@@ -1,0 +1,38 @@
+group Sample
+
+class_definition ::=
+<<<
+class <%= @name %><% if @superclass %> < <%= @superclass %><% end %>
+% if @attributes
+
+% for attr in @attributes 
+<%= attribute( *attr ).to_s.chomp %>
+% end
+% end
+% if @methods
+% for method in ( @methods || [] )
+<%= method( method ) %>
+% end
+% end
+end
+>>>
+
+attribute( name, access = 'rw' ) ::=
+<<<
+% case @access.to_s.downcase
+% when 'r'
+  attr_reader :<%= @name %>
+% when 'w'
+  attr_writer :<%= @name %>
+% else
+  attr_accessor :<%= @name %>
+% end
+>>>
+
+method ::=
+<<<
+  
+  def <%= @name %><% if @arguments and not @arguments.empty? %>( <%= @arguments.join( ', ' ) %> )<% end %>
+<%= @body.gsub( /^/, '    ' ) %>
+  end
+>>>

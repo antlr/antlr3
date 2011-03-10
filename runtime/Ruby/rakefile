@@ -1,0 +1,59 @@
+#!/usr/bin/ruby
+# encoding: utf-8
+
+require 'antlr3'
+require 'hoe'
+
+Hoe.spec "antlr3" do
+  self.version = ANTLR3::VERSION_STRING
+  self.rubyforge_name = "antlr3"
+  
+  developer "Kyle Yetter", "kcy5b@yahoo.com"
+  
+  spec_extras.update(
+    :required_ruby_version => ">= 1.8.7"
+  )
+  
+  self.test_globs = [
+    "test/unit/test-dfa.rb",
+    "test/unit/test-tree-wizard.rb",
+    "test/unit/test-streams.rb",
+    "test/unit/test-recognizers.rb",
+    "test/unit/test-trees.rb",
+    "test/unit/test-exceptions.rb",
+    "test/unit/test-scope.rb",
+    "test/unit/test-scheme.rb",
+    "test/unit/test-template.rb",
+    "test/functional/delegation/import.rb",
+    "test/functional/lexer/xml.rb",
+    "test/functional/lexer/properties.rb",
+    "test/functional/lexer/nuances.rb",
+    "test/functional/lexer/basic.rb",
+    "test/functional/lexer/filter-mode.rb",
+    "test/functional/lexer/syn-pred.rb",
+    "test/functional/debugging/rule-tracing.rb",
+    "test/functional/debugging/profile-mode.rb",
+    "test/functional/debugging/debug-mode.rb",
+    "test/functional/ast-output/hetero-nodes.rb",
+    "test/functional/ast-output/construction.rb",
+    "test/functional/ast-output/rewrites.rb",
+    "test/functional/ast-output/tree-rewrite.rb",
+    "test/functional/ast-output/auto-ast.rb",
+    "test/functional/main/main-scripts.rb",
+    "test/functional/tree-parser/basic.rb",
+    "test/functional/parser/predicates.rb",
+    "test/functional/parser/backtracking.rb",
+    "test/functional/parser/properties.rb",
+    "test/functional/parser/nuances.rb",
+    "test/functional/parser/rule-methods.rb",
+    "test/functional/parser/basic.rb",
+    "test/functional/parser/actions.rb",
+    "test/functional/parser/calc.rb",
+    "test/functional/parser/ll-star.rb",
+    "test/functional/parser/scopes.rb",
+    "test/functional/template-output/template-output.rb",
+    "test/functional/token-rewrite/via-parser.rb",
+    "test/functional/token-rewrite/basic.rb"
+  ]
+  
+end

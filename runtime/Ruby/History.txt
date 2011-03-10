@@ -1,0 +1,149 @@
+=== 1.8.5 / 10-21-10
+
+* 1 Bug Fix
+  - fixed ANTLR3::InteractiveStringStream to work with Ruby 1.9. The lexer main script
+    should function in interactive mode for Ruby 1.9 now.
+
+=== 1.8.4 / 10-08-10
+
+* 1 Bug Fix
+  - removed directory dependency from tasks created by ANTLR3::Task, which caused
+    compilation to be performed twice in some situations
+
+=== 1.8.3 / 10-08-10
+
+* 2 Bug Fixes
+  - fixed typo in TokenRewriteStream#cast_range
+  - added work-around code to handle the lack of support for StopIteration in Rubinius
+
+=== 1.8.2 / 10-02-10
+
+* Bug Fix: removed references to Parser#token_stream
+  - changed references to Parser#token_stream to Parser#input in `antlr3/profile.rb' to
+    avoid "private method token_stream called" errors in profile mode
+
+* Minor Enhancement: new samples included with the distribution
+  - added a newly developed `samples/JavaScript.g' file for parsing JavaScript.
+    While not entirely complete and flawless, it does a pretty good job
+    of parsing JavaScript up through Firefox's 1.6 version of the language.
+  - included the `samples/standard' directory with the package distribution,
+    which has been in the development repository for a while, but I never
+    updated the package spec to include these files.
+
+=== 1.8.0 / 07-03-10
+
+* Bug Fix / Major Enhancement: made antlr3 compatible with ruby 1.9
+  - altered ANTLR3::StringStream to always have #peek return an integer in both
+    Ruby 1.8 and 1.9. In 1.9, @data is now an array of code point values and
+    the new instance variable @string contains the actual string. In Ruby 1.8,
+    both @data and @string contain the string value.
+  - lexer code is no longer generated using '?c' character syntax; characters
+    are now represented as hexadecimal integers to make the code compatible
+    with Ruby 1.9
+
+=== 1.7.5 / 06-18-10
+
+* Minor Enhancements
+  - added #compile! and #clobber! methods to directly invoke the 'compile'
+    and 'clobber' tasks respectively
+  
+* Bug Fixes
+  - removed special ruby-stylistic formatting on syntactic predicate method names to
+    fix a bad bug in code-generation that cropped up in more complex grammars
+
+=== 1.7.2 / 05-16-10
+
+* Minor Enhancements
+  - added new #hold convenience method to ANTLR3::CommonTokenStream
+
+* Bug Fixes
+  - corrected a typo in ANTLR3::Error#FailedPredicate which caused a
+    NoMethodError to raise instead of FailedPredicate when semantic
+    predicates failed
+
+* Documentation
+  - added more content to the ruby antlr3 guide
+  - set up an official project website at
+    http://antlr.ohboyohboyohboy.org
+
+=== 1.7.0 / 04-20-10
+
+* Minor Enhancements
+  - added new #each_on_channel and #walk convenience methods to ANTLR3::CommonTokenStream
+
+* Bug Fixes
+  - discovered and fixed a rare but serious bug in the way the output code evaluates
+    syntactic predicates
+
+* Documentation
+  - began developing a more thorough usage guide for the package
+  - the guide is currently available on GitHub at
+    http://ohboyohboyohboy.github.com/antlr3
+
+=== 1.6.3 / 02-12-10
+
+* 4 Minor Enhancements
+  - added --help and --version options to antlr4ruby
+  - documented the antlr4ruby source and added license information
+  - prettied up the source code in all of the library files a little
+  - added a hoe-based rakefile with the gem distribution of the source code
+
+=== 1.6.0 / 01-27-10
+
+* 4 Minor Enhancements to runtime library
+  - CommonTokenStream and subclasses can now also accept another CommonTokenStream
+    object, serving sort of as a copy constructor. This provides a reasonable way
+    to cast a CommonTokenStream into a TokenRewriteStream and vice-versa
+  - CommonTreeNodeStream can take an options hash at the end of any of its various
+    signatures to provide values for attributes like token_stream
+  - If a parser is created with a CharacterStream object (i.e., StringStream), it
+    will also try to cast it by checking for an associated lexer (like it currently
+    does when created with String or IO objects).
+  - Template-output mode parsers have a new class method "load_templates( path )"
+    which will attempt to load the template group file at +path+ and, if successful,
+    set it to the parser's default template library. (See the CMinus example set for
+    an example of how this can be used)
+
+* 2 bug fixes / 1 change to templates
+  - backtracking was broken in situations where recognition failed when
+    a semantic predicate was encountered as the template code did not
+    throw BacktrackingFailed when it was in backtracking mode instead of
+    PredicateFailed
+  - rule memoization also had a major bug in that rules that were memoized
+    after failure did not throw BacktrackingFailed when it was needed
+  - I changed `attribute scope' structures (not rule return scopes, but
+    the groups of attributes you can assign to rules with the `scope' keyword),
+    from being implemented as named constants in the class body to class
+    variables belonging to the recognizer. As class variables do not need
+    to follow naming conventions, this provides more freedom in naming without
+    all of the ugly name mangling. These are generally used privately by parsers,
+    so it shouldn't be too drastic of a change as to break end user's code.
+
+=== 1.5.0 / 01-25-10
+
+* 2 minor enhancements
+  - Added BaseTree#walk, which iterates in a top-down fashion across all notes in a tree.
+  - Added BaseTree#prune, which stops decent into the current node during BaseTree#walk.
+
+* 1 optimization
+  - changed `closure loops' ( uses of the `*' or `+' modifiers ) from using
+    Kernel#loop to `while true ... end' style loops, which should be slightly
+    faster
+
+* new test code
+  - test/functiona/template-output/template-output.rb serves as a basic
+    functional test implementation for the new template output mode
+
+=== 1.4.0 / 01-17-10
+
+* 1 major new feature
+  - finished basic implementation of a template output mode.
+  - lib/antlr3/template.rb defines a number of classes for
+    ERB-based template output translation
+  - templates/ST.stg defines the Ruby target templates to
+    generate template output mode recognizers
+    
+* new test code
+  - added template unit tests at test/unit/test-template.rb
+  - test/functional/template-output/template-output.rb serves as a basic
+    functional test implementation for the new template output mode

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    This file defines what goes in to ANTLR Uber jar, which includes
+    all of the classes we need to run an executable jar in standalone
+    mode, other than junit, which has a non Free BSD license and so
+    we are reluctanct to include it in the jar.
+  -->
+<assembly>
+
+    <!--
+        This is the suffix that will be used to name the uber jar
+        once it is jared up.
+      -->
+    <id>completejar</id>
+
+    <!--
+        Exclude the antlr-master pom from the jar - we don't need it
+        and it causes silly things to happen.
+      -->
+    <useProjectArtifact>false</useProjectArtifact>
+
+    <!--
+        The only output format we need is the executable jar file
+      -->
+    <formats>
+        <format>jar</format>
+    </formats>
+
+    <!--
+        Make all jars unpack at the same level and don't include
+        any extranous directories.
+      -->
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <!--
+        Which of the modules that the master pom builds do we
+        wish to include in the uber jar. We are including
+        dependencies, so we only need to name the Tool module
+        and the gunit module.
+      -->
+    <moduleSets>
+
+        <moduleSet>
+            
+            <includes>
+                
+                <include>org.antlr:antlr</include>
+          
+            </includes>
+            <!--
+                Of the binaries, such as the depencies that the
+                above modules need, which do we want and which do we not.
+                Currently we want all the dependencies in the Tool jar.
+              -->
+            <binaries>
+
+            <!--
+                Unpack the binary dependencies so we have a nice
+                uber jar that can run with java -jar and need not have
+                CLASSPATH configured and so on.
+              -->
+                        <unpack>true</unpack>
+            </binaries>
+
+        </moduleSet>
+        
+        <moduleSet>
+
+            <includes>
+
+                <include>org.antlr:gunit</include>
+
+            </includes>
+
+            <!--
+                We do not want any of the dependencies that gunit has as they
+                are inlcuded with the tool. In particular we want to exclude
+                the junit dependency.
+              -->
+            <binaries>
+                
+               <includeDependencies>false</includeDependencies>
+
+            </binaries>
+
+        </moduleSet>
+
+    </moduleSets>
+
+    <!--
+        What do we want to include in the jar from each project
+      -->
+    <fileSets>
+        <fileSet>
+
+            <!--
+                We need the output classes and resources etc.
+              -->
+            <directory>${project.build.outputDirectory}</directory>
+        </fileSet>
+    </fileSets>
+
+
+    
+</assembly>

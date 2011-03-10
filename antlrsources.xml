@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    This is the assembly descriptor for building a full source code
+    distribution of ANTLR and all its related components. This assmebly
+    only includes the Java oriented source code, hence only the Java runtime
+    is included in the resulting jar.
+
+    The resulting jar is distribution that can be expanded with:
+
+      jar xvf antlr-master-3.x.x-src.jar
+
+    The output directory will be antlr-master-3.x.x and in here will be
+    the BUILD.txt fie, which explains how to build ANTLR.
+
+    Jim Idle - May, 2009
+ -->
+<assembly>
+
+    <!-- The name of this assembly descriptor, which is referenced in
+         the master pom.xml using <assemblyRef> (although in fact we
+         reference the file name that contains it to avoid cluttering
+         the pom.
+      -->
+    <id>src</id>
+
+    <!-- We have elected to produce only a jar output and to use the line
+         endings of whatever platform we are running on. More formats
+         can be added for simultaneous production, such as <format>zip</format>
+      -->
+    <formats>
+        <format>jar</format>
+    </formats>
+
+    <!--
+        The resulting archives will hve a base directory named after the master
+        artifact, rather than just extract into the current directory.
+      -->
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <!-- We need to described the source code of each of the modules we want
+         including in the archive. In the main this is because we did not store
+         the modules in perforce using directory names that match the module
+         names. This was for historic reasons as we already moved everything
+         about massively, jsut to move to Maven inthe first place.
+      -->
+    <moduleSets>
+
+        <!-- Describe the gUnit source code.
+          -->
+        <moduleSet>
+
+            <!-- The Maven artifact name tells the assembly artifact a bunch
+                 of information to start with, such as its location in the current
+                 tree and so on.
+              -->
+            <includes>
+                <include>org.antlr:gunit</include>
+            </includes>
+
+            <!-- What sources do we wish to include from this module?
+              -->
+            <sources>
+                
+                <fileSets>
+
+                    <!-- We have one file set, being the src sub-directory, which in
+                         the output archive, we also want to be called src/
+                      -->
+                    <fileSet>
+                        <directory>src</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+                
+
+                    <!-- In the base gUnit directory, we need to include a number
+                         of files that either document the module or control the
+                         build. These are not underneath the src directory of course
+                         so they need to be named here (which nicely documents what
+                         is included.
+                      -->
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                            <include>CHANGES.txt</include>
+                            <include>LICENSE.txt</include>
+                            <include>README.txt</include>
+                            <include>antlr.config</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+
+        </moduleSet>
+
+        <!-- Describe the gUnit source code.
+          -->
+        <moduleSet>
+
+            <!-- The Maven artifact name tells the assembly artifact a bunch
+                 of information to start with, such as its location in the current
+                 tree and so on.
+              -->
+            <includes>
+                <include>org.antlr:antlr-runtime</include>
+            </includes>
+
+            <!-- What sources do we wish to include from this module?
+              -->
+            <sources>
+
+                <!-- Because the Java runtime source is not in a directory
+                     called antlr-runtime, directly underneath the master
+                     directory, we need to map the output directory so that
+                     instead of starting with the name of the artifact, it
+                     is in the place where the build expects it.
+                  -->
+                <outputDirectoryMapping>runtime/Java</outputDirectoryMapping>
+
+                <fileSets>
+                     <!-- We have one file set, being the src sub-directory, which in
+                          the output archive, we also want to be called src/
+                       -->
+                    <fileSet>
+                        <directory>src</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <!-- In the base runtime/Java directory, we need to include a number
+                         of files that either document the module or control the
+                         build. These are not underneath the src directory of course
+                         so they need to be named here (which nicely documents what
+                         is included.
+                      -->
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                            <include>doxyfile</include>
+                            <include>antlr.config</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+
+        </moduleSet>
+
+        <!-- Describe the ANTLR tool source code.
+          -->
+        <moduleSet>
+            <includes>
+                <include>org.antlr:antlr</include>
+            </includes>
+
+            <!-- What sources do we wish to include from this module?
+              -->
+            <sources>
+
+                <!-- Because the tool source code is not in a directory
+                     called antlr, nor directly underneath the master
+                     directory, we need to map the output directory so that
+                     instead of starting with the name of the artifact, it
+                     is in the place where the build expects it.
+                  -->
+                <outputDirectoryMapping>tool</outputDirectoryMapping>
+
+                
+                <fileSets>
+
+                    <!-- We have one file set, being the src sub-directory, which in
+                         the output archive, we also want to be called src/
+                      -->
+                    <fileSet>
+                        <directory>src</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <!-- In the base tool directory, we need to include a number
+                         of files that either document the module or control the
+                         build. These are not underneath the src directory of course
+                         so they need to be named here (which nicely documents what
+                         is included.
+                      -->
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                            <include>CHANGES.txt</include>
+                            <include>LICENSE.txt</include>
+                            <include>README.txt</include>
+                            <include>antlr.config</include>
+                        </includes>
+                    </fileSet>
+
+                </fileSets>
+
+
+            </sources>
+
+        </moduleSet>
+
+        <!-- Describe the ANTLR maven plugin source code.
+
+             Strictly speaking, this is not a sub module of the tool because it
+             relies on the tool, runtime, and gunit modules. However, it is natural
+             part of the Java source set and so I found a way to build it as a sub-module
+             and include it in the source set.
+          -->
+        <moduleSet>
+            <includes>
+                <include>org.antlr:antlr3-maven-plugin</include>
+            </includes>
+
+            <!-- What sources do we wish to include from this module?
+              -->
+            <sources>
+
+                
+                <fileSets>
+                    
+                    <!-- We have one file set, being the src sub-directory, which in
+                         the output archive, we also want to be called src/
+                      -->
+                    <fileSet>
+                        <directory>src</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <!-- In the base plugin directory, we need to include a number
+                     of files that either document the module or control the
+                     build. These are not underneath the src directory of course
+                     so they need to be named here (which nicely documents what
+                     is included.
+                      -->
+                    <fileSet>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+
+                
+            </sources>
+
+        </moduleSet>
+
+         <!-- Describe the gUnit maven plugin source code.
+
+             Strictly speaking, this is not a sub module of the tool because it
+             relies on the tool, runtime, and gunit modules. However, it is natural
+             part of the Java source set and so I found a way to build it as a sub-module
+             and include it in the source set.
+          -->
+        <moduleSet>
+            <includes>
+                <include>org.antlr:maven-gunit-plugin</include>
+            </includes>
+
+            <!-- What sources do we wish to include from this module?
+              -->
+            <sources>
+
+                <!-- Because the tool source code is not in a directory
+                     called antlr, nor directly underneath the master
+                     directory, we need to map the output directory so that
+                     instead of starting with the name of the artifact, it
+                     is in the place where the build expects it.
+                  -->
+                <outputDirectoryMapping>gunit-maven-plugin</outputDirectoryMapping>
+
+                <!-- We have one file set, being the src sub-directory, which in
+                     the output archive, we also want to be called src/
+                  -->
+                <fileSets>
+
+                    <fileSet>
+                        <directory>src</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <!-- In the base plugin directory, we need to include a number
+                         of files that either document the module or control the
+                         build. These are not underneath the src directory of course
+                         so they need to be named here (which nicely documents what
+                         is included.
+                      -->
+                    <fileSet>
+                     
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                    </fileSet>
+
+                    </fileSets>
+                
+            </sources>
+
+        </moduleSet>
+
+    </moduleSets>
+
+    <!-- In the base directory of the master build directory (the root of all
+         the other sources), there are a number of files that describe or control
+         the build (such as the master pom.xml and the BUILD.txt files). Hence
+         we need to describe them in their own fileset. No output mapping is required here
+         of course.
+      -->
+    <fileSets>
+        <fileSet>
+            <includes>
+                <include>pom.xml</include>
+                <include>antlrjar.xml</include>
+                <include>antlrsources.xml</include>
+                <include>BUILD.txt</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+</assembly>

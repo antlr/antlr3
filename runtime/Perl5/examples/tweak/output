@@ -1,0 +1,16 @@
+public class Wrapper {
+public void foo() {
+int k;
+int i;
+  i = 3;
+  k = i;
+  i = k*4;
+}
+
+public void bar() {
+int j;
+  j = i*2;
+}
+}
+
+

@@ -1,0 +1,51 @@
+### DEPENDENCIES ###
+
+Prerequisites:
+  * Java JRE 1.6 or greater.
+  * Apache Ant 1.7.0 or greater; see http://ant.apache.org/manual/install.html
+
+Before building the JavaScript target you will need to download a few third
+party open source libraries:
+
+  * ant-contrib: Download ant-contrib here: http://downloads.sourceforge.net/ant-contrib/ant-contrib-1.0b3-bin.zip?modtime=1162486738&big_mirror=0
+  * Unzip the downloaded file.
+  * Move ant-contrib-1.0b3.jar from the unzipped directory to runtime/JavaScript/third/
+
+  * closure compiler: Download here: http://closure-compiler.googlecode.com/files/compiler-latest.zip
+  * Unzip the downloaded file.
+  * Move compiler.jar from the unzipped directory to runtime/JavaScript/third/
+
+  * jsdoc-toolkit: Download the latest release from here: http://code.google.com/p/jsdoc-toolkit/downloads/list
+  * Unzip the downloaded file.
+  * Move the unzipped folder to runtime/JavaScript/third/jsdoc-toolkit
+
+  * jsunit: Download here: https://sourceforge.net/project/showfiles.php?group_id=28041&package_id=19823&release_id=404277 
+  * Unzip the downloaded file.
+  * Move the unzipped folder to runtime/JavaScript/tests/jsunit
+
+### BUILD ###
+1) In a shell cd to runtime/JavaScript/build.
+2) Run 'ant'. This will build the JavaScript runtime libraries into the
+   runtime/JavaScript/lib folder.
+
+### TESTS ###
+Compile Tests:
+1) Build the Antlr tool itself (see main Antlr documentation for details).
+   This is most easily done by cd'ing to the root of the antlr code and running
+   'mvn -Dmaven.test.skip=true package assembly:assembly'.  If using a
+   different build method, update runtime/JavaScript/build/antlr3.properties to
+   point to the alternative jar.
+2) In a shell cd to runtime/JavaScript/build.
+3) Run 'ant compile-tests'.  This can take a while.  Warnings (but not errors)
+   issued during this step are expected.  (We test the JS runtime against
+   grammars that have recoverable problems.)
+
+Run Tests:
+1) Compile the tests using the directions above.
+2) Open runtime/JavaScript/tests/jsunit/testRunner.html in a browser.  Note
+   that some browsers (notably, Firefox 3.5) will have trouble with this page
+   when opened with the 'file://' protocol.  To circumvent this issue, start
+   and access the page through a lightweight http server (e.g. Mongoose).
+3) Select the file runtime/JavaScript/tests/functional/all.html (or any other
+   test html file).
+4) Hit 'Run' and (hopefully ;) watch the pretty green bar grow.

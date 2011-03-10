@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.antlr</groupId>
+    <artifactId>antlr3-maven-archetype</artifactId>
+    <version>3.3-SNAPSHOT</version>
+    <packaging>maven-archetype</packaging>
+    <name>ANTLR3 Maven Archetype</name>
+    
+
+    <!--
+
+    Inherit from the ANTLR master pom, which tells us what
+    version we are and allows us to inherit dependencies
+    and so on.
+
+    Unfortunately, because of a bug in the archetype plugin
+    we cannot use the parent pom because it causes the
+    artifactId in the generated pom to be set to antlr3-maven-archetype
+    We will reinstate this parent usage when that is fixed.
+    
+    <parent>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr-master</artifactId>
+        <version>3.2.1-SNAPSHOT</version>
+    </parent>
+    -->
+  <!--
+
+   REMOVE THIS ONCE ARCHETYPE PLUGIN BUG MENTIONED ABOVE IS FIXED AND
+   THE PARENT POM REFERENCE IS REINSTATED
+   
+    Define where the ANTLR releated jars are deployed both for
+    the main ANTLR repository, which syncs with the maven main
+    repository, and the snapshot repository, which can be
+    used by developers that need the latest development version of
+    something, but is used here to show maven where to deploy
+    snapshots and releases.
+    -->
+    <distributionManagement>
+
+        <repository>
+            <id>antlr-repo</id>
+            <name>ANTLR Testing repository</name>
+            <url>scpexe://antlr.org/home/mavensync/antlr-repo</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>antlr-snapshot</id>
+            <name>ANTLR Testing Snapshot Repository</name>
+            <url>scpexe://antlr.org/home/mavensync/antlr-snapshot</url>
+        </snapshotRepository>
+
+    </distributionManagement>
+
+  <build>
+
+    <extensions>
+
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.0-alpha-4</version>
+      </extension>
+
+    </extensions>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>2.0-alpha-4</version>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+  </build>
+
+</project>

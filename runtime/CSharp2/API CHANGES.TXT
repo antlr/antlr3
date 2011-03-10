@@ -1,0 +1,47 @@
+Check:
+
+RewriteRuleElementStream is in CSharp3 not a generic type!
+
+Look for Get() to turn into indexers!
+
+API CHANGES FROM ANTRLR 3.1 to ANTLR 3.2
+
+Removed any obsolete API. Lots of properties and methods have been turned virtual. Constants in UPPERCASE_ONLY have been turned into UppercaseOnly.
+
+Antlr.Runtime.Tree.Tree renamed to Antlr.Runtime.Tree.TreeConstants
+
+Antlr.Runtime.BaseRecognizer.Failed() has been turned into a property
+Antlr.Runtime.BaseRecognizer.NEXT_TOKEN_RULE_NAME renamed to Antlr.Runtime.BaseRecognizer.NextTokenRuleName
+Antlr.Runtime.BaseRecognizer.MEMO_RULE_FAILED renamed to Antlr.Runtime.BaseRecognizer.MemoRuleFailed
+Antlr.Runtime.BaseRecognizer.MEMO_RULE_UNKNOWN renamed to Antlr.Runtime.BaseRecognizer.MemoRuleUnknown
+Antlr.Runtime.BaseRecognizer.INITIAL_FOLLOW_STACK_SIZE renamed to Antlr.Runtime.BaseRecognizer.InitialFollowStackSize
+Antlr.Runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL renamed to Antlr.Runtime.BaseRecognizer.DefaultTokenChannel
+Antlr.Runtime.BaseRecognizer.HIDDEN renamed to Antlr.Runtime.BaseRecognizer.Hidden
+Antlr.Runtime.BaseRecognizer.Input has been removed.
+
+Antlr.Runtime.Parser.Input - return type has been changed to ITokenStream
+
+Antlr.Runtime.Lexer.Input - return type has been changed to ICharStream
+
+Antlr.Runtime.TreeParser - return type has been changed to ITreeNodeStream
+
+Antlr.Runtime.RuleReturnScope - removed setters from properties
+
+Antlr.Runtime.ParserRuleReturnScope - removed setters from properties
+Antlr.Runtime.ParserRuleReturnScope.start has been made public
+Antlr.Runtime.ParserRuleReturnScope.stop has been made public
+
+Antlr.Runtime.TreeRuleReturnScope - removed setter from property
+
+Antlr.Runtime.Tree.RewriteRuleElementStream is no longer generic (this causes appropriate changes to the derived classes). Usually T and SpecializingType have been replaced with "object".
+Antlr.Runtime.Tree.RewriteRuleElementStream.HasNext has been turned into a property
+Antlr.Runtime.Tree.RewriteRuleElementStream._Next() has been merged with NextTree()
+Antlr.Runtime.Tree.RewriteRuleElementStream.Dup() has been added
+
+Antlr.Runtime.Tree.RewriteRuleTokenStream.Dup() has been added
+
+Antlr.Runtime.Tree.RewriteRuleTokenStream.Dup() has been added
+
+Antlr.Runtime.CharStreamConstants.EOF has been renamed to EndOfFile
+
+Antlr.Runtime.Tree.ITreeAdaptor.GetNilNode has been turned into property Nil (implementing classes followed)

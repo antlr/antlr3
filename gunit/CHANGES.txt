@@ -1,0 +1,127 @@
+gUnit
+
+Leon, Jen-Yuan Su
+leonsu at mac com
+
+CHANGES
+
+December 15, 2010
+
+* TJP gunit checked tokens.index() != size instead of size()-1
+
+November 26, 2010
+
+* Added -p package-name-for-junit-output since test package is usually
+  different than parser package. TJP
+
+January 24, 2009
+
+* Improved error messages
+
+* stderr was being ignored upon exception.
+
+* generated junit test code indicate lines in gunit script. also error
+  messages during parse time show line number from gunit script.
+
+* refactored template generation / parameters
+
+* Allow strings in AST descriptions (gUnit.g). E.g., it handle this rule
+  (I had to quote the "^(" root tokens):
+
+  block:
+	"( ^(A B) | ^(b C) )" -> (BLOCK (ALT ("^(" A B)) (ALT ("^(" b C)))
+
+
+January 23, 2009
+
+* whitespace ignored and "x y z" turned into x y z now in	expected tree p\
+attern. E.g.,
+
+rule:
+    "a : A<X,Y=a.b.c>;" -> (RULE a (BLOCK (ALT
+                            (A (ELEMENT_OPTIONS X (= Y "a.b.c")))))
+                           )
+
+July 31, 2009
+
+* support custom tree adaptor in gUnit script
+
+March 21, 2009
+
+* gUnitTestSuite.java: use lexer rule name if parser rule name is null (by Shaoting)
+
+* add gunit/swingui package for gUnitEditor GUI
+
+Feb 17, 2009
+
+* added new interfaces for GUI editor
+
+* recognizes invalid input as a FAIL case instead of throwing an exception
+
+Steve Ebersole provided a patch for the following two fixes.
+* allows setting an output directory (for JUnitCodeGen)
+
+* allows providing a classloader (for both JUnitCodeGen and gUnitExecutor) 
+
+Nov 25, 2008
+
+* fixed external test file path issue. if an input test file is not found under the current dir, then try to look for it under the package dir also.
+
+* fixed multiple-line input indentation issue.
+
+* fixed bug: FileNotFoundException terminated gUnit tests due to any non-existent input test file.
+
+* display escaped text for newline characters in the test result for comparing expected and actual string.
+
+Nov 20, 2008
+
+* added new functionality of testing lexical rules
+
+* fixed bug of using PipedInput/Output Stream and changed to ByteArrayOutputStream. Jared Bunting provided a patch on this issue.
+
+* improved jUnit translation mode and moved supporting codes into gUnitBaseTest.
+
+Oct 31, 2008
+
+* fixed bug of testing a tree grammar's template output
+
+July 9, 2008
+
+* fixed bug: program exited upon InvocationTargetException 
+  Sumanto Biswas pointed out the issue and provided suggestions.
+
+* Better handle on test rule's StringTemplate output
+
+May 10, 2008
+
+* added exit code functionality
+
+* fixed string escaping bug for junit generator
+
+1.0.2 - Apr 01, 2008
+
+* fixed grammar bug: multiple-line input, AST output
+
+* adjusted the output of test result
+
+Mar 20, 2008
+
+* moved test result to string template (gUnitTestResult.stg)
+
+* added the display of line of test in the test result
+
+Feb 19, 2008
+
+* fixed bug of displaying test sequence and error message from ANTLR
+
+Feb 8, 2008
+
+* made compatible with ANTLR 3.1b1
+
+1.0.1 - Jan 11, 2008
+
+* Kenny MacDermid helps with code refactoring
+
+1.0 - Aug 20, 2007
+
+Initial early access release

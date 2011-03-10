@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype>
+  <id>antlr3-maven-archetype</id>
+  <sources>
+    <source>src\main\java\org\antlr\demo\AbstractTLexer.java</source>
+    <source>src\main\java\org\antlr\demo\AbstractTParser.java</source>
+    <source>src\main\java\org\antlr\demo\Main.java</source>
+  </sources>
+  <resources>
+    <resource>src\main\antlr3\imports\Ruleb.g</resource>
+    <resource>src\main\antlr3\TLexer.g</resource>
+    <resource>src\main\antlr3\TParser.g</resource>
+    <resource>src\main\antlr3\TTree.g</resource>
+  </resources>
+</archetype>
