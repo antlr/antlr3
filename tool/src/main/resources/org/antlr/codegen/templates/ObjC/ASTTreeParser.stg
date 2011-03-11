@@ -75,6 +75,11 @@ group ASTTreeParser;
     [super dealloc];
 }
 
+@synthesize tree;
+>>
+
+@returnScopeProperties() ::= <<
+@property (retain) <recognizer.ASTLabelType; null="ANTLRCommonTree"> *tree;
 >>
 
 /** Add a variable to track last element matched */
@@ -276,7 +281,7 @@ _last = (<ASTLabelType> *)[input LT:1];
 <super.ruleRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>
 <if(!rewriteMode)>
-    [treeAdaptor addChild:[<label> getTree] toTree:root_<treeLevel>];
+    [treeAdaptor addChild:<label>.tree toTree:root_<treeLevel>];
 <else> <! rewrite mode !>
 if ( _first_<treeLevel> == nil ) _first_<treeLevel> = <label>.tree;
 <endif>
@@ -286,7 +291,8 @@ if ( _first_<treeLevel> == nil ) _first_<treeLevel> = <label>.tree;
 ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTTreeParser ruleRefAndListLabel */
 <ruleRef(...)>
-<listLabel(elem = "["+label+" getTree]",...)>
+<! <listLabel(elem = "["+label+" getTree]",...)> !>
+<listLabel(elem = label+".tree",...)>
 >>
 
 /** ^(rule ...) auto construct */
@@ -296,7 +302,7 @@ _last = (<ASTLabelType> *)[input LT:1];
 <super.ruleRef(...)>
 <if(!rewriteMode)>
 <if(backtracking)>if ( state.backtracking == 0 ) <endif>
-root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:[<label> getTree] old:root_<treeLevel>];
+root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:<label>.tree old:root_<treeLevel>];
 <endif>
 >>
 
@@ -304,7 +310,7 @@ root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:[<label> getTree] o
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTTreeParser ruleRefRuleRootAndListLabel */
 <ruleRefRuleRoot(...)>
-<listLabel(elem="["+label+" getTree]",...)>
+<listLabel(elem=label+".tree",...)>
 >>
 
 /** rule when output=AST and tracking for rewrite */

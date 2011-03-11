@@ -157,7 +157,7 @@ parserMethods() ::= <<
 
 - (void) dealloc
 {
-    [self setTree:nil];
+    self.tree = nil;
     [super dealloc];
 }
 

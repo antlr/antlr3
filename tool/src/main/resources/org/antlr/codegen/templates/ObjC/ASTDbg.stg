@@ -32,14 +32,14 @@
 group ASTDbg;
 
 parserMembers() ::= <<
-ANTLRDebugTreeAdaptor *adaptor = [ANTLRDebugTreeAdaptor newANTLRDebugTreeAdaptor:(id)dbg Adaptor:[ANTLRCommonTreeAdaptor newANTLRCommonTreeAdaptor]];
+ANTLRDebugTreeAdaptor *adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:(id)dbg Adaptor:[ANTLRCommonTreeAdaptor newTreeAdaptor]];
 
 // fix this
 - (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
 {
-    adaptor = [ANTLRDebugTreeAdaptor newANTLRDebugTreeAdaptor:dbg Adaptor:anAdaptor];
+    adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:dbg Adaptor:anAdaptor];
 <if(grammar.grammarIsRoot)>
-    adaptor = [ANTLRDebugTreeAdaptor newANTLRDebugTreeAdaptor:adaptor withDBG:dbg];
+    adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:adaptor withDBG:dbg];
 <else>
     adaptor = (ANTLRDebugTreeAdaptor *)adaptor; // delegator sends dbg adaptor
 <endif><\n>
@@ -70,13 +70,13 @@ try {
 >>
 
 @ctorForRootGrammar.finally() ::= <<
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newANTLRCommonTreeAdaptor];
+ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];
 [proxy setTreeAdaptor:adap];
 >>
 
 @ctorForProfilingRootGrammar.finally() ::=<<
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newANTLRCommonTreeAdaptor];
+ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];
 [proxy setTreeAdaptor:adap];
 >>
@@ -85,7 +85,7 @@ ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newANTLRCommonTreeAdaptor
 
 @ctorForPredefinedListener.finally() ::=<<
 <if(grammar.grammarIsRoot)> <! don't create new adaptor for delegates !>
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newANTLRCommonTreeAdaptor];
+ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];<\n>
 <endif>
 >>
