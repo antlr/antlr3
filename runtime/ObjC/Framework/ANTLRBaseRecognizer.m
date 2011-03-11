@@ -39,16 +39,16 @@ extern NSInteger debug;
 
 @implementation ANTLRBaseRecognizer
 
-static NSArray *_tokenNames;
+static NSMutableArray *_tokenNames;
 static NSString *_grammarFileName;
 static NSString *NEXT_TOKEN_RULE_NAME;
 
 @synthesize state;
 @synthesize grammarFileName;
 //@synthesize failed;
-@synthesize tokenNames;
 @synthesize sourceName;
 //@synthesize numberOfSyntaxErrors;
+@synthesize tokenNames;
 
 + (void) initialize
 {
@@ -71,12 +71,12 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	return [[ANTLRBaseRecognizer alloc] initWithState:aState];
 }
 
-+ (NSArray *)getTokenNames
++ (NSMutableArray *)getTokenNames
 {
     return _tokenNames;
 }
 
-+ (void)setTokenNames:(NSArray *)theTokNams
++ (void)setTokenNames:(NSMutableArray *)theTokNams
 {
     _tokenNames = theTokNams;
     [_tokenNames retain];
@@ -296,7 +296,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     [self displayRecognitionError:[self getTokenNames] Exception:e];
 }
 
--(void) displayRecognitionError:(NSArray *)theTokNams Exception:(ANTLRRecognitionException *)e
+-(void) displayRecognitionError:(NSMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e
 {
     NSString *hdr = [self getErrorHeader:e];
     NSString *msg = [self getErrorMessage:e TokenNames:theTokNams];
@@ -325,7 +325,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  Override this to change the message generated for one or more
  *  exception types.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSArray *)theTokNams
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSMutableArray *)theTokNams
 {
     NSString *msg = [e getMessage];
     if ( [e isKindOfClass:[ANTLRUnwantedTokenException class]] ) {
@@ -436,9 +436,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (NSString *)getTokenErrorDisplay:(id<ANTLRToken>)t
 {
-    NSString *s = [t getText];
+    NSString *s = t.text;
     if ( s == nil ) {
-        if ( [t getType] == ANTLRTokenTypeEOF ) {
+        if ( t.type == ANTLRTokenTypeEOF ) {
             s = @"<EOF>";
         }
         else {

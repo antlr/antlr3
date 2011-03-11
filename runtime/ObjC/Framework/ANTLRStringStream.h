@@ -43,17 +43,6 @@
     ANTLRCharStreamState *charState;
 }
 
-@property (retain, getter=getData,setter=setData:) NSString *data;
-@property (getter=getP,setter=setP:) NSInteger p;
-@property (getter=getN,setter=setN:) NSInteger n;
-@property (getter=getLine,setter=setLine:) NSInteger line;
-@property (getter=getCharPositionInLine,setter=setCharPositionInLine:) NSInteger charPositionInLine;
-@property (getter=getMarkDepth,setter=setMarkDepth:) NSInteger markDepth;
-@property (retain, getter=getMarkers, setter=setMarkers:) ANTLRPtrBuffer *markers;
-@property (getter=getLastMarker,setter=setLastMarker:) NSInteger lastMarker;
-@property (retain, getter=getSourceName, setter=setSourceName:) NSString *name;
-@property (retain, getter=getCharState, setter=setCharState:) ANTLRCharStreamState *charState;
-
 + newANTLRStringStream;
 
 + newANTLRStringStream:(NSString *)aString;
@@ -119,8 +108,16 @@
 - (NSString *)toString;
 
 // accessors to the raw data of this stream
-- (NSString *) getData;
-- (void) setData: (NSString *) aData;
 
+@property (retain) NSString *data;
+@property (assign) NSInteger p;
+@property (assign) NSInteger n;
+@property (assign) NSInteger line;
+@property (assign) NSInteger charPositionInLine;
+@property (assign) NSInteger markDepth;
+@property (retain) ANTLRPtrBuffer *markers;
+@property (assign) NSInteger lastMarker;
+@property (retain) NSString *name;
+@property (retain) ANTLRCharStreamState *charState;
 
 @end

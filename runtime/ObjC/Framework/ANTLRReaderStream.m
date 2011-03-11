@@ -72,7 +72,7 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
 
 - (void) load:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
 {
-    NSData *retData;
+    NSData *retData = nil;
     if ( fh==nil ) {
         return;
     }
@@ -85,12 +85,12 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
 #pragma mark fix these NSLog calls
     @try {
         int numRead=0;
-        p = 0;
+        int p1 = 0;
         retData = [fh readDataToEndOfFile];
         numRead = [retData length];
-        NSLog( @"read %d chars; p was %d is now %d", n, p, (p+numRead) );
-        p += numRead;
-        n = p+1;
+        NSLog( @"read %d chars; p was %d is now %d", n, p1, (p1+numRead) );
+        p1 += numRead;
+        n = p1+1;
         data = [[NSString alloc] initWithData:retData encoding:NSASCIIStringEncoding];
         NSLog( @"n=%d", n );
     }

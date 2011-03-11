@@ -48,7 +48,7 @@
 - (id)initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (NSString *) Description;
-
+- (id) stackTrace:(NSException *)e;
 //    - (void)setDecisionNumber:(NSInteger)decisionNumber;
 //    - (void)setStateNumber:(NSInteger)stateNumber;
 @end

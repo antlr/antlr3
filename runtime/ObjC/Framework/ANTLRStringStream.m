@@ -37,8 +37,8 @@ extern NSInteger debug;
 @synthesize line;
 @synthesize charPositionInLine;
 @synthesize markDepth;
-@synthesize lastMarker;
 @synthesize markers;
+@synthesize lastMarker;
 @synthesize name;
 @synthesize charState;
 
@@ -406,7 +406,7 @@ extern NSInteger debug;
 //---------------------------------------------------------- 
 //  data 
 //---------------------------------------------------------- 
-- (NSString *) data
+- (NSString *) getData
 {
     return data; 
 }

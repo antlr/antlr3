@@ -45,6 +45,9 @@ typedef enum {
 
 @protocol ANTLRToken < NSObject, NSCopying >
 
+@property (retain) NSString *text;
+@property (assign) NSInteger type;
+
 // The singleton eofToken instance.
 + (id<ANTLRToken>) eofToken;
 // The default channel for this class of Tokens

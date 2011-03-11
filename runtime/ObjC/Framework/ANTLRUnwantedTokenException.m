@@ -74,7 +74,7 @@
     if ( token==nil ) {
         return [NSString stringWithFormat:@"UnwantedTokenException(found=%@)", exp];
     }
-    return [NSString stringWithFormat:@"UnwantedTokenException(found=%@ %@", [token getText], exp];
+    return [NSString stringWithFormat:@"UnwantedTokenException(found=%@ %@", token.text, exp];
 }
 
 @end

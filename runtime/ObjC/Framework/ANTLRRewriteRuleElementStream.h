@@ -27,28 +27,25 @@
 #import <Cocoa/Cocoa.h>
 #import "ANTLRTreeAdaptor.h"
 
-typedef union {
-    id single;
-    NSMutableArray *multiple;
-} Elements;
-
 // TODO: this should be separated into stream and enumerator classes
 @interface ANTLRRewriteRuleElementStream : NSObject {
     NSInteger cursor;
     BOOL dirty;        ///< indicates whether the stream should return copies of its elements, set to true after a call to -reset
     BOOL isSingleElement;
-    Elements elements;
+    id singleElement;
+    NSMutableArray *elements;
     
     NSString *elementDescription;
     id<ANTLRTreeAdaptor> treeAdaptor;
 }
 
-@property (assign, getter=GetCursor, setter=SetCursor:) NSInteger cursor;
-@property (assign, getter=Getdirty, setter=Setdirty:) BOOL dirty;
-@property (assign, getter=GetIsSingleElement, setter=SetIsSingleElement:) BOOL isSingleElement;
-@property (assign, getter=GetElement, setter=SetElement:) Elements elements;
-@property (assign, getter=GetElementDescription, setter=SetElementDescription:) NSString *elementDescription;
-@property (retain, getter=GetTreeAdaptor, setter=SetTreeAdaptor:) id<ANTLRTreeAdaptor> treeAdaptor;
+@property (assign) NSInteger cursor;
+@property (assign) BOOL dirty;
+@property (assign) BOOL isSingleElement;
+@property (assign) id singleElement;
+@property (assign) NSMutableArray *elements;
+@property (assign) NSString *elementDescription;
+@property (retain) id<ANTLRTreeAdaptor> treeAdaptor;
 
 + (ANTLRRewriteRuleElementStream*) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription;

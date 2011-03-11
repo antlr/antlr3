@@ -108,7 +108,7 @@
 - (id)initWithTokenType:(NSInteger)aTokenType
 {
 	if ((self = [super init]) != nil ) {
-		token = [ANTLRCommonToken newANTLRCommonToken:aTokenType];
+		token = [ANTLRCommonToken newToken:aTokenType];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;
@@ -122,7 +122,7 @@
 - (id) initWithTokenType:(NSInteger)aTokenType Text:(NSString *)theText
 {
 	if ((self = [super init]) != nil ) {
-		token = [ANTLRCommonToken newANTLRCommonToken:aTokenType Text:theText];
+		token = [ANTLRCommonToken newToken:aTokenType Text:theText];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;

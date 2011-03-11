@@ -55,34 +55,25 @@
 - (id) init
 {
 	if ((self = [super init]) != nil) {
-		p = -1;
-		tokens = [[NSMutableArray arrayWithCapacity:1000] retain];
 		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = ANTLRTokenChannelDefault;
-        tokenSource = nil;
 	}
 	return self;
 }
 
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
 {
-	if ((self = [super init]) != nil) {
-		p = -1;
-		tokens = [[NSMutableArray arrayWithCapacity:1000] retain];
+	if ((self = [super initWithSource:theTokenSource]) != nil) {
 		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = ANTLRTokenChannelDefault;
-		tokenSource = theTokenSource;
 	}
 	return self;
 }
 
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSInteger)aChannel
 {
-	if ((self = [super init]) != nil) {
-		p = -1;
-		tokens = [[NSMutableArray arrayWithCapacity:1000] retain];
+	if ((self = [super initWithSource:theTokenSource]) != nil) {
 		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
-		tokenSource = theTokenSource;
 		channel = aChannel;
 	}
 	return self;

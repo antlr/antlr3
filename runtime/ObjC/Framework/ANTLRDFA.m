@@ -190,7 +190,7 @@ NSInteger debug = 0;
         size += [encodedString characterAtIndex:i];
     }
     NSMutableData *dp = [NSMutableData dataWithLength:size];
-    short *data = (short *)[[dp mutableBytes] retain];
+    short *data = (short *)[dp mutableBytes];
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];
@@ -212,7 +212,7 @@ NSInteger debug = 0;
         size += [encodedString characterAtIndex:i];
     }
     NSMutableData *dp = [NSMutableData dataWithLength:size];
-    char *data = [[dp mutableBytes] retain];
+    char *data = (short *)[dp mutableBytes];
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];

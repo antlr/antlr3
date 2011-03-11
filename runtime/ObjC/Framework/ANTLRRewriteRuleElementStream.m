@@ -31,6 +31,7 @@
 @synthesize cursor;
 @synthesize dirty;
 @synthesize isSingleElement;
+@synthesize singleElement;
 @synthesize elements;
 @synthesize elementDescription;
 @synthesize treeAdaptor;
@@ -69,6 +70,8 @@
         [self setTreeAdaptor:aTreeAdaptor];
         dirty = NO;
         isSingleElement = YES;
+        singleElement = nil;
+        elements = nil;
     }
     return self;
 }
@@ -82,6 +85,8 @@
         [self setTreeAdaptor:aTreeAdaptor];
         dirty = NO;
         isSingleElement = YES;
+        singleElement = nil;
+        elements = nil;
         [self addElement:anElement];
     }
     return self;
@@ -96,8 +101,9 @@
         [self setDescription:anElementDescription];
         [self setTreeAdaptor:aTreeAdaptor];
         dirty = NO;
+        singleElement = nil;
         isSingleElement = NO;
-        elements.multiple = [[NSMutableArray alloc] initWithArray:theElements];
+        elements = [[NSMutableArray alloc] initWithArray:theElements];
     }
     return self;
 }
@@ -105,9 +111,9 @@
 - (void) dealloc
 {
     if (isSingleElement)
-        [elements.single release];
+        [singleElement release];
     else
-        [elements.multiple release];
+        [elements release];
     [self setDescription:nil];
     [self setTreeAdaptor:nil];
     [super dealloc];
@@ -137,58 +143,40 @@
 {
     if (anElement == nil)
         return;
-    if (isSingleElement) {
-        
-        if (elements.single == nil) {
-            elements.single = [anElement retain];
-            elements.single = anElement;
-            return;
+    if (elements != nil) {
+        [elements addObject:anElement];
+        return;
         }
-        isSingleElement = NO;
-        NSMutableArray *newArray = [[NSMutableArray arrayWithCapacity:5] retain];
-        [newArray addObject:elements.single];
-        // [elements.single release];  // balance previous retain in initializer/addElement
-        [newArray addObject:anElement];
-        elements.multiple = newArray;
-    } else {
-        [elements.multiple addObject:anElement];
+    if (singleElement == nil) {
+        singleElement = anElement;
+        singleElement = [anElement retain];
+        return;
     }
+    isSingleElement = NO;
+    elements = [[NSMutableArray arrayWithCapacity:5] retain];
+    [elements addObject:singleElement];
+    singleElement = nil;  // balance previous retain in initializer/addElement
+    [elements addObject:anElement];
 }
 
 - (void) setElement: (id)anElement
 {
     if (anElement == nil)
         return;
-    if (isSingleElement) {
-        if (elements.single == nil) {
-            elements.single = [anElement retain];
-            elements.single = anElement;
-            return;
+    if (elements != nil) {
+        [elements addObject:anElement];
+        return;
         }
-        isSingleElement = NO;
-        NSMutableArray *newArray = [[NSMutableArray arrayWithCapacity:5] retain];
-        [newArray addObject:elements.single];
-        // [elements.single release];  // balance previous retain in initializer/addElement
-        [newArray addObject:anElement];
-        elements.multiple = newArray;
-    } else {
-        [elements.multiple addObject:anElement];
+    if (singleElement == nil) {
+        singleElement = anElement;
+        singleElement = [anElement retain];
+        return;
     }
-}
-
-- (NSInteger) size
-{
-    if (isSingleElement && elements.single != nil)
-        return 1;
-    if (isSingleElement == NO && elements.multiple != nil)
-        return [elements.multiple count];
-    return 0;
-}
-
-- (BOOL) hasNext
-{
-    return (isSingleElement && elements.single != nil && cursor < 1) ||
-            (isSingleElement == NO && elements.multiple != nil && cursor < [elements.multiple count]);
+    isSingleElement = NO;
+    elements = [[NSMutableArray arrayWithCapacity:5] retain];
+    [elements addObject:singleElement];
+    singleElement = nil;  // balance previous retain in initializer/addElement
+    [elements addObject:anElement];
 }
 
 - (id<ANTLRTree>) nextTree
@@ -212,17 +200,33 @@
     }
     if ( cursor >= n ) {
         if ( n == 1 ) {
-            return [self toTree:elements.single]; // will be dup'ed in -next
+            return [self toTree:singleElement]; // will be dup'ed in -next
         }
         @throw [NSException exceptionWithName:@"RewriteCardinalityException" reason:nil userInfo:nil];// TODO: fill in real exception
     }
-    if (isSingleElement && elements.single != nil) {
+    if (singleElement != nil) {
         cursor++;
-        return [self toTree:elements.single];
+        return [self toTree:singleElement];
     }
-    id el = [elements.multiple objectAtIndex:cursor];
+    id el = [elements objectAtIndex:cursor];
     cursor++;
     return [self toTree:el];
+}
+
+- (BOOL) hasNext
+{
+    return (singleElement != nil && cursor < 1) ||
+            (elements != nil && cursor < [elements count]);
+}
+
+- (NSInteger) size
+{
+    NSInteger n = 0;
+    if (singleElement != nil)
+        n = 1;
+    if (elements != nil)
+        return [elements count];
+    return n;
 }
 
 - (id) copyElement:(id)element

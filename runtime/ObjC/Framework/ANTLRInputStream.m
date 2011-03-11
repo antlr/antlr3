@@ -55,7 +55,7 @@
             encoding:(NSStringEncoding)theEncoding
 {
     if ( self = [super initWithReader:anInput size:theSize readBufferSize:theRBSize] ) {
-        [self load:theSize readBufferSize:theRBSize];
+        //[self load:theSize readBufferSize:theRBSize];
     }
     return self;
 }

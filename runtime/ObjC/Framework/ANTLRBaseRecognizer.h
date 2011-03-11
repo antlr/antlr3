@@ -54,18 +54,9 @@
 @interface ANTLRBaseRecognizer : NSObject {
 	ANTLRRecognizerSharedState *state;	// the state of this recognizer. Might be shared with other recognizers, e.g. in grammar import scenarios.
 	NSString *grammarFileName;			// where did the grammar come from. filled in by codegeneration
-//    BOOL failed;
     NSString *sourceName;
-//    NSInteger numberOfSyntaxErrors;
-    NSArray *tokenNames;
+    NSMutableArray *tokenNames;
 }
-
-@property (retain, getter=getState, setter=setState) ANTLRRecognizerSharedState *state;
-@property (retain, getter=getGrammarFileName, setter=setGrammarFileName) NSString *grammarFileName;
-//@property (assign, getter=getFailed, setter=setFailed) BOOL failed;
-@property (retain, getter=getTokenNames, setter=setTokenNames) NSArray *tokenNames;
-@property (retain, getter=getSourceName, setter=setSourceName) NSString *sourceName;
-//@property (assign, getter=getNumberOfSyntaxErrors, setter=setNumberOfSyntaxErrors) NSInteger numberOfSyntaxErrors;
 
 + (void) initialize;
 
@@ -73,7 +64,7 @@
 + (ANTLRBaseRecognizer *) newANTLRBaseRecognizerWithRuleLen:(NSInteger)aLen;
 + (ANTLRBaseRecognizer *) newANTLRBaseRecognizer:(ANTLRRecognizerSharedState *)aState;
 
-+ (NSArray *)getTokenNames;
++ (NSMutableArray *)getTokenNames;
 + (void)setTokenNames:(NSArray *)aTokNamArray;
 + (void)setGrammarFileName:(NSString *)aFileName;
 
@@ -117,8 +108,8 @@
 
 // error reporting and recovery
 - (void) reportError:(ANTLRRecognitionException *)e;
-- (void) displayRecognitionError:(NSArray *)theTokNams Exception:(ANTLRRecognitionException *)e;
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSArray *)theTokNams;
+- (void) displayRecognitionError:(NSMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e;
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSMutableArray *)theTokNams;
 - (NSInteger) getNumberOfSyntaxErrors;
 - (NSString *)getErrorHeader:(ANTLRRecognitionException *)e;
 - (NSString *)getTokenErrorDisplay:(id<ANTLRToken>)t;
@@ -160,7 +151,7 @@
 - (NSMutableArray *) getRuleInvocationStack:(ANTLRRecognitionException *)exception
 					             Recognizer:(NSString *)recognizerClassName;
 
-- (NSArray *) getTokenNames;
+- (NSMutableArray *) getTokenNames;
 - (NSString *)getGrammarFileName;
 - (NSString *)getSourceName;
 - (NSMutableArray *) toStrings:(NSArray *)tokens;
@@ -179,5 +170,10 @@
 // like supplying selectors instead of writing code directly into the actions of the grammar.
 - (BOOL) evaluateSyntacticPredicate:(SEL)synpredFragment;
 // stream:(id<ANTLRIntStream>)anInput;
+
+@property (retain) ANTLRRecognizerSharedState *state;
+@property (retain) NSString *grammarFileName;
+@property (retain) NSString *sourceName;
+@property (retain) NSMutableArray *tokenNames;
 
 @end

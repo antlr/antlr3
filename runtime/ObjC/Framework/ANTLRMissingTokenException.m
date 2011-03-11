@@ -71,10 +71,10 @@
 - (NSString *)toString
 {
     if ( inserted != nil && token != nil ) {
-        return [NSString stringWithFormat:@"MissingTokenException(inserted %@ at %@)", inserted, [token getText]];
+        return [NSString stringWithFormat:@"MissingTokenException(inserted %@ at %@)", inserted, token.text];
     }
     if ( token!=nil ) {
-        return [NSString stringWithFormat:@"MissingTokenException(at %@)", [token getText] ];
+        return [NSString stringWithFormat:@"MissingTokenException(at %@)", token.text ];
     }
     return @"MissingTokenException";
 }

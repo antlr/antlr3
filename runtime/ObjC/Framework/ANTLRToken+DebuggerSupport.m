@@ -36,7 +36,7 @@
 
 - (NSString *)debuggerDescription
 {
-	NSString *_text = [self getText];
+	NSString *_text = self.text;
 	NSMutableString *escapedText;
 	if (_text) {
 		escapedText = [_text copyWithZone:nil];

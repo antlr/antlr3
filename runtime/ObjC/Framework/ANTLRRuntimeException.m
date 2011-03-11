@@ -103,4 +103,20 @@
     return [super reason];
 }
 
+- (id) stackTrace:(NSException *)e
+{
+    NSArray *addrs = [e callStackReturnAddresses];
+    NSArray *trace = [e callStackSymbols];
+    
+    for (NSString *traceStr in trace) {
+        NSLog( @"%@", traceStr);
+        // TODO: remove special after testing
+        if ([traceStr hasPrefix:@"main("] > 0)
+            return traceStr;
+        if (![traceStr hasPrefix:@"org.stringtemplate"])
+            return traceStr;
+    }
+    return trace;    
+}
+
 @end
