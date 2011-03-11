@@ -106,7 +106,7 @@
     NSString *tokenText =[NSString stringWithFormat:@"<missing %@ %d>", [self getTokenNames], expectedTokenType];
     //id<ANTLRTreeAdaptor> anAdaptor = (id<ANTLRTreeAdaptor>)[((id<ANTLRTreeNodeStream>)e.input) getTreeAdaptor];
     //return [anAdaptor createToken:expectedTokenType Text:tokenText];
-    return [ANTLRCommonToken newANTLRCommonToken:expectedTokenType Text:tokenText];
+    return [ANTLRCommonToken newToken:expectedTokenType Text:tokenText];
 }
 
 /** Match '.' in tree parser has special meaning.  Skip node or
@@ -162,13 +162,13 @@
 /** Tree parsers parse nodes they usually have a token object as
  *  payload. Set the exception token and do the default behavior.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e  TokenNames:(NSArray *) theTokNams
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e  TokenNames:(NSMutableArray *) theTokNams
 {
     if ( [self isKindOfClass:[ANTLRTreeParser class]] ) {
         id<ANTLRTreeAdaptor> adaptor = (id<ANTLRTreeAdaptor>)[((id<ANTLRTreeNodeStream>)e.input) getTreeAdaptor];
         e.token = [adaptor getToken:((id<ANTLRTree>)e.node)];
         if ( e.token == nil ) { // could be an UP/DOWN node
-            e.token = [ANTLRCommonToken newANTLRCommonToken:[adaptor getType:e.node]
+            e.token = [ANTLRCommonToken newToken:[adaptor getType:e.node]
                                                         Text:[adaptor getText:e.node]];
         }
     }

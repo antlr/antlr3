@@ -134,7 +134,7 @@
     // Wildcard?
     if ( ttype == ANTLRLexerTokenTypeDOT ) {
         ttype = [tokenizer nextToken];
-        id<ANTLRToken> wildcardPayload = [ANTLRCommonToken newANTLRCommonToken:0 Text:@"."];
+        id<ANTLRToken> wildcardPayload = [ANTLRCommonToken newToken:0 Text:@"."];
         ANTLRTreePattern *node = [ANTLRWildcardTreePattern newANTLRWildcardTreePattern:wildcardPayload];
         if ( label != nil ) {
             node.label = label;

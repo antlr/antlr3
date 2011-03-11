@@ -93,13 +93,13 @@
 
 - (id<ANTLRToken>)createToken:(NSInteger)tokenType Text:(NSString *)text
 {
-    id<ANTLRToken> fromToken = [ANTLRCommonToken newANTLRCommonToken:tokenType Text:text];
+    id<ANTLRToken> fromToken = [ANTLRCommonToken newToken:tokenType Text:text];
     return fromToken;
 }
 
 - (id<ANTLRToken>)createToken:(ANTLRCommonToken *)fromToken
 {
-    return fromToken = [ANTLRCommonToken newANTLRCommonTokenWithToken:(ANTLRCommonToken *)fromToken];
+    return fromToken = [ANTLRCommonToken newTokenWithToken:(ANTLRCommonToken *)fromToken];
 }
 
 /** Track start/stop token for subtree root created for a rule.

@@ -102,7 +102,7 @@
         tokenText = @"<missing EOF>";
     else
         tokenText = [NSString stringWithFormat:@"<missing %@>\n",[[ANTLRBaseRecognizer getTokenNames] objectAtIndex:expectedTokenType]];
-    ANTLRCommonToken *t = [[ANTLRCommonToken newANTLRCommonToken:expectedTokenType Text:tokenText] retain];
+    ANTLRCommonToken *t = [[ANTLRCommonToken newToken:expectedTokenType Text:tokenText] retain];
     ANTLRCommonToken *current = [anInput LT:1];
     if ( [current getType] == ANTLRTokenTypeEOF ) {
         current = [anInput LT:-1];

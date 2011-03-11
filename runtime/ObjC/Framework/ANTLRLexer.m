@@ -87,8 +87,8 @@
         return; // no shared state work to do
     }
     state.token = nil;
-    state.type = ANTLRTokenTypeInvalid;
-    state.channel = ANTLRTokenChannelDefault;
+    state.type = ANTLRCommonToken.INVALID_TOKEN_TYPE;
+    state.channel = ANTLRCommonToken.DEFAULT_CHANNEL;
     state.tokenStartCharIndex = -1;
     state.tokenStartCharPositionInLine = -1;
     state.tokenStartLine = -1;
@@ -116,7 +116,7 @@
 {
 	while (YES) {
         [self setToken:nil];
-        state.channel = ANTLRTokenChannelDefault;
+        state.channel = ANTLRCommonToken.DEFAULT_CHANNEL;
         state.tokenStartCharIndex = [input getIndex];
         state.tokenStartCharPositionInLine = [input getCharPositionInLine];
         state.tokenStartLine = [input getLine];
@@ -124,10 +124,11 @@
         
         // [self setText:[self getText]];
 		if ([input LA:1] == ANTLRCharStreamEOF) {
-            ANTLRCommonToken *eof = [ANTLRCommonToken eofToken];
-            [eof setStart:[input getIndex]];
-            [eof setStop:[input getIndex]];
-            [eof setChannel:ANTLRTokenChannelDefault];
+            ANTLRCommonToken *eof = [ANTLRCommonToken newToken:input
+                                                          Type:ANTLRTokenTypeEOF
+                                                       Channel:ANTLRCommonToken.DEFAULT_CHANNEL
+                                                         Start:[input getIndex]
+                                                          Stop:[input getIndex]];
             [eof setLine:[self getLine]];
             [eof setCharPositionInLine:[self getCharPositionInLine]];
 			return eof;
@@ -143,9 +144,12 @@
             }
 			return state.token;
 		}
+		@catch (ANTLRNoViableAltException *nva) {
+			[self reportError:nva];
+			[self recover:nva];
+		}
 		@catch (ANTLRRecognitionException *e) {
 			[self reportError:e];
-			[self recover:e];
 		}
 	}
 }
@@ -167,11 +171,9 @@
 
 - (void) setInput:(id<ANTLRCharStream>) anInput
 {
-    if (input != anInput) {
-        input = nil;
-        [self reset];
-        input = anInput;
-    }
+    input = nil;
+    [self reset];
+    input = anInput;
 }
 
 /** Currently does not support multiple emits per nextToken invocation
@@ -195,13 +197,13 @@
  */
 - (void) emit
 {
-	id<ANTLRToken> aToken = [ANTLRCommonToken newANTLRCommonToken:input
-                                                             Type:state.type
-                                                          Channel:state.channel
-                                                            Start:state.tokenStartCharIndex
-                                                             Stop:[input getIndex]-1];
+	id<ANTLRToken> aToken = [ANTLRCommonToken newToken:input
+                                                  Type:state.type
+                                               Channel:state.channel
+                                                 Start:state.tokenStartCharIndex
+                                                  Stop:[input getIndex]-1];
 	[aToken setLine:state.tokenStartLine];
-    [aToken setText:[self getText]];
+    aToken.text = [self getText];
 	[aToken setCharPositionInLine:[state getCharPositionInLine]];
     [aToken retain];
 	[self emit:aToken];
@@ -220,7 +222,7 @@
 				state.failed = YES;
 				return;
 			}
-			ANTLRMismatchedTokenException  *mte = [ANTLRMismatchedTokenException newANTLRMismatchedTokenExceptionChar:[aString characterAtIndex:i] Stream:input];
+			ANTLRMismatchedTokenException *mte = [ANTLRMismatchedTokenException newANTLRMismatchedTokenExceptionChar:[aString characterAtIndex:i] Stream:input];
 			[self recover:mte];
 			@throw mte;
 		}

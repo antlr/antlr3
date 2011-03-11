@@ -33,7 +33,11 @@ static ANTLRCommonToken *INVALID_TOKEN;
 
 @implementation ANTLRCommonToken
 
-// @synthesize text;
+    static NSInteger DEFAULT_CHANNEL = ANTLRTokenChannelDefault;
+    static NSInteger INVALID_TOKEN_TYPE = ANTLRTokenTypeInvalid;
+
+
+@synthesize text;
 @synthesize type;
 @synthesize line;
 @synthesize charPositionInLine;
@@ -41,39 +45,49 @@ static ANTLRCommonToken *INVALID_TOKEN;
 @synthesize index;
 @synthesize startIndex;
 @synthesize stopIndex;
-// @synthesize input;
+@synthesize input;
 
 + (void) initialize
 {
-    EOF_TOKEN = [ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeEOF Text:@"EOF"];
-    SKIP_TOKEN = [ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeInvalid Text:@"Skip"];
-    INVALID_TOKEN = [ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeInvalid Text:@"Invalid"];
+    EOF_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeEOF Text:@"EOF"];
+    SKIP_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Skip"];
+    INVALID_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Invalid"];
     [EOF_TOKEN retain];
     [SKIP_TOKEN retain];
     [INVALID_TOKEN retain];
 }
 
-+ (ANTLRCommonToken *) newANTLRCommonToken
++ (NSInteger) DEFAULT_CHANNEL
+{
+    return DEFAULT_CHANNEL;
+}
+
++ (NSInteger) INVALID_TOKEN_TYPE
+{
+    return INVALID_TOKEN_TYPE;
+}
+
++ (ANTLRCommonToken *) newToken
 {
     return [[ANTLRCommonToken alloc] init];
 }
 
-+ (ANTLRCommonToken *) newANTLRCommonToken:(id<ANTLRCharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop
++ (ANTLRCommonToken *) newToken:(id<ANTLRCharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop
 {
     return [[ANTLRCommonToken alloc] initWithInput:(id<ANTLRCharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop];
 }
 
-+ (ANTLRCommonToken *) newANTLRCommonToken:(ANTLRTokenType)tokenType
++ (ANTLRCommonToken *) newToken:(ANTLRTokenType)tokenType
 {
     return( [[ANTLRCommonToken alloc] initWithType:tokenType] );
 }
 
-+ (ANTLRCommonToken *) newANTLRCommonToken:(NSInteger)tokenType Text:(NSString *)tokenText
++ (ANTLRCommonToken *) newToken:(NSInteger)tokenType Text:(NSString *)tokenText
 {
     return( [[ANTLRCommonToken alloc] initWithType:tokenType Text:tokenText] );
 }
 
-+ (ANTLRCommonToken *) newANTLRCommonTokenWithToken:(ANTLRCommonToken *)fromToken
++ (ANTLRCommonToken *) newTokenWithToken:(ANTLRCommonToken *)fromToken
 {
     return( [[ANTLRCommonToken alloc] initWithToken:fromToken] );
 }
@@ -82,7 +96,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 + (id<ANTLRToken>) eofToken
 {
 	if (EOF_TOKEN == nil) {
-		EOF_TOKEN = [[ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeEOF Text:@"EOF"] retain];
+		EOF_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeEOF Text:@"EOF"] retain];
 	}
 	return EOF_TOKEN;
 }
@@ -91,7 +105,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 + (id<ANTLRToken>) skipToken
 {
 	if (SKIP_TOKEN == nil) {
-		SKIP_TOKEN = [[ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeInvalid Text:@"Skip"] retain];
+		SKIP_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Skip"] retain];
 	}
 	return SKIP_TOKEN;
 }
@@ -100,7 +114,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 + (id<ANTLRToken>) invalidToken
 {
 	if (INVALID_TOKEN == nil) {
-		INVALID_TOKEN = [[ANTLRCommonToken newANTLRCommonToken:ANTLRTokenTypeInvalid Text:@"Invalid"] retain];
+		INVALID_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Invalid"] retain];
 	}
 	return SKIP_TOKEN;
 }
@@ -136,6 +150,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
         channel = aChannel;
         startIndex = aStart;
         stopIndex = aStop;
+        text = [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
     }
     return self;
 }
@@ -143,7 +158,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 - (id) initWithToken:(ANTLRCommonToken *)oldToken
 {
     if ((self = [super init]) != nil) {
-        text = oldToken.text;
+        text = [NSString stringWithString:oldToken.text];
         type = oldToken.type;
         line = oldToken.line;
         index = oldToken.index;

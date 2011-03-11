@@ -47,26 +47,18 @@
 	id<ANTLRCharStream> input;
 }
 
-@property (retain, getter=getText, setter=setText:) NSString *text;
-@property (assign, getter=getType, setter=setType:) NSInteger type;
-@property (assign, getter=getLine, setter=setLine:) NSUInteger line;
-@property (assign, getter=getCharPositionInLine, setter=setCharPositionInLine:) NSUInteger charPositionInLine;
-@property (assign, getter=getChannel, setter=setChannel:) NSUInteger channel;
-@property (assign, getter=getTokenIndex, setter=setTokenIndex:) NSUInteger index;
-@property (assign, getter=getStart, setter=setStart:) NSUInteger startIndex;
-@property (assign, getter=getStop, setter=setStop:) NSUInteger stopIndex;
-@property (retain, getter=getInput, setter=setInput:) id<ANTLRCharStream> input;
-
 + (void) initialize;
-+ (ANTLRCommonToken *) newANTLRCommonToken;
-+ (ANTLRCommonToken *) newANTLRCommonToken:(id<ANTLRCharStream>)anInput
++ (NSInteger) DEFAULT_CHANNEL;
++ (NSInteger) INVALID_TOKEN_TYPE;
++ (ANTLRCommonToken *) newToken;
++ (ANTLRCommonToken *) newToken:(id<ANTLRCharStream>)anInput
                                       Type:(NSInteger)aTType
                                    Channel:(NSInteger)aChannel
                                      Start:(NSInteger)aStart
                                       Stop:(NSInteger)aStop;
-+ (ANTLRCommonToken *) newANTLRCommonToken:(ANTLRTokenType)aType;
-+ (id<ANTLRToken>) newANTLRCommonToken:(NSInteger)tokenType Text:(NSString *)tokenText;
-+ (id<ANTLRToken>) newANTLRCommonTokenWithToken:(ANTLRCommonToken *)fromToken;
++ (ANTLRCommonToken *) newToken:(ANTLRTokenType)aType;
++ (id<ANTLRToken>) newToken:(NSInteger)tokenType Text:(NSString *)tokenText;
++ (id<ANTLRToken>) newTokenWithToken:(ANTLRCommonToken *)fromToken;
 + (id<ANTLRToken>) eofToken;
 + (id<ANTLRToken>) skipToken;
 + (id<ANTLRToken>) invalidToken;
@@ -134,5 +126,15 @@
 
 - (NSString *) description;
 - (NSString *) toString;
+
+@property (retain) NSString *text;
+@property (assign) NSInteger type;
+@property (assign) NSUInteger line;
+@property (assign) NSUInteger charPositionInLine;
+@property (assign) NSUInteger channel;
+@property (assign) NSUInteger index;
+@property (assign, getter=getStart, setter=setStart:) NSUInteger startIndex;
+@property (assign, getter=getStop, setter=setStop:) NSUInteger stopIndex;
+@property (retain) id<ANTLRCharStream> input;
 
 @end
