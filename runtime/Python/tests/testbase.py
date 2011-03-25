@@ -91,7 +91,7 @@ if 'CLASSPATH' not in os.environ:
 
 else:
     classpath = ''
-    
+
 
 class ANTLRTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -100,15 +100,12 @@ class ANTLRTest(unittest.TestCase):
         self.moduleName = os.path.splitext(os.path.basename(sys.modules[self.__module__].__file__))[0]
         self.className = self.__class__.__name__
         self._baseDir = None
-            
+
         self.lexerModule = None
         self.parserModule = None
 
         self.grammarName = None
         self.grammarType = None
-
-        self.antlr_version = antlr3.version_str_to_tuple(
-            os.environ.get('ANTLRVERSION', 'HEAD'))
 
 
     @property
@@ -141,7 +138,7 @@ class ANTLRTest(unittest.TestCase):
 
         return self._baseDir
 
-    
+
     def _invokeantlr(self, dir, file, options, javaOptions=''):
         cmd = 'cd %s; java %s %s org.antlr.Tool -o . %s %s 2>&1' % (
             dir, javaOptions, classpath, options, file
@@ -164,21 +161,21 @@ class ANTLRTest(unittest.TestCase):
                 "Failed to compile grammar '%s':\n%s\n\n" % (file, cmd)
                 + output
                 )
-        
-        
+
+
     def compileGrammar(self, grammarName=None, options='', javaOptions=''):
         if grammarName is None:
             grammarName = self.moduleName + '.g'
-            
+
         self._baseDir = os.path.join(
             testbasedir,
             self.moduleName)
         if not os.path.isdir(self._baseDir):
             os.makedirs(self._baseDir)
-            
+
         if self.grammarName is None:
             self.grammarName = os.path.splitext(grammarName)[0]
-        
+
         grammarPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), grammarName)
 
         # get type and name from first grammar line
@@ -239,7 +236,7 @@ class ANTLRTest(unittest.TestCase):
                 # add dependencies to my .stg files
                 templateDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src', 'org', 'antlr', 'codegen', 'templates', 'Python'))
                 templates = glob.glob(os.path.join(templateDir, '*.stg'))
-                
+
                 for dst, src in dependencies:
                     src.extend(templates)
 
@@ -257,7 +254,7 @@ class ANTLRTest(unittest.TestCase):
                     if os.path.getmtime(source) > os.path.getmtime(dest):
                         rebuild = True
                         break
-                    
+
 
             if rebuild:
                 self._invokeantlr(self.baseDir, grammarPath, options, javaOptions)
@@ -266,23 +263,23 @@ class ANTLRTest(unittest.TestCase):
             # mark grammar as broken
             compileErrorCache[grammarName] = True
             raise
-        
+
 
     def lexerClass(self, base):
         """Optionally build a subclass of generated lexer class"""
-        
+
         return base
 
 
     def parserClass(self, base):
         """Optionally build a subclass of generated parser class"""
-        
+
         return base
 
 
     def walkerClass(self, base):
         """Optionally build a subclass of generated walker class"""
-        
+
         return base
 
 
@@ -293,28 +290,28 @@ class ANTLRTest(unittest.TestCase):
         return imp.load_module(
             name, modFile, modPathname, modDescription
             )
-    
-        
+
+
     def getLexer(self, *args, **kwargs):
         """Build lexer instance. Arguments are passed to lexer.__init__()."""
 
-        if self.grammarType == 'lexer' and self.antlr_version >= (3, 1, 0, 0):
+        if self.grammarType == 'lexer':
             self.lexerModule = self.__load_module(self.grammarName)
             cls = getattr(self.lexerModule, self.grammarName)
         else:
             self.lexerModule = self.__load_module(self.grammarName + 'Lexer')
             cls = getattr(self.lexerModule, self.grammarName + 'Lexer')
-            
+
         cls = self.lexerClass(cls)
 
         lexer = cls(*args, **kwargs)
 
         return lexer
-    
+
 
     def getParser(self, *args, **kwargs):
         """Build parser instance. Arguments are passed to parser.__init__()."""
-        
+
         if self.grammarType == 'parser':
             self.lexerModule = self.__load_module(self.grammarName)
             cls = getattr(self.lexerModule, self.grammarName)
@@ -326,11 +323,11 @@ class ANTLRTest(unittest.TestCase):
         parser = cls(*args, **kwargs)
 
         return parser
-    
+
 
     def getWalker(self, *args, **kwargs):
         """Build walker instance. Arguments are passed to walker.__init__()."""
-        
+
         self.walkerModule = self.__load_module(self.grammarName + 'Walker')
         cls = getattr(self.walkerModule, self.grammarName + 'Walker')
         cls = self.walkerClass(cls)
@@ -352,26 +349,26 @@ class ANTLRTest(unittest.TestCase):
         assert grammarType in ('lexer', 'parser', 'tree', 'combined'), grammarType
 
         grammarPath = os.path.join(self.baseDir, grammarName + '.g')
-        
+
         # dump temp grammar file
         fp = open(grammarPath, 'w')
         fp.write(grammar)
         fp.close()
 
         return grammarName, grammarPath, grammarType
-    
+
 
     def writeFile(self, name, contents):
         testDir = os.path.dirname(os.path.abspath(__file__))
         path = os.path.join(self.baseDir, name)
-        
+
         fp = open(path, 'w')
         fp.write(contents)
         fp.close()
 
         return path
 
-    
+
     def compileInlineGrammar(self, grammar, options='', javaOptions='',
                              returnModule=False):
         # write grammar file
@@ -384,25 +381,25 @@ class ANTLRTest(unittest.TestCase):
             options,
             javaOptions
             )
-        
+
         if grammarType == 'combined':
             lexerMod = self.__load_module(grammarName + 'Lexer')
             parserMod = self.__load_module(grammarName + 'Parser')
             if returnModule:
                 return lexerMod, parserMod
-            
+
             lexerCls = getattr(lexerMod, grammarName + 'Lexer')
             lexerCls = self.lexerClass(lexerCls)
             parserCls = getattr(parserMod, grammarName + 'Parser')
             parserCls = self.parserClass(parserCls)
 
             return lexerCls, parserCls
-        
+
         if grammarType == 'lexer':
             lexerMod = self.__load_module(grammarName)
             if returnModule:
                 return lexerMod
-            
+
             lexerCls = getattr(lexerMod, grammarName)
             lexerCls = self.lexerClass(lexerCls)
 
@@ -412,7 +409,7 @@ class ANTLRTest(unittest.TestCase):
             parserMod = self.__load_module(grammarName)
             if returnModule:
                 return parserMod
-            
+
             parserCls = getattr(parserMod, grammarName)
             parserCls = self.parserClass(parserCls)
 
@@ -422,7 +419,7 @@ class ANTLRTest(unittest.TestCase):
             walkerMod = self.__load_module(grammarName)
             if returnModule:
                 return walkerMod
-            
+
             walkerCls = getattr(walkerMod, grammarName)
             walkerCls = self.walkerClass(walkerCls)
 

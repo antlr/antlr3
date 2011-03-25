@@ -15,16 +15,16 @@ class TestDFA(unittest.TestCase):
         """
 
         class TRecognizer(antlr3.BaseRecognizer):
-            antlr_version = antlr3.runtime_version
-        
+            api_version = 'HEAD'
+
         self.recog = TRecognizer()
-        
-        
+
+
     def testInit(self):
         """DFA.__init__()
 
         Just a smoke test.
-        
+
         """
 
         dfa = antlr3.DFA(
@@ -36,7 +36,7 @@ class TestDFA(unittest.TestCase):
             accept=[],
             special=[],
             transition=[]
-            )      
+            )
 
 
     def testUnpack(self):
@@ -56,8 +56,8 @@ class TestDFA(unittest.TestCase):
               6, 6, 6, 6, 6
               ]
             )
-            
-        
+
+
 
 if __name__ == "__main__":
     unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))
