@@ -19,6 +19,11 @@ def unlink(path):
             raise
 
 
+class GrammarCompileError(Exception):
+  """Grammar failed to compile."""
+  pass
+
+
 # At least on MacOSX tempdir (/tmp) is a symlink. It's sometimes dereferences,
 # sometimes not, breaking the inspect.getmodule() function.
 testbasedir = os.path.join(
@@ -157,7 +162,7 @@ class ANTLRTest(unittest.TestCase):
             failed = True
 
         if failed:
-            raise RuntimeError(
+            raise GrammarCompileError(
                 "Failed to compile grammar '%s':\n%s\n\n" % (file, cmd)
                 + output
                 )
@@ -225,7 +230,7 @@ class ANTLRTest(unittest.TestCase):
                     failed = True
 
                 if failed:
-                    raise RuntimeError(
+                    raise GrammarCompileError(
                         "antlr -depend failed with code %s on grammar '%s':\n\n"
                         % (rc, grammarName)
                         + cmd

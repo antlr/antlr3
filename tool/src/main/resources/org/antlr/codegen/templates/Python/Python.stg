@@ -905,11 +905,11 @@ self.match(EOF)
 >>
 
 // used for left-recursive rules
-recRuleDefArg()                       ::= "FIXME(3)int <recRuleArg()>"
-recRuleArg()                          ::= "FIXME(4)_p"
-recRuleAltPredicate(ruleName,opPrec)  ::= "FIXME(5)<recRuleArg()> \<= <opPrec>"
-recRuleSetResultAction()              ::= "FIXME(6)root_0=$<ruleName>_primary.tree;"
-recRuleSetReturnAction(src,name)      ::= "FIXME(7)$<name>=$<src>.<name>;"
+recRuleDefArg()                       ::= "<recRuleArg()>"
+recRuleArg()                          ::= "_p"
+recRuleAltPredicate(ruleName,opPrec)  ::= "<recRuleArg()> \<= <opPrec>"
+recRuleSetResultAction()              ::= "root_0 = $<ruleName>_primary.tree"
+recRuleSetReturnAction(src, name)      ::= "$<name> = $<src>.<name>"
 
 /** match ^(root children) in tree parser */
 tree(root, actionsAfterRoot, children, nullableChildList,
@@ -1115,7 +1115,7 @@ if s == <i0>: <! compressed special state numbers 0..n-1 !>
     <state>}; separator="\nel">
 
 <if(backtracking)>
-        if self._state.backtracking >0:
+        if self._state.backtracking > 0:
             raise BacktrackingFailed
 
 <endif>
@@ -1413,10 +1413,12 @@ execAction(action) ::= <<
 <if(backtracking)>
 <if(actions.(actionScope).synpredgate)>
 if <actions.(actionScope).synpredgate>:
+    pass
     <action>
 
 <else>
 if <actions.(actionScope).synpredgate>:
+    pass
     <action>
 
 <endif>
