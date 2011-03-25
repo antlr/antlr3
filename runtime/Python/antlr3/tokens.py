@@ -236,12 +236,16 @@ class CommonToken(Token):
 
 
     def getType(self):
-        return self.type 
+        return self.type
 
     def setType(self, ttype):
         self.type = ttype
 
-    
+    def getTypeName(self):
+        return str(self.type)
+
+    typeName = property(lambda s: s.getTypeName())
+
     def getLine(self):
         return self.line
     
@@ -293,11 +297,11 @@ class CommonToken(Token):
         else:
             txt = "<no text>"
 
-        return "[@%d,%d:%d=%r,<%d>%s,%d:%d]" % (
+        return "[@%d,%d:%d=%r,<%s>%s,%d:%d]" % (
             self.index,
             self.start, self.stop,
             txt,
-            self.type, channelStr,
+            self.typeName, channelStr,
             self.line, self.charPositionInLine
             )
     
@@ -412,5 +416,3 @@ INVALID_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
 # In an action, a lexer rule can set token to this SKIP_TOKEN and ANTLR
 # will avoid creating a token for this symbol and try to fetch another.
 SKIP_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
-
-
