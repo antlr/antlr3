@@ -75,6 +75,8 @@ public class RewriteRuleSubtreeStream extends RewriteRuleElementStream {
 		}
 		// test size above then fetch
 		Object tree = _next();
+		while (adaptor.isNil(tree) && adaptor.getChildCount(tree) == 1)
+			tree = adaptor.getChild(tree, 0);
 		//System.out.println("_next="+((Tree)tree).toStringTree());
 		Object el = adaptor.dupNode(tree); // dup just the root (want node here)
 		return el;
