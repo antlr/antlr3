@@ -29,6 +29,7 @@ package org.antlr.test;
 
 import org.antlr.Tool;
 import org.antlr.codegen.CodeGenerator;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSyntaxMessage;
@@ -248,7 +249,7 @@ public class TestTreeGrammarRewriteAST extends BaseTest {
 
         int expectedMsgID = ErrorManager.MSG_WILDCARD_AS_ROOT;
         Object expectedArg = null;
-        antlr.RecognitionException expectedExc = null;
+        RecognitionException expectedExc = null;
         GrammarSyntaxMessage expectedMessage =
             new GrammarSyntaxMessage(expectedMsgID, g, null, expectedArg, expectedExc);
 

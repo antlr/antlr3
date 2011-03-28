@@ -1,8 +1,10 @@
 package org.antlr.tool;
 
-import antlr.Token;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.grammar.v2.*;
+import org.antlr.grammar.v3.*;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
+import org.antlr.runtime.tree.TreeNodeStream;
 import org.antlr.stringtemplate.*;
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 
@@ -29,7 +31,8 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 
 	public Map<Integer, ASSOC> altAssociativity = new HashMap<Integer, ASSOC>();
 
-	public LeftRecursiveRuleAnalyzer(Grammar g, String ruleName) {
+	public LeftRecursiveRuleAnalyzer(TreeNodeStream input, Grammar g, String ruleName) {
+		super(input);
 		this.g = g;
 		this.ruleName = ruleName;
 		language = (String)g.getOption("language");
@@ -278,32 +281,32 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 	}
 
 	public void stripSynPred(GrammarAST altAST) {
-		GrammarAST t = (GrammarAST)altAST.getFirstChild();
+		GrammarAST t = (GrammarAST)altAST.getChild(0);
 		if ( t.getType()==ANTLRParser.BACKTRACK_SEMPRED ||
 			 t.getType()==ANTLRParser.SYNPRED ||
 			 t.getType()==ANTLRParser.SYN_SEMPRED )
 		{
-			altAST.setFirstChild(t.getNextSibling()); // kill it
+			altAST.deleteChild(0); // kill it
 		}
 	}
 
 	public void stripLeftRecursion(GrammarAST altAST) {
-		GrammarAST rref = (GrammarAST)altAST.getFirstChild();
+		GrammarAST rref = (GrammarAST)altAST.getChild(0);
 		if ( rref.getType()== ANTLRParser.RULE_REF &&
 			 rref.getText().equals(ruleName))
 		{
 			// remove rule ref
-			altAST.setFirstChild(rref.getNextSibling());
+			altAST.deleteChild(0);
 			// reset index so it prints properly
-			GrammarAST newFirstChild = (GrammarAST) altAST.getFirstChild();
-			altAST.startIndex = newFirstChild.startIndex;
+			GrammarAST newFirstChild = (GrammarAST) altAST.getChild(0);
+			altAST.setTokenStartIndex(newFirstChild.getTokenStartIndex());
 		}
 	}
 
 	public String text(GrammarAST t) {
 		if ( t==null ) return null;
 		try {
-			return new ANTLRTreePrinter().toString(t, grammar, true);
+			return new ANTLRTreePrinter(new CommonTreeNodeStream(t)).toString(grammar, true);
 		}
 		catch (Exception e) {
 			ErrorManager.error(ErrorManager.MSG_BAD_AST_STRUCTURE, e);

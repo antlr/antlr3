@@ -118,12 +118,12 @@ public class TestSymbolDefinitions extends BaseTest {
 		assertEquals(literals, foundLiterals);
 
 		String implicitLexer =
-			"lexer grammar t;\n" +
-			"\n" +
-			"T__5 : 'x' ;\n" +
-			"\n" +
-			"// $ANTLR src \"<string>\" 3\n" +
-			"E: 'x' '0' ;\n";
+			"lexer grammar t;" + newline +
+			"" + newline +
+			"T__5 : 'x' ;" + newline +
+			"" + newline +
+			"// $ANTLR src \"<string>\" 3" + newline +
+			"E: 'x' '0' ;";
 		assertEquals(implicitLexer, g.getLexerGrammar());
 	}
 

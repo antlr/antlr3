@@ -31,6 +31,8 @@ import org.antlr.Tool;
 import org.antlr.tool.*;
 import org.junit.Test;
 
+import java.io.File;
+
 public class TestCompositeGrammars extends BaseTest {
 	protected boolean debug = false;
 
@@ -735,7 +737,7 @@ public class TestCompositeGrammars extends BaseTest {
 		assertEquals("unexpected warnings: "+equeue, 1, equeue.warnings.size());
 
 		String expectedError =
-			"warning(105): "+tmpdir.toString().replaceFirst("\\-[0-9]+","")+"/M.g:3:5: no lexer rule corresponding to token: ABC";
+			"warning(105): "+tmpdir.toString().replaceFirst("\\-[0-9]+","")+File.separator+"M.g:3:5: no lexer rule corresponding to token: ABC";
 		assertEquals(expectedError, equeue.warnings.get(0).toString().replaceFirst("\\-[0-9]+",""));
 	}
 

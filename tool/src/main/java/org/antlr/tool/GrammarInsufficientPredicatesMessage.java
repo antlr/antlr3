@@ -27,10 +27,10 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.analysis.Label;
+import org.antlr.runtime.Token;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.util.*;
@@ -53,7 +53,7 @@ public class GrammarInsufficientPredicatesMessage extends Message {
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
-		column = decisionASTNode.getColumn();
+		column = decisionASTNode.getCharPositionInLine();
 		String fileName = probe.dfa.nfa.grammar.getFileName();
 		if ( fileName!=null ) {
 			file = fileName;

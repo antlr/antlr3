@@ -29,6 +29,7 @@ package org.antlr.codegen;
 
 import org.antlr.Tool;
 import org.antlr.analysis.Label;
+import org.antlr.runtime.Token;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.tool.Grammar;
 
@@ -352,7 +353,7 @@ public class Target {
 	/** Give target a chance to do some postprocessing on actions.
 	 *  Python for example will have to fix the indention.
 	 */
-	public List postProcessAction(List chunks, antlr.Token actionToken) {
+	public List postProcessAction(List chunks, Token actionToken) {
 		return chunks;
 	}
 

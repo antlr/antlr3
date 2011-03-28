@@ -29,8 +29,9 @@ package org.antlr.test;
 
 import org.antlr.Tool;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.grammar.v3.ActionTranslator;
+import org.antlr.runtime.CommonToken;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSemanticsMessage;
@@ -61,7 +62,7 @@ public class TestMessages extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	"rule",
-																	new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 

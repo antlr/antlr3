@@ -27,7 +27,8 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.stringtemplate.StringTemplate;
 
 /** A problem with the syntax of your antlr grammar such as
@@ -37,12 +38,12 @@ public class GrammarSyntaxMessage extends Message {
 	public Grammar g;
 	/** Most of the time, we'll have a token and so this will be set. */
 	public Token offendingToken;
-	public antlr.RecognitionException exception;
+	public RecognitionException exception;
 
 	public GrammarSyntaxMessage(int msgID,
 								Grammar grammar,
 								Token offendingToken,
-								antlr.RecognitionException exception)
+								RecognitionException exception)
 	{
 		this(msgID,grammar,offendingToken,null,exception);
 	}
@@ -51,7 +52,7 @@ public class GrammarSyntaxMessage extends Message {
 								Grammar grammar,
 								Token offendingToken,
 								Object arg,
-								antlr.RecognitionException exception)
+								RecognitionException exception)
 	{
 		super(msgID, arg, null);
 		this.offendingToken = offendingToken;
@@ -64,7 +65,7 @@ public class GrammarSyntaxMessage extends Message {
 		column = 0;
 		if ( offendingToken!=null ) {
 			line = offendingToken.getLine();
-			column = offendingToken.getColumn();
+			column = offendingToken.getCharPositionInLine();
 		}
 		// TODO: actually set the right Grammar instance to get the filename
 		// TODO: have to update all v2 grammar files for this. or use errormanager and tool to get the current grammar

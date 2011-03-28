@@ -47,7 +47,7 @@ import org.antlr.tool.*;
 @members {
 Rule enclosingRule;
 Grammar grammar;
-antlr.Token actionToken;
+Token actionToken;
 int outerAltNum = 0;
 
 	public ActionAnalysis(Grammar grammar, String ruleName, GrammarAST actionAST)

@@ -27,8 +27,8 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
 import org.antlr.analysis.Label;
+import org.antlr.runtime.Token;
 
 import java.util.Iterator;
 import java.util.List;
@@ -95,7 +95,7 @@ public class NameSpaceChecker {
 
 	protected void checkForRuleDefinitionProblems(Rule r) {
 		String ruleName = r.name;
-		antlr.Token ruleToken = r.tree.getToken();
+		Token ruleToken = r.tree.getToken();
 		int msgID = 0;
 		if ( (grammar.type==Grammar.PARSER||grammar.type==Grammar.TREE_PARSER) &&
 			 Character.isUpperCase(ruleName.charAt(0)) )
@@ -162,7 +162,7 @@ public class NameSpaceChecker {
 		for (Iterator it = grammar.scopedRuleRefs.iterator(); it.hasNext();) {
 			GrammarAST scopeAST = (GrammarAST)it.next(); // ^(DOT ID atom)
 			Grammar scopeG = grammar.composite.getGrammar(scopeAST.getText());
-			GrammarAST refAST = scopeAST.getChild(1);
+			GrammarAST refAST = (GrammarAST)scopeAST.getChild(1);
 			String ruleName = refAST.getText();
 			if ( scopeG==null ) {
 				ErrorManager.grammarError(ErrorManager.MSG_NO_SUCH_GRAMMAR_SCOPE,
@@ -218,7 +218,7 @@ public class NameSpaceChecker {
 	 *  return values, parameters, and rule-scope dynamic attributes
 	 *  defined in surrounding rule.
 	 */
-	protected void checkForLabelConflict(Rule r, antlr.Token label) {
+	protected void checkForLabelConflict(Rule r, Token label) {
 		int msgID = 0;
 		Object arg2 = null;
 		if ( grammar.getGlobalScope(label.getText())!=null ) {
@@ -247,7 +247,7 @@ public class NameSpaceChecker {
 
 	/** If type of previous label differs from new label's type, that's an error.
 	 */
-	public boolean checkForLabelTypeMismatch(Rule r, antlr.Token label, int type) {
+	public boolean checkForLabelTypeMismatch(Rule r, Token label, int type) {
 		Grammar.LabelElementPair prevLabelPair =
 			(Grammar.LabelElementPair)r.labelNameSpace.get(label.getText());
 		if ( prevLabelPair!=null ) {

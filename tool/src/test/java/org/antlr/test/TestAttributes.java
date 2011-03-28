@@ -29,8 +29,9 @@ package org.antlr.test;
 
 import org.antlr.Tool;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.grammar.v3.ActionTranslator;
+import org.antlr.runtime.CommonToken;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
@@ -57,7 +58,7 @@ public class TestAttributes extends BaseTest {
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		String action = "i<3; '<xmltag>'";
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),0);
+																	 new CommonToken(ANTLRParser.ACTION,action),0);
 		String expecting = action;
 		String rawTranslation =
 			translator.translate();
@@ -85,7 +86,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),0);
+									  new CommonToken(ANTLRParser.ACTION,action),0);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -111,7 +112,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -142,7 +143,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =	translator.translate();
 		assertEquals(expecting, rawTranslation);
 
@@ -195,7 +196,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =	translator.translate();
 		assertEquals(expecting, rawTranslation);
 
@@ -231,7 +232,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =	translator.translate();
 		assertEquals(expecting, rawTranslation);
 
@@ -256,7 +257,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		assertEquals(expecting, rawTranslation);
@@ -287,7 +288,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -331,7 +332,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -378,7 +379,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -411,7 +412,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -452,7 +453,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -480,7 +481,7 @@ public class TestAttributes extends BaseTest {
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -515,7 +516,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "b",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -546,7 +547,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "b",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -574,7 +575,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -616,7 +617,7 @@ public class TestAttributes extends BaseTest {
 		String expecting = expecting1;
 		do {
 			ActionTranslator translator = new ActionTranslator(generator,"rule1",
-																		 new antlr.CommonToken(ANTLRParser.ACTION,action),i+1);
+																		 new CommonToken(ANTLRParser.ACTION,action),i+1);
 			String rawTranslation =
 					translator.translate();
 			StringTemplateGroup templates =
@@ -644,7 +645,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -677,7 +678,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -691,8 +692,8 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleLabels() throws Exception {
 		String action = "$r.x; $r.start;\n $r.stop;\n $r.tree; $a.x; $a.stop;";
-		String expecting = "(r!=null?r.x:0); (r!=null?((Token)r.start):null);\n" +
-						   "             (r!=null?((Token)r.stop):null);\n" +
+		String expecting = "(r!=null?r.x:0); (r!=null?((Token)r.start):null);" + newline +
+						   "             (r!=null?((Token)r.stop):null);" + newline +
 						   "             (r!=null?((Object)r.tree):null); (r!=null?r.x:0); (r!=null?((Token)r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
@@ -803,7 +804,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -837,7 +838,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -870,7 +871,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -903,7 +904,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -930,7 +931,7 @@ public class TestAttributes extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -955,7 +956,7 @@ public class TestAttributes extends BaseTest {
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 null,
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),0);
+																	 new CommonToken(ANTLRParser.ACTION,action),0);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -985,7 +986,7 @@ public class TestAttributes extends BaseTest {
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 null,
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),0);
+																	 new CommonToken(ANTLRParser.ACTION,action),0);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1024,7 +1025,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1051,7 +1052,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 
 		assertEquals("unexpected errors: "+equeue, 2, equeue.errors.size());
 
@@ -1083,7 +1084,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1116,7 +1117,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1147,7 +1148,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1176,7 +1177,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1212,7 +1213,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1244,7 +1245,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1275,7 +1276,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 null,
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),0);
+																	 new CommonToken(ANTLRParser.ACTION,action),0);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1305,7 +1306,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1363,7 +1364,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1394,7 +1395,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1429,7 +1430,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1461,7 +1462,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1488,7 +1489,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1515,7 +1516,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1542,7 +1543,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1616,7 +1617,7 @@ public class TestAttributes extends BaseTest {
 			g.setCodeGenerator(generator);
 			generator.genRecognizer(); // forces load of templates
 			ActionTranslator translator = new ActionTranslator(generator,"a",
-															   new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+															   new CommonToken(ANTLRParser.ACTION,action),1);
 			String rawTranslation =
 				translator.translate();
 			StringTemplateGroup templates =
@@ -1643,7 +1644,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-														   new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+														   new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1671,7 +1672,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1729,7 +1730,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1757,7 +1758,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1807,7 +1808,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		StringTemplate codeST = generator.getRecognizerST();
 		String code = codeST.toString();
 		String found = code.substring(code.indexOf("###")+3,code.indexOf("!!!"));
@@ -1836,7 +1837,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1848,7 +1849,7 @@ public class TestAttributes extends BaseTest {
 		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
 		translator = new ActionTranslator(generator,
 											   "a",
-											   new antlr.CommonToken(ANTLRParser.ACTION,action2),2);
+											   new CommonToken(ANTLRParser.ACTION,action2),2);
 		rawTranslation =
 			translator.translate();
 		templates =
@@ -1910,7 +1911,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1947,7 +1948,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -1984,7 +1985,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "b",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2083,7 +2084,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2112,7 +2113,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2141,7 +2142,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2168,7 +2169,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		String rawTranslation =
@@ -2199,7 +2200,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		String rawTranslation =
@@ -2303,7 +2304,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer();
 
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2332,7 +2333,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer();
 
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2374,7 +2375,7 @@ public class TestAttributes extends BaseTest {
 			"s : x+=a x+=b {System.out.println($x);} ;" +
 			"a : 'a';\n"+
 			"b : 'b';\n"+
-			"WS : (' '|'\n') {skip();};\n";
+			"WS : (' '|'\\n') {skip();};\n";
 		String expecting = "[a, b]\na b\n";
 		String found = execParser("T.g", grammar, "TParser", "TLexer",
 								  "s", "a b", false);
@@ -2388,7 +2389,7 @@ public class TestAttributes extends BaseTest {
 			"s : x+=a x+=b {System.out.println($x);} ;" +
 			"a : 'a' -> {%{\"hi\"}} ;\n"+
 			"b : 'b' -> {%{\"mom\"}} ;\n"+
-			"WS : (' '|'\n') {skip();};\n";
+			"WS : (' '|'\\n') {skip();};\n";
 		String expecting = "[hi, mom]\n";
 		String found = execParser("T.g", grammar, "TParser", "TLexer",
 								  "s", "a b", false);
@@ -2573,7 +2574,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2602,7 +2603,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2631,7 +2632,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2738,7 +2739,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2767,7 +2768,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2795,7 +2796,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "R",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2893,7 +2894,7 @@ public class TestAttributes extends BaseTest {
 		ActionTranslator translator =
 			new ActionTranslator(generator,
 									  "a",
-									  new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+									  new CommonToken(ANTLRParser.ACTION,action),1);
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		String rawTranslation =
@@ -2924,7 +2925,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer();
 
 		ActionTranslator translator = new ActionTranslator(generator,"a",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -2998,7 +2999,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "field",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -3026,7 +3027,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -3054,7 +3055,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -3081,7 +3082,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -3109,7 +3110,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -3151,7 +3152,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -3180,7 +3181,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "rule",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 
@@ -3239,7 +3240,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer();
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "RULE",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =
@@ -3274,7 +3275,7 @@ public class TestAttributes extends BaseTest {
 		generator.genRecognizer();
 		ActionTranslator translator = new ActionTranslator(generator,
 																	 "twoIDs",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		// check that we didn't use scopeSetAttributeRef int translation!
@@ -3331,8 +3332,8 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRefToTextAttributeForCurrentTreeRule() throws Exception {
 		String action = "$text";
-		String expecting = "input.getTokenStream().toString(\n" +
-						   "              input.getTreeAdaptor().getTokenStartIndex(retval.start),\n" +
+		String expecting = "input.getTokenStream().toString(" + newline +
+						   "              input.getTreeAdaptor().getTokenStartIndex(retval.start)," + newline +
 						   "              input.getTreeAdaptor().getTokenStopIndex(retval.start))";
 
 		ErrorQueue equeue = new ErrorQueue();
@@ -3375,7 +3376,7 @@ public class TestAttributes extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer(); // forces load of templates
 		ActionTranslator translator = new ActionTranslator(generator, "b",
-																	 new antlr.CommonToken(ANTLRParser.ACTION,action),1);
+																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
 		StringTemplateGroup templates =

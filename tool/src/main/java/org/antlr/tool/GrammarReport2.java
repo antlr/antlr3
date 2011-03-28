@@ -70,7 +70,7 @@ public class GrammarReport2 {
 				d.dfa.decisionNFAStartState.associatedASTNode;
 			buf.append(decisionAST.getLine());
 			buf.append(":");
-			buf.append(decisionAST.getColumn());
+			buf.append(decisionAST.getCharPositionInLine());
 			buf.append(" decision "+decision+":");
 			
 			if ( d.dfa.isCyclic() ) buf.append(" cyclic");

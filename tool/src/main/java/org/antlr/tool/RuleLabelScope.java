@@ -27,7 +27,7 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
+import org.antlr.runtime.Token;
 
 public class RuleLabelScope extends AttributeScope {
 	/** Rules have a predefined set of attributes as well as

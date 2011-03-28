@@ -27,10 +27,10 @@
  */
 package org.antlr.analysis;
 
-import antlr.Token;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.MultiMap;
 import org.antlr.misc.Utils;
+import org.antlr.runtime.Token;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarAST;
@@ -472,16 +472,16 @@ public class DecisionProbe {
 				if ( dfa.isTokensRuleDecision() ) {
 					for (Integer altI : unreachableAlts) {
 						GrammarAST decAST = dfa.getDecisionASTNode();
-						GrammarAST altAST = decAST.getChild(altI-1);
+						GrammarAST altAST = (GrammarAST)decAST.getChild(altI-1);
 						GrammarAST delegatedTokensAlt =
-							altAST.getFirstChildWithType(ANTLRParser.DOT);
+							(GrammarAST)altAST.getFirstChildWithType(ANTLRParser.DOT);
 						if ( delegatedTokensAlt !=null ) {
 							isInheritedTokensRule = true;
 							ErrorManager.grammarWarning(ErrorManager.MSG_IMPORTED_TOKENS_RULE_EMPTY,
 														dfa.nfa.grammar,
 														null,
 														dfa.nfa.grammar.name,
-														delegatedTokensAlt.getFirstChild().getText());
+														delegatedTokensAlt.getChild(0).getText());
 						}
 					}
 				}
@@ -509,10 +509,10 @@ public class DecisionProbe {
 		GrammarAST lastAltAST = null;
 		if ( blockAST.getChild(0).getType()==ANTLRParser.OPTIONS ) {
 			// if options, skip first child: ( options { ( = greedy false ) )
-			lastAltAST = blockAST.getChild(lastAlt.intValue());
+			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt.intValue());
 		}
 		else {
-			lastAltAST = blockAST.getChild(lastAlt.intValue()-1);
+			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt.intValue()-1);
 		}
 		//System.out.println("last alt is "+lastAltAST.toStringTree());
 		// if last alt looks like ( ALT . <end-of-alt> ) then wildcard

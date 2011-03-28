@@ -41,7 +41,7 @@ public class TestASTConstruction extends BaseTest {
 				"parser grammar P;\n"+
 				"a : A;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT A <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT A <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -52,7 +52,7 @@ public class TestASTConstruction extends BaseTest {
 				"A : B+;\n" +
 				"B : 'a';");
 		String expecting =
-			" ( rule A ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT B <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule A ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT B <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("A").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -63,7 +63,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : (b)+;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -74,7 +74,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : b+;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -85,7 +85,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : (b)?;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( ? ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (? (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -96,7 +96,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : b?;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( ? ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (? (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -107,7 +107,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : (b)*;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -118,7 +118,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : b*;\n" +
 				"b : B;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT b <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT b <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -128,7 +128,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : 'a'*;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT 'a' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT 'a' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -138,7 +138,7 @@ public class TestASTConstruction extends BaseTest {
 				"lexer grammar P;\n"+
 				"B : 'b'*;");
 		String expecting =
-			" ( rule B ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT 'b' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule B ARG RET scope (BLOCK (ALT (* (BLOCK (ALT 'b' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("B").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -148,7 +148,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : 'while'*;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT 'while' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT 'while' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -158,7 +158,7 @@ public class TestASTConstruction extends BaseTest {
 				"lexer grammar P;\n"+
 				"B : 'while'*;");
 		String expecting =
-			" ( rule B ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT 'while' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule B ARG RET scope (BLOCK (ALT (* (BLOCK (ALT 'while' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("B").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -168,7 +168,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : 'a'+;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT 'a' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT 'a' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -178,7 +178,7 @@ public class TestASTConstruction extends BaseTest {
 				"lexer grammar P;\n"+
 				"B : 'b'+;");
 		String expecting =
-			" ( rule B ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT 'b' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule B ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT 'b' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("B").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -188,7 +188,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : 'a'?;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( ? ( BLOCK ( ALT 'a' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (? (BLOCK (ALT 'a' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -198,7 +198,7 @@ public class TestASTConstruction extends BaseTest {
 				"lexer grammar P;\n"+
 				"B : 'b'?;");
 		String expecting =
-			" ( rule B ARG RET scope ( BLOCK ( ALT ( ? ( BLOCK ( ALT 'b' <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule B ARG RET scope (BLOCK (ALT (? (BLOCK (ALT 'b' <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("B").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -208,7 +208,7 @@ public class TestASTConstruction extends BaseTest {
 				"lexer grammar P;\n"+
 				"ID : 'a'..'z'+;");
 		String expecting =
-			" ( rule ID ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT ( .. 'a' 'z' ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule ID ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT (.. 'a' 'z') <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("ID").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -218,7 +218,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x=ID;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( = x ID ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (= x ID) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -228,7 +228,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x=ID?;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( ? ( BLOCK ( ALT ( = x ID ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (? (BLOCK (ALT (= x ID) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -238,7 +238,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x=ID*;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT ( = x ID ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT (= x ID) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -249,7 +249,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : x=b;\n" +
 				"b : ID;\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( = x b ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (= x b) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -259,7 +259,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x=(A|B);\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( = x ( BLOCK ( ALT A <end-of-alt> ) ( ALT B <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (= x (BLOCK (ALT A <end-of-alt>) (ALT B <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -269,7 +269,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x=~(A|B);\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( = x ( ~ ( BLOCK ( ALT A <end-of-alt> ) ( ALT B <end-of-alt> ) <end-of-block> ) ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (= x (~ (BLOCK (ALT A <end-of-alt>) (ALT B <end-of-alt>) <end-of-block>))) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -279,7 +279,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x+=~(A|B);\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( += x ( ~ ( BLOCK ( ALT A <end-of-alt> ) ( ALT B <end-of-alt> ) <end-of-block> ) ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+= x (~ (BLOCK (ALT A <end-of-alt>) (ALT B <end-of-alt>) <end-of-block>))) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -289,7 +289,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x+=~(A|B)+;\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT ( += x ( ~ ( BLOCK ( ALT A <end-of-alt> ) ( ALT B <end-of-alt> ) <end-of-block> ) ) ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT (+= x (~ (BLOCK (ALT A <end-of-alt>) (ALT B <end-of-alt>) <end-of-block>))) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -300,7 +300,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : x=b+;\n" +
 				"b : ID;\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT ( = x b ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT (= x b) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -310,7 +310,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x+=ID*;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT ( += x ID ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT (+= x ID) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -320,7 +320,7 @@ public class TestASTConstruction extends BaseTest {
 				"grammar P;\n"+
 				"a : x+='int'*;");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( * ( BLOCK ( ALT ( += x 'int' ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (* (BLOCK (ALT (+= x 'int') <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -332,7 +332,7 @@ public class TestASTConstruction extends BaseTest {
 				"a : x+=b+;\n" +
 				"b : ID;\n");
 		String expecting =
-			" ( rule a ARG RET scope ( BLOCK ( ALT ( + ( BLOCK ( ALT ( += x b ) <end-of-alt> ) <end-of-block> ) ) <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule a ARG RET scope (BLOCK (ALT (+ (BLOCK (ALT (+= x b) <end-of-alt>) <end-of-block>)) <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("a").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -340,10 +340,10 @@ public class TestASTConstruction extends BaseTest {
 	@Test public void testRootTokenInStarLoop() throws Exception {
 		Grammar g = new Grammar(
 				"grammar Expr;\n" +
-				"options { backtrack=true; }\n" +
+				"options { output=AST; backtrack=true; }\n" +
 				"a : ('*'^)* ;\n");  // bug: the synpred had nothing in it
 		String expecting =
-			" ( rule synpred1_Expr ARG RET scope ( BLOCK ( ALT '*' <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule synpred1_Expr ARG RET scope (BLOCK (ALT '*' <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("synpred1_Expr").tree.toStringTree();
 		assertEquals(expecting, found);
 	}
@@ -354,7 +354,7 @@ public class TestASTConstruction extends BaseTest {
 				"options { backtrack=true; }\n" +
 				"a : ({blort} 'x')* ;\n");  // bug: the synpred had nothing in it
 		String expecting =
-			" ( rule synpred1_Expr ARG RET scope ( BLOCK ( ALT blort 'x' <end-of-alt> ) <end-of-block> ) <end-of-rule> )";
+			"(rule synpred1_Expr ARG RET scope (BLOCK (ALT blort 'x' <end-of-alt>) <end-of-block>) <end-of-rule>)";
 		String found = g.getRule("synpred1_Expr").tree.toStringTree();
 		assertEquals(expecting, found);
 	}

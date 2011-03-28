@@ -28,7 +28,7 @@
 package org.antlr.tool;
 
 import org.antlr.analysis.DFA;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.Utils;
 import org.antlr.runtime.misc.Stats;
 
@@ -307,7 +307,7 @@ public class GrammarReport {
 				dfa.decisionNFAStartState.associatedASTNode;
 			buf.append(decisionAST.getLine());
 			buf.append(":");
-			buf.append(decisionAST.getColumn());
+			buf.append(decisionAST.getCharPositionInLine());
 			buf.append(newline);
 		}
 		return buf.toString();

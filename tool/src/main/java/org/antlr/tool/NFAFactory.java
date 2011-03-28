@@ -32,6 +32,7 @@ import org.antlr.misc.IntSet;
 import org.antlr.misc.IntervalSet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -290,7 +291,7 @@ public class NFAFactory {
 	 *  not invoked by another rule (they can only be invoked from outside).
 	 *  These are the start rules.
      */
-    public int build_EOFStates(List rules) {
+    public int build_EOFStates(Collection rules) {
 		int numberUnInvokedRules = 0;
         for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
 			Rule r = (Rule) iterator.next();

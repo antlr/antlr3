@@ -28,9 +28,9 @@
 
 package org.antlr.analysis;
 
-import antlr.CommonToken;
-import antlr.Token;
 import org.antlr.misc.IntSet;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
 import org.antlr.tool.Grammar;
 
 import java.util.ArrayList;
@@ -129,11 +129,11 @@ public class MachineProbe {
 					if (!t.isEpsilon() && !t.label.getSet().and(label).isNil()
 							&& next.contains(t.target)) {
 						if (p.associatedASTNode != null) {
-							antlr.Token oldtoken = p.associatedASTNode.token;
+							Token oldtoken = p.associatedASTNode.token;
 							CommonToken token = new CommonToken(oldtoken
 									.getType(), oldtoken.getText());
 							token.setLine(oldtoken.getLine());
-							token.setColumn(oldtoken.getColumn());
+							token.setCharPositionInLine(oldtoken.getCharPositionInLine());
 							tokens.add(token);
 							break nfaConfigLoop; // found path, move to next
 													// NFAState set

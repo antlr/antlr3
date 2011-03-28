@@ -28,7 +28,7 @@
 package org.antlr.analysis;
 
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.tool.Grammar;

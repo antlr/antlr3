@@ -27,16 +27,19 @@
  */
 package org.antlr.tool;
 
-import antlr.BaseAST;
-import antlr.Token;
-import antlr.TokenWithIndex;
-import antlr.collections.AST;
 import org.antlr.analysis.DFA;
 import org.antlr.analysis.NFAState;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.IntSet;
 import org.antlr.misc.Interval;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.stringtemplate.StringTemplate;
+import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 
 import java.util.*;
 
@@ -54,20 +57,12 @@ import java.util.*;
  *  have all sorts of extra work to do.  Ick.  Anyway, I'm doing all this
  *  on purpose, not out of ignorance. ;)
  */
-public class GrammarAST extends BaseAST {
+public class GrammarAST extends CommonTree {
 	static int count = 0;
 
 	public int ID = ++count;
 
-	/** This AST node was created from what token? */
-    public TokenWithIndex token = null;
-
-	public String textOverride;
-
-	/** What token indexes bracket all tokens associated with this node
-	 *  and below?
-	 */
-	public int startIndex=-1, stopIndex=-1;
+	private String textOverride;
 
     public String enclosingRuleName;
 
@@ -153,12 +148,16 @@ public class GrammarAST extends BaseAST {
 		initialize(t,txt);
 	}
 
+	public GrammarAST(Token token) {
+		initialize(token);
+	}
+
 	public void initialize(int i, String s) {
-        token = new TokenWithIndex(i,s);
-		token.setIndex(-1);
+        token = new CommonToken(i,s);
+		token.setTokenIndex(-1);
     }
 
-    public void initialize(AST ast) {
+    public void initialize(Tree ast) {
 		GrammarAST t = ((GrammarAST)ast);
 		this.startIndex = t.startIndex;
 		this.stopIndex = t.stopIndex;
@@ -170,9 +169,9 @@ public class GrammarAST extends BaseAST {
 	}
 
     public void initialize(Token token) {
-        this.token = (TokenWithIndex)token;
+        this.token = token;
 		if ( token!=null ) {
-			startIndex = ((TokenWithIndex) token).getIndex();
+			startIndex = token.getTokenIndex();
 			stopIndex = startIndex;
 		}
     }
@@ -184,10 +183,6 @@ public class GrammarAST extends BaseAST {
     public void setLookaheadDFA(DFA lookaheadDFA) {
         this.lookaheadDFA = lookaheadDFA;
     }
-
-	public Token getToken() {
-		return token;
-	}
 
     public NFAState getNFAStartState() {
         return NFAStartState;
@@ -251,16 +246,16 @@ public class GrammarAST extends BaseAST {
 			this.blockOptions = null;
 			return;
 		}
-		Set keys = options.keySet();
-		for (Iterator it = keys.iterator(); it.hasNext();) {
-			String optionName = (String) it.next();
+		String[] keys = (String[])options.keySet().toArray(new String[options.size()]);
+		for (String optionName : keys) {
 			String stored= setBlockOption(grammar, optionName, options.get(optionName));
 			if ( stored==null ) {
-				it.remove();
+				options.remove(optionName);
 			}
 		}
     }
 
+    @Override
     public String getText() {
 		if ( textOverride!=null ) return textOverride;
         if ( token!=null ) {
@@ -277,6 +272,7 @@ public class GrammarAST extends BaseAST {
 		textOverride = text; // don't alt tokens as others might see
 	}
 
+    @Override
     public int getType() {
         if ( token!=null ) {
             return token.getType();
@@ -284,13 +280,14 @@ public class GrammarAST extends BaseAST {
         return -1;
     }
 
+    @Override
     public int getLine() {
 		int line=0;
         if ( token!=null ) {
             line = token.getLine();
         }
 		if ( line==0 ) {
-			AST child = getFirstChild();
+			Tree child = getChild(0);
 			if ( child!=null ) {
 				line = child.getLine();
 			}
@@ -298,28 +295,27 @@ public class GrammarAST extends BaseAST {
         return line;
     }
 
-    public int getColumn() {
+    @Override
+    public int getCharPositionInLine(){
 		int col=0;
         if ( token!=null ) {
-            col = token.getColumn();
+            col = token.getCharPositionInLine();
         }
 		if ( col==0 ) {
-			AST child = getFirstChild();
+			Tree child = getChild(0);
 			if ( child!=null ) {
-				col = child.getColumn();
+				col = child.getCharPositionInLine();
 			}
 		}
         return col;
     }
 
-	public int getCharPositionInLine() { return getColumn()-1; }
-
     public void setLine(int line) {
         token.setLine(line);
     }
 
-    public void setColumn(int col) {
-        token.setColumn(col);
+    public void setCharPositionInLine(int value){
+        token.setCharPositionInLine(value);
     }
 
  	public IntSet getSetValue() {
@@ -331,73 +327,73 @@ public class GrammarAST extends BaseAST {
     }
 
     public GrammarAST getLastChild() {
-        return ((GrammarAST)getFirstChild()).getLastSibling();
+        if (getChildCount() == 0)
+            return null;
+        return (GrammarAST)getChild(getChildCount() - 1);
+    }
+
+    public GrammarAST getNextSibling() {
+        return (GrammarAST)getParent().getChild(getChildIndex() + 1);
     }
 
     public GrammarAST getLastSibling() {
-        GrammarAST t = this;
-        GrammarAST last = null;
-        while ( t!=null ) {
-            last = t;
-            t = (GrammarAST)t.getNextSibling();
+        Tree parent = getParent();
+        if ( parent==null ) {
+            return null;
         }
-        return last;
+        return (GrammarAST)parent.getChild(parent.getChildCount() - 1);
     }
 
-    /** Get the ith child from 0 */
-	public GrammarAST getChild(int i) {
-		int n = 0;
-		AST t = getFirstChild();
-		while ( t!=null ) {
-			if ( n==i ) {
-				return (GrammarAST)t;
-			}
-			n++;
-			t = (GrammarAST)t.getNextSibling();
-		}
-		return null;
-	}
-
-	public GrammarAST getFirstChildWithType(int ttype) {
-		AST t = getFirstChild();
-		while ( t!=null ) {
-			if ( t.getType()==ttype ) {
-				return (GrammarAST)t;
-			}
-			t = (GrammarAST)t.getNextSibling();
-		}
-		return null;
-	}
 
     public GrammarAST[] getChildrenAsArray() {
-        AST t = getFirstChild();
-        GrammarAST[] array = new GrammarAST[getNumberOfChildren()];
-        int i = 0;
-        while ( t!=null ) {
-            array[i] = (GrammarAST)t;
-            t = t.getNextSibling();
-            i++;
-        }
-        return array;
+        return (GrammarAST[])getChildren().toArray(new GrammarAST[getChildCount()]);
     }
 
-	/** Return a reference to the first node (depth-first) that has
-	 *  token type ttype.  Assume 'this' is a root node; don't visit siblings
-	 *  of root.  Return null if no node found with ttype.
-	 */
+    private static final GrammarAST DescendantDownNode = new GrammarAST(Token.DOWN, "DOWN");
+    private static final GrammarAST DescendantUpNode = new GrammarAST(Token.UP, "UP");
+
+    public static List<Tree> descendants(Tree root){
+        return descendants(root, false);
+    }
+
+    public static List<Tree> descendants(Tree root, boolean insertDownUpNodes){
+        List<Tree> result = new ArrayList<Tree>();
+        int count = root.getChildCount();
+
+        if (insertDownUpNodes){
+            result.add(root);
+            result.add(DescendantDownNode);
+
+            for (int i = 0 ; i < count ; i++){
+                Tree child = root.getChild(i);
+                for (Tree subchild : descendants(child, true))
+                    result.add(subchild);
+            }
+
+            result.add(DescendantUpNode);
+        }else{
+            result.add(root);
+            for (int i = 0 ; i < count ; i++){
+                Tree child = root.getChild(i);
+                for (Tree subchild : descendants(child, false))
+                    result.add(subchild);
+            }
+        }
+
+        return result;
+    }
+
 	public GrammarAST findFirstType(int ttype) {
 		// check this node (the root) first
 		if ( this.getType()==ttype ) {
 			return this;
 		}
 		// else check children
-		GrammarAST child = (GrammarAST)this.getFirstChild();
-		while ( child!=null ) {
-			GrammarAST result = child.findFirstType(ttype);
-			if ( result!=null ) {
-				return result;
+		Iterable<Tree> descendants = descendants(this);
+		for (Tree child : descendants) {
+			if ( child.getType()==ttype ) {
+				return (GrammarAST)child;
 			}
-			child = (GrammarAST)child.getNextSibling();
 		}
 		return null;
 	}
@@ -412,89 +408,56 @@ public class GrammarAST extends BaseAST {
 		// check this node (the root) first
 		if ( this.getType()==ttype ) nodes.add(this);
 		// check children
-		GrammarAST child = (GrammarAST)this.getFirstChild();
-		while ( child!=null ) {
+		for (int i = 0; i < getChildCount(); i++){
+			GrammarAST child = (GrammarAST)getChild(i);
 			child._findAllType(ttype, nodes);
-			child = (GrammarAST)child.getNextSibling();
 		}
 	}
-
-    public int getNumberOfChildrenWithType(int ttype) {
-        AST p = this.getFirstChild();
-        int n = 0;
-        while ( p!=null ) {
-            if ( p.getType()==ttype ) n++;
-            p = p.getNextSibling();
-        }
-        return n;
-    }
 
     /** Make nodes unique based upon Token so we can add them to a Set; if
 	 *  not a GrammarAST, check type.
 	 */
+	@Override
 	public boolean equals(Object ast) {
 		if ( this == ast ) {
 			return true;
 		}
 		if ( !(ast instanceof GrammarAST) ) {
-			return this.getType() == ((AST)ast).getType();
+			return this.getType() == ((Tree)ast).getType();
 		}
 		GrammarAST t = (GrammarAST)ast;
 		return token.getLine() == t.getLine() &&
-			   token.getColumn() == t.getColumn();
+			   token.getCharPositionInLine() == t.getCharPositionInLine();
 	}
+
+    /** Make nodes unique based upon Token so we can add them to a Set; if
+	 *  not a GrammarAST, check type.
+	 */
+    @Override
+    public int hashCode(){
+        if (token == null)
+            return 0;
+
+        return token.hashCode();
+    }
 
 	/** See if tree has exact token types and structure; no text */
-	public boolean hasSameTreeStructure(AST t) {
+	public boolean hasSameTreeStructure(Tree other) {
 		// check roots first.
-		if (this.getType() != t.getType()) return false;
+		if (this.getType() != other.getType()) return false;
 		// if roots match, do full list match test on children.
-		if (this.getFirstChild() != null) {
-			if (!(((GrammarAST)this.getFirstChild()).hasSameListStructure(t.getFirstChild()))) return false;
+		Iterator<Tree> thisDescendants = descendants(this, true).iterator();
+		Iterator<Tree> otherDescendants = descendants(other, true).iterator();
+		while (thisDescendants.hasNext()) {
+			if (!otherDescendants.hasNext())
+				return false;
+			if (thisDescendants.next().getType() != otherDescendants.next().getType())
+				return false;
 		}
-		// sibling has no kids, make sure t doesn't either
-		else if (t.getFirstChild() != null) {
-			return false;
-		}
-		return true;
+		return !otherDescendants.hasNext();
 	}
 
-	public boolean hasSameListStructure(AST t) {
-		AST sibling;
-
-		// the empty tree is not a match of any non-null tree.
-		if (t == null) {
-			return false;
-		}
-
-		// Otherwise, start walking sibling lists.  First mismatch, return false.
-		for (sibling = this;
-			 sibling != null && t != null;
-			 sibling = sibling.getNextSibling(), t = t.getNextSibling())
-		{
-			// as a quick optimization, check roots first.
-			if (sibling.getType()!=t.getType()) {
-				return false;
-			}
-			// if roots match, do full list match test on children.
-			if (sibling.getFirstChild() != null) {
-				if (!((GrammarAST)sibling.getFirstChild()).hasSameListStructure(t.getFirstChild())) {
-					return false;
-				}
-			}
-			// sibling has no kids, make sure t doesn't either
-			else if (t.getFirstChild() != null) {
-				return false;
-			}
-		}
-		if (sibling == null && t == null) {
-			return true;
-		}
-		// one sibling list has more than the other
-		return false;
-	}
-
-	public static GrammarAST dup(AST t) {
+	public static GrammarAST dup(Tree t) {
 		if ( t==null ) {
 			return null;
 		}
@@ -503,25 +466,29 @@ public class GrammarAST extends BaseAST {
 		return dup_t;
 	}
 
-	/** Duplicate tree including siblings of root. */
-	public static GrammarAST dupListNoActions(GrammarAST t, GrammarAST parent) {
-		GrammarAST result = dupTreeNoActions(t, parent);            // if t == null, then result==null
-		GrammarAST nt = result;
-		while (t != null) {						// for each sibling of the root
-			t = (GrammarAST)t.getNextSibling();
-			if ( t!=null && t.getType()==ANTLRParser.ACTION ) {
-				continue;
-			}
-			GrammarAST d = dupTreeNoActions(t, parent);
-			if ( d!=null ) {
-				if ( nt!=null ) {
-					nt.setNextSibling(d);	// dup each subtree, building new tree
-				}
-				nt = d;
-			}
-		}
-		return result;
-	}
+    @Override
+    public Tree dupNode(){
+        return dup(this);
+    }
+
+    private static List<GrammarAST> getChildrenForDupTree(GrammarAST t) {
+        List<GrammarAST> result = new ArrayList<GrammarAST>();
+        for (int i = 0; i < t.getChildCount(); i++){
+            GrammarAST child = (GrammarAST)t.getChild(i);
+            int ttype = child.getType();
+            if (ttype == ANTLRParser.REWRITE)
+                continue;
+
+            if (ttype == ANTLRParser.BANG || ttype == ANTLRParser.ROOT) {
+                for (GrammarAST subchild : getChildrenForDupTree(child))
+                    result.add(subchild);
+            } else {
+                result.add(child);
+            }
+        }
+
+        return result;
+    }
 
 	/**Duplicate a tree, assuming this is a root node of a tree--
 	 * duplicate that node and what's below; ignore siblings of root node.
@@ -530,25 +497,9 @@ public class GrammarAST extends BaseAST {
 		if ( t==null ) {
 			return null;
 		}
-		int ttype = t.getType();
-		if ( ttype==ANTLRParser.REWRITE ) {
-			return null;
-		}
-		if ( ttype==ANTLRParser.BANG || ttype==ANTLRParser.ROOT ) {
-			// return x from ^(ROOT x)
-			return (GrammarAST)dupListNoActions((GrammarAST)t.getFirstChild(), t);
-		}
-        /* DOH!  Must allow labels for sem preds
-        if ( (ttype==ANTLRParser.ASSIGN||ttype==ANTLRParser.PLUS_ASSIGN) &&
-			 (parent==null||parent.getType()!=ANTLRParser.OPTIONS) )
-		{
-			return dupTreeNoActions(t.getChild(1), t); // return x from ^(ASSIGN label x)
-		}
-		*/
-		GrammarAST result = dup(t);		// make copy of root
-		// copy all children of root.
-		GrammarAST kids = dupListNoActions((GrammarAST)t.getFirstChild(), t);
-		result.setFirstChild(kids);
+		GrammarAST result = (GrammarAST)t.dupNode();
+		for (GrammarAST subchild : getChildrenForDupTree(t))
+			result.addChild(dupTreeNoActions(subchild, result));
 		return result;
 	}
 
@@ -558,23 +509,27 @@ public class GrammarAST extends BaseAST {
 		}
 		GrammarAST root = dup(t);		// make copy of root
 		// copy all children of root.
-		t = (GrammarAST)t.getFirstChild();
-		while (t != null) {						// for each sibling of the root
-			GrammarAST d = dupTree(t);
-			root.addChild(d);
-			t = (GrammarAST)t.getNextSibling();
+		for (int i= 0; i < t.getChildCount(); i++) {
+			GrammarAST child = (GrammarAST)t.getChild(i);
+			root.addChild(dupTree(child));
 		}
 		return root;
 	}
 
 	public void setTreeEnclosingRuleNameDeeply(String rname) {
-		GrammarAST t = this;
-		t.enclosingRuleName = rname;
-		t = t.getChild(0);
-		while (t != null) {						// for each sibling of the root
-			t.setTreeEnclosingRuleNameDeeply(rname);
-			t = (GrammarAST)t.getNextSibling();
+		enclosingRuleName = rname;
+		if (getChildCount() == 0) return;
+		for (Object child : getChildren()) {
+			if (!(child instanceof GrammarAST)) {
+				continue;
+			}
+			GrammarAST grammarAST = (GrammarAST)child;
+			grammarAST.setTreeEnclosingRuleNameDeeply(rname);
 		}
+	}
+
+	String toStringList() {
+		return "";
 	}
 
 	/** Track start/stop token for subtree root created for a rule.
@@ -583,55 +538,21 @@ public class GrammarAST extends BaseAST {
 	 *  Might be useful info so I'll not force to be i..i.
 	 */
 	public void setTokenBoundaries(Token startToken, Token stopToken) {
-		if ( startToken!=null ) startIndex = ((TokenWithIndex)startToken).getIndex();
-		if ( stopToken!=null ) stopIndex = ((TokenWithIndex)stopToken).getIndex();
-	}
-
-	/** For every node in this subtree, make sure it's start/stop token's
-	 *  are set.  Walk depth first, visit bottom up.  Only updates nodes
-	 *  with at least one token index < 0.
-	 */
-	public Interval setUnknownTokenBoundaries() {
-//		System.out.println(getText()+": START");
-		if ( getNumberOfChildren()==0 ) {
-			if ( startIndex<0 || stopIndex<0 ) {
-				startIndex = stopIndex = token.getIndex();
-				//System.out.println(getText()+": STOP "+startIndex);
-			}
-			return new Interval(startIndex, stopIndex);
-		}
-		GrammarAST t = (GrammarAST)this.getFirstChild();
-		int min = token.getIndex()>=0 ? token.getIndex() : Integer.MAX_VALUE;
-		int max = -1;
-		while (t != null) {
-			Interval I = t.setUnknownTokenBoundaries();
-			if ( I.a!=-1 ) min = Math.min(min, I.a);
-			max = Math.max(max, I.b);
-			t = (GrammarAST)t.getNextSibling();
-		}
-		if ( startIndex<0 || min < startIndex ) startIndex = min;
-		if ( stopIndex<0 || max > stopIndex ) stopIndex = max;
-		//System.out.println(getText()+": STOP "+startIndex+".."+stopIndex);
-		return new Interval(startIndex, stopIndex);
+		if ( startToken!=null ) startIndex = startToken.getTokenIndex();
+		if ( stopToken!=null ) stopIndex = stopToken.getTokenIndex();
 	}
 
 	public GrammarAST getBlockALT(int i) {
 		if ( this.getType()!=ANTLRParser.BLOCK ) return null;
-		GrammarAST t = (GrammarAST)getFirstChild();
-		int j = 0;
-		while ( t!=null ) {
-			if ( t.getType()==ANTLRParser.ALT ) {
-				j++;
-				if ( j==i ) return t;
+		int alts = 0;
+		for (int j =0 ; j < getChildCount(); j++) {
+			if (getChild(j).getType() == ANTLRParser.ALT) {
+				alts++;
 			}
-			t = (GrammarAST)t.getNextSibling();
+			if (alts == i) {
+				return (GrammarAST)getChild(j);
+			}
 		}
 		return null;
 	}
-
-//	@Override
-//	public String toString() {
-//		if ( startIndex==-1 && stopIndex==-1 ) return getText();
-//		return getText()+":"+startIndex+".."+stopIndex;
-//	}
 }

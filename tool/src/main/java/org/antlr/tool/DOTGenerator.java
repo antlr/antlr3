@@ -29,7 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.Tool;
 import org.antlr.analysis.*;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.Utils;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;

@@ -41,7 +41,7 @@ import org.antlr.codegen.*;
 import org.antlr.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 
 }
 
@@ -51,7 +51,7 @@ Rule enclosingRule;
 int outerAltNum;
 Grammar grammar;
 CodeGenerator generator;
-antlr.Token actionToken;
+Token actionToken;
 
 	public ActionTranslator(CodeGenerator generator,
 								 String ruleName,
@@ -67,7 +67,7 @@ antlr.Token actionToken;
 
 	public ActionTranslator(CodeGenerator generator,
 								 String ruleName,
-								 antlr.Token actionToken,
+								 Token actionToken,
 								 int outerAltNum)
 	{
 		this(new ANTLRStringStream(actionToken.getText()));
@@ -110,7 +110,7 @@ public List translateAction(String action) {
 	ActionTranslator translator =
 		new ActionTranslator(generator,
 								  rname,
-								  new antlr.CommonToken(ANTLRParser.ACTION,action),outerAltNum);
+								  new CommonToken(ANTLRParser.ACTION,action),outerAltNum);
     return translator.translateToChunks();
 }
 

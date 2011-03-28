@@ -27,18 +27,16 @@
  */
 package org.antlr.tool;
 
-import antlr.*;
-import antlr.collections.AST;
 import org.antlr.Tool;
 import org.antlr.analysis.*;
+import org.antlr.analysis.DFA;
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.codegen.*;
-import org.antlr.grammar.v2.ANTLRLexer;
-import org.antlr.grammar.v2.ANTLRParser;
-import org.antlr.grammar.v2.*;
-import org.antlr.grammar.v3.ActionAnalysis;
+import org.antlr.grammar.v3.*;
 import org.antlr.misc.*;
 import org.antlr.misc.Utils;
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 
@@ -148,7 +146,7 @@ public class Grammar {
 	 *  including whitespace tokens etc...  I use this to extract
 	 *  lexer rules from combined grammars.
 	 */
-	public TokenStreamRewriteEngine tokenBuffer;
+	public CommonTokenStream tokenBuffer;
 	public static final String IGNORE_STRING_IN_GRAMMAR_FILE_NAME = "__";
 	public static final String AUTO_GENERATED_TOKEN_NAME_PREFIX = "T__";
 
@@ -161,7 +159,7 @@ public class Grammar {
 	}
 
 	public class LabelElementPair {
-		public antlr.Token label;
+		public Token label;
 		public GrammarAST elementRef;
 		public String referencedRuleName;
 		/** Has an action referenced the label?  Set by ActionAnalysis.g
@@ -169,7 +167,7 @@ public class Grammar {
 		 */
 		public boolean actionReferencesLabel;
 		public int type; // in {RULE_LABEL,TOKEN_LABEL,RULE_LIST_LABEL,TOKEN_LIST_LABEL}
-		public LabelElementPair(antlr.Token label, GrammarAST elementRef) {
+		public LabelElementPair(Token label, GrammarAST elementRef) {
 			this.label = label;
 			this.elementRef = elementRef;
 			this.referencedRuleName = elementRef.getText();
@@ -331,7 +329,7 @@ public class Grammar {
 	protected Set<GrammarAST> scopedRuleRefs = new HashSet();
 
 	/** The unique set of all token ID references in any rule */
-	protected Set<antlr.Token> tokenIDRefs = new HashSet<antlr.Token>();
+	protected Set<Token> tokenIDRefs = new HashSet<Token>();
 
 	/** Be able to assign a number to every decision in grammar;
 	 *  decisions in 1..n
@@ -538,7 +536,7 @@ public class Grammar {
 
 	/** Used for testing; only useful on noncomposite grammars.*/
 	public Grammar(String grammarString)
-			throws antlr.RecognitionException, antlr.TokenStreamException
+			throws RecognitionException
 	{
 		this(null, grammarString);
 	}
@@ -547,14 +545,17 @@ public class Grammar {
 	 *  noncomposite grammars.
 	 */
 	public Grammar(Tool tool, String grammarString)
-		throws antlr.RecognitionException
+		throws RecognitionException
 	{
 		this(tool);
 		setFileName("<string>");
 		StringReader r = new StringReader(grammarString);
 		parseAndBuildAST(r);
 		composite.assignTokenTypes();
-		defineGrammarSymbols();
+		//composite.translateLeftRecursiveRules();
+		addRulesForSyntacticPredicates();
+		composite.defineGrammarSymbols();
+		//composite.createNFAs();
 		checkNameSpaceAndActions();
 	}
 
@@ -621,24 +622,21 @@ public class Grammar {
 
 	public void parseAndBuildAST(Reader r) {
 		// BUILD AST FROM GRAMMAR
-		ANTLRLexer lexer = new ANTLRLexer(r);
-		lexer.setFilename(this.getFileName());
-		// use the rewrite engine because we want to buffer up all tokens
-		// in case they have a merged lexer/parser, send lexer rules to
-		// new grammar.
-		lexer.setTokenObjectClass("antlr.TokenWithIndex");
-		tokenBuffer = new ANTLRTokenStream(lexer);
-		tokenBuffer.discard(ANTLRParser.WS);
-		tokenBuffer.discard(ANTLRParser.ML_COMMENT);
-		tokenBuffer.discard(ANTLRParser.COMMENT);
-		tokenBuffer.discard(ANTLRParser.SL_COMMENT);
-		ANTLRParser parser = new ANTLRParser(tokenBuffer);
-		parser.setFilename(this.getFileName());
+		ANTLRLexer lexer;
 		try {
-			parser.grammar(this);
+			lexer = new ANTLRLexer(new ANTLRReaderStream(r));
+		} catch (IOException e) {
+			ErrorManager.internalError("unexpected stream error from parsing "+fileName, e);
+			return;
 		}
-		catch (TokenStreamException tse) {
-			ErrorManager.internalError("unexpected stream error from parsing "+fileName, tse);
+
+		lexer.setFileName(this.getFileName());
+		tokenBuffer = new CommonTokenStream(lexer);
+		ANTLRParser parser = ANTLRParser.createParser(tokenBuffer);
+		parser.setFileName(this.getFileName());
+		ANTLRParser.grammar__return result = null;
+		try {
+			result = parser.grammar_(this);
 		}
 		catch (RecognitionException re) {
 			ErrorManager.internalError("unexpected parser recognition error from "+fileName, re);
@@ -659,13 +657,13 @@ public class Grammar {
 			}
 		}
 
-		grammarTree = (GrammarAST)parser.getAST();
+		setGrammarTree((GrammarAST)result.getTree());
 
 		//if ( grammarTree!=null ) System.out.println("grammar tree: "+grammarTree.toStringTree());
 
 		grammarTree.setUnknownTokenBoundaries();
 
-		setFileName(lexer.getFilename()); // the lexer #src might change name
+		setFileName(lexer.getFileName()); // the lexer #src might change name
 		if ( grammarTree==null || grammarTree.findFirstType(ANTLRParser.RULE)==null ) {
 			ErrorManager.error(ErrorManager.MSG_NO_RULES, getFileName());
 			return;
@@ -708,13 +706,13 @@ public class Grammar {
 
 	public void translateLeftRecursiveRule(GrammarAST ruleAST) {
 		//System.out.println(ruleAST.toStringTree());
+		CommonTreeNodeStream input = new CommonTreeNodeStream(ruleAST);
 		LeftRecursiveRuleAnalyzer leftRecursiveRuleWalker =
-			new LeftRecursiveRuleAnalyzer(this, ruleAST.enclosingRuleName);
-		leftRecursiveRuleWalker.setASTNodeClass("org.antlr.tool.GrammarAST");
+			new LeftRecursiveRuleAnalyzer(input, this, ruleAST.enclosingRuleName);
 		boolean isLeftRec = false;
 		try {
 			//System.out.println("TESTING "+ruleAST.enclosingRuleName);
-			isLeftRec = leftRecursiveRuleWalker.rec_rule(ruleAST, this);
+			isLeftRec = leftRecursiveRuleWalker.rec_rule(this);
 		}
 		catch (RecognitionException re) {
 			ErrorManager.error(ErrorManager.MSG_BAD_AST_STRUCTURE, re);
@@ -740,10 +738,9 @@ public class Grammar {
 
 		// DEFINE RULES
 		//System.out.println("### define "+name+" rules");
-		DefineGrammarItemsWalker defineItemsWalker = new DefineGrammarItemsWalker();
-		defineItemsWalker.setASTNodeClass("org.antlr.tool.GrammarAST");
+		DefineGrammarItemsWalker defineItemsWalker = new DefineGrammarItemsWalker(new CommonTreeNodeStream(getGrammarTree()));
 		try {
-			defineItemsWalker.grammar(grammarTree, this);
+			defineItemsWalker.grammar_(this);
 		}
 		catch (RecognitionException re) {
 			ErrorManager.error(ErrorManager.MSG_BAD_AST_STRUCTURE,
@@ -903,35 +900,33 @@ public class Grammar {
 	}
 
 	public GrammarAST parseArtificialRule(String ruleText) {
-		ANTLRLexer lexer = new ANTLRLexer(new StringReader(ruleText));
-		lexer.setTokenObjectClass("antlr.TokenWithIndex");
-		TokenStreamRewriteEngine tokbuf = new ANTLRTokenStream(lexer);
-		tokbuf.discard(ANTLRParser.WS);
-		tokbuf.discard(ANTLRParser.ML_COMMENT);
-		tokbuf.discard(ANTLRParser.COMMENT);
-		tokbuf.discard(ANTLRParser.SL_COMMENT);
-		ANTLRParser parser = new ANTLRParser(tokbuf);
+		ANTLRLexer lexer = new ANTLRLexer(new ANTLRStringStream(ruleText));
+		ANTLRParser parser = ANTLRParser.createParser(new CommonTokenStream(lexer));
 		parser.setGrammar(this);
-		parser.setGtype(this.type);
-		parser.setASTNodeClass("org.antlr.tool.GrammarAST");
-		try { parser.rule(); }
+		parser.setGrammarType(this.type);
+		try {
+			ANTLRParser.rule_return result = parser.rule();
+			return (GrammarAST)result.getTree();
+		}
 		catch (Exception e) {
 			ErrorManager.error(ErrorManager.MSG_ERROR_CREATING_ARTIFICIAL_RULE,
 							   e);
+			return null;
 		}
-		return (GrammarAST)parser.getAST();
 	}
 
-
 	public void addRule(GrammarAST grammarTree, GrammarAST t) {
-		GrammarAST p = (GrammarAST)grammarTree.getFirstChild();
-		while ( p!=null &&
-				p.getType()!=ANTLRParser.RULE &&
-			    p.getType()!=ANTLRParser.PREC_RULE )
-		{
-			p = (GrammarAST)p.getNextSibling();
+		GrammarAST p = null;
+		for (int i = 0; i < grammarTree.getChildCount(); i++ ) {
+			p = (GrammarAST)grammarTree.getChild(i);
+			if (p == null || p.getType() == ANTLRParser.RULE || p.getType() == ANTLRParser.PREC_RULE) {
+				break;
+			}
 		}
-		if ( p!=null ) grammarTree.addChild(t);
+
+		if (p != null) {
+			grammarTree.addChild(t);
+		}
 	}
 
 	/** for any syntactic predicates, we need to define rules for them; they will get
@@ -1025,9 +1020,10 @@ public class Grammar {
 			return;
 		}
 
-		TreeToNFAConverter nfaBuilder = new TreeToNFAConverter(this, nfa, factory);
+		CommonTreeNodeStream input = new CommonTreeNodeStream(getGrammarTree());
+		TreeToNFAConverter nfaBuilder = new TreeToNFAConverter(input, this, nfa, factory);
 		try {
-			nfaBuilder.grammar(grammarTree);
+			nfaBuilder.grammar_();
 		}
 		catch (RecognitionException re) {
 			ErrorManager.error(ErrorManager.MSG_BAD_AST_STRUCTURE,
@@ -1262,7 +1258,7 @@ outer:
 	private void updateLineColumnToLookaheadDFAMap(DFA lookaheadDFA) {
 		GrammarAST decisionAST = nfa.grammar.getDecisionBlockAST(lookaheadDFA.decisionNumber);
 		int line = decisionAST.getLine();
-		int col = decisionAST.getColumn();
+		int col = decisionAST.getCharPositionInLine();
 		lineColumnToLookaheadDFAMap.put(new StringBuffer().append(line + ":")
 										.append(col).toString(), lookaheadDFA);
 	}
@@ -1432,7 +1428,7 @@ outer:
 	/** Define a new rule.  A new rule index is created by incrementing
 	 *  ruleIndex.
 	 */
-	public void defineRule(antlr.Token ruleToken,
+	public void defineRule(Token ruleToken,
 						   String modifier,
 						   Map options,
 						   GrammarAST tree,
@@ -1587,7 +1583,7 @@ outer:
 		return null;
 	}
 
-	public void defineLexerRuleFoundInParser(antlr.Token ruleToken,
+	public void defineLexerRuleFoundInParser(Token ruleToken,
 											 GrammarAST ruleAST)
 	{
 //		System.out.println("rule tree is:\n"+ruleAST.toStringTree());
@@ -1602,11 +1598,11 @@ outer:
 		buf.append("\" ");
 		buf.append(ruleAST.getLine());
 		buf.append("\n");
-		for (int i=ruleAST.startIndex;
-			 i<=ruleAST.stopIndex && i<tokenBuffer.size();
+		for (int i=ruleAST.getTokenStartIndex();
+			 i<=ruleAST.getTokenStopIndex() && i<tokenBuffer.size();
 			 i++)
 		{
-			TokenWithIndex t = (TokenWithIndex)tokenBuffer.getToken(i);
+			CommonToken t = (CommonToken)tokenBuffer.get(i);
 			// undo the text deletions done by the lexer (ugh)
 			if ( t.getType()==ANTLRParser.BLOCK ) {
 				buf.append("(");
@@ -1779,7 +1775,7 @@ outer:
 	/** Define a label defined in a rule r; check the validity then ask the
 	 *  Rule object to actually define it.
 	 */
-	protected void defineLabel(Rule r, antlr.Token label, GrammarAST element, int type) {
+	protected void defineLabel(Rule r, Token label, GrammarAST element, int type) {
 		boolean err = nameSpaceChecker.checkForLabelTypeMismatch(r, label, type);
 		if ( err ) {
 			return;
@@ -1788,7 +1784,7 @@ outer:
 	}
 
 	public void defineTokenRefLabel(String ruleName,
-									antlr.Token label,
+									Token label,
 									GrammarAST tokenRef)
 	{
 		Rule r = getLocallyDefinedRule(ruleName);
@@ -1809,7 +1805,7 @@ outer:
 	}
 
     public void defineWildcardTreeLabel(String ruleName,
-                                           antlr.Token label,
+                                           Token label,
                                            GrammarAST tokenRef)
     {
         Rule r = getLocallyDefinedRule(ruleName);
@@ -1819,7 +1815,7 @@ outer:
     }
 
     public void defineWildcardTreeListLabel(String ruleName,
-                                           antlr.Token label,
+                                           Token label,
                                            GrammarAST tokenRef)
     {
         Rule r = getLocallyDefinedRule(ruleName);
@@ -1829,7 +1825,7 @@ outer:
     }
 
     public void defineRuleRefLabel(String ruleName,
-								   antlr.Token label,
+								   Token label,
 								   GrammarAST ruleRef)
 	{
 		Rule r = getLocallyDefinedRule(ruleName);
@@ -1839,7 +1835,7 @@ outer:
 	}
 
 	public void defineTokenListLabel(String ruleName,
-									 antlr.Token label,
+									 Token label,
 									 GrammarAST element)
 	{
 		Rule r = getLocallyDefinedRule(ruleName);
@@ -1849,7 +1845,7 @@ outer:
 	}
 
 	public void defineRuleListLabel(String ruleName,
-									antlr.Token label,
+									Token label,
 									GrammarAST element)
 	{
 		Rule r = getLocallyDefinedRule(ruleName);
@@ -1995,7 +1991,7 @@ outer:
 			return; // no error here; see NameSpaceChecker
 		}
 		r.trackRuleReferenceInAlt(refAST, outerAltNum);
-		antlr.Token refToken = refAST.getToken();
+		Token refToken = refAST.getToken();
 		if ( !ruleRefs.contains(refAST) ) {
 			ruleRefs.add(refAST);
 		}
@@ -2272,6 +2268,7 @@ outer:
 			addDelegateGrammar(delegateGrammar);
 
 			delegateGrammar.parseAndBuildAST(br);
+			delegateGrammar.addRulesForSyntacticPredicates();
 			if ( !validImport(delegateGrammar) ) {
 				ErrorManager.grammarError(ErrorManager.MSG_INVALID_IMPORT,
 										  this,
@@ -2499,7 +2496,7 @@ outer:
 	/** Save the option key/value pair and process it; return the key
 	 *  or null if invalid option.
 	 */
-	public String setOption(String key, Object value, antlr.Token optionsStartToken) {
+	public String setOption(String key, Object value, Token optionsStartToken) {
 		if ( legalOption(key) ) {
 			ErrorManager.grammarError(ErrorManager.MSG_ILLEGAL_OPTION,
 									  this,
@@ -2533,7 +2530,7 @@ outer:
 		}
 	}
 
-	public void setOptions(Map options, antlr.Token optionsStartToken) {
+	public void setOptions(Map options, Token optionsStartToken) {
 		if ( options==null ) {
 			this.options = null;
 			return;
@@ -3021,7 +3018,8 @@ outer:
 		boolean valid = true;
 		try {
 			//System.out.println("parse BLOCK as set tree: "+t.toStringTree());
-			nfabuilder.testBlockAsSet(t);
+			int alts = nfabuilder.testBlockAsSet(t);
+			valid = alts > 1;
 		}
 		catch (RecognitionException re) {
 			// The rule did not parse as a set, return null; ignore exception
@@ -3138,6 +3136,10 @@ outer:
 		return grammarTree;
 	}
 
+	public void setGrammarTree(GrammarAST value) {
+		grammarTree = value;
+	}
+
 	public Tool getTool() {
 		return tool;
 	}
@@ -3155,8 +3157,8 @@ outer:
 	}
 
 	public String toString() {
-		return "FFFFFFFFFFFFFF";
-	//	return grammarTreeToString(grammarTree);
+	//	return "FFFFFFFFFFFFFF";
+		return grammarTreeToString(grammarTree);
 	}
 
 	public String grammarTreeToString(GrammarAST t) {
@@ -3166,8 +3168,8 @@ outer:
 	public String grammarTreeToString(GrammarAST t, boolean showActions) {
 		String s = null;
 		try {
-			s = t.getLine()+":"+t.getColumn()+": ";
-			s += new ANTLRTreePrinter().toString((AST)t, this, showActions);
+			s = t.getLine()+":"+(t.getCharPositionInLine()+1)+": ";
+			s += new ANTLRTreePrinter(new CommonTreeNodeStream(t)).toString(this, showActions);
 		}
 		catch (Exception e) {
 			s = "<invalid or missing tree structure>";
@@ -3176,10 +3178,9 @@ outer:
 	}
 
 	public void printGrammar(PrintStream output) {
-		ANTLRTreePrinter printer = new ANTLRTreePrinter();
-		printer.setASTNodeClass("org.antlr.tool.GrammarAST");
+		ANTLRTreePrinter printer = new ANTLRTreePrinter(new CommonTreeNodeStream(getGrammarTree()));
 		try {
-			String g = printer.toString(grammarTree, this, false);
+			String g = printer.toString(this, false);
 			output.println(g);
 		}
 		catch (RecognitionException re) {

@@ -27,7 +27,7 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
+import org.antlr.runtime.Token;
 import org.antlr.stringtemplate.StringTemplate;
 
 /** A problem with the symbols and/or meaning of a grammar such as rule
@@ -71,7 +71,7 @@ public class GrammarSemanticsMessage extends Message {
 		column = 0;
 		if ( offendingToken!=null ) {
 			line = offendingToken.getLine();
-			column = offendingToken.getColumn();
+			column = offendingToken.getCharPositionInLine();
 		}
 		if ( g!=null ) {
 			file = g.getFileName();

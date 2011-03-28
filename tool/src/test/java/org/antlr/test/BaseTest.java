@@ -48,6 +48,7 @@ import java.util.*;
 
 
 public abstract class BaseTest {
+	public static final String newline = System.getProperty("line.separator");
 
 	public static final String jikes = null;//"/usr/bin/jikes";
 	public static final String pathSep = System.getProperty("path.separator");
@@ -119,10 +120,11 @@ public abstract class BaseTest {
 			classpathOption = "-bootclasspath";
 		}
 
+		String inputFile = tmpdir + File.separator + fileName;
 		String[] args = new String[] {
 					compiler, "-d", tmpdir,
 					classpathOption, tmpdir+pathSep+CLASSPATH,
-					tmpdir+"/"+fileName
+					inputFile
 		};
 		String cmdLine = compiler+" -d "+tmpdir+" "+classpathOption+" "+tmpdir+pathSep+CLASSPATH+" "+fileName;
 		//System.out.println("compile: "+cmdLine);
@@ -130,8 +132,8 @@ public abstract class BaseTest {
 		try {
 			Process process =
 				Runtime.getRuntime().exec(args, null, outputDir);
-			StreamVacuum stdout = new StreamVacuum(process.getInputStream());
-			StreamVacuum stderr = new StreamVacuum(process.getErrorStream());
+			StreamVacuum stdout = new StreamVacuum(process.getInputStream(), inputFile);
+			StreamVacuum stderr = new StreamVacuum(process.getErrorStream(), inputFile);
 			stdout.start();
 			stderr.start();
 			process.waitFor();
@@ -372,16 +374,17 @@ public abstract class BaseTest {
 
 	public String execRecognizer() {
 		try {
+			String inputFile = new File(tmpdir, "input").getAbsolutePath();
 			String[] args = new String[] {
 				"java", "-classpath", tmpdir+pathSep+CLASSPATH,
-				"Test", new File(tmpdir, "input").getAbsolutePath()
+				"Test", inputFile
 			};
 			//String cmdLine = "java -classpath "+CLASSPATH+pathSep+tmpdir+" Test " + new File(tmpdir, "input").getAbsolutePath();
 			//System.out.println("execParser: "+cmdLine);
 			Process process =
 				Runtime.getRuntime().exec(args, null, new File(tmpdir));
-			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
-			StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
+			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream(), inputFile);
+			StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream(), inputFile);
 			stdoutVacuum.start();
 			stderrVacuum.start();
 			process.waitFor();
@@ -509,8 +512,10 @@ public abstract class BaseTest {
 		StringBuffer buf = new StringBuffer();
 		BufferedReader in;
 		Thread sucker;
-		public StreamVacuum(InputStream in) {
+		String inputFile;
+		public StreamVacuum(InputStream in, String inputFile) {
 			this.in = new BufferedReader( new InputStreamReader(in) );
+			this.inputFile = inputFile;
 		}
 		public void start() {
 			sucker = new Thread(this);
@@ -520,6 +525,8 @@ public abstract class BaseTest {
 			try {
 				String line = in.readLine();
 				while (line!=null) {
+					if (line.startsWith(inputFile))
+						line = line.substring(inputFile.length()+1);
 					buf.append(line);
 					buf.append('\n');
 					line = in.readLine();

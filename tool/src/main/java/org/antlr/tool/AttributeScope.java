@@ -28,8 +28,8 @@
 
 package org.antlr.tool;
 
-import antlr.Token;
 import org.antlr.codegen.CodeGenerator;
+import org.antlr.runtime.Token;
 
 import java.util.*;
 
@@ -136,6 +136,23 @@ public class AttributeScope {
 
 	public void addAttribute(String name, String decl) {
 		attributes.put(name, new Attribute(name,decl));
+	}
+
+	/** Given @scope::name {action} define it for this attribute scope. Later,
+	 *  the code generator will ask for the actions table.
+	 */
+	public final void defineNamedAction(GrammarAST nameAST, GrammarAST actionAST)
+	{
+		String actionName = nameAST.getText();
+		GrammarAST a = actions.get(actionName);
+		if (a != null) {
+			ErrorManager.grammarError(ErrorManager.MSG_ACTION_REDEFINITION,
+									  grammar,
+									  nameAST.getToken(),
+									  nameAST.getText());
+		} else {
+			actions.put(actionName, actionAST);
+		}
 	}
 
 	public Attribute getAttribute(String name) {

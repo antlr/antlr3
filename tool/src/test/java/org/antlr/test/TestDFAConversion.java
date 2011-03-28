@@ -1171,7 +1171,7 @@ public class TestDFAConversion extends BaseTest {
 			"a : A | B | C ;"
 		);
 		String expecting = // still looks like block
-			" ( grammar t ( rule a ARG RET scope ( BLOCK ( ALT A <end-of-alt> ) ( ALT B <end-of-alt> ) ( ALT C <end-of-alt> ) <end-of-block> ) <end-of-rule> ) )";
+			"(grammar t (rule a ARG RET scope (BLOCK (ALT A <end-of-alt>) (ALT B <end-of-alt>) (ALT C <end-of-alt>) <end-of-block>) <end-of-rule>))";
 		assertEquals(expecting, g.getGrammarTree().toStringTree());
 	}
 

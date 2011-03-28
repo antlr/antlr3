@@ -161,11 +161,11 @@ catch (IOException ioe) {
 try { dbg.enterRule(getGrammarFileName(), "<ruleName>");
 if ( getRuleLevel()==0 ) {dbg.commence();}
 incRuleLevel();
-dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.column>);<\n>
+dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.charPositionInLine>);<\n>
 >>
 
 @rule.postamble() ::= <<
-dbg.location(<ruleDescriptor.EORNode.line>, <ruleDescriptor.EORNode.column>);<\n>
+dbg.location(<ruleDescriptor.EORNode.line>, <ruleDescriptor.EORNode.charPositionInLine>);<\n>
 }
 finally {
     dbg.exitRule(getGrammarFileName(), "<ruleName>");

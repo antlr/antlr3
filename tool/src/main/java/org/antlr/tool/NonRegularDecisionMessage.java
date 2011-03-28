@@ -49,7 +49,7 @@ public class NonRegularDecisionMessage extends Message {
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
-		column = decisionASTNode.getColumn();
+		column = decisionASTNode.getCharPositionInLine();
 		String fileName = probe.dfa.nfa.grammar.getFileName();
 		if ( fileName!=null ) {
 			file = fileName;

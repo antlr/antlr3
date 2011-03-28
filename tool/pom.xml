@@ -73,23 +73,6 @@
                 </executions>
                 
             </plugin>
-            
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>antlr-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <sourceDirectory>src/main/antlr2/org/antlr/grammar/v2</sourceDirectory>
-                    <grammars>antlr.g codegen.g, antlr.print.g, assign.types.g, buildnfa.g, left.recur.rules.g define.g</grammars>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -106,7 +106,7 @@ public abstract class Message {
 			locationValid = true;
 		}
 		if (column != -1) {
-			locationST.setAttribute("column", column);
+			locationST.setAttribute("column", column+1);
 			locationValid = true;
 		}
 		if (file != null) {

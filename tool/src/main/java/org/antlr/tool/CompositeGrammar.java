@@ -26,12 +26,13 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */package org.antlr.tool;
 
-import antlr.RecognitionException;
 import org.antlr.analysis.Label;
 import org.antlr.analysis.NFAState;
-import org.antlr.grammar.v2.ANTLRParser;
-import org.antlr.grammar.v2.AssignTokenTypesWalker;
+import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.grammar.v3.AssignTokenTypesWalker;
 import org.antlr.misc.Utils;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 import java.util.*;
 
@@ -323,17 +324,17 @@ public class CompositeGrammar {
 		return (NFAState)numberToStateList.get(s);
 	}
 
-	public void assignTokenTypes() throws antlr.RecognitionException {
+	public void assignTokenTypes() throws RecognitionException {
 		// ASSIGN TOKEN TYPES for all delegates (same walker)
 		//System.out.println("### assign types");
 		AssignTokenTypesWalker ttypesWalker = new AssignTokenTypesBehavior();
-		ttypesWalker.setASTNodeClass("org.antlr.tool.GrammarAST");
 		List<Grammar> grammars = delegateGrammarTreeRoot.getPostOrderedGrammarList();
 		for (int i = 0; grammars!=null && i < grammars.size(); i++) {
 			Grammar g = (Grammar)grammars.get(i);
+			ttypesWalker.setTreeNodeStream(new CommonTreeNodeStream(g.getGrammarTree()));
 			try {
 				//System.out.println("    walking "+g.name);
-				ttypesWalker.grammar(g.getGrammarTree(), g);
+				ttypesWalker.grammar_(g);
 			}
 			catch (RecognitionException re) {
 				ErrorManager.error(ErrorManager.MSG_BAD_AST_STRUCTURE,
@@ -351,7 +352,7 @@ public class CompositeGrammar {
 			Grammar g = grammars.get(i);
 			if ( !(g.type==Grammar.PARSER || g.type==Grammar.COMBINED) ) continue;
 			for (GrammarAST r : g.grammarTree.findAllType(ANTLRParser.RULE)) {
-				if ( !Character.isUpperCase(r.getFirstChild().getText().charAt(0)) ) {
+				if ( !Character.isUpperCase(r.getChild(0).getText().charAt(0)) ) {
 					if ( LeftRecursiveRuleAnalyzer.hasImmediateRecursiveRuleRefs(r, r.enclosingRuleName) ) {
 						g.translateLeftRecursiveRule(r);
 					}

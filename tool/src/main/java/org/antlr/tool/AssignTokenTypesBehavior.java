@@ -28,8 +28,9 @@
 package org.antlr.tool;
 
 import org.antlr.analysis.Label;
-import org.antlr.grammar.v2.AssignTokenTypesWalker;
+import org.antlr.grammar.v3.AssignTokenTypesWalker;
 import org.antlr.misc.Utils;
+import org.antlr.runtime.tree.TreeNodeStream;
 
 import java.util.*;
 
@@ -47,6 +48,10 @@ public class AssignTokenTypesBehavior extends AssignTokenTypesWalker {
 	 *  generated lexer.
 	 */
 	protected Set<String> tokenRuleDefs = new HashSet();
+
+	public AssignTokenTypesBehavior() {
+		super(null);
+	}
 
     @Override
 	protected void init(Grammar g) {
@@ -146,7 +151,7 @@ public class AssignTokenTypesBehavior extends AssignTokenTypesWalker {
 				*/
 				if ( grammar.type==Grammar.COMBINED || grammar.type==Grammar.LEXER ) {
 					// only call this rule an alias if combined or lexer
-					alias(t, (GrammarAST)block.getFirstChild().getFirstChild());
+					alias(t, (GrammarAST)block.getChild(0).getChild(0));
 				}
 			}
 		}

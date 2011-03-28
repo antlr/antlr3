@@ -27,11 +27,11 @@
  */
 package org.antlr.test;
 
-import antlr.Token;
 import org.antlr.analysis.DFA;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.BitSet;
+import org.antlr.runtime.Token;
 import org.antlr.tool.*;
 import org.junit.Test;
 

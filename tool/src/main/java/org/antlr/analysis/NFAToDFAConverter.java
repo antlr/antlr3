@@ -27,9 +27,9 @@
  */
 package org.antlr.analysis;
 
-import antlr.Token;
 import org.antlr.misc.OrderedHashSet;
 import org.antlr.misc.Utils;
+import org.antlr.runtime.Token;
 import org.antlr.tool.ErrorManager;
 
 import java.util.*;

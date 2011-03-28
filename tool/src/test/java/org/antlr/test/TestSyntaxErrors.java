@@ -40,8 +40,8 @@ public class TestSyntaxErrors extends BaseTest {
 			";\n" +
 			"q : 'e' ;\n";
 		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", "ae", false);
-		String expecting = "input line 1:1 no viable alternative at input 'e'\n";
-		String result = stderrDuringParse.replaceAll(".*?/input ", "input ");
+		String expecting = "line 1:1 no viable alternative at input 'e'\n";
+		String result = stderrDuringParse;
 		assertEquals(expecting, result);
 	}
 
@@ -54,8 +54,8 @@ public class TestSyntaxErrors extends BaseTest {
 			"q : 'e' ;\n";
 		System.out.println(grammar);
 		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", "abe", false);
-		String expecting = "input line 1:2 no viable alternative at input 'e'\n";
-		String result = stderrDuringParse.replaceAll(".*?/input ", "input ");
+		String expecting = "line 1:2 no viable alternative at input 'e'\n";
+		String result = stderrDuringParse;
 		assertEquals(expecting, result);
 	}
 
@@ -67,8 +67,8 @@ public class TestSyntaxErrors extends BaseTest {
 			";\n" +
 			"q : 'e' ;\n";
 		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", "aaae", false);
-		String expecting = "input line 1:3 no viable alternative at input 'e'\n";
-		String result = stderrDuringParse.replaceAll(".*?/input ", "input ");
+		String expecting = "line 1:3 no viable alternative at input 'e'\n";
+		String result = stderrDuringParse;
 		assertEquals(expecting, result);
 	}
 
@@ -84,8 +84,8 @@ public class TestSyntaxErrors extends BaseTest {
 			"  ;\n";
 		System.out.println(grammar);
 		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", "((i))z", false);
-		String expecting = "input line 1:0 no viable alternative at input '('\n";
-		String result = stderrDuringParse.replaceAll(".*?/input ", "input ");
+		String expecting = "line 1:0 no viable alternative at input '('\n";
+		String result = stderrDuringParse;
 		assertEquals(expecting, result);
 	}
 

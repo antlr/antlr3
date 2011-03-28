@@ -30,7 +30,8 @@ package org.antlr.tool;
 import org.antlr.analysis.NFAState;
 import org.antlr.analysis.RuleClosureTransition;
 import org.antlr.analysis.Transition;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.runtime.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -298,7 +299,7 @@ public class GrammarSanity {
 									new Integer(outerAltNum));
 	}
 
-	protected boolean isValidSimpleElementNode(GrammarAST t) {
+	protected boolean isValidSimpleElementNode(Tree t) {
 		switch ( t.getType() ) {
 			case ANTLRParser.TREE_BEGIN :
 			case ANTLRParser.TOKEN_REF :

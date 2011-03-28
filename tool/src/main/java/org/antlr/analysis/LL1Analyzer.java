@@ -27,7 +27,7 @@
  */
 package org.antlr.analysis;
 
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.IntSet;
 import org.antlr.misc.IntervalSet;
 import org.antlr.tool.Grammar;

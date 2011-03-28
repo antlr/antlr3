@@ -27,10 +27,11 @@
  */
 package org.antlr.tool;
 
-import antlr.CommonToken;
 import org.antlr.analysis.NFAState;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.grammar.v2.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
 
 import java.util.*;
 
@@ -74,6 +75,9 @@ public class Rule {
 
 	/** A list of scope names (String) used by this rule */
 	public List useScopes;
+
+    /** Exceptions that this rule can throw */
+    public Set<String> throwsSpec;
 
     /** A list of all LabelElementPair attached to tokens like id=ID */
     public LinkedHashMap tokenLabels;
@@ -162,6 +166,7 @@ public class Rule {
 		this.index = ruleIndex;
 		this.numberOfAlts = numberOfAlts;
 		this.grammar = grammar;
+		throwsSpec = new HashSet<String>();
 		altToTokenRefMap = new Map[numberOfAlts+1];
 		altToRuleRefMap = new Map[numberOfAlts+1];
 		for (int alt=1; alt<=numberOfAlts; alt++) {
@@ -170,7 +175,13 @@ public class Rule {
 		}
 	}
 
-	public void defineLabel(antlr.Token label, GrammarAST elementRef, int type) {
+	public static int getRuleType(String ruleName){
+		if (ruleName == null || ruleName.length() == 0)
+			throw new IllegalArgumentException("The specified rule name is not valid.");
+		return Character.isUpperCase(ruleName.charAt(0)) ? Grammar.LEXER : Grammar.PARSER;
+	}
+
+	public void defineLabel(Token label, GrammarAST elementRef, int type) {
 		Grammar.LabelElementPair pair = grammar.new LabelElementPair(label,elementRef);
 		pair.type = type;
 		labelNameSpace.put(label.getText(), pair);
@@ -512,7 +523,7 @@ public class Rule {
 	/** Save the option key/value pair and process it; return the key
 	 *  or null if invalid option.
 	 */
-	public String setOption(String key, Object value, antlr.Token optionsStartToken) {
+	public String setOption(String key, Object value, Token optionsStartToken) {
 		if ( !legalOptions.contains(key) ) {
 			ErrorManager.grammarError(ErrorManager.MSG_ILLEGAL_OPTION,
 									  grammar,
@@ -536,7 +547,7 @@ public class Rule {
 		return key;
 	}
 
-	public void setOptions(Map options, antlr.Token optionsStartToken) {
+	public void setOptions(Map options, Token optionsStartToken) {
 		if ( options==null ) {
 			this.options = null;
 			return;

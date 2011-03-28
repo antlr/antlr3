@@ -27,11 +27,12 @@
  */
 package org.antlr.tool;
 
-import antlr.Token;
 import org.antlr.Tool;
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.misc.BitSet;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -797,7 +798,7 @@ public class ErrorManager {
 								   Grammar grammar,
 								   Token token,
 								   Object arg,
-								   antlr.RecognitionException re)
+								   RecognitionException re)
 	{
 		getErrorState().errors++;
 		getErrorState().errorMsgIDs.add(msgID);
