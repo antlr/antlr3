@@ -35,6 +35,7 @@ full of WTFs - though IMHO Java is the Real WTF(TM) here...
 
 package org.antlr.codegen;
 
+import org.antlr.runtime.Token;
 import org.antlr.tool.Grammar;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class PythonTarget extends Target {
 		return l;
     }
 
-    public List postProcessAction(List chunks, antlr.Token actionToken) {
+    public List postProcessAction(List chunks, Token actionToken) {
 		/* TODO
 		   - check for and report TAB usage
 		 */
@@ -107,12 +108,12 @@ public class PythonTarget extends Target {
 
 			if ( chunk instanceof String ) {
 				String text = (String)chunks.get(i);
-				if ( nChunks.size() == 0 && actionToken.getColumn() > 0 ) {
+				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// prepend to this chunk
 
 					String ws = "";
-					for ( int j = 0 ; j < actionToken.getColumn() ; j++ ) {
+					for ( int j = 0 ; j < actionToken.getCharPositionInLine() ; j++ ) {
 						ws += " ";
 					}
 					text = ws + text;
@@ -125,12 +126,12 @@ public class PythonTarget extends Target {
 				}
 			}
 			else {
-				if ( nChunks.size() == 0 && actionToken.getColumn() > 0 ) {
+				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// add as a chunk of its own
 
 					String ws = "";
-					for ( int j = 0 ; j < actionToken.getColumn() ; j++ ) {
+					for ( int j = 0 ; j <= actionToken.getCharPositionInLine() ; j++ ) {
 						ws += " ";
 					}
 					nChunks.add(ws);

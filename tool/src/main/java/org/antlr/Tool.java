@@ -27,7 +27,6 @@
  */
 package org.antlr;
 
-import antlr.ANTLRException;
 import org.antlr.analysis.*;
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.Graph;
@@ -366,7 +365,7 @@ public class Tool {
      * @param grammarFileName The grammar file we are checking
      */
     public boolean buildRequired(String grammarFileName)
-        throws IOException, ANTLRException
+        throws IOException
     {
         BuildDependencyGenerator bd =
             new BuildDependencyGenerator(this, grammarFileName);

@@ -83,7 +83,7 @@ public class BuildDependencyGenerator {
     protected StringTemplateGroup templates;
 
     public BuildDependencyGenerator(Tool tool, String grammarFileName)
-            throws IOException, antlr.TokenStreamException, antlr.RecognitionException {
+            throws IOException {
         this.tool = tool;
         this.grammarFileName = grammarFileName;
         grammar = tool.getRootGrammar(grammarFileName);

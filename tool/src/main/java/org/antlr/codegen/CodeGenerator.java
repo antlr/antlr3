@@ -28,7 +28,6 @@
 package org.antlr.codegen;
 
 
-import antlr.TokenStreamRewriteEngine;
 import org.antlr.Tool;
 import org.antlr.analysis.*;
 import org.antlr.analysis.DFA;
