@@ -385,7 +385,7 @@ parser(grammar, name, scopes, tokens, tokenNames, rules, numRules, bitsets,
  */
 treeParser(grammar, name, scopes, tokens, tokenNames, globalAction, rules,
            numRules, bitsets, labelType={<ASTLabelType>}, ASTLabelType="object",
-           superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Tree.<if(filterMode)><if(buildAST)>TreeRewriter\<<labelType>\><else>TreeFilter<endif><else>TreeParser<endif><endif>},
+           superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Tree.<if(filterMode)><if(buildAST)>TreeRewriter<else>TreeFilter<endif><else>TreeParser<endif><endif>},
            members={<actions.treeparser.members>},
            filterMode) ::= <<
 <genericParser(inputStreamType="ITreeNodeStream", rewriteElementType="Node", ...)>
