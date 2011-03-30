@@ -386,8 +386,9 @@ static  pANTLR3_STRING  getText			(pANTLR3_COMMON_TOKEN token)
 			//
 			if (token->type == ANTLR3_TOKEN_EOF)
 			{
-				token->tokText.text	= token->strFactory->newStr8(token->strFactory, (pANTLR3_UINT8)"<EOF>");
-				token->textState	= ANTLR3_TEXT_STRING;
+				token->tokText.text				= token->strFactory->newStr8(token->strFactory, (pANTLR3_UINT8)"<EOF>");
+				token->textState				= ANTLR3_TEXT_STRING;
+				token->tokText.text->factory	= token->strFactory;
 				return token->tokText.text;
 			}
 

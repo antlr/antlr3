@@ -146,19 +146,28 @@ antlr3LexerNew(ANTLR3_UINT32 sizeHint, pANTLR3_RECOGNIZER_SHARED_STATE state)
     
     /* Initialise the eof token
      */
-    specialT			= &(lexer->rec->state->tokSource->eofToken);
+    specialT					= &(lexer->rec->state->tokSource->eofToken);
     antlr3SetTokenAPI	  (specialT);
     specialT->setType	  (specialT, ANTLR3_TOKEN_EOF);
-    specialT->factoryMade	= ANTLR3_TRUE;					// Prevent things trying to free() it
+    specialT->factoryMade		= ANTLR3_TRUE;					// Prevent things trying to free() it
     specialT->strFactory        = NULL;
+	specialT->textState			= ANTLR3_TEXT_NONE;
+	specialT->custom			= NULL;
+	specialT->user1				= 0;
+	specialT->user2				= 0;
+	specialT->user3				= 0;
 
 	// Initialize the skip token.
 	//
-    specialT			= &(lexer->rec->state->tokSource->skipToken);
+    specialT					= &(lexer->rec->state->tokSource->skipToken);
     antlr3SetTokenAPI	  (specialT);
     specialT->setType	  (specialT, ANTLR3_TOKEN_INVALID);
-    specialT->factoryMade	= ANTLR3_TRUE;					// Prevent things trying to free() it
+    specialT->factoryMade		= ANTLR3_TRUE;					// Prevent things trying to free() it
     specialT->strFactory        = NULL;
+	specialT->custom			= NULL;
+	specialT->user1				= 0;
+	specialT->user2				= 0;
+	specialT->user3				= 0;
     return  lexer;
 }
 

@@ -137,20 +137,31 @@ antlr3StringFactoryNew(ANTLR3_UINT32 encoding)
         factory->close	    =  closeFactory;
         break;
 
-        // TODO: These encdoings need equivalent functions to
-        // UTF16 and 8Bit. For now they just fall through.
+        // TODO: These encodings need equivalent functions to
+        // UTF16 and 8Bit if I am going to support those encodings in the STRING stuff.
+		// The STRING stuff was intended as a quick and dirty hack for people that did not
+		// want to worry about memory and performance very much, but nobody ever reads the 
+		// notes or comments or uses the email list search. I want to discourage using these
+		// interfaces as it is much more efficient to use the pointers within the tokens
+		// directly, so I am not implementing the string stuff for the newer encodings.
         //
     case    ANTLR3_ENC_UTF8:
+		break;
 
     case    ANTLR3_ENC_UTF32:
+		break;
 
     case    ANTLR3_ENC_UTF16BE:
+		break;
 
     case    ANTLR3_ENC_UTF16LE:
+		break;
 
     case    ANTLR3_ENC_UTF32BE:
+		break;
 
     case    ANTLR3_ENC_UTF32LE:
+		break;
 
     case    ANTLR3_ENC_EBCDIC:
     case    ANTLR3_ENC_8BIT:
