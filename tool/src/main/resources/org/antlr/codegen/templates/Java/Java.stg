@@ -39,6 +39,16 @@ javaTypeInitMap ::= [
 	default:"null" // anything other than an atomic type
 ]
 
+// System.Boolean.ToString() returns "True" and "False", but the proper C# literals are "true" and "false"
+// The Java version of Boolean returns "true" and "false", so they map to themselves here.
+booleanLiteral ::= [
+	"True":"true",
+	"False":"false",
+	"true":"true",
+	"false":"false",
+	default:"false"
+]
+
 /** The overall file structure of a recognizer; stores methods for rules
  *  and cyclic DFAs plus support code.
  */
