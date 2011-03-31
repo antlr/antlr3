@@ -108,8 +108,9 @@ public class TestSemanticPredicates extends BaseTest {
 			"a : ( {p1}? A )+ (A)+;");
 		String expecting =
 			".s0-A->.s1\n" +
-			".s1-{!(p1)}?->:s2=>1\n" +
-			".s1-{p1}?->:s3=>2\n";       // loop back
+			".s1-{p1}?->:s2=>1\n" +
+			".s1-{true}?->:s3=>2\n";       // loop back
+        checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
 	}
 
 	@Test public void testAndPredicates() throws Exception {

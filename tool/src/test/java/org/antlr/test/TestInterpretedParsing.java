@@ -105,7 +105,7 @@ public class TestInterpretedParsing extends BaseTest {
 		ParseTree t = parseEngine.parse("prog");
 		String result = t.toStringTree();
 		String expecting =
-			"(<grammar p> (prog while x { (assign i = (expr 1) MismatchedTokenException(5!=9))))";
+			"(<grammar p> (prog while x { (assign i = (expr 1) MismatchedTokenException(6!=10))))";
 		assertEquals(expecting, result);
 	}
 
@@ -140,7 +140,7 @@ public class TestInterpretedParsing extends BaseTest {
 		ParseTree t = parseEngine.parse("prog");
 		String result = t.toStringTree();
 		String expecting =
-			"(<grammar p> (prog while x { (assign i = (expr MismatchedSetException(9!={5,10,11})))))";
+			"(<grammar p> (prog while x { (assign i = (expr MismatchedSetException(10!={5,6,7})))))";
 		assertEquals(expecting, result);
 	}
 
@@ -175,7 +175,7 @@ public class TestInterpretedParsing extends BaseTest {
 		ParseTree t = parseEngine.parse("prog");
 		String result = t.toStringTree();
 		String expecting =
-			"(<grammar p> (prog while x { (assign i = (expr NoViableAltException(9@[4:1: expr : ( INT | FLOAT | ID );])))))";
+			"(<grammar p> (prog while x { (assign i = (expr NoViableAltException(10@[4:1: expr : ( INT | FLOAT | ID );])))))";
 		assertEquals(expecting, result);
 	}
 

@@ -286,9 +286,9 @@ public class TestCompositeGrammars extends BaseTest {
 		g.parseAndBuildAST();
 		g.composite.assignTokenTypes();
 
-		String expectedTokenIDToTypeMap = "[A=4, WS=6, X=5]";
+		String expectedTokenIDToTypeMap = "[A=4, WS=5, X=6]";
 		String expectedStringLiteralToTypeMap = "{'a'=4}";
-		String expectedTypeToTokenList = "[A, X, WS]";
+		String expectedTypeToTokenList = "[A, WS, X]";
 
 		assertEquals(expectedTokenIDToTypeMap,
 					 realElements(g.composite.tokenIDToTypeMap).toString());
@@ -770,9 +770,9 @@ public class TestCompositeGrammars extends BaseTest {
 		g.composite.assignTokenTypes();
 		g.composite.defineGrammarSymbols();
 
-		String expectedTokenIDToTypeMap = "[M=6, S=5, T=4]";
+		String expectedTokenIDToTypeMap = "[M=4, S=5, T=6]";
 		String expectedStringLiteralToTypeMap = "{}";
-		String expectedTypeToTokenList = "[T, S, M]";
+		String expectedTypeToTokenList = "[M, S, T]";
 
 		assertEquals(expectedTokenIDToTypeMap,
 					 realElements(g.composite.tokenIDToTypeMap).toString());
@@ -833,9 +833,9 @@ public class TestCompositeGrammars extends BaseTest {
 		g.composite.assignTokenTypes();
 		g.composite.defineGrammarSymbols();
 
-		String expectedTokenIDToTypeMap = "[A=8, B=6, C=7, M=9, S=5, T=4]";
+		String expectedTokenIDToTypeMap = "[A=4, B=5, C=6, M=7, S=8, T=9]";
 		String expectedStringLiteralToTypeMap = "{}";
-		String expectedTypeToTokenList = "[T, S, B, C, A, M]";
+		String expectedTypeToTokenList = "[A, B, C, M, S, T]";
 
 		assertEquals(expectedTokenIDToTypeMap,
 					 realElements(g.composite.tokenIDToTypeMap).toString());
@@ -879,9 +879,9 @@ public class TestCompositeGrammars extends BaseTest {
 		g.composite.assignTokenTypes();
 		g.composite.defineGrammarSymbols();
 
-		String expectedTokenIDToTypeMap = "[M=6, S=5, T=4]";
+		String expectedTokenIDToTypeMap = "[M=4, S=5, T=6]";
 		String expectedStringLiteralToTypeMap = "{}";
-		String expectedTypeToTokenList = "[T, S, M]";
+		String expectedTypeToTokenList = "[M, S, T]";
 
 		assertEquals(expectedTokenIDToTypeMap,
 					 realElements(g.composite.tokenIDToTypeMap).toString());

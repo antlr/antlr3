@@ -39,9 +39,9 @@ public class AssignTokenTypesBehavior extends AssignTokenTypesWalker {
 	protected static final Integer UNASSIGNED = Utils.integer(-1);
 	protected static final Integer UNASSIGNED_IN_PARSER_RULE = Utils.integer(-2);
 
-	protected Map<String,Integer> stringLiterals = new LinkedHashMap();
-	protected Map<String,Integer> tokens = new LinkedHashMap();
-	protected Map<String,String> aliases = new LinkedHashMap();
+	protected Map<String,Integer> stringLiterals = new TreeMap<String, Integer>();
+	protected Map<String,Integer> tokens = new TreeMap<String, Integer>();
+	protected Map<String,String> aliases = new TreeMap<String, String>();
 	protected Map<String,String> aliasesReverseIndex = new HashMap<String,String>();
 
 	/** Track actual lexer rule defs so we don't get repeated token defs in

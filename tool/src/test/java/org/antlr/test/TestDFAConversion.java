@@ -360,7 +360,7 @@ public class TestDFAConversion extends BaseTest {
 			"    ;");
 		String expecting =
 			".s0-ID->.s1\n" +
-			".s0-INT..FLOAT->:s3=>2\n" +
+			".s0-{FLOAT, INT}->:s3=>2\n" +
 			".s1-{synpred1_t}?->:s2=>1\n" +
 			".s1-{true}?->:s3=>2\n";
 		int[] unreachableAlts = null;
@@ -393,7 +393,7 @@ public class TestDFAConversion extends BaseTest {
 			"    ;");
 		String expecting =
 			".s0-ID->.s1\n" +
-			".s0-INT..FLOAT->:s3=>2\n" +
+			".s0-{FLOAT, INT}->:s3=>2\n" +
 			".s1-{synpred1_t}?->:s2=>1\n" +
 			".s1-{true}?->:s3=>2\n";
 		int[] unreachableAlts = null;
@@ -427,7 +427,7 @@ public class TestDFAConversion extends BaseTest {
 			"    ;");
 		String expecting =
 			".s0-ID->.s1\n" +
-			".s0-INT..FLOAT->:s4=>2\n" +
+			".s0-{FLOAT, INT}->:s4=>2\n" +
 			".s1-L->.s2\n" +
 			".s2-{synpred1_t}?->:s3=>1\n" +
 			".s2-{true}?->:s4=>2\n";
@@ -1100,7 +1100,7 @@ public class TestDFAConversion extends BaseTest {
 			"c : CASE E ;\n");
 		String expecting =
 			".s0-CASE->:s2=>1\n" +
-			".s0-LCURLY..E->:s1=>2\n";
+			".s0-E..RCURLY->:s1=>2\n";
 		int[] unreachableAlts = null;
 		int[] nonDetAlts = new int[] {1,2};
 		String ambigInput = "CASE";
@@ -1232,11 +1232,11 @@ As a result, alternative(s) 2 were disabled for that input
 			"type : I | F;");
 		// nondeterministic from left edge; no stop state
 		String expecting =
-			".s0-I..F->.s1\n" +
+			".s0-F..I->.s1\n" +
 			".s1-ID->:s2=>1\n";
 		int[] unreachableAlts = new int[] {2,3,4};
 		int[] nonDetAlts = new int[] {1,2,3,4};
-		String ambigInput = "I..F ID";
+		String ambigInput = "F..I ID";
 		int[] danglingAlts = null;
 		int numWarnings = 2;
 		checkDecision(g, 1, expecting, unreachableAlts,
@@ -1253,9 +1253,9 @@ As a result, alternative(s) 2 were disabled for that input
 			"\n" +
 			"esc : SLASH ( N | D03 (D07)? ) ;");
 		String expecting =
+			".s0-D03..N->:s2=>2\n" +
 			".s0-R->:s3=>3\n" +
-			".s0-SLASH->:s1=>1\n" +
-			".s0-{L, N..D07}->:s2=>2\n";
+			".s0-SLASH->:s1=>1\n";
 		int[] unreachableAlts = null;
 		int[] nonDetAlts = new int[] {1,2};
 		String ambigInput = "D07";
