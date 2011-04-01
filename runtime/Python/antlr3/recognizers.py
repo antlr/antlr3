@@ -880,12 +880,6 @@ class BaseRecognizer(object):
         self._state.backtracking = n
 
 
-    def failed(self):
-        """Return whether or not a backtracking attempt failed."""
-
-        return self._state.failed
-
-
     def getGrammarFileName(self):
         """For debugging and other purposes, might want the grammar name.
 
@@ -983,10 +977,12 @@ class BaseRecognizer(object):
         if self._state.backtracking > 0:
             sys.stdout.write(" backtracking=%s" % self._state.backtracking)
 
-        if self._state.failed:
-            sys.stdout.write(" failed")
-        else:
-            sys.stdout.write(" succeeded")
+        # mmmm... we use BacktrackingFailed exceptions now. So how could we
+        # get that information here?
+        #if self._state.failed:
+        #    sys.stdout.write(" failed")
+        #else:
+        #    sys.stdout.write(" succeeded")
 
         sys.stdout.write('\n')
 
