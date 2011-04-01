@@ -316,6 +316,7 @@ synpredRule(ruleName, ruleDescriptor, block, description, nakedBlock) ::=
 <<
 # $ANTLR start "<ruleName>"
 def <ruleName>_fragment(self, <ruleDescriptor.parameterScope:parameterScope(scope=it)>):
+    <ruleLabelDefs()>
 <if(trace)>
     self.traceIn("<ruleName>_fragment", <ruleDescriptor.index>)
     try:
@@ -817,7 +818,7 @@ lexerStringRef(string,label,elementIndex) ::= <<
 <if(label)>
 <label>Start = self.getCharIndex()
 self.match(<string>)
-<label> = CommonToken(input=self.input, type=INVALID_TOKEN_TYPE, channel=DEFAULT_CHANNEL, start=<label>Start, stop=self.getCharIndex()-1)
+<label> = <labelType>(input=self.input, type=INVALID_TOKEN_TYPE, channel=DEFAULT_CHANNEL, start=<label>Start, stop=self.getCharIndex()-1)
 <else>
 self.match(<string>)
 <endif>
@@ -875,7 +876,7 @@ lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
 <if(label)>
 <label>Start<elementIndex> = self.getCharIndex()
 self.<if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">)
-<label> = CommonToken(
+<label> = <labelType>(
     input=self.input,
     type=INVALID_TOKEN_TYPE,
     channel=DEFAULT_CHANNEL,
@@ -898,7 +899,7 @@ lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 <label>Start<elementIndex> = self.getCharIndex()
 self.match(EOF)
-<label> = CommonToken(input=self.input, type=EOF, channel=DEFAULT_CHANNEL, start=<label>Start<elementIndex>, stop=self.getCharIndex()-1)
+<label> = <labelType>(input=self.input, type=EOF, channel=DEFAULT_CHANNEL, start=<label>Start<elementIndex>, stop=self.getCharIndex()-1)
 <else>
 self.match(EOF)
 <endif>

@@ -5,7 +5,7 @@ import unittest
 from StringIO import StringIO
 
 from antlr3.tree import (CommonTreeNodeStream, CommonTree, CommonTreeAdaptor,
-                         TreeParser, TreeVisitor)
+                         TreeParser, TreeVisitor, TreeIterator)
 from antlr3 import CommonToken, UP, DOWN, EOF
 from antlr3.treewizard import TreeWizard
 
@@ -338,6 +338,27 @@ class TestTreeNodeStream(unittest.TestCase):
         self.failUnlessEqual(104, stream.LT(1).getType())
 
 
+    def testReset(self):
+        # ^(101 ^(102 103 ^(106 107) ) 104 105)
+        # stream has 7 real + 6 nav nodes
+        # Sequence of types: 101 DN 102 DN 103 106 DN 107 UP UP 104 105 UP EOF
+        r0 = CommonTree(CommonToken(101))
+        r1 = CommonTree(CommonToken(102))
+        r0.addChild(r1)
+        r1.addChild(CommonTree(CommonToken(103)))
+        r2 = CommonTree(CommonToken(106))
+        r2.addChild(CommonTree(CommonToken(107)))
+        r1.addChild(r2)
+        r0.addChild(CommonTree(CommonToken(104)))
+        r0.addChild(CommonTree(CommonToken(105)))
+
+        stream = CommonTreeNodeStream(r0)
+        v1 = self.toNodesOnlyString(stream) # scan all
+        stream.reset()
+        v2 = self.toNodesOnlyString(stream) # scan all
+        self.assertEquals(v1, v2)
+
+
     def toNodesOnlyString(self, nodes):
         buf = []
         for i in range(nodes.size()):
@@ -347,7 +368,7 @@ class TestTreeNodeStream(unittest.TestCase):
                 buf.append(str(type))
 
         return ' '.join(buf)
-    
+
 
 class TestCommonTreeNodeStream(unittest.TestCase):
     """Test case for the CommonTreeNodeStream class."""
@@ -380,7 +401,7 @@ class TestCommonTreeNodeStream(unittest.TestCase):
         indexOf107 = 12
         for _ in range(indexOf107):# consume til 107 node
             stream.consume()
-        
+
         # CALL 102
         self.failUnlessEqual(107, stream.LT(1).getType())
         stream.push(indexOf102)
@@ -513,7 +534,7 @@ class TestCommonTree(unittest.TestCase):
 
         self.adaptor = CommonTreeAdaptor()
 
-        
+
     def testSingleNode(self):
         t = CommonTree(CommonToken(101))
         self.failUnless(t.parent is None)
@@ -546,7 +567,7 @@ class TestCommonTree(unittest.TestCase):
         self.failUnlessEqual(r0, c0.parent)
         self.failUnlessEqual(0, c0.childIndex)
         self.failUnlessEqual(r0, c1.parent)
-        self.failUnlessEqual(1, c1.childIndex)        
+        self.failUnlessEqual(1, c1.childIndex)
         self.failUnlessEqual(r0, c2.parent)
         self.failUnlessEqual(2, c2.childIndex)
 
@@ -698,10 +719,10 @@ class TestCommonTree(unittest.TestCase):
         error = False
         try:
         	t.replaceChildren(0, 0, newChild)
-	
+
         except IndexError:
         	error = True
-	
+
         self.failUnless(error)
 
 
@@ -1157,7 +1178,7 @@ class TestTreeContext(unittest.TestCase):
         try:
             TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT ... ... VEC")
             self.fail()
-        except ValueError, exc: 
+        except ValueError, exc:
             expecting = "invalid syntax: ... ..."
             found = str(exc)
             self.assertEquals(expecting, found)
@@ -1217,6 +1238,95 @@ class TestTreeVisitor(unittest.TestCase):
                       "post(3)", "post(VEC)", "post(MULT)", "post(PRINT)" ]
 
         self.assertEquals(expecting, found)
+
+
+class TestTreeIterator(unittest.TestCase):
+    tokens = [
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>",
+        "A", "B", "C", "D", "E", "F", "G" ]
+
+    def testNode(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("A")
+        it = TreeIterator(t)
+        expecting = "A EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testFlatAB(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(nil A B)")
+        it = TreeIterator(t)
+        expecting = "nil DOWN A B UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testAB(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(A B)")
+        it = TreeIterator(t)
+        expecting = "A DOWN B UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testABC(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(A B C)")
+        it = TreeIterator(t)
+        expecting = "A DOWN B C UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testVerticalList(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(A (B C))")
+        it = TreeIterator(t)
+        expecting = "A DOWN B DOWN C UP UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testComplex(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(A (B (C D E) F) G)")
+        it = TreeIterator(t)
+        expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def testReset(self):
+        adaptor = CommonTreeAdaptor()
+        wiz = TreeWizard(adaptor, self.tokens)
+        t = wiz.create("(A (B (C D E) F) G)")
+        it = TreeIterator(t)
+        expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+        it.reset()
+        expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
+        found = self.toString(it)
+        self.assertEquals(expecting, found)
+
+
+    def toString(self, it):
+        buf = []
+        for n in it:
+            buf.append(str(n))
+
+        return ' '.join(buf)
+
 
 if __name__ == "__main__":
     unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))

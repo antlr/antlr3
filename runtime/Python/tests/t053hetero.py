@@ -29,9 +29,9 @@ class T(testbase.ANTLRTest):
             def recover(self, input, re):
                 # no error recovery yet, just crash!
                 raise
-            
+
         return TParser
-    
+
 
     def lexerClass(self, base):
         class TLexer(base):
@@ -56,9 +56,9 @@ class T(testbase.ANTLRTest):
             def recover(self, input, re):
                 # no error recovery yet, just crash!
                 raise
-            
+
         return TLexer
-    
+
 
     def execParser(self, grammar, grammarEntry, input):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -73,7 +73,7 @@ class T(testbase.ANTLRTest):
             return r.tree.toStringTree()
 
         return ""
-    
+
 
     def execTreeParser(self, grammar, grammarEntry, treeGrammar, treeEntry, input):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -143,13 +143,36 @@ class T(testbase.ANTLRTest):
             ID : 'a'..'z'+ ;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(
             grammar, 'a',
             input="a"
             )
 
         self.failUnlessEqual("a<V>", found)
+
+
+    def testNamedType(self):
+        grammar = textwrap.dedent(
+            r"""
+            grammar $T;
+            options {
+                language=Python;
+                output=AST;
+            }
+            @header {
+            class V(CommonTree):
+                def toString(self):
+                    return self.token.text + "<V>"
+                __str__ = toString
+            }
+            a : ID<node=V> ;
+            ID : 'a'..'z'+ ;
+            WS : (' '|'\\n') {$channel=HIDDEN;} ;
+            """)
+
+        found = self.execParser(grammar, 'a', input="a")
+        self.assertEquals("a<V>", found)
 
 
     def testTokenWithLabel(self):
@@ -381,7 +404,7 @@ class T(testbase.ANTLRTest):
                 self.x = x
                 self.y = y
                 self.z = z
-                
+
             def toString(self):
                 txt = ""
                 if self.token is not None:
@@ -557,7 +580,7 @@ class T(testbase.ANTLRTest):
         self.failUnlessEqual("(int<V> a) (int<V> b) (int<V> c)", found)
 
     # TREE PARSERS -- REWRITE AST
-        
+
     def testTreeParserRewriteFlatList(self):
         grammar = textwrap.dedent(
         r'''
@@ -682,7 +705,7 @@ class T(testbase.ANTLRTest):
         class V(CommonTree):
             def __init__(self, tokenType):
                 CommonTree.__init__(self, CommonToken(tokenType))
-                
+
             def toString(self):
                 return tokenNames[self.token.type] + "<V>"
             __str__ = toString
@@ -731,7 +754,7 @@ class T(testbase.ANTLRTest):
             def __init__(self, tokenType, x):
                 CommonTree.__init__(self, CommonToken(tokenType))
                 self.x = x
-                
+
             def toString(self):
                 return tokenNames[self.token.type] + "<V>;" + str(self.x)
             __str__ = toString
@@ -778,7 +801,7 @@ class T(testbase.ANTLRTest):
         class V(CommonTree):
             def __init__(self, tokenType):
                 CommonTree.__init__(self, CommonToken(tokenType))
-                
+
             def toString(self):
                 return tokenNames[self.token.type] + "<V>"
             __str__ = toString
@@ -829,7 +852,7 @@ class T(testbase.ANTLRTest):
                 else:
                     CommonTree.__init__(self, tree)
                     self.token.type = tokenType
-                
+
             def toString(self):
                 return tokenNames[self.token.type]+"<V>@"+str(self.token.line)
             __str__ = toString
@@ -861,7 +884,7 @@ class T(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         treeGrammar = textwrap.dedent(
             r'''
             tree grammar TP;
@@ -879,10 +902,10 @@ class T(testbase.ANTLRTest):
                 __str__ = toString
 
             }
-            
+
             a : ID<V> ';'<V>;
             ''')
-            
+
         found = self.execTreeParser(
             grammar, 'a',
             treeGrammar, 'a',

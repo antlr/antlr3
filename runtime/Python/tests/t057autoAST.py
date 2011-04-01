@@ -30,9 +30,9 @@ class TestAutoAST(testbase.ANTLRTest):
             def emitErrorMessage(self, msg):
                 self._errors.append(msg)
 
-            
+
         return TParser
-    
+
 
     def lexerClass(self, base):
         class TLexer(base):
@@ -57,9 +57,9 @@ class TestAutoAST(testbase.ANTLRTest):
             def recover(self, input, re):
                 # no error recovery yet, just crash!
                 raise
-            
+
         return TLexer
-    
+
 
     def execParser(self, grammar, grammarEntry, input, expectErrors=False):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -87,7 +87,7 @@ class TestAutoAST(testbase.ANTLRTest):
 
         else:
             return result, parser._errors
-        
+
 
     def execTreeParser(self, grammar, grammarEntry, treeGrammar, treeEntry, input):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -119,7 +119,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;};
             ''')
-        
+
         found = self.execParser(grammar, "a", "abc 34")
         self.assertEquals("abc 34", found);
 
@@ -149,7 +149,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-    
+
         found = self.execParser(grammar, "a", "abc 34")
         self.assertEquals("(abc 34)", found)
 
@@ -164,7 +164,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-    
+
         found = self.execParser(grammar, "a", "34 abc")
         self.assertEquals("(abc 34)", found)
 
@@ -179,7 +179,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "abc 34 dag 4532")
         self.assertEquals("abc 4532", found)
 
@@ -209,7 +209,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "void foo;")
         self.assertEquals("(void foo ;)", found)
 
@@ -239,7 +239,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "void foo;")
         self.assertEquals("(foo void ;)", found)
 
@@ -254,7 +254,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "void foo;")
         self.assertEquals("(foo void ;)", found)
 
@@ -269,7 +269,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "void foo;")
         self.assertEquals("(foo void ;)", found)
 
@@ -299,7 +299,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a 34 c")
         self.assertEquals("(34 a c)", found)
 
@@ -314,7 +314,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a 34 c")
         self.assertEquals("(c (34 a))", found)
 
@@ -329,7 +329,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a 34 * b 9 * c")
         self.assertEquals("(* (* (a 34) b 9) c)", found)
 
@@ -344,7 +344,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "void a b;")
         self.assertEquals("void a b ;", found)
 
@@ -360,7 +360,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "int a")
         self.assertEquals("int a", found)
 
@@ -376,7 +376,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "int a")
         self.assertEquals("(int a)", found)
 
@@ -392,7 +392,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "int a")
         self.assertEquals("(int a)", found)
 
@@ -408,7 +408,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "int a")
         self.assertEquals("(int a)", found)
 
@@ -423,7 +423,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a+b+c+d")
         self.assertEquals("(+ (+ (+ a b) c) d)", found)
 
@@ -439,7 +439,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a+b+c-d")
         self.assertEquals("(- (+ (+ a b) c) d)", found)
 
@@ -456,7 +456,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "s", "3 exp 4 exp 5")
         self.assertEquals("(exp 3 (exp 4 5))", found)
 
@@ -471,7 +471,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "abc")
         self.assertEquals("abc", found)
 
@@ -486,12 +486,13 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "+abc")
         self.assertEquals("(+ abc)", found)
 
 
-    @testbase.broken("FAILS until antlr.g rebuilt in v3", RuntimeError)
+    @testbase.broken(
+        "FAILS until antlr.g rebuilt in v3", testbase.GrammarCompileError)
     def testSetRootWithLabel(self):
         grammar = textwrap.dedent(
             r'''
@@ -502,7 +503,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "+abc")
         self.assertEquals("(+ abc)", found)
 
@@ -517,7 +518,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a+b-c")
         self.assertEquals("(- (+ a b) c)", found)
 
@@ -532,7 +533,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34+2")
         self.assertEquals("34 + 2", found)
 
@@ -547,7 +548,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34+2")
         self.assertEquals("34 + 2", found)
 
@@ -562,7 +563,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34+2")
         self.assertEquals("34 + 2", found)
 
@@ -577,7 +578,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34 55")
         self.assertEquals("(34 55)", found)
 
@@ -592,7 +593,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34 55")
         self.assertEquals("(34 55)", found)
 
@@ -607,7 +608,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "34 55")
         self.assertEquals("(34 55)", found)
 
@@ -623,7 +624,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "3+4+5")
         self.assertEquals("(+ (+ 3 4) 5)", found)
 
@@ -640,7 +641,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         self.assertEquals("2nd id=b;a b", found)
 
@@ -656,7 +657,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         self.assertEquals("2nd id=b,(b a)", found)
 
@@ -691,7 +692,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         expecting = "id list=[a,b],(a b)"
         self.assertEquals(expecting, found)
@@ -707,7 +708,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a")
         self.assertEquals("a", found)
 
@@ -722,7 +723,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a")
         self.assertEquals("", found)
 
@@ -741,7 +742,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         self.assertEquals("2nd x=b,a b", found)
 
@@ -759,7 +760,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         self.assertEquals("x=(b a),(b a)", found)
 
@@ -777,7 +778,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b")
         self.assertEquals("1st x=a,b", found)
 
@@ -795,7 +796,7 @@ class TestAutoAST(testbase.ANTLRTest):
             D : 'd' ;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "a b b c c d")
         self.assertEquals("a b b c c d", found)
 
@@ -811,7 +812,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found = self.execParser(grammar, "a", "abc 34")
         self.assertEquals("34\nabc 34", found)
 
@@ -821,12 +822,12 @@ class TestAutoAST(testbase.ANTLRTest):
             r'''
             grammar T;
             options { language=Python;output=AST; }
-            r : (INT|ID)+ ; 
+            r : (INT|ID)+ ;
             ID : 'a'..'z' + ;
             INT : '0'..'9' +;
             WS: (' ' | '\n' | '\\t')+ {$channel = HIDDEN;};
             ''')
-        
+
         found = self.execParser(grammar, "r", "abc 34 d")
         self.assertEquals("abc 34 d", found)
 
@@ -842,7 +843,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "decl", "int 34 x=1;",
                                         expectErrors=True)
         self.assertEquals(["line 1:4 extraneous input u'34' expecting ID"],
@@ -862,7 +863,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "decl", "int =1;",
                                         expectErrors=True)
         self.assertEquals(["line 1:4 missing ID at u'='"], errors)
@@ -881,7 +882,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "decl", "x=1;",
                                         expectErrors=True)
         self.assertEquals(["line 1:0 mismatched input u'x' expecting set None"], errors)
@@ -898,7 +899,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
         self.assertEquals(["line 0:-1 missing INT at '<EOF>'"], errors)
         self.assertEquals("abc <missing INT>", found)
@@ -915,7 +916,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-    
+
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
         self.assertEquals(["line 0:-1 mismatched input '<EOF>' expecting INT"], errors)
         self.assertEquals("<mismatched token: <EOF>, resync=abc>", found)
@@ -933,7 +934,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "a", "abc ick 34",
                                         expectErrors=True)
         self.assertEquals(["line 1:4 extraneous input u'ick' expecting INT"],
@@ -951,7 +952,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "a", "34", expectErrors=True)
         self.assertEquals(["line 1:0 missing ID at u'34'"], errors)
         self.assertEquals("<missing ID> 34", found)
@@ -969,9 +970,9 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "a", "34", expectErrors=True)
-        
+
         # finds an error at the first token, 34, and re-syncs.
         # re-synchronizing does not consume a token because 34 follows
         # ref to rule b (start of c). It then matches 34 in c.
@@ -992,7 +993,7 @@ class TestAutoAST(testbase.ANTLRTest):
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
-        
+
         found, errors = self.execParser(grammar, "a", "*", expectErrors=True)
         self.assertEquals(["line 1:0 no viable alternative at input u'*'"],
                           errors)

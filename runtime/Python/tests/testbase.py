@@ -8,6 +8,7 @@ import re
 import tempfile
 import shutil
 import inspect
+import hashlib
 from distutils.errors import *
 import antlr3
 
@@ -343,6 +344,14 @@ class ANTLRTest(unittest.TestCase):
 
 
     def writeInlineGrammar(self, grammar):
+        # Create a unique ID for this test and use it as the grammar name,
+        # to avoid class name reuse. This kinda sucks. Need to find a way so
+        # tests can use the same grammar name without messing up the namespace.
+        # Well, first I should figure out what the exact problem is...
+        id = hashlib.md5(self.baseDir).hexdigest()[-8:]
+        grammar = grammar.replace('$TP', 'TP' + id)
+        grammar = grammar.replace('$T', 'T' + id)
+
         # get type and name from first grammar line
         m = re.match(r'\s*((lexer|parser|tree)\s+|)grammar\s+(\S+);', grammar, re.MULTILINE)
         assert m is not None, grammar
