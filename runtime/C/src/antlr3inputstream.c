@@ -291,10 +291,18 @@ antlr38BitReuse(pANTLR3_INPUT_STREAM input, pANTLR3_UINT8 inString, ANTLR3_UINT3
     input->data		= inString;
     input->sizeBuf	= size;
     
-    // Now we can set up the file name
+    // Now we can set up the file name. As we are reusing the stream, there may already
+    // be a string that we can reuse for holding the filename.
     //
-    input->istream->streamName	= input->strFactory->newStr(input->strFactory, name == NULL ? (pANTLR3_UINT8)"-memory-" : name);
-    input->fileName		= input->istream->streamName;
+	if	(input->istream->streamName == NULL) 
+	{
+		input->istream->streamName	= input->strFactory->newStr(input->strFactory, name == NULL ? (pANTLR3_UINT8)"-memory-" : name);
+		input->fileName		= input->istream->streamName;
+	}
+	else
+	{
+		input->istream->streamName->set(input->istream->streamName,  (name == NULL ? (const char *)"-memory-" : (const char *)name));
+	}
 
     input->reset(input);
 }
