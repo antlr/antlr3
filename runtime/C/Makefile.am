@@ -25,10 +25,8 @@ LIBSOURCES		=	src/antlr3baserecognizer.c			\
 					src/antlr3parser.c					\
 					src/antlr3rewritestreams.c			\
 					src/antlr3string.c					\
-					src/antlr3stringstream.c			\
 					src/antlr3tokenstream.c				\
-					src/antlr3treeparser.c				\
-					src/antlr3ucs2inputstream.c
+					src/antlr3treeparser.c
 
 libantlr3c_la_SOURCES = $(LIBSOURCES)
 
@@ -60,7 +58,6 @@ include_HEADERS =	include/antlr3.h						\
 					include/antlr3recognizersharedstate.h	\
 					include/antlr3rewritestreams.h			\
 					include/antlr3string.h					\
-					include/antlr3stringstream.h			\
 					include/antlr3tokenstream.h				\
 					include/antlr3treeparser.h				\
 					antlr3config.h
