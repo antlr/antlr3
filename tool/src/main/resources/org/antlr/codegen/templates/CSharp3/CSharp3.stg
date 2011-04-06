@@ -112,7 +112,7 @@ lexer(grammar, name, tokens, scopes, rules, numRules, labelType="CommonToken",
       filterMode, superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Lexer<endif>}) ::= <<
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "<ANTLRVersion>")]
 [System.CLSCompliant(false)]
-public partial class <grammar.recognizerName> : <@superClassName><superClass><@end>
+<actions.(actionScope).modifier; null="public"> partial class <grammar.recognizerName> : <@superClassName><superClass><@end>
 {
 	<tokens:{public const int <it.name; format="id">=<it.type>;}; separator="\n">
 	<scopes:{<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
@@ -126,17 +126,17 @@ public partial class <grammar.recognizerName> : <@superClassName><superClass><@e
          {g|public <g.recognizerName> <g:delegateName()>;}; separator="\n">
     <last(grammar.delegators):{g|public <g.recognizerName> gParent;}>
 
-	public <grammar.recognizerName>()<! needed by subclasses !>
+	<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>()<! needed by subclasses !>
 	{
 		OnCreated();
 	}
 
-	public <grammar.recognizerName>(<lexerInputStreamType()> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}> )
+	<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>(<lexerInputStreamType()> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}> )
 		: this(input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}>)
 	{
 	}
 
-	public <grammar.recognizerName>(<lexerInputStreamType()> input, RecognizerSharedState state<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
+	<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>(<lexerInputStreamType()> input, RecognizerSharedState state<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
 		: base(input, state)
 	{
 <if(memoize)>
@@ -279,7 +279,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
               filterMode) ::= <<
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "<ANTLRVersion>")]
 [System.CLSCompliant(false)]
-public partial class <grammar.recognizerName> : <@superClassName><superClass><@end>
+<actions.(actionScope).modifier; null="public"> partial class <grammar.recognizerName> : <@superClassName><superClass><@end>
 {
 <if(grammar.grammarIsRoot)>
 	internal static readonly string[] tokenNames = new string[] {
@@ -299,11 +299,11 @@ public partial class <grammar.recognizerName> : <@superClassName><superClass><@e
 	<scopes:{<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
 	<@members>
 <! WARNING. bug in ST: this is cut-n-paste into Dbg.stg !>
-public <grammar.recognizerName>( <inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}> )
+<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>( <inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}> )
 	: this( input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}> )
 {
 }
-public <grammar.recognizerName>(<inputStreamType> input, RecognizerSharedState state<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
+<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>(<inputStreamType> input, RecognizerSharedState state<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
 	: base(input, state)
 {
 	<parserCtorBody()>
