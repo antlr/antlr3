@@ -901,7 +901,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
-        self.assertEquals(["line 0:-1 missing INT at '<EOF>'"], errors)
+        self.assertEquals(["line 1:3 missing INT at '<EOF>'"], errors)
         self.assertEquals("abc <missing INT>", found)
 
 
@@ -918,7 +918,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
-        self.assertEquals(["line 0:-1 mismatched input '<EOF>' expecting INT"], errors)
+        self.assertEquals(["line 1:3 mismatched input '<EOF>' expecting INT"], errors)
         self.assertEquals("<mismatched token: <EOF>, resync=abc>", found)
 
 

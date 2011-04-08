@@ -114,6 +114,17 @@ class ANTLRTest(unittest.TestCase):
         self.grammarType = None
 
 
+    def assertListEqual(self, a, b):
+        if a == b:
+            return
+
+        import difflib
+        a = [str(l) + '\n' for l in a]
+        b = [str(l) + '\n' for l in b]
+
+        raise AssertionError(''.join(difflib.unified_diff(a, b)))
+
+
     @property
     def baseDir(self):
         if self._baseDir is None:
@@ -240,7 +251,7 @@ class ANTLRTest(unittest.TestCase):
                         )
 
                 # add dependencies to my .stg files
-                templateDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src', 'org', 'antlr', 'codegen', 'templates', 'Python'))
+                templateDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'tool', 'src', 'main', 'resources', 'org', 'antlr', 'codegen', 'templates', 'Python'))
                 templates = glob.glob(os.path.join(templateDir, '*.stg'))
 
                 for dst, src in dependencies:

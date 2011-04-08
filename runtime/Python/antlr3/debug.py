@@ -79,11 +79,10 @@ class DebugParser(Parser):
 
 
     def reportError(self, exc):
+        Parser.reportError(self, exc)
+
         if isinstance(exc, RecognitionException):
             self._dbg.recognitionException(exc)
-
-        else:
-            traceback.print_exc(exc)
 
 
 class DebugTokenStream(TokenStream):
@@ -128,7 +127,7 @@ class DebugTokenStream(TokenStream):
 
     def consumeInitialHiddenTokens(self):
         """consume all initial off-channel tokens"""
-        
+
         firstOnChannelTokenIndex = self.input.index()
         for idx in range(firstOnChannelTokenIndex):
             self._dbg.consumeHiddenToken(self.input.get(idx))
@@ -399,7 +398,7 @@ class DebugTreeAdaptor(TreeAdaptor):
 
 class DebugEventListener(object):
     """All debugging events that a recognizer can trigger.
- 
+
     I did not create a separate AST debugging interface as it would create
     lots of extra classes and DebugParser has a dbg var defined, which makes
     it hard to change to ASTDebugEventListener.  I looked hard at this issue
@@ -449,7 +448,7 @@ class DebugEventListener(object):
         pass
 
 
-    def enterDecision(self, decisionNumber):
+    def enterDecision(self, decisionNumber, couldBacktrack):
 	"""Every decision, fixed k or arbitrary, has an enter/exit event
         so that a GUI can easily track what LT/consume events are
         associated with prediction.  You will see a single enter/exit
@@ -592,7 +591,7 @@ class DebugEventListener(object):
         """
         pass
 
-    
+
     def endResync(self):
 	"""Indicates that the recognizer has finished consuming tokens in order
         to resychronize.  There may be multiple beginResync/endResync pairs
@@ -940,7 +939,7 @@ class DebugEventSocketProxy(DebugEventListener):
         self.transmit("exitSubRule\t%d" % decisionNumber)
 
 
-    def enterDecision(self, decisionNumber):
+    def enterDecision(self, decisionNumber, couldBacktrack):
         self.transmit("enterDecision\t%d" % decisionNumber)
 
 
@@ -1061,7 +1060,7 @@ class DebugEventSocketProxy(DebugEventListener):
 #         buf.append(tokenIndex);
 #         serializeText(buf, text);
 
-	
+
     ## A S T  E v e n t s
 
     def nilNode(self, t):

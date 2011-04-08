@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
 >>
 
-lexer(grammar, name, tokens, scopes, rules, numRules, labelType="Token",
+lexer(grammar, name, tokens, scopes, rules, numRules, labelType="CommonToken",
       filterMode, superClass="Lexer") ::= <<
 <grammar.directDelegates:
  {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
@@ -155,7 +155,7 @@ filteringNextToken() ::= <<
 def nextToken(self):
     while True:
         if self.input.LA(1) == EOF:
-            return EOF_TOKEN
+            return self.makeEOFToken()
 
         self._state.token = None
         self._state.channel = DEFAULT_CHANNEL
@@ -814,11 +814,15 @@ matchSetAndListLabel(s,label,elementIndex,postmatchCode) ::= <<
 >>
 
 /** Match a string literal */
-lexerStringRef(string,label,elementIndex) ::= <<
+lexerStringRef(string,label,elementIndex="0") ::= <<
 <if(label)>
 <label>Start = self.getCharIndex()
 self.match(<string>)
+<label>StartLine<elementIndex> = self.getLine()
+<label>StartCharPos<elementIndex> = self.getCharPositionInLine()
 <label> = <labelType>(input=self.input, type=INVALID_TOKEN_TYPE, channel=DEFAULT_CHANNEL, start=<label>Start, stop=self.getCharIndex()-1)
+<label>.setLine(<label>StartLine<elementIndex>)
+<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
 <else>
 self.match(<string>)
 <endif>
@@ -876,13 +880,16 @@ lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
 <if(label)>
 <label>Start<elementIndex> = self.getCharIndex()
 self.<if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">)
+<label>StartLine<elementIndex> = self.getLine()
+<label>StartCharPos<elementIndex> = self.getCharPositionInLine()
 <label> = <labelType>(
     input=self.input,
     type=INVALID_TOKEN_TYPE,
     channel=DEFAULT_CHANNEL,
     start=<label>Start<elementIndex>,
-    stop=self.getCharIndex()-1
-    )
+    stop=self.getCharIndex()-1)
+<label>.setLine(<label>StartLine<elementIndex>)
+<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
 <else>
 self.<if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">)
 <endif>
@@ -898,8 +905,12 @@ lexerRuleRefAndListLabel(rule,label,args,elementIndex,scope) ::= <<
 lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 <label>Start<elementIndex> = self.getCharIndex()
+<label>StartLine<elementIndex> = self.getLine()
+<label>StartCharPos<elementIndex> = self.getCharPositionInLine()
 self.match(EOF)
 <label> = <labelType>(input=self.input, type=EOF, channel=DEFAULT_CHANNEL, start=<label>Start<elementIndex>, stop=self.getCharIndex()-1)
+<label>.setLine(<label>StartLine<elementIndex>)
+<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
 <else>
 self.match(EOF)
 <endif>

@@ -30,9 +30,9 @@ class TestRewriteAST(testbase.ANTLRTest):
             def emitErrorMessage(self, msg):
                 self._errors.append(msg)
 
-            
+
         return TParser
-    
+
 
     def lexerClass(self, base):
         class TLexer(base):
@@ -57,9 +57,9 @@ class TestRewriteAST(testbase.ANTLRTest):
             def recover(self, input, re):
                 # no error recovery yet, just crash!
                 raise
-            
+
         return TLexer
-    
+
 
     def execParser(self, grammar, grammarEntry, input, expectErrors=False):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -87,7 +87,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         else:
             return result, parser._errors
-        
+
 
     def execTreeParser(self, grammar, grammarEntry, treeGrammar, treeEntry, input):
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
@@ -470,7 +470,7 @@ class TestRewriteAST(testbase.ANTLRTest):
             options {language=Python;output=AST;}
             a : ID INT -> {False}? ID
                        -> {True}? INT
-                       -> 
+                       ->
               ;
             ID : 'a'..'z'+ ;
             INT : '0'..'9'+;
@@ -1176,7 +1176,7 @@ class TestRewriteAST(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python;output=AST;} 
+            options {language=Python;output=AST;}
             a: (INT|ID)+ -> INT+ ID+ ;
             INT: '0'..'9'+;
             ID : 'a'..'z'+;
@@ -1191,7 +1191,7 @@ class TestRewriteAST(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python;output=AST;} 
+            options {language=Python;output=AST;}
             a: (INT|ID) -> INT? ID? ;
             INT: '0'..'9'+;
             ID : 'a'..'z'+;
@@ -1208,7 +1208,7 @@ class TestRewriteAST(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python;output=AST;} 
+            options {language=Python;output=AST;}
             a : x=(INT|ID) -> $x ;
             INT: '0'..'9'+;
             ID : 'a'..'z'+;
@@ -1222,14 +1222,14 @@ class TestRewriteAST(testbase.ANTLRTest):
     def testRewriteAction(self):
         grammar = textwrap.dedent(
             r'''
-            grammar T; 
+            grammar T;
             options {language=Python;output=AST;}
             tokens { FLOAT; }
             r
-                : INT -> {CommonTree(CommonToken(type=FLOAT, text=$INT.text+".0"))} 
-                ; 
-            INT : '0'..'9'+; 
-            WS: (' ' | '\n' | '\t')+ {$channel = HIDDEN;}; 
+                : INT -> {CommonTree(CommonToken(type=FLOAT, text=$INT.text+".0"))}
+                ;
+            INT : '0'..'9'+;
+            WS: (' ' | '\n' | '\t')+ {$channel = HIDDEN;};
             ''')
 
         found = self.execParser(grammar, "r", "25")
@@ -1242,13 +1242,13 @@ class TestRewriteAST(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""
             grammar T;
-            options {language=Python;output=AST;} 
-            tokens {PARMS;} 
-            
-            modulo 
-             : 'modulo' ID ('(' parms+ ')')? -> ^('modulo' ID ^(PARMS parms+)?) 
-             ; 
-            parms : '#'|ID; 
+            options {language=Python;output=AST;}
+            tokens {PARMS;}
+
+            modulo
+             : 'modulo' ID ('(' parms+ ')')? -> ^('modulo' ID ^(PARMS parms+)?)
+             ;
+            parms : '#'|ID;
             ID : ('a'..'z' | 'A'..'Z')+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             """)
@@ -1267,7 +1267,7 @@ class TestRewriteAST(testbase.ANTLRTest):
             tokens {BLOCK;}
             a : ID ID INT INT INT -> (ID INT)+;
             ID : 'a'..'z'+ ;
-            INT : '0'..'9'+; 
+            INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             ''')
 
@@ -1412,7 +1412,6 @@ class TestRewriteAST(testbase.ANTLRTest):
         self.assertEquals("(EXPR <error: x> x 1)", found) # tree gets invented ID token
 
 
-    #@testbase.broken("FIXME", AssertionError)
     def testMissingTokenGivesErrorNode(self):
         grammar = textwrap.dedent(
             r'''
@@ -1426,7 +1425,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "a", "abc",
                                         expectErrors=True)
-        self.assertEquals(["line 0:-1 missing INT at '<EOF>'"], errors)
+        self.assertEquals(["line 1:3 missing INT at '<EOF>'"], errors)
         # doesn't do in-line recovery for sets (yet?)
         self.assertEquals("abc <missing INT>", found)
 

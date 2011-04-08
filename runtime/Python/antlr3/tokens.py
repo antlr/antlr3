@@ -47,7 +47,7 @@ class Token(object):
         Using setter/getter methods is deprecated. Use o.text instead.
         """
         raise NotImplementedError
-    
+
     def setText(self, text):
         """@brief Set the text of the token.
 
@@ -62,48 +62,48 @@ class Token(object):
         Using setter/getter methods is deprecated. Use o.type instead."""
 
         raise NotImplementedError
-    
+
     def setType(self, ttype):
         """@brief Get the type of the token.
 
         Using setter/getter methods is deprecated. Use o.type instead."""
 
         raise NotImplementedError
-    
-    
+
+
     def getLine(self):
         """@brief Get the line number on which this token was matched
 
         Lines are numbered 1..n
-        
+
         Using setter/getter methods is deprecated. Use o.line instead."""
 
         raise NotImplementedError
-    
+
     def setLine(self, line):
         """@brief Set the line number on which this token was matched
 
         Using setter/getter methods is deprecated. Use o.line instead."""
 
         raise NotImplementedError
-    
-    
+
+
     def getCharPositionInLine(self):
         """@brief Get the column of the tokens first character,
-        
+
         Columns are numbered 0..n-1
-        
+
         Using setter/getter methods is deprecated. Use o.charPositionInLine instead."""
 
         raise NotImplementedError
-    
+
     def setCharPositionInLine(self, pos):
         """@brief Set the column of the tokens first character,
 
         Using setter/getter methods is deprecated. Use o.charPositionInLine instead."""
 
         raise NotImplementedError
-    
+
 
     def getChannel(self):
         """@brief Get the channel of the token
@@ -111,25 +111,25 @@ class Token(object):
         Using setter/getter methods is deprecated. Use o.channel instead."""
 
         raise NotImplementedError
-    
+
     def setChannel(self, channel):
         """@brief Set the channel of the token
 
         Using setter/getter methods is deprecated. Use o.channel instead."""
 
         raise NotImplementedError
-    
+
 
     def getTokenIndex(self):
         """@brief Get the index in the input stream.
 
         An index from 0..n-1 of the token object in the input stream.
         This must be valid in order to use the ANTLRWorks debugger.
-        
+
         Using setter/getter methods is deprecated. Use o.index instead."""
 
         raise NotImplementedError
-    
+
     def setTokenIndex(self, index):
         """@brief Set the index in the input stream.
 
@@ -173,11 +173,11 @@ class CommonToken(Token):
     unnecessary copy operations.
 
     """
-    
+
     def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
                  input=None, start=None, stop=None, oldToken=None):
         Token.__init__(self)
-        
+
         if oldToken is not None:
             self.type = oldToken.type
             self.line = oldToken.line
@@ -185,21 +185,21 @@ class CommonToken(Token):
             self.channel = oldToken.channel
             self.index = oldToken.index
             self._text = oldToken._text
+            self.input = oldToken.input
             if isinstance(oldToken, CommonToken):
-                self.input = oldToken.input
                 self.start = oldToken.start
                 self.stop = oldToken.stop
-            
+
         else:
             self.type = type
             self.input = input
             self.charPositionInLine = -1 # set to invalid position
             self.line = 0
             self.channel = channel
-            
+
 	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
             self.index = -1
-            
+
             # We need to be able to change the text once in a while.  If
             # this is non-null, then getText should return this.  Note that
             # start/stop are not affected by changing this.
@@ -219,8 +219,11 @@ class CommonToken(Token):
 
         if self.input is None:
             return None
-        
-        return self.input.substring(self.start, self.stop)
+
+        if self.start < self.input.size() and self.stop < self.input.size():
+          return self.input.substring(self.start, self.stop)
+
+        return '<EOF>'
 
 
     def setText(self, text):
@@ -248,28 +251,28 @@ class CommonToken(Token):
 
     def getLine(self):
         return self.line
-    
+
     def setLine(self, line):
         self.line = line
 
 
     def getCharPositionInLine(self):
         return self.charPositionInLine
-    
+
     def setCharPositionInLine(self, pos):
         self.charPositionInLine = pos
 
 
     def getChannel(self):
         return self.channel
-    
+
     def setChannel(self, channel):
         self.channel = channel
-    
+
 
     def getTokenIndex(self):
         return self.index
-    
+
     def setTokenIndex(self, index):
         self.index = index
 
@@ -304,11 +307,11 @@ class CommonToken(Token):
             self.typeName, channelStr,
             self.line, self.charPositionInLine
             )
-    
+
 
 class ClassicToken(Token):
     """@brief Alternative token implementation.
-    
+
     A Token object like we'd use in ANTLR 2.x; has an actual string created
     and associated with this object.  These objects are needed for imaginary
     tree nodes that have payload objects.  We need to create a Token object
@@ -321,14 +324,14 @@ class ClassicToken(Token):
                  oldToken=None
                  ):
         Token.__init__(self)
-        
+
         if oldToken is not None:
             self.text = oldToken.text
             self.type = oldToken.type
             self.line = oldToken.line
             self.charPositionInLine = oldToken.charPositionInLine
             self.channel = oldToken.channel
-            
+
         self.text = text
         self.type = type
         self.line = None
@@ -345,36 +348,36 @@ class ClassicToken(Token):
 
 
     def getType(self):
-        return self.type 
+        return self.type
 
     def setType(self, ttype):
         self.type = ttype
 
-    
+
     def getLine(self):
         return self.line
-    
+
     def setLine(self, line):
         self.line = line
 
 
     def getCharPositionInLine(self):
         return self.charPositionInLine
-    
+
     def setCharPositionInLine(self, pos):
         self.charPositionInLine = pos
 
 
     def getChannel(self):
         return self.channel
-    
+
     def setChannel(self, channel):
         self.channel = channel
-    
+
 
     def getTokenIndex(self):
         return self.index
-    
+
     def setTokenIndex(self, index):
         self.index = index
 
@@ -390,7 +393,7 @@ class ClassicToken(Token):
         channelStr = ""
         if self.channel > 0:
             channelStr = ",channel=" + str(self.channel)
-            
+
         txt = self.text
         if txt is None:
             txt = "<no text>"
@@ -402,15 +405,12 @@ class ClassicToken(Token):
                                           self.line,
                                           self.charPositionInLine
                                           )
-    
+
 
     __str__ = toString
     __repr__ = toString
 
 
-
-EOF_TOKEN = CommonToken(type=EOF)
-	
 INVALID_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
 
 # In an action, a lexer rule can set token to this SKIP_TOKEN and ANTLR

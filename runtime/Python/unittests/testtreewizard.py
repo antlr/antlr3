@@ -42,7 +42,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testEnd(self):
         """TreePatternLexer(): ')'"""
 
@@ -52,7 +52,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testPercent(self):
         """TreePatternLexer(): '%'"""
 
@@ -62,7 +62,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testDot(self):
         """TreePatternLexer(): '.'"""
 
@@ -72,7 +72,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testColon(self):
         """TreePatternLexer(): ':'"""
 
@@ -82,7 +82,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testEOF(self):
         """TreePatternLexer(): EOF"""
 
@@ -92,7 +92,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testID(self):
         """TreePatternLexer(): ID"""
 
@@ -102,7 +102,7 @@ class TestTreePatternLexer(unittest.TestCase):
         self.failUnlessEqual(lexer.sval, '_foo12_bar')
         self.failUnlessEqual(lexer.error, False)
 
-        
+
     def testARG(self):
         """TreePatternLexer(): ARG"""
 
@@ -131,7 +131,7 @@ class TestTreePatternParser(unittest.TestCase):
 
         We need a tree adaptor, use CommonTreeAdaptor.
         And a constant list of token names.
-        
+
         """
 
         self.adaptor = CommonTreeAdaptor()
@@ -172,7 +172,7 @@ class TestTreePatternParser(unittest.TestCase):
         self.failUnlessEqual(tree.getChildCount(), 1)
         self.failUnlessEqual(tree.getChild(0).getType(), 6)
         self.failUnlessEqual(tree.getChild(0).getText(), 'B')
-        
+
 
     def testNil(self):
         """TreePatternParser: 'nil'"""
@@ -182,7 +182,7 @@ class TestTreePatternParser(unittest.TestCase):
         self.failUnless(isinstance(tree, CommonTree))
         self.failUnlessEqual(tree.getType(), 0)
         self.failUnlessEqual(tree.getText(), None)
-        
+
 
     def testWildcard(self):
         """TreePatternParser: '(.)'"""
@@ -190,7 +190,7 @@ class TestTreePatternParser(unittest.TestCase):
         parser = TreePatternParser(lexer, self.wizard, self.adaptor)
         tree = parser.pattern()
         self.failUnless(isinstance(tree, WildcardTreePattern))
-        
+
 
     def testLabel(self):
         """TreePatternParser: '(%a:A)'"""
@@ -199,7 +199,7 @@ class TestTreePatternParser(unittest.TestCase):
         tree = parser.pattern()
         self.failUnless(isinstance(tree, TreePattern))
         self.failUnlessEqual(tree.label, 'a')
-        
+
 
     def testError1(self):
         """TreePatternParser: ')'"""
@@ -207,7 +207,7 @@ class TestTreePatternParser(unittest.TestCase):
         parser = TreePatternParser(lexer, self.wizard, self.adaptor)
         tree = parser.pattern()
         self.failUnless(tree is None)
-        
+
 
     def testError2(self):
         """TreePatternParser: '()'"""
@@ -215,7 +215,7 @@ class TestTreePatternParser(unittest.TestCase):
         parser = TreePatternParser(lexer, self.wizard, self.adaptor)
         tree = parser.pattern()
         self.failUnless(tree is None)
-        
+
 
     def testError3(self):
         """TreePatternParser: '(A ])'"""
@@ -223,7 +223,7 @@ class TestTreePatternParser(unittest.TestCase):
         parser = TreePatternParser(lexer, self.wizard, self.adaptor)
         tree = parser.pattern()
         self.failUnless(tree is None)
-        
+
 
 class TestTreeWizard(unittest.TestCase):
     """Test case for the TreeWizard class."""
@@ -233,7 +233,7 @@ class TestTreeWizard(unittest.TestCase):
 
         We need a tree adaptor, use CommonTreeAdaptor.
         And a constant list of token names.
-        
+
         """
 
         self.adaptor = CommonTreeAdaptor()
@@ -269,12 +269,12 @@ class TestTreeWizard(unittest.TestCase):
             wiz.getTokenType('A'),
             5
             )
-            
+
         self.failUnlessEqual(
             wiz.getTokenType('VAR'),
             11
             )
-            
+
         self.failUnlessEqual(
             wiz.getTokenType('invalid'),
             INVALID_TOKEN_TYPE
@@ -339,7 +339,7 @@ class TestTreeWizard(unittest.TestCase):
             (ttype, [str(node) for node in nodes])
             for ttype, nodes in indexMap.items()
             )
-        
+
     def testSingleNodeIndex(self):
         wiz = TreeWizard(self.adaptor, self.tokens)
         tree = wiz.create("ID")
@@ -374,9 +374,9 @@ class TestTreeWizard(unittest.TestCase):
         elements = []
         def visitor(node, parent, childIndex, labels):
             elements.append(str(node))
-        
+
         wiz.visit(tree, wiz.getTokenType("B"), visitor)
-        
+
         expecting = ['B']
         self.failUnlessEqual(expecting, elements)
 
@@ -388,9 +388,9 @@ class TestTreeWizard(unittest.TestCase):
         elements = []
         def visitor(node, parent, childIndex, labels):
             elements.append(str(node))
-        
+
         wiz.visit(tree, wiz.getTokenType("C"), visitor)
-        
+
         expecting = ['C']
         self.failUnlessEqual(expecting, elements)
 
@@ -402,9 +402,9 @@ class TestTreeWizard(unittest.TestCase):
         elements = []
         def visitor(node, parent, childIndex, labels):
             elements.append(str(node))
-        
+
         wiz.visit(tree, wiz.getTokenType("B"), visitor)
-        
+
         expecting = ['B', 'B', 'B']
         self.failUnlessEqual(expecting, elements)
 
@@ -416,9 +416,9 @@ class TestTreeWizard(unittest.TestCase):
         elements = []
         def visitor(node, parent, childIndex, labels):
             elements.append(str(node))
-        
+
         wiz.visit(tree, wiz.getTokenType("A"), visitor)
-        
+
         expecting = ['A', 'A']
         self.failUnlessEqual(expecting, elements)
 
@@ -430,9 +430,9 @@ class TestTreeWizard(unittest.TestCase):
         elements = []
         def visitor(node, parent, childIndex, labels):
             elements.append('%s@%s[%d]' % (node, parent, childIndex))
-        
+
         wiz.visit(tree, wiz.getTokenType("B"), visitor)
-        
+
         expecting = ['B@A[0]', 'B@A[1]', 'B@A[2]']
         self.failUnlessEqual(expecting, elements)
 
@@ -447,9 +447,9 @@ class TestTreeWizard(unittest.TestCase):
                 '%s@%s[%d]'
                 % (node, ['nil', parent][parent is not None], childIndex)
                 )
-        
+
         wiz.visit(tree, wiz.getTokenType("A"), visitor)
-        
+
         expecting = ['A@nil[0]', 'A@A[1]']
         self.failUnlessEqual(expecting, elements)
 
@@ -463,9 +463,9 @@ class TestTreeWizard(unittest.TestCase):
             elements.append(
                 str(node)
                 )
-        
+
         wiz.visit(tree, '(A B)', visitor)
-        
+
         expecting = ['A'] # shouldn't match overall root, just (A B)
         self.failUnlessEqual(expecting, elements)
 
@@ -480,9 +480,9 @@ class TestTreeWizard(unittest.TestCase):
                 '%s@%s[%d]'
                 % (node, ['nil', parent][parent is not None], childIndex)
                 )
-        
+
         wiz.visit(tree, '(A B)', visitor)
-        
+
         expecting = ['A@A[2]', 'A@D[0]']
         self.failUnlessEqual(expecting, elements)
 
@@ -502,9 +502,9 @@ class TestTreeWizard(unittest.TestCase):
                    labels['b'],
                    )
                 )
-        
+
         wiz.visit(tree, '(%a:A %b:B)', visitor)
-        
+
         expecting = ['foo@A[2]foo&bar', 'big@D[0]big&dog']
         self.failUnlessEqual(expecting, elements)
 
@@ -565,6 +565,15 @@ class TestTreeWizard(unittest.TestCase):
         # to match text--check structure only.
         valid = wiz.parse(t, "(A B[foo] C)")
         self.failUnless(valid)
+
+
+    def testParseWithText2(self):
+        wiz = TreeWizard(self.adaptor, self.tokens)
+        t = wiz.create("(A B[T__32] (C (D E[a])))")
+        # C pattern has no text arg so despite [bar] in t, no need
+        # to match text--check structure only.
+        valid = wiz.parse(t, "(A B[foo] C)")
+        self.assertEquals("(A T__32 (C (D a)))", t.toStringTree())
 
 
     def testParseWithTextFails(self):
@@ -634,7 +643,7 @@ class TestTreeWizard(unittest.TestCase):
         same = wiz.equals(t1, t2)
         self.failUnless(same)
 
-	
+
     def testEqualsWithMismatchedText(self):
         wiz = TreeWizard(self.adaptor, self.tokens)
         t1 = wiz.create("(A B[foo] C)")

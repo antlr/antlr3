@@ -66,6 +66,10 @@ ruleNames = [
     "invalidRule", <grammar.allImportedRules:{rST | "<rST.name>"}; wrap="\n    ", separator=", ">
     ]<\n>
 <endif>
+decisionCanBacktrack = [
+    False, # invalid decision
+    <grammar.decisions:{d | <if(d.dfa.hasSynPred)>True<else>False<endif>}; wrap="\n    ", separator=", ">
+    ]
 <if(grammar.grammarIsRoot)> <! grammar imports other grammar(s) !>
 def getRuleLevel(self):
     return self.ruleLevel
@@ -229,7 +233,8 @@ finally:
 
 @blockBody.decision() ::= <<
 try:
-    self._dbg.enterDecision(<decisionNumber>)
+    self._dbg.enterDecision(
+        <decisionNumber>, self.decisionCanBacktrack[<decisionNumber>])
     <@super.decision()>
 finally:
     self._dbg.exitDecision(<decisionNumber>)
@@ -237,7 +242,8 @@ finally:
 
 @ruleBlock.decision() ::= <<
 try:
-    self._dbg.enterDecision(<decisionNumber>)
+    self._dbg.enterDecision(
+        <decisionNumber>, self.decisionCanBacktrack[<decisionNumber>])
     <@super.decision()>
 finally:
     self._dbg.exitDecision(<decisionNumber>)
@@ -257,7 +263,8 @@ finally:
 
 @positiveClosureBlockLoop.decisionBody() ::= <<
 try:
-    self._dbg.enterDecision(<decisionNumber>)
+    self._dbg.enterDecision(
+        <decisionNumber>, self.decisionCanBacktrack[<decisionNumber>])
     <@super.decisionBody()>
 finally:
     self._dbg.exitDecision(<decisionNumber>)
@@ -276,7 +283,8 @@ finally:
 
 @closureBlockLoop.decisionBody() ::= <<
 try:
-    self._dbg.enterDecision(<decisionNumber>)
+    self._dbg.enterDecision(
+        <decisionNumber>, self.decisionCanBacktrack[<decisionNumber>])
     <@super.decisionBody()>
 finally:
     self._dbg.exitDecision(<decisionNumber>)

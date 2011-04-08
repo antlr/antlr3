@@ -22,7 +22,7 @@ class T(testbase.ANTLRTest):
         if result.st is not None:
             return result.st.toString()
         return None
-    
+
 
     def testInlineTemplate(self):
         grammar = textwrap.dedent(
@@ -35,7 +35,7 @@ class T(testbase.ANTLRTest):
               -> template(id={$ID.text}, int={$INT.text})
                  "id=<id>, int=<int>"
             ;
-            
+
             ID : 'a'..'z'+;
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
@@ -64,7 +64,7 @@ class T(testbase.ANTLRTest):
             file=StringIO(templates),
             lexer='angle-bracket'
             )
-        
+
         grammar = textwrap.dedent(
             r'''grammar T2;
             options {
@@ -75,7 +75,7 @@ class T(testbase.ANTLRTest):
               -> expr(op={$OP.text}, args={$r})
             ;
             arg: ID -> template(t={$ID.text}) "<t>";
-            
+
             ID : 'a'..'z'+;
             OP: '+';
             WS : (' '|'\n') {$channel=HIDDEN;} ;
@@ -99,9 +99,9 @@ class T(testbase.ANTLRTest):
               output=template;
             }
             a : ID INT
-              -> 
+              ->
             ;
-            
+
             ID : 'a'..'z'+;
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
@@ -131,7 +131,7 @@ class T(testbase.ANTLRTest):
             b: ID
               -> template(t={$ID.text}) "<t>"
             ;
-            
+
             ID : 'a'..'z'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             '''
@@ -155,7 +155,7 @@ class T(testbase.ANTLRTest):
             a: ID
               -> { stringtemplate3.StringTemplate("hello") }
             ;
-            
+
             ID : 'a'..'z'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             '''
@@ -179,7 +179,7 @@ class T(testbase.ANTLRTest):
             a: ID
               { $st = %{"hello"} }
             ;
-            
+
             ID : 'a'..'z'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             '''
@@ -207,7 +207,7 @@ class T(testbase.ANTLRTest):
               }
               -> { res }
             ;
-            
+
             ID : 'a'..'z'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             '''
@@ -235,7 +235,7 @@ class T(testbase.ANTLRTest):
             file=StringIO(templates),
             lexer='angle-bracket'
             )
-        
+
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
@@ -247,7 +247,7 @@ class T(testbase.ANTLRTest):
                 $st = %({"expr"})(args={[1, 2, 3]}, op={"+"})
               }
             ;
-            
+
             ID : 'a'..'z'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
             '''
@@ -277,7 +277,7 @@ class T(testbase.ANTLRTest):
               ->                  template(int={$INT.text})
                                   "C: <int>"
             ;
-            
+
             ID : 'a'..'z'+;
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
@@ -304,7 +304,7 @@ class T(testbase.ANTLRTest):
               -> template(id={$ID.text}, int={$INT.text})
                  "id=<id>, int=<int>"
             ;
-            
+
             ID : 'a'..'z'+;
             INT : '0'..'9'+;
             WS : (' '|'\n') {$channel=HIDDEN;} ;
@@ -341,12 +341,12 @@ class T(testbase.ANTLRTest):
                 : expr
                   -> template(t={$text}) <<boom(<t>)>>
                 ;
-                
+
             expr
                 : ID
                 | INT
                 ;
-                
+
             ID:  'a'..'z'+;
             INT: '0'..'9'+;
             WS: (' '|'\n')+ {$channel=HIDDEN;} ;
@@ -365,7 +365,7 @@ class T(testbase.ANTLRTest):
             return 12;
             '''
             )
-        
+
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
 
         cStream = antlr3.StringStream(input)
@@ -375,7 +375,7 @@ class T(testbase.ANTLRTest):
         result = parser.prog()
 
         found = tStream.toString()
-        
+
         expected = textwrap.dedent(
             '''\
             if ( foo ) {
@@ -387,7 +387,7 @@ class T(testbase.ANTLRTest):
             return boom(12);
             '''
             )
-        
+
         self.failUnlessEqual(expected, found)
 
 
@@ -403,20 +403,20 @@ class T(testbase.ANTLRTest):
               BLOCK;
               ASSIGN;
             }
-            
+
             prog: stat+;
 
             stat
                 : IF '(' e=expr ')' s=stat
                   -> ^(IF $e $s)
                 | RETURN expr ';'
-                  -> ^(RETURN expr)                
+                  -> ^(RETURN expr)
                 | '{' stat* '}'
-                  -> ^(BLOCK stat*)                
+                  -> ^(BLOCK stat*)
                 | ID '=' expr ';'
                   -> ^(ASSIGN ID expr)
                 ;
-                
+
             expr
                 : ID
                 | INT
@@ -445,8 +445,8 @@ class T(testbase.ANTLRTest):
 
             stat
                 : ^(IF expr stat)
-                | ^(RETURN return_expr)                
-                | ^(BLOCK stat*)                
+                | ^(RETURN return_expr)
+                | ^(BLOCK stat*)
                 | ^(ASSIGN ID expr)
                 ;
 
@@ -454,7 +454,7 @@ class T(testbase.ANTLRTest):
                 : expr
                   -> template(t={$text}) <<boom(<t>)>>
                 ;
-            
+
             expr
                 : ID
                 | INT
@@ -473,10 +473,10 @@ class T(testbase.ANTLRTest):
             return 12;
             '''
             )
-        
+
         lexerCls, parserCls = self.compileInlineGrammar(grammar)
         walkerCls = self.compileInlineGrammar(treeGrammar)
-        
+
         cStream = antlr3.StringStream(input)
         lexer = lexerCls(cStream)
         tStream = antlr3.TokenRewriteStream(lexer)
@@ -486,9 +486,9 @@ class T(testbase.ANTLRTest):
         nodes.setTokenStream(tStream)
         walker = walkerCls(nodes)
         walker.prog()
-        
+
         found = tStream.toString()
-        
+
         expected = textwrap.dedent(
             '''\
             if ( foo ) {
@@ -500,9 +500,9 @@ class T(testbase.ANTLRTest):
             return boom(12);
             '''
             )
-        
+
         self.failUnlessEqual(expected, found)
 
-        
+
 if __name__ == '__main__':
     unittest.main()

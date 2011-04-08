@@ -41,7 +41,7 @@ from antlr3.exceptions import RecognitionException, MismatchedTokenException, \
      NoViableAltException, EarlyExitException, MismatchedSetException, \
      MismatchedNotSetException, FailedPredicateException, \
      BacktrackingFailed, UnwantedTokenException, MissingTokenException
-from antlr3.tokens import CommonToken, EOF_TOKEN, SKIP_TOKEN
+from antlr3.tokens import CommonToken, SKIP_TOKEN
 from antlr3.compat import set, frozenset, reversed
 
 
@@ -1079,6 +1079,15 @@ class Lexer(BaseRecognizer, TokenSource):
         self._state.text = None
 
 
+    def makeEOFToken(self):
+        eof = CommonToken(
+            type=EOF, channel=DEFAULT_CHANNEL,
+            input=self.input,
+            start=self.input.index(), stop=self.input.index())
+        eof.line = self.input.line
+        eof.charPositionInLine = self.input.charPositionInLine
+        return eof
+
     def nextToken(self):
         """
         Return a token from this source; i.e., match a token on the char
@@ -1093,7 +1102,7 @@ class Lexer(BaseRecognizer, TokenSource):
             self._state.tokenStartLine = self.input.line
             self._state.text = None
             if self.input.LA(1) == EOF:
-                return EOF_TOKEN
+                return self.makeEOFToken()
 
             try:
                 self.mTokens()
@@ -1355,7 +1364,7 @@ class Parser(BaseRecognizer):
     def __init__(self, lexer, state=None):
         BaseRecognizer.__init__(self, state)
 
-        self.setTokenStream(lexer)
+        self.input = lexer
 
 
     def reset(self):

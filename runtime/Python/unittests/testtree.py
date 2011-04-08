@@ -194,7 +194,7 @@ class TestTreeNodeStream(unittest.TestCase):
             stream.consume()
 
         self.failUnlessEqual(EOF, stream.LT(1).getType())
-        self.failUnlessEqual(UP, stream.LT(-1).getType())
+        self.failUnlessEqual(UP, stream.LT(-1).getType())  #TODO: remove?
         stream.rewind(m)      # REWIND
 
         # consume til end again :)
@@ -203,7 +203,7 @@ class TestTreeNodeStream(unittest.TestCase):
             stream.consume()
 
         self.failUnlessEqual(EOF, stream.LT(1).getType())
-        self.failUnlessEqual(UP, stream.LT(-1).getType())
+        self.failUnlessEqual(UP, stream.LT(-1).getType())  #TODO: remove?
 
 
     def testMarkRewindInMiddle(self):
@@ -357,6 +357,25 @@ class TestTreeNodeStream(unittest.TestCase):
         stream.reset()
         v2 = self.toNodesOnlyString(stream) # scan all
         self.assertEquals(v1, v2)
+
+
+    def testIterator(self):
+        r0 = CommonTree(CommonToken(101))
+        r1 = CommonTree(CommonToken(102))
+        r0.addChild(r1)
+        r1.addChild(CommonTree(CommonToken(103)))
+        r2 = CommonTree(CommonToken(106))
+        r2.addChild(CommonTree(CommonToken(107)))
+        r1.addChild(r2)
+        r0.addChild(CommonTree(CommonToken(104)))
+        r0.addChild(CommonTree(CommonToken(105)))
+
+        stream = CommonTreeNodeStream(r0)
+
+        expecting = [
+            101, DOWN, 102, DOWN, 103, 106, DOWN, 107, UP, UP, 104, 105, UP]
+        found = [t.type for t in stream]
+        self.assertEqual(expecting, found)
 
 
     def toNodesOnlyString(self, nodes):

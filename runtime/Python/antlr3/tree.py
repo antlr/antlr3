@@ -1106,6 +1106,9 @@ class BaseTreeAdaptor(TreeAdaptor):
 
 
     def createFromToken(self, tokenType, fromToken, text=None):
+        if fromToken is None:
+            return self.createFromType(tokenType, text)
+
         assert isinstance(tokenType, (int, long)), type(tokenType).__name__
         assert isinstance(fromToken, Token), type(fromToken).__name__
         assert text is None or isinstance(text, basestring), type(text).__name__
@@ -1856,6 +1859,10 @@ class CommonTreeNodeStream(TreeNodeStream):
         self.calls = []
 
 
+    def __iter__(self):
+        return TreeIterator(self.root, self.adaptor)
+
+
     def fillBuffer(self):
         """Walk tree with depth-first-search and fill nodes buffer.
         Don't do DOWN, UP nodes if its a list (t is isNil).
@@ -1963,6 +1970,10 @@ class CommonTreeNodeStream(TreeNodeStream):
             return None
 
         return self.nodes[self.p - k]
+
+
+    def isEOF(self, obj):
+        return self.adaptor.getType(obj) == EOF
 
 
     def getTreeSource(self):
@@ -2207,7 +2218,9 @@ class TreeParser(BaseRecognizer):
 
     def getMissingSymbol(self, input, e, expectedTokenType, follow):
         tokenText = "<missing " + self.tokenNames[expectedTokenType] + ">"
-        return CommonTree(CommonToken(type=expectedTokenType, text=tokenText))
+        adaptor = input.adaptor
+        return adaptor.createToken(
+            CommonToken(type=expectedTokenType, text=tokenText))
 
 
     # precompiled regex used by inContext
@@ -2414,9 +2427,11 @@ class TreeVisitor(object):
             # if rewritten, walk children of new t
             t = pre_action(t)
 
-        for idx in xrange(self.adaptor.getChildCount(t)):
+        idx = 0
+        while idx < self.adaptor.getChildCount(t):
             child = self.adaptor.getChild(t, idx)
             self.visit(child, pre_action, post_action)
+            idx += 1
 
         if post_action is not None and not isNil:
             t = post_action(t)
@@ -2775,7 +2790,8 @@ class RewriteRuleSubtreeStream(RewriteRuleElementStream):
 
         # test size above then fetch
         el = self._next()
-        return el
+        # dup just the root (want node here)
+        return self.adaptor.dupNode(el)
 
 
     def dup(self, el):
