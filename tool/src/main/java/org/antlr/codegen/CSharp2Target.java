@@ -28,7 +28,7 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
 
 public class CSharp2Target extends Target 

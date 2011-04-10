@@ -28,8 +28,8 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;
@@ -86,11 +86,10 @@ public class CPPTarget extends Target {
 	protected void genRecognizerHeaderFile(Tool tool,
 										   CodeGenerator generator,
 										   Grammar grammar,
-										   StringTemplate headerFileST,
+										   ST headerFileST,
 										   String extName)
 		throws IOException
 	{
-		StringTemplateGroup templates = generator.getTemplates();
 		generator.write(headerFileST, grammar.name+extName);
 	}
 

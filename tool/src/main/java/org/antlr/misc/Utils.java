@@ -27,6 +27,9 @@
  */
 package org.antlr.misc;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Utils {
 	public static final int INTEGER_POOL_MAX_VALUE = 1000;
 	static Integer[] ints = new Integer[INTEGER_POOL_MAX_VALUE+1];
@@ -70,4 +73,20 @@ public class Utils {
 		result.append(src.substring(startIndex,src.length()));
 		return result.toString();
 	}
+
+//	/** mimic struct; like a non-iterable map. */
+//	public static class Struct {
+//		public Map<String,Object> fields = new HashMap<String,Object>();
+//
+//		@Override
+//		public String toString() { return fields.toString(); }
+//	}
+//
+//	public static Struct struct(String propNames, Object... values) {
+//		String[] props = propNames.split(",");
+//		int i=0;
+//		Struct s = new Struct();
+//		for (String p : props) s.fields.put(p, values[i++]);
+//		return s;
+//	}
 }

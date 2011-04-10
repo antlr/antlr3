@@ -28,8 +28,6 @@
 /** Template overrides to add debugging to normal Java output;
  *  If ASTs are built, then you'll also get ASTDbg.stg loaded.
  */
-group Dbg;
-
 @outputFile.imports() ::= <<
 <@super.imports()>
 import org.antlr.runtime.debug.*;
@@ -229,10 +227,10 @@ enterAlt(n) ::= "dbg.enterAlt(<n>);<\n>"
 
 @closureBlock.postdecision() ::= "<exitDecision()>"
 
-@altSwitchCase.prealt() ::= "<enterAlt(n=i)>"
+@altSwitchCase.prealt() ::= "<enterAlt(altNum)>" // altNum is arg of altSwitchCase
 
 @element.prematch() ::=
-    "dbg.location(<it.line>,<it.pos>);"
+    "dbg.location(<e.line>,<e.pos>);" // e is arg of element
 
 @matchSet.mismatchedSetException() ::=
     "dbg.recognitionException(mse);"

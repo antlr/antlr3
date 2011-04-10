@@ -28,7 +28,7 @@
 package org.antlr.tool;
 
 import org.antlr.analysis.DecisionProbe;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /** Reports the condition that ANTLR's LL(*) analysis engine terminated
  *  early.
@@ -49,8 +49,8 @@ public class GrammarAnalysisAbortedMessage extends Message {
 		if ( fileName!=null ) {
 			file = fileName;
 		}
-		StringTemplate st = getMessageTemplate();
-		st.setAttribute("enclosingRule",
+		ST st = getMessageTemplate();
+		st.add("enclosingRule",
 						probe.dfa.getNFADecisionStartState().enclosingRule.name);
 
 		return super.toString(st);

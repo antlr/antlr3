@@ -32,9 +32,8 @@ import org.antlr.codegen.CodeGenerator;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.grammar.v3.ActionTranslator;
 import org.antlr.runtime.CommonToken;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSemanticsMessage;
@@ -49,7 +48,7 @@ public class TestTemplates extends BaseTest {
     public void testTemplateConstructor() throws Exception {
 		String action = "x = %foo(name={$ID.text});";
 		String expecting = "x = templateLib.getInstanceOf(\"foo\"," +
-			LINE_SEP + "  new STAttrMap().put(\"name\", (ID1!=null?ID1.getText():null)));";
+			"new STAttrMap().put(\"name\", (ID1!=null?ID1.getText():null)));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -73,10 +72,10 @@ public class TestTemplates extends BaseTest {
 										new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 
@@ -110,10 +109,10 @@ public class TestTemplates extends BaseTest {
 										new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 
@@ -124,7 +123,7 @@ public class TestTemplates extends BaseTest {
     public void testIndirectTemplateConstructor() throws Exception {
 		String action = "x = %({\"foo\"})(name={$ID.text});";
 		String expecting = "x = templateLib.getInstanceOf(\"foo\"," +
-			LINE_SEP + "  new STAttrMap().put(\"name\", (ID1!=null?ID1.getText():null)));";
+			"new STAttrMap().put(\"name\", (ID1!=null?ID1.getText():null)));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -148,10 +147,10 @@ public class TestTemplates extends BaseTest {
 										new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 
@@ -183,10 +182,10 @@ public class TestTemplates extends BaseTest {
 																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 
@@ -219,10 +218,10 @@ public class TestTemplates extends BaseTest {
 										new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 
@@ -254,10 +253,10 @@ public class TestTemplates extends BaseTest {
 																	 new CommonToken(ANTLRParser.ACTION,action),1);
 		String rawTranslation =
 			translator.translate();
-		StringTemplateGroup templates =
-			new StringTemplateGroup(".", AngleBracketTemplateLexer.class);
-		StringTemplate actionST = new StringTemplate(templates, rawTranslation);
-		String found = actionST.toString();
+		STGroup templates =
+			new STGroup();
+		ST actionST = new ST(templates, rawTranslation);
+		String found = actionST.render();
 
 		assertNoErrors(equeue);
 

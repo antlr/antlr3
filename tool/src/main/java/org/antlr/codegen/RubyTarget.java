@@ -29,7 +29,7 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.antlr.stringtemplate.*;
+import org.stringtemplate.v4.*;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;
@@ -88,11 +88,11 @@ public class RubyTarget extends Target
     		rubyCharValueEscape['"'] = "\\\"";
     	}
 
-        public String toString( Object o ) {
-            return o.toString();
-        }
-
-        public String toString( Object o, String formatName ) {
+        public String toString( Object o, String formatName, Locale locale ) {
+			if ( formatName==null ) {
+				return o.toString();
+			}
+			
             String idString = o.toString();
 
             if ( idString.isEmpty() ) return idString;
@@ -302,7 +302,7 @@ public class RubyTarget extends Target
     		Tool tool,
     		CodeGenerator generator,
     		Grammar grammar,
-    		StringTemplate outputFileST
+    		ST outputFileST
     ) throws IOException
     {
         /*
@@ -348,7 +348,7 @@ public class RubyTarget extends Target
             }
         }
 
-        StringTemplateGroup group = generator.getTemplates();
+        STGroup group = generator.getTemplates();
         RubyRenderer renderer = new RubyRenderer();
         try {
             group.registerRenderer( Class.forName( "java.lang.String" ), renderer );

@@ -30,9 +30,9 @@ package org.antlr.tool;
 import org.antlr.Tool;
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.Utils;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class BuildDependencyGenerator {
     protected Tool tool;
     protected Grammar grammar;
     protected CodeGenerator generator;
-    protected StringTemplateGroup templates;
+    protected STGroup templates;
 
     public BuildDependencyGenerator(Tool tool, String grammarFileName)
             throws IOException {
@@ -115,12 +115,12 @@ public class BuildDependencyGenerator {
         //
         files.add(new File(tool.getOutputDirectory(), generator.getVocabFileName()));
         // are we generating a .h file?
-        StringTemplate headerExtST = null;
-        StringTemplate extST = generator.getTemplates().getInstanceOf("codeFileExtension");
+        ST headerExtST = null;
+        ST extST = generator.getTemplates().getInstanceOf("codeFileExtension");
         if (generator.getTemplates().isDefined("headerFile")) {
             headerExtST = generator.getTemplates().getInstanceOf("headerFileExtension");
             String suffix = Grammar.grammarTypeToFileNameSuffix[grammar.type];
-            String fileName = grammar.name + suffix + headerExtST.toString();
+            String fileName = grammar.name + suffix + headerExtST.render();
             files.add(new File(outputDir, fileName));
         }
         if (grammar.type == Grammar.COMBINED) {
@@ -128,12 +128,12 @@ public class BuildDependencyGenerator {
             // don't add T__.g (just a temp file)
             
             String suffix = Grammar.grammarTypeToFileNameSuffix[Grammar.LEXER];
-            String lexer = grammar.name + suffix + extST.toString();
+            String lexer = grammar.name + suffix + extST.render();
             files.add(new File(outputDir, lexer));
 
             // TLexer.h
             if (headerExtST != null) {
-                String header = grammar.name + suffix + headerExtST.toString();
+                String header = grammar.name + suffix + headerExtST.render();
                 files.add(new File(outputDir, header));
             }
         // for combined, don't generate TLexer.tokens
@@ -144,7 +144,7 @@ public class BuildDependencyGenerator {
                 grammar.composite.getDelegates(grammar.composite.getRootGrammar());
         for (Grammar g : imports) {
             outputDir = tool.getOutputDirectory(g.getFileName());
-            String fname = groomQualifiedFileName(outputDir.toString(), g.getRecognizerName() + extST.toString());
+            String fname = groomQualifiedFileName(outputDir.toString(), g.getRecognizerName() + extST.render());
             files.add(new File(fname));
         }
 
@@ -199,47 +199,19 @@ public class BuildDependencyGenerator {
         return files;
     }
 
-    public StringTemplate getDependencies() {
+    public ST getDependencies() {
         loadDependencyTemplates();
-        StringTemplate dependenciesST = templates.getInstanceOf("dependencies");
-        dependenciesST.setAttribute("in", getDependenciesFileList());
-        dependenciesST.setAttribute("out", getGeneratedFileList());
-        dependenciesST.setAttribute("grammarFileName", grammar.fileName);
+        ST dependenciesST = templates.getInstanceOf("dependencies");
+        dependenciesST.add("in", getDependenciesFileList());
+        dependenciesST.add("out", getGeneratedFileList());
+        dependenciesST.add("grammarFileName", grammar.fileName);
         return dependenciesST;
     }
 
     public void loadDependencyTemplates() {
-        if (templates != null) {
-            return;
-        }
+        if (templates != null) return;
         String fileName = "org/antlr/tool/templates/depend.stg";
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        InputStream is = cl.getResourceAsStream(fileName);
-        if (is == null) {
-            cl = ErrorManager.class.getClassLoader();
-            is = cl.getResourceAsStream(fileName);
-        }
-        if (is == null) {
-            ErrorManager.internalError("Can't load dependency templates: " + fileName);
-            return;
-        }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(is));
-            templates = new StringTemplateGroup(br,
-                    AngleBracketTemplateLexer.class);
-            br.close();
-        } catch (IOException ioe) {
-            ErrorManager.internalError("error reading dependency templates file " + fileName, ioe);
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ioe) {
-                    ErrorManager.internalError("cannot close dependency templates file " + fileName, ioe);
-                }
-            }
-        }
+        templates = new STGroupFile(fileName);
     }
 
     public String getTokenVocab() {

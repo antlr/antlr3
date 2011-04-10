@@ -38,7 +38,7 @@ import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 
 import java.util.*;
@@ -120,11 +120,11 @@ public class GrammarAST extends CommonTree {
 	 */
 	public int outerAltNum;
 
-	/** if this is a TOKEN_REF or RULE_REF node, this is the code StringTemplate
+	/** if this is a TOKEN_REF or RULE_REF node, this is the code ST
 	 *  generated for this node.  We need to update it later to add
 	 *  a label if someone does $tokenref or $ruleref in an action.
 	 */
-	public StringTemplate code;
+	public ST code;
 
     /**
      *

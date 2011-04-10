@@ -29,7 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.analysis.NFAState;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class GrammarUnreachableAltsMessage extends Message {
 			file = fileName;
 		}
 
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 
 		if ( probe.dfa.isTokensRuleDecision() ) {
 			// alts are token rules, convert to the names instead of numbers
@@ -74,12 +74,12 @@ public class GrammarUnreachableAltsMessage extends Message {
 					probe.dfa.nfa.grammar.getRuleStartState(tokenName);
 				line = ruleStart.associatedASTNode.getLine();
 				column = ruleStart.associatedASTNode.getCharPositionInLine();
-				st.setAttribute("tokens", tokenName);
+				st.add("tokens", tokenName);
 			}
 		}
 		else {
 			// regular alt numbers, show the alts
-			st.setAttribute("alts", alts);
+			st.add("alts", alts);
 		}
 
 		return super.toString(st);

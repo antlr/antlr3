@@ -39,20 +39,18 @@ import org.antlr.misc.BitSet;
 import org.antlr.misc.*;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.stringtemplate.*;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.*;
 import org.antlr.tool.*;
+import org.stringtemplate.v4.AutoIndentWriter;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.Writer;
 import java.util.*;
 
 /** ANTLR's code generator.
  *
  *  Generate recognizers derived from grammars.  Language independence
- *  achieved through the use of StringTemplateGroup objects.  All output
+ *  achieved through the use of STGroup objects.  All output
  *  strings are completely encapsulated in the group files such as Java.stg.
  *  Some computations are done that are unused by a particular language.
  *  This generator just computes and sets the values into the templates;
@@ -84,7 +82,7 @@ public class CodeGenerator {
 	public final static int MSA_DEFAULT = 3;
 	public static int MIN_SWITCH_ALTS = MSA_DEFAULT;
 	public boolean GENERATE_SWITCHES_WHEN_POSSIBLE = true;
-	public static boolean EMIT_TEMPLATE_DELIMITERS = false;
+	public static boolean LAUNCH_ST_INSPECTOR = false;
 	public final static int MADSI_DEFAULT = 60; // do lots of states inline (needed for expression rules)
 	public static int MAX_ACYCLIC_DFA_STATES_INLINE = MADSI_DEFAULT;
 
@@ -105,17 +103,17 @@ public class CodeGenerator {
 	public Target target = null;
 
 	/** Where are the templates this generator should use to generate code? */
-	protected StringTemplateGroup templates;
+	protected STGroup templates;
 
 	/** The basic output templates without AST or templates stuff; this will be
 	 *  the templates loaded for the language such as Java.stg *and* the Dbg
 	 *  stuff if turned on.  This is used for generating syntactic predicates.
 	 */
-	protected StringTemplateGroup baseTemplates;
+	protected STGroup baseTemplates;
 
-	protected StringTemplate recognizerST;
-	protected StringTemplate outputFileST;
-	protected StringTemplate headerFileST;
+	protected ST recognizerST;
+	protected ST outputFileST;
+	protected ST headerFileST;
 
 	/** Used to create unique labels */
 	protected int uniqueLabelNumber = 1;
@@ -150,8 +148,8 @@ public class CodeGenerator {
 
 	public static final String VOCAB_FILE_EXTENSION = ".tokens";
 	protected final static String vocabFilePattern =
-		"<tokens:{<attr.name>=<attr.type>\n}>" +
-		"<literals:{<attr.name>=<attr.type>\n}>";
+		"<tokens:{it|<it.name>=<it.type>\n}>" +
+		"<literals:{it|<it.name>=<it.type>\n}>";
 
 	public CodeGenerator(Tool tool, Grammar grammar, String language) {
 		this.tool = tool;
@@ -185,20 +183,8 @@ public class CodeGenerator {
 
 	/** load the main language.stg template group file */
 	public void loadTemplates(String language) {
-		// get a group loader containing main templates dir and target subdir
-		String templateDirs =
-			classpathTemplateRootDirectoryName+":"+
-			classpathTemplateRootDirectoryName+"/"+language;
-		//System.out.println("targets="+templateDirs.toString());
-		StringTemplateGroupLoader loader =
-			new CommonGroupLoader(templateDirs,
-								  ErrorManager.getStringTemplateErrorListener());
-		StringTemplateGroup.registerGroupLoader(loader);
-		StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
-
-		// first load main language template
-		StringTemplateGroup coreTemplates =
-			StringTemplateGroup.loadGroup(language);
+		String langDir = classpathTemplateRootDirectoryName+"/"+language;
+		STGroup coreTemplates = new STGroupFile(langDir+"/"+language+".stg");
 		baseTemplates = coreTemplates;
 		if ( coreTemplates ==null ) {
 			ErrorManager.error(ErrorManager.MSG_MISSING_CODE_GEN_TEMPLATES,
@@ -211,68 +197,62 @@ public class CodeGenerator {
 		String outputOption = (String)grammar.getOption("output");
 		if ( outputOption!=null && outputOption.equals("AST") ) {
 			if ( debug && grammar.type!=Grammar.LEXER ) {
-				StringTemplateGroup dbgTemplates =
-					StringTemplateGroup.loadGroup("Dbg", coreTemplates);
+				STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+				dbgTemplates.importTemplates(coreTemplates);
 				baseTemplates = dbgTemplates;
-				StringTemplateGroup astTemplates =
-					StringTemplateGroup.loadGroup("AST",dbgTemplates);
-				StringTemplateGroup astParserTemplates = astTemplates;
-				//if ( !grammar.rewriteMode() ) {
-					if ( grammar.type==Grammar.TREE_PARSER ) {
-						astParserTemplates =
-							StringTemplateGroup.loadGroup("ASTTreeParser", astTemplates);
-					}
-					else {
-						astParserTemplates =
-							StringTemplateGroup.loadGroup("ASTParser", astTemplates);
-					}
-				//}
-				StringTemplateGroup astDbgTemplates =
-					StringTemplateGroup.loadGroup("ASTDbg", astParserTemplates);
+				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
+				astTemplates.importTemplates(dbgTemplates);
+				STGroup astParserTemplates = astTemplates;
+				if ( grammar.type==Grammar.TREE_PARSER ) {
+					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
+					astParserTemplates.importTemplates(astTemplates);
+				}
+				else {
+					astParserTemplates = new STGroupFile(langDir+"/ASTParser.stg");
+					astParserTemplates.importTemplates(astTemplates);
+				}
+				STGroup astDbgTemplates = new STGroupFile(langDir+"/ASTDbg.stg");
+				astDbgTemplates.importTemplates(astParserTemplates);
 				templates = astDbgTemplates;
 			}
 			else {
-				StringTemplateGroup astTemplates =
-					StringTemplateGroup.loadGroup("AST", coreTemplates);
-				StringTemplateGroup astParserTemplates = astTemplates;
-				//if ( !grammar.rewriteMode() ) {
-					if ( grammar.type==Grammar.TREE_PARSER ) {
-						astParserTemplates =
-							StringTemplateGroup.loadGroup("ASTTreeParser", astTemplates);
-					}
-					else {
-						astParserTemplates =
-							StringTemplateGroup.loadGroup("ASTParser", astTemplates);
-					}
-				//}
+				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
+				astTemplates.importTemplates(coreTemplates);
+				STGroup astParserTemplates = astTemplates;
+				if ( grammar.type==Grammar.TREE_PARSER ) {
+					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
+					astParserTemplates.importTemplates(astTemplates);
+				}
+				else {
+					astParserTemplates = new STGroupFile(langDir+"/ASTParser.stg");
+					astParserTemplates.importTemplates(astTemplates);
+				}
 				templates = astParserTemplates;
 			}
 		}
 		else if ( outputOption!=null && outputOption.equals("template") ) {
 			if ( debug && grammar.type!=Grammar.LEXER ) {
-				StringTemplateGroup dbgTemplates =
-					StringTemplateGroup.loadGroup("Dbg", coreTemplates);
+				STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+				dbgTemplates.importTemplates(coreTemplates);
 				baseTemplates = dbgTemplates;
-				StringTemplateGroup stTemplates =
-					StringTemplateGroup.loadGroup("ST",dbgTemplates);
+				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
+				stTemplates.importTemplates(dbgTemplates);
 				templates = stTemplates;
 			}
 			else {
-				templates = StringTemplateGroup.loadGroup("ST", coreTemplates);
+				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
+				stTemplates.importTemplates(coreTemplates);
+				templates = stTemplates;
 			}
 		}
 		else if ( debug && grammar.type!=Grammar.LEXER ) {
-			templates = StringTemplateGroup.loadGroup("Dbg", coreTemplates);
+			STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+			dbgTemplates.importTemplates(coreTemplates);
+			templates = dbgTemplates;
 			baseTemplates = templates;
 		}
 		else {
 			templates = coreTemplates;
-		}
-
-		if ( EMIT_TEMPLATE_DELIMITERS ) {
-			templates.emitDebugStartStopStrings(true);
-			templates.doNotEmitDebugStringsForTemplate("codeFileExtension");
-			templates.doNotEmitDebugStringsForTemplate("headerFileExtension");
 		}
 	}
 
@@ -288,7 +268,7 @@ public class CodeGenerator {
 	 *
 	 *  The target, such as JavaTarget, dictates which files get written.
 	 */
-	public StringTemplate genRecognizer() {
+	public ST genRecognizer() {
 		//System.out.println("### generate "+grammar.name+" recognizer");
 		// LOAD OUTPUT TEMPLATES
 		loadTemplates(language);
@@ -321,8 +301,9 @@ public class CodeGenerator {
 		}
 		else {
 			// create a dummy to avoid null-checks all over code generator
-			headerFileST = new StringTemplate(templates,"");
-			headerFileST.setName("dummy-header-file");
+			headerFileST = new ST(templates,"xyz");
+			headerFileST.add("cyclicDFAs", (Object)null); // it normally sees this from outputFile
+			//headerFileST.impl.name = "dummy-header-file";
 		}
 
 		boolean filterMode = grammar.getOption("filter")!=null &&
@@ -343,7 +324,7 @@ public class CodeGenerator {
 		// translate $x::y references
 		translateActionAttributeReferences(actions);
 
-        StringTemplate gateST = templates.getInstanceOf("actionGate");
+        ST gateST = templates.getInstanceOf("actionGate");
         if ( filterMode ) {
             // if filtering, we need to set actions to execute at backtracking
             // level 1 not 0.
@@ -351,76 +332,76 @@ public class CodeGenerator {
         }
         grammar.setSynPredGateIfNotAlready(gateST);
 
-        headerFileST.setAttribute("actions", actions);
-		outputFileST.setAttribute("actions", actions);
+        headerFileST.add("actions", actions);
+		outputFileST.add("actions", actions);
 
-		headerFileST.setAttribute("buildTemplate", new Boolean(grammar.buildTemplate()));
-		outputFileST.setAttribute("buildTemplate", new Boolean(grammar.buildTemplate()));
-		headerFileST.setAttribute("buildAST", new Boolean(grammar.buildAST()));
-		outputFileST.setAttribute("buildAST", new Boolean(grammar.buildAST()));
+		headerFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
+		outputFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
+		headerFileST.add("buildAST", new Boolean(grammar.buildAST()));
+		outputFileST.add("buildAST", new Boolean(grammar.buildAST()));
 
-		outputFileST.setAttribute("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
-		headerFileST.setAttribute("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
+		outputFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
+		headerFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
 
-		outputFileST.setAttribute("backtracking", Boolean.valueOf(canBacktrack));
-		headerFileST.setAttribute("backtracking", Boolean.valueOf(canBacktrack));
+		outputFileST.add("backtracking", Boolean.valueOf(canBacktrack));
+		headerFileST.add("backtracking", Boolean.valueOf(canBacktrack));
 		// turn on memoize attribute at grammar level so we can create ruleMemo.
 		// each rule has memoize attr that hides this one, indicating whether
 		// it needs to save results
 		String memoize = (String)grammar.getOption("memoize");
-		outputFileST.setAttribute("memoize",
-								  (grammar.atLeastOneRuleMemoizes||
-								  Boolean.valueOf(memoize!=null&&memoize.equals("true"))&&
-									          canBacktrack));
-		headerFileST.setAttribute("memoize",
-								  (grammar.atLeastOneRuleMemoizes||
-								  Boolean.valueOf(memoize!=null&&memoize.equals("true"))&&
-									          canBacktrack));
+		outputFileST.add("memoize",
+						 (grammar.atLeastOneRuleMemoizes ||
+						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  canBacktrack));
+		headerFileST.add("memoize",
+						 (grammar.atLeastOneRuleMemoizes ||
+						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  canBacktrack));
 
 
-		outputFileST.setAttribute("trace", Boolean.valueOf(trace));
-		headerFileST.setAttribute("trace", Boolean.valueOf(trace));
+		outputFileST.add("trace", Boolean.valueOf(trace));
+		headerFileST.add("trace", Boolean.valueOf(trace));
 
-		outputFileST.setAttribute("profile", Boolean.valueOf(profile));
-		headerFileST.setAttribute("profile", Boolean.valueOf(profile));
+		outputFileST.add("profile", Boolean.valueOf(profile));
+		headerFileST.add("profile", Boolean.valueOf(profile));
 
 		// RECOGNIZER
 		if ( grammar.type==Grammar.LEXER ) {
 			recognizerST = templates.getInstanceOf("lexer");
-			outputFileST.setAttribute("LEXER", Boolean.valueOf(true));
-			headerFileST.setAttribute("LEXER", Boolean.valueOf(true));
-			recognizerST.setAttribute("filterMode",
-									  Boolean.valueOf(filterMode));
+			outputFileST.add("LEXER", Boolean.valueOf(true));
+			headerFileST.add("LEXER", Boolean.valueOf(true));
+			recognizerST.add("filterMode",
+							 Boolean.valueOf(filterMode));
 		}
 		else if ( grammar.type==Grammar.PARSER ||
 			grammar.type==Grammar.COMBINED )
 		{
 			recognizerST = templates.getInstanceOf("parser");
-			outputFileST.setAttribute("PARSER", Boolean.valueOf(true));
-			headerFileST.setAttribute("PARSER", Boolean.valueOf(true));
+			outputFileST.add("PARSER", Boolean.valueOf(true));
+			headerFileST.add("PARSER", Boolean.valueOf(true));
 		}
 		else {
 			recognizerST = templates.getInstanceOf("treeParser");
-			outputFileST.setAttribute("TREE_PARSER", Boolean.valueOf(true));
-			headerFileST.setAttribute("TREE_PARSER", Boolean.valueOf(true));
-            recognizerST.setAttribute("filterMode",
-                                      Boolean.valueOf(filterMode));
+			outputFileST.add("TREE_PARSER", Boolean.valueOf(true));
+			headerFileST.add("TREE_PARSER", Boolean.valueOf(true));
+            recognizerST.add("filterMode",
+							 Boolean.valueOf(filterMode));
 		}
-		outputFileST.setAttribute("recognizer", recognizerST);
-		headerFileST.setAttribute("recognizer", recognizerST);
-		outputFileST.setAttribute("actionScope",
-								  grammar.getDefaultActionScope(grammar.type));
-		headerFileST.setAttribute("actionScope",
-								  grammar.getDefaultActionScope(grammar.type));
+		outputFileST.add("recognizer", recognizerST);
+		headerFileST.add("recognizer", recognizerST);
+		outputFileST.add("actionScope",
+						 grammar.getDefaultActionScope(grammar.type));
+		headerFileST.add("actionScope",
+						 grammar.getDefaultActionScope(grammar.type));
 
 		String targetAppropriateFileNameString =
 			target.getTargetStringLiteralFromString(grammar.getFileName());
-		outputFileST.setAttribute("fileName", targetAppropriateFileNameString);
-		headerFileST.setAttribute("fileName", targetAppropriateFileNameString);
-		outputFileST.setAttribute("ANTLRVersion", tool.VERSION);
-		headerFileST.setAttribute("ANTLRVersion", tool.VERSION);
-		outputFileST.setAttribute("generatedTimestamp", Tool.getCurrentTimeStamp());
-		headerFileST.setAttribute("generatedTimestamp", Tool.getCurrentTimeStamp());
+		outputFileST.add("fileName", targetAppropriateFileNameString);
+		headerFileST.add("fileName", targetAppropriateFileNameString);
+		outputFileST.add("ANTLRVersion", tool.VERSION);
+		headerFileST.add("ANTLRVersion", tool.VERSION);
+		outputFileST.add("generatedTimestamp", Tool.getCurrentTimeStamp());
+		headerFileST.add("generatedTimestamp", Tool.getCurrentTimeStamp());
 
 		// GENERATE RECOGNIZER
 		// Walk the AST holding the input grammar, this time generating code
@@ -454,22 +435,27 @@ public class CodeGenerator {
 		if ( grammar.synPredNamesUsedInDFA.size()>0 ) {
 			synpredNames = grammar.synPredNamesUsedInDFA;
 		}
-		outputFileST.setAttribute("synpreds", synpredNames);
-		headerFileST.setAttribute("synpreds", synpredNames);
+		outputFileST.add("synpreds", synpredNames);
+		headerFileST.add("synpreds", synpredNames);
 
 		// all recognizers can see Grammar object
-		recognizerST.setAttribute("grammar", grammar);
+		recognizerST.add("grammar", grammar);
+
+		if (LAUNCH_ST_INSPECTOR) {
+			outputFileST.inspect();
+			if ( templates.isDefined("headerFile") ) headerFileST.inspect();
+		}
 
 		// WRITE FILES
 		try {
 			target.genRecognizerFile(tool,this,grammar,outputFileST);
 			if ( templates.isDefined("headerFile") ) {
-				StringTemplate extST = templates.getInstanceOf("headerFileExtension");
-				target.genRecognizerHeaderFile(tool,this,grammar,headerFileST,extST.toString());
+				ST extST = templates.getInstanceOf("headerFileExtension");
+				target.genRecognizerHeaderFile(tool,this,grammar,headerFileST,extST.render());
 			}
 			// write out the vocab interchange file; used by antlr,
 			// does not change per target
-			StringTemplate tokenVocabSerialization = genTokenVocabOutput();
+			ST tokenVocabSerialization = genTokenVocabOutput();
 			String vocabFileName = getVocabFileName();
 			if ( vocabFileName!=null ) {
 				write(tokenVocabSerialization, vocabFileName);
@@ -606,24 +592,24 @@ public class CodeGenerator {
 			long w = words[j];
 			wordStrings[j] = target.getTarget64BitStringFromValue(w);
 		}
-        recognizerST.setAttribute("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
-                referencedElementName,
-                enclosingRuleName,
-                wordStrings,
-                tokenTypeList,
-                Utils.integer(elementIndex));
-        outputFileST.setAttribute("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
-                referencedElementName,
-                enclosingRuleName,
-                wordStrings,
-                tokenTypeList,
-                Utils.integer(elementIndex));
-        headerFileST.setAttribute("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
-                referencedElementName,
-                enclosingRuleName,
-                wordStrings,
-                tokenTypeList,
-                Utils.integer(elementIndex));
+		recognizerST.addAggr("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
+							 referencedElementName,
+							 enclosingRuleName,
+							 wordStrings,
+							 tokenTypeList,
+							 Utils.integer(elementIndex));
+		outputFileST.addAggr("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
+							 referencedElementName,
+							 enclosingRuleName,
+							 wordStrings,
+							 tokenTypeList,
+							 Utils.integer(elementIndex));
+		headerFileST.addAggr("bitsets.{name,inName,bits,tokenTypes,tokenIndex}",
+							 referencedElementName,
+							 enclosingRuleName,
+							 wordStrings,
+							 tokenTypeList,
+							 Utils.integer(elementIndex));
 	}
 
 	// L O O K A H E A D  D E C I S I O N  G E N E R A T I O N
@@ -635,10 +621,10 @@ public class CodeGenerator {
 	 *
 	 *  Regardless, the output file and header file get a copy of the DFAs.
 	 */
-	public StringTemplate genLookaheadDecision(StringTemplate recognizerST,
-											   DFA dfa)
+	public ST genLookaheadDecision(ST recognizerST,
+								   DFA dfa)
 	{
-		StringTemplate decisionST;
+		ST decisionST;
 		// If we are doing inline DFA and this one is acyclic and LL(*)
 		// I have to check for is-non-LL(*) because if non-LL(*) the cyclic
 		// check is not done by DFA.verify(); that is, verify() avoids
@@ -650,16 +636,16 @@ public class CodeGenerator {
 		else {
 			// generate any kind of DFA here (cyclic or acyclic)
 			dfa.createStateTables(this);
-			outputFileST.setAttribute("cyclicDFAs", dfa);
-			headerFileST.setAttribute("cyclicDFAs", dfa);
+			outputFileST.add("cyclicDFAs", dfa);
+			headerFileST.add("cyclicDFAs", dfa);
 			decisionST = templates.getInstanceOf("dfaDecision");
 			String description = dfa.getNFADecisionStartState().getDescription();
 			description = target.getTargetStringLiteralFromString(description);
 			if ( description!=null ) {
-				decisionST.setAttribute("description", description);
+				decisionST.add("description", description);
 			}
-			decisionST.setAttribute("decisionNumber",
-									Utils.integer(dfa.getDecisionNumber()));
+			decisionST.add("decisionNumber",
+						   Utils.integer(dfa.getDecisionNumber()));
 		}
 		return decisionST;
 	}
@@ -670,64 +656,64 @@ public class CodeGenerator {
 	 *  because if you get here, the state is super complicated and needs an
 	 *  if-then-else.  This is used by the new DFA scheme created June 2006.
 	 */
-	public StringTemplate generateSpecialState(DFAState s) {
-		StringTemplate stateST;
+	public ST generateSpecialState(DFAState s) {
+		ST stateST;
 		stateST = templates.getInstanceOf("cyclicDFAState");
-		stateST.setAttribute("needErrorClause", Boolean.valueOf(true));
-		stateST.setAttribute("semPredState",
-							 Boolean.valueOf(s.isResolvedWithPredicates()));
-		stateST.setAttribute("stateNumber", s.stateNumber);
-		stateST.setAttribute("decisionNumber", s.dfa.decisionNumber);
+		stateST.add("needErrorClause", Boolean.valueOf(true));
+		stateST.add("semPredState",
+					Boolean.valueOf(s.isResolvedWithPredicates()));
+		stateST.add("stateNumber", s.stateNumber);
+		stateST.add("decisionNumber", s.dfa.decisionNumber);
 
 		boolean foundGatedPred = false;
-		StringTemplate eotST = null;
+		ST eotST = null;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
 			Transition edge = (Transition) s.transition(i);
-			StringTemplate edgeST;
+			ST edgeST;
 			if ( edge.label.getAtom()==Label.EOT ) {
 				// this is the default clause; has to held until last
 				edgeST = templates.getInstanceOf("eotDFAEdge");
-				stateST.removeAttribute("needErrorClause");
+				stateST.remove("needErrorClause");
 				eotST = edgeST;
 			}
 			else {
 				edgeST = templates.getInstanceOf("cyclicDFAEdge");
-				StringTemplate exprST =
+				ST exprST =
 					genLabelExpr(templates,edge,1);
-				edgeST.setAttribute("labelExpr", exprST);
+				edgeST.add("labelExpr", exprST);
 			}
-			edgeST.setAttribute("edgeNumber", Utils.integer(i+1));
-			edgeST.setAttribute("targetStateNumber",
-								 Utils.integer(edge.target.stateNumber));
+			edgeST.add("edgeNumber", Utils.integer(i + 1));
+			edgeST.add("targetStateNumber",
+					   Utils.integer(edge.target.stateNumber));
 			// stick in any gated predicates for any edge if not already a pred
 			if ( !edge.label.isSemanticPredicate() ) {
 				DFAState t = (DFAState)edge.target;
 				SemanticContext preds =	t.getGatedPredicatesInNFAConfigurations();
 				if ( preds!=null ) {
 					foundGatedPred = true;
-					StringTemplate predST = preds.genExpr(this,
+					ST predST = preds.genExpr(this,
 														  getTemplates(),
 														  t.dfa);
-					edgeST.setAttribute("predicates", predST.toString());
+					edgeST.add("predicates", predST.render());
 				}
 			}
 			if ( edge.label.getAtom()!=Label.EOT ) {
-				stateST.setAttribute("edges", edgeST);
+				stateST.add("edges", edgeST);
 			}
 		}
 		if ( foundGatedPred ) {
 			// state has >= 1 edge with a gated pred (syn or sem)
 			// must rewind input first, set flag.
-			stateST.setAttribute("semPredState", new Boolean(foundGatedPred));
+			stateST.add("semPredState", new Boolean(foundGatedPred));
 		}
 		if ( eotST!=null ) {
-			stateST.setAttribute("edges", eotST);
+			stateST.add("edges", eotST);
 		}
 		return stateST;
 	}
 
 	/** Generate an expression for traversing an edge. */
-	protected StringTemplate genLabelExpr(StringTemplateGroup templates,
+	protected ST genLabelExpr(STGroup templates,
 										  Transition edge,
 										  int k)
 	{
@@ -739,14 +725,14 @@ public class CodeGenerator {
 			return genSetExpr(templates, label.getSet(), k, true);
 		}
 		// must be simple label
-		StringTemplate eST = templates.getInstanceOf("lookaheadTest");
-		eST.setAttribute("atom", getTokenTypeAsTargetLabel(label.getAtom()));
-		eST.setAttribute("atomAsInt", Utils.integer(label.getAtom()));
-		eST.setAttribute("k", Utils.integer(k));
+		ST eST = templates.getInstanceOf("lookaheadTest");
+		eST.add("atom", getTokenTypeAsTargetLabel(label.getAtom()));
+		eST.add("atomAsInt", Utils.integer(label.getAtom()));
+		eST.add("k", Utils.integer(k));
 		return eST;
 	}
 
-	protected StringTemplate genSemanticPredicateExpr(StringTemplateGroup templates,
+	protected ST genSemanticPredicateExpr(STGroup templates,
 													  Transition edge)
 	{
 		DFA dfa = ((DFAState)edge.target).dfa; // which DFA are we in
@@ -758,7 +744,7 @@ public class CodeGenerator {
 	/** For intervals such as [3..3, 30..35], generate an expression that
 	 *  tests the lookahead similar to LA(1)==3 || (LA(1)>=30&&LA(1)<=35)
 	 */
-	public StringTemplate genSetExpr(StringTemplateGroup templates,
+	public ST genSetExpr(STGroup templates,
 									 IntSet set,
 									 int k,
 									 boolean partOfDFA)
@@ -768,8 +754,8 @@ public class CodeGenerator {
 		}
 		IntervalSet iset = (IntervalSet)set;
 		if ( iset.getIntervals()==null || iset.getIntervals().size()==0 ) {
-			StringTemplate emptyST = new StringTemplate(templates, "");
-			emptyST.setName("empty-set-expr");
+			ST emptyST = new ST(templates, "");
+			emptyST.impl.name = "empty-set-expr";
 			return emptyST;
 		}
 		String testSTName = "lookaheadTest";
@@ -778,30 +764,30 @@ public class CodeGenerator {
 			testSTName = "isolatedLookaheadTest";
 			testRangeSTName = "isolatedLookaheadRangeTest";
 		}
-		StringTemplate setST = templates.getInstanceOf("setTest");
+		ST setST = templates.getInstanceOf("setTest");
 		Iterator iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;
 		while (iter.hasNext()) {
 			Interval I = (Interval) iter.next();
 			int a = I.a;
 			int b = I.b;
-			StringTemplate eST;
+			ST eST;
 			if ( a==b ) {
 				eST = templates.getInstanceOf(testSTName);
-				eST.setAttribute("atom", getTokenTypeAsTargetLabel(a));
-				eST.setAttribute("atomAsInt", Utils.integer(a));
-				//eST.setAttribute("k",Utils.integer(k));
+				eST.add("atom", getTokenTypeAsTargetLabel(a));
+				eST.add("atomAsInt", Utils.integer(a));
+				//eST.add("k",Utils.integer(k));
 			}
 			else {
 				eST = templates.getInstanceOf(testRangeSTName);
-				eST.setAttribute("lower",getTokenTypeAsTargetLabel(a));
-				eST.setAttribute("lowerAsInt", Utils.integer(a));
-				eST.setAttribute("upper",getTokenTypeAsTargetLabel(b));
-				eST.setAttribute("upperAsInt", Utils.integer(b));
-				eST.setAttribute("rangeNumber",Utils.integer(rangeNumber));
+				eST.add("lower", getTokenTypeAsTargetLabel(a));
+				eST.add("lowerAsInt", Utils.integer(a));
+				eST.add("upper", getTokenTypeAsTargetLabel(b));
+				eST.add("upperAsInt", Utils.integer(b));
+				eST.add("rangeNumber", Utils.integer(rangeNumber));
 			}
-			eST.setAttribute("k",Utils.integer(k));
-			setST.setAttribute("ranges", eST);
+			eST.add("k", Utils.integer(k));
+			setST.add("ranges", eST);
 			rangeNumber++;
 		}
 		return setST;
@@ -813,7 +799,7 @@ public class CodeGenerator {
 	 *  code template.  This is not the token vocab interchange file, but
 	 *  rather a list of token type ID needed by the recognizer.
 	 */
-	protected void genTokenTypeConstants(StringTemplate code) {
+	protected void genTokenTypeConstants(ST code) {
 		// make constants for the token types
 		Iterator tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
@@ -823,7 +809,7 @@ public class CodeGenerator {
 				 tokenType>=Label.MIN_TOKEN_TYPE )
 			{
 				// don't do FAUX labels 'cept EOF
-				code.setAttribute("tokens.{name,type}", tokenID, Utils.integer(tokenType));
+				code.addAggr("tokens.{name,type}", tokenID, Utils.integer(tokenType));
 			}
 		}
 	}
@@ -831,12 +817,12 @@ public class CodeGenerator {
 	/** Generate a token names table that maps token type to a printable
 	 *  name: either the label like INT or the literal like "begin".
 	 */
-	protected void genTokenTypeNames(StringTemplate code) {
+	protected void genTokenTypeNames(ST code) {
 		for (int t=Label.MIN_TOKEN_TYPE; t<=grammar.getMaxTokenType(); t++) {
 			String tokenName = grammar.getTokenDisplayName(t);
 			if ( tokenName!=null ) {
 				tokenName=target.getTargetStringLiteralFromString(tokenName, true);
-				code.setAttribute("tokenNames", tokenName);
+				code.add("tokenNames", tokenName);
 			}
 		}
 	}
@@ -866,18 +852,18 @@ public class CodeGenerator {
 	 *
 	 *  This is independent of the target language; used by antlr internally
 	 */
-	protected StringTemplate genTokenVocabOutput() {
-		StringTemplate vocabFileST =
-			new StringTemplate(vocabFilePattern,
-							   AngleBracketTemplateLexer.class);
-		vocabFileST.setName("vocab-file");
+	protected ST genTokenVocabOutput() {
+		ST vocabFileST = new ST(vocabFilePattern);
+		vocabFileST.add("literals",(Object)null); // "define" literals arg
+		vocabFileST.add("tokens",(Object)null);
+		vocabFileST.impl.name = "vocab-file";
 		// make constants for the token names
 		Iterator tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
 			String tokenID = (String) tokenIDs.next();
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
-				vocabFileST.setAttribute("tokens.{name,type}", tokenID, Utils.integer(tokenType));
+				vocabFileST.addAggr("tokens.{name,type}", tokenID, Utils.integer(tokenType));
 			}
 		}
 
@@ -887,7 +873,7 @@ public class CodeGenerator {
 			String literal = (String) literals.next();
 			int tokenType = grammar.getTokenType(literal);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
-				vocabFileST.setAttribute("tokens.{name,type}", literal, Utils.integer(tokenType));
+				vocabFileST.addAggr("tokens.{name,type}", literal, Utils.integer(tokenType));
 			}
 		}
 
@@ -908,15 +894,15 @@ public class CodeGenerator {
 
 	/** Translate an action like [3,"foo",a[3]] and return a List of the
 	 *  translated actions.  Because actions are themselves translated to a list
-	 *  of chunks, must cat together into a StringTemplate>.  Don't translate
+	 *  of chunks, must cat together into a ST>.  Don't translate
 	 *  to strings early as we need to eval templates in context.
 	 */
-	public List<StringTemplate> translateArgAction(String ruleName,
+	public List<ST> translateArgAction(String ruleName,
 										   GrammarAST actionTree)
 	{
 		String actionText = actionTree.token.getText();
 		List<String> args = getListOfArgumentsFromAction(actionText,',');
-		List<StringTemplate> translatedArgs = new ArrayList<StringTemplate>();
+		List<ST> translatedArgs = new ArrayList<ST>();
 		for (String arg : args) {
 			if ( arg!=null ) {
 				Token actionToken =
@@ -927,9 +913,8 @@ public class CodeGenerator {
 											  actionTree.outerAltNum);
 				List chunks = translator.translateToChunks();
 				chunks = target.postProcessAction(chunks, actionToken);
-				StringTemplate catST = new StringTemplate(templates, "<chunks>");
-				catST.setAttribute("chunks", chunks);
-				templates.createStringTemplate();
+				ST catST = new ST(templates, "<chunks>");
+				catST.add("chunks", chunks);
 				translatedArgs.add(catST);
 			}
 		}
@@ -1041,7 +1026,7 @@ public class CodeGenerator {
 	 *  an action, translate it to the appropriate template constructor
 	 *  from the templateLib. This translates a *piece* of the action.
 	 */
-	public StringTemplate translateTemplateConstructor(String ruleName,
+	public ST translateTemplateConstructor(String ruleName,
 													   int outerAltNum,
 													   Token actionToken,
 													   String templateActionText)
@@ -1072,7 +1057,7 @@ public class CodeGenerator {
 		gen.init(grammar);
 		gen.setCurrentRuleName(ruleName);
 		gen.setOuterAltNum(outerAltNum);
-		StringTemplate st = null;
+		ST st = null;
 		try {
 			st = gen.rewrite_template();
 		}
@@ -1210,11 +1195,11 @@ public class CodeGenerator {
 
 	// M I S C
 
-	public StringTemplateGroup getTemplates() {
+	public STGroup getTemplates() {
 		return templates;
 	}
 
-	public StringTemplateGroup getBaseTemplates() {
+	public STGroup getBaseTemplates() {
 		return baseTemplates;
 	}
 
@@ -1233,7 +1218,7 @@ public class CodeGenerator {
 		}
 	}
 
-	public StringTemplate getRecognizerST() {
+	public ST getRecognizerST() {
 		return outputFileST;
 	}
 
@@ -1241,9 +1226,9 @@ public class CodeGenerator {
 	 *  just use T.java as output regardless of type.
 	 */
 	public String getRecognizerFileName(String name, int type) {
-		StringTemplate extST = templates.getInstanceOf("codeFileExtension");
+		ST extST = templates.getInstanceOf("codeFileExtension");
 		String recognizerName = grammar.getRecognizerName();
-		return recognizerName+extST.toString();
+		return recognizerName+extST.render();
 		/*
 		String suffix = "";
 		if ( type==Grammar.COMBINED ||
@@ -1265,16 +1250,16 @@ public class CodeGenerator {
 		return grammar.name+VOCAB_FILE_EXTENSION;
 	}
 
-	public void write(StringTemplate code, String fileName) throws IOException {
+	public void write(ST code, String fileName) throws IOException {
 		long start = System.currentTimeMillis();
 		Writer w = tool.getOutputFile(grammar, fileName);
 		// Write the output to a StringWriter
-		StringTemplateWriter wr = templates.getStringTemplateWriter(w);
+		STWriter wr = new AutoIndentWriter(w);
 		wr.setLineWidth(lineWidth);
 		code.write(wr);
 		w.close();
 		long stop = System.currentTimeMillis();
-		//System.out.println("render time for "+fileName+": "+(int)(stop-start)+"ms");
+		System.out.println("render time for "+fileName+": "+(int)(stop-start)+"ms");
 	}
 
 	/** You can generate a switch rather than if-then-else for a DFA state

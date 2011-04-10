@@ -33,10 +33,11 @@ import org.antlr.analysis.DecisionProbe;
 import org.antlr.misc.BitSet;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateErrorListener;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STErrorListener;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
+import org.stringtemplate.v4.misc.STMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,7 +82,7 @@ import java.util.*;
  *  full of messages has an error, how could I print to anything but System.err?
  *
  *  TODO: how to map locale to a file encoding for the stringtemplate group file?
- *  StringTemplate knows how to pay attention to the default encoding so it
+ *  ST knows how to pay attention to the default encoding so it
  *  should probably just work unless a GUI sets the local to some chinese
  *  variation but System.getProperty("file.encoding") is US.  Hmm...
  *
@@ -281,9 +282,9 @@ public class ErrorManager {
 	private static Map threadToToolMap = new HashMap();
 
 	/** The group of templates that represent all possible ANTLR errors. */
-	private static StringTemplateGroup messages;
+	private static STGroup messages;
 	/** The group of templates that represent the current message format. */
-	private static StringTemplateGroup format;
+	private static STGroup format;
 
 	/** From a msgID how can I get the name of the template that describes
 	 *  the error or warning?
@@ -326,52 +327,58 @@ public class ErrorManager {
 	/** Handle all ST error listeners here (code gen, Grammar, and this class
 	 *  use templates.
 	 */
-	static StringTemplateErrorListener initSTListener =
-		new StringTemplateErrorListener() {
-			public void error(String s, Throwable e) {
-				System.err.println("ErrorManager init error: "+s);
-				if ( e!=null ) {
-					System.err.println("exception: "+e);
-				}
-				/*
-				if ( e!=null ) {
-					e.printStackTrace(System.err);
-				}
-				*/
+	static STErrorListener initSTListener =
+		new STErrorListener() {
+			public void compileTimeError(STMessage msg) {
+				System.err.println("ErrorManager init error: "+msg);
 			}
-			public void warning(String s) {
-				System.err.println("ErrorManager init warning: "+s);
+
+			public void runTimeError(STMessage msg) {
+				System.err.println("ErrorManager init error: "+msg);
 			}
-			public void debug(String s) {}
+
+			public void IOError(STMessage msg) {
+				System.err.println("ErrorManager init error: "+msg);
+			}
+
+			public void internalError(STMessage msg) {
+				System.err.println("ErrorManager init error: "+msg);
+			}
+
 		};
 
 	/** During verification of the messages group file, don't gen errors.
 	 *  I'll handle them here.  This is used only after file has loaded ok
 	 *  and only for the messages STG.
 	 */
-	static StringTemplateErrorListener blankSTListener =
-		new StringTemplateErrorListener() {
-			public void error(String s, Throwable e) {}
-			public void warning(String s) {}
-			public void debug(String s) {}
+	static STErrorListener blankSTListener =
+		new STErrorListener() {
+			public void compileTimeError(STMessage msg) {			}
+			public void runTimeError(STMessage msg) {			}
+			public void IOError(STMessage msg) {			}
+			public void internalError(STMessage msg) {			}
 		};
 
 	/** Errors during initialization related to ST must all go to System.err.
 	 */
-	static StringTemplateErrorListener theDefaultSTListener =
-		new StringTemplateErrorListener() {
-		public void error(String s, Throwable e) {
-			if ( e instanceof InvocationTargetException ) {
-				e = ((InvocationTargetException)e).getTargetException();
+	static STErrorListener theDefaultSTListener =
+		new STErrorListener() {
+			public void compileTimeError(STMessage msg) {
+				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
-			ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, s, e);
-		}
-		public void warning(String s) {
-			ErrorManager.warning(ErrorManager.MSG_INTERNAL_WARNING, s);
-		}
-		public void debug(String s) {
-		}
-	};
+
+			public void runTimeError(STMessage msg) {
+				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+			}
+
+			public void IOError(STMessage msg) {
+				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+			}
+
+			public void internalError(STMessage msg) {
+				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+			}
+		};
 
 	// make sure that this class is ready to use after loading
 	static {
@@ -387,7 +394,7 @@ public class ErrorManager {
 		setFormat("antlr");
 	}
 
-    public static StringTemplateErrorListener getStringTemplateErrorListener() {
+    public static STErrorListener getSTErrorListener() {
 		return theDefaultSTListener;
 	}
 
@@ -400,44 +407,19 @@ public class ErrorManager {
 		ErrorManager.locale = locale;
 		String language = locale.getLanguage();
 		String fileName = "org/antlr/tool/templates/messages/languages/"+language+".stg";
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream is = cl.getResourceAsStream(fileName);
-		if ( is==null ) {
-			cl = ErrorManager.class.getClassLoader();
-			is = cl.getResourceAsStream(fileName);
-		}
-		if ( is==null && language.equals(Locale.US.getLanguage()) ) {
-			rawError("ANTLR installation corrupted; cannot find English messages file "+fileName);
-			panic();
-		}
-		else if ( is==null ) {
-			//rawError("no such locale file "+fileName+" retrying with English locale");
-			setLocale(Locale.US); // recurse on this rule, trying the US locale
-			return;
-		}
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(is));
-			messages = new StringTemplateGroup(br,
-											   AngleBracketTemplateLexer.class,
-											   initSTListener);
-			br.close();
-		}
-		catch (IOException ioe) {
-			rawError("error reading message file "+fileName, ioe);
-		}
-		finally {
-			if ( br!=null ) {
-				try {
-					br.close();
-				}
-				catch (IOException ioe) {
-					rawError("cannot close message file "+fileName, ioe);
-				}
+		messages = new STGroupFile(fileName);
+		messages.setListener(initSTListener);
+		if ( !messages.isDefined("INTERNAL_ERROR") ) { // pick random msg to load
+			if ( language.equals(Locale.US.getLanguage()) ) {
+				rawError("ANTLR installation corrupted; cannot find English messages file "+fileName);
+				panic();
+			}
+			else {
+				setLocale(Locale.US); // recurse on this rule, trying the US locale
 			}
 		}
 
-		messages.setErrorListener(blankSTListener);
+		messages.setListener(blankSTListener);
 		boolean messagesOK = verifyMessages();
 		if ( !messagesOK && language.equals(Locale.US.getLanguage()) ) {
 			rawError("ANTLR installation corrupted; English messages file "+language+".stg incomplete");
@@ -454,40 +436,20 @@ public class ErrorManager {
 	public static void setFormat(String formatName) {
 		ErrorManager.formatName = formatName;
 		String fileName = "org/antlr/tool/templates/messages/formats/"+formatName+".stg";
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream is = cl.getResourceAsStream(fileName);
-		if ( is==null ) {
-			cl = ErrorManager.class.getClassLoader();
-			is = cl.getResourceAsStream(fileName);
-		}
-		if ( is==null && formatName.equals("antlr") ) {
-			rawError("ANTLR installation corrupted; cannot find ANTLR messages format file "+fileName);
-			panic();
-		}
-		else if ( is==null ) {
-			rawError("no such message format file "+fileName+" retrying with default ANTLR format");
-			setFormat("antlr"); // recurse on this rule, trying the default message format
-			return;
-		}
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(is));
-			format = new StringTemplateGroup(br,
-											   AngleBracketTemplateLexer.class,
-											   initSTListener);
-		}
-		finally {
-			try {
-				if ( br!=null ) {
-					br.close();
-				}
+		format = new STGroupFile(fileName);
+		format.setListener(initSTListener);
+		if ( !format.isDefined("message") ) { // pick random msg to load
+			if ( formatName.equals("antlr") ) {
+				rawError("no such message format file "+fileName+" retrying with default ANTLR format");
+				setFormat("antlr"); // recurse on this rule, trying the default message format
+				return;
 			}
-			catch (IOException ioe) {
-				rawError("cannot close message format file "+fileName, ioe);
+			else {
+				setFormat("antlr"); // recurse on this rule, trying the default message format
 			}
 		}
 
-		format.setErrorListener(blankSTListener);
+		format.setListener(blankSTListener);
 		boolean formatOK = verifyFormat();
 		if ( !formatOK && formatName.equals("antlr") ) {
 			rawError("ANTLR installation corrupted; ANTLR messages format file "+formatName+".stg incomplete");
@@ -544,39 +506,39 @@ public class ErrorManager {
 		threadToToolMap.put(Thread.currentThread(), tool);
 	}
 
-	/** Given a message ID, return a StringTemplate that somebody can fill
+	/** Given a message ID, return a ST that somebody can fill
 	 *  with data.  We need to convert the int ID to the name of a template
 	 *  in the messages ST group.
 	 */
-	public static StringTemplate getMessage(int msgID) {
+	public static ST getMessage(int msgID) {
         String msgName = idToMessageTemplateName[msgID];
 		return messages.getInstanceOf(msgName);
 	}
 	public static String getMessageType(int msgID) {
 		if (getErrorState().warningMsgIDs.member(msgID)) {
-			return messages.getInstanceOf("warning").toString();
+			return messages.getInstanceOf("warning").render();
 		}
 		else if (getErrorState().errorMsgIDs.member(msgID)) {
-			return messages.getInstanceOf("error").toString();
+			return messages.getInstanceOf("error").render();
 		}
 		assertTrue(false, "Assertion failed! Message ID " + msgID + " created but is not present in errorMsgIDs or warningMsgIDs.");
 		return "";
 	}
 
-	/** Return a StringTemplate that refers to the current format used for
+	/** Return a ST that refers to the current format used for
 	 * emitting messages.
 	 */
-	public static StringTemplate getLocationFormat() {
+	public static ST getLocationFormat() {
 		return format.getInstanceOf("location");
 	}
-	public static StringTemplate getReportFormat() {
+	public static ST getReportFormat() {
 		return format.getInstanceOf("report");
 	}
-	public static StringTemplate getMessageFormat() {
+	public static ST getMessageFormat() {
 		return format.getInstanceOf("message");
 	}
 	public static boolean formatWantsSingleLineMessage() {
-		return format.getInstanceOf("wantsSingleLineMessage").toString().equals("true");
+		return format.getInstanceOf("wantsSingleLineMessage").render().equals("true");
 	}
 
 	public static ANTLRErrorListener getErrorListener() {

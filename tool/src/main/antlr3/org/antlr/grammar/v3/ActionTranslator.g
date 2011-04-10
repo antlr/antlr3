@@ -33,7 +33,7 @@ options {
 
 @header {
 package org.antlr.grammar.v3;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.runtime.*;
 import org.antlr.tool.*;
 import org.antlr.codegen.*;
@@ -78,7 +78,7 @@ Token actionToken;
 		this.outerAltNum = outerAltNum;
 	}
 
-/** Return a list of strings and StringTemplate objects that
+/** Return a list of strings and ST objects that
  *  represent the translated action.
  */
 public List translateToChunks() {
@@ -96,7 +96,8 @@ public String translate() {
 	StringBuffer buf = new StringBuffer();
 	for (int i = 0; i < theChunks.size(); i++) {
 		Object o = (Object) theChunks.get(i);
-		buf.append(o);
+		if ( o instanceof ST ) buf.append(((ST)o).render());
+		else buf.append(o);
 	}
 	//System.out.println("translated: "+buf.toString());
 	return buf.toString();
@@ -163,8 +164,8 @@ AttributeScope resolveDynamicScope(String scopeName) {
 	return null; // not a valid dynamic scope
 }
 
-protected StringTemplate template(String name) {
-	StringTemplate st = generator.getTemplates().getInstanceOf(name);
+protected ST template(String name) {
+	ST st = generator.getTemplates().getInstanceOf(name);
 	chunks.add(st);
 	return st;
 }
@@ -186,15 +187,15 @@ SET_ENCLOSING_RULE_SCOPE_ATTR
 	                         enclosingRule.getLocalAttributeScope($y.text)!=null}?
 		//{System.out.println("found \$rule.attr");}
 		{
-		StringTemplate st = null;
+		ST st = null;
 		AttributeScope scope = enclosingRule.getLocalAttributeScope($y.text);
 		if ( scope.isPredefinedRuleScope ) {
 			if ( $y.text.equals("st") || $y.text.equals("tree") ) {
 				st = template("ruleSetPropertyRef_"+$y.text);
 				grammar.referenceRuleLabelPredefinedAttribute($x.text);
-				st.setAttribute("scope", $x.text);
-				st.setAttribute("attr", $y.text);
-				st.setAttribute("expr", translateAction($expr.text));
+				st.add("scope", $x.text);
+				st.add("attr", $y.text);
+				st.add("expr", translateAction($expr.text));
 			} else {
 				ErrorManager.grammarError(ErrorManager.MSG_WRITE_TO_READONLY_ATTR,
 										  grammar,
@@ -213,14 +214,14 @@ SET_ENCLOSING_RULE_SCOPE_ATTR
 	    }
 		else if ( scope.isParameterScope ) {
 			st = template("parameterSetAttributeRef");
-			st.setAttribute("attr", scope.getAttribute($y.text));
-			st.setAttribute("expr", translateAction($expr.text));
+			st.add("attr", scope.getAttribute($y.text));
+			st.add("expr", translateAction($expr.text));
 		}
 		else { // must be return value
 			st = template("returnSetAttributeRef");
-			st.setAttribute("ruleDescriptor", enclosingRule);
-			st.setAttribute("attr", scope.getAttribute($y.text));
-			st.setAttribute("expr", translateAction($expr.text));
+			st.add("ruleDescriptor", enclosingRule);
+			st.add("attr", scope.getAttribute($y.text));
+			st.add("expr", translateAction($expr.text));
 		}
 		}
 	;
@@ -236,13 +237,13 @@ ENCLOSING_RULE_SCOPE_ATTR
 									  actionToken,
 									  $x.text);
 		}
-		StringTemplate st = null;
+		ST st = null;
 		AttributeScope scope = enclosingRule.getLocalAttributeScope($y.text);
 		if ( scope.isPredefinedRuleScope ) {
 			st = template("rulePropertyRef_"+$y.text);
 			grammar.referenceRuleLabelPredefinedAttribute($x.text);
-			st.setAttribute("scope", $x.text);
-			st.setAttribute("attr", $y.text);
+			st.add("scope", $x.text);
+			st.add("attr", $y.text);
 		}
 	    else if ( scope.isPredefinedLexerRuleScope ) {
 	    	// perhaps not the most precise error message to use, but...
@@ -253,12 +254,12 @@ ENCLOSING_RULE_SCOPE_ATTR
 	    }
 		else if ( scope.isParameterScope ) {
 			st = template("parameterAttributeRef");
-			st.setAttribute("attr", scope.getAttribute($y.text));
+			st.add("attr", scope.getAttribute($y.text));
 		}
 		else { // must be return value
 			st = template("returnAttributeRef");
-			st.setAttribute("ruleDescriptor", enclosingRule);
-			st.setAttribute("attr", scope.getAttribute($y.text));
+			st.add("ruleDescriptor", enclosingRule);
+			st.add("attr", scope.getAttribute($y.text));
 		}
 		}
 	;
@@ -306,9 +307,9 @@ TOKEN_SCOPE_ATTR
 				label = $x.text;
 			}
 		}
-		StringTemplate st = template("tokenLabelPropertyRef_"+$y.text);
-		st.setAttribute("scope", label);
-		st.setAttribute("attr", AttributeScope.tokenScope.getAttribute($y.text));
+		ST st = template("tokenLabelPropertyRef_"+$y.text);
+		st.add("scope", label);
+		st.add("attr", AttributeScope.tokenScope.getAttribute($y.text));
 		}
 	;
 
@@ -379,29 +380,29 @@ String refdRuleName=null;
 				label = $x.text;
 			}
 		}
-		StringTemplate st;
+		ST st;
 		Rule refdRule = grammar.getRule(refdRuleName);
 		AttributeScope scope = refdRule.getLocalAttributeScope($y.text);
 		if ( scope.isPredefinedRuleScope ) {
 			st = template("ruleLabelPropertyRef_"+$y.text);
 			grammar.referenceRuleLabelPredefinedAttribute(refdRuleName);
-			st.setAttribute("scope", label);
-			st.setAttribute("attr", $y.text);
+			st.add("scope", label);
+			st.add("attr", $y.text);
 		}
 		else if ( scope.isPredefinedLexerRuleScope ) {
 			st = template("lexerRuleLabelPropertyRef_"+$y.text);
 			grammar.referenceRuleLabelPredefinedAttribute(refdRuleName);
-			st.setAttribute("scope", label);
-			st.setAttribute("attr", $y.text);
+			st.add("scope", label);
+			st.add("attr", $y.text);
 		}
 		else if ( scope.isParameterScope ) {
 			// TODO: error!
 		}
 		else {
 			st = template("ruleLabelRef");
-			st.setAttribute("referencedRule", refdRule);
-			st.setAttribute("scope", label);
-			st.setAttribute("attr", scope.getAttribute($y.text));
+			st.add("referencedRule", refdRule);
+			st.add("scope", label);
+			st.add("attr", scope.getAttribute($y.text));
 		}
 		}
 	;
@@ -414,7 +415,7 @@ LABEL_REF
 		        enclosingRule.getRuleLabel($ID.text)==null}?
 		// {System.out.println("found \$label");}
 		{
-		StringTemplate st;
+		ST st;
 		Grammar.LabelElementPair pair = getElementLabel($ID.text);
 		if ( pair.type==Grammar.RULE_LIST_LABEL ||
              pair.type==Grammar.TOKEN_LIST_LABEL ||
@@ -425,7 +426,7 @@ LABEL_REF
 		else {
 			st = template("tokenLabelRef");
 		}
-		st.setAttribute("label", $ID.text);
+		st.add("label", $ID.text);
 		}
 	;
 
@@ -443,8 +444,8 @@ ISOLATED_TOKEN_REF
 									  $ID.text);
 		}
 		else {
-			StringTemplate st = template("tokenLabelRef");
-			st.setAttribute("label", label);
+			ST st = template("tokenLabelRef");
+			st.add("label", label);
 		}
 		}
 	;
@@ -465,8 +466,8 @@ ISOLATED_LEXER_RULE_REF
 									  $ID.text);
 		}
 		else {
-			StringTemplate st = template("lexerRuleLabel");
-			st.setAttribute("label", label);
+			ST st = template("lexerRuleLabel");
+			st.add("label", label);
 		}
 		}
 	;
@@ -488,15 +489,15 @@ SET_LOCAL_ATTR
 													&& !enclosingRule.getLocalAttributeScope($ID.text).isPredefinedLexerRuleScope}?
 		//{System.out.println("found set \$localattr");}
 		{
-		StringTemplate st;
+		ST st;
 		AttributeScope scope = enclosingRule.getLocalAttributeScope($ID.text);
 		if ( scope.isPredefinedRuleScope ) {
 			if ($ID.text.equals("tree") || $ID.text.equals("st")) {
 				st = template("ruleSetPropertyRef_"+$ID.text);
 				grammar.referenceRuleLabelPredefinedAttribute(enclosingRule.name);
-				st.setAttribute("scope", enclosingRule.name);
-				st.setAttribute("attr", $ID.text);
-				st.setAttribute("expr", translateAction($expr.text));
+				st.add("scope", enclosingRule.name);
+				st.add("attr", $ID.text);
+				st.add("expr", translateAction($expr.text));
 			} else {
 				ErrorManager.grammarError(ErrorManager.MSG_WRITE_TO_READONLY_ATTR,
 										 grammar,
@@ -507,14 +508,14 @@ SET_LOCAL_ATTR
 		}
 		else if ( scope.isParameterScope ) {
 			st = template("parameterSetAttributeRef");
-			st.setAttribute("attr", scope.getAttribute($ID.text));
-			st.setAttribute("expr", translateAction($expr.text));
+			st.add("attr", scope.getAttribute($ID.text));
+			st.add("expr", translateAction($expr.text));
 		}
 		else {
 			st = template("returnSetAttributeRef");
-			st.setAttribute("ruleDescriptor", enclosingRule);
-			st.setAttribute("attr", scope.getAttribute($ID.text));
-			st.setAttribute("expr", translateAction($expr.text));
+			st.add("ruleDescriptor", enclosingRule);
+			st.add("attr", scope.getAttribute($ID.text));
+			st.add("expr", translateAction($expr.text));
 			}
 		}
 	;
@@ -522,27 +523,27 @@ LOCAL_ATTR
 	:	'$' ID {enclosingRule!=null && enclosingRule.getLocalAttributeScope($ID.text)!=null}?
 		//{System.out.println("found \$localattr");}
 		{
-		StringTemplate st;
+		ST st;
 		AttributeScope scope = enclosingRule.getLocalAttributeScope($ID.text);
 		if ( scope.isPredefinedRuleScope ) {
 			st = template("rulePropertyRef_"+$ID.text);
 			grammar.referenceRuleLabelPredefinedAttribute(enclosingRule.name);
-			st.setAttribute("scope", enclosingRule.name);
-			st.setAttribute("attr", $ID.text);
+			st.add("scope", enclosingRule.name);
+			st.add("attr", $ID.text);
 		}
 		else if ( scope.isPredefinedLexerRuleScope ) {
 			st = template("lexerRulePropertyRef_"+$ID.text);
-			st.setAttribute("scope", enclosingRule.name);
-			st.setAttribute("attr", $ID.text);
+			st.add("scope", enclosingRule.name);
+			st.add("attr", $ID.text);
 		}
 		else if ( scope.isParameterScope ) {
 			st = template("parameterAttributeRef");
-			st.setAttribute("attr", scope.getAttribute($ID.text));
+			st.add("attr", scope.getAttribute($ID.text));
 		}
 		else {
 			st = template("returnAttributeRef");
-			st.setAttribute("ruleDescriptor", enclosingRule);
-			st.setAttribute("attr", scope.getAttribute($ID.text));
+			st.add("ruleDescriptor", enclosingRule);
+			st.add("attr", scope.getAttribute($ID.text));
 		}
 		}
 	;
@@ -567,10 +568,10 @@ SET_DYNAMIC_SCOPE_ATTR
 		{
 		AttributeScope scope = resolveDynamicScope($x.text);
 		if ( scope!=null ) {
-			StringTemplate st = template("scopeSetAttributeRef");
-			st.setAttribute("scope", $x.text);
-			st.setAttribute("attr",  scope.getAttribute($y.text));
-			st.setAttribute("expr",  translateAction($expr.text));
+			ST st = template("scopeSetAttributeRef");
+			st.add("scope", $x.text);
+			st.add("attr",  scope.getAttribute($y.text));
+			st.add("expr",  translateAction($expr.text));
 		}
 		else {
 			// error: invalid dynamic attribute
@@ -586,9 +587,9 @@ DYNAMIC_SCOPE_ATTR
 		{
 		AttributeScope scope = resolveDynamicScope($x.text);
 		if ( scope!=null ) {
-			StringTemplate st = template("scopeAttributeRef");
-			st.setAttribute("scope", $x.text);
-			st.setAttribute("attr",  scope.getAttribute($y.text));
+			ST st = template("scopeAttributeRef");
+			st.add("scope", $x.text);
+			st.add("attr",  scope.getAttribute($y.text));
 		}
 		else {
 			// error: invalid dynamic attribute
@@ -619,10 +620,10 @@ DYNAMIC_NEGATIVE_INDEXED_SCOPE_ATTR
 	:	'$' x=ID '[' '-' expr=SCOPE_INDEX_EXPR ']' '::' y=ID
 		// {System.out.println("found \$scope[-...]::attr");}
 		{
-		StringTemplate st = template("scopeAttributeRef");
-		st.setAttribute("scope",    $x.text);
-		st.setAttribute("attr",     resolveDynamicScope($x.text).getAttribute($y.text));
-		st.setAttribute("negIndex", $expr.text);
+		ST st = template("scopeAttributeRef");
+		st.add("scope",    $x.text);
+		st.add("attr",     resolveDynamicScope($x.text).getAttribute($y.text));
+		st.add("negIndex", $expr.text);
 		}		
 	;
 
@@ -630,10 +631,10 @@ DYNAMIC_ABSOLUTE_INDEXED_SCOPE_ATTR
 	:	'$' x=ID '[' expr=SCOPE_INDEX_EXPR ']' '::' y=ID 
 		// {System.out.println("found \$scope[...]::attr");}
 		{
-		StringTemplate st = template("scopeAttributeRef");
-		st.setAttribute("scope", $x.text);
-		st.setAttribute("attr",  resolveDynamicScope($x.text).getAttribute($y.text));
-		st.setAttribute("index", $expr.text);
+		ST st = template("scopeAttributeRef");
+		st.add("scope", $x.text);
+		st.add("attr",  resolveDynamicScope($x.text).getAttribute($y.text));
+		st.add("index", $expr.text);
 		}		
 	;
 
@@ -651,8 +652,8 @@ ISOLATED_DYNAMIC_SCOPE
 	:	'$' ID {resolveDynamicScope($ID.text)!=null}?
 		// {System.out.println("found isolated \$scope where scope is a dynamic scope");}
 		{
-		StringTemplate st = template("isolatedDynamicScopeRef");
-		st.setAttribute("scope", $ID.text);
+		ST st = template("isolatedDynamicScopeRef");
+		st.add("scope", $ID.text);
 		}		
 	;
 	
@@ -669,7 +670,7 @@ TEMPLATE_INSTANCE
 		if ( enclosingRule!=null ) {
 			ruleName = enclosingRule.name;
 		}
-		StringTemplate st =
+		ST st =
 			generator.translateTemplateConstructor(ruleName,
 												   outerAltNum,
 												   actionToken,
@@ -686,7 +687,7 @@ INDIRECT_TEMPLATE_INSTANCE
 		// {System.out.println("found \%({...})(args)");}
 		{
 		String action = getText().substring(1,getText().length());
-		StringTemplate st =
+		ST st =
 			generator.translateTemplateConstructor(enclosingRule.name,
 												   outerAltNum,
 												   actionToken,
@@ -699,17 +700,17 @@ fragment
 ARG	:	ID '=' ACTION
 	;
 
-/**	%{expr}.y = z; template attribute y of StringTemplate-typed expr to z */
+/**	%{expr}.y = z; template attribute y of ST-typed expr to z */
 SET_EXPR_ATTRIBUTE
 	:	'%' a=ACTION '.' ID WS? '=' expr=ATTR_VALUE_EXPR ';'
 		// {System.out.println("found \%{expr}.y = z;");}
 		{
-		StringTemplate st = template("actionSetAttribute");
+		ST st = template("actionSetAttribute");
 		String action = $a.text;
 		action = action.substring(1,action.length()-1); // stuff inside {...}
-		st.setAttribute("st", translateAction(action));
-		st.setAttribute("attrName", $ID.text);
-		st.setAttribute("expr", translateAction($expr.text));
+		st.add("st", translateAction(action));
+		st.add("attrName", $ID.text);
+		st.add("expr", translateAction($expr.text));
 		}
 	;
 	
@@ -721,10 +722,10 @@ SET_ATTRIBUTE
 	:	'%' x=ID '.' y=ID WS? '=' expr=ATTR_VALUE_EXPR ';'
 		// {System.out.println("found \%x.y = z;");}
 		{
-		StringTemplate st = template("actionSetAttribute");
-		st.setAttribute("st", $x.text);
-		st.setAttribute("attrName", $y.text);
-		st.setAttribute("expr", translateAction($expr.text));
+		ST st = template("actionSetAttribute");
+		st.add("st", $x.text);
+		st.add("attrName", $y.text);
+		st.add("expr", translateAction($expr.text));
 		}
 	;
 
@@ -739,10 +740,10 @@ TEMPLATE_EXPR
 	:	'%' a=ACTION
 		// {System.out.println("found \%{expr}");}
 		{
-		StringTemplate st = template("actionStringConstructor");
+		ST st = template("actionStringConstructor");
 		String action = $a.text;
 		action = action.substring(1,action.length()-1); // stuff inside {...}
-		st.setAttribute("stringExpr", translateAction(action));
+		st.add("stringExpr", translateAction(action));
 		}
 	;
 	

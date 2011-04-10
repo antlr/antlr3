@@ -29,8 +29,8 @@ package org.antlr.codegen;
 
 import org.antlr.analysis.*;
 import org.antlr.misc.Utils;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 
 import java.util.List;
 
@@ -41,22 +41,22 @@ public class ACyclicDFACodeGenerator {
 		this.parentGenerator = parent;
 	}
 
-	public StringTemplate genFixedLookaheadDecision(StringTemplateGroup templates,
+	public ST genFixedLookaheadDecision(STGroup templates,
 													DFA dfa)
 	{
 		return walkFixedDFAGeneratingStateMachine(templates, dfa, dfa.startState, 1);
 	}
 
-	protected StringTemplate walkFixedDFAGeneratingStateMachine(
-			StringTemplateGroup templates,
+	protected ST walkFixedDFAGeneratingStateMachine(
+			STGroup templates,
 			DFA dfa,
 			DFAState s,
 			int k)
 	{
 		//System.out.println("walk "+s.stateNumber+" in dfa for decision "+dfa.decisionNumber);
 		if ( s.isAcceptState() ) {
-			StringTemplate dfaST = templates.getInstanceOf("dfaAcceptState");
-			dfaST.setAttribute("alt", Utils.integer(s.getUniquelyPredictedAlt()));
+			ST dfaST = templates.getInstanceOf("dfaAcceptState");
+			dfaST.add("alt", Utils.integer(s.getUniquelyPredictedAlt()));
 			return dfaST;
 		}
 
@@ -73,23 +73,23 @@ public class ACyclicDFACodeGenerator {
 			dfaEdgeName = "dfaEdgeSwitch";
 		}
 
-		StringTemplate dfaST = templates.getInstanceOf(dfaStateName);
+		ST dfaST = templates.getInstanceOf(dfaStateName);
 		if ( dfa.getNFADecisionStartState().decisionStateType==NFAState.LOOPBACK ) {
 			dfaST = templates.getInstanceOf(dfaLoopbackStateName);
 		}
 		else if ( dfa.getNFADecisionStartState().decisionStateType==NFAState.OPTIONAL_BLOCK_START ) {
 			dfaST = templates.getInstanceOf(dfaOptionalBlockStateName);
 		}
-		dfaST.setAttribute("k", Utils.integer(k));
-		dfaST.setAttribute("stateNumber", Utils.integer(s.stateNumber));
-		dfaST.setAttribute("semPredState",
+		dfaST.add("k", Utils.integer(k));
+		dfaST.add("stateNumber", Utils.integer(s.stateNumber));
+		dfaST.add("semPredState",
 						   Boolean.valueOf(s.isResolvedWithPredicates()));
 		/*
 		String description = dfa.getNFADecisionStartState().getDescription();
 		description = parentGenerator.target.getTargetStringLiteralFromString(description);
 		//System.out.println("DFA: "+description+" associated with AST "+dfa.getNFADecisionStartState());
 		if ( description!=null ) {
-			dfaST.setAttribute("description", description);
+			dfaST.add("description", description);
 		}
 		*/
 		int EOTPredicts = NFA.INVALID_ALT_NUMBER;
@@ -110,9 +110,9 @@ public class ACyclicDFACodeGenerator {
 				*/
 				continue;
 			}
-			StringTemplate edgeST = templates.getInstanceOf(dfaEdgeName);
+			ST edgeST = templates.getInstanceOf(dfaEdgeName);
 			// If the template wants all the label values delineated, do that
-			if ( edgeST.getFormalArgument("labels")!=null ) {
+			if ( edgeST.impl.formalArguments.get("labels")!=null ) {
 				List labels = edge.label.getSet().toList();
 				for (int j = 0; j < labels.size(); j++) {
 					Integer vI = (Integer) labels.get(j);
@@ -120,10 +120,10 @@ public class ACyclicDFACodeGenerator {
 						parentGenerator.getTokenTypeAsTargetLabel(vI.intValue());
 					labels.set(j, label); // rewrite List element to be name
 				}
-				edgeST.setAttribute("labels", labels);
+				edgeST.add("labels", labels);
 			}
 			else { // else create an expression to evaluate (the general case)
-				edgeST.setAttribute("labelExpr",
+				edgeST.add("labelExpr",
 									parentGenerator.genLabelExpr(templates,edge,k));
 			}
 
@@ -134,20 +134,20 @@ public class ACyclicDFACodeGenerator {
 					target.getGatedPredicatesInNFAConfigurations();
 				if ( preds!=null ) {
 					//System.out.println("preds="+target.getGatedPredicatesInNFAConfigurations());
-					StringTemplate predST = preds.genExpr(parentGenerator,
+					ST predST = preds.genExpr(parentGenerator,
 														  parentGenerator.getTemplates(),
 														  dfa);
-					edgeST.setAttribute("predicates", predST);
+					edgeST.add("predicates", predST);
 				}
 			}
 
-			StringTemplate targetST =
+			ST targetST =
 				walkFixedDFAGeneratingStateMachine(templates,
 												   dfa,
 												   (DFAState)edge.target,
 												   k+1);
-			edgeST.setAttribute("targetState", targetST);
-			dfaST.setAttribute("edges", edgeST);
+			edgeST.add("targetState", targetST);
+			dfaST.add("edges", edgeST);
 			/*
 			System.out.println("back to DFA "+
 							   dfa.decisionNumber+"."+s.stateNumber);
@@ -157,7 +157,7 @@ public class ACyclicDFACodeGenerator {
 		// HANDLE EOT EDGE
 		if ( EOTPredicts!=NFA.INVALID_ALT_NUMBER ) {
 			// EOT unique predicts an alt
-			dfaST.setAttribute("eotPredictsAlt", Utils.integer(EOTPredicts));
+			dfaST.add("eotPredictsAlt", Utils.integer(EOTPredicts));
 		}
 		else if ( EOTTarget!=null && EOTTarget.getNumberOfTransitions()>0 ) {
 			// EOT state has transitions so must split on predicates.
@@ -170,18 +170,18 @@ public class ACyclicDFACodeGenerator {
 			// hoisted up to the state that has the EOT edge.
 			for (int i = 0; i < EOTTarget.getNumberOfTransitions(); i++) {
 				Transition predEdge = (Transition)EOTTarget.transition(i);
-				StringTemplate edgeST = templates.getInstanceOf(dfaEdgeName);
-				edgeST.setAttribute("labelExpr",
+				ST edgeST = templates.getInstanceOf(dfaEdgeName);
+				edgeST.add("labelExpr",
 									parentGenerator.genSemanticPredicateExpr(templates,predEdge));
 				// the target must be an accept state
 				//System.out.println("EOT edge");
-				StringTemplate targetST =
+				ST targetST =
 					walkFixedDFAGeneratingStateMachine(templates,
 													   dfa,
 													   (DFAState)predEdge.target,
 													   k+1);
-				edgeST.setAttribute("targetState", targetST);
-				dfaST.setAttribute("edges", edgeST);
+				edgeST.add("targetState", targetST);
+				dfaST.add("edges", edgeST);
 			}
 		}
 		return dfaST;

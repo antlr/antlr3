@@ -27,7 +27,7 @@
  */
 package org.antlr.tool;
 
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /** The ANTLR code calls methods on ErrorManager to report errors etc...
  *  Rather than simply pass these arguments to the ANTLRErrorListener directly,
@@ -40,11 +40,11 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public abstract class Message {
 	// msgST is the actual text of the message
-	public StringTemplate msgST;
+	public ST msgST;
 	// these are for supporting different output formats
-	public StringTemplate locationST;
-	public StringTemplate reportST;
-	public StringTemplate messageFormatST;
+	public ST locationST;
+	public ST reportST;
+	public ST messageFormatST;
 
 	public int msgID;
 	public Object arg;
@@ -84,45 +84,41 @@ public abstract class Message {
 	/** Return a new template instance every time someone tries to print
 	 *  a Message.
 	 */
-	public StringTemplate getMessageTemplate() {
-		return msgST.getInstanceOf();
-	}
+	public ST getMessageTemplate() { return new ST(msgST); }
 
 	/** Return a new template instance for the location part of a Message.
 	 *  TODO: Is this really necessary? -Kay
 	 */
-	public StringTemplate getLocationTemplate() {
-		return locationST.getInstanceOf();
-	}
+	public ST getLocationTemplate() { return new ST(locationST); }
 
-	public String toString(StringTemplate messageST) {
+	public String toString(ST messageST) {
 		// setup the location
 		locationST = ErrorManager.getLocationFormat();
 		reportST = ErrorManager.getReportFormat();
 		messageFormatST = ErrorManager.getMessageFormat();
 		boolean locationValid = false;
 		if (line != -1) {
-			locationST.setAttribute("line", line);
+			locationST.add("line", line);
 			locationValid = true;
 		}
 		if (column != -1) {
-			locationST.setAttribute("column", column+1);
+			locationST.add("column", column+1);
 			locationValid = true;
 		}
 		if (file != null) {
-			locationST.setAttribute("file", file);
+			locationST.add("file", file);
 			locationValid = true;
 		}
 
-		messageFormatST.setAttribute("id", msgID);
-		messageFormatST.setAttribute("text", messageST);
+		messageFormatST.add("id", msgID);
+		messageFormatST.add("text", messageST);
 
 		if (locationValid) {
-			reportST.setAttribute("location", locationST);
+			reportST.add("location", locationST);
 		}
-		reportST.setAttribute("message", messageFormatST);
-		reportST.setAttribute("type", ErrorManager.getMessageType(msgID));
+		reportST.add("message", messageFormatST);
+		reportST.add("type", ErrorManager.getMessageType(msgID));
 
-		return reportST.toString();
+		return reportST.render();
 	}
 }

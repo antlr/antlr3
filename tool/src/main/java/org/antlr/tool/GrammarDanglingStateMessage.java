@@ -29,7 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,12 +60,12 @@ public class GrammarDanglingStateMessage extends Message {
 		}
 		List labels = probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = probe.getInputSequenceDisplay(labels);
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		List alts = new ArrayList();
 		alts.addAll(problemState.getAltSet());
 		Collections.sort(alts);
-		st.setAttribute("danglingAlts", alts);
-		st.setAttribute("input", input);
+		st.add("danglingAlts", alts);
+		st.add("input", input);
 
 		return super.toString(st);
 	}

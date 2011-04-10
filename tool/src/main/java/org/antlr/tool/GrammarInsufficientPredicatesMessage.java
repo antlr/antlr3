@@ -31,7 +31,7 @@ import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.analysis.Label;
 import org.antlr.runtime.Token;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.*;
 
@@ -58,7 +58,7 @@ public class GrammarInsufficientPredicatesMessage extends Message {
 		if ( fileName!=null ) {
 			file = fileName;
 		}
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		// convert to string key to avoid 3.1 ST bug
 		Map<String, Set<Token>> altToLocationsWithStringKey = new LinkedHashMap<String, Set<Token>>();
 		List<Integer> alts = new ArrayList<Integer>();
@@ -75,13 +75,13 @@ public class GrammarInsufficientPredicatesMessage extends Message {
 			System.out.println("tokens=\n"+tokens);
 			*/
 		}
-		st.setAttribute("altToLocations", altToLocationsWithStringKey);
+		st.add("altToLocations", altToLocationsWithStringKey);
 
 		List<Label> sampleInputLabels = problemState.dfa.probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = problemState.dfa.probe.getInputSequenceDisplay(sampleInputLabels);
-		st.setAttribute("upon", input);
+		st.add("upon", input);
 
-		st.setAttribute("hasPredicateBlockedByAction", problemState.dfa.hasPredicateBlockedByAction);
+		st.add("hasPredicateBlockedByAction", problemState.dfa.hasPredicateBlockedByAction);
 
 		return super.toString(st);
 	}

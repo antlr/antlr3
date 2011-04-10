@@ -439,7 +439,7 @@ public class Rule {
 			else {
 				grammar.defineRuleRefLabel(name, label, uniqueRefAST);
 			}
-			uniqueRefAST.code.setAttribute("label", labelName);
+			uniqueRefAST.code.add("label", labelName);
 		}
 		return labelName;
 	}

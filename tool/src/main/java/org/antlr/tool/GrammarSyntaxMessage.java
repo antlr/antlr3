@@ -29,7 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /** A problem with the syntax of your antlr grammar such as
  *  "The '{' came as a complete surprise to me at this point in your program"
@@ -72,9 +72,9 @@ public class GrammarSyntaxMessage extends Message {
 		if (g != null) {
 			file = g.getFileName();
 		}
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		if ( arg!=null ) {
-			st.setAttribute("arg", arg);
+			st.add("arg", arg);
 		}
 		return super.toString(st);
 	}

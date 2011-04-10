@@ -28,7 +28,7 @@
 package org.antlr.tool;
 
 import org.antlr.analysis.DecisionProbe;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,13 +55,13 @@ public class NonRegularDecisionMessage extends Message {
 			file = fileName;
 		}
 
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		String ruleName = probe.dfa.getNFADecisionStartState().enclosingRule.name;
-		st.setAttribute("ruleName", ruleName);
+		st.add("ruleName", ruleName);
 		List sortedAlts = new ArrayList();
 		sortedAlts.addAll(altsWithRecursion);
 		Collections.sort(sortedAlts); // make sure it's 1, 2, ...
-		st.setAttribute("alts", sortedAlts);
+		st.add("alts", sortedAlts);
 
 		return super.toString(st);
 	}

@@ -30,7 +30,8 @@ package org.antlr.tool;
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.analysis.NFAState;
-import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.misc.Utils;
+import org.stringtemplate.v4.ST;
 
 import java.util.Iterator;
 import java.util.List;
@@ -64,11 +65,11 @@ public class GrammarNonDeterminismMessage extends Message {
 			file = fileName;
 		}
 
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		// Now fill template with information about problemState
 		List labels = probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = probe.getInputSequenceDisplay(labels);
-		st.setAttribute("input", input);
+		st.add("input", input);
 
 		if ( probe.dfa.isTokensRuleDecision() ) {
 			Set disabledAlts = probe.getDisabledAlternatives(problemState);
@@ -81,11 +82,11 @@ public class GrammarNonDeterminismMessage extends Message {
 					probe.dfa.nfa.grammar.getRuleStartState(tokenName);
 				line = ruleStart.associatedASTNode.getLine();
 				column = ruleStart.associatedASTNode.getCharPositionInLine();
-				st.setAttribute("disabled", tokenName);
+				st.add("disabled", tokenName);
 			}
 		}
 		else {
-			st.setAttribute("disabled", probe.getDisabledAlternatives(problemState));
+			st.add("disabled", probe.getDisabledAlternatives(problemState));
 		}
 
 		List nondetAlts = probe.getNonDeterministicAltsForState(problemState);
@@ -105,23 +106,22 @@ public class GrammarNonDeterminismMessage extends Message {
 						probe.getNFAPathStatesForAlt(firstAlt,
 													 tracePathAlt,
 													 labels);
-					st.setAttribute("paths.{alt,states}",
-									displayAltI, path);
+					st.addAggr("paths.{alt, states}", displayAltI, path);
 				}
 				else {
 					if ( probe.dfa.isTokensRuleDecision() ) {
 						// alts are token rules, convert to the names instead of numbers
 						String tokenName =
 							probe.getTokenNameForTokensRuleAlt(displayAltI.intValue());
-						st.setAttribute("conflictingTokens", tokenName);
+						st.add("conflictingTokens", tokenName);
 					}
 					else {
-						st.setAttribute("conflictingAlts", displayAltI);
+						st.add("conflictingAlts", displayAltI);
 					}
 				}
 			}
 		}
-		st.setAttribute("hasPredicateBlockedByAction", problemState.dfa.hasPredicateBlockedByAction);
+		st.add("hasPredicateBlockedByAction", problemState.dfa.hasPredicateBlockedByAction);
 		return super.toString(st);
 	}
 

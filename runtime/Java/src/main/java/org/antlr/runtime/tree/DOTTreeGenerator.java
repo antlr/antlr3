@@ -89,7 +89,7 @@ public class DOTTreeGenerator {
 		/*
 		if ( adaptor.getChildCount(tree)==0 ) {
             // single node, don't do edge.
-            treeST.setAttribute("nodes", adaptor.getText(tree));
+            treeST.add("nodes", adaptor.getText(tree));
         }
         */
 		return treeST;

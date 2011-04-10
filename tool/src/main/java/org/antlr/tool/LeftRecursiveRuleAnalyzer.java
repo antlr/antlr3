@@ -5,8 +5,7 @@ import org.antlr.grammar.v3.*;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.runtime.tree.TreeNodeStream;
-import org.antlr.stringtemplate.*;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.*;
 
 import java.util.*;
 
@@ -26,7 +25,7 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 
 	public GrammarAST retvals;
 
-	public StringTemplateGroup recRuleTemplates;
+	public STGroup recRuleTemplates;
 	public String language;
 
 	public Map<Integer, ASSOC> altAssociativity = new HashMap<Integer, ASSOC>();
@@ -42,16 +41,10 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 	}
 
 	public void loadPrecRuleTemplates() {
-		String templateDirs =
-			CodeGenerator.classpathTemplateRootDirectoryName;
-		StringTemplateGroupLoader loader =
-			new CommonGroupLoader(templateDirs,
-								  ErrorManager.getStringTemplateErrorListener());
-		StringTemplateGroup.registerGroupLoader(loader);
-		StringTemplateGroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
-
-		recRuleTemplates =	StringTemplateGroup.loadGroup("LeftRecursiveRules");
-		if ( recRuleTemplates==null ) {
+		recRuleTemplates =
+			new STGroupFile(CodeGenerator.classpathTemplateRootDirectoryName+
+							"/LeftRecursiveRules.stg");
+		if ( !recRuleTemplates.isDefined("recRuleName") ) {
 			ErrorManager.error(ErrorManager.MSG_MISSING_CODE_GEN_TEMPLATES,
 							   "PrecRules");
 			return;
@@ -99,17 +92,17 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 
 		// rewrite e to be e_[rec_arg]
 		int nextPrec = nextPrecedence(alt);
-		StringTemplate refST = recRuleTemplates.getInstanceOf("recRuleRef");
-		refST.setAttribute("ruleName", ruleName);
-		refST.setAttribute("arg", nextPrec);
-		altTree = replaceRuleRefs(altTree, refST.toString());
+		ST refST = recRuleTemplates.getInstanceOf("recRuleRef");
+		refST.add("ruleName", ruleName);
+		refST.add("arg", nextPrec);
+		altTree = replaceRuleRefs(altTree, refST.render());
 
 		String altText = text(altTree);
 		altText = altText.trim();
 		altText += "{}"; // add empty alt to prevent pred hoisting
-		StringTemplate nameST = recRuleTemplates.getInstanceOf("recRuleName");
-		nameST.setAttribute("ruleName", ruleName);
-		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.toString());
+		ST nameST = recRuleTemplates.getInstanceOf("recRuleName");
+		nameST.add("ruleName", ruleName);
+		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.render());
 		String rewriteText = text(rewriteTree);
 		binaryAlts.put(alt, altText + (rewriteText != null ? " " + rewriteText : ""));
 		//System.out.println("binaryAlt " + alt + ": " + altText + ", rewrite=" + rewriteText);
@@ -125,17 +118,17 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		stripLeftRecursion(altTree);
 
 		int nextPrec = nextPrecedence(alt);
-		StringTemplate refST = recRuleTemplates.getInstanceOf("recRuleRef");
-		refST.setAttribute("ruleName", ruleName);
-		refST.setAttribute("arg", nextPrec);
-		altTree = replaceLastRuleRef(altTree, refST.toString());
+		ST refST = recRuleTemplates.getInstanceOf("recRuleRef");
+		refST.add("ruleName", ruleName);
+		refST.add("arg", nextPrec);
+		altTree = replaceLastRuleRef(altTree, refST.render());
 
 		String altText = text(altTree);
 		altText = altText.trim();
 		altText += "{}"; // add empty alt to prevent pred hoisting
-		StringTemplate nameST = recRuleTemplates.getInstanceOf("recRuleName");
-		nameST.setAttribute("ruleName", ruleName);
-		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.toString());
+		ST nameST = recRuleTemplates.getInstanceOf("recRuleName");
+		nameST.add("ruleName", ruleName);
+		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.render());
 		String rewriteText = text(rewriteTree);
 		ternaryAlts.put(alt, altText + (rewriteText != null ? " " + rewriteText : ""));
 		//System.out.println("ternaryAlt " + alt + ": " + altText + ", rewrite=" + rewriteText);
@@ -150,17 +143,17 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 
 		int nextPrec = precedence(alt);
 		// rewrite e to be e_[rec_arg]
-		StringTemplate refST = recRuleTemplates.getInstanceOf("recRuleRef");
-		refST.setAttribute("ruleName", ruleName);
-		refST.setAttribute("arg", nextPrec);
-		altTree = replaceRuleRefs(altTree, refST.toString());
+		ST refST = recRuleTemplates.getInstanceOf("recRuleRef");
+		refST.add("ruleName", ruleName);
+		refST.add("arg", nextPrec);
+		altTree = replaceRuleRefs(altTree, refST.render());
 		String altText = text(altTree);
 		altText = altText.trim();
 		altText += "{}"; // add empty alt to prevent pred hoisting
 
-		StringTemplate nameST = recRuleTemplates.getInstanceOf("recRuleName");
-		nameST.setAttribute("ruleName", ruleName);
-		rewriteTree = replaceRuleRefs(rewriteTree, nameST.toString());
+		ST nameST = recRuleTemplates.getInstanceOf("recRuleName");
+		nameST.add("ruleName", ruleName);
+		rewriteTree = replaceRuleRefs(rewriteTree, nameST.render());
 		String rewriteText = text(rewriteTree);
 
 		prefixAlts.add(altText + (rewriteText != null ? " " + rewriteText : ""));
@@ -173,9 +166,9 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		rewriteTree = GrammarAST.dupTree(rewriteTree);
 		stripSynPred(altTree);
 		stripLeftRecursion(altTree);
-		StringTemplate nameST = recRuleTemplates.getInstanceOf("recRuleName");
-		nameST.setAttribute("ruleName", ruleName);
-		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.toString());
+		ST nameST = recRuleTemplates.getInstanceOf("recRuleName");
+		nameST.add("ruleName", ruleName);
+		rewriteTree = replaceRuleRefs(rewriteTree, "$" + nameST.render());
 		String rewriteText = text(rewriteTree);
 		String altText = text(altTree);
 		altText = altText.trim();
@@ -199,30 +192,30 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 	// --------- get transformed rules ----------------
 
 	public String getArtificialPrecStartRule() {
-		StringTemplate ruleST = recRuleTemplates.getInstanceOf("recRuleStart");
-		ruleST.setAttribute("ruleName", ruleName);
-		ruleST.setAttribute("minPrec", 0);
-		ruleST.setAttribute("userRetvals", retvals);
+		ST ruleST = recRuleTemplates.getInstanceOf("recRuleStart");
+		ruleST.add("ruleName", ruleName);
+		ruleST.add("minPrec", 0);
+		ruleST.add("userRetvals", retvals);
 		fillRetValAssignments(ruleST, "recRuleName");
 
 		System.out.println("start: " + ruleST);
-		return ruleST.toString();
+		return ruleST.render();
 	}
 
 	public String getArtificialOpPrecRule() {
-		StringTemplate ruleST = recRuleTemplates.getInstanceOf("recRule");
-		ruleST.setAttribute("ruleName", ruleName);
-		ruleST.setAttribute("buildAST", grammar.buildAST());
-		StringTemplate argDefST =
+		ST ruleST = recRuleTemplates.getInstanceOf("recRule");
+		ruleST.add("ruleName", ruleName);
+		ruleST.add("buildAST", grammar.buildAST());
+		ST argDefST =
 			generator.getTemplates().getInstanceOf("recRuleDefArg");
-		ruleST.setAttribute("precArgDef", argDefST);
-		StringTemplate ruleArgST =
+		ruleST.add("precArgDef", argDefST);
+		ST ruleArgST =
 			generator.getTemplates().getInstanceOf("recRuleArg");
-		ruleST.setAttribute("argName", ruleArgST);
-		StringTemplate setResultST =
+		ruleST.add("argName", ruleArgST);
+		ST setResultST =
 			generator.getTemplates().getInstanceOf("recRuleSetResultAction");
-		ruleST.setAttribute("setResultAction", setResultST);
-		ruleST.setAttribute("userRetvals", retvals);
+		ruleST.add("setResultAction", setResultST);
+		ruleST.add("userRetvals", retvals);
 		fillRetValAssignments(ruleST, "recPrimaryName");
 
 		LinkedHashMap<Integer, String> opPrecRuleAlts = new LinkedHashMap<Integer, String>();
@@ -231,29 +224,29 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		opPrecRuleAlts.putAll(suffixAlts);
 		for (int alt : opPrecRuleAlts.keySet()) {
 			String altText = opPrecRuleAlts.get(alt);
-			StringTemplate altST = recRuleTemplates.getInstanceOf("recRuleAlt");
-			StringTemplate predST =
+			ST altST = recRuleTemplates.getInstanceOf("recRuleAlt");
+			ST predST =
 				generator.getTemplates().getInstanceOf("recRuleAltPredicate");
-			predST.setAttribute("opPrec", precedence(alt));
-			predST.setAttribute("ruleName", ruleName);
-			altST.setAttribute("pred", predST);
-			altST.setAttribute("alt", altText);
-			ruleST.setAttribute("alts", altST);
+			predST.add("opPrec", precedence(alt));
+			predST.add("ruleName", ruleName);
+			altST.add("pred", predST);
+			altST.add("alt", altText);
+			ruleST.add("alts", altST);
 		}
 
 		System.out.println(ruleST);
 
-		return ruleST.toString();
+		return ruleST.render();
 	}
 
 	public String getArtificialPrimaryRule() {
-		StringTemplate ruleST = recRuleTemplates.getInstanceOf("recPrimaryRule");
-		ruleST.setAttribute("ruleName", ruleName);
-		ruleST.setAttribute("alts", prefixAlts);
-		ruleST.setAttribute("alts", otherAlts);
-		ruleST.setAttribute("userRetvals", retvals);
+		ST ruleST = recRuleTemplates.getInstanceOf("recPrimaryRule");
+		ruleST.add("ruleName", ruleName);
+		ruleST.add("alts", prefixAlts);
+		ruleST.add("alts", otherAlts);
+		ruleST.add("userRetvals", retvals);
 		System.out.println(ruleST);
-		return ruleST.toString();
+		return ruleST.render();
 	}
 
 	public GrammarAST replaceRuleRefs(GrammarAST t, String name) {
@@ -324,18 +317,18 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		return p;
 	}
 
-	public void fillRetValAssignments(StringTemplate ruleST, String srcName) {
+	public void fillRetValAssignments(ST ruleST, String srcName) {
 		if ( retvals==null ) return;
 
 		// complicated since we must be target-independent
 		for (String name : getNamesFromArgAction(retvals.token)) {
-			StringTemplate setRetValST =
+			ST setRetValST =
 				generator.getTemplates().getInstanceOf("recRuleSetReturnAction");
-			StringTemplate ruleNameST = recRuleTemplates.getInstanceOf(srcName);
-			ruleNameST.setAttribute("ruleName", ruleName);
-			setRetValST.setAttribute("src", ruleNameST);
-			setRetValST.setAttribute("name", name);
-			ruleST.setAttribute("userRetvalAssignments",setRetValST);
+			ST ruleNameST = recRuleTemplates.getInstanceOf(srcName);
+			ruleNameST.add("ruleName", ruleName);
+			setRetValST.add("src", ruleNameST);
+			setRetValST.add("name", name);
+			ruleST.add("userRetvalAssignments",setRetValST);
 		}
 	}
 

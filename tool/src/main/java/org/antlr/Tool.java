@@ -32,6 +32,7 @@ import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.Graph;
 import org.antlr.runtime.misc.Stats;
 import org.antlr.tool.*;
+import org.stringtemplate.v4.STGroup;
 
 import java.io.*;
 import java.util.*;
@@ -66,7 +67,9 @@ public class Tool {
     /** Don't process grammar file if generated files are newer than grammar */
     private boolean make = false;
     private boolean showBanner = true;
-    private static boolean exitNow = false;
+	private static boolean exitNow = false;
+	private static boolean return_dont_exit = false;
+
 
 	public String forcedLanguageOption; // -language L on command line
 
@@ -88,6 +91,7 @@ public class Tool {
 
         if (!exitNow) {
             antlr.process();
+			if ( return_dont_exit ) return;
             if (ErrorManager.getNumErrors() > 0) {
                 System.exit(1);
             }
@@ -127,14 +131,12 @@ public class Tool {
     }
 
     public Tool(String[] args) {
+		STGroup.iterateAcrossValues = true; // ST v3 compatibility with Maps
 
         loadResources();
 
         // Set all the options and pick up all the named grammar files
-        //
         processArgs(args);
-
-
     }
 
     public void processArgs(String[] args) {
@@ -270,7 +272,9 @@ public class Tool {
                 internalOption_watchNFAConversion = true;
             }
             else if (args[i].equals("-XdbgST")) {
-                CodeGenerator.EMIT_TEMPLATE_DELIMITERS = true;
+                CodeGenerator.LAUNCH_ST_INSPECTOR = true;
+				STGroup.trackCreationEvents = true;
+				return_dont_exit = true;
             }
             else if (args[i].equals("-Xmaxinlinedfastates")) {
                 if (i + 1 >= args.length) {
@@ -592,7 +596,7 @@ public class Tool {
     public Grammar getRootGrammar(String grammarFileName)
         throws IOException
     {
-        //StringTemplate.setLintMode(true);
+        //ST.setLintMode(true);
         // grammars mentioned on command line are either roots or single grammars.
         // create the necessary composite in case it's got delegates; even
         // single grammar needs it to get token types.

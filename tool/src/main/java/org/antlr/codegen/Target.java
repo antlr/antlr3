@@ -30,7 +30,7 @@ package org.antlr.codegen;
 import org.antlr.Tool;
 import org.antlr.analysis.Label;
 import org.antlr.runtime.Token;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;
@@ -86,7 +86,7 @@ public class Target {
 	protected void genRecognizerFile(Tool tool,
 									 CodeGenerator generator,
 									 Grammar grammar,
-									 StringTemplate outputFileST)
+									 ST outputFileST)
 		throws IOException
 	{
 		String fileName =
@@ -97,7 +97,7 @@ public class Target {
 	protected void genRecognizerHeaderFile(Tool tool,
 										   CodeGenerator generator,
 										   Grammar grammar,
-										   StringTemplate headerFileST,
+										   ST headerFileST,
 										   String extName) // e.g., ".h"
 		throws IOException
 	{

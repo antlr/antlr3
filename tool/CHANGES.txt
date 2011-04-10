@@ -7,6 +7,15 @@ University of San Francisco
 
 CHANGES
 
+March 29 - April 10, 2011
+
+* Uses ST v4 now!!!  Massive change.  Only updated Java target so far.
+  Ripped out ST v3 usage to remove indirect dependency on ANTLR v2.
+
+March 28, 2011
+
+* Sam Harwell ported all v2 grammars to v3!
+
 March 3, 2011
 
 * left-recursion pattern off until all targets catch up

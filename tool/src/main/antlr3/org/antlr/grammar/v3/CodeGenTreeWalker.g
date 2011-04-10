@@ -31,7 +31,7 @@
 */
 
 /** Walk a grammar and generate code by gradually building up
- *  a bigger and bigger StringTemplate.
+ *  a bigger and bigger ST.
  *
  *  Terence Parr
  *  University of San Francisco
@@ -57,8 +57,8 @@ import java.util.Set;
 import java.util.Collection;
 import org.antlr.runtime.BitSet;
 import org.antlr.runtime.DFA;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 }
 
 @members {
@@ -69,7 +69,7 @@ private String currentRuleName = null;
 protected int blockNestingLevel = 0;
 protected int rewriteBlockNestingLevel = 0;
 private int outerAltNum = 0;
-protected StringTemplate currentBlockST = null;
+protected ST currentBlockST = null;
 protected boolean currentAltHasASTRewrite = false;
 protected int rewriteTreeNestingLevel = 0;
 protected HashSet<Object> rewriteRuleRefs = null;
@@ -113,19 +113,19 @@ public final void reportError(String s) {
 
 protected CodeGenerator generator;
 protected Grammar grammar;
-protected StringTemplateGroup templates;
+protected STGroup templates;
 
 /** The overall lexer/parser template; simulate dynamically scoped
  *  attributes by making this an instance var of the walker.
  */
-protected StringTemplate recognizerST;
+protected ST recognizerST;
 
-protected StringTemplate outputFileST;
-protected StringTemplate headerFileST;
+protected ST outputFileST;
+protected ST headerFileST;
 
 protected String outputOption = "";
 
-protected final StringTemplate getWildcardST(GrammarAST elementAST, GrammarAST ast_suffix, String label) {
+protected final ST getWildcardST(GrammarAST elementAST, GrammarAST ast_suffix, String label) {
     String name = "wildcard";
     if (grammar.type == Grammar.LEXER) {
         name = "wildcardChar";
@@ -133,7 +133,7 @@ protected final StringTemplate getWildcardST(GrammarAST elementAST, GrammarAST a
     return getTokenElementST(name, name, elementAST, ast_suffix, label);
 }
 
-protected final StringTemplate getRuleElementST( String name,
+protected final ST getRuleElementST( String name,
                                           String ruleTargetName,
                                           GrammarAST elementAST,
                                           GrammarAST ast_suffix,
@@ -151,15 +151,15 @@ protected final StringTemplate getRuleElementST( String name,
         grammar.defineRuleRefLabel( currentRuleName, labelTok, elementAST );
     }
 
-    StringTemplate elementST = templates.getInstanceOf( name );
+    ST elementST = templates.getInstanceOf( name );
     if ( label != null ) {
-        elementST.setAttribute( "label", label );
+        elementST.add( "label", label );
     }
 
     return elementST;
 }
 
-protected final StringTemplate getTokenElementST( String name,
+protected final ST getTokenElementST( String name,
                                            String elementName,
                                            GrammarAST elementAST,
                                            GrammarAST ast_suffix,
@@ -187,7 +187,7 @@ protected final StringTemplate getTokenElementST( String name,
         grammar.defineTokenRefLabel( currentRuleName, labelTok, elementAST );
     }
 
-    StringTemplate elementST = null;
+    ST elementST = null;
     if ( tryUnchecked && templates.isDefined( name + "Unchecked" + suffix ) )
         elementST = templates.getInstanceOf( name + "Unchecked" + suffix );
     if ( elementST == null )
@@ -195,7 +195,7 @@ protected final StringTemplate getTokenElementST( String name,
 
     if ( label != null )
     {
-        elementST.setAttribute( "label", label );
+        elementST.add( "label", label );
     }
     return elementST;
 }
@@ -292,9 +292,9 @@ public final void init( Grammar g ) {
 
 public
 grammar_[Grammar g,
-		StringTemplate recognizerST,
-		StringTemplate outputFileST,
-		StringTemplate headerFileST]
+		ST recognizerST,
+		ST outputFileST,
+		ST headerFileST]
 @init
 {
 	if ( state.backtracking == 0 )
@@ -305,9 +305,10 @@ grammar_[Grammar g,
 		this.headerFileST = headerFileST;
 		String superClass = (String)g.getOption("superClass");
 		outputOption = (String)g.getOption("output");
-		recognizerST.setAttribute("superClass", superClass);
+		if ( superClass!=null ) recognizerST.add("superClass", superClass);
 		if ( g.type!=Grammar.LEXER ) {
-			recognizerST.setAttribute("ASTLabelType", g.getOption("ASTLabelType"));
+		    Object lt = g.getOption("ASTLabelType");
+			if ( lt!=null ) recognizerST.add("ASTLabelType", lt);
 		}
 		if ( g.type==Grammar.TREE_PARSER && g.getOption("ASTLabelType")==null ) {
 			ErrorManager.grammarWarning(ErrorManager.MSG_MISSING_AST_TYPE_IN_TREE_GRAMMAR,
@@ -316,11 +317,12 @@ grammar_[Grammar g,
 									   g.name);
 		}
 		if ( g.type!=Grammar.TREE_PARSER ) {
-			recognizerST.setAttribute("labelType", g.getOption("TokenLabelType"));
+		    Object lt = g.getOption("TokenLabelType");
+			if ( lt!=null ) recognizerST.add("labelType", lt);
 		}
-		$recognizerST.setAttribute("numRules", grammar.getRules().size());
-		$outputFileST.setAttribute("numRules", grammar.getRules().size());
-		$headerFileST.setAttribute("numRules", grammar.getRules().size());
+		$recognizerST.add("numRules", grammar.getRules().size());
+		$outputFileST.add("numRules", grammar.getRules().size());
+		$headerFileST.add("numRules", grammar.getRules().size());
 	}
 }
 	:	(	^( LEXER_GRAMMAR grammarSpec )
@@ -338,16 +340,16 @@ grammarSpec
 	:   name=ID
 		(	cmt=DOC_COMMENT
 			{
-				outputFileST.setAttribute("docComment", $cmt.text);
-				headerFileST.setAttribute("docComment", $cmt.text);
+				outputFileST.add("docComment", $cmt.text);
+				headerFileST.add("docComment", $cmt.text);
 			}
 		)?
 		{
-			recognizerST.setAttribute("name", grammar.getRecognizerName());
-			outputFileST.setAttribute("name", grammar.getRecognizerName());
-			headerFileST.setAttribute("name", grammar.getRecognizerName());
-			recognizerST.setAttribute("scopes", grammar.getGlobalScopes());
-			headerFileST.setAttribute("scopes", grammar.getGlobalScopes());
+			recognizerST.add("name", grammar.getRecognizerName());
+			outputFileST.add("name", grammar.getRecognizerName());
+			headerFileST.add("name", grammar.getRecognizerName());
+			recognizerST.add("scopes", grammar.getGlobalScopes());
+			headerFileST.add("scopes", grammar.getGlobalScopes());
 		}
 		( ^(OPTIONS .*) )?
 		( ^(IMPORT .*) )?
@@ -357,7 +359,7 @@ grammarSpec
 		rules[recognizerST]
 	;
 
-rules[StringTemplate recognizerST]
+rules[ST recognizerST]
 @init
 {
 	String ruleName = ((GrammarAST)input.LT(1)).getChild(0).getText();
@@ -369,9 +371,9 @@ rules[StringTemplate recognizerST]
 				{
 					if ( $rST.code != null )
 					{
-						recognizerST.setAttribute("rules", $rST.code);
-						outputFileST.setAttribute("rules", $rST.code);
-						headerFileST.setAttribute("rules", $rST.code);
+						recognizerST.add("rules", $rST.code);
+						outputFileST.add("rules", $rST.code);
+						headerFileST.add("rules", $rST.code);
 					}
 				}
 			|	^(RULE .*)
@@ -388,7 +390,7 @@ rules[StringTemplate recognizerST]
 		)+
 	;
 
-rule returns [StringTemplate code=null]
+rule returns [ST code=null]
 @init
 {
 	String initAction = null;
@@ -403,7 +405,7 @@ rule returns [StringTemplate code=null]
 
 	// For syn preds, we don't want any AST code etc... in there.
 	// Save old templates ptr and restore later.  Base templates include Dbg.
-	StringTemplateGroup saveGroup = templates;
+	STGroup saveGroup = templates;
 	if ( ruleDescr.isSynPred )
 	{
 		templates = generator.getBaseTemplates();
@@ -427,7 +429,7 @@ rule returns [StringTemplate code=null]
 												false);
 				description =
 					generator.target.getTargetStringLiteralFromString(description);
-				$b.code.setAttribute("description", description);
+				$b.code.add("description", description);
 				// do not generate lexer rules in combined grammar
 				String stName = null;
 				if ( ruleDescr.isSynPred )
@@ -456,9 +458,9 @@ rule returns [StringTemplate code=null]
 				$code = templates.getInstanceOf(stName);
 				if ( $code.getName().equals("rule") )
 				{
-					$code.setAttribute("emptyRule", grammar.isEmptyRule(block2));
+					$code.add("emptyRule", grammar.isEmptyRule(block2));
 				}
-				$code.setAttribute("ruleDescriptor", ruleDescr);
+				$code.add("ruleDescriptor", ruleDescr);
 				String memo = (String)grammar.getBlockOption($start,"memoize");
 				if ( memo==null )
 				{
@@ -467,7 +469,7 @@ rule returns [StringTemplate code=null]
 				if ( memo!=null && memo.equals("true") &&
 					 (stName.equals("rule")||stName.equals("lexerRule")) )
 				{
-					$code.setAttribute("memoize", memo!=null && memo.equals("true"));
+					$code.add("memoize", memo!=null && memo.equals("true"));
 				}
 			}
 
@@ -482,24 +484,24 @@ rule returns [StringTemplate code=null]
 					boolean naked =
 						currentRuleName.equals(Grammar.ARTIFICIAL_TOKENS_RULENAME) ||
 						($mod.start!=null&&$mod.start.getText().equals(Grammar.FRAGMENT_RULE_MODIFIER));
-					$code.setAttribute("nakedBlock", naked);
+					$code.add("nakedBlock", naked);
 				}
 				else
 				{
 					description = grammar.grammarTreeToString($start,false);
 					description = generator.target.getTargetStringLiteralFromString(description);
-					$code.setAttribute("description", description);
+					$code.add("description", description);
 				}
 				Rule theRule = grammar.getRule(currentRuleName);
 				generator.translateActionAttributeReferencesForSingleScope(
 					theRule,
 					theRule.getActions()
 				);
-				$code.setAttribute("ruleName", currentRuleName);
-				$code.setAttribute("block", $b.code);
+				$code.add("ruleName", currentRuleName);
+				$code.add("block", $b.code);
 				if ( initAction!=null )
 				{
-					$code.setAttribute("initAction", initAction);
+					$code.add("initAction", initAction);
 				}
 			}
 		}
@@ -522,7 +524,7 @@ ruleScopeSpec
 	;
 
 block[String blockTemplateName, org.antlr.analysis.DFA dfa]
-	 returns [StringTemplate code=null]
+	 returns [ST code=null]
 options { k=1; }
 @init
 {
@@ -531,22 +533,22 @@ options { k=1; }
 	blockNestingLevel++;
 	if ( state.backtracking == 0 )
 	{
-		StringTemplate decision = null;
+		ST decision = null;
 		if ( $dfa != null )
 		{
 			$code = templates.getInstanceOf($blockTemplateName);
 			decision = generator.genLookaheadDecision(recognizerST,$dfa);
-			$code.setAttribute("decision", decision);
-			$code.setAttribute("decisionNumber", $dfa.getDecisionNumber());
-			$code.setAttribute("maxK",$dfa.getMaxLookaheadDepth());
-			$code.setAttribute("maxAlt",$dfa.getNumberOfAlts());
+			$code.add("decision", decision);
+			$code.add("decisionNumber", $dfa.getDecisionNumber());
+			$code.add("maxK",$dfa.getMaxLookaheadDepth());
+			$code.add("maxAlt",$dfa.getNumberOfAlts());
 		}
 		else
 		{
 			$code = templates.getInstanceOf($blockTemplateName+"SingleAlt");
 		}
-		$code.setAttribute("blockLevel", blockNestingLevel);
-		$code.setAttribute("enclosingBlockLevel", blockNestingLevel-1);
+		$code.add("blockLevel", blockNestingLevel);
+		$code.add("enclosingBlockLevel", blockNestingLevel-1);
 		altNum = 1;
 		if ( this.blockNestingLevel==RULE_BLOCK_NESTING_LEVEL ) {
 			this.outerAltNum=1;
@@ -555,7 +557,7 @@ options { k=1; }
 }
 	:	{$start.getSetValue()!=null}? => setBlock
 		{
-			$code.setAttribute("alts",$setBlock.code);
+			$code.add("alts",$setBlock.code);
 		}
 
 	|	^(  BLOCK
@@ -576,12 +578,12 @@ options { k=1; }
 						firstRewriteAST.getChild(0).getType()==ETC;
 					if ( $rew.code!=null && !etc )
 					{
-						$alt.code.setAttribute("rew", $rew.code);
+						$alt.code.add("rew", $rew.code);
 					}
 					// add this alt to the list of alts for this block
-					$code.setAttribute("alts",$alt.code);
-					$alt.code.setAttribute("altNum", altNum);
-					$alt.code.setAttribute("outerAlt", blockNestingLevel==RULE_BLOCK_NESTING_LEVEL);
+					$code.add("alts",$alt.code);
+					$alt.code.add("altNum", altNum);
+					$alt.code.add("outerAlt", blockNestingLevel==RULE_BLOCK_NESTING_LEVEL);
 					altNum++;
 				}
 			)+
@@ -590,10 +592,10 @@ options { k=1; }
 	;
 finally { blockNestingLevel--; }
 
-setBlock returns [StringTemplate code=null]
+setBlock returns [ST code=null]
 @init
 {
-	StringTemplate setcode = null;
+	ST setcode = null;
 	if ( state.backtracking == 0 )
 	{
 		if ( blockNestingLevel==RULE_BLOCK_NESTING_LEVEL && grammar.buildAST() )
@@ -618,26 +620,26 @@ setBlock returns [StringTemplate code=null]
 			{
 				setcode = getTokenElementST("matchSet", "set", $s, null, null);
 			}
-			setcode.setAttribute("elementIndex", i);
+			setcode.add("elementIndex", i);
 			//if ( grammar.type!=Grammar.LEXER )
 			//{
 			//	generator.generateLocalFOLLOW($s,"set",currentRuleName,i);
 			//}
-			setcode.setAttribute("s",
+			setcode.add("s",
 				generator.genSetExpr(templates,$s.getSetValue(),1,false));
-			StringTemplate altcode=templates.getInstanceOf("alt");
-			altcode.setAttribute("elements.{el,line,pos}",
+			ST altcode=templates.getInstanceOf("alt");
+			altcode.addAggr("elements.{el,line,pos}",
 								 setcode,
 								 $s.getLine(),
 								 $s.getCharPositionInLine() + 1
 								);
-			altcode.setAttribute("altNum", 1);
-			altcode.setAttribute("outerAlt", blockNestingLevel==RULE_BLOCK_NESTING_LEVEL);
+			altcode.add("altNum", 1);
+			altcode.add("outerAlt", blockNestingLevel==RULE_BLOCK_NESTING_LEVEL);
 			if ( !currentAltHasASTRewrite && grammar.buildAST() )
 			{
-				altcode.setAttribute("autoAST", true);
+				altcode.add("autoAST", true);
 			}
-			altcode.setAttribute("treeLevel", rewriteTreeNestingLevel);
+			altcode.add("treeLevel", rewriteTreeNestingLevel);
 			$code = altcode;
 		}
 	;
@@ -646,28 +648,28 @@ setAlternative
 	:	^(ALT setElement+ EOA)
 	;
 
-exceptionGroup[StringTemplate ruleST]
+exceptionGroup[ST ruleST]
 	:	( exceptionHandler[$ruleST] )+ (finallyClause[$ruleST])?
 	|	finallyClause[$ruleST]
 	;
 
-exceptionHandler[StringTemplate ruleST]
+exceptionHandler[ST ruleST]
 	:	^('catch' ARG_ACTION ACTION)
 		{
 			List chunks = generator.translateAction(currentRuleName,$ACTION);
-			$ruleST.setAttribute("exceptions.{decl,action}",$ARG_ACTION.text,chunks);
+			$ruleST.addAggr("exceptions.{decl,action}",$ARG_ACTION.text,chunks);
 		}
 	;
 
-finallyClause[StringTemplate ruleST]
+finallyClause[ST ruleST]
 	:	^('finally' ACTION)
 		{
 			List chunks = generator.translateAction(currentRuleName,$ACTION);
-			$ruleST.setAttribute("finally",chunks);
+			$ruleST.add("finally",chunks);
 		}
 	;
 
-alternative returns [StringTemplate code]
+alternative returns [ST code]
 @init
 {
 	if ( state.backtracking == 0 )
@@ -680,11 +682,11 @@ alternative returns [StringTemplate code]
 		}
 		String description = grammar.grammarTreeToString($start, false);
 		description = generator.target.getTargetStringLiteralFromString(description);
-		$code.setAttribute("description", description);
-		$code.setAttribute("treeLevel", rewriteTreeNestingLevel);
+		$code.add("description", description);
+		$code.add("treeLevel", rewriteTreeNestingLevel);
 		if ( !currentAltHasASTRewrite && grammar.buildAST() )
 		{
-			$code.setAttribute("autoAST", true);
+			$code.add("autoAST", true);
 		}
 	}
 }
@@ -694,7 +696,7 @@ alternative returns [StringTemplate code]
 				{
 					if (e != null && e.code != null)
 					{
-						$code.setAttribute("elements.{el,line,pos}",
+						$code.addAggr("elements.{el,line,pos}",
 										  $e.code,
 										  $e.start.getLine(),
 										  $e.start.getCharPositionInLine() + 1
@@ -706,7 +708,7 @@ alternative returns [StringTemplate code]
 		)
 	;
 
-element[GrammarAST label, GrammarAST astSuffix] returns [StringTemplate code=null]
+element[GrammarAST label, GrammarAST astSuffix] returns [ST code=null]
 options { k=1; }
 @init
 {
@@ -733,11 +735,11 @@ options { k=1; }
 			$code = templates.getInstanceOf("charRangeRef");
 			String low = generator.target.getTargetCharLiteralFromANTLRCharLiteral(generator,$a.text);
 			String high = generator.target.getTargetCharLiteralFromANTLRCharLiteral(generator,$b.text);
-			$code.setAttribute("a", low);
-			$code.setAttribute("b", high);
+			$code.add("a", low);
+			$code.add("b", high);
 			if ( label!=null )
 			{
-				$code.setAttribute("label", $label.getText());
+				$code.add("label", $label.getText());
 			}
 		}
 
@@ -756,9 +758,9 @@ options { k=1; }
 	|   (sp=SEMPRED|sp=GATED_SEMPRED)
 		{
 			$code = templates.getInstanceOf("validateSemanticPredicate");
-			$code.setAttribute("pred", generator.translateAction(currentRuleName,$sp));
+			$code.add("pred", generator.translateAction(currentRuleName,$sp));
 			String description = generator.target.getTargetStringLiteralFromString($sp.text);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 
 	|	SYN_SEMPRED // used only in lookahead; don't generate validating pred
@@ -770,20 +772,20 @@ options { k=1; }
 	|   EPSILON
 	;
 
-element_action returns [StringTemplate code=null]
+element_action returns [ST code=null]
 	:	act=ACTION
 		{
 			$code = templates.getInstanceOf("execAction");
-			$code.setAttribute("action", generator.translateAction(currentRuleName,$act));
+			$code.add("action", generator.translateAction(currentRuleName,$act));
 		}
 	|	act2=FORCED_ACTION
 		{
 			$code = templates.getInstanceOf("execForcedAction");
-			$code.setAttribute("action", generator.translateAction(currentRuleName,$act2));
+			$code.add("action", generator.translateAction(currentRuleName,$act2));
 		}
 	;
 
-notElement[GrammarAST n, GrammarAST label, GrammarAST astSuffix] returns [StringTemplate code=null]
+notElement[GrammarAST n, GrammarAST label, GrammarAST astSuffix] returns [ST code=null]
 @init
 {
 	IntSet elements=null;
@@ -836,9 +838,9 @@ notElement[GrammarAST n, GrammarAST label, GrammarAST astSuffix] returns [String
 									 (GrammarAST)$n.getChild(0),
 									 astSuffix,
 									 labelText);
-			$code.setAttribute("s",generator.genSetExpr(templates,elements,1,false));
+			$code.add("s",generator.genSetExpr(templates,elements,1,false));
 			int i = ((CommonToken)n.getToken()).getTokenIndex();
-			$code.setAttribute("elementIndex", i);
+			$code.add("elementIndex", i);
 			if ( grammar.type!=Grammar.LEXER )
 			{
 				generator.generateLocalFOLLOW(n,"set",currentRuleName,i);
@@ -846,7 +848,7 @@ notElement[GrammarAST n, GrammarAST label, GrammarAST astSuffix] returns [String
 		}
 	;
 
-ebnf returns [StringTemplate code=null]
+ebnf returns [ST code=null]
 @init
 {
 	org.antlr.analysis.DFA dfa=null;
@@ -869,11 +871,11 @@ ebnf returns [StringTemplate code=null]
 		{
 			String description = grammar.grammarTreeToString($start, false);
 			description = generator.target.getTargetStringLiteralFromString(description);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 	;
 
-tree_ returns [StringTemplate code]
+tree_ returns [ST code]
 @init
 {
 	rewriteTreeNestingLevel++;
@@ -887,10 +889,10 @@ tree_ returns [StringTemplate code]
 			// nullable child list if we can see the UP as the next token
 			// we need an "if ( input.LA(1)==Token.DOWN )" gate around
 			// the child list.
-			$code.setAttribute("nullableChildList", "true");
+			$code.add("nullableChildList", "true");
 		}
-		$code.setAttribute("enclosingTreeLevel", rewriteTreeNestingLevel-1);
-		$code.setAttribute("treeLevel", rewriteTreeNestingLevel);
+		$code.add("enclosingTreeLevel", rewriteTreeNestingLevel-1);
+		$code.add("treeLevel", rewriteTreeNestingLevel);
 		Rule r = grammar.getRule(currentRuleName);
 		if ( grammar.buildAST() && !r.hasRewrite(outerAltNum) ) {
 			rootSuffix = new GrammarAST(ROOT,"ROOT");
@@ -900,7 +902,7 @@ tree_ returns [StringTemplate code]
 	:	^(	TREE_BEGIN
 			el=element[null,rootSuffix]
 			{
-				$code.setAttribute("root.{el,line,pos}",
+				$code.addAggr("root.{el,line,pos}",
 								  $el.code,
 								  $el.start.getLine(),
 								  $el.start.getCharPositionInLine() + 1
@@ -912,7 +914,7 @@ tree_ returns [StringTemplate code]
 			(	(element_action) =>
 				act=element_action
 				{
-					$code.setAttribute("actionsAfterRoot.{el,line,pos}",
+					$code.addAggr("actionsAfterRoot.{el,line,pos}",
 									  $act.code,
 									  $act.start.getLine(),
 									  $act.start.getCharPositionInLine() + 1
@@ -921,7 +923,7 @@ tree_ returns [StringTemplate code]
 			)*
 			(	 el=element[null,null]
 				 {
-				 $code.setAttribute("children.{el,line,pos}",
+				 $code.addAggr("children.{el,line,pos}",
 								  $el.code,
 								  $el.start.getLine(),
 								  $el.start.getCharPositionInLine() + 1
@@ -932,8 +934,8 @@ tree_ returns [StringTemplate code]
 	;
 finally { rewriteTreeNestingLevel--; }
 
-atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix] 
-	returns [StringTemplate code=null]
+atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
+	returns [ST code=null]
 @init
 {
 	String labelText=null;
@@ -973,23 +975,23 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 				labelText = null;
 			}
 			$code = getRuleElementST("ruleRef", $r.text, $r, astSuffix, labelText);
-			$code.setAttribute("rule", rdef);
+			$code.add("rule", rdef);
 			if ( scope!=null ) { // scoped rule ref
 				Grammar scopeG = grammar.composite.getGrammar(scope.getText());
-				$code.setAttribute("scope", scopeG);
+				$code.add("scope", scopeG);
 			}
 			else if ( rdef.grammar != this.grammar ) { // nonlocal
 				// if rule definition is not in this grammar, it's nonlocal
 				List<Grammar> rdefDelegates = rdef.grammar.getDelegates();
 				if ( rdefDelegates.contains(this.grammar) ) {
-					$code.setAttribute("scope", rdef.grammar);
+					$code.add("scope", rdef.grammar);
 				}
 				else {
 					// defining grammar is not a delegate, scope all the
 					// back to root, which has delegate methods for all
 					// rules.  Don't use scope if we are root.
 					if ( this.grammar != rdef.grammar.composite.delegateGrammarTreeRoot.grammar ) {
-						$code.setAttribute("scope",
+						$code.add("scope",
 										  rdef.grammar.composite.delegateGrammarTreeRoot.grammar);
 					}
 				}
@@ -997,10 +999,10 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 
 			if ( $rarg!=null ) {
 				List args = generator.translateAction(currentRuleName,$rarg);
-				$code.setAttribute("args", args);
+				$code.add("args", args);
 			}
 			int i = ((CommonToken)r.getToken()).getTokenIndex();
-			$code.setAttribute("elementIndex", i);
+			$code.add("elementIndex", i);
 			generator.generateLocalFOLLOW($r,$r.text,currentRuleName,i);
 			$r.code = $code;
 		}
@@ -1035,66 +1037,66 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 						scopeName = scope.getText();
 					}
 					Rule rdef2 = grammar.getRule(scopeName, $t.text);
-					$code.setAttribute("rule", rdef2);
+					$code.add("rule", rdef2);
 					if ( scope!=null )
 					{ // scoped rule ref
 						Grammar scopeG = grammar.composite.getGrammar(scope.getText());
-						$code.setAttribute("scope", scopeG);
+						$code.add("scope", scopeG);
 					}
 					else if ( rdef2.grammar != this.grammar )
 					{ // nonlocal
 						// if rule definition is not in this grammar, it's nonlocal
-						$code.setAttribute("scope", rdef2.grammar);
+						$code.add("scope", rdef2.grammar);
 					}
 					if ( $targ!=null )
 					{
 						List args = generator.translateAction(currentRuleName,$targ);
-						$code.setAttribute("args", args);
+						$code.add("args", args);
 					}
 				}
 				int i = ((CommonToken)$t.getToken()).getTokenIndex();
-				$code.setAttribute("elementIndex", i);
+				$code.add("elementIndex", i);
 				if ( label!=null )
-					$code.setAttribute("label", labelText);
+					$code.add("label", labelText);
 			}
 			else
 			{
 				$code = getTokenElementST("tokenRef", $t.text, $t, astSuffix, labelText);
 				String tokenLabel =
 					generator.getTokenTypeAsTargetLabel(grammar.getTokenType(t.getText()));
-				$code.setAttribute("token",tokenLabel);
+				$code.add("token",tokenLabel);
 				if ( !currentAltHasASTRewrite && $t.terminalOptions!=null )
-				{ 
-					$code.setAttribute("terminalOptions", $t.terminalOptions);
+				{
+					$code.add("terminalOptions", $t.terminalOptions);
 				}
 				int i = ((CommonToken)$t.getToken()).getTokenIndex();
-				$code.setAttribute("elementIndex", i);
+				$code.add("elementIndex", i);
 				generator.generateLocalFOLLOW($t,tokenLabel,currentRuleName,i);
 			}
 			$t.code = $code;
 		}
 
-	|	c=CHAR_LITERAL 
+	|	c=CHAR_LITERAL
 		{
 			if ( grammar.type==Grammar.LEXER )
 			{
 				$code = templates.getInstanceOf("charRef");
-				$code.setAttribute("char",
+				$code.add("char",
 				   generator.target.getTargetCharLiteralFromANTLRCharLiteral(generator,$c.text));
 				if ( label!=null )
 				{
-					$code.setAttribute("label", labelText);
+					$code.add("label", labelText);
 				}
 			}
 			else { // else it's a token type reference
 				$code = getTokenElementST("tokenRef", "char_literal", $c, astSuffix, labelText);
 				String tokenLabel = generator.getTokenTypeAsTargetLabel(grammar.getTokenType($c.text));
-				$code.setAttribute("token",tokenLabel);
+				$code.add("token",tokenLabel);
 				if ( $c.terminalOptions!=null ) {
-					$code.setAttribute("terminalOptions",$c.terminalOptions);
+					$code.add("terminalOptions",$c.terminalOptions);
 				}
 				int i = ((CommonToken)$c.getToken()).getTokenIndex();
-				$code.setAttribute("elementIndex", i);
+				$code.add("elementIndex", i);
 				generator.generateLocalFOLLOW($c,tokenLabel,currentRuleName,i);
 			}
 		}
@@ -1105,12 +1107,12 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 			if ( grammar.type==Grammar.LEXER )
 			{
 				$code = templates.getInstanceOf("lexerStringRef");
-				$code.setAttribute("string",
+				$code.add("string",
 					generator.target.getTargetStringLiteralFromANTLRStringLiteral(generator,$s.text));
-				$code.setAttribute("elementIndex", i);
+				$code.add("elementIndex", i);
 				if ( label!=null )
 				{
-					$code.setAttribute("label", labelText);
+					$code.add("label", labelText);
 				}
 			}
 			else
@@ -1119,12 +1121,12 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 				$code = getTokenElementST("tokenRef", "string_literal", $s, astSuffix, labelText);
 				String tokenLabel =
 					generator.getTokenTypeAsTargetLabel(grammar.getTokenType($s.text));
-				$code.setAttribute("token",tokenLabel);
+				$code.add("token",tokenLabel);
 				if ( $s.terminalOptions!=null )
 				{
-					$code.setAttribute("terminalOptions",$s.terminalOptions);
+					$code.add("terminalOptions",$s.terminalOptions);
 				}
-				$code.setAttribute("elementIndex", i);
+				$code.add("elementIndex", i);
 				generator.generateLocalFOLLOW($s,tokenLabel,currentRuleName,i);
 			}
 		}
@@ -1132,7 +1134,7 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 	|	w=WILDCARD
 		{
 			$code = getWildcardST($w,astSuffix,labelText);
-			$code.setAttribute("elementIndex", ((CommonToken)$w.getToken()).getTokenIndex());
+			$code.add("elementIndex", ((CommonToken)$w.getToken()).getTokenIndex());
 		}
 
 	|	^(DOT ID a=atom[$ID, label, astSuffix]) // scope override on rule or token
@@ -1147,7 +1149,7 @@ ast_suffix
 	|	BANG
 	;
 
-set[GrammarAST label, GrammarAST astSuffix] returns [StringTemplate code=null]
+set[GrammarAST label, GrammarAST astSuffix] returns [ST code=null]
 @init
 {
 	String labelText=null;
@@ -1160,12 +1162,12 @@ set[GrammarAST label, GrammarAST astSuffix] returns [StringTemplate code=null]
 		{
 			$code = getTokenElementST("matchSet", "set", $s, astSuffix, labelText);
 			int i = ((CommonToken)$s.getToken()).getTokenIndex();
-			$code.setAttribute("elementIndex", i);
+			$code.add("elementIndex", i);
 			if ( grammar.type!=Grammar.LEXER )
 			{
 				generator.generateLocalFOLLOW($s,"set",currentRuleName,i);
 			}
-			$code.setAttribute("s", generator.genSetExpr(templates,$s.getSetValue(),1,false));
+			$code.add("s", generator.genSetExpr(templates,$s.getSetValue(),1,false));
 		}
 	;
 
@@ -1178,7 +1180,7 @@ setElement
 
 // REWRITE stuff
 
-rewrite returns [StringTemplate code=null]
+rewrite returns [ST code=null]
 @init
 {
 	if ( state.backtracking == 0 )
@@ -1192,9 +1194,9 @@ rewrite returns [StringTemplate code=null]
 			else
 			{
 				$code = templates.getInstanceOf("rewriteCode");
-				$code.setAttribute("treeLevel", OUTER_REWRITE_NESTING_LEVEL);
-				$code.setAttribute("rewriteBlockLevel", OUTER_REWRITE_NESTING_LEVEL);
-				$code.setAttribute("referencedElementsDeep",
+				$code.add("treeLevel", OUTER_REWRITE_NESTING_LEVEL);
+				$code.add("rewriteBlockLevel", OUTER_REWRITE_NESTING_LEVEL);
+				$code.add("referencedElementsDeep",
 								  getTokenTypesAsTargetLabels($start.rewriteRefsDeep));
 				Set<String> tokenLabels =
 					grammar.getLabels($start.rewriteRefsDeep, Grammar.TOKEN_LABEL);
@@ -1210,21 +1212,21 @@ rewrite returns [StringTemplate code=null]
 					grammar.getLabels($start.rewriteRefsDeep, Grammar.WILDCARD_TREE_LIST_LABEL);
 				// just in case they ref $r for "previous value", make a stream
 				// from retval.tree
-				StringTemplate retvalST = templates.getInstanceOf("prevRuleRootRef");
-				ruleLabels.add(retvalST.toString());
-				$code.setAttribute("referencedTokenLabels", tokenLabels);
-				$code.setAttribute("referencedTokenListLabels", tokenListLabels);
-				$code.setAttribute("referencedRuleLabels", ruleLabels);
-				$code.setAttribute("referencedRuleListLabels", ruleListLabels);
-				$code.setAttribute("referencedWildcardLabels", wildcardLabels);
-				$code.setAttribute("referencedWildcardListLabels", wildcardListLabels);
+				ST retvalST = templates.getInstanceOf("prevRuleRootRef");
+				ruleLabels.add(retvalST.render());
+				$code.add("referencedTokenLabels", tokenLabels);
+				$code.add("referencedTokenListLabels", tokenListLabels);
+				$code.add("referencedRuleLabels", ruleLabels);
+				$code.add("referencedRuleListLabels", ruleListLabels);
+				$code.add("referencedWildcardLabels", wildcardLabels);
+				$code.add("referencedWildcardListLabels", wildcardListLabels);
 			}
 		}
 		else
 		{
 				$code = templates.getInstanceOf("noRewrite");
-				$code.setAttribute("treeLevel", OUTER_REWRITE_NESTING_LEVEL);
-				$code.setAttribute("rewriteBlockLevel", OUTER_REWRITE_NESTING_LEVEL);
+				$code.add("treeLevel", OUTER_REWRITE_NESTING_LEVEL);
+				$code.add("rewriteBlockLevel", OUTER_REWRITE_NESTING_LEVEL);
 		}
 	}
 }
@@ -1243,7 +1245,7 @@ rewrite returns [StringTemplate code=null]
 					String description =
 						grammar.grammarTreeToString($r,false);
 					description = generator.target.getTargetStringLiteralFromString(description);
-					$code.setAttribute("alts.{pred,alt,description}",
+					$code.addAggr("alts.{pred,alt,description}",
 									  predChunks,
 									  alt,
 									  description);
@@ -1254,40 +1256,40 @@ rewrite returns [StringTemplate code=null]
 	|
 	;
 
-rewrite_block[String blockTemplateName] returns [StringTemplate code=null]
+rewrite_block[String blockTemplateName] returns [ST code=null]
 @init
 {
 	rewriteBlockNestingLevel++;
-	StringTemplate save_currentBlockST = currentBlockST;
+	ST save_currentBlockST = currentBlockST;
 	if ( state.backtracking == 0 )
 	{
 		$code = templates.getInstanceOf(blockTemplateName);
 		currentBlockST = $code;
-		$code.setAttribute("rewriteBlockLevel", rewriteBlockNestingLevel);
+		$code.add("rewriteBlockLevel", rewriteBlockNestingLevel);
 	}
 }
 	:	^(	BLOCK
 			{
-				currentBlockST.setAttribute("referencedElementsDeep",
+				currentBlockST.add("referencedElementsDeep",
 					getTokenTypesAsTargetLabels($BLOCK.rewriteRefsDeep));
-				currentBlockST.setAttribute("referencedElements",
+				currentBlockST.add("referencedElements",
 					getTokenTypesAsTargetLabels($BLOCK.rewriteRefsShallow));
 			}
 			alt=rewrite_alternative
 			EOB
 		)
 		{
-			$code.setAttribute("alt", $alt.code);
+			$code.add("alt", $alt.code);
 		}
 	;
 finally { rewriteBlockNestingLevel--; currentBlockST = save_currentBlockST; }
 
-rewrite_alternative returns [StringTemplate code=null]
+rewrite_alternative returns [ST code=null]
 	:	{generator.grammar.buildAST()}?
 		^(	a=ALT {$code=templates.getInstanceOf("rewriteElementList");}
 			(	(
 					el=rewrite_element
-					{$code.setAttribute("elements.{el,line,pos}",
+					{$code.addAggr("elements.{el,line,pos}",
 										$el.code,
 										$el.start.getLine(),
 										$el.start.getCharPositionInLine() + 1
@@ -1295,7 +1297,7 @@ rewrite_alternative returns [StringTemplate code=null]
 					}
 				)+
 			|	EPSILON
-				{$code.setAttribute("elements.{el,line,pos}",
+				{$code.addAggr("elements.{el,line,pos}",
 								   templates.getInstanceOf("rewriteEmptyAlt"),
 								   $a.getLine(),
 								   $a.getCharPositionInLine() + 1
@@ -1312,7 +1314,7 @@ rewrite_alternative returns [StringTemplate code=null]
 		ETC
 	;
 
-rewrite_element returns [StringTemplate code=null]
+rewrite_element returns [ST code=null]
 @init
 {
 	IntSet elements=null;
@@ -1326,45 +1328,45 @@ rewrite_element returns [StringTemplate code=null]
 		{ $code = $rewrite_tree.code; }
 	;
 
-rewrite_ebnf returns [StringTemplate code=null]
+rewrite_ebnf returns [ST code=null]
 	:	^( OPTIONAL rewrite_block["rewriteOptionalBlock"] )
 		{ $code = $rewrite_block.code; }
 		{
 			String description = grammar.grammarTreeToString($start, false);
 			description = generator.target.getTargetStringLiteralFromString(description);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 	|	^( CLOSURE rewrite_block["rewriteClosureBlock"] )
 		{ $code = $rewrite_block.code; }
 		{
 			String description = grammar.grammarTreeToString($start, false);
 			description = generator.target.getTargetStringLiteralFromString(description);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 	|	^( POSITIVE_CLOSURE rewrite_block["rewritePositiveClosureBlock"] )
 		{ $code = $rewrite_block.code; }
 		{
 			String description = grammar.grammarTreeToString($start, false);
 			description = generator.target.getTargetStringLiteralFromString(description);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 	;
 
-rewrite_tree returns [StringTemplate code]
+rewrite_tree returns [ST code]
 @init
 {
 	rewriteTreeNestingLevel++;
 	if ( state.backtracking == 0 )
 	{
 		$code = templates.getInstanceOf("rewriteTree");
-		$code.setAttribute("treeLevel", rewriteTreeNestingLevel);
-		$code.setAttribute("enclosingTreeLevel", rewriteTreeNestingLevel-1);
+		$code.add("treeLevel", rewriteTreeNestingLevel);
+		$code.add("enclosingTreeLevel", rewriteTreeNestingLevel-1);
 	}
 }
 	:	^(	TREE_BEGIN
 			r=rewrite_atom[true]
 			{
-				$code.setAttribute("root.{el,line,pos}",
+				$code.addAggr("root.{el,line,pos}",
 								   $r.code,
 								   $r.start.getLine(),
 								   $r.start.getCharPositionInLine() + 1
@@ -1373,7 +1375,7 @@ rewrite_tree returns [StringTemplate code]
 			(
 			  el=rewrite_element
 			  {
-				$code.setAttribute("children.{el,line,pos}",
+				$code.addAggr("children.{el,line,pos}",
 									$el.code,
 									$el.start.getLine(),
 									$el.start.getCharPositionInLine() + 1
@@ -1384,12 +1386,12 @@ rewrite_tree returns [StringTemplate code]
 		{
 			String description = grammar.grammarTreeToString($start, false);
 			description = generator.target.getTargetStringLiteralFromString(description);
-			$code.setAttribute("description", description);
+			$code.add("description", description);
 		}
 	;
 finally { rewriteTreeNestingLevel--; }
 
-rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
+rewrite_atom[boolean isRoot] returns [ST code=null]
 	:   r=RULE_REF
 		{
 			String ruleRefName = $r.text;
@@ -1399,14 +1401,14 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 				stName += "Root";
 			}
 			$code = templates.getInstanceOf(stName);
-			$code.setAttribute("rule", ruleRefName);
+			$code.add("rule", ruleRefName);
 			if ( grammar.getRule(ruleRefName)==null )
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_UNDEFINED_RULE_REF,
 										  grammar,
 										  ((GrammarAST)($r)).getToken(),
 										  ruleRefName);
-				$code = new StringTemplate(); // blank; no code gen
+				$code = new ST(""); // blank; no code gen
 			}
 			else if ( grammar.getRule(currentRuleName)
 						 .getRuleRefsInAlt(ruleRefName,outerAltNum)==null )
@@ -1415,7 +1417,7 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 										  grammar,
 										  ((GrammarAST)($r)).getToken(),
 										  ruleRefName);
-				$code = new StringTemplate(); // blank; no code gen
+				$code = new ST(); // blank; no code gen
 			}
 			else
 			{
@@ -1450,23 +1452,23 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 				stName += "Root";
 			}
 			$code = templates.getInstanceOf(stName);
-			$code.setAttribute("terminalOptions",term.terminalOptions);
+			$code.add("terminalOptions",term.terminalOptions);
 			if ( $arg!=null )
 			{
 				List args = generator.translateAction(currentRuleName,$arg);
-				$code.setAttribute("args", args);
+				$code.add("args", args);
 			}
-			$code.setAttribute("elementIndex", ((CommonToken)$start.getToken()).getTokenIndex());
+			$code.add("elementIndex", ((CommonToken)$start.getToken()).getTokenIndex());
 			int ttype = grammar.getTokenType(tokenName);
 			String tok = generator.getTokenTypeAsTargetLabel(ttype);
-			$code.setAttribute("token", tok);
+			$code.add("token", tok);
 			if ( grammar.getTokenType(tokenName)==Label.INVALID )
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_UNDEFINED_TOKEN_REF_IN_REWRITE,
 										  grammar,
 										  ((GrammarAST)($start)).getToken(),
 										  tokenName);
-				$code = new StringTemplate(); // blank; no code gen
+				$code = new ST(); // blank; no code gen
 			}
 		}
 
@@ -1486,9 +1488,9 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 											  ((GrammarAST)($LABEL)).getToken(),
 											  labelName);
 				}
-				StringTemplate labelST = templates.getInstanceOf("prevRuleRootRef");
+				ST labelST = templates.getInstanceOf("prevRuleRootRef");
 				$code = templates.getInstanceOf("rewriteRuleLabelRef"+(isRoot?"Root":""));
-				$code.setAttribute("label", labelST);
+				$code.add("label", labelST);
 			}
 			else if ( pair==null )
 			{
@@ -1496,7 +1498,7 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 										  grammar,
 										  ((GrammarAST)($LABEL)).getToken(),
 										  labelName);
-				$code = new StringTemplate();
+				$code = new ST();
 			}
 			else
 			{
@@ -1527,7 +1529,7 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 					stName += "Root";
 				}
 				$code = templates.getInstanceOf(stName);
-				$code.setAttribute("label", labelName);
+				$code.add("label", labelName);
 			}
 		}
 
@@ -1537,12 +1539,12 @@ rewrite_atom[boolean isRoot] returns [StringTemplate code=null]
 			String actText = $ACTION.text;
 			List chunks = generator.translateAction(currentRuleName,$ACTION);
 			$code = templates.getInstanceOf("rewriteNodeAction"+(isRoot?"Root":""));
-			$code.setAttribute("action", chunks);
+			$code.add("action", chunks);
 		}
 	;
 
 public
-rewrite_template returns [StringTemplate code=null]
+rewrite_template returns [ST code=null]
 	:	^( ALT EPSILON EOA ) {$code=templates.getInstanceOf("rewriteEmptyTemplate");}
 	|	^(	TEMPLATE (id=ID|ind=ACTION)
 			{
@@ -1553,13 +1555,13 @@ rewrite_template returns [StringTemplate code=null]
 				else if ( $id!=null )
 				{
 						$code = templates.getInstanceOf("rewriteExternalTemplate");
-						$code.setAttribute("name", $id.text);
+						$code.add("name", $id.text);
 				}
 				else if ( $ind!=null )
 				{ // must be \%({expr})(args)
 					$code = templates.getInstanceOf("rewriteIndirectTemplate");
 					List chunks=generator.translateAction(currentRuleName,$ind);
-					$code.setAttribute("expr", chunks);
+					$code.add("expr", chunks);
 				}
 			}
 			^(	ARGLIST
@@ -1570,7 +1572,7 @@ rewrite_template returns [StringTemplate code=null]
 						// broken up yet into trees.
 						$a.outerAltNum = this.outerAltNum;
 						List chunks = generator.translateAction(currentRuleName,$a);
-						$code.setAttribute("args.{name,value}", $arg.text, chunks);
+						$code.addAggr("args.{name,value}", $arg.text, chunks);
 					}
 					)
 				)*
@@ -1580,14 +1582,14 @@ rewrite_template returns [StringTemplate code=null]
 					String sl = $DOUBLE_QUOTE_STRING_LITERAL.text;
 					String t = sl.substring( 1, sl.length() - 1 ); // strip quotes
 					t = generator.target.getTargetStringLiteralFromString(t);
-					$code.setAttribute("template",t);
+					$code.add("template",t);
 				}
 			|	DOUBLE_ANGLE_STRING_LITERAL
 				{
 					String sl = $DOUBLE_ANGLE_STRING_LITERAL.text;
 					String t = sl.substring( 2, sl.length() - 2 ); // strip double angle quotes
 					t = generator.target.getTargetStringLiteralFromString(t);
-					$code.setAttribute("template",t);
+					$code.add("template",t);
 				}
 			)?
 		)
@@ -1597,7 +1599,7 @@ rewrite_template returns [StringTemplate code=null]
 			// set alt num for same reason as ARGLIST above
 			$act.outerAltNum = this.outerAltNum;
 			$code=templates.getInstanceOf("rewriteAction");
-			$code.setAttribute("action",
+			$code.add("action",
 							  generator.translateAction(currentRuleName,$act));
 		}
 	;

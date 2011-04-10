@@ -32,7 +32,7 @@ import org.antlr.misc.IntSet;
 import org.antlr.misc.IntervalSet;
 import org.antlr.misc.Utils;
 import org.antlr.runtime.IntStream;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.*;
 
 import java.util.*;
@@ -446,7 +446,7 @@ public class DFA {
 		// now that we have computed list of specialStates, gen code for 'em
 		for (int i = 0; i < specialStates.size(); i++) {
 			DFAState ss = (DFAState) specialStates.get(i);
-			StringTemplate stateST =
+			ST stateST =
 				generator.generateSpecialState(ss);
 			specialStateSTs.add(stateST);
 		}

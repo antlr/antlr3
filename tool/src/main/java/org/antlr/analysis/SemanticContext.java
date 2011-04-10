@@ -29,8 +29,8 @@ package org.antlr.analysis;
 
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarAST;
 
@@ -75,8 +75,8 @@ public abstract class SemanticContext {
 	/** Generate an expression that will evaluate the semantic context,
 	 *  given a set of output templates.
 	 */
-	public abstract StringTemplate genExpr(CodeGenerator generator,
-										   StringTemplateGroup templates,
+	public abstract ST genExpr(CodeGenerator generator,
+										   STGroup templates,
 										   DFA dfa);
 
 	public abstract boolean hasUserSemanticPredicate(); // user-specified sempred {}? or {}?=>
@@ -155,11 +155,11 @@ public abstract class SemanticContext {
 			return predicateAST.getText().hashCode();
 		}
 
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
-			StringTemplate eST = null;
+			ST eST = null;
 			if ( templates!=null ) {
 				if ( synpred ) {
 					eST = templates.getInstanceOf("evalSynPredicate");
@@ -176,21 +176,21 @@ public abstract class SemanticContext {
 				// Currently I don't warn you about this as it could be annoying.
 				// I do the translation anyway.
 				*/
-				//eST.setAttribute("pred", this.toString());
+				//eST.add("pred", this.toString());
 				if ( generator!=null ) {
-					eST.setAttribute("pred",
+					eST.add("pred",
 									 generator.translateAction(predEnclosingRuleName,predicateAST));
 				}
 			}
 			else {
-				eST = new StringTemplate("$pred$");
-				eST.setAttribute("pred", this.toString());
+				eST = new ST("<pred>");
+				eST.add("pred", this.toString());
 				return eST;
 			}
 			if ( generator!=null ) {
 				String description =
 					generator.target.getTargetStringLiteralFromString(this.toString());
-				eST.setAttribute("description", description);
+				eST.add("description", description);
 			}
 			return eST;
 		}
@@ -235,14 +235,14 @@ public abstract class SemanticContext {
 			this.constantValue = TRUE_PRED;
 		}
 
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
 			if ( templates!=null ) {
-				return templates.getInstanceOf("true");
+				return templates.getInstanceOf("true_value");
 			}
-			return new StringTemplate("true");
+			return new ST("true");
 		}
 
 		@Override
@@ -261,14 +261,14 @@ public abstract class SemanticContext {
 			super();
 			this.constantValue = FALSE_PRED;
 		}
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
 			if ( templates!=null ) {
 				return templates.getInstanceOf("false");
 			}
-			return new StringTemplate("false");
+			return new ST("false");
 		}
 		public String toString() {
 			return "false"; // not used for code gen, just DOT and print outs
@@ -282,19 +282,19 @@ public abstract class SemanticContext {
 			this.left = a;
 			this.right = b;
 		}
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
-			StringTemplate eST = null;
+			ST eST = null;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("andPredicates");
 			}
 			else {
-				eST = new StringTemplate("($left$&&$right$)");
+				eST = new ST("(<left>&&<right>)");
 			}
-			eST.setAttribute("left", left.genExpr(generator,templates,dfa));
-			eST.setAttribute("right", right.genExpr(generator,templates,dfa));
+			eST.add("left", left.genExpr(generator,templates,dfa));
+			eST.add("right", right.genExpr(generator,templates,dfa));
 			return eST;
 		}
 		public SemanticContext getGatedPredicateContext() {
@@ -343,20 +343,21 @@ public abstract class SemanticContext {
 				operands.add(b);
 			}
 		}
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
-			StringTemplate eST = null;
+			ST eST = null;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("orPredicates");
 			}
 			else {
-				eST = new StringTemplate("($first(operands)$$rest(operands):{o | ||$o$}$)");
+				// looks like these are called during testing
+				eST = new ST("(<first(operands)><rest(operands):{o | ||<o>}>)");
 			}
 			for (Iterator it = operands.iterator(); it.hasNext();) {
 				SemanticContext semctx = (SemanticContext) it.next();
-				eST.setAttribute("operands", semctx.genExpr(generator,templates,dfa));
+				eST.add("operands", semctx.genExpr(generator,templates,dfa));
 			}
 			return eST;
 		}
@@ -419,18 +420,18 @@ public abstract class SemanticContext {
 		public NOT(SemanticContext ctx) {
 			this.ctx = ctx;
 		}
-		public StringTemplate genExpr(CodeGenerator generator,
-									  StringTemplateGroup templates,
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
 									  DFA dfa)
 		{
-			StringTemplate eST = null;
+			ST eST = null;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("notPredicate");
 			}
 			else {
-				eST = new StringTemplate("?!($pred$)");
+				eST = new ST("!(<pred>)");
 			}
-			eST.setAttribute("pred", ctx.genExpr(generator,templates,dfa));
+			eST.add("pred", ctx.genExpr(generator,templates,dfa));
 			return eST;
 		}
 		public SemanticContext getGatedPredicateContext() {

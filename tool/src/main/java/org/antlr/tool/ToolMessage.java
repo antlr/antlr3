@@ -27,7 +27,7 @@
  */
 package org.antlr.tool;
 
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /** A generic message from the tool such as "file not found" type errors; there
  *  is no reason to create a special object for each error unlike the grammar
@@ -59,16 +59,16 @@ public class ToolMessage extends Message {
 		this.e = e;
 	}
 	public String toString() {
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		if ( arg!=null ) {
-			st.setAttribute("arg", arg);
+			st.add("arg", arg);
 		}
 		if ( arg2!=null ) {
-			st.setAttribute("arg2", arg2);
+			st.add("arg2", arg2);
 		}
 		if ( e!=null ) {
-			st.setAttribute("exception", e);
-			st.setAttribute("stackTrace", e.getStackTrace());
+			st.add("exception", e);
+			st.add("stackTrace", e.getStackTrace());
 		}
 		return super.toString(st);
 	}

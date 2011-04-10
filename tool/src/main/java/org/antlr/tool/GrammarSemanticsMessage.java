@@ -28,7 +28,7 @@
 package org.antlr.tool;
 
 import org.antlr.runtime.Token;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 /** A problem with the symbols and/or meaning of a grammar such as rule
  *  redefinition.
@@ -76,12 +76,12 @@ public class GrammarSemanticsMessage extends Message {
 		if ( g!=null ) {
 			file = g.getFileName();
 		}
-		StringTemplate st = getMessageTemplate();
+		ST st = getMessageTemplate();
 		if ( arg!=null ) {
-			st.setAttribute("arg", arg);
+			st.add("arg", arg);
 		}
 		if ( arg2!=null ) {
-			st.setAttribute("arg2", arg2);
+			st.add("arg2", arg2);
 		}
 		return super.toString(st);
 	}

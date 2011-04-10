@@ -29,7 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.Collection;
 import java.util.List;
@@ -67,15 +67,15 @@ public class RecursionOverflowMessage extends Message {
 			file = fileName;
 		}
 
-		StringTemplate st = getMessageTemplate();
-		st.setAttribute("targetRules", targetRules);
-		st.setAttribute("alt", alt);
-		st.setAttribute("callSiteStates", callSiteStates);
+		ST st = getMessageTemplate();
+		st.add("targetRules", targetRules);
+		st.add("alt", alt);
+		st.add("callSiteStates", callSiteStates);
 
 		List labels =
 			probe.getSampleNonDeterministicInputSequence(sampleBadState);
 		String input = probe.getInputSequenceDisplay(labels);
-		st.setAttribute("input", input);
+		st.add("input", input);
 
 		return super.toString(st);
 	}

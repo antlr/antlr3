@@ -29,7 +29,7 @@ package org.antlr.test;
 
 import org.antlr.Tool;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
 import org.junit.Test;
 
@@ -244,8 +244,8 @@ public class TestLexer extends BaseTest {
         CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
         g.setCodeGenerator(generator);
         generator.genRecognizer(); // codegen phase sets some vars we need
-        StringTemplate codeST = generator.getRecognizerST();
-        String code = codeST.toString();
+        ST codeST = generator.getRecognizerST();
+        String code = codeST.render();
         int m = code.indexOf("match(\"");
         String found = code.substring(m,m+expecting.length());
 

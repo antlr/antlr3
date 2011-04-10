@@ -28,7 +28,7 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;
@@ -42,13 +42,13 @@ public class CTarget extends Target {
     protected void genRecognizerFile(Tool tool,
             CodeGenerator generator,
             Grammar grammar,
-            StringTemplate outputFileST)
+            ST outputFileST)
             throws IOException {
 
         // Before we write this, and cause it to generate its string,
         // we need to add all the string literals that we are going to match
         //
-        outputFileST.setAttribute("literals", strings);
+        outputFileST.add("literals", strings);
         String fileName = generator.getRecognizerFileName(grammar.name, grammar.type);
         generator.write(outputFileST, fileName);
     }
@@ -57,7 +57,7 @@ public class CTarget extends Target {
     protected void genRecognizerHeaderFile(Tool tool,
             CodeGenerator generator,
             Grammar grammar,
-            StringTemplate headerFileST,
+            ST headerFileST,
             String extName)
             throws IOException {
         // Pick up the file name we are generating. This method will return a
@@ -70,11 +70,11 @@ public class CTarget extends Target {
         generator.write(headerFileST, fileName);
     }
 
-    protected StringTemplate chooseWhereCyclicDFAsGo(Tool tool,
+    protected ST chooseWhereCyclicDFAsGo(Tool tool,
             CodeGenerator generator,
             Grammar grammar,
-            StringTemplate recognizerST,
-            StringTemplate cyclicDFAST) {
+            ST recognizerST,
+            ST cyclicDFAST) {
         return recognizerST;
     }
 

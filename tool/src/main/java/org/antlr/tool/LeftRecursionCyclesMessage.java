@@ -27,7 +27,7 @@
  */
 package org.antlr.tool;
 
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import java.util.Collection;
 
@@ -44,8 +44,8 @@ public class LeftRecursionCyclesMessage extends Message {
 	}
 
 	public String toString() {
-		StringTemplate st = getMessageTemplate();
-		st.setAttribute("listOfCycles", cycles);
+		ST st = getMessageTemplate();
+		st.add("listOfCycles", cycles);
 		return super.toString(st);
 	}
 }

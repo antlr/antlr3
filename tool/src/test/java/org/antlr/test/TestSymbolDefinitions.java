@@ -30,7 +30,7 @@ package org.antlr.test;
 import org.antlr.Tool;
 import org.antlr.analysis.Label;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 import org.antlr.tool.*;
 import org.junit.Test;
 
@@ -119,7 +119,6 @@ public class TestSymbolDefinitions extends BaseTest {
 
 		String implicitLexer =
 			"lexer grammar t;" + newline +
-			"" + newline +
 			"T__5 : 'x' ;" + newline +
 			"" + newline +
 			"// $ANTLR src \"<string>\" 3" + newline +
@@ -227,8 +226,8 @@ public class TestSymbolDefinitions extends BaseTest {
 		Tool antlr = newTool();
 		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
 		g.setCodeGenerator(generator);
-		StringTemplate recogST = generator.genRecognizer();
-		String code = recogST.toString();
+		ST recogST = generator.genRecognizer();
+		String code = recogST.render();
 		assertTrue("not expecting label", code.indexOf("x=b();")<0);
 
 		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());

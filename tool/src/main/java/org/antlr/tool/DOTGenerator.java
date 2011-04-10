@@ -31,9 +31,9 @@ import org.antlr.Tool;
 import org.antlr.analysis.*;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.Utils;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupDir;
 
 import java.util.*;
 
@@ -45,8 +45,7 @@ public class DOTGenerator {
 	protected String rankdir="LR";
 
 	/** Library of output templates; use <attrname> format */
-    public static StringTemplateGroup stlib =
-            new StringTemplateGroup("toollib", AngleBracketTemplateLexer.class);
+    public static STGroup stlib = new STGroupDir("org/antlr/tool/templates/dot/dfa");
 
     /** To prevent infinite recursion when walking state machines, record
      *  which states we've visited.  Make a new set every time you start
@@ -70,23 +69,23 @@ public class DOTGenerator {
 			return null;
 		}
 		// The output DOT graph for visualization
-		StringTemplate dot = null;
+		ST dot = null;
 		markedStates = new HashSet();
         if ( startState instanceof DFAState ) {
-            dot = stlib.getInstanceOf("org/antlr/tool/templates/dot/dfa");
-			dot.setAttribute("startState",
+            dot = stlib.getInstanceOf("dfa");
+			dot.add("startState",
 					Utils.integer(startState.stateNumber));
-			dot.setAttribute("useBox",
-							 Boolean.valueOf(Tool.internalOption_ShowNFAConfigsInDFA));
+			dot.add("useBox",
+					Boolean.valueOf(Tool.internalOption_ShowNFAConfigsInDFA));
 			walkCreatingDFADOT(dot, (DFAState)startState);
         }
         else {
-            dot = stlib.getInstanceOf("org/antlr/tool/templates/dot/nfa");
-			dot.setAttribute("startState",
+            dot = stlib.getInstanceOf("nfa");
+			dot.add("startState",
 					Utils.integer(startState.stateNumber));
 			walkRuleNFACreatingDOT(dot, startState);
         }
-		dot.setAttribute("rankdir", rankdir);
+		dot.add("rankdir", rankdir);
         return dot.toString();
     }
 
@@ -95,10 +94,10 @@ public class DOTGenerator {
      *  from startState will be included.
     public String getRuleNFADOT(State startState) {
         // The output DOT graph for visualization
-        StringTemplate dot = stlib.getInstanceOf("org/antlr/tool/templates/dot/nfa");
+        ST dot = stlib.getInstanceOf("nfa");
 
         markedStates = new HashSet();
-        dot.setAttribute("startState",
+        dot.add("startState",
                 Utils.integer(startState.stateNumber));
         walkRuleNFACreatingDOT(dot, startState);
         return dot.toString();
@@ -109,7 +108,7 @@ public class DOTGenerator {
      *  fill a DOT description template.  Keep filling the
      *  states and edges attributes.
      */
-    protected void walkCreatingDFADOT(StringTemplate dot,
+    protected void walkCreatingDFADOT(ST dot,
 									  DFAState s)
     {
 		if ( markedStates.contains(Utils.integer(s.stateNumber)) ) {
@@ -119,15 +118,15 @@ public class DOTGenerator {
 		markedStates.add(Utils.integer(s.stateNumber)); // mark this node as completed.
 
         // first add this node
-        StringTemplate st;
+        ST st;
         if ( s.isAcceptState() ) {
-            st = stlib.getInstanceOf("org/antlr/tool/templates/dot/stopstate");
+            st = stlib.getInstanceOf("stopstate");
         }
         else {
-            st = stlib.getInstanceOf("org/antlr/tool/templates/dot/state");
+            st = stlib.getInstanceOf("state");
         }
-        st.setAttribute("name", getStateLabel(s));
-        dot.setAttribute("states", st);
+        st.add("name", getStateLabel(s));
+        dot.add("states", st);
 
         // make a DOT edge for each transition
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
@@ -143,12 +142,12 @@ public class DOTGenerator {
 					continue; // don't generate nodes for terminal states
 				}
 			}
-			st = stlib.getInstanceOf("org/antlr/tool/templates/dot/edge");
-			st.setAttribute("label", getEdgeLabel(edge));
-			st.setAttribute("src", getStateLabel(s));
-            st.setAttribute("target", getStateLabel(edge.target));
-			st.setAttribute("arrowhead", arrowhead);
-            dot.setAttribute("edges", st);
+			st = stlib.getInstanceOf("edge");
+			st.add("label", getEdgeLabel(edge));
+			st.add("src", getStateLabel(s));
+            st.add("target", getStateLabel(edge.target));
+			st.add("arrowhead", arrowhead);
+            dot.add("edges", st);
             walkCreatingDFADOT(dot, (DFAState)edge.target); // keep walkin'
         }
     }
@@ -159,7 +158,7 @@ public class DOTGenerator {
      *  for a rule so don't traverse edges to other rules and
      *  don't go past rule end state.
      */
-    protected void walkRuleNFACreatingDOT(StringTemplate dot,
+    protected void walkRuleNFACreatingDOT(ST dot,
                                           State s)
     {
         if ( markedStates.contains(s) ) {
@@ -169,15 +168,15 @@ public class DOTGenerator {
         markedStates.add(s); // mark this node as completed.
 
         // first add this node
-        StringTemplate stateST;
+        ST stateST;
         if ( s.isAcceptState() ) {
-            stateST = stlib.getInstanceOf("org/antlr/tool/templates/dot/stopstate");
+            stateST = stlib.getInstanceOf("stopstate");
         }
         else {
-            stateST = stlib.getInstanceOf("org/antlr/tool/templates/dot/state");
+            stateST = stlib.getInstanceOf("state");
         }
-        stateST.setAttribute("name", getStateLabel(s));
-        dot.setAttribute("states", stateST);
+        stateST.add("name", getStateLabel(s));
+        dot.add("states", stateST);
 
         if ( s.isAcceptState() )  {
             return; // don't go past end of rule node to the follow states
@@ -188,10 +187,10 @@ public class DOTGenerator {
 		if ( ((NFAState)s).isDecisionState() ) {
 			GrammarAST n = ((NFAState)s).associatedASTNode;
 			if ( n!=null && n.getType()!=ANTLRParser.EOB ) {
-				StringTemplate rankST = stlib.getInstanceOf("org/antlr/tool/templates/dot/decision-rank");
+				ST rankST = stlib.getInstanceOf("decision-rank");
 				NFAState alt = (NFAState)s;
 				while ( alt!=null ) {
-					rankST.setAttribute("states", getStateLabel(alt));
+					rankST.add("states", getStateLabel(alt));
 					if ( alt.transition[1] !=null ) {
 						alt = (NFAState)alt.transition[1].target;
 					}
@@ -199,45 +198,45 @@ public class DOTGenerator {
 						alt=null;
 					}
 				}
-				dot.setAttribute("decisionRanks", rankST);
+				dot.add("decisionRanks", rankST);
 			}
 		}
 
         // make a DOT edge for each transition
-		StringTemplate edgeST = null;
+		ST edgeST = null;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
             Transition edge = (Transition) s.transition(i);
             if ( edge instanceof RuleClosureTransition ) {
                 RuleClosureTransition rr = ((RuleClosureTransition)edge);
                 // don't jump to other rules, but display edge to follow node
-                edgeST = stlib.getInstanceOf("org/antlr/tool/templates/dot/edge");
+                edgeST = stlib.getInstanceOf("edge");
 				if ( rr.rule.grammar != grammar ) {
-					edgeST.setAttribute("label", "<"+rr.rule.grammar.name+"."+rr.rule.name+">");
+					edgeST.add("label", "<" + rr.rule.grammar.name + "." + rr.rule.name + ">");
 				}
 				else {
-					edgeST.setAttribute("label", "<"+rr.rule.name+">");
+					edgeST.add("label", "<" + rr.rule.name + ">");
 				}
-				edgeST.setAttribute("src", getStateLabel(s));
-				edgeST.setAttribute("target", getStateLabel(rr.followState));
-				edgeST.setAttribute("arrowhead", arrowhead);
-                dot.setAttribute("edges", edgeST);
+				edgeST.add("src", getStateLabel(s));
+				edgeST.add("target", getStateLabel(rr.followState));
+				edgeST.add("arrowhead", arrowhead);
+                dot.add("edges", edgeST);
 				walkRuleNFACreatingDOT(dot, rr.followState);
                 continue;
             }
 			if ( edge.isAction() ) {
-				edgeST = stlib.getInstanceOf("org/antlr/tool/templates/dot/action-edge");
+				edgeST = stlib.getInstanceOf("action-edge");
 			}
 			else if ( edge.isEpsilon() ) {
-				edgeST = stlib.getInstanceOf("org/antlr/tool/templates/dot/epsilon-edge");
+				edgeST = stlib.getInstanceOf("epsilon-edge");
 			}
 			else {
-				edgeST = stlib.getInstanceOf("org/antlr/tool/templates/dot/edge");
+				edgeST = stlib.getInstanceOf("edge");
 			}
-			edgeST.setAttribute("label", getEdgeLabel(edge));
-            edgeST.setAttribute("src", getStateLabel(s));
-			edgeST.setAttribute("target", getStateLabel(edge.target));
-			edgeST.setAttribute("arrowhead", arrowhead);
-            dot.setAttribute("edges", edgeST);
+			edgeST.add("label", getEdgeLabel(edge));
+            edgeST.add("src", getStateLabel(s));
+			edgeST.add("target", getStateLabel(edge.target));
+			edgeST.add("arrowhead", arrowhead);
+            dot.add("edges", edgeST);
             walkRuleNFACreatingDOT(dot, edge.target); // keep walkin'
         }
     }
