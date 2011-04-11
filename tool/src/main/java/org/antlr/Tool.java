@@ -754,7 +754,8 @@ public class Tool {
         System.err.println("  -Xdfa                   print DFA as text ");
         System.err.println("  -Xnoprune               test lookahead against EBNF block exit branches");
         System.err.println("  -Xnocollapse            collapse incident edges into DFA states");
-        System.err.println("  -Xdbgconversion         dump lots of info during NFA conversion");
+		System.err.println("  -Xdbgconversion         dump lots of info during NFA conversion");
+		System.err.println("  -Xconversiontimeout     use to restrict NFA conversion exponentiality");
         System.err.println("  -Xmultithreaded         run the analysis in 2 threads");
         System.err.println("  -Xnomergestopstates     do not merge stop states");
         System.err.println("  -Xdfaverbose            generate DFA states in DOT with NFA configs");

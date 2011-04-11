@@ -7,6 +7,12 @@ University of San Francisco
 
 CHANGES
 
+April 11, 2011
+
+* Added option -Xconversiontimeout back in.  Turns out we hit NFA conversion
+  time landmine occasionally with huge grammars; fails over to backtracking
+  (if turned on) if it can't make DFA.
+
 March 29 - April 10, 2011
 
 * Uses ST v4 now!!!  Massive change.  Only updated Java target so far.
