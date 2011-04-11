@@ -42,7 +42,7 @@ public static final String[] ruleNames = new String[] {
 <endif>
 public static final boolean[] decisionCanBacktrack = new boolean[] {
     false, // invalid decision
-    <grammar.decisions:{d | <booleanLiteral.(d.dfa.hasSynPred); null="false">}; wrap="\n    ", separator=", ">
+    <grammar.decisions:{d | <d.dfa.hasSynPred; null="false">}; wrap="\n    ", separator=", ">
 };<\n>
 <if(grammar.grammarIsRoot)> <! grammar imports other grammar(s) !>
     public int ruleLevel = 0;
