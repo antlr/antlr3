@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+April 13, 2011
+
+* Unmangled region names in STViz hiearchy tree display.
+
 April 11, 2011
 
 * Added option -Xconversiontimeout back in.  Turns out we hit NFA conversion
