@@ -299,9 +299,7 @@ lexerHeaderFile( LEXER,
 <actions.lexer.methodsDecl>
 /* ObjC end actions.lexer.methodsDecl */
 <rules:{rule |
-- (<rule.ruleDescriptor:{ruleDescriptor|<returnType()>}>)
-    <if(!rule.ruleDescriptor.isSynPred)>m<rule.ruleName><else><rule.ruleName>_fragment<endif>
-    <if(rule.ruleDescriptor.parameterScope)><rule.ruleDescriptor.parameterScope:parameterScope(scope=it)><endif>; }; separator="\n"><\n>
+- (<rule.ruleDescriptor:{ruleDescriptor|<returnType()>}>) <if(!rule.ruleDescriptor.isSynPred)>m<rule.ruleName><else><rule.ruleName>_fragment<endif> <if(rule.ruleDescriptor.parameterScope)><rule.ruleDescriptor.parameterScope:parameterScope(scope=it)><endif>; }; separator="\n"><\n>
 @end /* end of <className()> interface */<\n>
 >>
 
@@ -357,7 +355,8 @@ lexer(  grammar,
 
 - (id) initWithCharStream:(id\<ANTLRCharStream>)anInput
 {
-    if ((self = [super initWithCharStream:anInput State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]]) != nil) {
+    self = [super initWithCharStream:anInput State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]];
+    if ( self != nil ) {
 <if(memoize)>
         if ( state.ruleMemo == nil ) {
             state.ruleMemo = [[ANTLRRuleStack newANTLRRuleStackWithSize:<numRules>+1] retain];
@@ -753,11 +752,13 @@ genericParser(  grammar,
 <if(PARSER)>
 - (id) initWithTokenStream:(<inputStreamType>)aStream
 {
-    if ((self = [super initWithTokenStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]]) != nil) {
+    self = [super initWithTokenStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
+    if ( self != nil ) {
 <else><! TREE_PARSER !>
 - (id) initWithStream:(<inputStreamType>)aStream
 {
-    if ((self = [super initWithStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]]) != nil) {
+    self = [super initWithStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
+    if ( self != nil ) {
 <endif><\n>
         <! <parserCtorBody()> !>
         <cyclicDFAs:{dfa | dfa<dfa.decisionNumber> = [DFA<dfa.decisionNumber> newDFA<dfa.decisionNumber>WithRecognizer:self];}; separator="\n">
@@ -1141,7 +1142,7 @@ do {
                 goto loop<decisionNumber>;
             <ruleBacktrackFailure()>
             ANTLREarlyExitException *eee =
-                [ANTLREarlyExitException exceptionWithStream:input decisionNumber:<decisionNumber>];
+                [ANTLREarlyExitException newException:input decisionNumber:<decisionNumber>];
             <@earlyExitException()>
             @throw eee;
     }
@@ -1266,7 +1267,7 @@ if (<s>) {
     <if(backtracking)>state.failed = NO;<\n><endif>
 } else {
     <ruleBacktrackFailure()>
-    ANTLRMismatchedSetException *mse = [ANTLRMismatchedSetException exceptionWithSet:nil stream:input];
+    ANTLRMismatchedSetException *mse = [ANTLRMismatchedSetException newException:nil stream:input];
     <@mismatchedSetException()>
 <if(LEXER)>
     [self recover:mse];
@@ -1411,7 +1412,7 @@ if ( [input LA:1] == DOWN ) {
 validateSemanticPredicate(pred,description) ::= <<
 if ( !(<evalPredicate(...)>) ) {
     <ruleBacktrackFailure()>
-    @throw [ANTLRFailedPredicateException exceptionWithRuleName:@"<ruleName>" predicate:@"<description>" stream:input];
+    @throw [ANTLRFailedPredicateException newException:@"<ruleName>" predicate:@"<description>" stream:input];
 }
 >>
 
@@ -1425,7 +1426,7 @@ else {
     alt<decisionNumber> = <eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newANTLRNoViableAltException:<decisionNumber> state:<stateNumber> stream:input];
+    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
     <@noViableAltException()>
     @throw nvae;<\n>
 <endif>
@@ -1488,7 +1489,7 @@ default: ;
     alt<decisionNumber> = <eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newANTLRNoViableAltException:<decisionNumber> state:<stateNumber> stream:input];
+    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
     <@noViableAltException()>
     @throw nvae;<\n>
 <endif>
@@ -1577,7 +1578,8 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
 
 - (id) initWithRecognizer:(ANTLRBaseRecognizer *) theRecognizer
 {
-    if ((self = [super initWithRecognizer:theRecognizer]) != nil) {
+    self = [super initWithRecognizer:theRecognizer];
+    if ( self != nil ) {
         decisionNumber = <dfa.decisionNumber>;
         eot = dfa<dfa.decisionNumber>_eot;
         eof = dfa<dfa.decisionNumber>_eof;
@@ -1616,7 +1618,7 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
 <if(backtracking)>
     if ( [recognizer getBacktrackingLevel] > 0 ) { [recognizer setFailed:YES]; return -1; }<\n>
 <endif>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newANTLRNoViableAltException:<dfa.decisionNumber> state:s stream:[recognizer getInput]];
+    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<dfa.decisionNumber> state:s stream:[recognizer getInput]];
     /* [self error:nvae]; */ <! for debugger - do later !>
     @throw nvae;
 }<\n>
@@ -1679,7 +1681,7 @@ s = <targetStateNumber>;<\n> /* eotDFAEdge */
 
 andPredicates(left,right) ::= "(<left>&&<right>)"
 
-orPredicates(operands) ::= "(first(operands)<rest(operands):{o | ||<o>}>)"
+orPredicates(operands) ::= "(<first(operands)><rest(operands):{o | ||<o>}>)"
 
 notPredicate(pred) ::= "!(<evalPredicate(...)>)"
 
@@ -1779,8 +1781,7 @@ globalAttributeScopeImplementation(scope) ::= <<
 
 - (id) init
 {
-    if ((self = [super init]) != nil ) {
-    }
+    self = [super init];
     return self;
 }
 
@@ -1841,8 +1842,7 @@ ruleAttributeScopeImplementation(scope) ::= <<
 
 - (id) init
 {
-    if (self = [super init]) {
-    }
+    self = [super init];
     return self;
 }
 
@@ -1960,8 +1960,7 @@ returnScopeImplementation(scope) ::= <<
 
 - (id) init
 {
-    if (self = [super init]) {
-    }
+    self = [super init];
     return self;
 }
 

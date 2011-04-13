@@ -409,7 +409,7 @@ rewritePositiveClosureBlock(
 // <fileName>:<description>
 {
 if ( !(<referencedElements:{el | [stream_<el> hasNext]}; separator=" || ">) ) {
-    @throw [NSException exceptionWithName:@"RewriteEarlyExitException" reason:nil userInfo:nil];
+    @throw [ANTLRRewriteEarlyExitException newException];
 }
 while ( <referencedElements:{el | [stream_<el> hasNext]}; separator=" || "> ) {
     <alt>
@@ -506,8 +506,7 @@ rewriteRuleRef(rule) ::= <<
 >>
 
 rewriteRuleRefRoot(rule) ::= <<
-root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:(id\<ANTLRTree>)[stream_<rule> nextNode]
-                                                         old:root_<treeLevel>];<\n>
+root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:(id\<ANTLRTree>)[stream_<rule> nextNode] old:root_<treeLevel>];<\n>
 >>
 
 rewriteNodeAction(action) ::= <<

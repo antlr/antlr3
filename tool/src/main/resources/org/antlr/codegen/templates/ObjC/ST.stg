@@ -230,7 +230,8 @@ static class STAttrMap extends HashMap {
 /* -------- ST start STAttrMap.methods ------------ */
 - (id) init
 {
-    if (self = [super initWithLen:16]) {
+    self = [super initWithLen:16];
+    if ( self != nil ) {
         templateLib = [STGroup newSTGroup:"<name>Templates"];
     }
     return self;
