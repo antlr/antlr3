@@ -213,9 +213,9 @@ public class DecisionProbe {
 	}
 
 	/** Did the analysis complete it's work? */
-	public boolean analysisTimedOut() {
-		return timedOut;
-	}
+//	public boolean analysisTimedOut() {
+//		return timedOut;
+//	}
 
 	/** Took too long to analyze a DFA */
 	public boolean analysisOverflowed() {
@@ -621,10 +621,10 @@ public class DecisionProbe {
 		danglingStates.add(d);
 	}
 
-	public void reportAnalysisTimeout() {
-		timedOut = true;
+//	public void reportAnalysisTimeout() {
+//		timedOut = true;
 //		dfa.nfa.grammar.setOfDFAWhoseAnalysisTimedOut.add(dfa);
-	}
+//	}
 
 	/** Report that at least 2 alts have recursive constructs.  There is
 	 *  no way to build a DFA so we terminated.
@@ -896,7 +896,7 @@ public class DecisionProbe {
 
 	/** From an alt number associated with artificial Tokens rule, return
 	 *  the name of the token that is associated with that alt.
-	 */
+	 */ 
 	public String getTokenNameForTokensRuleAlt(int alt) {
 		NFAState decisionState = dfa.getNFADecisionStartState();
 		NFAState altState =

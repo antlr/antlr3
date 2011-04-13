@@ -1315,7 +1315,6 @@ outer:
 		// Retry to create a simpler DFA if analysis failed (non-LL(*),
 		// recursion overflow, or time out).
 		boolean failed =
-			lookaheadDFA.analysisTimedOut() ||
 			lookaheadDFA.probe.isNonLLStarDecision() ||
 			lookaheadDFA.probe.analysisOverflowed();
 		if ( failed && lookaheadDFA.okToRetryDFAWithK1() ) {
@@ -1331,11 +1330,6 @@ outer:
 			}
 			lookaheadDFA = null; // make sure other memory is "free" before redoing
 			lookaheadDFA = new DFA(decision, decisionStartState);
-		}
-		if ( lookaheadDFA.analysisTimedOut() ) { // did analysis bug out?
-			ErrorManager.internalError("could not even do k=1 for decision "+
-									   decision+"; reason: "+
-									   lookaheadDFA.getReasonForFailure());
 		}
 
 		setLookaheadDFA(decision, lookaheadDFA);

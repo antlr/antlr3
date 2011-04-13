@@ -50,7 +50,7 @@ public class DFA {
 	public static final int CYCLIC_UNKNOWN = -2;
 	public static final int CYCLIC_BUSY = -1; // in process of computing
 	public static final int CYCLIC_DONE = 0;
-
+	
 	/** Prevent explosion of DFA states during conversion. The max number
 	 *  of states per alt in a single decision's DFA.
 	public static final int MAX_STATES_PER_ALT_IN_DFA = 450;
@@ -166,7 +166,7 @@ public class DFA {
 	 *  if it takes too long, then terminate.  Assume bugs are in the
 	 *  analysis engine.
 	 */
-	protected long conversionStartTime;
+	//protected long conversionStartTime;
 
 	/** Map an edge transition table to a unique set number; ordered so
 	 *  we can push into the output template as an ordered list of sets
@@ -251,12 +251,12 @@ public class DFA {
 			//long stop = System.currentTimeMillis();
 			//System.out.println("verify cost: "+(int)(stop-start)+" ms");
 		}
-		catch (AnalysisTimeoutException at) {
-			probe.reportAnalysisTimeout();
-			if ( !okToRetryDFAWithK1() ) {
-				probe.issueWarnings();
-			}
-		}
+//		catch (AnalysisTimeoutException at) {
+//			probe.reportAnalysisTimeout();
+//			if ( !okToRetryDFAWithK1() ) {
+//				probe.issueWarnings();
+//			}
+//		}
 		catch (NonLLStarDecisionException nonLL) {
 			probe.reportNonLLStarDecision(this);
 			// >1 alt recurses, k=* and no auto backtrack nor manual sem/syn
@@ -807,7 +807,7 @@ public class DFA {
 	 *     ;
 	 *
 	 *  gives
-	 *
+	 * 
 	 * .s0-X->.s1
 	 * .s0-Y&&{synpred1_t}?->:s2=>1
 	 * .s1-{synpred1_t}?->:s2=>1
@@ -824,7 +824,7 @@ public class DFA {
 		return has;
 	}
 
-	public boolean getHasSynPred() { return hasSynPred(); } // for ST
+	public boolean getHasSynPred() { return hasSynPred(); } // for ST	
 
 	boolean _hasSynPred(DFAState d, Set<DFAState> busy) {
 		busy.add(d);
@@ -1030,7 +1030,7 @@ public class DFA {
 			(probe.isNonLLStarDecision()||probe.analysisOverflowed()) &&
 		    predicateVisible; // auto backtrack or manual sem/syn
 		return getUserMaxLookahead()!=1 &&
-			 (analysisTimedOut() || nonLLStarOrOverflowAndPredicateVisible);
+			 nonLLStarOrOverflowAndPredicateVisible;
 	}
 
 	public String getReasonForFailure() {
@@ -1046,14 +1046,6 @@ public class DFA {
 			if ( predicateVisible ) {
 				buf.append(" && predicate visible");
 			}
-		}
-		if ( analysisTimedOut() ) {
-			if ( buf.length()>0 ) {
-				buf.append(" && ");
-			}
-			buf.append("timed out (>");
-			buf.append(DFA.MAX_TIME_PER_DFA_CREATION);
-			buf.append("ms)");
 		}
 		buf.append("\n");
 		return buf.toString();
@@ -1098,9 +1090,9 @@ public class DFA {
 		return nAlts;
 	}
 
-	public boolean analysisTimedOut() {
-		return probe.analysisTimedOut();
-	}
+//	public boolean analysisTimedOut() {
+//		return probe.analysisTimedOut();
+//	}
 
     protected void initAltRelatedInfo() {
         unreachableAlts = new LinkedList();

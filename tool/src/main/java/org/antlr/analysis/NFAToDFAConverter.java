@@ -74,7 +74,7 @@ public class NFAToDFAConverter {
 	}
 
 	public void convert() {
-		dfa.conversionStartTime = System.currentTimeMillis();
+		//dfa.conversionStartTime = System.currentTimeMillis();
 
 		// create the DFA start state
 		dfa.startState = computeStartState();
@@ -601,13 +601,13 @@ public class NFAToDFAConverter {
 							   );
 		}
 
-		if ( DFA.MAX_TIME_PER_DFA_CREATION>0 &&
-			 System.currentTimeMillis() - d.dfa.conversionStartTime >=
-			 DFA.MAX_TIME_PER_DFA_CREATION )
-		{
-			// bail way out; we've blown up somehow
-			throw new AnalysisTimeoutException(d.dfa);
-		}
+//		if ( DFA.MAX_TIME_PER_DFA_CREATION>0 &&
+//			 System.currentTimeMillis() - d.dfa.conversionStartTime >=
+//			 DFA.MAX_TIME_PER_DFA_CREATION )
+//		{
+//			// bail way out; we've blown up somehow
+//			throw new AnalysisTimeoutException(d.dfa);
+//		}
 
 		NFAConfiguration proposedNFAConfiguration =
 				new NFAConfiguration(p.stateNumber,
