@@ -38,16 +38,6 @@ csharpVisibilityMap ::= [
 	default:"private"
 ]
 
-// System.Boolean.ToString() returns "True" and "False", but the proper C# literals are "true" and "false"
-// The Java version of Boolean returns "true" and "false", so they map to themselves here.
-booleanLiteral ::= [
-	"True":"true",
-	"False":"false",
-	"true":"true",
-	"false":"false",
-	default:"false"
-]
-
 /** The overall file structure of a recognizer; stores methods for rules
  *  and cyclic DFAs plus support code.
  */
@@ -285,13 +275,17 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 <endif>
 	<tokens:{it|public const int <it.name; format="id">=<it.type>;}; separator="\n">
 
+<if(grammar.delegates)>
 	// delegates
 	<grammar.delegates:
 		 {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
+<endif>
+<if(grammar.delegators)>
 	// delegators
 	<grammar.delegators:
 		 {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
 	<last(grammar.delegators):{g|private <g.recognizerName> gParent;}>
+<endif>
 
 	<scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
 	<@members()>
@@ -338,8 +332,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 	#region Follow sets
 	private static class Follow
 	{
-		<bitsets:{it|<bitset(name={_<it.name>_in_<it.inName><it.tokenIndex>},
-							words64=it.bits)>}>
+		<bitsets:{it|<bitset(name={_<it.name>_in_<it.inName><it.tokenIndex>}, words64=it.bits)>}; separator="\n">
 	}
 	#endregion Follow sets
 <endif>
@@ -348,19 +341,24 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 
 @genericParser.members() ::= <<
 <! WARNING. bug in ST: this is cut-n-paste into Dbg.stg !>
-<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>( <inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}> )
-	: this( input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}> )
+<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>(<inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
+	: this(input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}>)
 {
 }
 <actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>(<inputStreamType> input, RecognizerSharedState state<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>)
 	: base(input, state)
 {
 	<parserCtorBody()>
+<if(grammar.directDelegates)>
 	<grammar.directDelegates:
 		{g|<g:delegateName()> = new <g.recognizerName>(input, state<trunc(g.delegators):{p|, <p:delegateName()>}>, this);}; separator="\n">
+<endif>
+<if(grammar.indirectDelegates)>
 	<grammar.indirectDelegates:{g | <g:delegateName()> = <g.delegator:delegateName()>.<g:delegateName()>;}; separator="\n">
+<endif>
+<if(grammar.delegators)>
 	<last(grammar.delegators):{g|gParent = <g:delegateName()>;}>
-
+<endif>
 	OnCreated();
 }
 >>
@@ -719,7 +717,7 @@ int alt<decisionNumber>=<maxAlt>;
 <decls>
 <@predecision()>
 try { DebugEnterSubRule(<decisionNumber>);
-try { DebugEnterDecision(<decisionNumber>, false<!<booleanLiteral.(decision.dfa.hasSynPred)>!>);
+try { DebugEnterDecision(<decisionNumber>, false<!<decision.dfa.hasSynPred>!>);
 <decision>
 } finally { DebugExitDecision(<decisionNumber>); }
 <@postdecision()>
@@ -738,7 +736,7 @@ ruleBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK
 int alt<decisionNumber>=<maxAlt>;
 <decls>
 <@predecision()>
-try { DebugEnterDecision(<decisionNumber>, false<!<booleanLiteral.(decision.dfa.hasSynPred)>!>);
+try { DebugEnterDecision(<decisionNumber>, false<!<decision.dfa.hasSynPred>!>);
 <decision>
 } finally { DebugExitDecision(<decisionNumber>); }
 <@postdecision()>
@@ -778,7 +776,7 @@ while (true)
 {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
-	try { DebugEnterDecision(<decisionNumber>, false<!<booleanLiteral.(decision.dfa.hasSynPred)>!>);
+	try { DebugEnterDecision(<decisionNumber>, false<!<decision.dfa.hasSynPred>!>);
 	<decision>
 	} finally { DebugExitDecision(<decisionNumber>); }
 	<@postdecision()>
@@ -816,7 +814,7 @@ while (true)
 {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
-	try { DebugEnterDecision(<decisionNumber>, false<!<booleanLiteral.(decision.dfa.hasSynPred)>!>);
+	try { DebugEnterDecision(<decisionNumber>, false<!<decision.dfa.hasSynPred>!>);
 	<decision>
 	} finally { DebugExitDecision(<decisionNumber>); }
 	<@postdecision()>

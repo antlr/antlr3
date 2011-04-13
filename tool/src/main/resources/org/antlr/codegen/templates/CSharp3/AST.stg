@@ -49,9 +49,7 @@ parserCtorBody() ::= <<
 <super.parserCtorBody()>
 <treeAdaptorType()> treeAdaptor = default(<treeAdaptorType()>);
 CreateTreeAdaptor(ref treeAdaptor);
-
 TreeAdaptor = treeAdaptor<if(!actions.(actionScope).treeAdaptorType)> ?? new CommonTreeAdaptor()<endif>;
-
 >>
 
 /** Add an adaptor property that knows how to build trees */
