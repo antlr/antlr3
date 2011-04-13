@@ -10,6 +10,7 @@ CHANGES
 April 13, 2011
 
 * Unmangled region names in STViz hiearchy tree display.
+* Removed conversion timeout thing again
 
 April 11, 2011
 
