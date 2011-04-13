@@ -562,8 +562,10 @@ catch (<e.decl>)
 >>
 
 ruleDeclarations() ::= <<
-<if(ruleDescriptor.hasMultipleReturnValues)>
+<if(ruleDescriptor.returnScope.attributes)>
 <returnType()> retval = new <returnType()>(this);
+<elseif(ruleDescriptor.hasMultipleReturnValues)>
+<returnType()> retval = new <returnType()>();
 retval.Start = (<labelType>)input.LT(1);
 <else>
 <ruleDescriptor.returnScope.attributes:{ a |
@@ -1447,14 +1449,14 @@ ruleAttributeScope(scope) ::= <<
 returnStructName(it) ::= "<it.name>_return"
 
 returnType() ::= <%
-<if(ruleDescriptor.hasMultipleReturnValues)>
-<ruleDescriptor.grammar.recognizerName>.<ruleDescriptor:returnStructName()>
+<if(ruleDescriptor.returnScope.attributes)>
+	<ruleDescriptor.grammar.recognizerName>.<ruleDescriptor:returnStructName()>
+<elseif(ruleDescriptor.hasMultipleReturnValues)>
+	<ruleReturnBaseType()>
+<elseif(ruleDescriptor.hasSingleReturnValue)>
+	<ruleDescriptor.singleValueReturnType>
 <else>
-<if(ruleDescriptor.hasSingleReturnValue)>
-<ruleDescriptor.singleValueReturnType>
-<else>
-void
-<endif>
+	void
 <endif>
 %>
 
@@ -1494,14 +1496,20 @@ ruleLabelDef(label) ::= <%
  *  subgroups to stick in members.
  */
 returnScope(scope) ::= <<
-<if(ruleDescriptor.hasMultipleReturnValues)>
-<returnScopeModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> sealed partial class <ruleDescriptor:returnStructName()> : <if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope\<<labelType>\><@ruleReturnInterfaces()>
+<if(scope.attributes)>
+<returnScopeModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> sealed partial class <ruleDescriptor:returnStructName()> : <ruleReturnBaseType()><@ruleReturnInterfaces()>
 {
 	<scope.attributes:{it|public <it.decl>;}; separator="\n">
 	<@ruleReturnMembers()>
 }
 <endif>
 >>
+
+ruleReturnBaseType() ::= <%
+<@prefix()><if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope\<<labelType>>
+%>
+
+@ruleReturnBaseType.prefix() ::= ""
 
 @returnScope.ruleReturnMembers() ::= <<
 public <ruleDescriptor:returnStructName()>(<grammar.recognizerName> grammar) {OnCreated(grammar);}
@@ -1684,7 +1692,7 @@ execForcedAction(action) ::= "<action>"
 // M I S C (properties, etc...)
 
 bitset(name, words64) ::= <<
-public static readonly BitSet <name> = new BitSet(new ulong[]{<words64:{it|<it>UL};separator=",">});<\n>
+public static readonly BitSet <name> = new BitSet(new ulong[]{<words64:{it|<it>UL};separator=",">});
 >>
 
 codeFileExtension() ::= ".cs"

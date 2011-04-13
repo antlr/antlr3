@@ -80,16 +80,7 @@ treeAdaptorType() ::= <<
 <actions.(actionScope).treeAdaptorType; null="ITreeAdaptor">
 >>
 
-@returnScope.ruleReturnInterfaces() ::= <<
-, IAstRuleReturnScope\<<ASTLabelType>\>, IAstRuleReturnScope
->>
-
-@returnScope.ruleReturnMembers() ::= <<
-private <ASTLabelType> _tree;
-public <ASTLabelType> Tree { get { return _tree; } set { _tree = value; } }
-object IAstRuleReturnScope.Tree { get { return Tree; } }
-<@super.ruleReturnMembers()>
->>
+@ruleReturnBaseType.prefix() ::= "Ast"
 
 /** Add a variable to track rule's return AST */
 ruleDeclarations() ::= <<
