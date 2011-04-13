@@ -4,12 +4,12 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
     <packaging>pom</packaging>
-    <version>3.3.1-SNAPSHOT</version>
+    <version>3.4-SNAPSHOT</version>
     <name>ANTLR Master build control POM</name>
     <url>http://maven.apache.org</url>
 
   <!--
-    What version of ANTLR are we building? This sets the 
+    What version of ANTLR are we building? This sets the
     the version number for all other things that are built
     as part of an ANTLR release, unless they override or
     ignore it. We do this via a properites file for this
@@ -57,7 +57,7 @@
             <name>ANTLR Testing repository</name>
             <url>scpexe://antlr.org/home/mavensync/antlr-repo</url>
         </repository>
-      
+
         <snapshotRepository>
             <id>antlr-snapshot</id>
             <name>ANTLR Testing Snapshot Repository</name>
@@ -65,9 +65,9 @@
         </snapshotRepository>
 
     </distributionManagement>
-  
+
   <!--
-  
+
     Inform Maven of the ANTLR snapshot repository, which it will
     need to consult to get the latest snapshot build of the runtime
     if it was not built and installed locally.
@@ -86,7 +86,7 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-      
+
     </repositories>
 
   <!--
@@ -123,11 +123,11 @@
             </dependency>
 
         </dependencies>
-        
+
     </dependencyManagement>
 
     <build>
-      
+
         <defaultGoal>install</defaultGoal>
 
         <!--
@@ -141,7 +141,7 @@
             define anything that is relevant to all the modules that we
             build here. However each module also has an antlr.config file
             where you can override property values from the master file or
-            define things that are only relevant to that module. 
+            define things that are only relevant to that module.
           -->
         <filters>
             <filter>antlr.config</filter>
@@ -153,7 +153,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        
+
         <plugins>
 
              <plugin>
@@ -215,16 +215,16 @@
                     Here, we also build a master source jar as I was unable to pursuade
                     this plugin to use multiple configurations and not have the thing
                     screw up because of multiple modules :-(
-                    
+
                   -->
 
                 <artifactId>maven-assembly-plugin</artifactId>
 
-                <!-- 
+                <!--
                     Do not make the child modules build an assembly
                   -->
                 <inherited>false</inherited>
-           
+
                 <configuration>
                     <descriptors>
                         <descriptor>antlrjar.xml</descriptor>
@@ -246,19 +246,19 @@
 
 
             </plugin>
-	
-	    <plugin>  
-                <groupId>org.apache.maven.plugins</groupId>  
-                <artifactId>maven-source-plugin</artifactId>  
-                <executions>  
+
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <goals>  
-                           <goal>jar</goal>  
-                        </goals>  
-                    </execution>  
-                </executions>  
-            </plugin>  
+                        <goals>
+                           <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
 
