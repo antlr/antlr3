@@ -29,19 +29,18 @@ package org.antlr.codegen;
 
 
 import org.antlr.Tool;
-import org.antlr.analysis.*;
 import org.antlr.analysis.DFA;
+import org.antlr.analysis.*;
 import org.antlr.grammar.v3.ANTLRLexer;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.grammar.v3.CodeGenTreeWalker;
 import org.antlr.grammar.v3.ActionTranslator;
+import org.antlr.grammar.v3.CodeGenTreeWalker;
 import org.antlr.misc.BitSet;
 import org.antlr.misc.*;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.stringtemplate.v4.*;
 import org.antlr.tool.*;
-import org.stringtemplate.v4.AutoIndentWriter;
+import org.stringtemplate.v4.*;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -1251,15 +1250,15 @@ public class CodeGenerator {
 	}
 
 	public void write(ST code, String fileName) throws IOException {
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 		Writer w = tool.getOutputFile(grammar, fileName);
 		// Write the output to a StringWriter
 		STWriter wr = new AutoIndentWriter(w);
 		wr.setLineWidth(lineWidth);
 		code.write(wr);
 		w.close();
-		long stop = System.currentTimeMillis();
-		System.out.println("render time for "+fileName+": "+(int)(stop-start)+"ms");
+		//long stop = System.currentTimeMillis();
+		//System.out.println("render time for "+fileName+": "+(int)(stop-start)+"ms");
 	}
 
 	/** You can generate a switch rather than if-then-else for a DFA state
