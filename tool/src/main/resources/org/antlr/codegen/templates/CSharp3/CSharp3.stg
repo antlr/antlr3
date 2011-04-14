@@ -308,7 +308,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
    appear to be defined in this recognizer. !>
 	#region Delegated rules
 <grammar.delegatedRules:{ruleDescriptor|
-	<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType()> <ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope:parameterScope()>) <!throws RecognitionException !>{ <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope.attributes:{a|<a.name; format="id">}; separator=", ">); \}}; separator="\n">
+	<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType(ruleDescriptor)> <ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope:parameterScope()>) <!throws RecognitionException !>{ <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope.attributes:{a|<a.name; format="id">}; separator=", ">); \}}; separator="\n">
 	#endregion Delegated rules
 <endif>
 
@@ -483,14 +483,14 @@ ruleBacktrackFailure() ::= <<
  */
 rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memoize) ::= <<
 <ruleAttributeScope(scope=ruleDescriptor.ruleScope)>
-<returnScope(scope=ruleDescriptor.returnScope)>
+<returnScope(ruleDescriptor.returnScope)>
 partial void EnterRule_<ruleName>();
 partial void LeaveRule_<ruleName>();
 
 // $ANTLR start "<ruleName>"
 // <fileName>:<description>
 [GrammarRule("<ruleName>")]
-<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType()> <ruleName; format="id">(<ruleDescriptor.parameterScope:parameterScope()>)
+<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType(ruleDescriptor)> <ruleName; format="id">(<ruleDescriptor.parameterScope:parameterScope()>)
 {
 	EnterRule_<ruleName>();
 	EnterRule("<ruleName>", <ruleDescriptor.index>);
@@ -560,10 +560,8 @@ catch (<e.decl>)
 >>
 
 ruleDeclarations() ::= <<
-<if(ruleDescriptor.returnScope.attributes)>
-<returnType()> retval = new <returnType()>(this);
-<elseif(ruleDescriptor.hasMultipleReturnValues)>
-<returnType()> retval = new <returnType()>();
+<if(ruleDescriptor.hasMultipleReturnValues)>
+<returnType(ruleDescriptor)> retval = new <returnType(ruleDescriptor)>(<if(ruleDescriptor.returnScope.attributes)>this<endif>);
 retval.Start = (<labelType>)input.LT(1);
 <else>
 <ruleDescriptor.returnScope.attributes:{ a |
@@ -1446,8 +1444,8 @@ ruleAttributeScope(scope) ::= <<
 
 returnStructName(it) ::= "<it.name>_return"
 
-returnType() ::= <%
-<if(ruleDescriptor.returnScope.attributes)>
+returnType(ruleDescriptor) ::= <%
+<if(ruleDescriptor.returnScope.attributes && ruleDescriptor.hasMultipleReturnValues)>
 	<ruleDescriptor.grammar.recognizerName>.<ruleDescriptor:returnStructName()>
 <elseif(ruleDescriptor.hasMultipleReturnValues)>
 	<ruleReturnBaseType()>
@@ -1462,14 +1460,14 @@ returnType() ::= <%
  *  values.
  */
 ruleLabelType(referencedRule) ::= <%
-<if(referencedRule.hasMultipleReturnValues)>
-<referencedRule.grammar.recognizerName>.<referencedRule.name>_return
+<if(referencedRule.returnScope.attributes&&referencedRule.hasMultipleReturnValues)>
+	<referencedRule.grammar.recognizerName>.<referencedRule:returnStructName()>
+<elseif(referencedRule.hasMultipleReturnValues)>
+	<ruleReturnBaseType()>
+<elseif(referencedRule.hasSingleReturnValue)>
+	<referencedRule.singleValueReturnType>
 <else>
-<if(referencedRule.hasSingleReturnValue)>
-<referencedRule.singleValueReturnType>
-<else>
-void
-<endif>
+	void
 <endif>
 %>
 
@@ -1494,7 +1492,7 @@ ruleLabelDef(label) ::= <%
  *  subgroups to stick in members.
  */
 returnScope(scope) ::= <<
-<if(scope.attributes)>
+<if(scope.attributes && ruleDescriptor.hasMultipleReturnValues)>
 <returnScopeModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> sealed partial class <ruleDescriptor:returnStructName()> : <ruleReturnBaseType()><@ruleReturnInterfaces()>
 {
 	<scope.attributes:{it|public <it.decl>;}; separator="\n">
@@ -1504,10 +1502,8 @@ returnScope(scope) ::= <<
 >>
 
 ruleReturnBaseType() ::= <%
-<@prefix()><if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope\<<labelType>>
+<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope\<<labelType>>
 %>
-
-@ruleReturnBaseType.prefix() ::= ""
 
 @returnScope.ruleReturnMembers() ::= <<
 public <ruleDescriptor:returnStructName()>(<grammar.recognizerName> grammar) {OnCreated(grammar);}

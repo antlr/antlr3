@@ -78,7 +78,9 @@ treeAdaptorType() ::= <<
 <actions.(actionScope).treeAdaptorType; null="ITreeAdaptor">
 >>
 
-@ruleReturnBaseType.prefix() ::= "Ast"
+ruleReturnBaseType() ::= <%
+Ast<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope\<<ASTLabelType>, <labelType>>
+%>
 
 /** Add a variable to track rule's return AST */
 ruleDeclarations() ::= <<
