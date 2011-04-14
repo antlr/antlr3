@@ -130,7 +130,7 @@ if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>;
 /** label+=TOKEN auto construct */
 tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 <tokenRef(...)>
-<listLabel(label, label)>
+<listLabel(elem=label,...)>
 >>
 
 /** ^(ID ...) auto construct */
@@ -152,7 +152,7 @@ root_<treeLevel> = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_<treeLe
 /** Match ^(label+=TOKEN ...) auto construct */
 tokenRefRuleRootAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 <tokenRefRuleRoot(...)>
-<listLabel(label, label)>
+<listLabel(elem=label,...)>
 >>
 
 /** Match . wildcard and auto dup the node/subtree */
