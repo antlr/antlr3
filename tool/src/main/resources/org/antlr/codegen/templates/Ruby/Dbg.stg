@@ -143,12 +143,12 @@ end
 >>
 
 
-@altSwitchCase.prealt() ::= "<enterAlt(n=i)>"
+@altSwitchCase.prealt() ::= "<enterAlt(altNum)>"  // altNum is arg of altSwitchCase
 
 
-element() ::= <<
-@debug_listener.location(<it.line>, <it.pos>)
-<super.element()>
+element(e) ::= <<
+@debug_listener.location(<e.line>, <e.pos>) // e is arg of element
+<super.element(e)>
 >>
 
 

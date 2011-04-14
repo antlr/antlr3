@@ -1,4 +1,3 @@
-group ASTTreeParser;
 gatedAction(block) ::= <<
 <if(backtracking)>
 if <actions.(actionScope).synpredgate>
@@ -61,7 +60,7 @@ _last = _save_last_<treeLevel>
 
 >>
 
-tokenRefBang(token,label,elementIndex) ::= <<
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
 _last = @input.look
 <super.tokenRef(...)>
 >>
@@ -129,7 +128,7 @@ _first_<treeLevel> and _first_<treeLevel> = <label; format="label">
 
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = @input.look
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <gatedAction({
 <if(terminalOptions.node)>
@@ -140,25 +139,25 @@ tree_for_<label> = @adaptor.copy_node( <label; format="label"> )
 @adaptor.add_child( root_<treeLevel>, tree_for_<label> )
 })>
 <endif>
-})>
+}, ...)>
 >>
 
 
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 <matchSet(...)>
-<noRewrite()>
+<noRewrite(...)>
 >>
 
 
 
-matchSetBang(s,label,elementIndex,postmatchCode) ::= <<
+matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = @input.look
 <super.matchSet(...)>
 >>
 
 matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <gatedAction({
 <if(terminalOptions.node)>
@@ -169,7 +168,7 @@ tree_for_<label> = @adaptor.copy_node( <label; format="label"> )
 root_<treeLevel> = @adaptor.become_root( tree_for_<label>, root_<treeLevel> )
 })>
 <endif>
-})>
+}, ...)>
 >>
 
 ruleRef(rule,label,elementIndex,args,scope) ::= <<

@@ -1,5 +1,3 @@
-group ST;
-
 @parserBody.mixins() ::= <<
 <@super.mixins()>
 <if(rewriteMode)>

@@ -1,4 +1,3 @@
-group ASTParser;
 gatedAction(block) ::= <<
 <if(backtracking)>
 if <actions.(actionScope).synpredgate>
@@ -21,7 +20,7 @@ tree_for_<label> = <createNodeFromToken(...)>
 })>
 >>
 
-tokenRefBang(token,label,elementIndex) ::= "<super.tokenRef(...)>"
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(...)>"
 
 tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 <super.tokenRef(...)>
@@ -47,7 +46,7 @@ tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
 >>
 
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
-<super.matchSet(..., postmatchCode={<gatedAction({@adaptor.add_child( root_0, <createNodeFromToken(...)> )})>})>
+<super.matchSet(postmatchCode={<gatedAction({@adaptor.add_child( root_0, <createNodeFromToken(...)> )})>}, ...)>
 >>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
@@ -61,7 +60,7 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 <if(label)>
 <label; format="label"> = @input.look<\n>
 <endif>
-<super.matchSet(..., postmatchCode={<gatedAction({root_0 = @adaptor.become_root( <createNodeFromToken(...)>, root_0 )})>})>
+<super.matchSet(postmatchCode={<gatedAction({root_0 = @adaptor.become_root( <createNodeFromToken(...)>, root_0 )})>}, ...)>
 >>
 matchSetRuleRootAndListLabel(s,label,terminalOptions,elementIndex,debug) ::= <<
 <matchSetRuleRoot(...)>
@@ -107,7 +106,7 @@ ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <addToList(elem={<label; format="label">.tree},...)>
 >>
 
-wildcard(label,elementIndex) ::= <<
+wildcard(token,label,elementIndex,terminalOptions) ::= <<
 <super.wildcard(...)>
 <gatedAction({
 tree_for_<label> = @adaptor.create_with_payload( <label; format="label"> )
@@ -115,9 +114,9 @@ tree_for_<label> = @adaptor.create_with_payload( <label; format="label"> )
 })>
 >>
 
-wildcardBang(label,elementIndex) ::= "<super.wildcard(...)>"
+wildcardBang(token,label,elementIndex,terminalOptions) ::= "<super.wildcard(...)>"
 
-wildcardRuleRoot(label,elementIndex) ::= <<
+wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 <super.wildcard(...)>
 <gatedAction({
 tree_for_<label> = @adaptor.create_with_payload( <label; format="label"> )

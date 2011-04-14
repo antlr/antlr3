@@ -1,5 +1,3 @@
-group ASTDbg;
-
 @parserBody.additionalMembers() ::= <<
 def self.return_scope_members
   super.push( :tree )

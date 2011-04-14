@@ -1,5 +1,3 @@
-group AST;
-
 @parserBody.mixins() ::= <<
 <@super.mixins()>
 include ANTLR3::ASTBuilder
@@ -23,11 +21,11 @@ root_0 = nil<\n>
 ruleLabelDefs() ::= <<
 <super.ruleLabelDefs()>
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels,ruleDescriptor.tokenListLabels]
-    :{tree_for_<it.label.text> = nil}; separator="\n">
+    :{int |tree_for_<it.label.text> = nil}; separator="\n">
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{stream_<it> = ANTLR3::AST::RewriteRule<rewriteElementType>Stream.new( @adaptor, "token <it>" )}; separator="\n">
+    :{int |stream_<it> = ANTLR3::AST::RewriteRule<rewriteElementType>Stream.new( @adaptor, "token <it>" )}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{stream_<it> = ANTLR3::AST::RewriteRuleSubtreeStream.new( @adaptor, "rule <it>" )}; separator="\n">
+    :{int |stream_<it> = ANTLR3::AST::RewriteRuleSubtreeStream.new( @adaptor, "rule <it>" )}; separator="\n">
 >>
 
 alt(elements,altNum,description,autoAST,outerAlt,treeLevel,rew) ::= <<
@@ -129,22 +127,22 @@ root_0 = @adaptor.create_flat_list
 
 rewriteCodeLabels() ::= <<
 <referencedTokenLabels:
-{stream_<it> = <rewriteElementType; format="snakecase">_stream( "token <it>", <it; format="label"> )};
+{it | stream_<it> = <rewriteElementType; format="snakecase">_stream( "token <it>", <it; format="label"> )};
 separator="\n">
 <referencedTokenListLabels:
-{stream_<it> = <rewriteElementType; format="snakecase">_stream( "token <it>", list_of_<it; format="label"> )};
+{it | stream_<it> = <rewriteElementType; format="snakecase">_stream( "token <it>", list_of_<it; format="label"> )};
 separator="\n">
 <referencedWildcardLabels:
-{stream_<it> = subtree_stream( "wildcard <it>", <it; format="label"> )};
+{it | stream_<it> = subtree_stream( "wildcard <it>", <it; format="label"> )};
 separator="\n">
 <referencedWildcardListLabels:
-{stream_<it> = subtree_stream( "wildcard <it>", list_of_<it; format="label"> )};
+{it | stream_<it> = subtree_stream( "wildcard <it>", list_of_<it; format="label"> )};
 separator="\n">
 <referencedRuleLabels:
-{stream_<it> = <it; format="label"> ? subtree_stream( "rule <it>", <it; format="label">.tree ) : subtree_stream( "token <it>" )};
+{it | stream_<it> = <it; format="label"> ? subtree_stream( "rule <it>", <it; format="label">.tree ) : subtree_stream( "token <it>" )};
 separator="\n">
 <referencedRuleListLabels:
-{stream_<it> = subtree_stream( "token <it>", list_of_<it; format="label"> )};
+{it | stream_<it> = subtree_stream( "token <it>", list_of_<it; format="label"> )};
 separator="\n">
 >>
 
