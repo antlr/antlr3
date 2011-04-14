@@ -37,8 +37,6 @@
  *  The situation is not too bad as rewrite (->) usage makes ^ and !
  *  invalid. There is no huge explosion of combinations.
  */
-group ASTParser;
-
 @rule.setErrorReturnValue() ::= <<
 /* ASTParser rule.setErrorReturnValue */
 retval.tree = (<ASTLabelType> *)[treeAdaptor errorNode:input From:retval.start To:[input LT:-1] Exception:re];
@@ -59,7 +57,7 @@ tokenRef(token, label, elementIndex, terminalOptions) ::= <<
 
 /* ID! and output=AST (same as plain tokenRef) */
 /* ASTParser tokenRefBang */
-tokenRefBang(token,label,elementIndex) ::= "<super.tokenRef(...)>"
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(...)>"
 
 /** ID^ and output=AST */
 tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
@@ -104,18 +102,18 @@ tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
 // rather than just added on code.  Investigate that refactoring when
 // I have more time.
 
-matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
+matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <%
 /* ASTParser matchSet */
-<super.matchSet(..., postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> )<endif>
-    [treeAdaptor addChild:<createNodeFromToken(...)> toTree:root_0 ];})>
->>
+<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> )<endif>
+    [treeAdaptor addChild:<createNodeFromToken(...)> toTree:root_0 ];}, ...)>
+%>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 /* ASTParser matchRuleBlockSet */
 <matchSet(...)>
 >>
 
-matchSetBang(s,label,elementIndex,postmatchCode) ::= "<super.matchSet(...)>"
+matchSetBang(s,label,elementIndex,terminalOptions, postmatchCode) ::= "<super.matchSet(...)>"
 
 // note there is no matchSetTrack because -> rewrites force sets to be
 // plain old blocks of alts: (A|B|...|C)
@@ -125,8 +123,8 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 <if(label)>
 <label>=(<labelType> *)[input LT:1]; /* matchSetRuleRoot */<\n>
 <endif>
-<super.matchSet(..., postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> )<endif>
-root_0 = (<ASTLabelType> *)[treeAdaptor becomeRoot:<createNodeFromToken(...)> old:root_0];})>
+<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> )<endif>
+root_0 = (<ASTLabelType> *)[treeAdaptor becomeRoot:<createNodeFromToken(...)> old:root_0];}, ...)>
 >>
 
 // RULE REF AST
@@ -154,40 +152,40 @@ root_0 = (<ASTLabelType> *)[treeAdaptor becomeRoot:[<label> getTree] old:root_0]
 ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTParser ruleRefAndListLabel */
 <ruleRef(...)>
-<listLabel(elem = "["+label+"getTree]",...)>
+<listLabel(elem = {[<label> getTree]},...)>
 >>
 
 /** x+=rule! when output=AST is a rule ref with list addition */
 ruleRefBangAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTParser ruleRefBangAndListLabel */
 <ruleRefBang(...)>
-<listLabel(elem = "["+label+"getTree]",...)>
+<listLabel(elem = {[<label> getTree]},...)>
 >>
 
 /** x+=rule^ */
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTParser ruleRefRuleRootAndListLabel */
 <ruleRefRuleRoot(...)>
-<listLabel(elem = "["+label+"getTree]",...)>
+<listLabel(elem = {[<label> getTree]},...)>
 >>
 
 // WILDCARD AST
 
-wildcard(label,elementIndex) ::= <<
+wildcard(token,label,elementIndex,terminalOptions) ::= <<
 /* ASTParser wildcard */
 <super.wildcard(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-    [treeAdaptor addChild:[[treeAdaptor create:<label>] retain] toTree:root_0];
+    [treeAdaptor addChild:[[treeAdaptor createTree:<label>] retain] toTree:root_0];
 <if(backtracking)>}<endif>
 >>
 
-wildcardBang(label,elementIndex) ::= "<super.wildcard(...)>"
+wildcardBang(token,label,elementIndex,terminalOptions) ::= "<super.wildcard(...)>"
 
-wildcardRuleRoot(label,elementIndex) ::= <<
+wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 /* ASTParser wildcardRuleRoot */
 <super.wildcard(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-    <label>_tree = [[treeAdaptor create:<label>] retain]
+    <label>_tree = [[treeAdaptor createTree:<label>] retain]
     root_0 = (<ASTLabelType> *)[treeAdaptor becomeRoot:<label>_tree old:root_0];
 <if(backtracking)>}<endif>
 >>
@@ -197,7 +195,7 @@ createNodeFromToken(label,terminalOptions) ::= <<
 <if(terminalOptions.node)>
 [ANTLR<terminalOptions.node> newANTLR<terminalOptions.node>:<label>] <! new MethodNode(IDLabel) !>
 <else>
-(<ASTLabelType> *)[[treeAdaptor create:<label>] retain]
+(<ASTLabelType> *)[[treeAdaptor createTree:<label>] retain]
 <endif>
 >>
 

@@ -25,8 +25,6 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-group AST;
-
 @genericParserHeaderFile.memVars() ::= <<
 /* AST parserHeaderFile.memVars */
 NSInteger ruleLevel;
@@ -174,12 +172,12 @@ ruleLabelDefs() ::= <<
 /* AST ruleLabelDefs */
 <super.ruleLabelDefs()>
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,
-  ruleDescriptor.wildcardTreeListLabels]:{<ASTLabelType> *<it.label.text>_tree=nil;}; separator="\n">
-<ruleDescriptor.tokenListLabels:{<ASTLabelType> *<it.label.text>_tree = nil;}; separator="\n">
-<ruleDescriptor.allTokenRefsInAltsWithRewrites: {ANTLRRewriteRuleTokenStream *stream_<it> =
+  ruleDescriptor.wildcardTreeListLabels]:{it | <ASTLabelType> *<it.label.text>_tree=nil;}; separator="\n">
+<ruleDescriptor.tokenListLabels:{it | <ASTLabelType> *<it.label.text>_tree = nil;}; separator="\n">
+<ruleDescriptor.allTokenRefsInAltsWithRewrites:{it | ANTLRRewriteRuleTokenStream *stream_<it> =
     [[ANTLRRewriteRule<rewriteElementType>Stream newANTLRRewriteRule<rewriteElementType>Stream:treeAdaptor
                                                      description:@"token <it>"] retain];}; separator="\n">
-<ruleDescriptor.allRuleRefsInAltsWithRewrites:{ANTLRRewriteRuleSubtreeStream *stream_<it> =
+<ruleDescriptor.allRuleRefsInAltsWithRewrites:{it | ANTLRRewriteRuleSubtreeStream *stream_<it> =
     [[ANTLRRewriteRuleSubtreeStream newANTLRRewriteRuleSubtreeStream:treeAdaptor
                                                         description:@"rule <it>"] retain];}; separator="\n">
 >>
@@ -187,7 +185,7 @@ ruleLabelDefs() ::= <<
 ruleCleanUp() ::= <<
 /* AST ruleCleanUp */
 <super.ruleCleanUp()>
-<[ruleDescriptor.allTokenRefsInAltsWithRewrites,ruleDescriptor.allRuleRefsInAltsWithRewrites]:{[stream_<it> release];}; separator="\n">
+<[ruleDescriptor.allTokenRefsInAltsWithRewrites,ruleDescriptor.allRuleRefsInAltsWithRewrites]:{it | [stream_<it> release];}; separator="\n">
 <!
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(backtracking)>if ( state.backtracking == 0 ) {<\n>
@@ -205,10 +203,10 @@ ruleCleanUp() ::= <<
 
 rewriteCodeLabelsCleanUp() ::= <<
 /* AST rewriteCodeLabelsCleanUp */
- <referencedTokenLabels:{[stream_<it> release];}; separator="\n">
- <referencedTokenListLabels:{[stream_<it> release];}; separator="\n">
- <referencedRuleLabels:{[stream_<it> release];}; separator="\n">
- <referencedRuleListLabels:{[stream_<it> release];}; separator="\n">
+ <referencedTokenLabels:{it | [stream_<it> release];}; separator="\n">
+ <referencedTokenListLabels:{it | [stream_<it> release];}; separator="\n">
+ <referencedRuleLabels:{it | [stream_<it> release];}; separator="\n">
+ <referencedRuleListLabels:{it | [stream_<it> release];}; separator="\n">
 >>
 
 /** When doing auto AST construction, we must define some variables;
@@ -270,7 +268,7 @@ ruleRefTrack(rule,label,elementIndex,args,scope) ::= <<
 /** x+=rule when output=AST and tracking for rewrite */
 ruleRefTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefTrack(...)>
-<listLabel(elem="["+label+" getTree]",...)>
+<listLabel(elem={[<label> getTree]},...)>
 >>
 
 /** ^(rule ...) rewrite */
@@ -284,7 +282,7 @@ ruleRefRuleRootTrack(rule,label,elementIndex,args,scope) ::= <<
 /** ^(x+=rule ...) rewrite */
 ruleRefRuleRootTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefRuleRootTrack(...)>
-<listLabel(elem="["+label+" getTree]",...)>
+<listLabel(elem={[<label> getTree]},...)>
 >>
 
 // R e w r i t e
@@ -340,31 +338,31 @@ root_0 = (<ASTLabelType> *)[[[treeAdaptor class] newEmptyTree] retain];<\n>
 
 rewriteCodeLabels() ::= <<
 <referencedTokenLabels
-    :{ANTLRRewriteRule<rewriteElementType>Stream *stream_<it> =
+    :{it | ANTLRRewriteRule<rewriteElementType>Stream *stream_<it> =
     [[ANTLRRewriteRule<rewriteElementType>Stream newANTLRRewriteRule<rewriteElementType>Stream:treeAdaptor description:@"token <it>" element:<it>] retain];};
     separator="\n"
 >
-<referencedTokenListLabels:{ANTLRRewriteRule<rewriteElementType>Stream *stream_<it> =
+<referencedTokenListLabels:{it | ANTLRRewriteRule<rewriteElementType>Stream *stream_<it> =
     [[ANTLRRewriteRule<rewriteElementType>Stream newANTLRRewriteRule<rewriteElementType>Stream:treeAdaptor
         description:@"token <it>" elements:list_<it>] retain];};
     separator="\n"
 >
-<referencedWildcardLabels:{RewriteRuleSubtreeStream stream_<it> =
+<referencedWildcardLabels:{it | RewriteRuleSubtreeStream stream_<it> =
     [[ANTLRRewriteRuleSubtreeStream newANTLRRewriteRuleSubtreeStream:treeAdaptor
         description:"wildcard <it>" element:<it>] retain];};
     separator="\n"
 >
-<referencedWildcardListLabels:{RewriteRuleSubtreeStream stream_<it> =
+<referencedWildcardListLabels:{it | RewriteRuleSubtreeStream stream_<it> =
     [[ANTLRRewriteRuleSubtreeStream newANTLRRewriteRuleSubtreeStream:treeAdaptor
         descriptor:"wildcard <it>" elements:list_<it>] retain];};
     separator="\n"
 >
-<referencedRuleLabels:{ANTLRRewriteRuleSubtreeStream *stream_<it> =
+<referencedRuleLabels:{it | ANTLRRewriteRuleSubtreeStream *stream_<it> =
     [[ANTLRRewriteRuleSubtreeStream newANTLRRewriteRuleSubtreeStream:treeAdaptor
         description:@"token <it>" element:<it>!=nil?[<it> getTree]:nil] retain];};
     separator="\n"
 >
-<referencedRuleListLabels:{ANTLRRewriteRuleSubtreeStream *stream_<it> =
+<referencedRuleListLabels:{it | ANTLRRewriteRuleSubtreeStream *stream_<it> =
     [[ANTLRRewriteRuleSubtreeStream newANTLRRewriteRuleSubtreeStream:treeAdaptor
         description:@"token <it>" elements:list_<it>] retain];};
     separator="\n"
