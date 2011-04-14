@@ -47,41 +47,41 @@ retval.tree = (<ASTLabelType>)adaptor.errorNode(input, retval.start, input.LT(-1
 
 /** ID and output=AST */
 tokenRef(token,label,elementIndex,terminalOptions) ::= <<
-<super.tokenRef(token,label,elementIndex,terminalOptions)>
+<super.tokenRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-<label>_tree = <createNodeFromToken(label,terminalOptions)>;
+<label>_tree = <createNodeFromToken(...)>;
 adaptor.addChild(root_0, <label>_tree);
 <if(backtracking)>}<endif>
 >>
 
 /** ID! and output=AST (same as plain tokenRef) */
-tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(token,label,elementIndex,terminalOptions)>"
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(...)>"
 
 /** ID^ and output=AST */
 tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
-<super.tokenRef(token,label,elementIndex,terminalOptions)>
+<super.tokenRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-<label>_tree = <createNodeFromToken(label,terminalOptions)>;
+<label>_tree = <createNodeFromToken(...)>;
 root_0 = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_0);
 <if(backtracking)>}<endif>
 >>
 
 /** ids+=ID! and output=AST */
 tokenRefBangAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefBang(token,label,elementIndex,terminalOptions)>
-<listLabel(label, label)>
+<tokenRefBang(...)>
+<listLabel(elem=label, ...)>
 >>
 
 /** label+=TOKEN when output=AST but not rewrite alt */
 tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRef(token,label,elementIndex,terminalOptions)>
-<listLabel(label, label)>
+<tokenRef(...)>
+<listLabel(elem=label, ...)>
 >>
 
 /** Match label+=TOKEN^ when output=AST but not rewrite alt */
 tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
-<tokenRefRuleRoot(token,label,elementIndex,terminalOptions)>
-<listLabel(label, label)>
+<tokenRefRuleRoot(...)>
+<listLabel(elem=label, ...)>
 >>
 
 // SET AST
@@ -98,7 +98,7 @@ tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
 // I have more time.
 
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <%
-<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>adaptor.addChild(root_0, <createNodeFromToken(label,terminalOptions)>);}, ...)>
+<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>adaptor.addChild(root_0, <createNodeFromToken(...)>);}, ...)>
 %>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
@@ -114,23 +114,23 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 <if(label)>
 <label>=(<labelType>)input.LT(1);<\n>
 <endif>
-<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<createNodeFromToken(label,terminalOptions)>, root_0);},...)>
+<super.matchSet(postmatchCode={<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<createNodeFromToken(...)>, root_0);},...)>
 >>
 
 // RULE REF AST
 
 /** rule when output=AST */
 ruleRef(rule,label,elementIndex,args,scope) ::= <<
-<super.ruleRef(rule,label,elementIndex,args,scope)>
+<super.ruleRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>adaptor.addChild(root_0, <label>.getTree());
 >>
 
 /** rule! is same as normal rule ref */
-ruleRefBang(rule,label,elementIndex,args,scope) ::= "<super.ruleRef(rule,label,elementIndex,args,scope)>"
+ruleRefBang(rule,label,elementIndex,args,scope) ::= "<super.ruleRef(...)>"
 
 /** rule^ */
 ruleRefRuleRoot(rule,label,elementIndex,args,scope) ::= <<
-<super.ruleRef(rule,label,elementIndex,args,scope)>
+<super.ruleRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<label>.getTree(), root_0);
 >>
 
@@ -142,13 +142,13 @@ ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 
 /** x+=rule! when output=AST is a rule ref with list addition */
 ruleRefBangAndListLabel(rule,label,elementIndex,args,scope) ::= <<
-<ruleRefBang(rule,label,elementIndex,args,scope)>
+<ruleRefBang(...)>
 <listLabel(label, {<label>.getTree()})>
 >>
 
 /** x+=rule^ */
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
-<ruleRefRuleRoot(rule,label,elementIndex,args,scope)>
+<ruleRefRuleRoot(...)>
 <listLabel(label, {<label>.getTree()})>
 >>
 
