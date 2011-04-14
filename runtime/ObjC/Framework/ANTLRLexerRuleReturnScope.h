@@ -27,7 +27,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface ANTLRLexerRuleReturnScope : NSObject {
-	NSInteger start;
+	NSInteger startToken;
 	NSInteger stopToken;
 }
 
@@ -37,7 +37,7 @@
 - (NSInteger) getStop;
 - (void) setStop: (NSInteger) aStop;
 
-@property (assign, getter=getStart, setter=setStart:) NSInteger start;
-@property (getter=getStop,setter=setStop:) NSInteger stopToken;
+@property (assign) NSInteger startToken;
+@property (assign) NSInteger stopToken;
 
 @end
