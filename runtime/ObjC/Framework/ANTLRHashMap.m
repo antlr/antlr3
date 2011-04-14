@@ -44,18 +44,12 @@ static NSInteger itIndex;
 
 +(id)newANTLRHashMap
 {
-    ANTLRHashMap *aNewANTLRHashMap;
-    
-    aNewANTLRHashMap = [[ANTLRHashMap alloc] init];
-	return( aNewANTLRHashMap );
+    return [[[ANTLRHashMap alloc] init] retain];
 }
 
 +(id)newANTLRHashMapWithLen:(NSInteger)aBuffSize
 {
-    ANTLRHashMap *aNewANTLRHashMap;
-    
-    aNewANTLRHashMap = [[ANTLRHashMap alloc] initWithLen:aBuffSize];
-	return( aNewANTLRHashMap );
+    return [[[ANTLRHashMap alloc] initWithLen:aBuffSize] retain];
 }
 
 -(id)init
@@ -518,4 +512,5 @@ static NSInteger itIndex;
     return nil;
 }
 
+@synthesize BuffSize;
 @end

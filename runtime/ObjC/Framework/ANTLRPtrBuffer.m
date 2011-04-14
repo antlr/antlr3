@@ -48,24 +48,23 @@
 
 +(ANTLRPtrBuffer *)newANTLRPtrBuffer
 {
-    return [[ANTLRPtrBuffer alloc] init];
+    return [[[ANTLRPtrBuffer alloc] init] retain];
 }
 
 +(ANTLRPtrBuffer *)newANTLRPtrBufferWithLen:(NSInteger)cnt
 {
-    return [[ANTLRPtrBuffer alloc] initWithLen:cnt];
+    return [[[ANTLRPtrBuffer alloc] initWithLen:cnt] retain];
 }
 
 -(id)init
 {
-    NSInteger idx;
+    NSUInteger idx;
     
-	if ((self = [super init]) != nil) {
-		fNext = nil;
+	self = [super init];
+	if ( self != nil ) {
         BuffSize  = BUFFSIZE;
         ptr = 0;
-        buffer = [NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)];
-        [buffer retain];
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
         ptrBuffer = (id *)[buffer mutableBytes];
         for( idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
@@ -74,16 +73,15 @@
     return( self );
 }
 
--(id)initWithLen:(NSInteger)cnt
+-(id)initWithLen:(NSUInteger)cnt
 {
-    NSInteger idx;
+    NSUInteger idx;
     
-	if ((self = [super init]) != nil) {
-		fNext = nil;
+	self = [super init];
+	if ( self != nil ) {
         BuffSize  = cnt;
         ptr = 0;
-        buffer = [NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)];
-        [buffer retain];
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
         ptrBuffer = (id *)[buffer mutableBytes];
         for( idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
@@ -102,7 +100,10 @@
             tmp = ptrBuffer[idx];
             while ( tmp ) {
                 rtmp = tmp;
-                tmp = (id)tmp.fNext;
+                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+                    tmp = (id)tmp.fNext;
+                else
+                    tmp = nil;
                 [rtmp dealloc];
             }
         }
@@ -132,7 +133,10 @@
         tmp = ptrBuffer[idx];
         while ( tmp ) {
             rtmp = tmp;
-            tmp = [tmp getfNext];
+            if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+                tmp = (id)tmp.fNext;
+            else
+                tmp = nil;
             [rtmp dealloc];
         }
         ptrBuffer[idx] = nil;
@@ -149,12 +153,12 @@
     buffer = np;
 }
 
-- (NSInteger)getCount
+- (NSUInteger)getCount
 {
 	return( count );
 }
 
-- (void)setCount:(NSInteger)aCount
+- (void)setCount:(NSUInteger)aCount
 {
     count = aCount;
 }
@@ -169,12 +173,12 @@
     ptrBuffer = np;
 }
 
-- (NSInteger)getPtr
+- (NSUInteger)getPtr
 {
 	return( ptr );
 }
 
-- (void)setPtr:(NSInteger)aPtr
+- (void)setPtr:(NSUInteger)aPtr
 {
     ptr = aPtr;
 }
@@ -218,7 +222,7 @@
 	return v;
 }
 
-- (NSInteger)count
+- (NSUInteger)count
 {
     int cnt = 0;
     
@@ -231,14 +235,14 @@
     return cnt;
 }
 
-- (NSInteger)length
+- (NSUInteger)length
 {
     return BuffSize;
 }
 
-- (NSInteger)size
+- (NSUInteger)size
 {
-    NSInteger aSize = 0;
+    NSUInteger aSize = 0;
     for (int i = 0; i < BuffSize; i++ ) {
         if (ptrBuffer[i] != nil) {
             aSize += sizeof(id);
@@ -247,7 +251,7 @@
     return aSize;
 }
 
-- (void) insertObject:(id)aRule atIndex:(NSInteger)idx
+- (void) insertObject:(id)aRule atIndex:(NSUInteger)idx
 {
     if ( idx >= BuffSize ) {
         [self ensureCapacity:idx];
@@ -259,7 +263,7 @@
     ptrBuffer[idx] = aRule;
 }
 
-- (id)objectAtIndex:(NSInteger)idx
+- (id)objectAtIndex:(NSUInteger)idx
 {
     if ( idx < BuffSize ) {
         return ptrBuffer[idx];
@@ -291,13 +295,26 @@
     ptr = 0;
 }
 
-- (void) ensureCapacity:(NSInteger) index
+- (void)removeObjectAtIndex:(NSInteger)idx
 {
-	if ((index * sizeof(id)) >= [buffer length])
+    int i;
+    if ( idx >= 0 && idx < count ) {
+        if ( ptrBuffer[idx] != nil ) [ptrBuffer[idx] release];
+        for ( i = idx; i < count-1; i++ ) {
+            ptrBuffer[i] = ptrBuffer[i+1];
+        }
+        ptrBuffer[i] = nil;
+        count--;
+    }
+}
+
+- (void) ensureCapacity:(NSUInteger) anIndex
+{
+	if ((anIndex * sizeof(id)) >= [buffer length])
 	{
 		NSInteger newSize = ([buffer length] / sizeof(id)) * 2;
-		if (index > newSize) {
-			newSize = index + 1;
+		if (anIndex > newSize) {
+			newSize = anIndex + 1;
 		}
         BuffSize = newSize;
 		[buffer setLength:(BuffSize * sizeof(id))];
@@ -305,7 +322,7 @@
 	}
 }
 
-- (NSString *) toString
+- (NSString *) description
 {
     NSMutableString *str;
     NSInteger idx, cnt;
@@ -317,6 +334,11 @@
     }
     [str appendString:@"]"];
     return str;
+}
+
+- (NSString *) toString
+{
+    return [self description];
 }
 
 @end

@@ -222,7 +222,7 @@
 				state.failed = YES;
 				return;
 			}
-			ANTLRMismatchedTokenException *mte = [ANTLRMismatchedTokenException newANTLRMismatchedTokenExceptionChar:[aString characterAtIndex:i] Stream:input];
+			ANTLRMismatchedTokenException *mte = [ANTLRMismatchedTokenException newExceptionChar:[aString characterAtIndex:i] Stream:input];
 			[self recover:mte];
 			@throw mte;
 		}
@@ -246,7 +246,7 @@
 			state.failed = YES;
 			return;
 		}
-		ANTLRMismatchedTokenException  *mte = [ANTLRMismatchedTokenException newANTLRMismatchedTokenExceptionChar:aChar Stream:input];
+		ANTLRMismatchedTokenException  *mte = [ANTLRMismatchedTokenException newExceptionChar:aChar Stream:input];
 		[self recover:mte];
 		@throw mte;
 	}
@@ -263,7 +263,7 @@
 			return;
 		}
 		ANTLRMismatchedRangeException  *mre = [ANTLRMismatchedRangeException
-					exceptionWithRange:NSMakeRange((NSUInteger)fromChar,(NSUInteger)toChar)
+					newException:NSMakeRange((NSUInteger)fromChar,(NSUInteger)toChar)
 							   stream:input];
 		[self recover:mre];
 		@throw mre;

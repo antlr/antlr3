@@ -29,19 +29,15 @@
 #import "ANTLRBaseTree.h"
 
 @interface ANTLRCommonTree : ANTLRBaseTree <ANTLRTree> {
-	ANTLRCommonToken *token;
-	NSInteger startIndex;
-	NSInteger stopIndex;
-    ANTLRCommonTree *parent;
-    NSInteger childIndex;
 }
 
-@property (retain, getter=getANTLRCommonToken, setter=setANTLRCommonToken) ANTLRCommonToken *token;
-@property (assign, getter=getTokenStartIndex, setter=setTokenStartIndex) NSInteger startIndex;
-@property (assign, getter=getTokenStopIndex, setter=setTokenStopIndex) NSInteger stopIndex;
-@property (retain, getter=getParent, setter=setParent:) ANTLRCommonTree *parent;
-@property (assign, getter=getChildIndex, setter=setChildIndex) NSInteger childIndex;
-
+/*
+@property (retain, getter=getANTLRCommonToken, setter=setANTLRCommonToken:) ANTLRCommonToken *token;
+@property (assign, getter=getTokenStartIndex, setter=setTokenStartIndex:) NSInteger startIndex;
+@property (assign, getter=getTokenStopIndex, setter=setTokenStopIndex:) NSInteger stopIndex;
+@property (retain, getter=getParent, setter=setParent:) id<ANTLRBaseTree> parentparent;
+@property (assign, getter=getChildIndex, setter=setChildIndex:) NSInteger childIndex;
+*/
 + (ANTLRCommonTree *) invalidNode;
 + (ANTLRCommonTree *) newTree;
 + (ANTLRCommonTree *) newTreeWithTree:(ANTLRCommonTree *)aTree;
@@ -49,10 +45,10 @@
 + (ANTLRCommonTree *) newTreeWithTokenType:(NSInteger)tokenType;
 + (ANTLRCommonTree *) newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText;
 #ifdef DONTUSEYET
-+ (id<ANTLRTree>) newTreeWithTokenType:(NSInteger)tokenType;
-+ (id<ANTLRTree>) newTreeWithToken:(id<ANTLRToken>)fromToken TokenType:(NSInteger)tokenType;
-+ (id<ANTLRTree>) newTreeWithToken:(id<ANTLRToken>)fromToken TokenType:(NSInteger)tokenType Text:(NSString *)tokenText;
-+ (id<ANTLRTree>) newTreeWithToken:(id<ANTLRToken>)fromToken Text:(NSString *)tokenText;
++ (id<ANTLRBaseTree>) newTreeWithTokenType:(NSInteger)tokenType;
++ (id<ANTLRBaseTree>) newTreeWithToken:(id<ANTLRToken>)fromToken TokenType:(NSInteger)tokenType;
++ (id<ANTLRBaseTree>) newTreeWithToken:(id<ANTLRToken>)fromToken TokenType:(NSInteger)tokenType Text:(NSString *)tokenText;
++ (id<ANTLRBaseTree>) newTreeWithToken:(id<ANTLRToken>)fromToken Text:(NSString *)tokenText;
 #endif
 
 - (id) init;
@@ -61,13 +57,13 @@
 - (id) initWithTokenType:(NSInteger)aTokenType;
 - (id) initWithTokenType:(NSInteger)aTokenType Text:(NSString *)theText;
 
-- (id<ANTLRTree>) copyWithZone:(NSZone *)aZone;
+- (id<ANTLRBaseTree>) copyWithZone:(NSZone *)aZone;
 
 - (BOOL) isNil;
 
 - (ANTLRCommonToken *) getToken;
 - (void) setToken:(ANTLRCommonToken *)aToken;
-- (id<ANTLRTree>) dupNode;
+- (id<ANTLRBaseTree>) dupNode;
 - (NSInteger) getType;
 - (NSString *) getText;
 - (NSUInteger) getLine;

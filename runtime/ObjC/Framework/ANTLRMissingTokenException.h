@@ -37,10 +37,10 @@
     id<ANTLRToken> inserted;
 }
 /** Used for remote debugger deserialization */
-+ (id) newANTLRMissingTokenException;
-+ (id) newANTLRMissingTokenException:(NSInteger)expected
-                              Stream:(id<ANTLRIntStream>)anInput
-                                With:(id<ANTLRToken>)insertedToken;
++ (id) newException;
++ (id) newException:(NSInteger)expected
+             Stream:(id<ANTLRIntStream>)anInput
+               With:(id<ANTLRToken>)insertedToken;
 - (id) init;
 - (id) init:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput With:(id<ANTLRToken>)insertedToken;
 
@@ -48,4 +48,5 @@
 
 - (NSString *)toString;
 
+@property (retain) id<ANTLRToken> inserted;
 @end

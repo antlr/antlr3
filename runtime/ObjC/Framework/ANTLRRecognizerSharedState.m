@@ -50,17 +50,17 @@
 
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState
 {
-    return [[ANTLRRecognizerSharedState alloc] init];
+    return [[[ANTLRRecognizerSharedState alloc] init] retain];
 }
 
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedStateWithRuleLen:(NSInteger)aLen
 {
-    return [[ANTLRRecognizerSharedState alloc] initWithRuleLen:aLen];
+    return [[[ANTLRRecognizerSharedState alloc] initWithRuleLen:aLen] retain];
 }
 
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState:(ANTLRRecognizerSharedState *)aState
 {
-    return [[ANTLRRecognizerSharedState alloc] initWithState:aState];
+    return [[[ANTLRRecognizerSharedState alloc] initWithState:aState] retain];
 }
 
 - (id) init

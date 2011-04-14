@@ -33,6 +33,14 @@
 
 @implementation ANTLRTreePatternLexer
 
+@synthesize pattern;
+@synthesize p;
+@synthesize c;
+@synthesize n;
+@synthesize sval;
+@synthesize data;
+@synthesize error;
+
 + (ANTLRTreePatternLexer *)newANTLRTreePatternLexer:(NSString *)aPattern
 {
     return [[ANTLRTreePatternLexer alloc] initWithPattern:aPattern];
@@ -44,7 +52,7 @@
         p = -1;
         n = 0;
         error = NO;
-        sval = [NSMutableData dataWithLength:1000];
+        sval = [[NSMutableData dataWithLength:1000] retain];
         data = [sval mutableBytes];
         pattern = @"";
         n = [pattern length];
@@ -59,7 +67,7 @@
         p = -1;
         n = 0;
         error = NO;
-        sval = [NSMutableData dataWithLength:1000];
+        sval = [[NSMutableData dataWithLength:1000] retain];
         data = [sval mutableBytes];
         pattern = aPattern;
         n = [pattern length];

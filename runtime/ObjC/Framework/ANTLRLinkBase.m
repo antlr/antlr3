@@ -75,7 +75,7 @@
 {
     ANTLRLinkBase *copy;
     
-    copy = [[self class] alloc];
+    copy = [[self class] allocWithZone:aZone];
     copy.fPrev = fPrev;
     copy.fNext = fNext;
     return( copy );
@@ -85,10 +85,11 @@
 
 -(id<ANTLRLinkList>)append:(id<ANTLRLinkList>)node
 {
-	node.fNext = (id<ANTLRLinkList>)self;
-	node.fPrev = (id<ANTLRLinkList>)self.fPrev;
-	self.fPrev = node;
-	((id<ANTLRLinkList>)self.fPrev).fNext = node;
+	node.fPrev = (id<ANTLRLinkList>)self;
+	node.fNext = (id<ANTLRLinkList>)self.fNext;
+	if (node.fNext != nil)
+        node.fNext.fPrev = node;
+    self.fNext = node;
     return( node );
 }
 
@@ -96,7 +97,9 @@
 {
 	node.fNext = self;
 	node.fPrev = self.fPrev;
-	if ( self.fPrev != nil ) self.fPrev.fNext = node;
+    if (node.fPrev != nil) 
+        node.fPrev.fNext = node;
+	self.fPrev = node;
 	return( node );
 }
 
@@ -105,7 +108,7 @@
 	return(fNext);
 }
 
--(void)setFNext:(id<ANTLRLinkList>)np
+-(void)setfNext:(id<ANTLRLinkList>)np
 {
 	fNext = np;
 }
@@ -115,7 +118,7 @@
 	return(fPrev);
 }
 
--(void)setFPrev:(id<ANTLRLinkList>)pp
+-(void)setfPrev:(id<ANTLRLinkList>)pp
 {
 	fPrev = pp;
 }

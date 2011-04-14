@@ -34,67 +34,59 @@
 
 @implementation ANTLRRuntimeException
 
-+ (ANTLRRuntimeException *) newANTLRNoSuchElementException:(NSString *)aReason
++ (id) newException
 {
-    return [[ANTLRRuntimeException alloc] initWithName:@"ANTLRNoSuchElementException" reason:aReason];
+    return [[ANTLRRuntimeException alloc] init];
 }
 
-+ (ANTLRRuntimeException *) newANTLRIllegalArgumentException:(NSString *)aReason
++ (id) newException:(NSString *)aReason
 {
-    return [[ANTLRRuntimeException alloc] initWithName:@"ANTLRIllegalArgumentException" reason:aReason];
+    return [[ANTLRRuntimeException alloc] init:aReason];
 }
 
-+ (ANTLRRuntimeException *) newANTLRRuntimeException:(NSString *)aReason
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    return [[ANTLRRuntimeException alloc] initWithRuntime:aReason];
+    return [[ANTLRRuntimeException alloc] init:aReason userInfo:aUserInfo];
 }
 
-+ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason
++ (id) newException:(NSString *)aName reason:(NSString *)aReason;
 {
     return [[ANTLRRuntimeException alloc] initWithName:aName reason:aReason];
 }
 
-+ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
++ (id) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 {
     return [[ANTLRRuntimeException alloc] initWithName:aName reason:aReason userInfo:aUserInfo];
 }
 
-- init
+
+- (id) init
 {
-    if ((self = [super initWithName:@"ANTLRRuntimeException" reason:@"UnknownException" userInfo:nil]) != nil) {
-    }
+    self = [super initWithName:@"ANTLRRuntimeException" reason:@"UnknownException" userInfo:nil];
     return(self);
 }
 
-- (id)initWithRuntime:(NSString *)aReason
+- (id) init:(NSString *)aReason
 {
-    self = [super initWithName:(NSString *)@"RuntimeException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
-    if (self) {
-    }
+    self = [super initWithName:(NSString *)@"ANTLRRuntimeException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
     return(self);
 }
 
-- (id)initWithReason:(NSString *)aReason
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    self = [super initWithName:(NSString *)@"NoNameGiven" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
-    if (self) {
-    }
+    self = [super initWithName:@"ANTLRRuntimeException" reason:aReason userInfo:aUserInfo];
     return(self);
 }
 
-- (id)initWithName:(NSString *)aName reason:(NSString *)aReason
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason
 {
     self = [super initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
-    if (self) {
-    }
     return(self);
 }
 
-- (id)initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    self = [super initWithName:aName reason:aReason userInfo:aUserInfo];
-    if (self) {
-    }
+    self = [super initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo];
     return(self);
 }
 
@@ -117,6 +109,143 @@
             return traceStr;
     }
     return trace;    
+}
+
+@end
+
+@implementation ANTLRIllegalArgumentException
+
++ (id) newException
+{
+    return [[ANTLRIllegalArgumentException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[ANTLRIllegalArgumentException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[ANTLRIllegalArgumentException alloc] init:aReason userInfo:aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"ANTLRIllegalArgumentException" reason:@"UnknownException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"ANTLRIllegalArgumentException" reason:(NSString *)aReason userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"ANTLRIllegalArgumentException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation ANTLRIllegalStateException
+
++ (id) newException
+{
+    return [[ANTLRIllegalStateException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[ANTLRIllegalStateException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[ANTLRIllegalStateException alloc] init:aReason userInfo:aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"ANTLRIllegalStateException" reason:@"UnknownException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"ANTLRIllegalStateException" reason:(NSString *)aReason userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"ANTLRIllegalStateException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation ANTLRNoSuchElementException
+
++ (id) newException
+{
+    return [[ANTLRNoSuchElementException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[ANTLRNoSuchElementException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[ANTLRNoSuchElementException alloc] init:aReason userInfo:(NSDictionary *)aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"ANTLRNoSuchElementException" reason:@"UnknownException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"ANTLRNoSuchElementException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"ANTLRNoSuchElementException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:aName reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation ANTLRRewriteEarlyExitException
+
++ (id) newException
+{
+	return [[self alloc] init];
+}
+
+- (id) init
+{
+	self = [super initWithName:@"RewriteEarlyExitException" reason:nil userInfo:nil];
+	return self;
+}
+
+- (NSString *) description
+{
+	return [self name];
 }
 
 @end

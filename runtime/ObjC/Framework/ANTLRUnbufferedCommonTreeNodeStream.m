@@ -48,12 +48,12 @@
 @synthesize head;
 @synthesize tail;
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree;
+- (id) initWithTree:(ANTLRCommonTree *)theTree
 {
 	return [self initWithTree:theTree treeAdaptor:nil];
 }
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree treeAdaptor:(ANTLRCommonTreeAdaptor *)theAdaptor;
+- (id) initWithTree:(ANTLRCommonTree *)theTree treeAdaptor:(ANTLRCommonTreeAdaptor *)theAdaptor
 {
 	if ((self = [super init]) != nil) {
 		[self setRoot:theTree];
@@ -85,7 +85,7 @@
 	[super dealloc];
 }
 
-- (void) reset;
+- (void) reset
 {
 	currentNode = root;
 	previousNode = nil;
@@ -106,19 +106,19 @@
 
 #pragma mark ANTLRTreeNodeStream conformance
 
-- (id) LT:(NSInteger)k;
+- (id) LT:(NSInteger)k
 {
 	if (k == -1)
 		return previousNode;
 	if (k < 0)
 		@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-LT: looking back more than one node unsupported for unbuffered streams" userInfo:nil];
 	if (k == 0)
-		return [ANTLRBaseTree invalidNode];
+		return ANTLRBaseTree.INVALID_NODE;
 	[self fillBufferWithLookahead:k];
 	return [lookahead objectAtIndex:(head+k-1) % [lookahead count]];
 }
 
-- (id) treeSource;
+- (id) treeSource
 {
 	return [self root];
 }
@@ -137,7 +137,7 @@
     }
 }
 
-- (id<ANTLRTokenStream>) getTokenStream; 
+- (id<ANTLRTokenStream>) getTokenStream
 {
 	return tokenStream;
 }
@@ -151,34 +151,34 @@
 	}
 }
 
-- (void) setUsesUniqueNavigationNodes:(BOOL)flag;
+- (void) setUsesUniqueNavigationNodes:(BOOL)flag
 {
 	shouldUseUniqueNavigationNodes = flag;
 }
 
-- (id) nodeAtIndex:(NSUInteger) idx;
+- (id) nodeAtIndex:(NSUInteger) idx
 {
 	@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-nodeAtIndex: unsupported for unbuffered streams" userInfo:nil];
 }
 
-- (NSString *) toString;
+- (NSString *) toString
 {
 	@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-toString unsupported for unbuffered streams" userInfo:nil];
 }
 
-- (NSString *) toStringWithRange:(NSRange) aRange;
+- (NSString *) toStringWithRange:(NSRange) aRange
 {
 	@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-toString: unsupported for unbuffered streams" userInfo:nil];
 }
 
-- (NSString *) toStringFromNode:(id)startNode ToNode:(id)stopNode;
+- (NSString *) toStringFromNode:(id)startNode ToNode:(id)stopNode
 {
 	@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-toStringFromNode:toNode: unsupported for unbuffered streams" userInfo:nil];
 }
 
 #pragma mark ANTLRIntStream conformance
 
-- (void) consume;
+- (void) consume
 {
 	[self fillBufferWithLookahead:1];
 	absoluteNodeIndex++;
@@ -186,7 +186,7 @@
 	head = (head+1) % [lookahead count];
 }
 
-- (NSInteger) LA:(NSUInteger) i;
+- (NSInteger) LA:(NSUInteger) i
 {
 	ANTLRCommonTree *node = [self LT:i];
 	if (!node) 
@@ -195,7 +195,7 @@
 	return ttype;
 }
 
-- (NSUInteger) mark;
+- (NSUInteger) mark
 {
 	ANTLRUnbufferedCommonTreeNodeStreamState *state = [[[ANTLRUnbufferedCommonTreeNodeStreamState alloc] init] retain];
 	[state setCurrentNode:currentNode];
@@ -214,12 +214,12 @@
 	return [markers count];
 }
 
-- (NSUInteger) getIndex;
+- (NSUInteger) getIndex
 {
 	return absoluteNodeIndex + 1;
 }
 
-- (void) rewind:(NSUInteger) marker;
+- (void) rewind:(NSUInteger) marker
 {
 	if ( [markers count] < marker ) {
 		return;
@@ -249,12 +249,12 @@
 	[self rewind:[markers count]];
 }
 
-- (void) release:(NSUInteger) marker;
+- (void) release:(NSUInteger) marker
 {
 	@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-release: unsupported for unbuffered streams" userInfo:nil];
 }
 
-- (void) seek:(NSUInteger) anIndex;
+- (void) seek:(NSUInteger) anIndex
 {
 	if ( anIndex < (NSUInteger) index )
 		@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-seek: backwards unsupported for unbuffered streams" userInfo:nil];
@@ -270,7 +270,7 @@
 
 
 #pragma mark Lookahead Handling
-- (void) addLookahead:(id<ANTLRTree>)aNode;
+- (void) addLookahead:(id<ANTLRBaseTree>)aNode
 {
 	[lookahead replaceObjectAtIndex:tail withObject:aNode];
 	tail = (tail+1) % [lookahead count];
@@ -297,14 +297,14 @@
 	
 }
 
-- (NSUInteger) lookaheadSize;
+- (NSUInteger) lookaheadSize
 {
 	return tail < head
 		? ([lookahead count] - head + tail) 
 		: (tail - head);
 }
 
-- (void) fillBufferWithLookahead:(NSInteger)k;
+- (void) fillBufferWithLookahead:(NSInteger)k
 {
 	unsigned int n = [self lookaheadSize];
 	unsigned int i;
@@ -339,7 +339,7 @@
 }	
 
 #pragma mark Node visiting
-- (ANTLRCommonTree *) handleRootNode;
+- (ANTLRCommonTree *) handleRootNode
 {
 	ANTLRCommonTree *node = currentNode;
 	currentChildIndex = 0;
@@ -354,7 +354,7 @@
 	return node;
 }
 
-- (ANTLRCommonTree *) visitChild:(NSInteger)childNumber;
+- (ANTLRCommonTree *) visitChild:(NSInteger)childNumber
 {
 	ANTLRCommonTree *node = nil;
 	
@@ -371,7 +371,7 @@
 	return node;
 }
 
-- (void) walkBackToMostRecentNodeWithUnvisitedChildren;
+- (void) walkBackToMostRecentNodeWithUnvisitedChildren
 {
 	while (currentNode != nil && currentChildIndex >= (NSInteger)[currentNode getChildCount])
 	{
@@ -392,7 +392,7 @@
 	
 }
 
-- (void) addNavigationNodeWithType:(NSInteger)tokenType;
+- (void) addNavigationNodeWithType:(NSInteger)tokenType
 {
 	// TODO: this currently ignores shouldUseUniqueNavigationNodes.
 	switch (tokenType) {

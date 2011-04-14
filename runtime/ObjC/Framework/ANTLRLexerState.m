@@ -40,7 +40,6 @@
 
 - (void) reset
 {
-	[super reset];
 	[self setToken:nil];
 	type = 0;				
 	channel = 0;				
@@ -61,6 +60,7 @@
 {
 	return token;
 }
+
 - (void) setToken:(id<ANTLRToken>) theToken
 {
 	if (theToken != token) {
@@ -70,7 +70,7 @@
 }
 
 
-- (unsigned int) getType
+- (unsigned int) getTokenType
 {
 	return type;
 }
@@ -80,7 +80,7 @@
 	type = theTokenType;
 }
 
-- (unsigned int) channel
+- (unsigned int) getChannel
 {
 	return channel;
 }
@@ -90,7 +90,7 @@
 	channel = theChannel;
 }
 
-- (unsigned int) tokenStartLine
+- (unsigned int) getTokenStartLine
 {
 	return tokenStartLine;
 }
@@ -100,7 +100,7 @@
 	tokenStartLine = theTokenStartLine;
 }
 
-- (unsigned int) tokenCharPositionInLine
+- (unsigned int) getTokenCharPositionInLine
 {
 	return tokenStartCharPositionInLine;
 }
@@ -110,7 +110,7 @@
 	tokenStartCharPositionInLine = theCharPosition;
 }
 
-- (int) tokenStartCharIndex
+- (int) getTokenStartCharIndex
 {
 	return tokenStartCharIndex;
 }
@@ -120,7 +120,7 @@
 	tokenStartCharIndex = theTokenStartCharIndex;
 }
 
-- (NSString *) text
+- (NSString *) getText
 {
 	return text;
 }

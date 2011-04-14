@@ -33,12 +33,12 @@
 
 @implementation ANTLRUnwantedTokenException : ANTLRMismatchedTokenException
 	/** Used for remote debugger deserialization */
-+ (ANTLRUnwantedTokenException *)newANTLRUnwantedTokenException
++ (ANTLRUnwantedTokenException *)newException
 {
     return [[ANTLRUnwantedTokenException alloc] init];
 }
     
-+ (ANTLRUnwantedTokenException *)newANTLRUnwantedTokenException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput
++ (ANTLRUnwantedTokenException *)newException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput
 {
     return [[ANTLRUnwantedTokenException alloc] initWithStream:anInput And:expected];
 }
@@ -67,14 +67,14 @@
     
 - (NSString *)toString
 {
-    NSString *exp = [NSString stringWithFormat:@", expected %d", expecting];
+    NSString *exp1 = [NSString stringWithFormat:@", expected %d", expecting];
     if ( expecting == ANTLRTokenTypeInvalid ) {
-        exp = @"";
+        exp1 = @"";
     }
     if ( token==nil ) {
-        return [NSString stringWithFormat:@"UnwantedTokenException(found=%@)", exp];
+        return [NSString stringWithFormat:@"UnwantedTokenException(found=%@)", exp1];
     }
-    return [NSString stringWithFormat:@"UnwantedTokenException(found=%@ %@", token.text, exp];
+    return [NSString stringWithFormat:@"UnwantedTokenException(found=%@ %@", token.text, exp1];
 }
 
 @end

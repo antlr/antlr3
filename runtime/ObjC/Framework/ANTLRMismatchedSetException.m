@@ -31,7 +31,7 @@
 
 @synthesize expecting;
 
-+ (id) exceptionWithSet:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
++ (id) newException:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
 {
 	return [[ANTLRMismatchedSetException alloc] initWithSet:theExpectedSet stream:theStream];
 }

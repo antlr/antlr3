@@ -42,7 +42,7 @@
 }
 
 @property (retain, getter=getInput, setter=setInput:) id<ANTLRCharStream> input;
-@property (getter=getRuleNestingLevel, setter=setRuleNestingLevel) NSUInteger ruleNestingLevel;
+@property (getter=getRuleNestingLevel, setter=setRuleNestingLevel:) NSUInteger ruleNestingLevel;
 
 #pragma mark Initializer
 - (id) initWithCharStream:(id<ANTLRCharStream>) anInput;

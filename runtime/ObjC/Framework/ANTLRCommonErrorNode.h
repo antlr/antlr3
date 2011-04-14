@@ -60,4 +60,8 @@ ANTLRRecognitionException *trappedException;
 
 - (NSString *) toString;
 
+@property (retain) id<ANTLRIntStream> input;
+@property (retain) id<ANTLRToken> startToken;
+@property (retain) id<ANTLRToken> stopToken;
+@property (retain) ANTLRRecognitionException *trappedException;
 @end

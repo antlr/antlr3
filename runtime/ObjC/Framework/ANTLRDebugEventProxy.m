@@ -102,7 +102,7 @@ static unsigned lengthOfUTF8Ack = 0;
 	@try {
 		NSData *newLine = [debuggerFH readDataOfLength:lengthOfUTF8Ack];
 		response = [[NSString alloc] initWithData:newLine encoding:NSUTF8StringEncoding];
-		if (![response isEqualToString:@"ack\n"]) @throw [NSException exceptionWithName:@"ANTLRDebugEventProxy" Reason:@"illegal response from debugger" userInfo:nil];
+		if (![response isEqualToString:@"ack\n"]) @throw [NSException exceptionWithName:@"ANTLRDebugEventProxy" reason:@"illegal response from debugger" userInfo:nil];
 	}
 	@catch (NSException *e) {
 		NSLog(@"socket died or debugger misbehaved: %@ read <%@>", e, response);

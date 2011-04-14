@@ -46,6 +46,8 @@
 - (id<ANTLRLinkList>)getfPrev;
 - (void) setFPrev:(id<ANTLRLinkList>)pp;
 
+@property (retain) id<ANTLRLinkList> fPrev;
+@property (retain) id<ANTLRLinkList> fNext;
 @end
 
 @interface ANTLRLinkBase : NSObject <ANTLRLinkList> {
@@ -53,8 +55,8 @@
 	id<ANTLRLinkList> fNext;
 }
 
-@property (retain, getter=getfPrev, setter=setFPrev:) id<ANTLRLinkList> fPrev;
-@property (retain, getter=getfNext, setter=setFNext:) id<ANTLRLinkList> fNext;
+@property (retain) id<ANTLRLinkList> fPrev;
+@property (retain) id<ANTLRLinkList> fNext;
 
 + (id<ANTLRLinkList>)newANTLRLinkBase;
 + (id<ANTLRLinkList>)newANTLRLinkBase:(id<ANTLRLinkList>)np Prev:(id<ANTLRLinkList>)pp;
@@ -68,7 +70,7 @@
 - (id<ANTLRLinkList>)insert:(id<ANTLRLinkList>)node;
 
 - (id<ANTLRLinkList>)getfNext;
-- (void)setFNext:(id<ANTLRLinkList>) np;
+- (void)setfNext:(id<ANTLRLinkList>) np;
 - (id<ANTLRLinkList>)getfPrev;
-- (void)setFPrev:(id<ANTLRLinkList>) pp;
+- (void)setfPrev:(id<ANTLRLinkList>) pp;
 @end

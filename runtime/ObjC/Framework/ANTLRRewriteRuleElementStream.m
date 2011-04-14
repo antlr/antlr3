@@ -179,7 +179,7 @@
     [elements addObject:anElement];
 }
 
-- (id<ANTLRTree>) nextTree
+- (id<ANTLRBaseTree>) nextTree
 {
     NSInteger n = [self size];
     if ( dirty && (cursor >= 0 && n == 1)) {
@@ -235,7 +235,7 @@
     return nil;
 }
 
-- (id<ANTLRTree>) toTree:(id)element
+- (id<ANTLRBaseTree>) toTree:(id)element
 {
     return element;
 }

@@ -44,7 +44,7 @@
 }
 
 //@property (copy) ANTLRRuleStack *fNext;
-@property (getter=getLastHash, setter=setLastHash) NSInteger LastHash;
+@property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 
 // Contruction/Destruction
 + (ANTLRBaseStack *)newANTLRBaseStack;

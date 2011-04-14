@@ -76,7 +76,7 @@
 
 + (ANTLRBitSet *) of:(NSUInteger)a And2:(NSUInteger)b And3:(NSUInteger)c
 {
-    NSInteger d = ((a>b)?a:b);
+    NSUInteger d = ((a>b)?a:b);
     d = ((c>d)?c:d)+1;
     ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:d];
     [s add:a];
@@ -87,8 +87,8 @@
 
 + (ANTLRBitSet *) of:(NSUInteger)a And2:(NSUInteger)b And3:(NSUInteger)c And4:(NSUInteger)d
 {
-    NSInteger e = ((a>b)?a:b);
-    NSInteger f = ((c>d)?c:d);
+    NSUInteger e = ((a>b)?a:b);
+    NSUInteger f = ((c>d)?c:d);
     e = ((e>f)?e:f)+1;
     ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:e];
     [s add:a];
@@ -165,10 +165,9 @@
 {
 	if ((self = [super init]) != nil) {
         bitVector = CFBitVectorCreateMutable ( kCFAllocatorDefault, 0 );
-		NSEnumerator *enumerator = [theArray objectEnumerator];
 		id value;
 		int bit = 0;
-		while (value = [enumerator nextObject]) {
+		for (value in theArray) {
 			if ([value boolValue] == YES) {
                 [self add:bit];
 				//CFBitVectorSetBitAtIndex(bitVector, bit, 1);
@@ -310,9 +309,11 @@
 	return bitVector;
 }
 
+@synthesize bitVector;
 @end
 
 NSInteger max(NSInteger a, NSInteger b)
 {
     return (a>b)?a:b;
 }
+

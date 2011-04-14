@@ -37,8 +37,8 @@
     NSNumber *stopIndex;
 }
 
-@property (retain, getter=getStartIndex, setter=setStartIndex) NSNumber *startIndex;
-@property (retain, getter=getStopIndex, setter=setStopIndex) NSNumber *stopIndex;
+@property (retain, getter=getStartIndex, setter=setStartIndex:) NSNumber *startIndex;
+@property (retain, getter=getStopIndex, setter=setStopIndex:) NSNumber *stopIndex;
 
 + (ANTLRRuleMemo *)newANTLRRuleMemo;
 + (ANTLRRuleMemo *)newANTLRRuleMemoWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;

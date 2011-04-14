@@ -38,24 +38,24 @@
 
 @interface ANTLRPtrBuffer : ANTLRLinkBase {
 	//ANTLRPtrBuffer *fNext;
-    NSInteger BuffSize;
+    NSUInteger BuffSize;
+    NSUInteger count;
+    NSUInteger ptr;
     NSMutableData *buffer;
     id *ptrBuffer;
-    NSInteger count;
-    NSInteger ptr;
 }
 
-@property (getter=getBuffSize, setter=setBuffSize:) NSInteger BuffSize;
+@property (getter=getBuffSize, setter=setBuffSize:) NSUInteger BuffSize;
+@property (getter=getCount, setter=setCount:) NSUInteger count;
+@property (getter=getPtr, setter=setPtr:) NSUInteger ptr;
 @property (retain, getter=getBuffer, setter=setBuffer:) NSMutableData *buffer;
-@property (retain, getter=getPtrBuffer, setter=setPtrBuffer:) id *ptrBuffer;
-@property (getter=getCount, setter=setCount:) NSInteger count;
-@property (getter=getPtr, setter=setPtr:) NSInteger ptr;
+@property (assign, getter=getPtrBuffer, setter=setPtrBuffer:) id *ptrBuffer;
 
 // Contruction/Destruction
 +(ANTLRPtrBuffer *)newANTLRPtrBuffer;
 +(ANTLRPtrBuffer *)newANTLRPtrBufferWithLen:(NSInteger)cnt;
 -(id)init;
--(id)initWithLen:(NSInteger)cnt;
+-(id)initWithLen:(NSUInteger)cnt;
 -(void)dealloc;
 
 // Instance Methods
@@ -63,18 +63,18 @@
 /* clear -- reinitialize the maplist array */
 - (void) clear;
 
-- (NSInteger)count;
-- (NSInteger)length;
-- (NSInteger)size;
+- (NSUInteger)count;
+- (NSUInteger)length;
+- (NSUInteger)size;
 
 - (NSMutableData *)getBuffer;
 - (void)setBuffer:(NSMutableData *)np;
-- (NSInteger)getCount;
-- (void)setCount:(NSInteger)aCount;
+- (NSUInteger)getCount;
+- (void)setCount:(NSUInteger)aCount;
 - (id *)getPtrBuffer;
 - (void)setPtrBuffer:(id *)np;
-- (NSInteger)getPtr;
-- (void)setPtr:(NSInteger)np;
+- (NSUInteger)getPtr;
+- (void)setPtr:(NSUInteger)np;
 
 - (void) push:(id) v;
 - (id) pop;
@@ -82,11 +82,13 @@
 
 - (void) addObject:(id) v;
 - (void) addObjectsFromArray:(ANTLRPtrBuffer *)anArray;
-- (void) insertObject:(id)aRule atIndex:(NSInteger)idx;
-- (id)   objectAtIndex:(NSInteger)idx;
+- (void) insertObject:(id)aRule atIndex:(NSUInteger)idx;
+- (id)   objectAtIndex:(NSUInteger)idx;
 - (void) removeAllObjects;
+- (void)removeObjectAtIndex:(NSInteger)idx;
 
-- (void) ensureCapacity:(NSInteger) index;
+- (void) ensureCapacity:(NSUInteger) index;
+- (NSString *) description;
 - (NSString *) toString;
 
 @end

@@ -78,7 +78,7 @@
 
 - (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
 {
-    if ((self = [super init]) != nil) {
+    if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription elements:theElements]) != nil) {
         dirty = NO;
     }
     return self;

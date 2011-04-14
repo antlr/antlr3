@@ -96,7 +96,7 @@
 
 - (id<ANTLRToken>)objectAtIndex:(NSInteger)anIdx
 {
-    @throw [ANTLRRuntimeException newANTLRRuntimeException:@"Absolute token indexes are meaningless in an unbuffered stream"];
+    @throw [ANTLRRuntimeException newException:@"Absolute token indexes are meaningless in an unbuffered stream"];
 }
 
 - (NSString *)getSourceName

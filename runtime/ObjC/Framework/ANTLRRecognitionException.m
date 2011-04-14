@@ -36,17 +36,17 @@
 @synthesize line;
 @synthesize charPositionInLine;
 
-+ (ANTLRRecognitionException *) newANTLRRecognitionException
++ (id) newException
 {
 	return [[ANTLRRecognitionException alloc] init];
 }
 
-+ (ANTLRRecognitionException *) exceptionWithStream:(id<ANTLRIntStream>) anInputStream
++ (id) newException:(id<ANTLRIntStream>) anInputStream
 {
 	return [[ANTLRRecognitionException alloc] initWithStream:anInputStream];
 }
 
-+ (ANTLRRecognitionException *) exceptionWithStream:(id<ANTLRIntStream>) anInputStream reason:(NSString *)aReason
++ (id) newException:(id<ANTLRIntStream>) anInputStream reason:(NSString *)aReason
 {
 	return [[ANTLRRecognitionException alloc] initWithStream:anInputStream reason:aReason];
 }
@@ -89,6 +89,13 @@
 	if ((self = [super initWithName:NSStringFromClass([self class]) reason:@"Runtime Exception" userInfo:nil]) != nil) {
 	}
 	return self;
+}
+
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    if ((self = [super initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo]) != nil) {
+    }
+    return self;
 }
 
 - (void) dealloc
@@ -166,12 +173,12 @@
 //---------------------------------------------------------- 
 //  node 
 //---------------------------------------------------------- 
-- (id<ANTLRTree>) getNode
+- (id<ANTLRBaseTree>) getNode
 {
     return node; 
 }
 
-- (void) setNode: (id<ANTLRTree>) aNode
+- (void) setNode: (id<ANTLRBaseTree>) aNode
 {
     if (node != aNode) {
         [aNode retain];
@@ -195,4 +202,6 @@
     charPositionInLine = aPos;
 }
 
+@synthesize index;
+@synthesize c;
 @end

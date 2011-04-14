@@ -38,30 +38,35 @@
 @interface ANTLRTreeIterator : NSObject 
 {
 	id<ANTLRTreeAdaptor> adaptor;
-	id<ANTLRTree> root;
-	id<ANTLRTree> tree;
+	id<ANTLRBaseTree> root;
+	id<ANTLRBaseTree> tree;
 	BOOL firstTime;
-	id<ANTLRTree> up;
-	id<ANTLRTree> down;
-	id<ANTLRTree> eof;
+	id<ANTLRBaseTree> up;
+	id<ANTLRBaseTree> down;
+	id<ANTLRBaseTree> eof;
 	
 	ANTLRFastQueue *nodes;
 }
 
-@property(retain, readwrite) id<ANTLRTree> up;
-@property(retain, readwrite) id<ANTLRTree> down;
-@property(retain, readwrite) id<ANTLRTree> eof;
+@property(retain, readwrite) id<ANTLRBaseTree> up;
+@property(retain, readwrite) id<ANTLRBaseTree> down;
+@property(retain, readwrite) id<ANTLRBaseTree> eof;
 
 + newANTRLTreeIterator;
 + (ANTLRTreeIterator *) newANTRLTreeIteratorWithAdaptor:(ANTLRCommonTreeAdaptor *)adaptor
-                                                andTree:(id<ANTLRTree>)tree;
+                                                andTree:(id<ANTLRBaseTree>)tree;
 - (id) init;
-- (id) initWithTree:(id<ANTLRTree>) t;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>) a andTree:(id<ANTLRTree>) t;
+- (id) initWithTree:(id<ANTLRBaseTree>) t;
+- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>) a andTree:(id<ANTLRBaseTree>) t;
 
 - (void) reset;
 - (BOOL) hasNext;
 - (id) nextObject;
 - (NSArray *) allObjects;
 
+@property (retain) id<ANTLRTreeAdaptor> adaptor;
+@property (retain) id<ANTLRBaseTree> root;
+@property (retain) id<ANTLRBaseTree> tree;
+@property BOOL firstTime;
+@property (retain) ANTLRFastQueue *nodes;
 @end

@@ -31,7 +31,9 @@
 	int decisionNumber;
 }
 
-+ (ANTLREarlyExitException *) exceptionWithStream:(id<ANTLRIntStream>) anInputStream decisionNumber:(NSInteger) aDecisionNumber;
++ (ANTLREarlyExitException *) newException:(id<ANTLRIntStream>)anInputStream decisionNumber:(NSInteger)aDecisionNumber;
 - (id) initWithStream:(id<ANTLRIntStream>)anInputStream decisionNumber:(NSInteger) aDecisionNumber;
 
+@property int decisionNumber;
 @end
+

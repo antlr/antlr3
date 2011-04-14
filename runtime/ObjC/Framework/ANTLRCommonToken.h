@@ -37,26 +37,27 @@
 	NSUInteger charPositionInLine;
 	NSUInteger channel;
 	// this token's position in the TokenStream
-	NSUInteger index;
+	NSInteger index;
 	
 	// indices into the CharStream to avoid copying the text
 	// can manually override the text by using -setText:
-	NSUInteger startIndex;
-	NSUInteger stopIndex;
+	NSInteger startIndex;
+	NSInteger stopIndex;
 	// the actual input stream this token was found in
 	id<ANTLRCharStream> input;
 }
 
 + (void) initialize;
 + (NSInteger) DEFAULT_CHANNEL;
++ (id<ANTLRToken>)INVALID_TOKEN;
 + (NSInteger) INVALID_TOKEN_TYPE;
-+ (ANTLRCommonToken *) newToken;
-+ (ANTLRCommonToken *) newToken:(id<ANTLRCharStream>)anInput
-                                      Type:(NSInteger)aTType
-                                   Channel:(NSInteger)aChannel
-                                     Start:(NSInteger)aStart
-                                      Stop:(NSInteger)aStop;
-+ (ANTLRCommonToken *) newToken:(ANTLRTokenType)aType;
++ (id<ANTLRToken>) newToken;
++ (id<ANTLRToken>) newToken:(id<ANTLRCharStream>)anInput
+                       Type:(NSInteger)aTType
+                    Channel:(NSInteger)aChannel
+                      Start:(NSInteger)aStart
+                       Stop:(NSInteger)aStop;
++ (id<ANTLRToken>) newToken:(ANTLRTokenType)aType;
 + (id<ANTLRToken>) newToken:(NSInteger)tokenType Text:(NSString *)tokenText;
 + (id<ANTLRToken>) newTokenWithToken:(ANTLRCommonToken *)fromToken;
 + (id<ANTLRToken>) eofToken;
@@ -71,7 +72,7 @@
                              Channel:(NSInteger)aChannel
                                Start:(NSInteger)theStart
                                 Stop:(NSInteger)theStop;
-- (id) initWithToken:(ANTLRCommonToken *)aToken;
+- (id) initWithToken:(id<ANTLRToken>)aToken;
 - (id) initWithType:(ANTLRTokenType)aType;
 - (id) initWithType:(ANTLRTokenType)aTType Text:(NSString *)tokenText;
 
@@ -111,15 +112,15 @@
 - (id<ANTLRCharStream>) getInput;
 - (void) setInput: (id<ANTLRCharStream>) anInput;
 
-- (NSUInteger) getStart;
-- (void) setStart: (NSUInteger) aStart;
+- (NSInteger) getStart;
+- (void) setStart: (NSInteger) aStart;
 
-- (NSUInteger) getStop;
-- (void) setStop: (NSUInteger) aStop;
+- (NSInteger) getStop;
+- (void) setStop: (NSInteger) aStop;
 
 // the index of this Token into the TokenStream
-- (NSUInteger) getTokenIndex;
-- (void) setTokenIndex: (NSUInteger) aTokenIndex;
+- (NSInteger) getTokenIndex;
+- (void) setTokenIndex: (NSInteger) aTokenIndex;
 
 // conform to NSCopying
 - (id) copyWithZone:(NSZone *)theZone;
@@ -132,9 +133,9 @@
 @property (assign) NSUInteger line;
 @property (assign) NSUInteger charPositionInLine;
 @property (assign) NSUInteger channel;
-@property (assign) NSUInteger index;
-@property (assign, getter=getStart, setter=setStart:) NSUInteger startIndex;
-@property (assign, getter=getStop, setter=setStop:) NSUInteger stopIndex;
+@property (assign) NSInteger index;
+@property (assign, getter=getStart, setter=setStart:) NSInteger startIndex;
+@property (assign, getter=getStop, setter=setStop:) NSInteger stopIndex;
 @property (retain) id<ANTLRCharStream> input;
 
 @end

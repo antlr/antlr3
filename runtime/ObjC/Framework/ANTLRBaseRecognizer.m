@@ -711,7 +711,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     ANTLRRecognitionException *e = nil;
     // if next token is what we are looking for then "delete" this token
     if ( [self mismatchIsUnwantedToken:anInput TokenType:ttype] ) {
-        e = [ANTLRUnwantedTokenException newANTLRUnwantedTokenException:ttype Stream:anInput];
+        e = [ANTLRUnwantedTokenException newException:ttype Stream:anInput];
         /*
          System.err.println("recoverFromMismatchedToken deleting "+
          ((TokenStream)input).LT(1)+
@@ -729,12 +729,12 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     // can't recover with single token deletion, try insertion
     if ( [self mismatchIsMissingToken:anInput Follow:follow] ) {
         id<ANTLRToken> inserted = [self getMissingSymbol:anInput Exception:e TokenType:ttype Follow:follow];
-        e = [ANTLRMissingTokenException newANTLRMissingTokenException:ttype Stream:anInput With:inserted];
+        e = [ANTLRMissingTokenException newException:ttype Stream:anInput With:inserted];
         [self reportError:e];  // report after inserting so AW sees the token in the exception
         return inserted;
     }
     // even that didn't work; must throw the exception
-    e = [ANTLRMismatchedTokenException newANTLRMismatchedTokenException:ttype Stream:anInput];
+    e = [ANTLRMismatchedTokenException newException:ttype Stream:anInput];
     @throw e;
 }
 
@@ -860,7 +860,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (NSMutableArray *)getRuleInvocationStack
 {
     NSString *parserClassName = [[self className] retain];
-    return [self getRuleInvocationStack:[ANTLRRecognitionException newANTLRRecognitionException] Recognizer:parserClassName];
+    return [self getRuleInvocationStack:[ANTLRRecognitionException newException] Recognizer:parserClassName];
 }
 
 /** A more general version of getRuleInvocationStack where you can
@@ -955,11 +955,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
     if ( tokens == nil )
         return nil;
-    NSEnumerator *enumerator = [tokens objectEnumerator];
     NSMutableArray *strings = [[NSMutableArray arrayWithCapacity:[tokens count]] retain];
     id object;
     NSInteger i = 0;
-    while (object = [enumerator nextObject]) {
+    for (object in tokens) {
         [strings addObject:[[object getText] retain]];
         i++;
     }
@@ -980,7 +979,6 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
     NSNumber *stopIndexI;
     ANTLRHashRule *aHashRule;
-    ANTLRRuleMemo *aRuleMap;
     if ( (aHashRule = [state.ruleMemo objectAtIndex:ruleIndex]) == nil ) {
         aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
         [state.ruleMemo insertObject:aHashRule atIndex:ruleIndex];
@@ -1027,7 +1025,6 @@ static NSString *NEXT_TOKEN_RULE_NAME;
      StartIndex:(NSInteger)ruleStartIndex
 {
     ANTLRRuleStack *aRuleStack;
-    ANTLRHashRule *aHashRule;
     NSInteger stopTokenIndex;
 
     aRuleStack = state.ruleMemo;
@@ -1056,7 +1053,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 
     int aCnt = 0;
     aRuleStack = state.ruleMemo;
-    for (int i = 0; aRuleStack != nil && i < [aRuleStack length]; i++) {
+    for (NSUInteger i = 0; aRuleStack != nil && i < [aRuleStack length]; i++) {
         aHashRule = [aRuleStack objectAtIndex:i];
         if ( aHashRule != nil ) {
             aCnt += [aHashRule count]; // how many input indexes are recorded?

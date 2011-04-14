@@ -71,7 +71,7 @@
  *
  *  Return result of applying post action to this node.
  */
-- (ANTLRTreeVisitor *)visit:(id<ANTLRTree>)t Action:(ANTLRTreeVisitorAction *)action
+- (ANTLRTreeVisitor *)visit:(id<ANTLRBaseTree>)t Action:(ANTLRTreeVisitorAction *)action
 {
     // System.out.println("visit "+((Tree)t).toStringTree());
     BOOL isNil = [adaptor isNil:t];
@@ -79,9 +79,9 @@
         t = [action pre:(ANTLRTreeVisitorAction *)t]; // if rewritten, walk children of new t
     }
     for (int i=0; i < [adaptor getChildCount:t]; i++) {
-        id<ANTLRTree> child = [adaptor getChild:t At:i];
-        id<ANTLRTree> visitResult = [self visit:child Action:action];
-        id<ANTLRTree> childAfterVisit = [adaptor getChild:t At:i];
+        id<ANTLRBaseTree> child = [adaptor getChild:t At:i];
+        id<ANTLRBaseTree> visitResult = [self visit:child Action:action];
+        id<ANTLRBaseTree> childAfterVisit = [adaptor getChild:t At:i];
         if ( visitResult !=  childAfterVisit ) { // result & child differ?
             [adaptor setChild:t At:i Child:visitResult];
         }
@@ -90,4 +90,5 @@
     return t;
 }
 
+@synthesize adaptor;
 @end

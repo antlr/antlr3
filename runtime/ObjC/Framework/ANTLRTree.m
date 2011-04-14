@@ -29,11 +29,12 @@
 // TODO: this shouldn't be here...but needed for invalidNode
 #import "ANTLRCommonTree.h"
 
-@interface ANTLRTree (TreeMaintenance)
-- (void) _createChildrenList;
-@end
-
 @implementation ANTLRTree
+
+@synthesize isEmpty;
+@synthesize isEmptyNode;
+@synthesize invalidNode;
+@synthesize children;
 
 #pragma mark ANTLRTree protocol conformance
 
@@ -48,7 +49,8 @@
 
 - (id<ANTLRTree>) init
 {
-	if ((self = [super init]) != nil) {
+	self = [super init];
+	if ( self != nil ) {
 		isEmptyNode = NO;
 	}
 	return self;
@@ -136,15 +138,12 @@
 	return @"";
 }
 
-
-@end
-
-@implementation ANTLRTree (TreeMaintenance)
-
 - (void) _createChildrenList
 {
-	if (!children)
+	if ( children == nil )
 		children = [[NSMutableArray alloc] init];
 }
+
+@end
 
 @end

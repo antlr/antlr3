@@ -41,12 +41,12 @@
 @property (assign, getter=getExpectingChar, setter=setExpectingChar:) unichar expectingChar;
 @property (assign, getter=getIsTokenType, setter=setIsTokenType:) BOOL isTokenType;
 
-+ (id) newANTLRMismatchedTokenException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
-+ (id) newANTLRMismatchedTokenExceptionMissing:(NSInteger)expectedTokenType
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
++ (id) newExceptionMissing:(NSInteger)expectedTokenType
                                         Stream:(id<ANTLRIntStream>)anInput
                                          Token:(id<ANTLRToken>)inserted;
-+ (id) newANTLRMismatchedTokenExceptionChar:(unichar)expectedCharacter Stream:(id<ANTLRIntStream>)anInput;
-+ (id) newANTLRMismatchedTokenExceptionStream:(id<ANTLRIntStream>)anInput
++ (id) newExceptionChar:(unichar)expectedCharacter Stream:(id<ANTLRIntStream>)anInput;
++ (id) newExceptionStream:(id<ANTLRIntStream>)anInput
                                     Exception:(NSException *)e
                                        Follow:(ANTLRBitSet *)follow;
 - (id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;

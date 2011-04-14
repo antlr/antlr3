@@ -31,7 +31,7 @@
 @implementation ANTLRNoViableAltException
 
 
-+ (ANTLRNoViableAltException *) newANTLRNoViableAltException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream
++ (ANTLRNoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream
 {
 	return [[self alloc] initWithDecision:theDecisionNumber state:theStateNumber stream:theStream];
 }

@@ -49,7 +49,7 @@
 @property (assign, getter=getEofElementIndex, setter=setEofElementIndex:) NSInteger eofElementIndex;
 @property (assign, getter=getLastMarker, setter=setLastMarker:) NSInteger lastMarker;
 @property (assign, getter=getMarkDepth, setter=setMarkDepth:) NSInteger markDepth;
-@property (assign, getter=getPrevElement, setter=setPrevElement:) id prevElement;
+@property (retain) id prevElement;
 
 - (id) initWithEOF:(id) o;
 - (id) nextElement;

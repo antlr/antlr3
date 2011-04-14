@@ -35,26 +35,26 @@
 
 + (ANTLRIntArray *)newArray
 {
-    return [[ANTLRIntArray alloc] init];
+    return [[[ANTLRIntArray alloc] init] retain];
 }
 
-+ (ANTLRIntArray *)newArrayWithLen:(NSInteger)aLen
++ (ANTLRIntArray *)newArrayWithLen:(NSUInteger)aLen
 {
-    return [[ANTLRIntArray alloc] initWithLen:aLen];
+    return [[[ANTLRIntArray alloc] initWithLen:aLen] retain];
 }
 
 -(id) init
 {
 	if ((self = [super initWithLen:ANTLR_INT_ARRAY_INITIAL_SIZE]) != nil) {
-        ip = (NSInteger *)ptrBuffer;
+        ip = (NSUInteger *)ptrBuffer;
 	}
 	return self;
 }
 
--(id) initWithLen:(NSInteger)aLen
+-(id) initWithLen:(NSUInteger)aLen
 {
 	if ((self = [super initWithLen:aLen]) != nil) {
-        ip = (NSInteger *)ptrBuffer;
+        ip = (NSUInteger *)ptrBuffer;
 	}
 	return self;
 }
@@ -72,21 +72,21 @@
     return copy;
 }
 
-- (NSInteger)count
+- (NSUInteger)count
 {
     return ptr;
 }
 
 // FIXME: Java runtime returns p, I'm not so sure it's right so have added p + 1 to show true size!
--(NSInteger) size
+-(NSUInteger) size
 {
-	return (ptr * sizeof(NSInteger));
+	return (ptr * sizeof(NSUInteger));
 }
 
 -(void) addInteger:(NSInteger) v
 {
 	[self ensureCapacity:ptr];
-	ip[ptr++] = (id) v;
+	ip[ptr++] = (NSInteger) v;
 }
 
 -(void) push:(NSInteger) v
@@ -100,7 +100,7 @@
 	return v;
 }
 
--(NSInteger) integerAtIndex:(NSInteger) i
+-(NSInteger) integerAtIndex:(NSUInteger) i
 {
     if (i >= BuffSize) {
         return (NSInteger)-1;
@@ -108,31 +108,33 @@
 	return (NSInteger) ip[i];
 }
 
--(void) insertInteger:(NSInteger)anInteger AtIndex:(NSInteger)idx
+-(void) insertInteger:(NSInteger)anInteger AtIndex:(NSUInteger)idx
 {
     if ( idx >= BuffSize ) {
         [self ensureCapacity:idx];
     }
-    ip[idx] = (id) anInteger;
+    ip[idx] = (NSInteger) anInteger;
 }
 -(void) reset
 {
 	ptr = 0;
 }
 
-- (void) ensureCapacity:(NSInteger) index
+- (void) ensureCapacity:(NSUInteger) anIndex
 {
-	if ((index * sizeof(NSInteger)) >= [buffer length])
+	if ((anIndex * sizeof(NSUInteger)) >= [buffer length])
 	{
-		NSInteger newSize = ([buffer length] / sizeof(NSInteger)) * 2;
-		if (index > newSize) {
-			newSize = index + 1;
+		NSUInteger newSize = ([buffer length] / sizeof(NSUInteger)) * 2;
+		if (anIndex > newSize) {
+			newSize = anIndex + 1;
 		}
         BuffSize = newSize;
-		[buffer setLength:(BuffSize * sizeof(NSInteger))];
-        ip = (NSInteger *)ptrBuffer = [buffer mutableBytes];
+		[buffer setLength:(BuffSize * sizeof(NSUInteger))];
+        ptrBuffer = (id *)[buffer mutableBytes];
+        ip = (NSUInteger *)ptrBuffer;
 	}
 }
 
+@synthesize ip;
 @end
 

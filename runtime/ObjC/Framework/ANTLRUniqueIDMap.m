@@ -129,7 +129,7 @@
     
     for (int i = 0; i < BuffSize; i++) {
         if ((anElement = ptrBuffer[i]) != nil) {
-            aCnt =+ (NSInteger)[anElement count];
+            aCnt += (NSInteger)[anElement count];
         }
     }
     return aCnt;
@@ -147,12 +147,12 @@
 	[np dealloc];
 }
 
-- (id)getNode:(id<ANTLRTree>)aNode
+- (id)getNode:(id<ANTLRBaseTree>)aNode
 {
     ANTLRNodeMapElement *np;
     NSInteger idx;
     
-    idx = [(id<ANTLRTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode getType];
     np = ptrBuffer[idx];
     while ( np != nil ) {
         if (np.node == aNode) {
@@ -163,12 +163,12 @@
     return( nil );
 }
 
-- (void)putID:(id)anID Node:(id<ANTLRTree>)aNode
+- (void)putID:(id)anID Node:(id<ANTLRBaseTree>)aNode
 {
     ANTLRNodeMapElement *np, *np1;
     NSInteger idx;
     
-    idx = [(id<ANTLRTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode getType];
     idx %= HASHSIZE;
     np = [ANTLRNodeMapElement newANTLRNodeMapElementWithIndex:anID Node:aNode];
     np1 = ptrBuffer[idx];

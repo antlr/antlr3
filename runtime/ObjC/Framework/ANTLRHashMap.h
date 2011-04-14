@@ -37,7 +37,6 @@
 #define HBUFSIZE      0x2000
 
 @interface ANTLRHashMap : ANTLRLinkBase {
-	//	ANTLRHashMap *fNext;
     //    TStringPool *fPool;
     NSInteger Scope;
     NSInteger LastHash;
@@ -45,11 +44,6 @@
     ANTLRMapElement *ptrBuffer[HASHSIZE];
     NSInteger mode;
 }
-
-//@property (copy) ANTLRHashMap *fNext;
-//@property (copy) TStringPool *fPool;
-@property (getter=getScope, setter=setScope:) NSInteger Scope;
-@property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 
 // Contruction/Destruction
 + (id)newANTLRHashMap;
@@ -99,4 +93,11 @@
 - (NSEnumerator *)objectEnumerator;
 - (BOOL) hasNext;
 - (ANTLRMapElement *)nextObject;
+
+//@property (copy) TStringPool *fPool;
+@property (getter=getScope, setter=setScope:) NSInteger Scope;
+@property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
+
+@property NSInteger BuffSize;
+@property (getter=getMode,setter=setMode:) NSInteger mode;
 @end

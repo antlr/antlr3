@@ -30,7 +30,7 @@
 
 @implementation ANTLRMismatchedRangeException
 
-+ (id) exceptionWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput
++ (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput
 {
 	return [[ANTLRMismatchedRangeException alloc] initWithRange:aRange stream:theInput];
 }

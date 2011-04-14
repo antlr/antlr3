@@ -29,7 +29,7 @@
 
 @implementation ANTLRFailedPredicateException
 
-+ (ANTLRFailedPredicateException *) exceptionWithRuleName:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream
++ (ANTLRFailedPredicateException *) newException:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream
 {
 	return [[ANTLRFailedPredicateException alloc] initWithRuleName:theRuleName predicate:thePredicate stream:theStream];
 }

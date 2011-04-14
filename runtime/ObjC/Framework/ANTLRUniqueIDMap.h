@@ -42,7 +42,7 @@
     NSInteger lastHash;
 }
 
-@property (getter=getLastHash, setter=setLastHash) NSInteger lastHash;
+@property (getter=getLastHash, setter=setLastHash:) NSInteger lastHash;
 
 + (id)newANTLRUniqueIDMap;
 + (id)newANTLRUniqueIDMapWithLen:(NSInteger)aHashSize;
@@ -58,7 +58,7 @@
 
 - (void)deleteANTLRUniqueIDMap:(ANTLRNodeMapElement *)np;
 - (void)delete_chain:(ANTLRNodeMapElement *)np;
-- (id)getNode:(id<ANTLRTree>)aNode;
-- (void)putID:(id)anID Node:(id<ANTLRTree>)aNode;
+- (id)getNode:(id<ANTLRBaseTree>)aNode;
+- (void)putID:(id)anID Node:(id<ANTLRBaseTree>)aNode;
 
 @end

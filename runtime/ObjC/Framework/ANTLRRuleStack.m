@@ -44,12 +44,12 @@ extern NSInteger debug;
 
 + (ANTLRRuleStack *)newANTLRRuleStack
 {
-    return [[ANTLRRuleStack alloc] init];
+    return [[[ANTLRRuleStack alloc] init] retain];
 }
 
 + (ANTLRRuleStack *)newANTLRRuleStack:(NSInteger)cnt
 {
-    return [[ANTLRRuleStack alloc] initWithLen:cnt];
+    return [[[ANTLRRuleStack alloc] initWithLen:cnt] retain];
 }
 
 - (id)init

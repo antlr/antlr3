@@ -44,8 +44,7 @@
 
 - (id) init
 {
-    if (self = [super init]) {
-    }
+    self = [super init];
     return self;
 }
 
@@ -54,7 +53,8 @@
       readBufferSize:(NSInteger)theRBSize
             encoding:(NSStringEncoding)theEncoding
 {
-    if ( self = [super initWithReader:anInput size:theSize readBufferSize:theRBSize] ) {
+    ;self = [super initWithReader:anInput size:theSize readBufferSize:theRBSize];
+    if ( self != nil ) {
         //[self load:theSize readBufferSize:theRBSize];
     }
     return self;

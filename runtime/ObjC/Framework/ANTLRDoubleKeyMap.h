@@ -19,4 +19,5 @@
 - (NSArray *) allKeys1;
 - (NSArray *) allKeys2:(id)k1;
 - (NSMutableArray *) values;
+@property (retain) NSMutableDictionary *data;
 @end

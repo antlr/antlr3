@@ -42,4 +42,7 @@
 -(id) initWithNodes:(NSMutableArray *) n andEOF:(id) o;
 -(BOOL) hasNext;
 
+@property NSInteger i;
+@property (retain) id eof;
+@property (retain) NSMutableArray *nodes;
 @end

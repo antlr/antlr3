@@ -34,24 +34,24 @@
 @synthesize isTokenType;
 
 
-+ (id) newANTLRMismatchedTokenException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
 {
 	return [[ANTLRMismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput];
 }
 
-+ (id) newANTLRMismatchedTokenExceptionMissing:(NSInteger)expectedTokenType
++ (id) newExceptionMissing:(NSInteger)expectedTokenType
                                         Stream:(id<ANTLRIntStream>)anInput
                                          Token:(id<ANTLRToken>)inserted
 {
 	return [[ANTLRMismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput Token:inserted];
 }
 
-+ (id) newANTLRMismatchedTokenExceptionChar:(unichar) expectedCharacter Stream:(id<ANTLRIntStream>)anInput
++ (id) newExceptionChar:(unichar) expectedCharacter Stream:(id<ANTLRIntStream>)anInput
 {
 	return [[ANTLRMismatchedTokenException alloc] initWithCharacter:expectedCharacter Stream:anInput];
 }
 
-+ (id) newANTLRMismatchedTokenExceptionStream:(id<ANTLRIntStream>)anInput Exception:(NSException *)e Follow:(ANTLRBitSet *) follow
++ (id) newExceptionStream:(id<ANTLRIntStream>)anInput Exception:(NSException *)e Follow:(ANTLRBitSet *) follow
 {
 	return [[ANTLRMismatchedTokenException alloc] initWithStream:anInput];
 }

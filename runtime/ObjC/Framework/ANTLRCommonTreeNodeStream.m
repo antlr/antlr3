@@ -109,7 +109,7 @@
     return t;
 }
 
-- (BOOL) isEOF:(id<ANTLRTree>) aTree
+- (BOOL) isEOF:(id<ANTLRBaseTree>) aTree
 {
     return [adaptor getType:aTree] == ANTLRTokenTypeEOF;
 }
@@ -150,7 +150,7 @@
 
 - (ANTLRCommonTree *)getNode:(NSInteger) i
 {
-    @throw [ANTLRRuntimeException newANTLRRuntimeException:@"Absolute node indexes are meaningless in an unbuffered stream"];
+    @throw [ANTLRRuntimeException newException:@"Absolute node indexes are meaningless in an unbuffered stream"];
     return nil;
 }
 
@@ -162,17 +162,17 @@
 /** Make stream jump to a new location, saving old location.
  *  Switch back with pop().
  */
-- (void) push:(NSInteger) index
+- (void) push:(NSInteger) anIndex
 {
     if ( calls == nil ) {
         calls = [ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE];
     }
-    [calls push:p]; // save current index
-    [self seek:index];
+    [calls push:p]; // save current anIndex
+    [self seek:anIndex];
 }
 
-/** Seek back to previous index saved during last push() call.
- *  Return top of stack (return index).
+/** Seek back to previous anIndex saved during last push() call.
+ *  Return top of stack (return anIndex).
  */
 - (NSInteger) pop
 {
@@ -190,7 +190,7 @@
     }
 }
 
-- (NSString *) toStringFromNode:(id<ANTLRTree>)startNode ToNode:(id<ANTLRTree>)stopNode
+- (NSString *) toStringFromNode:(id<ANTLRBaseTree>)startNode ToNode:(id<ANTLRBaseTree>)stopNode
 {
     // we'll have to walk from start to stop in tree; we're not keeping
     // a complete node stream buffer
@@ -214,5 +214,8 @@
     return buf;
 }
 
+@synthesize it;
+@synthesize calls;
+@synthesize hasNilRoot;
 @end
 

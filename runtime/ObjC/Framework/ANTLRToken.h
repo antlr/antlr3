@@ -75,8 +75,8 @@ typedef enum {
 - (void) setChannel: (NSUInteger) aChannel;
 
 // the index of this Token into the TokenStream
-- (NSUInteger) getTokenIndex;
-- (void) setTokenIndex: (NSUInteger) aTokenIndex;
+- (NSInteger) getTokenIndex;
+- (void) setTokenIndex: (NSInteger) aTokenIndex;
 - (NSString *)toString;
 
 @end

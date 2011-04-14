@@ -65,13 +65,13 @@
     return self;
 }
 
-- (id<ANTLRTree>)pattern
+- (id<ANTLRBaseTree>)pattern
 {
     if ( ttype==ANTLRLexerTokenTypeBEGIN ) {
         return [self parseTree];
     }
     else if ( ttype==ANTLRLexerTokenTypeID ) {
-        id<ANTLRTree> node = [self parseNode];
+        id<ANTLRBaseTree> node = [self parseNode];
         if ( ttype==ANTLRLexerTokenTypeEOF ) {
             return node;
         }
@@ -80,13 +80,13 @@
     return nil;
 }
 
-- (id<ANTLRTree>) parseTree
+- (id<ANTLRBaseTree>) parseTree
 {
     if ( ttype != ANTLRLexerTokenTypeBEGIN ) {
-        @throw [ANTLRRuntimeException newANTLRRuntimeException:@"no BEGIN"];
+        @throw [ANTLRRuntimeException newException:@"no BEGIN"];
     }
     ttype = [tokenizer nextToken];
-    id<ANTLRTree> root = [self parseNode];
+    id<ANTLRBaseTree> root = [self parseNode];
     if ( root==nil ) {
         return nil;
     }
@@ -96,11 +96,11 @@
            ttype==ANTLRLexerTokenTypeDOT )
     {
         if ( ttype==ANTLRLexerTokenTypeBEGIN ) {
-            id<ANTLRTree> subtree = [self parseTree];
+            id<ANTLRBaseTree> subtree = [self parseTree];
             [adaptor addChild:subtree toTree:root];
         }
         else {
-            id<ANTLRTree> child = [self parseNode];
+            id<ANTLRBaseTree> child = [self parseNode];
             if ( child == nil ) {
                 return nil;
             }
@@ -108,16 +108,17 @@
         }
     }
     if ( ttype != ANTLRLexerTokenTypeEND ) {
-        @throw [ANTLRRuntimeException newANTLRRuntimeException:@"no END"];
+        @throw [ANTLRRuntimeException newException:@"no END"];
     }
     ttype = [tokenizer nextToken];
     return root;
 }
 
-- (id<ANTLRTree>) parseNode
+- (id<ANTLRBaseTree>) parseNode
 {
     // "%label:" prefix
     NSString *label = nil;
+    ANTLRTreePattern *node;
     if ( ttype == ANTLRLexerTokenTypePERCENT ) {
         ttype = [tokenizer nextToken];
         if ( ttype != ANTLRLexerTokenTypeID ) {
@@ -135,7 +136,7 @@
     if ( ttype == ANTLRLexerTokenTypeDOT ) {
         ttype = [tokenizer nextToken];
         id<ANTLRToken> wildcardPayload = [ANTLRCommonToken newToken:0 Text:@"."];
-        ANTLRTreePattern *node = [ANTLRWildcardTreePattern newANTLRWildcardTreePattern:wildcardPayload];
+        node = [ANTLRWildcardTreePattern newANTLRWildcardTreePattern:wildcardPayload];
         if ( label != nil ) {
             node.label = label;
         }
@@ -149,7 +150,7 @@
     NSString *tokenName = [tokenizer toString];
     ttype = [tokenizer nextToken];
     if ( [tokenName isEqualToString:@"nil"] ) {
-        return adaptor;
+        return [adaptor emptyNode];
     }
     NSString *text = tokenName;
     // check for arg
@@ -165,7 +166,6 @@
     if ( treeNodeType==ANTLRTokenTypeInvalid ) {
         return nil;
     }
-    id<ANTLRTree> node;
     node = [adaptor createTree:treeNodeType Text:text];
     if ( label!=nil && [node class] == [ANTLRTreePattern class] ) {
         ((ANTLRTreePattern *)node).label = label;
@@ -176,4 +176,8 @@
     return node;
 }
 
+@synthesize tokenizer;
+@synthesize ttype;
+@synthesize wizard;
+@synthesize adaptor;
 @end

@@ -27,6 +27,7 @@
 #import "ANTLRBufferedTokenStream.h"
 #import "ANTLRTokenSource.h"
 #import "ANTLRCommonTreeAdaptor.h"
+#import "ANTLRRuntimeException.h"
 
 extern NSInteger debug;
 
@@ -45,7 +46,7 @@ extern NSInteger debug;
 
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource
 {
-    return [[ANTLRBufferedTokenStream alloc] initWithSource:aSource];
+    return [[ANTLRBufferedTokenStream alloc] initWithTokenSource:aSource];
 }
 
 - (ANTLRBufferedTokenStream *) init
@@ -60,7 +61,7 @@ extern NSInteger debug;
 	return self;
 }
 
--(id) initWithSource:(id<ANTLRTokenSource>)aSource
+-(id) initWithTokenSource:(id<ANTLRTokenSource>)aSource
 {
 	if ((self = [super init]) != nil)
 	{
@@ -96,9 +97,9 @@ extern NSInteger debug;
     return p;
 }
 
-- (void) setIndex:(NSInteger) index
+- (void) setIndex:(NSInteger) anIndex
 {
-    p = index;
+    p = anIndex;
 }
 
 - (NSInteger) getRange
@@ -142,9 +143,9 @@ extern NSInteger debug;
     lastMarker = 0;
 }
 
-- (void) seek:(NSInteger) index
+- (void) seek:(NSInteger) anIndex
 {
-    p = index;
+    p = anIndex;
 }
 
 - (NSInteger) size
@@ -196,7 +197,7 @@ extern NSInteger debug;
 - (id<ANTLRToken>) getToken:(NSInteger) i
 {
     if ( i < 0 || i >= [tokens count] ) {
-        @throw [ANTLRRuntimeException newANTLRNoSuchElementException:[NSString stringWithFormat:@"token index %d out of range 0..%d", i, [tokens count]-1]];
+        @throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"token index %d out of range 0..%d", i, [tokens count]-1]];
     }
     return [tokens objectAtIndex:i];
 }

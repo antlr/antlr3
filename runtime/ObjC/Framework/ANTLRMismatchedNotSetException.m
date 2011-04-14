@@ -35,12 +35,12 @@
 
 @synthesize expecting;
 
-- (ANTLRMismatchedNotSetException *)newANTLRMismatchedNotSetException
+- (ANTLRMismatchedNotSetException *)newException
 {
     return [[ANTLRMismatchedNotSetException alloc] init];
 }
 
-- (ANTLRMismatchedNotSetException *)newANTLRMismatchedNotSetException:(id<ANTLRIntStream>)anInput
+- (ANTLRMismatchedNotSetException *)newException:(id<ANTLRIntStream>)anInput
                                                                Follow:(ANTLRBitSet *)expected
 {
     return [[ANTLRMismatchedNotSetException alloc] initWithStream:anInput Follow:(ANTLRBitSet *)expected];

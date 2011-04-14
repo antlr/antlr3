@@ -42,24 +42,17 @@
 
 +(id)newANTLRHashRule
 {
-    ANTLRHashRule *aNewANTLRHashRule;
-    
-    aNewANTLRHashRule = [[ANTLRHashRule alloc] init];
-	return( aNewANTLRHashRule );
+    return [[[ANTLRHashRule alloc] init] retain];
 }
 
 +(id)newANTLRHashRuleWithLen:(NSInteger)aBuffSize
 {
-    ANTLRHashRule *aNewANTLRHashRule;
-    
-    aNewANTLRHashRule = [[ANTLRHashRule alloc] initWithLen:aBuffSize];
-	return( aNewANTLRHashRule );
+    return [[[ANTLRHashRule alloc] initWithLen:aBuffSize] retain];
 }
 
 -(id)init
 {
 	if ((self = [super initWithLen:HASHSIZE]) != nil) {
-		fNext = nil;
 	}
     return( self );
 }
@@ -67,7 +60,6 @@
 -(id)initWithLen:(NSInteger)aBuffSize
 {
 	if ((self = [super initWithLen:aBuffSize]) != nil) {
-		fNext = nil;
         mode = 0;
 	}
     return( self );
@@ -83,8 +75,10 @@
             tmp = ptrBuffer[Index];
             while ( tmp && tmp != ptrBuffer[Index] ) {
                 rtmp = tmp;
-                // tmp = [tmp getfNext];
-                tmp = (ANTLRRuleMemo *)tmp.fNext;
+                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+                    tmp = (ANTLRRuleMemo *)tmp.fNext;
+                else
+                    tmp = nil;
                 [rtmp dealloc];
             }
         }
@@ -135,7 +129,10 @@
             tmp = ptrBuffer[Index];
             while ( tmp && tmp != ptrBuffer[Index ] ) {
                 rtmp = tmp;
-                tmp = tmp.fNext;
+                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+                    tmp = (ANTLRRuleMemo *)tmp.fNext;
+                else
+                    tmp = nil;
                 [rtmp dealloc];
             }
         }

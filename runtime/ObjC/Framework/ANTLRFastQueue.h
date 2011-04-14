@@ -36,14 +36,14 @@
 {
 //	NSAutoreleasePool *pool;
 	NSMutableArray *data;
-	NSInteger p;
-    NSInteger range;
+	NSUInteger p;
+    NSUInteger range;
 }
 
 //@property (retain, getter=getPool, setter=setPool:) NSAutoreleasePool *pool;
-@property (retain, getter=getData, setter=setData:) NSMutableArray *data;
-@property (assign, getter=getP, setter=setP:) NSInteger p;
-@property (assign, getter=getRange, setter=setRange:) NSInteger range;
+@property (retain) NSMutableArray *data;
+@property (assign) NSUInteger p;
+@property (assign) NSUInteger range;
 
 + (id) newANTLRFastQueue;
 
@@ -54,19 +54,15 @@
 - (void) reset;
 - (id) remove;
 - (void) addObject:(id) o;
-- (NSInteger) count;
-- (NSInteger) size;
-- (NSInteger) range;
+- (NSUInteger) count;
+- (NSUInteger) size;
+- (NSUInteger) range;
 - (id) head;
-- (id) objectAtIndex:(NSInteger) i;
+- (id) objectAtIndex:(NSUInteger) i;
 - (void) clear;
 - (NSString *) toString;
 - (NSString *) description;
 //- (NSAutoreleasePool *) getPool;
 //- (void) setPool:(NSAutoreleasePool *)aPool;
-- (NSMutableArray *) getData;
-- (void) setData:(NSMutableArray *)myData;
-- (NSInteger) getP;
-- (void) setP:(NSInteger)anInt;
 
 @end

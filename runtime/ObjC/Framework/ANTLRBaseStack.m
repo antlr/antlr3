@@ -44,12 +44,12 @@
 
 +(ANTLRBaseStack *)newANTLRBaseStack
 {
-    return [[ANTLRBaseStack alloc] init];
+    return [[[ANTLRBaseStack alloc] init] retain];
 }
 
 +(ANTLRBaseStack *)newANTLRBaseStackWithLen:(NSInteger)cnt
 {
-    return [[ANTLRBaseStack alloc] initWithLen:cnt];
+    return [[[ANTLRBaseStack alloc] initWithLen:cnt] retain];
 }
 
 -(id)init

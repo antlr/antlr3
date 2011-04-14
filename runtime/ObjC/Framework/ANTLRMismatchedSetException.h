@@ -34,7 +34,7 @@
 
 @property (retain, getter=getExpecting, setter=setExpecting:) NSSet *expecting;
 
-+ (id) exceptionWithSet:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
++ (id) newException:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
 - (id) initWithSet:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
 
 - (NSSet *) getExpecting;

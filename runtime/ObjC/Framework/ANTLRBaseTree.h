@@ -25,16 +25,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "ANTLRTree.h"
+#import "ANTLRCommonToken.h"
 
 @protocol ANTLRBaseTree <ANTLRTree>
 
-@property (retain, getter=getChildren, setter=setChildren) NSMutableArray *children;
++ (id<ANTLRBaseTree>) INVALID_NODE;
 
 + (id<ANTLRBaseTree>) newTree;
 + (id<ANTLRBaseTree>) newTree:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) init;
-- (id<ANTLRBaseTree>) initWith:(id<ANTLRTree>)node;
+- (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
 - (NSMutableArray *)getChildren;
@@ -45,11 +46,11 @@
 // Add t as a child to this node.  If t is null, do nothing.  If t
 //  is nil, add all children of t to this' children.
 
-- (void) addChild:(id<ANTLRTree>) tree;
+- (void) addChild:(id<ANTLRBaseTree>) tree;
 - (void) addChildren:(NSArray *) theChildren;
 //- (void) removeAllChildren;
 
-- (void) setChild:(NSInteger) i With:(id<ANTLRTree>)t;
+- (void) setChild:(NSInteger) i With:(id<ANTLRBaseTree>)t;
 - (id) deleteChild:(NSInteger) i;
 - (NSMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
@@ -65,12 +66,12 @@
 - (void) freshenParentAndChildIndexes;
 - (void) freshenParentAndChildIndexes:(NSInteger) offset;
 - (void) sanityCheckParentAndChildIndexes;
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRTree>) parent At:(NSInteger) i;
+- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>) parent At:(NSInteger) i;
 
 - (NSInteger) getChildIndex;
 - (void) setChildIndex:(NSInteger)i;
 
-- (id<ANTLRTree>)getAncestor:(NSInteger)ttype;
+- (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
 - (NSMutableArray *)getAncestors;
 
 #pragma mark Copying
@@ -93,21 +94,33 @@
 - (NSString *) toString;
 - (NSString *) toStringTree;
 
+@property (retain) id<ANTLRToken>token;
+@property (assign) NSInteger startIndex;
+@property (assign) NSInteger stopIndex;
+@property (retain) id<ANTLRBaseTree> parent;
+@property (assign) NSInteger childIndex;
+@property (retain) NSMutableArray *children;
+@property (retain) NSException *anException;
+
 @end
 
 @interface ANTLRBaseTree : NSObject <ANTLRTree>
 {
+	ANTLRCommonToken *token;
+	NSInteger startIndex;
+	NSInteger stopIndex;
+    id<ANTLRBaseTree> parent;
+    NSInteger childIndex;
 	NSMutableArray *children;
     NSException *anException;
 }
 
-@property (retain, getter=getChildren, setter=setChildren) NSMutableArray *children;
-
++ (id<ANTLRBaseTree>) INVALID_NODE;
 + (id<ANTLRBaseTree>) newTree;
 + (id<ANTLRBaseTree>) newTree:(id<ANTLRBaseTree>)node;
          
-- (id<ANTLRTree>) init;
-- (id<ANTLRBaseTree>) initWith:(id<ANTLRTree>)node;
+- (id<ANTLRBaseTree>) init;
+- (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
 - (NSMutableArray *)getChildren;
@@ -120,11 +133,11 @@
 // Add t as a child to this node.  If t is null, do nothing.  If t
 //  is nil, add all children of t to this' children.
 
-- (void) addChild:(id<ANTLRTree>) tree;
+- (void) addChild:(id<ANTLRBaseTree>) tree;
 - (void) addChildren:(NSArray *) theChildren;
 
-- (void) setChild:(NSInteger) i With:(id<ANTLRTree>)t;
-- (id) deleteChild:(NSInteger) i;
+- (void) setChild:(NSUInteger) i With:(id<ANTLRBaseTree>)t;
+- (id) deleteChild:(NSUInteger) idx;
 - (NSMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
 // Indicates the node is a nil node but may still have children, meaning
@@ -139,13 +152,13 @@
 - (void) freshenParentAndChildIndexes;
 - (void) freshenParentAndChildIndexes:(NSInteger) offset;
 - (void) sanityCheckParentAndChildIndexes;
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRTree>) parent At:(NSInteger) i;
+- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>) parent At:(NSInteger) i;
 
 - (NSInteger) getChildIndex;
 - (void) setChildIndex:(NSInteger)i;
 
 - (BOOL) hasAncestor:(NSInteger) ttype;
-- (id<ANTLRTree>)getAncestor:(NSInteger)ttype;
+- (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
 - (NSMutableArray *)getAncestors;
 
 - (id) copyWithZone:(NSZone *)aZone;
@@ -165,6 +178,15 @@
 - (NSString *) description;
 - (NSString *) toString;
 - (NSString *) toStringTree;
+
+@property (retain) ANTLRCommonToken *token;
+@property (assign) NSInteger startIndex;
+@property (assign) NSInteger stopIndex;
+@property (retain) id<ANTLRBaseTree> parent;
+@property (assign) NSInteger childIndex;
+
+@property (retain, getter=getChildren, setter=setChildren:) NSMutableArray *children;
+@property (retain) NSException *anException;
 
 @end
 

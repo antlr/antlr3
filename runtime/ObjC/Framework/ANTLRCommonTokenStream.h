@@ -35,20 +35,20 @@
 @interface ANTLRCommonTokenStream : ANTLRBufferedTokenStream < ANTLRTokenStream >
 {
 	NSMutableDictionary *channelOverride;
-	NSInteger channel;
+	NSUInteger channel;
 }
 
-@property (retain, getter=getChannelOverride,setter=setChannelOverride) NSMutableDictionary *channelOverride;
-@property (assign, getter=getChannel,setter=setChannel) NSInteger channel;
+@property (retain, getter=getChannelOverride,setter=setChannelOverride:) NSMutableDictionary *channelOverride;
+@property (assign, getter=getChannel,setter=setChannel:) NSUInteger channel;
 
 + (ANTLRCommonTokenStream *)newANTLRCommonTokenStream;
 + (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource;
 + (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
-                                                               Channel:(NSInteger)aChannel;
+                                                               Channel:(NSUInteger)aChannel;
 
 - (id) init;
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource;
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSInteger)aChannel;
+- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel;
 
 - (void) consume;
 - (id<ANTLRToken>) LB:(NSInteger)k;
@@ -64,8 +64,8 @@
 // - (id<ANTLRTokenSource>) getTokenSource;
 - (void) setTokenSource: (id<ANTLRTokenSource>) aTokenSource;
 
-- (NSInteger)getChannel;
-- (void)setChannel:(NSInteger)aChannel;
+- (NSUInteger)getChannel;
+- (void)setChannel:(NSUInteger)aChannel;
 
 - (NSMutableDictionary *)getChannelOverride;
 - (void)setChannelOverride:(NSMutableDictionary *)anOverride;

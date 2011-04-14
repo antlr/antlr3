@@ -53,15 +53,15 @@ NSInteger p;
 NSInteger range; // how deep have we gone?
     
 }
-@property (retain, getter=getTokenSource,setter=setTokenSource) id<ANTLRTokenSource> tokenSource;
-@property (retain, getter=getTokens,setter=setTokens) NSMutableArray *tokens;
-@property (assign, getter=getLastMarker,setter=setLastMarker) NSInteger lastMarker;
-@property (assign, getter=getIndex,setter=setIndex) NSInteger p;
-@property (assign, getter=getRange,setter=setRange) NSInteger range;
+@property (retain, getter=getTokenSource,setter=setTokenSource:) id<ANTLRTokenSource> tokenSource;
+@property (retain, getter=getTokens,setter=setTokens:) NSMutableArray *tokens;
+@property (assign, getter=getLastMarker,setter=setLastMarker:) NSInteger lastMarker;
+@property (assign, getter=getIndex,setter=setIndex:) NSInteger p;
+@property (assign, getter=getRange,setter=setRange:) NSInteger range;
 
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream;
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource;
-- (id) initWithSource:(id<ANTLRTokenSource>)aSource;
+- (id) initWithTokenSource:(id<ANTLRTokenSource>)aSource;
 - (id) copyWithZone:(NSZone *)aZone;
 - (NSInteger) getIndex;
 - (void) setIndex:(NSInteger)index;

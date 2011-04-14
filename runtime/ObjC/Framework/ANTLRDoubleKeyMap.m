@@ -4,7 +4,8 @@
 
 - (id) init
 {
-    if (self = [super init]) {
+    self = [super init];
+    if ( self  != nil ) {
         data = [NSMutableDictionary dictionaryWithCapacity:30];
     }
     return self;
@@ -15,13 +16,13 @@
     NSMutableDictionary *data2 = [data objectForKey:k1];
     id prev = nil;
     if (data2 == nil) {
-        data2 = [NSMutableDictionary dictionaryWithCapacity:30];
-        [data setObject:k1 forKey:data2];
+        data2 = [[NSMutableDictionary dictionaryWithCapacity:30] retain];
+        [data setObject:data2 forKey:k1];
     }
     else {
         prev = [data2 objectForKey:k2];
     }
-    [data2 setObject:k2 forKey:v];
+    [data2 setObject:v forKey:k2];
     return prev;
 }
 
@@ -92,4 +93,5 @@
     [super dealloc];
 }
 
+@synthesize data;
 @end

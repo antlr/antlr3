@@ -33,23 +33,3 @@
 #import <Cocoa/Cocoa.h>
 
 #define ANTLRErrorDomain @"ANTLRError"
-
-#define ANTLRIllegalArgumentException @"ANTLRIllegalArgumentException"
-#define ANTLRIllegalStateException @"IllegalStateException"
-//#define ANTLRRuntimeException @"RuntimeException"
-//#define ANTLRNoSuchMethodException @"NoSuchMethodException"
-//#define ANTLRNoSuchElementException @"NoSuchElementException"
-//#define ANTLRUnsupportedOperationException @"UnsupportedOperationException"
-
-
-/*typedef enum
-{
-	ANTLRIllegalState = 1,
-	ANTLRIllegalArgument = 2,
-	ANTLRRecognitionError = 3,
-	ANTLRMissingTokenError = 4,
-	ANTLRUnwantedTokenError = 5,
-	ANTLRMismatechedTokenError = 6,
-	ANTLRNoViableAltError = 7
-	
-} ANTLRErrorCode;*/

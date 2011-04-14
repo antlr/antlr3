@@ -34,14 +34,14 @@
 
 @implementation ANTLRMissingTokenException
 /** Used for remote debugger deserialization */
-+ (id) newANTLRMissingTokenException
++ (id) newException
 {
     return [[ANTLRMissingTokenException alloc] init];
 }
 
-+ (id) newANTLRMissingTokenException:(NSInteger)expected
-                        Stream:(id<ANTLRIntStream>)anInput
-                          With:(id<ANTLRToken>)insertedToken
++ (id) newException:(NSInteger)expected
+             Stream:(id<ANTLRIntStream>)anInput
+               With:(id<ANTLRToken>)insertedToken
 {
     return [[ANTLRMissingTokenException alloc] init:expected Stream:anInput With:insertedToken];
 }
@@ -79,4 +79,5 @@
     return @"MissingTokenException";
 }
 
+@synthesize inserted;
 @end

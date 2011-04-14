@@ -39,7 +39,7 @@
 
 @protocol ANTLRContextVisitor <NSObject>
 // TODO: should this be called visit or something else?
-- (void) visit:(id<ANTLRTree>)t Parent:(id<ANTLRTree>)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels;
+- (void) visit:(id<ANTLRBaseTree>)t Parent:(id<ANTLRBaseTree>)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels;
 
 @end
 
@@ -52,9 +52,13 @@
 + (ANTLRVisitor *)newANTLRVisitor:(NSInteger)anAction Actor:(id)anActor Object:(id)anObject1 Object:(id)anObject2;
 - (id) initWithAction:(NSInteger)anAction Actor:(id)anActor Object:(id)anObject1 Object:(id)anObject2;
 
-- (void) visit:(id<ANTLRTree>)t;
-- (void) visit:(id<ANTLRTree>)t Parent:(id<ANTLRTree>)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels;
+- (void) visit:(id<ANTLRBaseTree>)t;
+- (void) visit:(id<ANTLRBaseTree>)t Parent:(id<ANTLRBaseTree>)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels;
 
+@property NSInteger action;
+@property (retain) id actor;
+@property (retain) id object1;
+@property (retain) id object2;
 @end
 
 /** When using %label:TOKENNAME in a tree for parse(), we must
@@ -67,7 +71,7 @@
 @property (retain, getter=getLabel, setter=setLabel:) NSString *label;
 @property (assign, getter=getHasTextArg, setter=setHasTextArg:) BOOL hasTextArg;
 
-+ (ANTLRTreePattern *)newANTLRTreePattern:(id<ANTLRToken>)payload;
++ (id<ANTLRBaseTree>)newANTLRTreePattern:(id<ANTLRToken>)payload;
 
 - (id) initWithToken:(id<ANTLRToken>)payload;
 - (NSString *)toString;
@@ -83,15 +87,15 @@
 /** This adaptor creates TreePattern objects for use during scan() */
 @interface ANTLRTreePatternTreeAdaptor : ANTLRCommonTreeAdaptor {
 }
-+ (ANTLRTreePatternTreeAdaptor *)newANTLRTreePatternTreeAdaptor;
++ (ANTLRTreePatternTreeAdaptor *)newTreeAdaptor;
 #ifdef DONTUSENOMO
-+ (ANTLRTreePatternTreeAdaptor *)newANTLRTreePatternTreeAdaptor:(id<ANTLRToken>)payload;
++ (ANTLRTreePatternTreeAdaptor *)newTreeAdaptor:(id<ANTLRToken>)payload;
 #endif
 - (id) init;
 #ifdef DONTUSENOMO
 - initWithToken:(id<ANTLRToken>)payload;
 #endif
-- (id<ANTLRTree>)createTreePattern:(id<ANTLRToken>)payload;
+- (id<ANTLRBaseTree>)createTreePattern:(id<ANTLRToken>)payload;
 
 @end
 
@@ -110,25 +114,27 @@
 - (id) initWithTokenNames:(id<ANTLRTreeAdaptor>)anAdaptor TokenNames:(NSArray *)theTokNams;
 - (ANTLRMap *)computeTokenTypes:(NSArray *)theTokNams;
 - (NSInteger)getTokenType:(NSString *)tokenName;
-- (ANTLRMap *)index:(id<ANTLRTree>)t;
-- (void) _index:(id<ANTLRTree>)t Map:(ANTLRMap *)m;
-- (NSMutableArray *)find:(id<ANTLRTree>) t Pattern:(NSString *)pattern;
-- (ANTLRTreeWizard *)findFirst:(id<ANTLRTree>) t Type:(NSInteger)ttype;
-- (ANTLRTreeWizard *)findFirst:(id<ANTLRTree>) t Pattern:(NSString *)pattern;
-- (void) visit:(id<ANTLRTree>)t Type:(NSInteger)ttype Visitor:(ANTLRVisitor *)visitor;
-- (void) _visit:(id<ANTLRTree>)t
-         Parent:(id<ANTLRTree>)parent
+- (ANTLRMap *)index:(id<ANTLRBaseTree>)t;
+- (void) _index:(id<ANTLRBaseTree>)t Map:(ANTLRMap *)m;
+- (NSMutableArray *)find:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
+- (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Type:(NSInteger)ttype;
+- (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
+- (void) visit:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype Visitor:(ANTLRVisitor *)visitor;
+- (void) _visit:(id<ANTLRBaseTree>)t
+         Parent:(id<ANTLRBaseTree>)parent
      ChildIndex:(NSInteger)childIndex
            Type:(NSInteger)ttype
         Visitor:(ANTLRVisitor *)visitor;
-- (void)visit:(id<ANTLRTree>)t Pattern:(NSString *)pattern Visitor:(ANTLRVisitor *)visitor;
-- (BOOL)parse:(id<ANTLRTree>)t Pattern:(NSString *)pattern Map:(ANTLRMap *)labels;
-- (BOOL) parse:(id<ANTLRTree>) t Pattern:(NSString *)pattern;
-- (BOOL) _parse:(id<ANTLRTree>)t1 Pattern:(ANTLRTreePattern *)tpattern Map:(ANTLRMap *)labels;
-- (id<ANTLRTree>) createTree:(NSString *)pattern;
+- (void)visit:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern Visitor:(ANTLRVisitor *)visitor;
+- (BOOL)parse:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern Map:(ANTLRMap *)labels;
+- (BOOL) parse:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
+- (BOOL) _parse:(id<ANTLRBaseTree>)t1 Pattern:(id<ANTLRBaseTree>)tpattern Map:(ANTLRMap *)labels;
+- (id<ANTLRBaseTree>) createTree:(NSString *)pattern;
 - (BOOL)equals:(id)t1 O2:(id)t2 Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
 - (BOOL)equals:(id)t1 O2:(id)t2;
 - (BOOL) _equals:(id)t1 O2:(id)t2 Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
 
+@property (retain) id<ANTLRTreeAdaptor> adaptor;
+@property (retain) ANTLRMap *tokenNameToTypeMap;
 @end
 

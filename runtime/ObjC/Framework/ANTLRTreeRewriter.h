@@ -42,6 +42,8 @@
 
 - (id)rule;
 
+@property (retain) id  actor;
+@property SEL ruleSEL;
 @end
 
 @interface ANTLRTreeRewriter : ANTLRTreeParser {
@@ -57,16 +59,20 @@
 + (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
 - (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput;
 - (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
-- (ANTLRTreeRewriter *) applyOnce:(id<ANTLRTree>)t Rule:(ANTLRfptr *)whichRule;
-- (ANTLRTreeRewriter *) applyRepeatedly:(id<ANTLRTree>)t Rule:(ANTLRfptr *)whichRule;
-- (ANTLRTreeRewriter *) downup:(id<ANTLRTree>)t;
-- (ANTLRTreeRewriter *) pre:(id<ANTLRTree>)t;
-- (ANTLRTreeRewriter *) post:(id<ANTLRTree>)t;
-- (ANTLRTreeRewriter *) downup:(id<ANTLRTree>)t XForm:(BOOL)aShowTransformations;
-- (void)reportTransformation:(id<ANTLRTree>)oldTree Tree:(id<ANTLRTree>)newTree;
+- (ANTLRTreeRewriter *) applyOnce:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule;
+- (ANTLRTreeRewriter *) applyRepeatedly:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule;
+- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t;
+- (ANTLRTreeRewriter *) pre:(id<ANTLRBaseTree>)t;
+- (ANTLRTreeRewriter *) post:(id<ANTLRBaseTree>)t;
+- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t XForm:(BOOL)aShowTransformations;
+- (void)reportTransformation:(id<ANTLRBaseTree>)oldTree Tree:(id<ANTLRBaseTree>)newTree;
 - (ANTLRTreeRewriter *) topdown_fptr;
 - (ANTLRTreeRewriter *) bottomup_ftpr;
 - (ANTLRTreeRewriter *) topdown;
 - (ANTLRTreeRewriter *) bottomup;
 
+@property BOOL showTransformations;
+@property (retain) id<ANTLRTokenStream> originalTokenStream;
+@property (retain) id<ANTLRTreeAdaptor> originalAdaptor;
+@property (retain) ANTLRfptr *rule;
 @end

@@ -69,8 +69,8 @@
 - (NSInteger) size;
  
 - (BOOL) hasNext;
-- (id<ANTLRTree>) nextTree;
-- (id<ANTLRTree>) _next;       // internal: TODO: redesign if necessary. maybe delegate
+- (id<ANTLRBaseTree>) nextTree;
+- (id<ANTLRBaseTree>) _next;       // internal: TODO: redesign if necessary. maybe delegate
 
 - (id) copyElement:(id)element;
 - (id) toTree:(id)element;

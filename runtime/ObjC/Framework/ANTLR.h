@@ -54,6 +54,7 @@
 #import <ANTLR/ANTLRError.h>
 #import <ANTLR/ANTLRFailedPredicateException.h>
 #import <ANTLR/ANTLRFastQueue.h>
+#import <ANTLR/ANTLRFileStream.h>
 #import <ANTLR/ANTLRHashMap.h>
 #import <ANTLR/ANTLRHashRule.h>
 #import <ANTLR/ANTLRInputStream.h>

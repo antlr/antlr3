@@ -54,15 +54,15 @@
 @property (assign) NSInteger lastErrorIndex;
 @property (assign, getter=getFailed, setter=setFailed:) BOOL failed;
 @property (assign) NSInteger syntaxErrors;
-@property (assign, getter=getBacktracking, setter=setBacktracking) NSInteger backtracking;
+@property (assign, getter=getBacktracking, setter=setBacktracking:) NSInteger backtracking;
 @property (retain, getter=getRuleMemo, setter=setRuleMemo:) ANTLRRuleStack *ruleMemo;
-@property (copy, getter=getToken, setter=setToken) id<ANTLRToken> token;
+@property (copy, getter=getToken, setter=setToken:) id<ANTLRToken> token;
 @property (getter=getType,setter=setType:) NSUInteger type;
 @property (getter=getChannel,setter=setChannel:) NSUInteger channel;
 @property (getter=getTokenStartLine,setter=setTokenStartLine:) NSUInteger tokenStartLine;
 @property (getter=getCharPositionInLine,setter=setCharPositionInLine:) NSUInteger tokenStartCharPositionInLine;
 @property (getter=getTokenStartCharIndex,setter=setTokenStartCharIndex:) NSInteger tokenStartCharIndex;
-@property (retain, getter=getText, setter=setText) NSString *text;
+@property (retain, getter=getText, setter=setText:) NSString *text;
 
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState;
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedStateWithRuleLen:(NSInteger)aLen;

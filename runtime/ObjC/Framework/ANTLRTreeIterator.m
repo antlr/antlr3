@@ -40,7 +40,7 @@
 }
 
 + (ANTLRTreeIterator *) newANTRLTreeIteratorWithAdaptor:(ANTLRCommonTreeAdaptor *)adaptor
-                                                andTree:(id<ANTLRTree>)tree
+                                                andTree:(id<ANTLRBaseTree>)tree
 {
     return [[ANTLRTreeIterator alloc] initWithTreeAdaptor:adaptor andTree:tree];
 }
@@ -59,12 +59,12 @@
 	return self;
 }
 
--(id) initWithTree:(id<ANTLRTree>) t
+-(id) initWithTree:(id<ANTLRBaseTree>) t
 {
 	return [self initWithTreeAdaptor:[ANTLRCommonTreeAdaptor newTreeAdaptor] andTree:t];
 }
 
--(id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)a andTree:(id<ANTLRTree>)t
+-(id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)a andTree:(id<ANTLRBaseTree>)t
 {
 	if ((self = [super init]) != nil) {
 		firstTime = YES;
@@ -128,7 +128,7 @@
 		return self.down;
 	}
 	// if no children, look for next sibling of ancestor
-	id<ANTLRTree> parent = [adaptor getParent:tree];
+	id<ANTLRBaseTree> parent = [adaptor getParent:tree];
 	while (parent != nil && ([adaptor getChildIndex:tree] + 1) >= [adaptor getChildCount:parent]) {
 		[nodes addObject:up];
 		tree = parent;
@@ -158,10 +158,15 @@
 
 - (void)remove
 {
-    @throw [ANTLRRuntimeException newANTLRRuntimeException:@"UnsupportedOperationException"];
+    @throw [ANTLRRuntimeException newException:@"ANTLRUnsupportedOperationException"];
 }
 @synthesize up;
 @synthesize down;
 @synthesize eof;
 
+@synthesize adaptor;
+@synthesize root;
+@synthesize tree;
+@synthesize firstTime;
+@synthesize nodes;
 @end

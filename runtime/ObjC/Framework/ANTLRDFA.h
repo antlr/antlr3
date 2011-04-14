@@ -44,10 +44,6 @@
     NSInteger len;
 }
 
-@property (retain, getter=getRecognizer,setter=setRecognizer:) ANTLRBaseRecognizer *recognizer;
-@property (assign, getter=getDecision,setter=setDecision:) NSInteger decisionNumber;
-@property (assign, getter=getLen,setter=setLen:) NSInteger len;
-
 - (id) initWithRecognizer:(id) theRecognizer;
 // simulate the DFA using the static tables and predict an alternative
 - (NSInteger) predict:(id<ANTLRCharStream>)anInput;
@@ -72,4 +68,15 @@
 - (void)setRecognizer:(ANTLRBaseRecognizer *)aRecognizer;
 - (NSInteger)length;
 
+@property const int *eot;
+@property const int *eof;
+@property const unichar *min;
+@property const unichar *max;
+@property const int *accept;
+@property const int *special;
+@property const int **transition;
+
+@property (retain, getter=getRecognizer,setter=setRecognizer:) ANTLRBaseRecognizer *recognizer;
+@property (assign, getter=getDecision,setter=setDecision:) NSInteger decisionNumber;
+@property (assign, getter=getLen,setter=setLen:) NSInteger len;
 @end

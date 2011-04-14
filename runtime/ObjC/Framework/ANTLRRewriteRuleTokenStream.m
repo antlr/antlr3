@@ -101,7 +101,7 @@
     return self;
 }
 
-- (id<ANTLRTree>) nextNode
+- (id<ANTLRBaseTree>) nextNode
 {
     id<ANTLRToken> t = [self _next];
     return [treeAdaptor createTree:t];
@@ -115,14 +115,14 @@
 /** Don't convert to a tree unless they explicitly call nextTree.
  *  This way we can do hetero tree nodes in rewrite.
  */
-- (id<ANTLRTree>) toTree:(id<ANTLRToken>)element
+- (id<ANTLRBaseTree>) toTree:(id<ANTLRToken>)element
 {
     return element;
 }
 
 - (id) copyElement:(id)element
 {
-    @throw [ANTLRRuntimeException newANTLRRuntimeException:@"copy can't be called for a token stream."];
+    @throw [ANTLRRuntimeException newException:@"copy can't be called for a token stream."];
 }
 
 @end

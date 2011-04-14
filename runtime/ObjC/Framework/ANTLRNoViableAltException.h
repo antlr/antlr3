@@ -33,11 +33,13 @@
 	int stateNumber;
 }
 
-+ (ANTLRNoViableAltException *) newANTLRNoViableAltException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream;
++ (ANTLRNoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream;
 - (ANTLRNoViableAltException *) initWithDecision:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream;
 
 - (void)setDecisionNumber:(NSInteger)decisionNumber;
 - (void)setStateNumber:(NSInteger)stateNumber;
 
 
+@property (getter=decisionNumber,setter=setDecisionNumber:) NSInteger decisionNumber;
+@property (getter=stateNumber,setter=setStateNumber:) NSInteger stateNumber;
 @end

@@ -33,6 +33,7 @@
 #import "ANTLRError.h"
 #import "ANTLRRecognitionException.h"
 #import "ANTLRCommonToken.h"
+#import "ANTLRRuntimeException.h"
 
 @implementation ANTLRLookaheadStream
 
@@ -40,6 +41,7 @@
 @synthesize eofElementIndex;
 @synthesize lastMarker;
 @synthesize markDepth;
+@synthesize prevElement;
 
 -(id) init
 {
@@ -116,7 +118,7 @@
 	}
 }
 
--(NSInteger) count
+-(NSUInteger) count
 {
 	@throw [NSException exceptionWithName:@"ANTLRUnsupportedOperationException" reason:@"Streams have no defined size" userInfo:nil];
 }
@@ -141,7 +143,7 @@
 	if (k == 1) {
 		return prevElement;
 	}
-	@throw [ANTLRRuntimeException newANTLRNoSuchElementException:[NSString stringWithString:@"can't look backwards more than one token in this stream"]];
+	@throw [ANTLRNoSuchElementException newException:@"can't look backwards more than one token in this stream"];
 }
 
 -(id) getCurrentSymbol
@@ -184,9 +186,9 @@
 //    if (lastMarker == 0) [self reset];
 }
 
--(void) seek:(NSInteger) index
+-(void) seek:(NSInteger) anIndex
 {
-	p = index;
+	p = anIndex;
 }
 
 - (id) getEof

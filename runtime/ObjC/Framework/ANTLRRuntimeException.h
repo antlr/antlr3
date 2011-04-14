@@ -31,24 +31,70 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ANTLRRuntimeException : NSException
-{
+@interface ANTLRRuntimeException : NSException {
 }
 
-+ (ANTLRRuntimeException *) newANTLRNoSuchElementException:(NSString *)aReason;
-+ (ANTLRRuntimeException *) newANTLRIllegalArgumentException:(NSString *)aReason;
-+ (ANTLRRuntimeException *) newANTLRRuntimeException:(NSString *)aReason;
++ (ANTLRRuntimeException *) newException;
++ (ANTLRRuntimeException *) newException:(NSString *)aReason;
++ (ANTLRRuntimeException *) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
 + (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason;
-+ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason userInfo:aUserInfo;
++ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (id) init;
-- (id)initWithRuntime:(NSString *)aReason;
-- (id)initWithReason:(NSString *)aReason;
-- (id)initWithName:(NSString *)aName reason:(NSString *)aReason;
-- (id)initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason;
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (NSString *) Description;
 - (id) stackTrace:(NSException *)e;
-//    - (void)setDecisionNumber:(NSInteger)decisionNumber;
-//    - (void)setStateNumber:(NSInteger)stateNumber;
+
+@end
+
+@interface ANTLRIllegalArgumentException : ANTLRRuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id)init:(NSString *)aReason;
+- (id)init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
+@interface ANTLRIllegalStateException : ANTLRRuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id)init:(NSString *)aReason;
+- (id)init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
+@interface ANTLRNoSuchElementException : ANTLRRuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
+@interface ANTLRRewriteEarlyExitException : ANTLRRuntimeException {
+}
+
++ (id) newException;
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
 @end

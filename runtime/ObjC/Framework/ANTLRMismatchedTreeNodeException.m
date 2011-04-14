@@ -31,7 +31,7 @@
 
 @synthesize expecting;
 
-+ (id) newANTLRMismatchedTreeNodeException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
 {
 	return [[ANTLRMismatchedTreeNodeException alloc] initWithTokenType:expectedTokenType Stream:anInput];
 }

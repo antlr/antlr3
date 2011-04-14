@@ -134,4 +134,8 @@
     return aString;
 }
 
+@synthesize input;
+@synthesize startToken;
+@synthesize stopToken;
+@synthesize trappedException;
 @end

@@ -29,7 +29,7 @@
 
 @implementation ANTLREarlyExitException
 
-+ (ANTLREarlyExitException *) exceptionWithStream:(id<ANTLRIntStream>) anInputStream decisionNumber:(NSInteger) aDecisionNumber
++ (ANTLREarlyExitException *) newException:(id<ANTLRIntStream>) anInputStream decisionNumber:(NSInteger) aDecisionNumber
 {
 	return [[self alloc] initWithStream:anInputStream decisionNumber:aDecisionNumber];
 }
@@ -49,4 +49,6 @@
 	return desc;
 }
 
+@synthesize decisionNumber;
 @end
+

@@ -34,7 +34,7 @@
 	NSRange range;
 }
 
-+ (id) exceptionWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
++ (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
 - (id) initWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
 
 @end

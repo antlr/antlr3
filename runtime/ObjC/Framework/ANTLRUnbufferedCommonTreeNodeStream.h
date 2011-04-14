@@ -56,7 +56,7 @@
 	NSUInteger tail;
 }
 
-@property (retain, getter=getRoot, setter=setRoot) ANTLRCommonTree *root;
+@property (retain, getter=getRoot, setter=setRoot:) ANTLRCommonTree *root;
 @property (retain, getter=getCurrentNode, setter=setCurrentNode:) ANTLRCommonTree *currentNode;
 @property (retain, getter=getPreviousNode, setter=setPreviousNode:) ANTLRCommonTree *previousNode;
 @property (retain, getter=getTreeAdaptor, setter=setTreeAdaptor:) id<ANTLRTreeAdaptor> treeAdaptor;
@@ -104,7 +104,7 @@
 - (NSUInteger) size;
 
 #pragma mark Lookahead Handling
-- (void) addLookahead:(id<ANTLRTree>)aNode;
+- (void) addLookahead:(id<ANTLRBaseTree>)aNode;
 - (NSUInteger) lookaheadSize;
 - (void) fillBufferWithLookahead:(NSInteger)k;
 - (id) nextObject;

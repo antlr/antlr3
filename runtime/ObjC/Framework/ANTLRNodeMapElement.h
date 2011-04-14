@@ -31,25 +31,25 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ANTLRBaseMapElement.h"
-#import "ANTLRTree.h"
+#import "ANTLRBaseTree.h"
 
 @interface ANTLRNodeMapElement : ANTLRBaseMapElement {
-    id<ANTLRTree> node;
+    id<ANTLRBaseTree> node;
 }
 
-@property (retain, getter=getNode, setter=setNode:) id node;
+@property (retain, getter=getNode, setter=setNode:) id<ANTLRBaseTree> node;
 
 + (void)initialize;
 
 + (id) newANTLRNodeMapElement;
-+ (id) newANTLRNodeMapElementWithIndex:(id)anIndex Node:(id<ANTLRTree>)aNode;
++ (id) newANTLRNodeMapElementWithIndex:(id)anIndex Node:(id<ANTLRBaseTree>)aNode;
 - (id) init;
 - (id) initWithAnIndex:(id)anIndex Node:(id)aNode;
 
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (id<ANTLRTree>)getNode;
-- (void)setNode:(id<ANTLRTree>)aNode;
+- (id<ANTLRBaseTree>)getNode;
+- (void)setNode:(id<ANTLRBaseTree>)aNode;
 
 - (NSInteger)size;
 

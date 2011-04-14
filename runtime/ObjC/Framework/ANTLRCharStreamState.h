@@ -38,9 +38,9 @@ NSInteger line;
 NSInteger charPositionInLine;
 }
 
-@property (getter=getP,setter=setP:) NSInteger p;
-@property (getter=getLine,setter=setLine:) NSInteger line;
-@property (getter=getCharPositionInLine,setter=setCharPositionInLine:) NSInteger charPositionInLine;
+@property (assign) NSInteger p;
+@property (assign) NSInteger line;
+@property (assign) NSInteger charPositionInLine;
 
 + newANTLRCharStreamState;
 

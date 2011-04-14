@@ -33,7 +33,7 @@
 #import "ANTLRBaseTree.h"
 #import "ANTLRCommonToken.h"
 
-@interface ANTLRParseTree : ANTLRBaseTree {
+@interface ANTLRParseTree : ANTLRBaseTree <ANTLRBaseTree> {
 	id<ANTLRToken> payload;
 	NSMutableArray *hiddenTokens;
 }
@@ -42,10 +42,10 @@
  *  This really adds no functionality, it is just an alias for CommonTree
  *  that is more meaningful (specific) and holds a String to display for a node.
  */
-+ (ANTLRParseTree *)newANTLRParseTree:(id<ANTLRToken>)label;
++ (id<ANTLRBaseTree>)newANTLRParseTree:(id<ANTLRToken>)label;
 - (id)initWithLabel:(id<ANTLRToken>)label;
 
-- (id<ANTLRTree>)dupNode;
+- (id<ANTLRBaseTree>)dupNode;
 - (NSInteger)getType;
 - (NSString *)getText;
 - (NSInteger)getTokenStartIndex;
@@ -57,4 +57,6 @@
 - (NSString *)toInputString;
 - (void)_toStringLeaves:(NSMutableString *)buf;
 
+@property (retain) id<ANTLRToken> payload;
+@property (retain) NSMutableArray *hiddenTokens;
 @end

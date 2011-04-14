@@ -33,7 +33,7 @@
 #define FAILURE (-1)
 
 #import "ANTLRMap.h"
-#import "ANTLRTree.h"
+#import "ANTLRBaseTree.h"
 
 /*
  * Start of ANTLRMap
@@ -44,25 +44,20 @@
 
 +(id)newANTLRMap
 {
-    ANTLRMap *aNewANTLRMap;
-    
-    aNewANTLRMap = [[ANTLRMap alloc] init];
-	return( aNewANTLRMap );
+    return [[ANTLRMap alloc] init];
 }
 
 +(id)newANTLRMapWithLen:(NSInteger)aBuffSize
 {
-    ANTLRMap *aNewANTLRMap;
-    
-    aNewANTLRMap = [[ANTLRMap alloc] initWithLen:aBuffSize];
-	return( aNewANTLRMap );
+    return [[ANTLRMap alloc] initWithLen:aBuffSize];
 }
 
 -(id)init
 {
     NSInteger idx;
     
-	if ((self = [super initWithLen:HASHSIZE]) != nil) {
+	self = [super initWithLen:HASHSIZE];
+    if ( self != nil ) {
 		fNext = nil;
         for( idx = 0; idx < HASHSIZE; idx++ ) {
             ptrBuffer[idx] = nil;
@@ -73,7 +68,8 @@
 
 -(id)initWithLen:(NSInteger)aBuffSize
 {
-	if ((self = [super initWithLen:aBuffSize]) != nil) {
+	self = [super initWithLen:aBuffSize];
+    if ( self != nil ) {
 	}
     return( self );
 }
@@ -153,7 +149,7 @@
     
     for (int i = 0; i < BuffSize; i++) {
         if ((anElement = ptrBuffer[i]) != nil) {
-            aSize =+ (NSInteger)[anElement size];
+            aSize += (NSInteger)[anElement size];
         }
     }
     return aSize;
@@ -304,12 +300,12 @@
     return( nil );              /*   not found      */
 }
 
-- (NSInteger)getNode:(id<ANTLRTree>)aNode
+- (NSInteger)getNode:(id<ANTLRBaseTree>)aNode
 {
     ANTLRMapElement *np;
     NSInteger idx;
 
-    idx = [(id<ANTLRTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode getType];
     idx %= HASHSIZE;
     np = ptrBuffer[idx];
     return( [(NSNumber *)np.index integerValue] );

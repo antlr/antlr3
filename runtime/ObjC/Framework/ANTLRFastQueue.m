@@ -42,7 +42,7 @@
 
 + (id) newANTLRFastQueue
 {
-    return [[ANTLRFastQueue alloc] init];
+    return [[[ANTLRFastQueue alloc] init] retain];
 }
 
 - (id) init
@@ -103,17 +103,17 @@
 	[data addObject:o];
 }
 
-- (NSInteger) count
+- (NSUInteger) count
 {
 	return [data count];
 }
 
-- (NSInteger) size
+- (NSUInteger) size
 {
 	return [data count] - p;
 }
 
-- (NSInteger) range
+- (NSUInteger) range
 {
     return range;
 }
@@ -123,16 +123,16 @@
 	return [self objectAtIndex:0];
 }
 
-- (id) objectAtIndex:(NSInteger) i
+- (id) objectAtIndex:(NSUInteger) i
 {
-    NSInteger absIndex;
+    NSUInteger absIndex;
 
     absIndex = p + i;
 	if (absIndex >= [data count]) {
-		@throw [ANTLRRuntimeException newANTLRNoSuchElementException:[NSString stringWithFormat:@"queue index %d > last index %d", absIndex, [data count]-1]];
+		@throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d > last index %d", absIndex, [data count]-1]];
 	}
 	if (absIndex < 0) {
-	    @throw [ANTLRRuntimeException newANTLRNoSuchElementException:[NSString stringWithFormat:@"queue index %d < 0", absIndex]];
+	    @throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d < 0", absIndex]];
 	}
 	if ( absIndex > range ) range = absIndex;
 	return [data objectAtIndex:absIndex];
@@ -167,26 +167,5 @@
     pool = aPool;
 }
 #endif
-
-- (NSMutableArray *)getData
-{
-    return data;
-}
-
-- (void)setData:(NSMutableArray *)myData
-{
-    data = myData;
-}
-
-
-- (NSInteger) getP
-{
-    return p;
-}
-
-- (void) setP:(NSInteger) anInt
-{
-    p = anInt;
-}
 
 @end

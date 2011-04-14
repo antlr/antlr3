@@ -50,7 +50,7 @@
     return self;
 }
 
-- (id<ANTLRTree>)dupNode
+- (id<ANTLRBaseTree>)dupNode
 {
     return nil;
 }
@@ -70,7 +70,7 @@
     return 0;
 }
     
-- (void)setTokenStartIndex:(NSInteger)index
+- (void)setTokenStartIndex:(NSInteger)anIndex
 {
 }
     
@@ -79,7 +79,7 @@
     return 0;
 }
     
-- (void)setTokenStopIndex:(NSInteger)index
+- (void)setTokenStopIndex:(NSInteger)anIndex
 {
 }
     
@@ -102,7 +102,7 @@
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:25];
     if ( hiddenTokens!=nil ) {
-        for (int i = 0; i < [hiddenTokens count]; i++) {
+        for (NSUInteger i = 0; i < [hiddenTokens count]; i++) {
             id<ANTLRToken>  hidden = (id<ANTLRToken> ) [hiddenTokens objectAtIndex:i];
             [buf appendString:[hidden getText]];
         }
@@ -135,4 +135,6 @@
     }
 }
     
+@synthesize payload;
+@synthesize hiddenTokens;
 @end

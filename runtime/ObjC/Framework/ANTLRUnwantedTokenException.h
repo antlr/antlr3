@@ -35,8 +35,8 @@
 @interface ANTLRUnwantedTokenException : ANTLRMismatchedTokenException {
 
 }
-+ (ANTLRUnwantedTokenException *)newANTLRUnwantedTokenException;
-+ (ANTLRUnwantedTokenException *)newANTLRUnwantedTokenException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput;
++ (ANTLRUnwantedTokenException *)newException;
++ (ANTLRUnwantedTokenException *)newException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput;
 
 - (id) init;
 - (id) initWithStream:(id<ANTLRIntStream>)anInput And:(NSInteger)expected;

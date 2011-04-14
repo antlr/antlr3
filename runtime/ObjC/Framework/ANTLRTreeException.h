@@ -29,14 +29,14 @@
 #import "ANTLRRecognitionException.h"
 
 @interface ANTLRTreeException : ANTLRRecognitionException {
-	id<ANTLRTree> oldRoot;
-	id<ANTLRTree> newRoot;
+	id<ANTLRBaseTree> oldRoot;
+	id<ANTLRBaseTree> newRoot;
 }
 
-+ (id) exceptionWithOldRoot:(id<ANTLRTree>)theOldRoot newRoot:(id<ANTLRTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
-- (id) initWithOldRoot:(id<ANTLRTree>)theOldRoot newRoot:(id<ANTLRTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
++ (id) newException:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
+- (id) initWithOldRoot:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
 
-- (void) setOldRoot:(id<ANTLRTree>)aTree;
-- (void) setNewRoot:(id<ANTLRTree>)aTree;
+- (void) setOldRoot:(id<ANTLRBaseTree>)aTree;
+- (void) setNewRoot:(id<ANTLRBaseTree>)aTree;
 
 @end

@@ -40,7 +40,7 @@
 - (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 
 - (id) nextNode;
-- (id) nextTree:(id<ANTLRToken>)element;
+- (id) toTree:(id<ANTLRBaseTree>)element;
 - (id) dup:(id)element;
 
 @end

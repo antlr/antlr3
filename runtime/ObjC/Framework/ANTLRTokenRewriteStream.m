@@ -346,7 +346,7 @@ extern NSInteger debug;
 - (void) replaceProgNam:(NSString *)programName FromIndex:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString *)theText
 {
     if ( from > to || from < 0 || to < 0 || to >= [tokens count] ) {
-        @throw [ANTLRRuntimeException newANTLRIllegalArgumentException:[NSString stringWithFormat:@"replace: range invalid: %d..%d size=%d\n", from, to, [tokens count]]];
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"replace: range invalid: %d..%d size=%d\n", from, to, [tokens count]]];
     }
     ANTLRRewriteOperation *op = [ANTLRReplaceOp newANTLRReplaceOp:from ToIndex:to Text:theText];
     ANTLRHashMap *rewrites = (ANTLRHashMap *)[lastRewriteTokenIndexes getName:programName];
@@ -495,9 +495,9 @@ extern NSInteger debug;
     if ( end == [tokens count]-1 ) {
         // Scan any remaining operations after last token
         // should be included (they will be inserts).
-        int i = 0;
-        while ( i < [indexToOp count] - 1 ) {
-            ANTLRRewriteOperation *op = [indexToOp objectAtIndex:i];
+        int i2 = 0;
+        while ( i2 < [indexToOp count] - 1 ) {
+            ANTLRRewriteOperation *op = [indexToOp objectAtIndex:i2];
             if ( op.index >= [tokens count]-1 ) {
                 [buf appendString:op.text];
             }
@@ -586,7 +586,7 @@ extern NSInteger debug;
             BOOL disjoint = prevRop.lastIndex<rop.index || prevRop.index > rop.lastIndex;
             BOOL same = prevRop.index==rop.index && prevRop.lastIndex==rop.lastIndex;
             if ( !disjoint && !same ) {
-                @throw [ANTLRRuntimeException newANTLRIllegalArgumentException:
+                @throw [ANTLRIllegalArgumentException newException:
                         [NSString stringWithFormat:@"replace op boundaries of %@, overlap with previous %@\n", rop, prevRop]];
             }
         }
@@ -622,7 +622,7 @@ extern NSInteger debug;
                 continue;
             }
             if ( iop.index >= rop.index && iop.index <= rop.lastIndex ) {
-                @throw [ANTLRRuntimeException newANTLRIllegalArgumentException:[NSString stringWithFormat:@"insert op %d within boundaries of previous %d", iop, rop]];
+                @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"insert op %d within boundaries of previous %d", iop, rop]];
             }
         }
     }
@@ -633,7 +633,7 @@ extern NSInteger debug;
         if ( op == nil )
             continue; // ignore deleted ops
         if ( [m objectAtIndex:op.index] != nil ) {
-            @throw [ANTLRRuntimeException newANTLRRuntimeException:@"should only be one op per index\n"];
+            @throw [ANTLRRuntimeException newException:@"should only be one op per index\n"];
         }
         //[m put(new Integer(op.index), op);
         [m setObject:op atIndex:op.index];

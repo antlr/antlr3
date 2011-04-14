@@ -76,7 +76,7 @@ NSInteger level;
      */
 - (id) nextElement;
     
-- (BOOL) isEOF:(id<ANTLRTree>) o;
+- (BOOL) isEOF:(id<ANTLRBaseTree>) o;
 - (void) setUniqueNavigationNodes:(BOOL) uniqueNavigationNodes;
     
 - (id) getTreeSource;
@@ -109,9 +109,12 @@ NSInteger level;
     
 - (void) replaceChildren:(id)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
     
-- (NSString *) toStringFromNode:(id<ANTLRTree>)startNode ToNode:(id<ANTLRTree>)stopNode;
+- (NSString *) toStringFromNode:(id<ANTLRBaseTree>)startNode ToNode:(id<ANTLRBaseTree>)stopNode;
 
 /** For debugging; destructive: moves tree iterator to end. */
 - (NSString *) toTokenTypeString;
 
+@property (retain) ANTLRTreeIterator *it;
+@property (retain) ANTLRIntArray *calls;
+@property BOOL hasNilRoot;
 @end

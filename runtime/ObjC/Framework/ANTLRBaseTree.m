@@ -24,8 +24,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTree.h"
 #import "ANTLRBaseTree.h"
+#import "ANTLRBaseTreeAdaptor.h"
 #import "ANTLRToken.h"
 // TODO: this shouldn't be here...but needed for invalidNode
 #import "ANTLRCommonTree.h"
@@ -37,11 +37,28 @@ ANTLRTreeNavigationNodeDown *navigationNodeDown = nil;
 ANTLRTreeNavigationNodeUp *navigationNodeUp = nil;
 ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 
+
 @implementation ANTLRBaseTree
 
-@synthesize children;
+static id<ANTLRBaseTree> invalidNode = nil;
 
 #pragma mark ANTLRTree protocol conformance
+
++ (id<ANTLRBaseTree>) INVALID_NODE
+{
+	if ( invalidNode == nil ) {
+		invalidNode = [[ANTLRCommonTree alloc] initWithTokenType:ANTLRTokenTypeInvalid];
+	}
+	return invalidNode;
+}
+
++ (id<ANTLRBaseTree>) invalidNode
+{
+	if ( invalidNode == nil ) {
+		invalidNode = [[ANTLRCommonTree alloc] initWithTokenType:ANTLRTokenTypeInvalid];
+	}
+	return invalidNode;
+}
 
 + newTree
 {
@@ -54,21 +71,23 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
  */
 + newTree:(id<ANTLRBaseTree>) node
 {
-    return [[ANTLRBaseTree alloc] initWith:(id<ANTLRTree>) node];
+    return [[ANTLRBaseTree alloc] initWith:(id<ANTLRBaseTree>) node];
 }
 
-- (ANTLRBaseTree *) init
+- (id) init
 {
-    if (( self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
         children = nil;
         return self;
     }
     return nil;
 }
 
-- (ANTLRBaseTree *) initWith:(id<ANTLRTree>)node
+- (id) initWith:(id<ANTLRBaseTree>)node
 {
-    if (( self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
         children = nil;
         [children addObject:node];
         return self;
@@ -83,12 +102,12 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 	[super dealloc];
 }
 
-- (id<ANTLRTree>) getChild:(NSUInteger)i
+- (id<ANTLRBaseTree>) getChild:(NSUInteger)i
 {
     if ( children == nil || i >= [children count] ) {
         return nil;
     }
-    return (id<ANTLRTree>)[children objectAtIndex:i];
+    return (id<ANTLRBaseTree>)[children objectAtIndex:i];
 }
 
 /** Get the children internal List; note that if you directly mess with
@@ -104,10 +123,10 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     children = anArray;
 }
 
-- (id<ANTLRTree>) getFirstChildWithType:(NSInteger) type
+- (id<ANTLRBaseTree>) getFirstChildWithType:(NSInteger) type
 {
-    for (int i = 0; children != nil && i < [children count]; i++) {
-        id<ANTLRTree> t = (id<ANTLRTree>) [children objectAtIndex:i];
+    for (NSUInteger i = 0; children != nil && i < [children count]; i++) {
+        id<ANTLRBaseTree> t = (id<ANTLRBaseTree>) [children objectAtIndex:i];
         if ( [t getType] == type ) {
             return t;
         }
@@ -129,29 +148,29 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
  *  and child isNil then this routine moves children to t via
  *  t.children = child.children; i.e., without copying the array.
  */
-- (void) addChild:(id<ANTLRTree>) t
+- (void) addChild:(id<ANTLRBaseTree>) t
 {
     //System.out.println("add child "+t.toStringTree()+" "+self.toStringTree());
     //System.out.println("existing children: "+children);
     if ( t == nil ) {
         return; // do nothing upon addChild(nil)
     }
-    if ( self == t )
-        [NSException raise:ANTLRIllegalArgumentException format:(NSString *)@"ANTLRBaseTree Can't add self to self as child"];        
-    ANTLRBaseTree *childTree = (ANTLRBaseTree *) t;
+    if ( self == (ANTLRBaseTree *)t )
+        @throw [ANTLRIllegalArgumentException newException:@"ANTLRBaseTree Can't add self to self as child"];        
+    id<ANTLRBaseTree> childTree = (id<ANTLRBaseTree>) t;
     if ( [childTree isNil] ) { // t is an empty node possibly with children
         if ( children != nil && children == childTree.children ) {
-            @throw [ANTLRRuntimeException newANTLRRuntimeException:@"ANTLRBaseTree add child list to itself"];
+            @throw [ANTLRRuntimeException newException:@"ANTLRBaseTree add child list to itself"];
         }
         // just add all of childTree's children to this
         if ( childTree.children != nil ) {
             if ( children != nil ) { // must copy, this has children already
                 int n = [childTree.children count];
                 for ( int i = 0; i < n; i++) {
-                    id<ANTLRTree> c = (id<ANTLRTree>)[childTree.children objectAtIndex:i];
+                    id<ANTLRBaseTree> c = (id<ANTLRBaseTree>)[childTree.children objectAtIndex:i];
                     [children addObject:c];
                     // handle double-link stuff for each child of nil root
-                    [c setParent:self];
+                    [c setParent:(id<ANTLRBaseTree>)self];
                     [c setChildIndex:[children count]-1];
                 }
             }
@@ -168,7 +187,7 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
             children = [NSMutableArray arrayWithCapacity:5]; // create children list on demand
         }
         [children addObject:t];
-        [childTree setParent:self];
+        [childTree setParent:(id<ANTLRBaseTree>)self];
         [childTree setChildIndex:[children count]-1];
     }
     // System.out.println("now children are: "+children);
@@ -177,19 +196,19 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 /** Add all elements of kids list as children of this node */
 - (void) addChildren:(NSMutableArray *) kids
 {
-    for (int i = 0; i < [kids count]; i++) {
-        id<ANTLRTree> t = (id<ANTLRTree>) [kids objectAtIndex:i];
+    for (NSUInteger i = 0; i < [kids count]; i++) {
+        id<ANTLRBaseTree> t = (id<ANTLRBaseTree>) [kids objectAtIndex:i];
         [self addChild:t];
     }
 }
 
-- (void) setChild:(NSInteger) i With:(id<ANTLRTree>)t
+- (void) setChild:(NSUInteger) i With:(id<ANTLRBaseTree>)t
 {
     if ( t == nil ) {
         return;
     }
     if ( [t isNil] ) {
-        [NSException raise:ANTLRIllegalArgumentException format:(NSString *)@"ANTLRBaseTree Can't set single child to a list"];        
+        @throw [ANTLRIllegalArgumentException newException:@"ANTLRBaseTree Can't set single child to a list"];        
     }
     if ( children == nil ) {
         children = [NSMutableArray arrayWithCapacity:5];
@@ -200,19 +219,19 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     else {
         [children insertObject:t atIndex:i];
     }
-    [t setParent:self];
+    [t setParent:(id<ANTLRBaseTree>)self];
     [t setChildIndex:i];
 }
 
-- (id) deleteChild:(NSInteger) i
+- (id) deleteChild:(NSUInteger) idx
 {
     if ( children == nil ) {
         return nil;
     }
-    id<ANTLRTree> killed = (id<ANTLRTree>)[children objectAtIndex:i];
-    [children removeObjectAtIndex:i];
+    id<ANTLRBaseTree> killed = (id<ANTLRBaseTree>)[children objectAtIndex:idx];
+    [children removeObjectAtIndex:idx];
     // walk rest and decrement their child indexes
-    [self freshenParentAndChildIndexes:i];
+    [self freshenParentAndChildIndexes:idx];
     return killed;
 }
 
@@ -229,11 +248,11 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
      System.out.println("in="+toStringTree());
      */
     if ( children == nil ) {
-        [NSException raise:ANTLRIllegalArgumentException format:(NSString *)@"ANTLRBaseTree Invalid Indexes; no children in list"];        
+        @throw [ANTLRIllegalArgumentException newException:@"ANTLRBaseTree Invalid Indexes; no children in list"];        
     }
     int replacingHowMany = stopChildIndex - startChildIndex + 1;
     int replacingWithHowMany;
-    ANTLRBaseTree *newTree = (ANTLRBaseTree *) t;
+    id<ANTLRBaseTree> newTree = (id<ANTLRBaseTree>) t;
     NSMutableArray *newChildren = nil;
     // normalize to a list of children to add: newChildren
     if ( [newTree isNil] ) {
@@ -250,9 +269,9 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     if ( delta == 0 ) {
         int j = 0; // index into new children
         for (int i=startChildIndex; i <= stopChildIndex; i++) {
-            ANTLRBaseTree *child = (ANTLRBaseTree *)[newChildren objectAtIndex:j];
+            id<ANTLRBaseTree> child = (id<ANTLRBaseTree>)[newChildren objectAtIndex:j];
             [children replaceObjectAtIndex:i withObject:(id)child];
-            [child setParent:self];
+            [child setParent:(id<ANTLRBaseTree>)self];
             [child setChildIndex:i];
             j++;
         }
@@ -304,9 +323,9 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 {
     int n = [self getChildCount];
     for (int i = offset; i < n; i++) {
-        id<ANTLRTree> child = (id<ANTLRTree>)[self getChild:i];
+        id<ANTLRBaseTree> child = (id<ANTLRBaseTree>)[self getChild:i];
         [child setChildIndex:i];
-        [child setParent:self];
+        [child setParent:(id<ANTLRBaseTree>)self];
     }
 }
                
@@ -315,20 +334,18 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     [self sanityCheckParentAndChildIndexes:nil At:-1];
 }
                
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRTree>) parent At:(NSInteger) i
+- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>)aParent At:(NSInteger) i
 {
-    if ( parent != [self getParent] ) {
-        [NSException raise:@"ANTLRIllegalArgumentException" format:(NSString *)@"parents do not match; expected %s found %s", parent, [self getParent]];        
-        //        throw new IllegalStateException("parents don't match; expected "+parent+" found "+self.getParent());
+    if ( aParent != self.parent ) {
+        @throw [ANTLRIllegalStateException newException:[NSString stringWithFormat:@"parents don't match; expected %s found %s", aParent, self.parent]];
     }
     if ( i != [self getChildIndex] ) {
-        [NSException raise:@"ANTLRIllegalArgumentException" format:(NSString *)@"child indexes don't match; expected %d found %d", i, [self getChildIndex]];        
-        //        throw new IllegalStateException("child indexes don't match; expected "+i+" found "+self.getChildIndex());
+        @throw [ANTLRIllegalStateException newException:[NSString stringWithFormat:@"child indexes don't match; expected %d found %d", i, [self getChildIndex]]];
     }
     int n = [self getChildCount];
     for (int c = 0; c < n; c++) {
-        ANTLRCommonTree *child = (ANTLRCommonTree *)[self getChild:c];
-        [child sanityCheckParentAndChildIndexes:self At:c];
+        id<ANTLRBaseTree> child = (id<ANTLRBaseTree>)[self getChild:c];
+        [child sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>)self At:c];
     }
 }
                
@@ -340,7 +357,7 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     return 0;
 }
 
-- (void) setTokenStartIndex:(NSInteger) index
+- (void) setTokenStartIndex:(NSInteger) anIndex
 {
 }
 
@@ -352,11 +369,11 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     return 0;
 }
 
-- (void) setTokenStopIndex:(NSInteger) index
+- (void) setTokenStopIndex:(NSInteger) anIndex
 {
 }
 
-- (id<ANTLRTree>) dupNode
+- (id<ANTLRBaseTree>) dupNode
 {
     return nil;
 }
@@ -368,17 +385,17 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     return 0;
 }
 
-- (void) setChildIndex:(NSInteger) index
+- (void) setChildIndex:(NSInteger) anIndex
 {
 }
 
 /** ANTLRBaseTree doesn't track parent pointers. */
-- (id<ANTLRTree>) getParent
+- (id<ANTLRBaseTree>) getParent
 {
     return nil;
 }
 
-- (void) setParent:(id<ANTLRTree>) t
+- (void) setParent:(id<ANTLRBaseTree>) t
 {
 }
 
@@ -389,14 +406,14 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 }
 
 /** Walk upwards and get first ancestor with this token type. */
-- (id<ANTLRTree>) getAncestor:(NSInteger) ttype
+- (id<ANTLRBaseTree>) getAncestor:(NSInteger) ttype
 {
-    id<ANTLRTree> t = self;
-    t = [t getParent];
+    id<ANTLRBaseTree> t = (id<ANTLRBaseTree>)self;
+    t = (id<ANTLRBaseTree>)[t getParent];
     while ( t != nil ) {
         if ( [t getType]==ttype )
             return t;
-        t = [t getParent];
+        t = (id<ANTLRBaseTree>)[t getParent];
     }
     return nil;
 }
@@ -409,39 +426,14 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
     if ( [self getParent] == nil )
         return nil;
     NSMutableArray *ancestors = [NSMutableArray arrayWithCapacity:5];
-    id<ANTLRTree> t = self;
-    t = [t getParent];
+    id<ANTLRBaseTree> t = (id<ANTLRBaseTree>)self;
+    t = (id<ANTLRBaseTree>)[t getParent];
     while ( t != nil ) {
         [ancestors insertObject:t atIndex:0]; // insert at start
-        t = [t getParent];
+        t = (id<ANTLRBaseTree>)[t getParent];
     }
     [ancestors retain];
     return ancestors;
-}
-
-/** Print out a whole tree not just a node */
-- (NSString *) toStringTree
-{
-    if ( children == nil || [children count] == 0 ) {
-        return [self toString];
-    }
-    NSMutableString *buf = [NSMutableString stringWithCapacity:[children count]];
-    if ( ![self isNil] ) {
-        [buf appendString:@"("];
-        [buf appendString:[self toString]];
-        [buf appendString:@" "];
-    }
-    for (int i = 0; children != nil && i < [children count]; i++) {
-        id<ANTLRTree> t = (id<ANTLRTree>)[children objectAtIndex:i];
-        if ( i > 0 ) {
-            [buf appendString:@" "];
-        }
-        [buf appendString:[(id<ANTLRBaseTree>)t toStringTree]];
-    }
-    if ( ![self isNil] ) {
-        [buf appendString:@")"];
-    }
-    return buf;
 }
 
 - (NSInteger) getType
@@ -468,18 +460,12 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
 {
 }
 
-/** Override to say how a node (not a tree) should look as text */
-- (NSString *) toString
-{
-    return nil;
-}
-
 #pragma mark Copying
      
      // the children themselves are not copied here!
 - (id) copyWithZone:(NSZone *)aZone
 {
-    id<ANTLRTree> theCopy = [[[self class] allocWithZone:aZone] init];
+    id<ANTLRBaseTree> theCopy = [[[self class] allocWithZone:aZone] init];
     [theCopy addChildren:self.children];
     return theCopy;
 }
@@ -495,9 +481,8 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
         
     [theCopy.children removeAllObjects];
     NSMutableArray *childrenCopy = theCopy.children;
-    NSUInteger childIdx = 0;
-    for (childIdx = 0; childIdx < [children count]; childIdx++) {
-        id<ANTLRTree> childCopy = [[children objectAtIndex:childIdx] deepCopyWithZone:aZone];
+    for (id loopItem in children) {
+        id<ANTLRBaseTree> childCopy = [loopItem deepCopyWithZone:aZone];
         [theCopy addChild:childCopy];
     }
     [childrenCopy release];
@@ -506,13 +491,52 @@ ANTLRTreeNavigationNodeEOF *navigationNodeEOF = nil;
      
 - (NSString *) treeDescription
 {
-    return [self toStringTree];
+    if ( children == nil || [children count] == 0 ) {
+        return [self description];
+    }
+    NSMutableString *buf = [NSMutableString stringWithCapacity:[children count]];
+    if ( ![self isNil] ) {
+        [buf appendString:@"("];
+        [buf appendString:[self toString]];
+        [buf appendString:@" "];
+    }
+    for (int i = 0; children != nil && i < [children count]; i++) {
+        id<ANTLRBaseTree> t = (id<ANTLRBaseTree>)[children objectAtIndex:i];
+        if ( i > 0 ) {
+            [buf appendString:@" "];
+        }
+        [buf appendString:[(id<ANTLRBaseTree>)t toStringTree]];
+    }
+    if ( ![self isNil] ) {
+        [buf appendString:@")"];
+    }
+    return buf;
+}
+
+/** Print out a whole tree not just a node */
+- (NSString *) toStringTree
+{
+    return [self treeDescription];
 }
 
 - (NSString *) description
 {
     return nil;
 }
+
+/** Override to say how a node (not a tree) should look as text */
+- (NSString *) toString
+{
+    return nil;
+}
+
+@synthesize token;
+@synthesize startIndex;
+@synthesize stopIndex;
+@synthesize parent;
+@synthesize childIndex;
+@synthesize children;
+@synthesize anException;
 
 @end
 

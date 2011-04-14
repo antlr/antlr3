@@ -42,7 +42,7 @@
 }
 
 @property (retain, getter=getTokenSource, setter=setTokenSource:) id<ANTLRTokenSource> tokenSource;
-@property (getter=getTokenIndex, setter=setTokenIndex) NSInteger tokenIndex;
+@property (getter=getTokenIndex, setter=setTokenIndex:) NSInteger tokenIndex;
 @property (getter=getChannel, setter=setChannel:) NSInteger channel;
 
 + (ANTLRUnbufferedTokenStream *)newANTLRUnbufferedTokenStream:(id<ANTLRTokenSource>)aTokenSource;

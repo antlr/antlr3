@@ -45,11 +45,9 @@
     return [[ANTLRCommonTokenStream alloc] initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource];
 }
 
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
-                                                               Channel:(NSInteger)aChannel
++ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel
 {
-    return [[ANTLRCommonTokenStream alloc] initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
-                                                       Channel:aChannel];
+    return [[ANTLRCommonTokenStream alloc] initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:aChannel];
 }
 
 - (id) init
@@ -63,16 +61,16 @@
 
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
 {
-	if ((self = [super initWithSource:theTokenSource]) != nil) {
+	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
 		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = ANTLRTokenChannelDefault;
 	}
 	return self;
 }
 
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSInteger)aChannel
+- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel
 {
-	if ((self = [super initWithSource:theTokenSource]) != nil) {
+	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
 		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = aChannel;
 	}
@@ -203,12 +201,12 @@
     return copy;
 }
 
-- (NSInteger)getChannel
+- (NSUInteger)getChannel
 {
     return channel;
 }
 
-- (void)setChannel:(NSInteger)aChannel
+- (void)setChannel:(NSUInteger)aChannel
 {
     channel = aChannel;
 }

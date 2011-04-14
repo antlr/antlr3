@@ -66,13 +66,13 @@ BOOL error;
 
 }
 
-@property (retain, getter=getPattern, setter=setPattern:) NSString *pattern;
-@property (getter=getP, setter=setP:) NSInteger p;
-@property (getter=getC, setter=setC:) NSInteger c;
-@property (getter=getN, setter=setN:) NSInteger n;
+@property (retain) NSString *pattern;
+@property (assign) NSInteger p;
+@property (assign) NSInteger c;
+@property (assign) NSInteger n;
 @property (retain, getter=getSval, setter=setSval:) NSMutableData *sval;
-@property (assign, getter=getData, setter=setData:) char *data;
-@property (getter=getError, setter=setError) BOOL error;
+@property (assign) char *data;
+@property (assign) BOOL error;
 
 + (ANTLRTreePatternLexer *)newANTLRTreePatternLexer:(NSString *)aPattern;
 - (id) init;

@@ -37,14 +37,10 @@
 #define HBUFSIZE      0x2000
 
 @interface ANTLRHashRule : ANTLRPtrBuffer {
-	//	ANTLRHashRule *fNext;
     //    TStringPool *fPool;
     NSInteger LastHash;
     NSInteger mode;
 }
-
-//@property (copy) ANTLRHashRule *fNext;
-@property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 
 // Contruction/Destruction
 + (id)newANTLRHashRule;
@@ -69,4 +65,6 @@
 - (void) insertObject:(ANTLRRuleMemo *)aRule atIndex:(NSInteger)Index;
 - (ANTLRRuleMemo *) objectAtIndex:(NSInteger)Index;
 
+@property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
+@property (getter=getMode,setter=setMode:) NSInteger mode;
 @end

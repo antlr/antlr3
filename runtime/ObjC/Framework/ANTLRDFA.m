@@ -121,10 +121,10 @@ NSInteger debug = 0;
 			}
 			if ( debug > 2 ) {
                 NSLog(@"no viable alt!\n");
-                NSLog(@"min[%d] = $d\n", s, min[s]);
-                NSLog(@"max[%d] = $d\n", s, min[s]);
-                NSLog(@"eot[%d] = $d\n", s, min[s]);
-                NSLog(@"eof[%d] = $d\n", s, min[s]);
+                NSLog(@"min[%d] = %d\n", s, min[s]);
+                NSLog(@"max[%d] = %d\n", s, min[s]);
+                NSLog(@"eot[%d] = %d\n", s, min[s]);
+                NSLog(@"eof[%d] = %d\n", s, min[s]);
                 for (NSInteger p = 0; p < self.len; p++) {
                     NSLog(@"%d ", transition[s][p]);
                 }
@@ -146,14 +146,14 @@ NSInteger debug = 0;
 		[recognizer.state setFailed:YES];
 		return;
 	}
-	ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newANTLRNoViableAltException:decisionNumber state:state stream:anInput];
+	ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:decisionNumber state:state stream:anInput];
 	[self error:nvae];
 	@throw nvae;
 }
 
 - (NSInteger) specialStateTransition:(NSInteger)state Stream:(id<ANTLRIntStream>)anInput
 {
-    @throw [ANTLRNoViableAltException newANTLRNoViableAltException:-1 state:state stream:anInput];
+    @throw [ANTLRNoViableAltException newException:-1 state:state stream:anInput];
 	return -1;
 }
 
@@ -189,7 +189,7 @@ NSInteger debug = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    NSMutableData *dp = [NSMutableData dataWithLength:size];
+    NSMutableData *dp = [[NSMutableData dataWithLength:size] retain];
     short *data = (short *)[dp mutableBytes];
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
@@ -211,8 +211,8 @@ NSInteger debug = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    NSMutableData *dp = [NSMutableData dataWithLength:size];
-    char *data = (short *)[dp mutableBytes];
+    NSMutableData *dp = [[NSMutableData dataWithLength:size] retain];
+    char *data = (char *)[dp mutableBytes];
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];
@@ -255,4 +255,11 @@ NSInteger debug = 0;
     return len;
 }
 
+@synthesize eot;
+@synthesize eof;
+@synthesize min;
+@synthesize max;
+@synthesize accept;
+@synthesize special;
+@synthesize transition;
 @end
