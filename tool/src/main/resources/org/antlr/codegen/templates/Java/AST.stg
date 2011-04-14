@@ -91,7 +91,7 @@ root_0 = (<ASTLabelType>)adaptor.nil();<\n>
 
 /** ID and track it for use in a rewrite rule */
 tokenRefTrack(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefBang(token,label,elementIndex,terminalOptions)> <! Track implies no auto AST construction!>
+<tokenRefBang(...)> <! Track implies no auto AST construction!>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>stream_<token>.add(<label>);<\n>
 >>
 
@@ -99,43 +99,43 @@ tokenRefTrack(token,label,elementIndex,terminalOptions) ::= <<
  *  to the tracking list stream_ID for use in the rewrite.
  */
 tokenRefTrackAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefTrack(token,label,elementIndex,terminalOptions)>
-<listLabel(label, label)>
+<tokenRefTrack(...)>
+<listLabel(elem=label, ...)>
 >>
 
 /** ^(ID ...) track for rewrite */
 tokenRefRuleRootTrack(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefBang(token,label,elementIndex,terminalOptions)>
+<tokenRefBang(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>stream_<token>.add(<label>);<\n>
 >>
 
 /** Match ^(label+=TOKEN ...) track for rewrite */
 tokenRefRuleRootTrackAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefRuleRootTrack(token,label,elementIndex,terminalOptions)>
-<listLabel(label, label)>
+<tokenRefRuleRootTrack(...)>
+<listLabel(elem=label, ...)>
 >>
 
 /** rule when output=AST and tracking for rewrite */
 ruleRefTrack(rule,label,elementIndex,args,scope) ::= <<
-<super.ruleRef(rule,label,elementIndex,args,scope)>
+<super.ruleRef(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>stream_<rule.name>.add(<label>.getTree());
 >>
 
 /** x+=rule when output=AST and tracking for rewrite */
 ruleRefTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
-<ruleRefTrack(rule,label,elementIndex,args,scope)>
+<ruleRefTrack(...)>
 <listLabel(label, {<label>.getTree()})>
 >>
 
 /** ^(rule ...) rewrite */
 ruleRefRuleRootTrack(rule,label,elementIndex,args,scope) ::= <<
-<ruleRefRuleRoot(rule,label,elementIndex,args,scope)>
+<ruleRefRuleRoot(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>stream_<rule>.add(<label>.getTree());
 >>
 
 /** ^(x+=rule ...) rewrite */
 ruleRefRuleRootTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
-<ruleRefRuleRootTrack(rule,label,elementIndex,args,scope)>
+<ruleRefRuleRootTrack(...)>
 <listLabel(label, {<label>.getTree()})>
 >>
 
@@ -296,7 +296,7 @@ rewriteElement(e) ::= <<
 
 /** Gen ID or ID[args] */
 rewriteTokenRef(token,elementIndex,terminalOptions,args) ::= <<
-adaptor.addChild(root_<treeLevel>, <createRewriteNodeFromElement(token,terminalOptions,args)>);<\n>
+adaptor.addChild(root_<treeLevel>, <createRewriteNodeFromElement(...)>);<\n>
 >>
 
 /** Gen $label ... where defined via label=ID */
@@ -319,7 +319,7 @@ rewriteTokenListLabelRefRoot ::= rewriteTokenLabelRefRoot
 
 /** Gen ^(ID ...) or ^(ID[args] ...) */
 rewriteTokenRefRoot(token,elementIndex,terminalOptions,args) ::= <<
-root_<treeLevel> = (<ASTLabelType>)adaptor.becomeRoot(<createRewriteNodeFromElement(token,terminalOptions,args)>, root_<treeLevel>);<\n>
+root_<treeLevel> = (<ASTLabelType>)adaptor.becomeRoot(<createRewriteNodeFromElement(...)>, root_<treeLevel>);<\n>
 >>
 
 rewriteImaginaryTokenRef(args,token,terminalOptions,elementIndex) ::= <<
