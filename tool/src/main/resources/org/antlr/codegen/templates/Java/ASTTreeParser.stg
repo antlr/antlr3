@@ -105,13 +105,13 @@ _last = _save_last_<treeLevel>;
  */
 tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
 _last = (<ASTLabelType>)input.LT(1);
-<super.tokenRef(token,label,elementIndex,terminalOptions)>
+<super.tokenRef(...)>
 >>
 
 /** ID auto construct */
 tokenRef(token,label,elementIndex,terminalOptions) ::= <<
 _last = (<ASTLabelType>)input.LT(1);
-<super.tokenRef(token,label,elementIndex,terminalOptions)>
+<super.tokenRef(...)>
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -129,14 +129,14 @@ if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>;
 
 /** label+=TOKEN auto construct */
 tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRef(token,label,elementIndex,terminalOptions)>
+<tokenRef(...)>
 <listLabel(label, label)>
 >>
 
 /** ^(ID ...) auto construct */
 tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 _last = (<ASTLabelType>)input.LT(1);
-<super.tokenRef(token,label,elementIndex,terminalOptions)>
+<super.tokenRef(...)>
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -151,7 +151,7 @@ root_<treeLevel> = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_<treeLe
 
 /** Match ^(label+=TOKEN ...) auto construct */
 tokenRefRuleRootAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRefRuleRoot(token,label,elementIndex,terminalOptions)>
+<tokenRefRuleRoot(...)>
 <listLabel(label, label)>
 >>
 
