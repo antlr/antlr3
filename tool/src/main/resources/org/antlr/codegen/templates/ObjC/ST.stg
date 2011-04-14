@@ -28,7 +28,6 @@
 /** Template subgroup to add template rewrite output
  *  If debugging, then you'll also get STDbg.stg loaded.
  */
-group ST;
 
 @returnScopeInterface.memVars() ::= <<
 <@super.memVars()>

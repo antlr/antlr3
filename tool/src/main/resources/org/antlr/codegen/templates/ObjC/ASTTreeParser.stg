@@ -37,7 +37,6 @@
  *  Each combination has its own template except that label/no label
  *  is combined into tokenRef, ruleRef, ...
  */
-group ASTTreeParser;
 
 /* addition memVars for returnscopes */
 @returnScopeInterface.memVars() ::= <<
@@ -150,7 +149,7 @@ _last = _save_last_<treeLevel>;
 /** ID! and output=AST (same as plain tokenRef) 'cept add
  *  setting of _last
  */
-tokenRefBang(token,label,elementIndex) ::= <<
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
 /* ASTTreeParser tokenRefBang */
 _last = (<ASTLabelType> *)[input LT:1];
 <super.tokenRef(...)>
@@ -228,7 +227,7 @@ if ( _first_<treeLevel> == nil ) _first_<treeLevel> = <label>;
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 /* ASTTreeParser matchSet */
 _last = (<ASTLabelType> *)[input LT:1];
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -237,19 +236,19 @@ _last = (<ASTLabelType> *)[input LT:1];
 <label>_tree = (<ASTLabelType> *)[adaptor dupNode:<label>];
 <endif><\n>
 [adaptor addChild:<label>_tree toTree:root_<treeLevel>];
-<if(backtracking)>}<endif>
+<if(backtracking)>\}<endif>
 <endif>
-}
+}, ...
 )>
 >>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 /* ASTTreeParser matchRuleBlockSet */
 <matchSet(...)>
-<noRewrite()> <! set return tree !>
+<noRewrite(...)> <! set return tree !>
 >>
 
-matchSetBang(s,label,elementIndex,postmatchCode) ::= <<
+matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 /* ASTTreeParser matchSetBang */
 _last = (<ASTLabelType> *)[input LT:1];
 <super.matchSet(...)>
@@ -257,7 +256,7 @@ _last = (<ASTLabelType> *)[input LT:1];
 
 matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 /* ASTTreeParser matchSetRuleRoot */
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -266,9 +265,9 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 <label>_tree = (<ASTLabelType> *)[adaptor dupNode:<label>];
 <endif><\n>
 root_<treeLevel> = (<ASTLabelType> *)[adaptor becomeRoot:<label>_tree old:root_<treeLevel>];
-<if(backtracking)>}<endif>
+<if(backtracking)>\}<endif>
 <endif>
-}
+}, ...
 )>
 >>
 
@@ -292,7 +291,7 @@ ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTTreeParser ruleRefAndListLabel */
 <ruleRef(...)>
 <! <listLabel(elem = "["+label+" getTree]",...)> !>
-<listLabel(elem = label+".tree",...)>
+<listLabel(elem = {[<label> getTree]},...)>
 >>
 
 /** ^(rule ...) auto construct */
@@ -310,7 +309,7 @@ root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:<label>.tree old:ro
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 /* ASTTreeParser ruleRefRuleRootAndListLabel */
 <ruleRefRuleRoot(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(elem = {[<label> getTree]},...)>
 >>
 
 /** rule when output=AST and tracking for rewrite */

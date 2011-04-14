@@ -29,8 +29,6 @@
 /** Template overrides to add debugging to AST stuff.  Dynamic inheritance
  *  hierarchy is set up as ASTDbg : AST : Dbg : Java by code generator.
  */
-group ASTDbg;
-
 parserMembers() ::= <<
 ANTLRDebugTreeAdaptor *adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:(id)dbg Adaptor:[ANTLRCommonTreeAdaptor newTreeAdaptor]];
 
