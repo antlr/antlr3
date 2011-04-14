@@ -31,13 +31,6 @@
 @interface ANTLRCommonTree : ANTLRBaseTree <ANTLRTree> {
 }
 
-/*
-@property (retain, getter=getANTLRCommonToken, setter=setANTLRCommonToken:) ANTLRCommonToken *token;
-@property (assign, getter=getTokenStartIndex, setter=setTokenStartIndex:) NSInteger startIndex;
-@property (assign, getter=getTokenStopIndex, setter=setTokenStopIndex:) NSInteger stopIndex;
-@property (retain, getter=getParent, setter=setParent:) id<ANTLRBaseTree> parentparent;
-@property (assign, getter=getChildIndex, setter=setChildIndex:) NSInteger childIndex;
-*/
 + (ANTLRCommonTree *) invalidNode;
 + (ANTLRCommonTree *) newTree;
 + (ANTLRCommonTree *) newTreeWithTree:(ANTLRCommonTree *)aTree;
@@ -80,5 +73,13 @@
 - (void) setTokenStartIndex: (NSInteger) aStartIndex;
 - (NSInteger) getTokenStopIndex;
 - (void) setTokenStopIndex: (NSInteger) aStopIndex;
+
+/*
+ @property (retain, getter=getANTLRCommonToken, setter=setANTLRCommonToken:) ANTLRCommonToken *token;
+ @property (assign, getter=getTokenStartIndex, setter=setTokenStartIndex:) NSInteger startIndex;
+ @property (assign, getter=getTokenStopIndex, setter=setTokenStopIndex:) NSInteger stopIndex;
+ @property (retain, getter=getParent, setter=setParent:) id<ANTLRBaseTree> parentparent;
+ @property (assign, getter=getChildIndex, setter=setChildIndex:) NSInteger childIndex;
+ */
 
 @end

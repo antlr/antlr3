@@ -40,9 +40,9 @@
     return startNode;
 }	
 
-- (void)setStart:(ANTLRCommonTree *)aStartNode
+- (void)setStart:(ANTLRCommonTree *)aStart
 {
-    startNode = aStartNode;
+    startNode = aStart;
 }	
 
 // create a copy, including the text if available

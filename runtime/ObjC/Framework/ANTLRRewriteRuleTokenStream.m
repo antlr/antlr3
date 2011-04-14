@@ -104,7 +104,7 @@
 - (id<ANTLRBaseTree>) nextNode
 {
     id<ANTLRToken> t = [self _next];
-    return [treeAdaptor createTree:t];
+    return [treeAdaptor create:t];
 }
 
 - (id) nextToken

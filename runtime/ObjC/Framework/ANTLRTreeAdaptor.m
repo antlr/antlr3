@@ -66,15 +66,6 @@
     return nil;
 }
 
-- (id<ANTLRBaseTree>) createTree:(NSInteger)tokenType
-{
-	id<ANTLRToken> newToken = [self createToken:tokenType text:nil];
-	
-	id<ANTLRBaseTree> newTree = [self create:newToken];
-	[newToken release];
-	return newTree;
-}
-
 /** Create a new node derived from a token, with a new token type.
  *  This is invoked from an imaginary node ref on right side of a
  *  rewrite rule as IMAG[$tokenLabel].
@@ -102,23 +93,6 @@
 	id<ANTLRToken> newToken = [self createToken:fromToken];
 	[newToken setText:tokenText];
 	
-	id<ANTLRBaseTree> newTree = [self create:newToken];
-	[newToken release];
-	return newTree;
-}
-
-/** Same as create(tokenType,fromToken) except set the text too.
- *  This is invoked from an imaginary node ref on right side of a
- *  rewrite rule as IMAG[$tokenLabel, "IMAG"].
- *
- *  This should invoke createToken(Token).
- */
-- (id<ANTLRBaseTree>) createTree:(NSInteger)tokenType text:(NSString *)tokenText
-{
-	id<ANTLRToken> newToken = [self createToken:tokenType text:tokenText];
-	[newToken setType:tokenType];
-	[newToken setText:tokenText];
-    
 	id<ANTLRBaseTree> newTree = [self create:newToken];
 	[newToken release];
 	return newTree;

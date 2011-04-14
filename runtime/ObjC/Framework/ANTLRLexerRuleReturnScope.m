@@ -29,6 +29,8 @@
 
 @implementation ANTLRLexerRuleReturnScope
 
+@synthesize startToken;
+
 //---------------------------------------------------------- 
 //  start 
 //---------------------------------------------------------- 

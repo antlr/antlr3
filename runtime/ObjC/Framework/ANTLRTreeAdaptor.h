@@ -103,7 +103,7 @@
                            
 - (NSUInteger) getUniqueID:(id<ANTLRBaseTree>)aNode;
 
-- (id<ANTLRBaseTree>) createTreeFromToken:(id<ANTLRToken>)payload;
+- (id<ANTLRBaseTree>) create:(id<ANTLRToken>)payload;
 - (id<ANTLRBaseTree>) createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken;
 - (id<ANTLRBaseTree>) createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken Text:(NSString *)text;
 - (id<ANTLRBaseTree>) createTree:(NSInteger)tokenType Text:(NSString *)text;
@@ -155,6 +155,7 @@
 
 @end
 
+#ifdef DONTUSENOMO
 @interface ANTLRTreeAdaptor : NSObject {
     
 }
@@ -288,3 +289,4 @@
 - (void) replaceChildren:(id<ANTLRBaseTree>)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id<ANTLRBaseTree>)t;
 
 @end
+#endif
