@@ -99,7 +99,7 @@
 
 - (id<ANTLRToken>)createToken:(id<ANTLRToken>)fromToken
 {
-    return fromToken = [ANTLRCommonToken newTokenWithToken:(ANTLRCommonToken *)fromToken];
+    return [ANTLRCommonToken newTokenWithToken:(ANTLRCommonToken *)fromToken];
 }
 
 /** Track start/stop token for subtree root created for a rule.

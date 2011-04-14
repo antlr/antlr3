@@ -235,7 +235,7 @@
 {
     if (fromToken == nil)
         return [self createTree:tokenType Text:text];
-    fromToken = [self createToken:tokenType Text:text];
+    fromToken = [self createToken:fromToken];
     [fromToken setType:tokenType];
     [fromToken setText:text];
     id<ANTLRBaseTree>t = [self create:fromToken];
