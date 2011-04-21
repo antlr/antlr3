@@ -29,8 +29,10 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.stringtemplate.v4.*;
 import org.antlr.tool.Grammar;
+import org.stringtemplate.v4.AttributeRenderer;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 
 import java.io.IOException;
 import java.util.*;
@@ -59,7 +61,7 @@ public class RubyTarget extends Target
         }
     };
 
-    public static HashMap sharedActionBlocks = new HashMap();
+    public static Map<String, Map<String, Object>> sharedActionBlocks = new HashMap<String, Map<String, Object>>();
 
     public class RubyRenderer implements AttributeRenderer
     {
@@ -337,13 +339,13 @@ public class RubyTarget extends Target
         */
 
         if ( grammar.type == Grammar.COMBINED ) {
-            Map actions = grammar.getActions();
+            Map<String, Map<String, Object>> actions = grammar.getActions();
             if ( actions.containsKey( "all" ) ) {
                 sharedActionBlocks.put( grammar.name, actions.get( "all" ) );
             }
         } else if ( grammar.implicitLexer ) {
             if ( sharedActionBlocks.containsKey( grammar.name ) ) {
-                Map actions = grammar.getActions();
+                Map<String, Map<String, Object>> actions = grammar.getActions();
                 actions.put( "all", sharedActionBlocks.get( grammar.name ) );
             }
         }

@@ -287,8 +287,8 @@ public class Grammar {
 	 *  I track the AST node for the action in case I need the line number
 	 *  for errors.
 	 */
-	protected Map<String, Map<String,GrammarAST>> actions =
-		new HashMap<String, Map<String,GrammarAST>>();
+	private Map<String, Map<String, Object>> actions =
+		new HashMap<String, Map<String, Object>>();
 
 	/** The NFA that represents the grammar with edges labelled with tokens
 	 *  or epsilon.  It is more suitable to analysis than an AST representation.
@@ -779,11 +779,11 @@ public class Grammar {
 		}
 		lexerGrammarST.add("name", name);
 		// if there are any actions set for lexer, pass them in
-		if ( actions.get("lexer")!=null ) {
+		if ( getActions().get("lexer")!=null ) {
 			lexerGrammarST.add("actionNames",
-										((Map)actions.get("lexer")).keySet());
+										getActions().get("lexer").keySet());
 			lexerGrammarST.add("actions",
-										((Map)actions.get("lexer")).values());
+										getActions().get("lexer").values());
 		}
 		// make sure generated grammar has the same options
 		if ( options!=null ) {
@@ -1500,12 +1500,12 @@ outer:
 		}
 		//System.out.println("Grammar "+name+" define @"+scope+"::"+nameAST.getText()+"{"+actionAST.getText()+"}");
 		String actionName = nameAST.getText();
-		Map scopeActions = (Map)actions.get(scope);
+		Map<String, Object> scopeActions = getActions().get(scope);
 		if ( scopeActions==null ) {
-			scopeActions = new HashMap();
-			actions.put(scope, scopeActions);
+			scopeActions = new HashMap<String, Object>();
+			getActions().put(scope, scopeActions);
 		}
-		GrammarAST a = (GrammarAST)scopeActions.get(actionName);
+		Object a = scopeActions.get(actionName);
 		if ( a!=null ) {
 			ErrorManager.grammarError(
 				ErrorManager.MSG_ACTION_REDEFINITION,this,
@@ -1528,21 +1528,21 @@ outer:
 
     public void setSynPredGateIfNotAlready(ST gateST) {
         String scope = getDefaultActionScope(type);
-        Map actionsForGrammarScope = (Map)actions.get(scope);
+        Map<String, Object> actionsForGrammarScope = getActions().get(scope);
         // if no synpredgate action set by user then set
         if ( (actionsForGrammarScope==null ||
              !actionsForGrammarScope.containsKey(Grammar.SYNPREDGATE_ACTION_NAME)) )
         {
             if ( actionsForGrammarScope==null ) {
-                actionsForGrammarScope=new HashMap();
-                actions.put(scope, actionsForGrammarScope);
+                actionsForGrammarScope=new HashMap<String, Object>();
+                getActions().put(scope, actionsForGrammarScope);
             }
             actionsForGrammarScope.put(Grammar.SYNPREDGATE_ACTION_NAME,
                                        gateST);
         }
     }
 
-	public Map getActions() {
+	public Map<String, Map<String, Object>> getActions() {
 		return actions;
 	}
 

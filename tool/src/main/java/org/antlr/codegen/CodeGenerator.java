@@ -318,7 +318,7 @@ public class CodeGenerator {
 		// The only two possible output files are available at this point.
 		// Verify action scopes are ok for target and dump actions into output
 		// Templates can say <actions.parser.header> for example.
-		Map actions = grammar.getActions();
+		Map<String, Map<String, Object>> actions = grammar.getActions();
 		verifyActionScopesOkForTarget(actions);
 		// translate $x::y references
 		translateActionAttributeReferences(actions);
