@@ -28,8 +28,9 @@
 package org.antlr.codegen;
 
 import org.antlr.Tool;
-import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
+import org.antlr.tool.Rule;
+import org.stringtemplate.v4.ST;
 
 public class JavaTarget extends Target {
 	protected ST chooseWhereCyclicDFAsGo(Tool tool,
@@ -40,5 +41,12 @@ public class JavaTarget extends Target {
 	{
 		return recognizerST;
 	}
-}
 
+	@Override
+	protected void performGrammarAnalysis(CodeGenerator generator, Grammar grammar) {
+		super.performGrammarAnalysis(generator, grammar);
+		for (Rule rule : grammar.getRules()) {
+			rule.throwsSpec.add("RecognitionException");
+		}
+	}
+}
