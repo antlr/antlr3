@@ -184,6 +184,7 @@ public class CodeGenerator {
 	public void loadTemplates(String language) {
 		String langDir = classpathTemplateRootDirectoryName+"/"+language;
 		STGroup coreTemplates = new STGroupFile(langDir+"/"+language+".stg");
+
 		baseTemplates = coreTemplates;
 		if ( coreTemplates ==null ) {
 			ErrorManager.error(ErrorManager.MSG_MISSING_CODE_GEN_TEMPLATES,
@@ -213,6 +214,9 @@ public class CodeGenerator {
 				STGroup astDbgTemplates = new STGroupFile(langDir+"/ASTDbg.stg");
 				astDbgTemplates.importTemplates(astParserTemplates);
 				templates = astDbgTemplates;
+				dbgTemplates.iterateAcrossValues = true; // ST v3 compatibility with Maps
+				astDbgTemplates.iterateAcrossValues = true;
+				astParserTemplates.iterateAcrossValues = true;
 			}
 			else {
 				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
@@ -227,6 +231,8 @@ public class CodeGenerator {
 					astParserTemplates.importTemplates(astTemplates);
 				}
 				templates = astParserTemplates;
+				astTemplates.iterateAcrossValues = true; // ST v3 compatibility with Maps
+				astParserTemplates.iterateAcrossValues = true;
 			}
 		}
 		else if ( outputOption!=null && outputOption.equals("template") ) {
@@ -237,21 +243,25 @@ public class CodeGenerator {
 				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
 				stTemplates.importTemplates(dbgTemplates);
 				templates = stTemplates;
+				dbgTemplates.iterateAcrossValues = true;
 			}
 			else {
 				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
 				stTemplates.importTemplates(coreTemplates);
 				templates = stTemplates;
 			}
+			templates.iterateAcrossValues = true; // ST v3 compatibility with Maps
 		}
 		else if ( debug && grammar.type!=Grammar.LEXER ) {
 			STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
 			dbgTemplates.importTemplates(coreTemplates);
 			templates = dbgTemplates;
 			baseTemplates = templates;
+			baseTemplates.iterateAcrossValues = true; // ST v3 compatibility with Maps
 		}
 		else {
 			templates = coreTemplates;
+			coreTemplates.iterateAcrossValues = true; // ST v3 compatibility with Maps
 		}
 	}
 

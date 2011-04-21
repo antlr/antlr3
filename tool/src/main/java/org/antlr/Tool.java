@@ -131,8 +131,6 @@ public class Tool {
     }
 
     public Tool(String[] args) {
-		STGroup.iterateAcrossValues = true; // ST v3 compatibility with Maps
-
         loadResources();
 
         // Set all the options and pick up all the named grammar files

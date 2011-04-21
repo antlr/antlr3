@@ -248,7 +248,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
    appear to be defined in this recognizer. !>
     // Delegated rules
 <grammar.delegatedRules:{ruleDescriptor|
-    public <returnType()> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec:{x|<x>}; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
+    public <returnType()> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
 
     <synpreds:{p | <synpred(p)>}>
 

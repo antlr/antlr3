@@ -7,6 +7,11 @@ University of San Francisco
 
 CHANGES
 
+April 21, 2011
+
+* Updated for ST v4.0.2 (setting iterateAcrossValues = true as instance var)
+* Needed throws condition for delegatedRules.
+
 April 20, 2011 (Sam Harwell)
 
 * Implement the 'throwsSpec' feature of parser rules for the Java target
