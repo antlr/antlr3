@@ -29,14 +29,12 @@ package org.antlr.analysis;
 
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarAST;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /** A binary tree structure used to record the semantic context in which
  *  an NFA configuration is valid.  It's either a single predicate or
@@ -64,7 +62,7 @@ public abstract class SemanticContext {
 	 *  This prevents lots of if!=null type checks all over; it represents
 	 *  just an empty set of predicates.
 	 */
-	public static final SemanticContext EMPTY_SEMANTIC_CONTEXT = new Predicate();
+	public static final SemanticContext EMPTY_SEMANTIC_CONTEXT = new Predicate(Predicate.INVALID_PRED_VALUE);
 
 	/** Given a semantic context expression tree, return a tree with all
 	 *  nongated predicates set to true and then reduced.  So p&&(q||r) would
@@ -104,9 +102,9 @@ public abstract class SemanticContext {
 		 */
 		protected boolean synpred = false;
 
-		public static final int INVALID_PRED_VALUE = -1;
+		public static final int INVALID_PRED_VALUE = -2;
 		public static final int FALSE_PRED = 0;
-		public static final int TRUE_PRED = 1;
+		public static final int TRUE_PRED = ~0;
 
 		/** sometimes predicates are known to be true or false; we need
 		 *  a way to represent this without resorting to a target language
@@ -114,9 +112,9 @@ public abstract class SemanticContext {
 		 */
 		protected int constantValue = INVALID_PRED_VALUE;
 
-		public Predicate() {
+		public Predicate(int constantValue) {
 			predicateAST = new GrammarAST();
-			this.gated=false;
+			this.constantValue=constantValue;
 		}
 
 		public Predicate(GrammarAST predicate) {
@@ -145,13 +143,28 @@ public abstract class SemanticContext {
 			if ( !(o instanceof Predicate) ) {
 				return false;
 			}
-			return predicateAST.getText().equals(((Predicate)o).predicateAST.getText());
+
+			Predicate other = (Predicate)o;
+			if (this.constantValue != other.constantValue){
+				return false;
+			}
+
+			if (this.constantValue != INVALID_PRED_VALUE){
+				return true;
+			}
+
+			return predicateAST.getText().equals(other.predicateAST.getText());
 		}
 
 		public int hashCode() {
+			if (constantValue != INVALID_PRED_VALUE){
+				return constantValue;
+			}
+
 			if ( predicateAST ==null ) {
 				return 0;
 			}
+
 			return predicateAST.getText().hashCode();
 		}
 
@@ -195,6 +208,7 @@ public abstract class SemanticContext {
 			return eST;
 		}
 
+		@Override
 		public SemanticContext getGatedPredicateContext() {
 			if ( gated ) {
 				return this;
@@ -209,18 +223,21 @@ public abstract class SemanticContext {
 					 predicateAST.getType()==ANTLRParser.SEMPRED );
 		}
 
+		@Override
 		public boolean isSyntacticPredicate() {
 			return predicateAST !=null &&
 				( predicateAST.getType()==ANTLRParser.SYN_SEMPRED ||
 				  predicateAST.getType()==ANTLRParser.BACKTRACK_SEMPRED );
 		}
 
+		@Override
 		public void trackUseOfSyntacticPredicates(Grammar g) {
 			if ( synpred ) {
 				g.synPredNamesUsedInDFA.add(predicateAST.getText());
 			}
 		}
 
+		@Override
 		public String toString() {
 			if ( predicateAST ==null ) {
 				return "<nopred>";
@@ -231,10 +248,10 @@ public abstract class SemanticContext {
 
 	public static class TruePredicate extends Predicate {
 		public TruePredicate() {
-			super();
-			this.constantValue = TRUE_PRED;
+			super(TRUE_PRED);
 		}
 
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
@@ -250,17 +267,18 @@ public abstract class SemanticContext {
 			return false; // not user specified.
 		}
 
+		@Override
 		public String toString() {
 			return "true"; // not used for code gen, just DOT and print outs
 		}
 	}
 
-	/*
 	public static class FalsePredicate extends Predicate {
 		public FalsePredicate() {
-			super();
-			this.constantValue = FALSE_PRED;
+			super(FALSE_PRED);
 		}
+
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
@@ -270,79 +288,220 @@ public abstract class SemanticContext {
 			}
 			return new ST("false");
 		}
+
+		@Override
+		public boolean hasUserSemanticPredicate() {
+			return false; // not user specified.
+		}
+
+		@Override
 		public String toString() {
 			return "false"; // not used for code gen, just DOT and print outs
 		}
 	}
-	*/
 
-	public static class AND extends SemanticContext {
-		protected SemanticContext left,right;
-		public AND(SemanticContext a, SemanticContext b) {
-			this.left = a;
-			this.right = b;
-		}
-		public ST genExpr(CodeGenerator generator,
-									  STGroup templates,
-									  DFA dfa)
-		{
-			ST eST = null;
-			if ( templates!=null ) {
-				eST = templates.getInstanceOf("andPredicates");
+	public static abstract class CommutativePredicate extends SemanticContext {
+		protected Set<SemanticContext> operands;
+		protected int hashcode;
+
+		public CommutativePredicate(SemanticContext a, SemanticContext b) {
+			operands = new HashSet<SemanticContext>();
+			if (a.getClass() == this.getClass()){
+				CommutativePredicate predicate = (CommutativePredicate)a;
+				operands.addAll(predicate.operands);
+			} else {
+				operands.add(a);
 			}
-			else {
-				eST = new ST("(<left>&&<right>)");
+
+			if (b.getClass() == this.getClass()){
+				CommutativePredicate predicate = (CommutativePredicate)b;
+				operands.addAll(predicate.operands);
+			} else {
+				operands.add(b);
 			}
-			eST.add("left", left.genExpr(generator,templates,dfa));
-			eST.add("right", right.genExpr(generator,templates,dfa));
-			return eST;
+
+			hashcode = calculateHashCode();
 		}
+
+		public CommutativePredicate(Iterable<SemanticContext> contexts){
+			for (SemanticContext context : contexts){
+				if (context.getClass() == this.getClass()){
+					CommutativePredicate predicate = (CommutativePredicate)context;
+					operands.addAll(predicate.operands);
+				} else {
+					operands.add(context);
+				}
+			}
+
+			hashcode = calculateHashCode();
+		}
+
+		@Override
 		public SemanticContext getGatedPredicateContext() {
-			SemanticContext gatedLeft = left.getGatedPredicateContext();
-			SemanticContext gatedRight = right.getGatedPredicateContext();
-			if ( gatedLeft==null ) {
-				return gatedRight;
+			SemanticContext result = null;
+			for (SemanticContext semctx : operands) {
+				SemanticContext gatedPred = semctx.getGatedPredicateContext();
+				if ( gatedPred!=null ) {
+					result = combinePredicates(result, gatedPred);
+				}
 			}
-			if ( gatedRight==null ) {
-				return gatedLeft;
-			}
-			return new AND(gatedLeft, gatedRight);
+			return result;
 		}
 
 		@Override
 		public boolean hasUserSemanticPredicate() {
-			return left.hasUserSemanticPredicate()||right.hasUserSemanticPredicate();
+			for (SemanticContext semctx : operands) {
+				if ( semctx.hasUserSemanticPredicate() ) {
+					return true;
+				}
+			}
+			return false;
 		}
 
+		@Override
 		public boolean isSyntacticPredicate() {
-			return left.isSyntacticPredicate()||right.isSyntacticPredicate();
+			for (SemanticContext semctx : operands) {
+				if ( semctx.isSyntacticPredicate() ) {
+					return true;
+				}
+			}
+			return false;
 		}
+
+		@Override
 		public void trackUseOfSyntacticPredicates(Grammar g) {
-			left.trackUseOfSyntacticPredicates(g);
-			right.trackUseOfSyntacticPredicates(g);
+			for (SemanticContext semctx : operands) {
+				semctx.trackUseOfSyntacticPredicates(g);
+			}
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+
+			if (obj.getClass() == this.getClass()) {
+				CommutativePredicate commutative = (CommutativePredicate)obj;
+				Set<SemanticContext> otherOperands = commutative.operands;
+				if (operands.size() != otherOperands.size())
+					return false;
+
+				return operands.containsAll(otherOperands);
+			}
+
+			if (obj instanceof NOT)
+			{
+				NOT not = (NOT)obj;
+				if (not.ctx instanceof CommutativePredicate && not.ctx.getClass() != this.getClass()) {
+					Set<SemanticContext> otherOperands = ((CommutativePredicate)not.ctx).operands;
+					if (operands.size() != otherOperands.size())
+						return false;
+
+					ArrayList<SemanticContext> temp = new ArrayList<SemanticContext>(operands.size());
+					for (SemanticContext context : otherOperands) {
+						temp.add(not(context));
+					}
+
+					return operands.containsAll(temp);
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public int hashCode(){
+			return hashcode;
+		}
+
+		@Override
 		public String toString() {
-			return "("+left+"&&"+right+")";
+			StringBuffer buf = new StringBuffer();
+			buf.append("(");
+			int i = 0;
+			for (SemanticContext semctx : operands) {
+				if ( i>0 ) {
+					buf.append(getOperandString());
+				}
+				buf.append(semctx.toString());
+				i++;
+			}
+			buf.append(")");
+			return buf.toString();
+		}
+
+		public abstract String getOperandString();
+
+		public abstract SemanticContext combinePredicates(SemanticContext left, SemanticContext right);
+
+		public abstract int calculateHashCode();
+	}
+
+	public static class AND extends CommutativePredicate {
+		public AND(SemanticContext a, SemanticContext b) {
+			super(a,b);
+		}
+
+		public AND(Iterable<SemanticContext> contexts) {
+			super(contexts);
+		}
+
+		@Override
+		public ST genExpr(CodeGenerator generator,
+									  STGroup templates,
+									  DFA dfa)
+		{
+			ST result = null;
+			for (SemanticContext operand : operands) {
+				if (result == null)
+					result = operand.genExpr(generator, templates, dfa);
+
+				ST eST = null;
+				if ( templates!=null ) {
+					eST = templates.getInstanceOf("andPredicates");
+				}
+				else {
+					eST = new ST("(<left>&&<right>)");
+				}
+				eST.add("left", result);
+				eST.add("right", operand.genExpr(generator,templates,dfa));
+				result = eST;
+			}
+
+			return result;
+		}
+
+		@Override
+		public String getOperandString() {
+			return "&&";
+		}
+
+		@Override
+		public SemanticContext combinePredicates(SemanticContext left, SemanticContext right) {
+			return SemanticContext.and(left, right);
+		}
+
+		@Override
+		public int calculateHashCode() {
+			int hashcode = 0;
+			for (SemanticContext context : operands) {
+				hashcode = hashcode ^ context.hashCode();
+			}
+
+			return hashcode;
 		}
 	}
 
-	public static class OR extends SemanticContext {
-		protected Set operands;
+	public static class OR extends CommutativePredicate {
 		public OR(SemanticContext a, SemanticContext b) {
-			operands = new HashSet();
-			if ( a instanceof OR ) {
-				operands.addAll(((OR)a).operands);
-			}
-			else if ( a!=null ) {
-				operands.add(a);
-			}
-			if ( b instanceof OR ) {
-				operands.addAll(((OR)b).operands);
-			}
-			else if ( b!=null ) {
-				operands.add(b);
-			}
+			super(a,b);
 		}
+
+		public OR(Iterable<SemanticContext> contexts) {
+			super(contexts);
+		}
+
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
@@ -352,66 +511,32 @@ public abstract class SemanticContext {
 				eST = templates.getInstanceOf("orPredicates");
 			}
 			else {
-				// looks like these are called during testing
 				eST = new ST("(<first(operands)><rest(operands):{o | ||<o>}>)");
 			}
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
+			for (SemanticContext semctx : operands) {
 				eST.add("operands", semctx.genExpr(generator,templates,dfa));
 			}
 			return eST;
 		}
-		public SemanticContext getGatedPredicateContext() {
-			SemanticContext result = null;
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
-				SemanticContext gatedPred = semctx.getGatedPredicateContext();
-				if ( gatedPred!=null ) {
-					result = or(result, gatedPred);
-					// result = new OR(result, gatedPred);
-				}
-			}
-			return result;
-		}
+
 		@Override
-		public boolean hasUserSemanticPredicate() {
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
-				if ( semctx.hasUserSemanticPredicate() ) {
-					return true;
-				}
-			}
-			return false;
+		public String getOperandString() {
+			return "||";
 		}
-		public boolean isSyntacticPredicate() {
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
-				if ( semctx.isSyntacticPredicate() ) {
-					return true;
-				}
-			}
-			return false;
+
+		@Override
+		public SemanticContext combinePredicates(SemanticContext left, SemanticContext right) {
+			return SemanticContext.or(left, right);
 		}
-		public void trackUseOfSyntacticPredicates(Grammar g) {
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
-				semctx.trackUseOfSyntacticPredicates(g);
+
+		@Override
+		public int calculateHashCode() {
+			int hashcode = 0;
+			for (SemanticContext context : operands) {
+				hashcode = ~hashcode ^ context.hashCode();
 			}
-		}
-		public String toString() {
-			StringBuffer buf = new StringBuffer();
-			buf.append("(");
-			int i = 0;
-			for (Iterator it = operands.iterator(); it.hasNext();) {
-				SemanticContext semctx = (SemanticContext) it.next();
-				if ( i>0 ) {
-					buf.append("||");
-				}
-				buf.append(semctx.toString());
-				i++;
-			}
-			buf.append(")");
-			return buf.toString();
+
+			return hashcode;
 		}
 	}
 
@@ -420,6 +545,8 @@ public abstract class SemanticContext {
 		public NOT(SemanticContext ctx) {
 			this.ctx = ctx;
 		}
+
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
@@ -434,6 +561,8 @@ public abstract class SemanticContext {
 			eST.add("pred", ctx.genExpr(generator,templates,dfa));
 			return eST;
 		}
+
+		@Override
 		public SemanticContext getGatedPredicateContext() {
 			SemanticContext p = ctx.getGatedPredicateContext();
 			if ( p==null ) {
@@ -447,13 +576,17 @@ public abstract class SemanticContext {
 			return ctx.hasUserSemanticPredicate();
 		}
 
+		@Override
 		public boolean isSyntacticPredicate() {
 			return ctx.isSyntacticPredicate();
 		}
+
+		@Override
 		public void trackUseOfSyntacticPredicates(Grammar g) {
 			ctx.trackUseOfSyntacticPredicates(g);
 		}
 
+		@Override
 		public boolean equals(Object object) {
 			if ( !(object instanceof NOT) ) {
 				return false;
@@ -461,6 +594,12 @@ public abstract class SemanticContext {
 			return this.ctx.equals(((NOT)object).ctx);
 		}
 
+		@Override
+		public int hashCode() {
+			return ~ctx.hashCode();
+		}
+
+		@Override
 		public String toString() {
 			return "!("+ctx+")";
 		}
@@ -468,56 +607,215 @@ public abstract class SemanticContext {
 
 	public static SemanticContext and(SemanticContext a, SemanticContext b) {
 		//System.out.println("AND: "+a+"&&"+b);
+		SemanticContext[] terms = factorOr(a, b);
+		SemanticContext commonTerms = terms[0];
+		a = terms[1];
+		b = terms[2];
+
+		boolean factored = commonTerms != null && commonTerms != EMPTY_SEMANTIC_CONTEXT && !(commonTerms instanceof TruePredicate);
+		if (factored) {
+			return or(commonTerms, and(a, b));
+		}
+		
+		//System.Console.Out.WriteLine( "AND: " + a + "&&" + b );
+		if (a instanceof FalsePredicate || b instanceof FalsePredicate)
+			return new FalsePredicate();
+
 		if ( a==EMPTY_SEMANTIC_CONTEXT || a==null ) {
 			return b;
 		}
 		if ( b==EMPTY_SEMANTIC_CONTEXT || b==null ) {
 			return a;
 		}
-		if ( a.equals(b) ) {
-			return a; // if same, just return left one
-		}
+
+		if (a instanceof TruePredicate)
+			return b;
+
+		if (b instanceof TruePredicate)
+			return a;
+
+		//// Factoring takes care of this case
+		//if (a.Equals(b))
+		//    return a;
+
 		//System.out.println("## have to AND");
 		return new AND(a,b);
 	}
 
 	public static SemanticContext or(SemanticContext a, SemanticContext b) {
 		//System.out.println("OR: "+a+"||"+b);
-		if ( a==EMPTY_SEMANTIC_CONTEXT || a==null ) {
+		SemanticContext[] terms = factorAnd(a, b);
+		SemanticContext commonTerms = terms[0];
+		a = terms[1];
+		b = terms[2];
+		boolean factored = commonTerms != null && commonTerms != EMPTY_SEMANTIC_CONTEXT && !(commonTerms instanceof FalsePredicate);
+		if (factored) {
+			return and(commonTerms, or(a, b));
+		}
+
+		if ( a==EMPTY_SEMANTIC_CONTEXT || a==null || a instanceof FalsePredicate ) {
 			return b;
 		}
-		if ( b==EMPTY_SEMANTIC_CONTEXT || b==null ) {
+
+		if ( b==EMPTY_SEMANTIC_CONTEXT || b==null || b instanceof FalsePredicate ) {
 			return a;
 		}
-		if ( a instanceof TruePredicate ) {
-			return a;
+
+		if ( a instanceof TruePredicate || b instanceof TruePredicate || commonTerms instanceof TruePredicate ) {
+			return new TruePredicate();
 		}
-		if ( b instanceof TruePredicate ) {
-			return b;
-		}
-		if ( a instanceof NOT && b instanceof Predicate ) {
+
+		//// Factoring takes care of this case
+		//if (a.equals(b))
+		//    return a;
+
+		if ( a instanceof NOT ) {
 			NOT n = (NOT)a;
 			// check for !p||p
 			if ( n.ctx.equals(b) ) {
 				return new TruePredicate();
 			}
 		}
-		else if ( b instanceof NOT && a instanceof Predicate ) {
+		else if ( b instanceof NOT ) {
 			NOT n = (NOT)b;
 			// check for p||!p
 			if ( n.ctx.equals(a) ) {
 				return new TruePredicate();
 			}
 		}
-		else if ( a.equals(b) ) {
-			return a;
-		}
+
 		//System.out.println("## have to OR");
-		return new OR(a,b);
+		OR result = new OR(a,b);
+		if (result.operands.size() == 1)
+			return result.operands.iterator().next();
+
+		return result;
 	}
 
 	public static SemanticContext not(SemanticContext a) {
+		if (a instanceof NOT) {
+			return ((NOT)a).ctx;
+		}
+
+		if (a instanceof TruePredicate)
+			return new FalsePredicate();
+		else if (a instanceof FalsePredicate)
+			return new TruePredicate();
+
 		return new NOT(a);
 	}
 
+	// Factor so (a && b) == (result && a && b)
+	public static SemanticContext[] factorAnd(SemanticContext a, SemanticContext b)
+	{
+		if (a == EMPTY_SEMANTIC_CONTEXT || a == null || a instanceof FalsePredicate)
+			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
+		if (b == EMPTY_SEMANTIC_CONTEXT || b == null || b instanceof FalsePredicate)
+			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
+
+		if (a instanceof TruePredicate || b instanceof TruePredicate)
+		{
+			return new SemanticContext[] { new TruePredicate(), EMPTY_SEMANTIC_CONTEXT, EMPTY_SEMANTIC_CONTEXT };
+		}
+
+		HashSet<SemanticContext> opsA = new HashSet<SemanticContext>(getAndOperands(a));
+		HashSet<SemanticContext> opsB = new HashSet<SemanticContext>(getAndOperands(b));
+
+		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
+		result.retainAll(opsB);
+		if (result.size() == 0)
+			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
+
+		opsA.removeAll(result);
+		if (opsA.size() == 0)
+			a = new TruePredicate();
+		else if (opsA.size() == 1)
+			a = opsA.iterator().next();
+		else
+			a = new AND(opsA);
+
+		opsB.removeAll(result);
+		if (opsB.size() == 0)
+			b = new TruePredicate();
+		else if (opsB.size() == 1)
+			b = opsB.iterator().next();
+		else
+			b = new AND(opsB);
+
+		if (result.size() == 1)
+			return new SemanticContext[] { result.iterator().next(), a, b };
+
+		return new SemanticContext[] { new AND(result), a, b };
+	}
+
+	// Factor so (a || b) == (result || a || b)
+	public static SemanticContext[] factorOr(SemanticContext a, SemanticContext b)
+	{
+		HashSet<SemanticContext> opsA = new HashSet<SemanticContext>(getOrOperands(a));
+		HashSet<SemanticContext> opsB = new HashSet<SemanticContext>(getOrOperands(b));
+
+		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
+		result.retainAll(opsB);
+		if (result.size() == 0)
+			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
+
+		opsA.removeAll(result);
+		if (opsA.size() == 0)
+			a = new FalsePredicate();
+		else if (opsA.size() == 1)
+			a = opsA.iterator().next();
+		else
+			a = new OR(opsA);
+
+		opsB.removeAll(result);
+		if (opsB.size() == 0)
+			b = new FalsePredicate();
+		else if (opsB.size() == 1)
+			b = opsB.iterator().next();
+		else
+			b = new OR(opsB);
+
+		if (result.size() == 1)
+			return new SemanticContext[] { result.iterator().next(), a, b };
+
+		return new SemanticContext[] { new OR(result), a, b };
+	}
+
+	public static Collection<SemanticContext> getAndOperands(SemanticContext context)
+	{
+		if (context instanceof AND)
+			return ((AND)context).operands;
+
+		if (context instanceof NOT) {
+			Collection<SemanticContext> operands = getOrOperands(((NOT)context).ctx);
+			List<SemanticContext> result = new ArrayList<SemanticContext>(operands.size());
+			for (SemanticContext operand : operands) {
+				result.add(not(operand));
+			}
+			return result;
+		}
+
+		ArrayList<SemanticContext> result = new ArrayList<SemanticContext>();
+		result.add(context);
+		return result;
+	}
+
+	public static Collection<SemanticContext> getOrOperands(SemanticContext context)
+	{
+		if (context instanceof OR)
+			return ((OR)context).operands;
+
+		if (context instanceof NOT) {
+			Collection<SemanticContext> operands = getAndOperands(((NOT)context).ctx);
+			List<SemanticContext> result = new ArrayList<SemanticContext>(operands.size());
+			for (SemanticContext operand : operands) {
+				result.add(not(operand));
+			}
+			return result;
+		}
+
+		ArrayList<SemanticContext> result = new ArrayList<SemanticContext>();
+		result.add(context);
+		return result;
+	}
 }
