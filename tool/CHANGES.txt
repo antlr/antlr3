@@ -7,6 +7,11 @@ University of San Francisco
 
 CHANGES
 
+April 20, 2011 (Sam Harwell)
+
+* Implement the 'throwsSpec' feature of parser rules for the Java target
+* Improve algorithm for SemanticContext Boolean predicate reduction
+
 April 13, 2011
 
 * Unmangled region names in STViz hiearchy tree display.
