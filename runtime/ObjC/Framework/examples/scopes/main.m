@@ -6,7 +6,7 @@
 int main() {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSString *string = [NSString stringWithContentsOfFile:@"../../examples/scopes/input"];
+	NSString *string = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/scopes/input"];
 	NSLog(@"input is : %@", string);
 	ANTLRStringStream *stream = [[ANTLRStringStream alloc] initWithStringNoCopy:string];
 	SymbolTableLexer *lexer = [[SymbolTableLexer alloc] initWithCharStream:stream];
