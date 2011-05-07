@@ -30,18 +30,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-
+#import "AMutableArray.h"
 
 @interface ANTLRFastQueue : NSObject <NSCopying>
 {
 //	NSAutoreleasePool *pool;
-	NSMutableArray *data;
+	AMutableArray *data;
 	NSUInteger p;
     NSUInteger range;
 }
 
 //@property (retain, getter=getPool, setter=setPool:) NSAutoreleasePool *pool;
-@property (retain) NSMutableArray *data;
+@property (retain) AMutableArray *data;
 @property (assign) NSUInteger p;
 @property (assign) NSUInteger range;
 

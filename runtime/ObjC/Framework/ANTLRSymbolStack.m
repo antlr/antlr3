@@ -108,8 +108,8 @@
 
 - (void) insertObject:(ANTLRSymbolsScope *)aRule atIndex:(NSInteger)idx
 {
-    if (aRule != ptrBuffer[idx]) {
-        if (ptrBuffer[idx] != nil) [ptrBuffer[idx] release];
+    if ( aRule != ptrBuffer[idx] ) {
+        if ( ptrBuffer[idx] ) [ptrBuffer[idx] release];
         [aRule retain];
     }
     ptrBuffer[idx] = aRule;

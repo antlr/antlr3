@@ -162,7 +162,7 @@
 /** Tree parsers parse nodes they usually have a token object as
  *  payload. Set the exception token and do the default behavior.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e  TokenNames:(NSMutableArray *) theTokNams
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e  TokenNames:(AMutableArray *) theTokNams
 {
     if ( [self isKindOfClass:[ANTLRTreeParser class]] ) {
         id<ANTLRTreeAdaptor> adaptor = (id<ANTLRTreeAdaptor>)[((id<ANTLRTreeNodeStream>)e.input) getTreeAdaptor];

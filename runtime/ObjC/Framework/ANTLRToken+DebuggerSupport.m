@@ -52,8 +52,8 @@
 		[self getTokenIndex],
 		[self getType],
 		[self getChannel],
-		[self getLine],
-		[self getCharPositionInLine],
+		[self line],
+		[self charPositionInLine],
 		escapedText
 		];
 }

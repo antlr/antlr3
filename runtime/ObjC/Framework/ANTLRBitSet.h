@@ -28,6 +28,7 @@
 #import <Cocoa/Cocoa.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import "ANTLRToken.h"
+#import "AMutableArray.h"
 
 #define BITS (sizeof(NSUInteger) * 8)
 #define LOG_BITS ((sizeof(NSUInteger)==8)?6:5)
@@ -48,7 +49,7 @@
  * @param nbits The size of the ANTLRBitSet in bits
  */
 + (ANTLRBitSet *) newANTLRBitSetWithNBits:(NSUInteger)nbits;
-+ (ANTLRBitSet *) newANTLRBitSetWithArray:(NSMutableArray *)types;
++ (ANTLRBitSet *) newANTLRBitSetWithArray:(AMutableArray *)types;
 + (ANTLRBitSet *) newANTLRBitSetWithBits:(const unsigned long long *)theBits Count:(NSUInteger)longCount;
 
 + (ANTLRBitSet *) of:(NSUInteger)el;

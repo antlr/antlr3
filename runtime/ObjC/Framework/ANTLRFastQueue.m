@@ -42,14 +42,14 @@
 
 + (id) newANTLRFastQueue
 {
-    return [[[ANTLRFastQueue alloc] init] retain];
+    return [[ANTLRFastQueue alloc] init];
 }
 
 - (id) init
 {
 	if ((self = [super init]) != nil ) {
 //		pool = [NSAutoreleasePool new];
-		data = [[NSMutableArray arrayWithCapacity:100] autorelease];
+		data = [AMutableArray arrayWithCapacity:100];
 		p = 0;
 		range = -1;
 	}
@@ -82,7 +82,8 @@
 - (void) clear
 {
 	p = 0;
-	[data removeAllObjects];
+    if ( [data count] )
+        [data removeAllObjects];
 }
 
 - (id) remove
@@ -100,7 +101,8 @@
 
 - (void) addObject:(id) o
 {
-	[data addObject:o];
+	[o retain];
+    [data addObject:o];
 }
 
 - (NSUInteger) count

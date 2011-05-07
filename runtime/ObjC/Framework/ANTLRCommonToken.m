@@ -226,9 +226,35 @@ static ANTLRCommonToken *INVALID_TOKEN;
 
 
 //---------------------------------------------------------- 
+//  charPositionInLine 
+//---------------------------------------------------------- 
+- (NSUInteger) charPositionInLine
+{
+	return charPositionInLine;
+}
+
+- (void) setCharPositionInLine:(NSUInteger)aCharPositionInLine
+{
+    charPositionInLine = aCharPositionInLine;
+}
+
+//---------------------------------------------------------- 
+//  line 
+//---------------------------------------------------------- 
+- (NSUInteger) line
+{
+	return line;
+}
+
+- (void) setLine:(NSUInteger)aLine
+{
+    line = aLine;
+}
+
+//---------------------------------------------------------- 
 //  text 
 //---------------------------------------------------------- 
-- (NSString *) getText
+- (NSString *) text
 {
 	if (text != nil) {
 		return text;
@@ -242,9 +268,9 @@ static ANTLRCommonToken *INVALID_TOKEN;
 - (void) setText: (NSString *) aText
 {
     if (text != aText) {
-        [aText retain];
-        [text release];
+        if ( text ) [text release];
         text = aText;
+        [text retain];
     }
 }
 
@@ -260,32 +286,6 @@ static ANTLRCommonToken *INVALID_TOKEN;
 - (void) setType: (NSInteger) aType
 {
     type = aType;
-}
-
-//---------------------------------------------------------- 
-//  line 
-//---------------------------------------------------------- 
-- (NSUInteger) getLine
-{
-    return line;
-}
-
-- (void) setLine: (NSUInteger) aLine
-{
-    line = aLine;
-}
-
-//---------------------------------------------------------- 
-//  charPositionInLine 
-//---------------------------------------------------------- 
-- (NSUInteger) getCharPositionInLine
-{
-    return charPositionInLine;
-}
-
-- (void) setCharPositionInLine: (NSUInteger) aCharPositionInLine
-{
-    charPositionInLine = aCharPositionInLine;
 }
 
 //---------------------------------------------------------- 
@@ -313,9 +313,9 @@ static ANTLRCommonToken *INVALID_TOKEN;
 - (void) setInput: (id<ANTLRCharStream>) anInput
 {
     if (input != anInput) {
-        [anInput retain];
-        [input release];
+        if ( input ) [input release];
         input = anInput;
+        [input retain];
     }
 }
 
@@ -370,8 +370,8 @@ static ANTLRCommonToken *INVALID_TOKEN;
     if ( channel > 0 ) {
         channelStr = [NSString stringWithFormat:@",channel=%d\n", channel];
     }
-	if ([self getText] != nil) {
-		txtString = [NSMutableString stringWithString:[self getText]];
+	if ([self text] != nil) {
+		txtString = [NSMutableString stringWithString:[self text]];
 		[txtString replaceOccurrencesOfString:@"\n" withString:@"\\\\n" options:NSAnchoredSearch range:NSMakeRange(0, [txtString length])];
 		[txtString replaceOccurrencesOfString:@"\r" withString:@"\\\\r" options:NSAnchoredSearch range:NSMakeRange(0, [txtString length])];
 		[txtString replaceOccurrencesOfString:@"\t" withString:@"\\\\t" options:NSAnchoredSearch range:NSMakeRange(0, [txtString length])];

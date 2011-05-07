@@ -64,7 +64,7 @@
 - (void) setToken:(id<ANTLRToken>) theToken
 {
 	if (theToken != token) {
-		[token release];
+		if ( token ) [token release];
 		token = [theToken retain];
 	}
 }
@@ -120,7 +120,7 @@
 	tokenStartCharIndex = theTokenStartCharIndex;
 }
 
-- (NSString *) getText
+- (NSString *) text
 {
 	return text;
 }
@@ -128,7 +128,7 @@
 - (void) setText:(NSString *) theText
 {
 	if (text != theText) {
-		[text release];
+		if ( text ) [text release];
 		text = [theText retain];
 	}
 }

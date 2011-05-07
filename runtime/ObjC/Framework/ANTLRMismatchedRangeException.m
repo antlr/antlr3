@@ -30,6 +30,8 @@
 
 @implementation ANTLRMismatchedRangeException
 
+@synthesize range;
+
 + (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput
 {
 	return [[ANTLRMismatchedRangeException alloc] initWithRange:aRange stream:theInput];

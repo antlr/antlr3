@@ -37,7 +37,6 @@
 #define BUFFSIZE         101
 
 @interface ANTLRPtrBuffer : ANTLRLinkBase {
-	//ANTLRPtrBuffer *fNext;
     NSUInteger BuffSize;
     NSUInteger count;
     NSUInteger ptr;

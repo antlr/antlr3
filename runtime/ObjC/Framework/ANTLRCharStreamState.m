@@ -30,7 +30,7 @@
 
 @implementation ANTLRCharStreamState
 
-@synthesize p;
+@synthesize index;
 @synthesize line;
 @synthesize charPositionInLine;
 
@@ -42,51 +42,11 @@
 - (id) init
 {
     if ((self = [super init]) != nil) {
-        p = 0;
+        index = 0;
         line = 1;
         charPositionInLine = 0;
     }
     return self;
 }
-
-//---------------------------------------------------------- 
-//  index 
-//---------------------------------------------------------- 
-- (NSInteger) getP
-{
-    return p;
-}
-
-- (void) setP: (NSInteger) anIndex
-{
-    p = anIndex;
-}
-
-//---------------------------------------------------------- 
-//  line 
-//---------------------------------------------------------- 
-- (NSInteger) getLine
-{
-    return line;
-}
-
-- (void) setLine: (NSInteger) aLine
-{
-    line = aLine;
-}
-
-//---------------------------------------------------------- 
-//  charPositionInLine 
-//---------------------------------------------------------- 
-- (NSInteger) getCharPositionInLine
-{
-    return charPositionInLine;
-}
-
-- (void) setCharPositionInLine: (NSInteger) aCharPositionInLine
-{
-    charPositionInLine = aCharPositionInLine;
-}
-
 
 @end

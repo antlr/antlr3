@@ -72,17 +72,6 @@
     return( copy );
 }
 
-- (id)getIndex
-{
-    return index;
-}
-
-- (void)setIndex:(id)anIdx
-{
-    [anIdx retain];
-    index = anIdx;
-}
-
 - (NSInteger)count
 {
     return 1;

@@ -79,9 +79,9 @@
     return copy;
 }
 
-- (NSInteger)count
+- (NSUInteger)count
 {
-    NSInteger aCnt = 0;
+    NSUInteger aCnt = 0;
     
     for (int i = 0; i < BuffSize; i++) {
         if (ptrBuffer[i] != nil) {
@@ -91,7 +91,7 @@
     return aCnt;
 }
 
-- (NSInteger) size
+- (NSUInteger) size
 {
     return BuffSize;
 }
@@ -107,7 +107,7 @@
             while ( tmp ) {
                 rtmp = tmp;
                 tmp = [tmp getfNext];
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }

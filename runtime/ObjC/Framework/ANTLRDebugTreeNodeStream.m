@@ -136,7 +136,7 @@
 
 - (NSUInteger) getIndex
 {
-	return [input getIndex];
+	return input.index;
 }
 
 - (void) rewind:(NSUInteger) marker

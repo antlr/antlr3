@@ -56,18 +56,18 @@ static NSInteger itIndex;
 {
     NSInteger idx;
     
-	if ((self = [super init]) != nil) {
-		fNext = nil;
+    if ((self = [super init]) != nil) {
+        fNext = nil;
         BuffSize = HASHSIZE;
-		Scope = 0;
-		if ( fNext != nil ) {
-			Scope = ((ANTLRHashMap *)fNext)->Scope+1;
-			for( idx = 0; idx < BuffSize; idx++ ) {
-				ptrBuffer[idx] = ((ANTLRHashMap *)fNext)->ptrBuffer[idx];
-			}
-		}
+        Scope = 0;
+        if ( fNext != nil ) {
+            Scope = ((ANTLRHashMap *)fNext)->Scope+1;
+            for( idx = 0; idx < BuffSize; idx++ ) {
+                ptrBuffer[idx] = ((ANTLRHashMap *)fNext)->ptrBuffer[idx];
+            }
+        }
         mode = 0;
-	}
+    }
     return( self );
 }
 
@@ -75,18 +75,18 @@ static NSInteger itIndex;
 {
     NSInteger idx;
     
-	if ((self = [super init]) != nil) {
-		fNext = nil;
+    if ((self = [super init]) != nil) {
+        fNext = nil;
         BuffSize = aBuffSize;
-		Scope = 0;
-		if ( fNext != nil ) {
-			Scope = ((ANTLRHashMap *)fNext)->Scope+1;
-			for( idx = 0; idx < BuffSize; idx++ ) {
-				ptrBuffer[idx] = ((ANTLRHashMap *)fNext)->ptrBuffer[idx];
-			}
-		}
+        Scope = 0;
+        if ( fNext != nil ) {
+            Scope = ((ANTLRHashMap *)fNext)->Scope+1;
+            for( idx = 0; idx < BuffSize; idx++ ) {
+                ptrBuffer[idx] = ((ANTLRHashMap *)fNext)->ptrBuffer[idx];
+            }
+        }
         mode = 0;
-	}
+    }
     return( self );
 }
 
@@ -94,7 +94,7 @@ static NSInteger itIndex;
 {
     ANTLRMapElement *tmp, *rtmp;
     NSInteger idx;
-	
+    
     if ( self.fNext != nil ) {
         for( idx = 0; idx < BuffSize; idx++ ) {
             tmp = ptrBuffer[idx];
@@ -106,7 +106,7 @@ static NSInteger itIndex;
             }
         }
     }
-	[super dealloc];
+    [super dealloc];
 }
 
 - (NSInteger)count
@@ -175,7 +175,7 @@ static NSInteger itIndex;
 {
     NSInteger idx;
     ANTLRMapElement *tmp;
-	ANTLRHashMap *htmp;
+    ANTLRHashMap *htmp;
     
     htmp = *map;
     if ( (*map)->fNext != nil ) {
@@ -213,14 +213,14 @@ static NSInteger itIndex;
 #endif
 -(NSInteger)hash:(NSString *)s       /*    form hash value for string s */
 {
-	NSInteger hashval;
-	const char *tmp;
+    NSInteger hashval;
+    const char *tmp;
     
-	tmp = [s cStringUsingEncoding:NSASCIIStringEncoding];
-	for( hashval = 0; *tmp != '\0'; )
+    tmp = [s cStringUsingEncoding:NSASCIIStringEncoding];
+    for( hashval = 0; *tmp != '\0'; )
         hashval += *tmp++;
-	self->LastHash = hashval % BuffSize;
-	return( self->LastHash );
+    self->LastHash = hashval % BuffSize;
+    return( self->LastHash );
 }
 
 #ifdef USERDOC
@@ -330,8 +330,8 @@ static NSInteger itIndex;
 -(void)delete_chain:(ANTLRMapElement *)np
 {
     if ( [np getfNext] != nil )
-		[self delete_chain:[np getfNext]];
-	[np dealloc];
+        [self delete_chain:[np getfNext]];
+    [np dealloc];
 }
 
 #ifdef DONTUSEYET
@@ -352,30 +352,30 @@ static NSInteger itIndex;
 
 -(ANTLRMapElement *)getptrBufferEntry:(NSInteger)idx
 {
-	return( ptrBuffer[idx] );
+    return( ptrBuffer[idx] );
 }
 
 -(ANTLRMapElement **)getptrBuffer
 {
-	return( ptrBuffer );
+    return( ptrBuffer );
 }
 
 -(void)setptrBuffer:(ANTLRMapElement *)np Index:(NSInteger)idx
 {
-	if ( idx < BuffSize ) {
+    if ( idx < BuffSize ) {
         [np retain];
-		ptrBuffer[idx] = np;
+        ptrBuffer[idx] = np;
     }
 }
 
 -(NSInteger)getScope
 {
-	return( Scope );
+    return( Scope );
 }
 
 -(void)setScopeScope:(NSInteger)i
 {
-	Scope = i;
+    Scope = i;
 }
 
 - (ANTLRMapElement *)getTType:(NSString *)name
@@ -393,7 +393,7 @@ static NSInteger itIndex;
 
     aTType = ttype % BuffSize;
     for( np = self->ptrBuffer[ttype]; np != nil; np = [np getfNext] ) {
-        if ( [np.index integerValue] == ttype ) {
+        if ( [(NSNumber *)np.node integerValue] == ttype ) {
             return( np );        /*   found it       */
         }
     }
@@ -443,8 +443,8 @@ static NSInteger itIndex;
     if ( idx >= BuffSize ) {
         idx %= BuffSize;
     }
-    if (aRule != ptrBuffer[idx]) {
-        if (ptrBuffer[idx] != nil) [ptrBuffer[idx] release];
+    if ( aRule != ptrBuffer[idx] ) {
+        if ( ptrBuffer[idx] != nil ) [ptrBuffer[idx] release];
         [aRule retain];
     }
     ptrBuffer[idx] = aRule;
@@ -465,8 +465,8 @@ static NSInteger itIndex;
     if ( idx >= BuffSize ) {
         idx %= BuffSize;
     }
-    if (aRule != ptrBuffer[idx]) {
-        if (ptrBuffer[idx] != nil) [ptrBuffer[idx] release];
+    if ( aRule != ptrBuffer[idx] ) {
+        if ( ptrBuffer[idx] ) [ptrBuffer[idx] release];
         [aRule retain];
     }
     ptrBuffer[idx] = aRule;
@@ -479,7 +479,7 @@ static NSInteger itIndex;
     np = [self lookup:name Scope:0 ];
     if ( np == nil ) {
         np = [ANTLRMapElement newANTLRMapElementWithName:name Node:aNode];
-        if (ptrBuffer[LastHash] != nil)
+        if ( ptrBuffer[LastHash] )
             [ptrBuffer[LastHash] release];
         [np retain];
         np.fNext = ptrBuffer[ LastHash ];

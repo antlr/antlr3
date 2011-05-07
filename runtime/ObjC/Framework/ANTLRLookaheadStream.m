@@ -38,6 +38,7 @@
 @implementation ANTLRLookaheadStream
 
 @synthesize eof;
+@synthesize index;
 @synthesize eofElementIndex;
 @synthesize lastMarker;
 @synthesize markDepth;
@@ -49,7 +50,7 @@
         eof = [ANTLRCommonToken eofToken];
 		eofElementIndex = UNITIALIZED_EOF_ELEMENT_INDEX;
 		markDepth = 0;
-        currentElementIndex = 0;
+        index = 0;
 	}
 	return self;
 }
@@ -65,7 +66,7 @@
 - (void) reset
 {
 	[super reset];
-    currentElementIndex = 0;
+    index = 0;
     p = 0;
     prevElement = nil;
 	eofElementIndex = UNITIALIZED_EOF_ELEMENT_INDEX;
@@ -93,7 +94,7 @@
 {
 	[self sync:1];
 	prevElement = [self remove];
-    currentElementIndex++;
+    index++;
 }
 
 -(void) sync:(NSInteger) need
@@ -149,16 +150,6 @@
 -(id) getCurrentSymbol
 {
 	return [self LT:1];
-}
-
--(NSInteger) getIndex
-{
-	return currentElementIndex;
-}
-
-- (void) setIndex:(NSInteger)i
-{
-    currentElementIndex = i;
 }
 
 -(NSInteger) mark

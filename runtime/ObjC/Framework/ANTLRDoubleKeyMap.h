@@ -1,3 +1,6 @@
+
+#import "AMutableArray.h"
+#import "AMutableDictionary.h"
 #import "ANTLRLinkBase.h"
 /**
  * Sometimes we need to map a key to a value but key is two pieces of data.
@@ -5,19 +8,21 @@
  * map; avoids mem creation.
  */
 
-
+@class AMutableArray;
 
 @interface ANTLRDoubleKeyMap : ANTLRLinkBase {
-    NSMutableDictionary *data;
+    AMutableDictionary *data;
 }
 
 - (id) init;
 - (id) setObject:(id)v forKey1:(id)k1 forKey2:(NSString *)k2;
 - (id) objectForKey1:(id)k1 forKey2:(id)k2;
-- (NSMutableDictionary *) objectForKey:(id)k1;
+- (AMutableDictionary *) objectForKey:(id)k1;
 - (NSArray *) valuesForKey:(id)k1;
 - (NSArray *) allKeys1;
-- (NSArray *) allKeys2:(id)k1;
-- (NSMutableArray *) values;
-@property (retain) NSMutableDictionary *data;
+- (AMutableArray *) allKeys2:(id)k1;
+- (NSArray *) values;
+
+@property (retain) AMutableDictionary *data;
+
 @end

@@ -33,9 +33,9 @@
 @interface ANTLRStringStream : NSObject < ANTLRCharStream > {
 	NSString *data;
 	NSInteger n;
-	NSInteger p;
-	NSInteger line;
-	NSInteger charPositionInLine;
+	NSInteger index;
+	NSUInteger line;
+	NSUInteger charPositionInLine;
 	NSInteger markDepth;
 	ANTLRPtrBuffer *markers;
 	NSInteger lastMarker;
@@ -72,8 +72,6 @@
 - (NSInteger) LA:(NSInteger) i;
 - (NSInteger) LT:(NSInteger) i;
 
-// returns the position of the current input symbol
-- (NSInteger) getIndex;
 // total length of the input data
 - (NSInteger) size;
 
@@ -88,18 +86,6 @@
 - (NSString *) substring:(NSInteger)startIndex To:(NSInteger)stopIndex;
 - (NSString *) substringWithRange:(NSRange) theRange;
 
-// used for tracking the current position in the input stream
-- (NSInteger) getLine;
-- (void) setLine:(NSInteger) theLine;
-- (NSInteger) getCharPositionInLine;
-- (void) setCharPositionInLine:(NSInteger) thePos;
-
-- (NSInteger) getN;
-- (void) setN:(NSInteger)num;
-
-- (NSInteger) getP;
-- (void) setP:(NSInteger)num;
-
 - (ANTLRPtrBuffer *)getMarkers;
 - (void) setMarkers:(ANTLRPtrBuffer *)aMarkerList;
 
@@ -110,10 +96,10 @@
 // accessors to the raw data of this stream
 
 @property (retain) NSString *data;
-@property (assign) NSInteger p;
+@property (assign) NSInteger index;
 @property (assign) NSInteger n;
-@property (assign) NSInteger line;
-@property (assign) NSInteger charPositionInLine;
+@property (assign) NSUInteger line;
+@property (assign) NSUInteger charPositionInLine;
 @property (assign) NSInteger markDepth;
 @property (retain) ANTLRPtrBuffer *markers;
 @property (assign) NSInteger lastMarker;

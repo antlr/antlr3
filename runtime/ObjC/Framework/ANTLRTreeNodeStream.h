@@ -36,7 +36,7 @@
 
 - (id) initWithTree:(ANTLRCommonTree *)theTree;
 
-- (id) getNode:(NSInteger) idx;
+- (id) getTree:(NSInteger) idx;
 - (id) LT:(NSInteger)k;
 - (id) getTreeSource;
 - (id<ANTLRTokenStream>) getTokenStream; 

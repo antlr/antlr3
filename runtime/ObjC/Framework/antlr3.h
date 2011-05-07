@@ -24,6 +24,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import <ANTLR/ACBTree.h>
+#import <ANTLR/AMutableArray.h>
+#import <ANTLR/AMutableDictionary.h>
 #import <ANTLR/ANTLRBaseMapElement.h>
 #import <ANTLR/ANTLRBaseRecognizer.h>
 #import <ANTLR/ANTLRBaseStack.h>
@@ -107,3 +110,4 @@
 //#import <ANTLR/ANTLRUnbufferedCommonTreeNodeStreamState.h>
 #import <ANTLR/ANTLRUniqueIDMap.h>
 #import <ANTLR/ANTLRUnwantedTokenException.h>
+#import <ANTLR/ArrayIterator.h>

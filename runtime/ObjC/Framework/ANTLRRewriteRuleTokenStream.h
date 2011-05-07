@@ -41,7 +41,7 @@
 /** Create a stream, but feed off an existing list */
 + (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)adaptor
                           description:(NSString *)elementDescription
-                             elements:(NSMutableArray *)elements;
+                             elements:(AMutableArray *)elements;
 
 - (id) init;
 - (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
@@ -51,7 +51,7 @@
                    element:(id)element;
 - (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
                description:(NSString *)aDescription
-                  elements:(NSMutableArray *)elements;
+                  elements:(AMutableArray *)elements;
                                
 /** Get next token from stream and make a node for it */
 - (id) nextNode;

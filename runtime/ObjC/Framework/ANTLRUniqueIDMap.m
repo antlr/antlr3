@@ -100,7 +100,7 @@
             while ( tmp ) {
                 rtmp = tmp;
                 tmp = tmp.fNext;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -116,7 +116,7 @@
         while ( tmp ) {
             rtmp = tmp;
             tmp = [tmp getfNext];
-            [rtmp dealloc];
+            [rtmp release];
         }
         ptrBuffer[idx] = nil;
     }

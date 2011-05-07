@@ -52,16 +52,16 @@
 
 -(id)init
 {
-	if ((self = [super initWithLen:HASHSIZE]) != nil) {
-	}
+    if ((self = [super initWithLen:HASHSIZE]) != nil) {
+    }
     return( self );
 }
 
 -(id)initWithLen:(NSInteger)aBuffSize
 {
-	if ((self = [super initWithLen:aBuffSize]) != nil) {
+    if ((self = [super initWithLen:aBuffSize]) != nil) {
         mode = 0;
-	}
+    }
     return( self );
 }
 
@@ -69,7 +69,7 @@
 {
     ANTLRRuleMemo *tmp, *rtmp;
     int Index;
-	
+    
     if ( self.fNext != nil ) {
         for( Index = 0; Index < BuffSize; Index++ ) {
             tmp = ptrBuffer[Index];
@@ -83,7 +83,7 @@
             }
         }
     }
-	[super dealloc];
+    [super dealloc];
 }
 
 - (NSInteger)count
@@ -142,18 +142,18 @@
 -(void)delete_chain:(ANTLRRuleMemo *)np
 {
     if ( np.fNext != nil )
-		[self delete_chain:np.fNext];
-	[np dealloc];
+        [self delete_chain:np.fNext];
+    [np dealloc];
 }
 
 -(ANTLRRuleMemo **)getPtrBuffer
 {
-	return( ptrBuffer );
+    return( ptrBuffer );
 }
 
 -(void)setPtrBuffer:(ANTLRRuleMemo **)np
 {
-	ptrBuffer = np;
+    ptrBuffer = np;
 }
 
 - (NSNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex

@@ -134,8 +134,8 @@
 
 - (void)setStartIndex:(NSNumber *)aStartIndex
 {
-    if (aStartIndex != startIndex) {
-        if (startIndex != nil) [startIndex release];
+    if ( aStartIndex != startIndex ) {
+        if ( startIndex ) [startIndex release];
         [aStartIndex retain];
     }
     startIndex = aStartIndex;
@@ -148,8 +148,8 @@
 
 - (void)setStopIndex:(NSNumber *)aStopIndex
 {
-    if (aStopIndex != stopIndex) {
-        if (stopIndex != nil) [stopIndex release];
+    if ( aStopIndex != stopIndex ) {
+        if ( stopIndex ) [stopIndex release];
         [aStopIndex retain];
     }
     stopIndex = aStopIndex;

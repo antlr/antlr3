@@ -110,21 +110,4 @@
 	[debugListener endBacktrack:level wasSuccessful:successful];
 }
 
-- (void) recoverFromMismatchedToken:(id<ANTLRIntStream>)inputStream 
-						  exception:(NSException *)e 
-						  tokenType:(ANTLRTokenType)ttype 
-							 follow:(ANTLRBitSet *)follow
-{
-#warning TODO: recoverFromMismatchedToken in debugger
-	[super recoverFromMismatchedToken:inputStream exception:e tokenType:ttype follow:follow];
-}
-
-- (void) recoverFromMismatchedSet:(id<ANTLRIntStream>)inputStream
-						exception:(NSException *)e
-						   follow:(ANTLRBitSet *)follow
-{
-#warning TODO: recoverFromMismatchedSet in debugger
-	[super recoverFromMismatchedSet:inputStream exception:e follow:follow];
-}
-
 @end

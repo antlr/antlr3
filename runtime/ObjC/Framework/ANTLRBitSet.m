@@ -47,7 +47,7 @@
     return [[ANTLRBitSet alloc] initWithNBits:nbits];
 }
 
-+ (ANTLRBitSet *) newANTLRBitSetWithArray:(NSMutableArray *)types
++ (ANTLRBitSet *) newANTLRBitSetWithArray:(AMutableArray *)types
 {
     return [[ANTLRBitSet alloc] initWithArrayOfBits:types];
 }

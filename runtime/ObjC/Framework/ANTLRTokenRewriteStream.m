@@ -43,7 +43,7 @@ extern NSInteger debug;
 @implementation ANTLRRewriteOperation
 
 @synthesize instructionIndex;
-@synthesize index;
+@synthesize rwIndex;
 @synthesize text;
 
 + (ANTLRRewriteOperation *) newANTLRRewriteOperation:(NSInteger)anIndex Text:(NSString *)theText
@@ -54,18 +54,18 @@ extern NSInteger debug;
 - (id) initWithIndex:(NSInteger)anIndex Text:(NSString *)theText
 {
     if ((self = [super init]) != nil) {
-        index = anIndex;
+        rwIndex = anIndex;
         text = theText;
     }
     return self;
 }
 
 /** Execute the rewrite operation by possibly adding to the buffer.
- *  Return the index of the next token to operate on.
+ *  Return the rwIndex of the next token to operate on.
  */
 - (NSInteger) execute:(NSString *)buf
 {
-    return index;
+    return rwIndex;
 }
     
 - (NSString *)toString
@@ -73,7 +73,7 @@ extern NSInteger debug;
     NSString *opName = [self className];
     int $index = [self indexOf:'$' inString:opName];
     opName = [opName substringWithRange:NSMakeRange($index+1, [opName length])];
-    return [NSString stringWithFormat:@"<%@%d:\"%@\">", opName, index, opName];			
+    return [NSString stringWithFormat:@"<%@%d:\"%@\">", opName, rwIndex, opName];			
 }
 
 - (NSInteger) indexOf:(char)aChar inString:(NSString *)aString
@@ -101,7 +101,7 @@ extern NSInteger debug;
 - (id) initWithIndex:(NSInteger)anIndex Text:(NSString *)theText
 {
     if ((self = [super initWithIndex:anIndex Text:theText]) != nil) {
-        index = anIndex;
+        rwIndex = anIndex;
         text = theText;
     }
     return self;
@@ -111,10 +111,10 @@ extern NSInteger debug;
 - (NSInteger) execute:(NSMutableString *)buf
 {
     [buf appendString:text];
-    if ( [[tokens objectAtIndex:index] getType] != ANTLRTokenTypeEOF ) {
-        [buf appendString:[[tokens objectAtIndex:index] getText]];
+    if ( [[tokens objectAtIndex:rwIndex] getType] != ANTLRTokenTypeEOF ) {
+        [buf appendString:[[tokens objectAtIndex:rwIndex] text]];
     }
-    return index+1;
+    return rwIndex+1;
 }
 
 @end
@@ -123,6 +123,8 @@ extern NSInteger debug;
  *  instructions.
  */
 @implementation ANTLRReplaceOp
+
+@synthesize lastIndex;
 
 + (ANTLRReplaceOp *) newANTLRReplaceOp:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString*)theText
 {
@@ -148,7 +150,7 @@ extern NSInteger debug;
 
 - (NSString *)toString
 {
-    return [NSString stringWithFormat:@"<ANTLRReplaceOp@ %d..%d :>%@\n", index, lastIndex, text];
+    return [NSString stringWithFormat:@"<ANTLRReplaceOp@ %d..%d :>%@\n", rwIndex, lastIndex, text];
 }
 
 @end
@@ -171,7 +173,7 @@ extern NSInteger debug;
      
 - (NSString *)toString
 {
-    return [NSString stringWithFormat:@"<DeleteOp@ %d..%d\n",  index, lastIndex];
+    return [NSString stringWithFormat:@"<DeleteOp@ %d..%d\n",  rwIndex, lastIndex];
 }
 
 @end
@@ -254,7 +256,7 @@ extern NSInteger debug;
     id object;
     ANTLRHashMap *is;
 
-    //    NSMutableArray *is = [programs get(programName)];
+    //    AMutableArray *is = [programs get(programName)];
     is = [self getPrograms];
     object = [is getName:programName];
     if ( is != nil ) {
@@ -286,9 +288,9 @@ extern NSInteger debug;
 
 - (void) insertAfterProgNam:(NSString *)programName Index:(NSInteger)anIndex Text:(NSString *)theText
 {
-    // to insert after, just insert before next index (even if past end)
+    // to insert after, just insert before next rwIndex (even if past end)
     [self insertBeforeProgName:programName Index:anIndex+1 Text:theText];
-    //addToSortedRewriteList(programName, new InsertAfterOp(index,text));
+    //addToSortedRewriteList(programName, new InsertAfterOp(rwIndex,text));
 }
 
 
@@ -309,10 +311,10 @@ extern NSInteger debug;
     [self insertBeforeProgName:DEFAULT_PROGRAM_NAME Index:anIndex Text:theText];
 }
 
-- (void) insertBeforeProgName:(NSString *)programName Index:(NSInteger)index Text:(NSString *)theText
+- (void) insertBeforeProgName:(NSString *)programName Index:(NSInteger)rwIndex Text:(NSString *)theText
 {
-    //addToSortedRewriteList(programName, new ANTLRInsertBeforeOp(index,text));
-    ANTLRRewriteOperation *op = [ANTLRInsertBeforeOp newANTLRInsertBeforeOp:index Text:theText];
+    //addToSortedRewriteList(programName, new ANTLRInsertBeforeOp(rwIndex,text));
+    ANTLRRewriteOperation *op = [ANTLRInsertBeforeOp newANTLRInsertBeforeOp:rwIndex Text:theText];
     ANTLRHashMap *rewrites = [self getProgram:programName];
     op.instructionIndex = [rewrites count];
     [rewrites addObject:op];		
@@ -432,7 +434,7 @@ extern NSInteger debug;
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     for (int i = start; i >= MIN_TOKEN_INDEX && i <= end && i< [tokens count]; i++) {
         if ( [[lastRewriteTokenIndexes objectAtIndex:i] getType] != ANTLRTokenTypeEOF )
-            [buf appendString:[[tokens objectAtIndex:i] getText]];
+            [buf appendString:[[tokens objectAtIndex:i] text]];
     }
     return [NSString stringWithString:buf];
 }
@@ -475,12 +477,12 @@ extern NSInteger debug;
     int i = start;
     while ( i <= end && i < [tokens count] ) {
         ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[indexToOp objectAtIndex:i];
-        [indexToOp setObject:nil atIndex:i]; // remove so any left have index size-1
+        [indexToOp setObject:nil atIndex:i]; // remove so any left have rwIndex size-1
         id<ANTLRToken>t = (id<ANTLRToken>) [tokens objectAtIndex:i];
         if ( op == nil ) {
-            // no operation at that index, just dump token
+            // no operation at that rwIndex, just dump token
             if ( [t getType] != ANTLRTokenTypeEOF )
-                [buf appendString:[t getText]];
+                [buf appendString:[t text]];
             i++; // move to next token
         }
         else {
@@ -488,7 +490,7 @@ extern NSInteger debug;
         }
     }
     
-    // include stuff after end if it's last index in buffer
+    // include stuff after end if it's last rwIndex in buffer
     // So, if they did an insertAfter(lastValidIndex, "foo"), include
     // foo if end==lastValidIndex.
     //if ( end == [tokens size]-1 ) {
@@ -498,7 +500,7 @@ extern NSInteger debug;
         int i2 = 0;
         while ( i2 < [indexToOp count] - 1 ) {
             ANTLRRewriteOperation *op = [indexToOp objectAtIndex:i2];
-            if ( op.index >= [tokens count]-1 ) {
+            if ( op.rwIndex >= [tokens count]-1 ) {
                 [buf appendString:op.text];
             }
         }
@@ -508,7 +510,7 @@ extern NSInteger debug;
 
 /** We need to combine operations and report invalid operations (like
  *  overlapping replaces that are not completed nested).  Inserts to
- *  same index need to be combined etc...   Here are the cases:
+ *  same rwIndex need to be combined etc...   Here are the cases:
  *
  *  I.i.u I.j.v								leave alone, nonoverlapping
  *  I.i.u I.i.v								combine: Iivu
@@ -524,7 +526,7 @@ extern NSInteger debug;
  *  R.x-y.v I.x.u 							R.x-y.uv (combine, delete I)
  *  R.x-y.v I.i.u | i not in x-y			leave alone, nonoverlapping
  *
- *  I.i.u = insert u before op @ index i
+ *  I.i.u = insert u before op @ rwIndex i
  *  R.x-y.u = replace x-y indexed tokens with u
  *
  *  First we need to examine replaces.  For any replace op:
@@ -536,20 +538,20 @@ extern NSInteger debug;
  *
  *  Then we can deal with inserts:
  *
- * 		1. for any inserts to same index, combine even if not adjacent.
+ * 		1. for any inserts to same rwIndex, combine even if not adjacent.
  * 		2. for any prior replace with same left boundary, combine this
  *         insert with replace and delete this replace.
- * 		3. throw exception if index in same range as previous replace
+ * 		3. throw exception if rwIndex in same range as previous replace
  *
  *  Don't actually delete; make op null in list. Easier to walk list.
- *  Later we can throw as we add to index -> op map.
+ *  Later we can throw as we add to rwIndex -> op map.
  *
  *  Note that I.2 R.2-2 will wipe out I.2 even though, technically, the
  *  inserted stuff would be before the replace range.  But, if you
  *  add tokens in front of a method body '{' and then delete the method
  *  body, I think the stuff before the '{' you added should disappear too.
  *
- *  Return a map from token index to operation.
+ *  Return a map from token rwIndex to operation.
  */
 - (ANTLRHashMap *)reduceToSingleOperationPerIndex:(ANTLRHashMap *)rewrites
 {
@@ -568,7 +570,7 @@ extern NSInteger debug;
         ANTLRHashMap *inserts = [self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
         for (int j = 0; j < [inserts size]; j++) {
             ANTLRInsertBeforeOp *iop = (ANTLRInsertBeforeOp *)[inserts objectAtIndex:j];
-            if ( iop.index >= rop.index && iop.index <= rop.lastIndex ) {
+            if ( iop.rwIndex >= rop.rwIndex && iop.rwIndex <= rop.lastIndex ) {
                 // delete insert as it's a no-op.
                 [rewrites insertObject:nil atIndex:iop.instructionIndex];
             }
@@ -577,14 +579,14 @@ extern NSInteger debug;
         ANTLRHashMap *prevReplaces = [self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
         for (int j = 0; j < [prevReplaces count]; j++) {
             ANTLRReplaceOp *prevRop = (ANTLRReplaceOp *) [prevReplaces objectAtIndex:j];
-            if ( prevRop.index>=rop.index && prevRop.lastIndex <= rop.lastIndex ) {
+            if ( prevRop.rwIndex>=rop.rwIndex && prevRop.lastIndex <= rop.lastIndex ) {
                 // delete replace as it's a no-op.
                 [rewrites setObject:nil atIndex:prevRop.instructionIndex];
                 continue;
             }
             // throw exception unless disjoint or identical
-            BOOL disjoint = prevRop.lastIndex<rop.index || prevRop.index > rop.lastIndex;
-            BOOL same = prevRop.index==rop.index && prevRop.lastIndex==rop.lastIndex;
+            BOOL disjoint = prevRop.lastIndex<rop.rwIndex || prevRop.rwIndex > rop.lastIndex;
+            BOOL same = prevRop.rwIndex==rop.rwIndex && prevRop.lastIndex==rop.lastIndex;
             if ( !disjoint && !same ) {
                 @throw [ANTLRIllegalArgumentException newException:
                         [NSString stringWithFormat:@"replace op boundaries of %@, overlap with previous %@\n", rop, prevRop]];
@@ -600,11 +602,11 @@ extern NSInteger debug;
         if ( !([[op class] isKindOfClass:[ANTLRInsertBeforeOp class]]) )
             continue;
         ANTLRInsertBeforeOp *iop = (ANTLRInsertBeforeOp *)[rewrites objectAtIndex:i];
-        // combine current insert with prior if any at same index
+        // combine current insert with prior if any at same rwIndex
         ANTLRHashMap *prevInserts = (ANTLRHashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
         for (int j = 0; j < [prevInserts count]; j++) {
             ANTLRInsertBeforeOp *prevIop = (ANTLRInsertBeforeOp *) [prevInserts objectAtIndex:j];
-            if ( prevIop.index == iop.index ) { // combine objects
+            if ( prevIop.rwIndex == iop.rwIndex ) { // combine objects
                                                 // convert to strings...we're in process of toString'ing
                                                 // whole token buffer so no lazy eval issue with any templates
                 iop.text = [self catOpText:iop.text PrevText:prevIop.text];
@@ -612,16 +614,16 @@ extern NSInteger debug;
                 [rewrites setObject:nil atIndex:prevIop.instructionIndex];
             }
         }
-        // look for replaces where iop.index is in range; error
+        // look for replaces where iop.rwIndex is in range; error
         ANTLRHashMap *prevReplaces = (ANTLRHashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
         for (int j = 0; j < [prevReplaces count]; j++) {
             ANTLRReplaceOp *rop = (ANTLRReplaceOp *) [prevReplaces objectAtIndex:j];
-            if ( iop.index == rop.index ) {
+            if ( iop.rwIndex == rop.rwIndex ) {
                 rop.text = [self catOpText:iop.text PrevText:rop.text];
                 [rewrites setObject:nil atIndex:i];  // delete current insert
                 continue;
             }
-            if ( iop.index >= rop.index && iop.index <= rop.lastIndex ) {
+            if ( iop.rwIndex >= rop.rwIndex && iop.rwIndex <= rop.lastIndex ) {
                 @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"insert op %d within boundaries of previous %d", iop, rop]];
             }
         }
@@ -632,14 +634,14 @@ extern NSInteger debug;
         ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[rewrites objectAtIndex:i];
         if ( op == nil )
             continue; // ignore deleted ops
-        if ( [m objectAtIndex:op.index] != nil ) {
-            @throw [ANTLRRuntimeException newException:@"should only be one op per index\n"];
+        if ( [m objectAtIndex:op.rwIndex] != nil ) {
+            @throw [ANTLRRuntimeException newException:@"should only be one op per rwIndex\n"];
         }
-        //[m put(new Integer(op.index), op);
-        [m setObject:op atIndex:op.index];
+        //[m put(new Integer(op.rwIndex), op);
+        [m setObject:op atIndex:op.rwIndex];
     }
-    //System.out.println("index to op: "+m);
-    if (debug > 1) NSLog(@"index to  op %d\n", m);
+    //System.out.println("rwIndex to op: "+m);
+    if (debug > 1) NSLog(@"rwIndex to  op %d\n", m);
     return m;
 }
 
@@ -659,7 +661,7 @@ extern NSInteger debug;
     return [self getKindOfOps:rewrites KindOfClass:kind Index:[rewrites count]];
 }
 
-/** Get all operations before an index of a particular kind */
+/** Get all operations before an rwIndex of a particular kind */
 - (ANTLRHashMap *)getKindOfOps:(ANTLRHashMap *)rewrites KindOfClass:(Class)kind Index:(NSInteger)before
 {
     ANTLRHashMap *ops = [ANTLRHashMap newANTLRHashMapWithLen:15];
@@ -682,7 +684,7 @@ extern NSInteger debug;
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     for (int i = start; i >= MIN_TOKEN_INDEX && i <= end && i < [tokens count]; i++) {
-        [buf appendString:[[tokens objectAtIndex:i] getText]];
+        [buf appendString:[[tokens objectAtIndex:i] text]];
     }
     return [NSString stringWithString:buf];
 }

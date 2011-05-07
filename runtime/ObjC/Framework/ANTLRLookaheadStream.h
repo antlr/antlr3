@@ -36,7 +36,7 @@
 
 @interface ANTLRLookaheadStream : ANTLRFastQueue
 {
-    NSInteger currentElementIndex;
+    NSInteger index;
 	NSInteger eofElementIndex;
 	NSInteger lastMarker;
 	NSInteger markDepth;
@@ -45,7 +45,7 @@
 }
 
 @property (readwrite, retain, getter=getEof, setter=setEof:) id eof;
-@property (assign, getter=getIndex, setter=setIndex:) NSInteger currentElementIndex;
+@property (assign) NSInteger index;
 @property (assign, getter=getEofElementIndex, setter=setEofElementIndex:) NSInteger eofElementIndex;
 @property (assign, getter=getLastMarker, setter=setLastMarker:) NSInteger lastMarker;
 @property (assign, getter=getMarkDepth, setter=setMarkDepth:) NSInteger markDepth;
@@ -60,8 +60,6 @@
 - (id) LT:(NSInteger) i;
 - (id) LB:(NSInteger) i;
 - (id) getCurrentSymbol;
-- (NSInteger) getIndex;
-- (void) setIndex:(NSInteger)i;
 - (NSInteger) mark;
 - (void) release:(NSInteger) marker;
 - (void) rewind:(NSInteger) marker;

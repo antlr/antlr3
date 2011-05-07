@@ -29,16 +29,16 @@
 #import "ANTLRRecognitionException.h"
 
 @interface ANTLRMismatchedSetException : ANTLRRecognitionException {
-	NSSet *expecting;
+	NSString *expecting;
 }
 
-@property (retain, getter=getExpecting, setter=setExpecting:) NSSet *expecting;
+@property (retain, getter=getExpecting, setter=setExpecting:) NSString *expecting;
 
-+ (id) newException:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
-- (id) initWithSet:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
++ (id) newException:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
+- (id) initWithSet:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
 
-- (NSSet *) getExpecting;
-- (void) setExpecting: (NSSet *) anExpectedSet;
+- (NSString *) getExpecting;
+- (void) setExpecting: (NSString *) anExpectedSet;
 
 
 @end

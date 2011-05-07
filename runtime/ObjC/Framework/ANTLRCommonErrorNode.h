@@ -56,7 +56,7 @@ ANTLRRecognitionException *trappedException;
 
 - (NSInteger) getType;
 
-- (NSString *) getText;
+- (NSString *) text;
 
 - (NSString *) toString;
 

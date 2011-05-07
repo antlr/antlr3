@@ -26,6 +26,7 @@
 
 #import "ANTLRTree.h"
 #import "ANTLRCommonToken.h"
+#import "AMutableArray.h"
 
 @protocol ANTLRBaseTree <ANTLRTree>
 
@@ -38,8 +39,8 @@
 - (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
-- (NSMutableArray *)getChildren;
-- (void) setChildren:(NSMutableArray *)anArray;
+- (AMutableArray *)getChildren;
+- (void) setChildren:(AMutableArray *)anArray;
 - (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;
 
@@ -52,7 +53,7 @@
 
 - (void) setChild:(NSInteger) i With:(id<ANTLRBaseTree>)t;
 - (id) deleteChild:(NSInteger) i;
-- (NSMutableArray *) createChildrenList;
+- (AMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
 // Indicates the node is a nil node but may still have children, meaning
 // the tree is a flat list.
@@ -72,7 +73,7 @@
 - (void) setChildIndex:(NSInteger)i;
 
 - (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
-- (NSMutableArray *)getAncestors;
+- (AMutableArray *)getAncestors;
 
 #pragma mark Copying
 - (id) copyWithZone:(NSZone *)aZone;	// the children themselves are not copied here!
@@ -81,10 +82,10 @@
 
 #pragma mark Tree Parser support
 - (NSInteger) getType;
-- (NSString *) getText;
+- (NSString *) text;
 // In case we don't have a token payload, what is the line for errors?
-- (NSInteger) getLine;
-- (NSInteger) getCharPositionInLine;
+- (NSUInteger) line;
+- (NSUInteger) charPositionInLine;
 
 
 #pragma mark Informational
@@ -94,24 +95,14 @@
 - (NSString *) toString;
 - (NSString *) toStringTree;
 
-@property (retain) id<ANTLRToken>token;
-@property (assign) NSInteger startIndex;
-@property (assign) NSInteger stopIndex;
-@property (retain) id<ANTLRBaseTree> parent;
-@property (assign) NSInteger childIndex;
-@property (retain) NSMutableArray *children;
+@property (retain) AMutableArray *children;
 @property (retain) NSException *anException;
 
 @end
 
 @interface ANTLRBaseTree : NSObject <ANTLRTree>
 {
-	ANTLRCommonToken *token;
-	NSInteger startIndex;
-	NSInteger stopIndex;
-    id<ANTLRBaseTree> parent;
-    NSInteger childIndex;
-	NSMutableArray *children;
+	AMutableArray *children;
     NSException *anException;
 }
 
@@ -123,8 +114,8 @@
 - (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
-- (NSMutableArray *)getChildren;
-- (void) setChildren:(NSMutableArray *)anArray;
+- (AMutableArray *)getChildren;
+- (void) setChildren:(AMutableArray *)anArray;
 - (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;
 
@@ -138,7 +129,7 @@
 
 - (void) setChild:(NSUInteger) i With:(id<ANTLRBaseTree>)t;
 - (id) deleteChild:(NSUInteger) idx;
-- (NSMutableArray *) createChildrenList;
+- (AMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
 // Indicates the node is a nil node but may still have children, meaning
 	// the tree is a flat list.
@@ -159,7 +150,7 @@
 
 - (BOOL) hasAncestor:(NSInteger) ttype;
 - (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
-- (NSMutableArray *)getAncestors;
+- (AMutableArray *)getAncestors;
 
 - (id) copyWithZone:(NSZone *)aZone;
 - (id) deepCopy;					// performs a deepCopyWithZone: with the default zone
@@ -167,25 +158,19 @@
 
 	// Return a token type; needed for tree parsing
 - (NSInteger) getType;
-- (NSString *) getText;
+- (NSString *) text;
 
 	// In case we don't have a token payload, what is the line for errors?
-- (NSInteger) getLine;
-- (NSInteger) getCharPositionInLine;
-- (void) setCharPositionInLine:(NSInteger)pos;
+- (NSUInteger) line;
+- (NSUInteger) charPositionInLine;
+- (void) setCharPositionInLine:(NSUInteger)pos;
 
 - (NSString *) treeDescription;
 - (NSString *) description;
 - (NSString *) toString;
 - (NSString *) toStringTree;
 
-@property (retain) ANTLRCommonToken *token;
-@property (assign) NSInteger startIndex;
-@property (assign) NSInteger stopIndex;
-@property (retain) id<ANTLRBaseTree> parent;
-@property (assign) NSInteger childIndex;
-
-@property (retain) NSMutableArray *children;
+@property (retain) AMutableArray *children;
 @property (retain) NSException *anException;
 
 @end

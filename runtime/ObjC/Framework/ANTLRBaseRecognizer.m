@@ -39,7 +39,7 @@ extern NSInteger debug;
 
 @implementation ANTLRBaseRecognizer
 
-static NSMutableArray *_tokenNames;
+static AMutableArray *_tokenNames;
 static NSString *_grammarFileName;
 static NSString *NEXT_TOKEN_RULE_NAME;
 
@@ -71,12 +71,12 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	return [[ANTLRBaseRecognizer alloc] initWithState:aState];
 }
 
-+ (NSMutableArray *)getTokenNames
++ (AMutableArray *)getTokenNames
 {
     return _tokenNames;
 }
 
-+ (void)setTokenNames:(NSMutableArray *)theTokNams
++ (void)setTokenNames:(AMutableArray *)theTokNams
 {
     _tokenNames = theTokNams;
     [_tokenNames retain];
@@ -159,8 +159,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
     if ( state == nil )
         return; 
-    if ( state.following != nil )
-        [state.following removeAllObjects]; 
+    if ( state.following != nil ) {
+        if ( [state.following count] )
+            [state.following removeAllObjects];
+    }
     state._fsp = -1;
     state.errorRecovery = NO;		// are we recovering?
     state.lastErrorIndex = -1;
@@ -168,8 +170,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     state.syntaxErrors = 0;
     state.backtracking = 0;			// the level of backtracking
     state.tokenStartCharIndex = -1;
-    if ( state.ruleMemo != nil )
-        [state.ruleMemo removeAllObjects];
+    if ( state.ruleMemo != nil ) {
+        if ( [state.ruleMemo count] )
+            [state.ruleMemo removeAllObjects];
+    }
 }
 
 - (BOOL) getFailed
@@ -190,9 +194,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (void) setState:(ANTLRRecognizerSharedState *) theState
 {
 	if (state != theState) {
-		[state release];
-		[theState retain];
+		if ( state ) [state release];
 		state = theState;
+		[state retain];
 	}
 }
 
@@ -296,7 +300,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     [self displayRecognitionError:[self getTokenNames] Exception:e];
 }
 
--(void) displayRecognitionError:(NSMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e
+-(void) displayRecognitionError:(AMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e
 {
     NSString *hdr = [self getErrorHeader:e];
     NSString *msg = [self getErrorMessage:e TokenNames:theTokNams];
@@ -325,7 +329,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  Override this to change the message generated for one or more
  *  exception types.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSMutableArray *)theTokNams
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)theTokNams
 {
     NSString *msg = [e getMessage];
     if ( [e isKindOfClass:[ANTLRUnwantedTokenException class]] ) {
@@ -466,14 +470,14 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (void)recover:(id<ANTLRIntStream>)anInput Exception:(ANTLRRecognitionException *)re
 {
-    if ( state.lastErrorIndex == [anInput getIndex] ) {
+    if ( state.lastErrorIndex == anInput.index ) {
         // uh oh, another error at same token index; must be a case
         // where LT(1) is in the recovery token set so nothing is
         // consumed; consume a single token so at least to prevent
         // an infinite loop; this is a failsafe.
         [anInput consume];
     }
-    state.lastErrorIndex = [anInput getIndex];
+    state.lastErrorIndex = anInput.index;
     ANTLRBitSet *followSet = [self computeErrorRecoverySet];
     [self beginResync];
     [self consumeUntilFollow:anInput Follow:followSet];
@@ -821,7 +825,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (void)pushFollow:(ANTLRBitSet *)fset
 {
     if ( (state._fsp +1) >= [state.following count] ) {
-        //        NSMutableArray *f = [NSMutableArray arrayWithCapacity:[[state.following] count]*2];
+        //        AMutableArray *f = [AMutableArray arrayWithCapacity:[[state.following] count]*2];
         //        System.arraycopy(state.following, 0, f, 0, state.following.length);
         //        state.following = f;
         [state.following addObject:fset];
@@ -857,7 +861,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  This is very useful for error messages and for context-sensitive
  *  error recovery.
  */
-- (NSMutableArray *)getRuleInvocationStack
+- (AMutableArray *)getRuleInvocationStack
 {
     NSString *parserClassName = [[self className] retain];
     return [self getRuleInvocationStack:[ANTLRRecognitionException newException] Recognizer:parserClassName];
@@ -870,11 +874,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *
  *  TODO: move to a utility class or something; weird having lexer call this
  */
-- (NSMutableArray *)getRuleInvocationStack:(ANTLRRecognitionException *)e
+- (AMutableArray *)getRuleInvocationStack:(ANTLRRecognitionException *)e
                                 Recognizer:(NSString *)recognizerClassName
 {
     // char *name;
-    NSMutableArray *rules = [[NSMutableArray arrayWithCapacity:20] retain];
+    AMutableArray *rules = [[AMutableArray arrayWithCapacity:20] retain];
     NSArray *stack = [e callStackSymbols];
     int i = 0;
     for (i = [stack count]-1; i >= 0; i--) {
@@ -951,15 +955,15 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 /** A convenience method for use most often with template rewrites.
  *  Convert a List<Token> to List<String>
  */
-- (NSMutableArray *)toStrings:(NSMutableArray *)tokens
+- (AMutableArray *)toStrings:(AMutableArray *)tokens
 {
     if ( tokens == nil )
         return nil;
-    NSMutableArray *strings = [[NSMutableArray arrayWithCapacity:[tokens count]] retain];
+    AMutableArray *strings = [[AMutableArray arrayWithCapacity:[tokens count]] retain];
     id object;
     NSInteger i = 0;
     for (object in tokens) {
-        [strings addObject:[[object getText] retain]];
+        [strings addObject:[[object text] retain]];
         i++;
     }
     return strings;
@@ -1001,7 +1005,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (BOOL)alreadyParsedRule:(id<ANTLRIntStream>)anInput RuleIndex:(NSInteger)ruleIndex
 {
-    NSInteger aStopIndex = [self getRuleMemoization:ruleIndex StartIndex:[anInput getIndex]];
+    NSInteger aStopIndex = [self getRuleMemoization:ruleIndex StartIndex:anInput.index];
     if ( aStopIndex == ANTLR_MEMO_RULE_UNKNOWN ) {
         // NSLog(@"rule %d not yet encountered\n", ruleIndex);
         return NO;
@@ -1028,7 +1032,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     NSInteger stopTokenIndex;
 
     aRuleStack = state.ruleMemo;
-    stopTokenIndex = (state.failed ? ANTLR_MEMO_RULE_FAILED : ([anInput getIndex]-1));
+    stopTokenIndex = (state.failed ? ANTLR_MEMO_RULE_FAILED : (anInput.index-1));
     if ( aRuleStack == nil ) {
         if (debug) NSLog(@"!!!!!!!!! memo array is nil for %@", [self getGrammarFileName]);
         return;

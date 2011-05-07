@@ -293,7 +293,7 @@
 
     aTType = ttype % HASHSIZE;
     for( np = self->ptrBuffer[ttype]; np != nil; np = [np getfNext] ) {
-        if ( [np.index integerValue] == ttype ) {
+        if ( [(NSNumber *)np.node integerValue] == ttype ) {
             return( np );        /*   found it       */
         }
     }
@@ -308,7 +308,7 @@
     idx = [(id<ANTLRBaseTree>)aNode getType];
     idx %= HASHSIZE;
     np = ptrBuffer[idx];
-    return( [(NSNumber *)np.index integerValue] );
+    return( [(NSNumber *)np.node integerValue] );
 }
 
 - (ANTLRMapElement *)getTType:(NSString *)name

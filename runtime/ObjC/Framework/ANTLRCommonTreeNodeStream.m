@@ -28,6 +28,7 @@
 #import "ANTLRTokenStream.h"
 #import "ANTLRIntStream.h"
 #import "ANTLRCharStream.h"
+#import "AMutableArray.h"
 
 @implementation ANTLRCommonTreeNodeStream
 

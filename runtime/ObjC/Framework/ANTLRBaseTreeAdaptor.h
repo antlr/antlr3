@@ -119,6 +119,8 @@
 
 - (void) setType:(id<ANTLRBaseTree>)aTree Type:(NSInteger)type;
 
+- (id<ANTLRToken>)getToken:(ANTLRCommonTree *)t;
+
 - (NSString *)getText:(id<ANTLRBaseTree>)aTree;
 
 - (void) setText:(id<ANTLRBaseTree>)aTree Text:(NSString *)theText;
@@ -130,6 +132,10 @@
 - (id<ANTLRBaseTree>) deleteChild:(id<ANTLRBaseTree>)aTree Index:(NSInteger)index;
 
 - (NSInteger) getChildCount:(id<ANTLRBaseTree>)aTree;
+
+- (id<ANTLRBaseTree>) getParent:(id<ANTLRBaseTree>) t;
+
+- (void) setParent:(id<ANTLRBaseTree>)t With:(id<ANTLRBaseTree>) parent;
 
 - (NSInteger) getUniqueID:(id<ANTLRBaseTree>)node;
 

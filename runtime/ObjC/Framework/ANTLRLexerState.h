@@ -51,7 +51,7 @@
 - (int) getTokenStartCharIndex;
 - (void) setTokenStartCharIndex:(int) theTokenStartCharIndex;
 
-- (NSString *) getText;
+- (NSString *) text;
 - (void) setText:(NSString *) theText;
 
 @end

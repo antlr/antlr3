@@ -56,8 +56,8 @@
 // Instance Methods
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (NSInteger)count;
-- (NSInteger)size;
+- (NSUInteger)count;
+- (NSUInteger)size;
 /* clear -- reinitialize the maplist array */
 
 - (NSInteger)getLastHash;

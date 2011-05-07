@@ -67,7 +67,7 @@
 {
     ANTLRHashRule *aHashRule;
 	if ((self = [super init]) != nil ) {
-        following = [NSMutableArray arrayWithCapacity:10];
+        following = [AMutableArray arrayWithCapacity:10];
         _fsp = -1;
         errorRecovery = NO;			// are we recovering?
         lastErrorIndex = -1;
@@ -98,7 +98,7 @@
 {
     ANTLRHashRule *aHashRule;
 	if ((self = [super init]) != nil ) {
-        following = [NSMutableArray arrayWithCapacity:10];
+        following = [AMutableArray arrayWithCapacity:10];
         _fsp = -1;
         errorRecovery = NO;			// are we recovering?
         lastErrorIndex = -1;
@@ -169,8 +169,8 @@
 
 - (void) dealloc
 {
-	[following release];
-	[ruleMemo release];
+	if ( following ) [following release];
+	if ( ruleMemo ) [ruleMemo release];
 	[super dealloc];
 }
 
@@ -186,7 +186,7 @@
 {
     if (token != aToken) {
         [aToken retain];
-        [token release];
+        if ( token ) [token release];
         token = aToken;
     }
 }
@@ -211,7 +211,7 @@
     tokenStartLine = theTokenStartLine;
 }
 
-- (NSUInteger) getCharPositionInLine
+- (NSUInteger) charPositionInLine
 {
     return tokenStartCharPositionInLine;
 }
@@ -237,12 +237,12 @@
 	NSLog(@"%@", e.name);
 }
 
-- (NSMutableArray *) getFollowing
+- (AMutableArray *) getFollowing
 {
 	return following;
 }
 
-- (void)setFollowing:(NSMutableArray *)aFollow
+- (void)setFollowing:(AMutableArray *)aFollow
 {
     following = aFollow;
 }

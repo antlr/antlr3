@@ -44,5 +44,9 @@
 - (id<ANTLRDebugEventListener>) debugListener;
 - (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
 
+- (void) recoverFromMismatchedToken:(id<ANTLRIntStream>)inputStream 
+						  exception:(NSException *)e 
+						  tokenType:(ANTLRTokenType)ttype 
+							 follow:(ANTLRBitSet *)follow;
 
 @end

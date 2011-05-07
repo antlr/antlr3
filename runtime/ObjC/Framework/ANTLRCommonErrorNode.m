@@ -86,7 +86,7 @@
     return ANTLRTokenTypeInvalid;
 }
 
-- (NSString *)getText
+- (NSString *)text
 {
     NSString *badText = nil;
     if ( [startToken isKindOfClass:[self class]] ) {
@@ -119,18 +119,18 @@
     else if ( [trappedException isKindOfClass:[ANTLRUnwantedTokenException class]] ) {
         aString = [NSString stringWithFormat:@"<extraneous: %@, resync=%@>",
         [trappedException getUnexpectedToken],
-        [self getText]];
+        [self text]];
         return aString;
     }
     else if ( [trappedException isKindOfClass:[ANTLRMismatchedTokenException class]] ) {
-        aString = [NSString stringWithFormat:@"<mismatched token: %@, resync=%@>", trappedException.token, [self getText]];
+        aString = [NSString stringWithFormat:@"<mismatched token: %@, resync=%@>", trappedException.token, [self text]];
         return aString;
     }
     else if ( [trappedException isKindOfClass:[ANTLRNoViableAltException class]] ) {
-        aString = [NSString stringWithFormat:@"<unexpected:  %@, resync=%@>", trappedException.token, [self getText]];
+        aString = [NSString stringWithFormat:@"<unexpected:  %@, resync=%@>", trappedException.token, [self text]];
         return aString;
     }
-    aString = [NSString stringWithFormat:@"<error: %@>",[self getText]];
+    aString = [NSString stringWithFormat:@"<error: %@>",[self text]];
     return aString;
 }
 

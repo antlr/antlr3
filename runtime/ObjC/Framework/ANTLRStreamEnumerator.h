@@ -30,19 +30,19 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-
+#import "AMutableArray.h"
 
 @interface ANTLRStreamEnumerator : NSEnumerator 
 {
 	NSInteger i;
 	id eof;
-	NSMutableArray *nodes;
+	AMutableArray *nodes;
 }
 
--(id) initWithNodes:(NSMutableArray *) n andEOF:(id) o;
+-(id) initWithNodes:(AMutableArray *) n andEOF:(id) o;
 -(BOOL) hasNext;
 
 @property NSInteger i;
 @property (retain) id eof;
-@property (retain) NSMutableArray *nodes;
+@property (retain) AMutableArray *nodes;
 @end

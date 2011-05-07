@@ -81,7 +81,7 @@
 {
     if (input != anInput) {
         [anInput retain];
-        [input release];
+        if ( input ) [input release];
         input = anInput;
     }
 }
@@ -107,8 +107,8 @@
     if ( [current getType] == ANTLRTokenTypeEOF ) {
         current = [anInput LT:-1];
     }
-    t.line = [current getLine];
-    t.charPositionInLine = [current getCharPositionInLine];
+    t.line = current.line;
+    t.charPositionInLine = current.charPositionInLine;
     t.channel = ANTLRTokenChannelDefault;
     return t;
 }

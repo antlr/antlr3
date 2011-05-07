@@ -63,9 +63,10 @@ static NSInteger _aUniqueID;
 
 - (id) initWithAnIndex:(id)anIndex Node:(id)aNode
 {
-    if ((self = [super initWithAnIndex:anIndex]) != nil ) {
+    self = [super initWithAnIndex:anIndex];
+    if ( self ) {
         if ( aNode != node ) {
-            if (node  != nil) [node release];
+            if ( node ) [node release];
             [aNode retain];
         }
         node = aNode;
@@ -90,7 +91,7 @@ static NSInteger _aUniqueID;
 - (void)setNode:(id<ANTLRBaseTree>)aNode
 {
     if ( aNode != node ) {
-        if (node  != nil) [node release];
+        if ( node ) [node release];
         [aNode retain];
     }
     node = aNode;

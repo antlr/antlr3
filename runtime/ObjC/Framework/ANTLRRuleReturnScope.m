@@ -47,7 +47,7 @@
 }
 
 /** Has a value potentially if output=AST; */
-- (id) getNode
+- (id) getTree
 {
     return nil;
 }

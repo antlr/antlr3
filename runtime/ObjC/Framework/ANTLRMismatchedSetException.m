@@ -31,12 +31,12 @@
 
 @synthesize expecting;
 
-+ (id) newException:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
++ (id) newException:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
 {
 	return [[ANTLRMismatchedSetException alloc] initWithSet:theExpectedSet stream:theStream];
 }
 
-- (id) initWithSet:(NSSet *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
+- (id) initWithSet:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
 {
 	if ((self = [super initWithStream:theStream]) != nil) {
 		[self setExpecting:theExpectedSet];
@@ -61,15 +61,15 @@
 //---------------------------------------------------------- 
 //  expectedSet 
 //---------------------------------------------------------- 
-- (NSSet *) getExpecting
+- (NSString *) getExpecting
 {
     return expecting; 
 }
 
-- (void) setExpecting: (NSSet *) anExpectedSet
+- (void) setExpecting: (NSString *) anExpectedSet
 {
-    if (expecting != anExpectedSet) {
-        [expecting release];
+    if ( expecting != anExpectedSet ) {
+        if ( expecting ) [expecting release];
         [anExpectedSet retain];
         expecting = anExpectedSet;
     }

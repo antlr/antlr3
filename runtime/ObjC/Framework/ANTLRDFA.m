@@ -242,9 +242,8 @@ NSInteger debug = 0;
 
 - (void)setRecognizer:(ANTLRBaseRecognizer *)aRecognizer
 {
-    if (recognizer != aRecognizer) {
-        if (recognizer != nil)
-            [recognizer release];
+    if ( recognizer != aRecognizer ) {
+        if ( recognizer ) [recognizer release];
         [aRecognizer retain];
     }
     recognizer = aRecognizer;

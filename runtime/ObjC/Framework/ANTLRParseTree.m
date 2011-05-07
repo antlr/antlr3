@@ -60,7 +60,7 @@
     return 0;
 }
     
-- (NSString *)getText
+- (NSString *)text
 {
     return [self toString];
 }
@@ -90,7 +90,7 @@
         if ( [t getType] == ANTLRTokenTypeEOF ) {
             return @"<EOF>";
         }
-        return [t getText];
+        return [t text];
     }
     return [payload toString];
 }
@@ -104,7 +104,7 @@
     if ( hiddenTokens!=nil ) {
         for (NSUInteger i = 0; i < [hiddenTokens count]; i++) {
             id<ANTLRToken>  hidden = (id<ANTLRToken> ) [hiddenTokens objectAtIndex:i];
-            [buf appendString:[hidden getText]];
+            [buf appendString:[hidden text]];
         }
     }
     NSString *nodeText = [self toString];

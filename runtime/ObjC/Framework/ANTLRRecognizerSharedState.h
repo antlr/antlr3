@@ -28,9 +28,10 @@
 #import "ANTLRToken.h"
 #import "ANTLRBitSet.h"
 #import "ANTLRRuleStack.h"
+#import "AMutableArray.h"
 
 @interface ANTLRRecognizerSharedState : NSObject {
-	NSMutableArray *following;          // a stack of FOLLOW bitsets used for context sensitive prediction and recovery
+	AMutableArray *following;          // a stack of FOLLOW bitsets used for context sensitive prediction and recovery
     NSInteger _fsp;                     // Follow stack pointer
 	BOOL errorRecovery;                 // are we recovering?
 	NSInteger lastErrorIndex;
@@ -48,7 +49,7 @@
 	NSString   *text;
 }
 
-@property (retain, getter=getFollowing, setter=setFollowing:) NSMutableArray *following;
+@property (retain, getter=getFollowing, setter=setFollowing:) AMutableArray *following;
 @property (assign) NSInteger _fsp;
 @property (assign) BOOL errorRecovery;
 @property (assign) NSInteger lastErrorIndex;
@@ -60,9 +61,9 @@
 @property (getter=getType,setter=setType:) NSUInteger type;
 @property (getter=getChannel,setter=setChannel:) NSUInteger channel;
 @property (getter=getTokenStartLine,setter=setTokenStartLine:) NSUInteger tokenStartLine;
-@property (getter=getCharPositionInLine,setter=setCharPositionInLine:) NSUInteger tokenStartCharPositionInLine;
+@property (getter=charPositionInLine,setter=setCharPositionInLine:) NSUInteger tokenStartCharPositionInLine;
 @property (getter=getTokenStartCharIndex,setter=setTokenStartCharIndex:) NSInteger tokenStartCharIndex;
-@property (retain, getter=getText, setter=setText:) NSString *text;
+@property (retain, getter=text, setter=setText:) NSString *text;
 
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState;
 + (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedStateWithRuleLen:(NSInteger)aLen;
@@ -84,18 +85,18 @@
 - (NSUInteger) getTokenStartLine;
 - (void) setTokenStartLine:(NSUInteger) theTokenStartLine;
 
-- (NSUInteger) getCharPositionInLine;
+- (NSUInteger) charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger) theCharPosition;
 
 - (NSInteger) getTokenStartCharIndex;
 - (void) setTokenStartCharIndex:(NSInteger) theTokenStartCharIndex;
 
-- (NSString *) getText;
+- (NSString *) text;
 - (void) setText:(NSString *) theText;
 
 
-- (NSMutableArray *) getFollowing;
-- (void)setFollowing:(NSMutableArray *)aFollow;
+- (AMutableArray *) getFollowing;
+- (void)setFollowing:(AMutableArray *)aFollow;
 - (ANTLRRuleStack *) getRuleMemo;
 - (void)setRuleMemo:(ANTLRRuleStack *)aRuleMemo;
 - (BOOL) isErrorRecovery;

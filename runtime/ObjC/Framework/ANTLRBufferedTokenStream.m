@@ -36,7 +36,7 @@ extern NSInteger debug;
 @synthesize tokenSource;
 @synthesize tokens;
 @synthesize lastMarker;
-@synthesize p;
+@synthesize index;
 @synthesize range;
 
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream
@@ -54,8 +54,8 @@ extern NSInteger debug;
 	if ((self = [super init]) != nil)
 	{
         tokenSource = nil;
-        tokens = [[NSMutableArray arrayWithCapacity:1000] retain];
-        p = -1;
+        tokens = [[AMutableArray arrayWithCapacity:1000] retain];
+        index = -1;
         range = -1;
 	}
 	return self;
@@ -66,8 +66,8 @@ extern NSInteger debug;
 	if ((self = [super init]) != nil)
 	{
         tokenSource = aSource;
-        tokens = [[NSMutableArray arrayWithCapacity:1000] retain];
-        p = -1;
+        tokens = [[AMutableArray arrayWithCapacity:1000] retain];
+        index = -1;
         range = -1;
 	}
 	return self;
@@ -82,7 +82,7 @@ extern NSInteger debug;
     if ( self.tokens )
         copy.tokens = [tokens copyWithZone:aZone];
     copy.lastMarker = self.lastMarker;
-    copy.p = self.p;
+    copy.index = self.index;
     copy.range = self.range;
     return copy;
 }
@@ -90,16 +90,6 @@ extern NSInteger debug;
 - (id<ANTLRTokenSource>) getTokenSource
 {
     return tokenSource;
-}
-
-- (NSInteger) getIndex
-{
-    return p;
-}
-
-- (void) setIndex:(NSInteger) anIndex
-{
-    p = anIndex;
 }
 
 - (NSInteger) getRange
@@ -114,11 +104,11 @@ extern NSInteger debug;
 
 - (NSInteger) mark
 {
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
 //        [self fill];
     }
-    lastMarker = [self getIndex];
+    lastMarker = self.index;
     return lastMarker;
 }
 
@@ -139,13 +129,13 @@ extern NSInteger debug;
 
 - (void) reset
 {
-    p = 0;
+    index = 0;
     lastMarker = 0;
 }
 
 - (void) seek:(NSInteger) anIndex
 {
-    p = anIndex;
+    index = anIndex;
 }
 
 - (NSInteger) size
@@ -162,12 +152,12 @@ extern NSInteger debug;
  */
 - (void) consume
 {
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
 //        [self fill];
     }
-    p++;
-    [self sync:p];
+    index++;
+    [self sync:index];
 }
 
 /** Make sure index i in tokens has a token. */
@@ -186,7 +176,7 @@ extern NSInteger debug;
     for (NSInteger i=1; i <= n; i++) {
         id<ANTLRToken> t = [tokenSource nextToken];
         [t setTokenIndex:[tokens count]];
-        if (debug > 1) NSLog(@"adding %@ at index %d\n", [t getText], [tokens count]);
+        if (debug > 1) NSLog(@"adding %@ at index %d\n", [t text], [tokens count]);
         [tokens addObject:t];
         [t retain];
         if ( [t getType] == ANTLRTokenTypeEOF )
@@ -203,15 +193,15 @@ extern NSInteger debug;
 }
 
 /** Get all tokens from start..stop inclusively */
-- (NSMutableArray *)getFrom:(NSInteger)startIndex To:(NSInteger)stopIndex
+- (AMutableArray *)getFrom:(NSInteger)startIndex To:(NSInteger)stopIndex
 {
     if ( startIndex < 0 || stopIndex < 0 )
         return nil;
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
 //        [self fill];
     }
-    NSMutableArray *subset = [NSMutableArray arrayWithCapacity:5];
+    AMutableArray *subset = [AMutableArray arrayWithCapacity:5];
     if ( stopIndex >= [tokens count] )
         stopIndex = [tokens count]-1;
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
@@ -230,14 +220,14 @@ extern NSInteger debug;
 
 - (id<ANTLRToken>) LB:(NSInteger)k
 {
-    if ( (p - k) < 0 )
+    if ( (index - k) < 0 )
         return nil;
-    return [tokens objectAtIndex:(p-k)];
+    return [tokens objectAtIndex:(index-k)];
 }
 
 - (id<ANTLRToken>) LT:(NSInteger)k
 {
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
 //        [self fill];
     }
@@ -246,7 +236,7 @@ extern NSInteger debug;
     if ( k < 0 )
         return [self LB:-k];
     
-    NSInteger i = p + k - 1;
+    NSInteger i = index + k - 1;
     [self sync:i];
     if ( i >= [tokens count] ) { // return EOF token
                                 // EOF must be last token
@@ -260,23 +250,24 @@ extern NSInteger debug;
 - (void) setup
 {
     [self sync:0];
-    p = 0;
+    index = 0;
 }
 
 /** Reset this token stream by setting its token source. */
 - (void) setTokenSource:(id<ANTLRTokenSource>) aTokenSource
 {
     tokenSource = aTokenSource;
-    [tokens removeAllObjects];
-    p = -1;
+    if ( [tokens count] )
+        [tokens removeAllObjects];
+    index = -1;
 }
 
-- (NSMutableArray *)getTokens
+- (AMutableArray *)getTokens
 {
     return tokens;
 }
 
-- (NSMutableArray *)getTokensFrom:(NSInteger) startIndex To:(NSInteger) stopIndex
+- (AMutableArray *)getTokensFrom:(NSInteger) startIndex To:(NSInteger) stopIndex
 {
     return [self getTokensFrom:startIndex To:stopIndex With:(ANTLRBitSet *)nil];
 }
@@ -285,9 +276,9 @@ extern NSInteger debug;
  *  the token type BitSet.  Return null if no tokens were found.  This
  *  method looks at both on and off channel tokens.
  */
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex With:(ANTLRBitSet *)types
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex With:(ANTLRBitSet *)types
 {
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
 //        [self fill];
     }
@@ -299,7 +290,7 @@ extern NSInteger debug;
         return nil;
     
     // list = tokens[start:stop]:{Token t, t.getType() in types}
-    NSMutableArray *filteredTokens = [NSMutableArray arrayWithCapacity:5];
+    AMutableArray *filteredTokens = [AMutableArray arrayWithCapacity:5];
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
         id<ANTLRToken>t = [tokens objectAtIndex:i];
         if ( types == nil || [types member:[t getType]] ) {
@@ -313,12 +304,12 @@ extern NSInteger debug;
     return filteredTokens;
 }
 
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithType:(NSInteger)ttype
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithType:(NSInteger)ttype
 {
     return [self getTokensFrom:startIndex To:stopIndex With:[ANTLRBitSet of:ttype]];
 }
 
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithList:(NSMutableArray *)types
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithList:(AMutableArray *)types
 {
     return [self getTokensFrom:startIndex To:stopIndex With:[ANTLRBitSet newANTLRBitSetWithArray:types]];
 }
@@ -331,7 +322,7 @@ extern NSInteger debug;
 /** Grab *all* tokens from stream and return string */
 - (NSString *) toString
 {
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
     }
     [self fill];
@@ -342,7 +333,7 @@ extern NSInteger debug;
 {
     if ( startIdx < 0 || stopIdx < 0 )
         return nil;
-    if ( p == -1 ) {
+    if ( index == -1 ) {
         [self setup];
     }
     if ( stopIdx >= [tokens count] )
@@ -352,7 +343,7 @@ extern NSInteger debug;
         id<ANTLRToken>t = [tokens objectAtIndex:i];
         if ( [t getType] == ANTLRTokenTypeEOF )
             break;
-        [buf appendString:[t getText]];
+        [buf appendString:[t text]];
     }
     return buf;
 }
@@ -368,27 +359,16 @@ extern NSInteger debug;
 /** Get all tokens from lexer until EOF */
 - (void) fill
 {
-    if ( p == -1 ) [self setup];
-    if ( [[tokens objectAtIndex:p] getType] == ANTLRTokenTypeEOF )
+    if ( index == -1 ) [self setup];
+    if ( [[tokens objectAtIndex:index] getType] == ANTLRTokenTypeEOF )
         return;
     
-    NSInteger i = p+1;
+    NSInteger i = index+1;
     [self sync:i];
     while ( [[tokens objectAtIndex:i] getType] != ANTLRTokenTypeEOF ) {
         i++;
         [self sync:i];
     }
 }
-
-#ifdef DONTUSENOMO
-- (NSUInteger) getCharPositionInLine
-{
-    return -1;
-}
-
-- (void) setCharPositionInLine:(NSUInteger)thePos
-{
-}
-#endif
 
 @end

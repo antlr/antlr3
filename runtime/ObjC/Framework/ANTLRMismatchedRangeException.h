@@ -34,6 +34,8 @@
 	NSRange range;
 }
 
+@property (assign) NSRange range;
+
 + (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
 - (id) initWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
 

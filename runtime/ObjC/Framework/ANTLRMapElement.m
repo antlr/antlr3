@@ -151,8 +151,7 @@
 - (void)setName:(NSString *)aName
 {
     if ( aName != name ) {
-        if (name != nil)
-            [name release];
+        if ( name ) [name release];
         [aName retain];
     }
     name = aName;

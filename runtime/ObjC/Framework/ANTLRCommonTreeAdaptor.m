@@ -139,7 +139,7 @@
 {
     if ( t == nil )
         return nil;
-    return [(id<ANTLRBaseTree>) t getText];
+    return [(id<ANTLRBaseTree>) t text];
 }
 
 - (void)setText:(id<ANTLRBaseTree>)t Text:(NSString *)text

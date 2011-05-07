@@ -149,7 +149,7 @@
 
 -(NSArray *) allObjects
 {
-	NSMutableArray *array = [NSMutableArray arrayWithCapacity:10];
+	AMutableArray *array = [AMutableArray arrayWithCapacity:10];
 	while ([self hasNext]) {
 		[array addObject:[self nextObject]];
 	}

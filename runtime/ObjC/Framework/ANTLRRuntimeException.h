@@ -98,3 +98,14 @@
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 @end
+
+@interface ANTLRUnsupportedOperationException : ANTLRRuntimeException {
+}
+
++ (id) newException:(NSString *)aReason;
+
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason;
+- (id) initWithName:(NSString *)aMsg reason:(NSString *)aCause userInfo:(NSDictionary *)userInfo;
+
+@end
+

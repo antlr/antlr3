@@ -45,8 +45,10 @@ typedef enum {
 
 @protocol ANTLRToken < NSObject, NSCopying >
 
-@property (retain) NSString *text;
+@property (retain, getter = text, setter = setText:) NSString *text;
 @property (assign) NSInteger type;
+@property (assign) NSUInteger line;
+@property (assign) NSUInteger charPositionInLine;
 
 // The singleton eofToken instance.
 + (id<ANTLRToken>) eofToken;
@@ -54,19 +56,19 @@ typedef enum {
 + (ANTLRTokenChannel) defaultChannel;
 
 // provide hooks to explicitely set the text as opposed to use the indices into the CharStream
-- (NSString *) getText;
-- (void) setText:(NSString *) theText;
+- (NSString *) text;
+- (void) setText:(NSString *)theText;
 
 - (NSInteger) getType;
 - (void) setType: (NSInteger) aType;
 
 // ANTLR v3 provides automatic line and position tracking. Subclasses do not need to
 // override these, if they do not want to store line/pos tracking information
-- (NSUInteger) getLine;
+- (NSUInteger) line;
 - (void) setLine: (NSUInteger) aLine;
 
-- (NSUInteger) getCharPositionInLine;
-- (void) setCharPositionInLine: (NSUInteger) aCharPositionInLine;
+- (NSUInteger) charPositionInLine;
+- (void) setCharPositionInLine:(NSUInteger)aCharPositionInLine;
 
 // explicitely change the channel this Token is on. The default parser implementation
 // just sees the defaultChannel

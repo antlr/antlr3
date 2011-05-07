@@ -44,7 +44,7 @@
 	return self;
 }
 
--(id) initWithNodes:(NSMutableArray *) n andEOF:(id) o
+-(id) initWithNodes:(AMutableArray *) n andEOF:(id) o
 {
 	self = [self init];
 	if (self)

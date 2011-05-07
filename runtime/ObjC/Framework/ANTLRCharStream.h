@@ -41,15 +41,9 @@
 - (NSInteger)LT:(NSInteger) i;
 
 // ANTLR tracks the line information automatically
-- (NSInteger) getLine;
 
 // Because this stream can rewind, we need to be able to reset the line
-- (void) setLine:(NSInteger) theLine;
 
 // The index of the character relative to the beginning of the line 0..n-1
-- (NSInteger) getCharPositionInLine;
-
-- (void) setCharPositionInLine:(NSInteger) thePos;
-
 
 @end

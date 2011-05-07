@@ -114,7 +114,7 @@
 							 follow:(ANTLRBitSet *)follow
 {
 #warning TODO: recoverFromMismatchedToken in debugger
-	[super recoverFromMismatchedToken:inputStream exception:e tokenType:ttype follow:follow];
+	[self recoverFromMismatchedToken:inputStream exception:e follow:follow];
 }
 
 - (void) recoverFromMismatchedSet:(id<ANTLRIntStream>)inputStream
@@ -122,7 +122,7 @@
 						   follow:(ANTLRBitSet *)follow
 {
 #warning TODO: recoverFromMismatchedSet in debugger
-	[super recoverFromMismatchedSet:inputStream exception:e follow:follow];
+	[super recoverFromMismatchedSet:inputStream];
 }
 
 @end

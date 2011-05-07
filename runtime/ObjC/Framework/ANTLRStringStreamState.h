@@ -51,6 +51,8 @@
 - (void) setCharPositionInLine: (NSUInteger) aCharPositionInLine;
 
 
-
+@property (assign) NSUInteger index;
+@property (assign) NSUInteger line;
+@property (assign) NSUInteger charPositionInLine;
 
 @end

@@ -41,9 +41,9 @@
 }
 
 - (ANTLRMismatchedNotSetException *)newException:(id<ANTLRIntStream>)anInput
-                                                               Follow:(ANTLRBitSet *)expected
+                                                               Follow:(NSString *)expected
 {
-    return [[ANTLRMismatchedNotSetException alloc] initWithStream:anInput Follow:(ANTLRBitSet *)expected];
+    return [[ANTLRMismatchedNotSetException alloc] initWithStream:anInput Follow:(NSString *)expected];
 }
 
 - (id) init
@@ -53,7 +53,7 @@
     return(self);
 }
 
-- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(ANTLRBitSet *)expected
+- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(NSString *)expected
 {
     if ((self = [super initWithStream:anInput]) != nil ) {
         expecting = expected;

@@ -29,6 +29,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ANTLRIntStream.h"
+#import "AMutableArray.h"
 
 // This is an abstract superclass for lexers and parsers.
 
@@ -52,10 +53,10 @@
 #import "ANTLRFailedPredicateException.h"
 
 @interface ANTLRBaseRecognizer : NSObject {
-	ANTLRRecognizerSharedState *state;	// the state of this recognizer. Might be shared with other recognizers, e.g. in grammar import scenarios.
-	NSString *grammarFileName;			// where did the grammar come from. filled in by codegeneration
+    ANTLRRecognizerSharedState *state;  // the state of this recognizer. Might be shared with other recognizers, e.g. in grammar import scenarios.
+    NSString *grammarFileName;          // where did the grammar come from. filled in by codegeneration
     NSString *sourceName;
-    NSMutableArray *tokenNames;
+    AMutableArray *tokenNames;
 }
 
 + (void) initialize;
@@ -64,7 +65,7 @@
 + (ANTLRBaseRecognizer *) newANTLRBaseRecognizerWithRuleLen:(NSInteger)aLen;
 + (ANTLRBaseRecognizer *) newANTLRBaseRecognizer:(ANTLRRecognizerSharedState *)aState;
 
-+ (NSMutableArray *)getTokenNames;
++ (AMutableArray *)getTokenNames;
 + (void)setTokenNames:(NSArray *)aTokNamArray;
 + (void)setGrammarFileName:(NSString *)aFileName;
 
@@ -108,8 +109,8 @@
 
 // error reporting and recovery
 - (void) reportError:(ANTLRRecognitionException *)e;
-- (void) displayRecognitionError:(NSMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e;
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSMutableArray *)theTokNams;
+- (void) displayRecognitionError:(AMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e;
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)theTokNams;
 - (NSInteger) getNumberOfSyntaxErrors;
 - (NSString *)getErrorHeader:(ANTLRRecognitionException *)e;
 - (NSString *)getTokenErrorDisplay:(id<ANTLRToken>)t;
@@ -147,20 +148,20 @@
 - (ANTLRBitSet *)popFollow;
 
 // to be used by the debugger to do reporting. maybe hook in incremental stuff here, too.
-- (NSMutableArray *) getRuleInvocationStack;
-- (NSMutableArray *) getRuleInvocationStack:(ANTLRRecognitionException *)exception
-					             Recognizer:(NSString *)recognizerClassName;
+- (AMutableArray *) getRuleInvocationStack;
+- (AMutableArray *) getRuleInvocationStack:(ANTLRRecognitionException *)exception
+                                 Recognizer:(NSString *)recognizerClassName;
 
-- (NSMutableArray *) getTokenNames;
+- (AMutableArray *) getTokenNames;
 - (NSString *)getGrammarFileName;
 - (NSString *)getSourceName;
-- (NSMutableArray *) toStrings:(NSArray *)tokens;
+- (AMutableArray *) toStrings:(NSArray *)tokens;
 // support for memoization
 - (NSInteger) getRuleMemoization:(NSInteger)ruleIndex StartIndex:(NSInteger)ruleStartIndex;
 - (BOOL) alreadyParsedRule:(id<ANTLRIntStream>)anInput RuleIndex:(NSInteger)ruleIndex;
 - (void) memoize:(id<ANTLRIntStream>)anInput
-	     RuleIndex:(NSInteger)ruleIndex
-	    StartIndex:(NSInteger)ruleStartIndex;
+         RuleIndex:(NSInteger)ruleIndex
+        StartIndex:(NSInteger)ruleStartIndex;
 - (NSInteger) getRuleMemoizationCacheSize;
 - (void)traceIn:(NSString *)ruleName Index:(NSInteger)ruleIndex Object:(id)inputSymbol;
 - (void)traceOut:(NSString *)ruleName Index:(NSInteger)ruleIndex Object:(id)inputSymbol;
@@ -174,6 +175,6 @@
 @property (retain) ANTLRRecognizerSharedState *state;
 @property (retain) NSString *grammarFileName;
 @property (retain) NSString *sourceName;
-@property (retain) NSMutableArray *tokenNames;
+@property (retain) AMutableArray *tokenNames;
 
 @end

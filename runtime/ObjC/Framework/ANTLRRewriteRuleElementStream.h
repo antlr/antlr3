@@ -33,7 +33,7 @@
     BOOL dirty;        ///< indicates whether the stream should return copies of its elements, set to true after a call to -reset
     BOOL isSingleElement;
     id singleElement;
-    NSMutableArray *elements;
+    AMutableArray *elements;
     
     NSString *elementDescription;
     id<ANTLRTreeAdaptor> treeAdaptor;
@@ -43,7 +43,7 @@
 @property (assign) BOOL dirty;
 @property (assign) BOOL isSingleElement;
 @property (assign) id singleElement;
-@property (assign) NSMutableArray *elements;
+@property (assign) AMutableArray *elements;
 @property (assign) NSString *elementDescription;
 @property (retain) id<ANTLRTreeAdaptor> treeAdaptor;
 

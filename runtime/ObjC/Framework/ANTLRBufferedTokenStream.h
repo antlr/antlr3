@@ -28,6 +28,7 @@
 #import "ANTLRTokenStream.h"
 #import "ANTLRTokenSource.h"
 #import "ANTLRBitSet.h"
+#import "AMutableArray.h"
 
 @interface ANTLRBufferedTokenStream : NSObject <ANTLRTokenStream> 
 {
@@ -38,33 +39,31 @@ id<ANTLRTokenSource> tokenSource;
      *  as its moving window moves through the input.  This list captures
      *  everything so we can access complete input text.
      */
-NSMutableArray *tokens;
+AMutableArray *tokens;
     
     /** Track the last mark() call result value for use in rewind(). */
 NSInteger lastMarker;
     
     /** The index into the tokens list of the current token (next token
-     *  to consume).  tokens[p] should be LT(1).  p=-1 indicates need
+     *  to consume).  tokens[index] should be LT(1).  index=-1 indicates need
      *  to initialize with first token.  The ctor doesn't get a token.
-     *  First call to LT(1) or whatever gets the first token and sets p=0;
+     *  First call to LT(1) or whatever gets the first token and sets index=0;
      */
-NSInteger p;
+NSInteger index;
     
 NSInteger range; // how deep have we gone?
     
 }
 @property (retain, getter=getTokenSource,setter=setTokenSource:) id<ANTLRTokenSource> tokenSource;
-@property (retain, getter=getTokens,setter=setTokens:) NSMutableArray *tokens;
+@property (retain, getter=getTokens,setter=setTokens:) AMutableArray *tokens;
 @property (assign, getter=getLastMarker,setter=setLastMarker:) NSInteger lastMarker;
-@property (assign, getter=getIndex,setter=setIndex:) NSInteger p;
+@property (assign) NSInteger index;
 @property (assign, getter=getRange,setter=setRange:) NSInteger range;
 
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream;
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource;
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)aSource;
 - (id) copyWithZone:(NSZone *)aZone;
-- (NSInteger) getIndex;
-- (void) setIndex:(NSInteger)index;
 - (NSInteger) getRange;
 - (void) setRange:(NSInteger)anInt;
 - (NSInteger) mark;
@@ -72,25 +71,25 @@ NSInteger range; // how deep have we gone?
 - (void) rewind:(NSInteger) marker;
 - (void) rewind;
 - (void) reset;
-- (void) seek:(NSInteger) index;
+- (void) seek:(NSInteger) anIndex;
 - (NSInteger) size;
 - (void) consume;
 - (void) sync:(NSInteger) i;
 - (void) fetch:(NSInteger) n;
 - (id<ANTLRToken>) getToken:(NSInteger) i;
-- (NSMutableArray *)getFrom:(NSInteger)startIndex To:(NSInteger) stopIndex;
+- (AMutableArray *)getFrom:(NSInteger)startIndex To:(NSInteger) stopIndex;
 - (NSInteger) LA:(NSInteger)i;
 - (id<ANTLRToken>) LB:(NSInteger) k;
 - (id<ANTLRToken>) LT:(NSInteger) k;
 - (void) setup;
 - (id<ANTLRTokenSource>) getTokenSource;
 - (void) setTokenSource:(id<ANTLRTokenSource>) aTokenSource;
-- (NSMutableArray *)getTokens;
+- (AMutableArray *)getTokens;
 - (NSString *) getSourceName;
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex;
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex With:(ANTLRBitSet *)types;
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithList:(NSMutableArray *)types;
-- (NSMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithType:(NSInteger)ttype;
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex;
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex With:(ANTLRBitSet *)types;
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithList:(AMutableArray *)types;
+- (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithType:(NSInteger)ttype;
 - (NSString *) toString;
 - (NSString *) toStringFromStart:(NSInteger)startIndex ToEnd:(NSInteger)stopIndex;
 - (NSString *) toStringFromToken:(id<ANTLRToken>)startIndex ToToken:(id<ANTLRToken>)stopIndex;

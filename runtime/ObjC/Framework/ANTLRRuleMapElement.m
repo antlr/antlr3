@@ -93,9 +93,8 @@
 
 - (void)setRuleNum:(id)aRuleNum
 {
-    if (aRuleNum != ruleNum) {
-        if (ruleNum != nil)
-            [ruleNum release];
+    if ( aRuleNum != ruleNum ) {
+        if ( ruleNum ) [ruleNum release];
         [aRuleNum retain];
     }
     ruleNum = aRuleNum;

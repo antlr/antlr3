@@ -72,15 +72,15 @@
 - (void) setInput: (id<ANTLRTokenStream>) aTokenStream
 {
     if (input != aTokenStream) {
-        [aTokenStream retain];
-        [input release];
+        if ( input ) [input release];
         input = aTokenStream;
+        [input retain];
     }
 }
 
 - (void) consumeInitialHiddenTokens
 {
-	int firstIdx = [input getIndex];
+	int firstIdx = input.index;
 	for (int i = 0; i<firstIdx; i++)
 		[debugListener consumeHiddenToken:[input getToken:i]];
 	initialStreamState = NO;
@@ -100,10 +100,10 @@
 {
 	if ( initialStreamState )
 		[self consumeInitialHiddenTokens];
-	int a = [input getIndex];
+	int a = input.index;
 	id<ANTLRToken> token = [input LT:1];
 	[input consume];
-	int b = [input getIndex];
+	int b = input.index;
 	[debugListener consumeToken:token];
 	if (b > a+1) // must have consumed hidden tokens
 		for (int i = a+1; i < b; i++)
@@ -152,7 +152,7 @@
 
 - (NSInteger) getIndex
 {
-    return [input getIndex];
+    return input.index;
 }
 
 - (void) release:(NSInteger) marker
@@ -193,7 +193,7 @@
 
 - (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken
 {
-    return [input toStringFromStart:[startToken getStartIndex] ToEnd:[stopToken getStopIndex]];
+    return [input toStringFromStart:[startToken getStart] ToEnd:[stopToken getStopToken]];
 }
 
 @end

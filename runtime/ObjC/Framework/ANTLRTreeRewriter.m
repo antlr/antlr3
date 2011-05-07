@@ -56,7 +56,7 @@
 	if ( [actor respondsToSelector:ruleSEL] )
 		return [actor performSelector:ruleSEL];
     else
-        @throw [ANTLRRecognitionException newException:@"Unknown Rewrite exception"];
+        @throw [ANTLRRuntimeException newException:@"Unknown Rewrite exception"];
     return nil;
 }
 

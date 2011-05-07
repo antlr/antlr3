@@ -24,6 +24,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import "AMutableArray.h"
+
 @protocol ANTLRTree < NSObject, NSCopying >
 
 //+ (id<ANTLRTree>) invalidNode;
@@ -46,7 +48,7 @@
 /** Return a list of all ancestors of this node.  The first node of
  *  list is the root and the last is the parent of this node.
  */
-- (NSMutableArray *) getAncestors;
+- (AMutableArray *) getAncestors;
 
 /** This node is what child index? 0..n-1 */
 - (NSInteger) getChildIndex;
@@ -109,11 +111,11 @@
 
 #pragma mark Tree Parser support
 - (NSInteger) getType;
-- (NSString *) getText;
+- (NSString *) text;
 // In case we don't have a token payload, what is the line for errors?
-- (NSInteger) getLine;
-- (NSInteger) getCharPositionInLine;
-- (void) setCharPositionInLine:(NSInteger)pos;
+- (NSUInteger) line;
+- (NSUInteger) charPositionInLine;
+- (void) setCharPositionInLine:(NSUInteger)pos;
 
 #pragma mark Informational
 - (NSString *) treeDescription;

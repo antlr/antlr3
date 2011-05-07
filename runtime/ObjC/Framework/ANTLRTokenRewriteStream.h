@@ -40,23 +40,23 @@
 
 @interface ANTLRRewriteOperation : ANTLRCommonTokenStream
 {
-/** What index into rewrites List are we? */
+/** What rwIndex into rewrites List are we? */
 NSInteger instructionIndex;
-/** Token buffer index. */
-NSInteger index;
+/** Token buffer rwIndex. */
+NSInteger rwIndex;
 NSString *text;
 }
 
 @property (getter=getInstructionIndex, setter=setInstructionIndex:) NSInteger instructionIndex;
-@property (getter=getIndex, setter=setIndex:) NSInteger index;
-@property (retain, getter=getText, setter=setText:) NSString *text;
+@property (assign) NSInteger rwIndex;
+@property (retain, getter=text, setter=setText:) NSString *text;
 
-+ (ANTLRRewriteOperation *) newANTLRRewriteOperation:(NSInteger)index Text:(NSString *)text;
++ (ANTLRRewriteOperation *) newANTLRRewriteOperation:(NSInteger)anIndex Text:(NSString *)text;
 
 - (id) initWithIndex:(NSInteger)anIndex Text:(NSString *)theText;
 
 /** Execute the rewrite operation by possibly adding to the buffer.
- *  Return the index of the next token to operate on.
+ *  Return the rwIndex of the next token to operate on.
  */
 - (NSInteger) execute:(NSString *)buf;
 
@@ -79,7 +79,7 @@ NSString *text;
     NSInteger lastIndex;
 }
 
-@property (getter=getLastIndex, setter=setLastIndex:) NSInteger lastIndex;
+@property (assign) NSInteger lastIndex;
 
 + (ANTLRReplaceOp *) newANTLRReplaceOp:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString*)theText;
 - (id) initWithIndex:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString *)theText;
@@ -107,7 +107,7 @@ NSString *text;
  */
 ANTLRHashMap *programs;
 
-/** Map String (program name) -> Integer index */
+/** Map String (program name) -> Integer rwIndex */
 ANTLRHashMap *lastRewriteTokenIndexes;
 }
 
@@ -136,7 +136,7 @@ ANTLRHashMap *lastRewriteTokenIndexes;
 
 - (void) insertBeforeToken:(id<ANTLRToken>)t Text:(NSString *)theText;
 - (void) insertBeforeIndex:(NSInteger)anIndex Text:(NSString *)theText;
-- (void) insertBeforeProgName:(NSString *)programName Index:(NSInteger)index Text:(NSString *)theText;
+- (void) insertBeforeProgName:(NSString *)programName Index:(NSInteger)anIndex Text:(NSString *)theText;
 - (void) replaceFromIndex:(NSInteger)anIndex Text:(NSString *)theText;
 - (void) replaceFromIndex:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString *)theText;
 - (void) replaceFromToken:(id<ANTLRToken>)indexT Text:(NSString *)theText;

@@ -63,7 +63,7 @@
             break;
         case 1:
             if ( [(ANTLRTreeWizard *)actor _parse:t Pattern:object1/* tpattern */ Map:nil] ) {
-                [(NSMutableArray *)object2/* subtrees */ addObject:t];
+                [(AMutableArray *)object2/* subtrees */ addObject:t];
             }
             break;
     }
@@ -322,7 +322,7 @@
 }
 
 /** Return a List of tree nodes with token type ttype */
-- (NSMutableArray *)find:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype
+- (AMutableArray *)find:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype
 {
 #ifdef DONTUSENOMO
     final List nodes = new ArrayList();
@@ -332,16 +332,16 @@
         }
     } );
 #endif
-    NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:100];
+    AMutableArray *nodes = [AMutableArray arrayWithCapacity:100];
     ANTLRVisitor *contextVisitor = [ANTLRVisitor newANTLRVisitor:3 Actor:self Object:(id)nodes Object:nil];
     [self visit:t Type:ttype Visitor:contextVisitor];
     return nodes;
 }
 
 /** Return a List of subtrees matching pattern. */
-- (NSMutableArray *)find:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern
+- (AMutableArray *)find:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern
 {
-    NSMutableArray *subtrees = [NSMutableArray arrayWithCapacity:100];
+    AMutableArray *subtrees = [AMutableArray arrayWithCapacity:100];
     // Create a TreePattern from the pattern
     ANTLRTreePatternLexer *tokenizer = [ANTLRTreePatternLexer newANTLRTreePatternLexer:pattern];
     ANTLRTreePatternParser *parser = [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer
@@ -511,7 +511,7 @@
         if ( [adaptor getType:t1] != [tpattern getType] )
             return NO;
         // if pattern has text, check node text
-        if ( tpattern.hasTextArg && ![[adaptor getText:t1] isEqualToString:[tpattern getText]] ) {
+        if ( tpattern.hasTextArg && ![[adaptor getText:t1] isEqualToString:[tpattern text]] ) {
             return NO;
         }
     }
@@ -642,9 +642,9 @@
         return; // tokenType not of interest
     }
     NSInteger streamIndexI = streamIndex;
-    NSMutableArray *indexes = (NSMutableArray *)[tokenTypeToStreamIndexesMap objectAtIndex:tokenTypeI];
+    AMutableArray *indexes = (AMutableArray *)[tokenTypeToStreamIndexesMap objectAtIndex:tokenTypeI];
     if ( indexes==nil ) {
-        indexes = [NSMutableArray arrayWithCapacity:100]; // no list yet for this token type
+        indexes = [AMutableArray arrayWithCapacity:100]; // no list yet for this token type
         indexes.add(streamIndexI); // not there yet, add
         [tokenTypeToStreamIndexesMap put:tokenTypeI Idexes:indexes];
     }

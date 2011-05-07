@@ -43,7 +43,7 @@
 - (id<ANTLRToken>) getStop;
 
 /** Has a value potentially if output=AST; */
-- (id) getNode;
+- (id) getTree;
 
 /** Has a value potentially if output=template; Don't use StringTemplate
  *  type as it then causes a dependency with ST lib.

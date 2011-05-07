@@ -36,7 +36,7 @@
     NSNumber *index;
 }
 
-@property (retain, getter=getIndex, setter=setIndex:) NSNumber *index;
+@property (retain) NSNumber *index;
 
 + (id) newANTLRBaseMapElement;
 + (id) newANTLRBaseMapElementWithIndex:(NSNumber *)anIdx;
@@ -44,9 +44,6 @@
 - (id) initWithAnIndex:(NSNumber *)anIdx;
 
 - (id) copyWithZone:(NSZone *)aZone;
-
-- (NSNumber *)getIndex;
-- (void)setIndex:(NSNumber *)anIdx;
 
 - (NSInteger)count;
 - (NSInteger)size;

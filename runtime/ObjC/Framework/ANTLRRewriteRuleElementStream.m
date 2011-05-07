@@ -103,17 +103,15 @@
         dirty = NO;
         singleElement = nil;
         isSingleElement = NO;
-        elements = [[NSMutableArray alloc] initWithArray:theElements];
+        elements = [[AMutableArray arrayWithArray:theElements] retain];
     }
     return self;
 }
 
 - (void) dealloc
 {
-    if (isSingleElement)
-        [singleElement release];
-    else
-        [elements release];
+    if ( singleElement && isSingleElement ) [singleElement release];
+    else if ( elements && !isSingleElement ) [elements release];
     [self setDescription:nil];
     [self setTreeAdaptor:nil];
     [super dealloc];
@@ -133,9 +131,9 @@
 - (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
-        [treeAdaptor release];
-        [treeAdaptor retain];
+        if ( treeAdaptor ) [treeAdaptor release];
         treeAdaptor = aTreeAdaptor;
+        [treeAdaptor retain];
     }
 }
 
@@ -153,7 +151,7 @@
         return;
     }
     isSingleElement = NO;
-    elements = [[NSMutableArray arrayWithCapacity:5] retain];
+    elements = [[AMutableArray arrayWithCapacity:5] retain];
     [elements addObject:singleElement];
     singleElement = nil;  // balance previous retain in initializer/addElement
     [elements addObject:anElement];
@@ -173,7 +171,7 @@
         return;
     }
     isSingleElement = NO;
-    elements = [[NSMutableArray arrayWithCapacity:5] retain];
+    elements = [[AMutableArray arrayWithCapacity:5] retain];
     [elements addObject:singleElement];
     singleElement = nil;  // balance previous retain in initializer/addElement
     [elements addObject:anElement];

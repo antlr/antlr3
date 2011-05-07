@@ -36,6 +36,7 @@
 #import "ANTLRLookaheadStream.h"
 #import "ANTLRTreeIterator.h"
 #import "ANTLRIntArray.h"
+#import "AMutableArray.h"
 
 #define DEFAULT_INITIAL_BUFFER_SIZE 100
 #define INITIAL_CALL_STACK_SIZE 10
@@ -44,8 +45,8 @@
 @interface ANTLRStreamIterator : ANTLRTreeIterator
 {
     NSInteger idx;
-    ANTLRBufferedTreeNodeStream input;
-    NSMutableArray *nodes;
+    ANTLRBufferedTreeNodeStream *input;
+    AMutableArray *nodes;
 }
 
 + (id) newANTLRStreamIterator:(ANTLRBufferedTreeNodeStream *) theStream;
@@ -60,19 +61,19 @@
 
 @interface ANTLRBufferedTreeNodeStream : NSObject <ANTLRTreeNodeStream> 
 {
-	id<ANTLRBaseTree> up;
-	id<ANTLRBaseTree> down;
-	id<ANTLRBaseTree> eof;
+	id up;
+	id down;
+	id eof;
 	
-	NSMutableArray *nodes;
+	AMutableArray *nodes;
 	
-	id<ANTLRBaseTree> root; // root
+	id root; // root
 	
 	id<ANTLRTokenStream> tokens;
 	ANTLRCommonTreeAdaptor *adaptor;
 	
 	BOOL uniqueNavigationNodes;
-	NSInteger p;
+	NSInteger index;
 	NSInteger lastMarker;
 	ANTLRIntArray *calls;
 	
@@ -81,36 +82,36 @@
 	
 }
 
-@property (retain, getter=getUp, setter=setUp:) id<ANTLRBaseTree> up;
-@property (retain, getter=getDown, setter=setDown:) id<ANTLRBaseTree> down;
-@property (retain, getter=getEof, setter=setEof:) id<ANTLRBaseTree> eof;
-@property (retain, getter=getNodes, setter=setNodes:) NSMutableArray *nodes;
-@property (retain, getter=getTreeSource, setter=setTreeSource:) id<ANTLRBaseTree> root;
+@property (retain, getter=getUp, setter=setUp:) id up;
+@property (retain, getter=getDown, setter=setDown:) id down;
+@property (retain, getter=eof, setter=setEof:) id eof;
+@property (retain, getter=getNodes, setter=setNodes:) AMutableArray *nodes;
+@property (retain, getter=getTreeSource, setter=setTreeSource:) id root;
 @property (retain, getter=getTokenStream, setter=setTokenStream:) id<ANTLRTokenStream> tokens;
 @property (retain, getter=getAdaptor, setter=setAdaptor:) ANTLRCommonTreeAdaptor *adaptor;
 @property (assign, getter=getUniqueNavigationNodes, setter=setUniqueNavigationNodes:) BOOL uniqueNavigationNodes;
-@property (assign, getter=getIndex, setter=setIndex:) NSInteger p;
+@property (assign) NSInteger index;
 @property (assign, getter=getLastMarker, setter=setLastMarker:) NSInteger lastMarker;
 @property (retain, getter=getCalls, setter=setCalls:) ANTLRIntArray *calls;
 @property (retain, getter=getEnum, setter=setEnum:) NSEnumerator *e;
 @property (retain, getter=getCurrentSymbol, setter=setCurrentSymbol:) id currentSymbol;
 
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRBaseTree>)tree;
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(id<ANTLRBaseTree>)tree;
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(id<ANTLRBaseTree>)tree withBufferSize:(NSInteger)initialBufferSize;
++ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(ANTLRCommonTree *)tree;
++ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(ANTLRCommonTree *)tree;
++ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(ANTLRCommonTree *)tree withBufferSize:(NSInteger)initialBufferSize;
 
 #pragma mark Constructor
-- (id) initWithTree:(id<ANTLRBaseTree>)tree;
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(id<ANTLRBaseTree>)tree;
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(id<ANTLRBaseTree>)tree WithBufferSize:(NSInteger)bufferSize;
+- (id) initWithTree:(ANTLRCommonTree *)tree;
+- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree;
+- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree WithBufferSize:(NSInteger)bufferSize;
 
 - (id) copyWithZone:(NSZone *)aZone;
 
 // protected methods. DO NOT USE
 #pragma mark Protected Methods
 - (void) fillBuffer;
-- (void) fillBufferWithTree:(id<ANTLRBaseTree>) tree;
-- (NSInteger) getNodeIndex:(id<ANTLRBaseTree>) node;
+- (void) fillBufferWithTree:(ANTLRCommonTree *) tree;
+- (NSInteger) getNodeIndex:(ANTLRCommonTree *) node;
 - (void) addNavigationNode:(NSInteger) type;
 - (id) getNode:(NSUInteger) i;
 - (id) LT:(NSInteger) k;
@@ -131,8 +132,6 @@
 - (NSInteger) LA:(NSInteger) i;
 - (NSInteger) mark;
 - (void) release:(NSInteger) marker;
-- (NSInteger) getIndex;
-- (void) setIndex:(NSInteger) idx;
 - (void) rewind:(NSInteger) marker;
 - (void) rewind;
 - (void) seek:(NSInteger) idx;
@@ -150,7 +149,8 @@
 - (NSString *) toStringFromNode:(id)aStart ToNode:(id)aStop;
 
 // getters and setters
-- (NSMutableArray *) getNodes;
-- (id<ANTLRBaseTree>) getEof;
+- (AMutableArray *) getNodes;
+- (id) eof;
+- (void)setEof:(id)anEOF;
 
 @end

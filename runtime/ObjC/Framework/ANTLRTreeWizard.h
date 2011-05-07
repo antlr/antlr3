@@ -34,6 +34,7 @@
 #import "ANTLRCommonTree.h"
 #import "ANTLRMapElement.h"
 #import "ANTLRMap.h"
+#import "AMutableArray.h"
 
 @class ANTLRVisitor;
 
@@ -116,7 +117,7 @@
 - (NSInteger)getTokenType:(NSString *)tokenName;
 - (ANTLRMap *)index:(id<ANTLRBaseTree>)t;
 - (void) _index:(id<ANTLRBaseTree>)t Map:(ANTLRMap *)m;
-- (NSMutableArray *)find:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
+- (AMutableArray *)find:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
 - (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Type:(NSInteger)ttype;
 - (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern;
 - (void) visit:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype Visitor:(ANTLRVisitor *)visitor;

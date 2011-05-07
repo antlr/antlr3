@@ -79,11 +79,9 @@
  */
 - (NSString *)getErrorHeader:(ANTLRRecognitionException *)e;
 
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(NSMutableArray *) tokenNames;
+- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *) tokenNames;
 
 - (void) traceIn:(NSString *)ruleName Index:(NSInteger)ruleIndex;
 - (void) traceOut:(NSString *)ruleName Index:(NSInteger)ruleIndex;
-
-
 
 @end

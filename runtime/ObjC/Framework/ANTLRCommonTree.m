@@ -29,46 +29,38 @@
 
 @implementation ANTLRCommonTree
 
-/*
-@synthesize token;
-@synthesize startIndex;
-@synthesize stopIndex;
-@synthesize parent;
-@synthesize childIndex;
-*/
-
-+ (id<ANTLRBaseTree>)INVALID_NODE
++ (ANTLRCommonTree *)INVALID_NODE
 {
 	return [[ANTLRCommonTree alloc] initWithToken:[ANTLRCommonToken invalidToken]];
 }
 
-+ (id<ANTLRBaseTree>)invalidNode
++ (ANTLRCommonTree *)invalidNode
 {
-    // Had to cast to id<ANTLRBaseTree> here, because GCC is dumb.
+    // Had to cast to ANTLRCommonTree * here, because GCC is dumb.
 	return [[ANTLRCommonTree alloc] initWithToken:ANTLRCommonToken.INVALID_TOKEN];
 }
 
-+ (id<ANTLRBaseTree>)newTree
++ (ANTLRCommonTree *)newTree
 {
     return [[ANTLRCommonTree alloc] init];
 }
 
-+ (id<ANTLRBaseTree>)newTreeWithTree:(id<ANTLRBaseTree>)aTree
++ (ANTLRCommonTree *)newTreeWithTree:(ANTLRCommonTree *)aTree
 {
     return [[ANTLRCommonTree alloc] initWithTreeNode:aTree];
 }
 
-+ (id<ANTLRBaseTree>)newTreeWithToken:(id<ANTLRToken>)aToken
++ (ANTLRCommonTree *)newTreeWithToken:(id<ANTLRToken>)aToken
 {
 	return [[ANTLRCommonTree alloc] initWithToken:aToken];
 }
 
-+ (id<ANTLRBaseTree>)newTreeWithTokenType:(NSInteger)aTType
++ (ANTLRCommonTree *)newTreeWithTokenType:(NSInteger)aTType
 {
 	return [[ANTLRCommonTree alloc] initWithTokenType:(NSInteger)aTType];
 }
 
-+ (id<ANTLRBaseTree>)newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText
++ (ANTLRCommonTree *)newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText
 {
 	return [[ANTLRCommonTree alloc] initWithTokenType:(NSInteger)aTType Text:theText];
 }
@@ -83,10 +75,10 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (id<ANTLRBaseTree>)self;
+	return (ANTLRCommonTree *)self;
 }
 
-- (id)initWithTreeNode:(id<ANTLRBaseTree>)aNode
+- (id)initWithTreeNode:(ANTLRCommonTree *)aNode
 {
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
@@ -96,7 +88,7 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (id<ANTLRBaseTree>)self;
+	return self;
 }
 
 - (id)initWithToken:(id<ANTLRToken>)aToken
@@ -109,7 +101,7 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (id<ANTLRBaseTree>)self;
+	return self;
 }
 
 - (id)initWithTokenType:(NSInteger)aTokenType
@@ -124,7 +116,7 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (id<ANTLRBaseTree>)self;
+	return self;
 }
 
 - (id) initWithTokenType:(NSInteger)aTokenType Text:(NSString *)theText
@@ -139,7 +131,7 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (id<ANTLRBaseTree>)self;
+	return self;
 }
 
 - (void) dealloc
@@ -176,13 +168,13 @@
 - (void) setToken:(ANTLRCommonToken *) aToken
 {
 	if (token != aToken) {
-		[aToken retain];
 		[token release];
 		token = aToken;
+		[token retain];
 	}
 }
 
-- (id<ANTLRBaseTree>) dupNode
+- (ANTLRCommonTree *) dupNode
 {
     return [ANTLRCommonTree newTreeWithTree:self ];
 }
@@ -194,31 +186,31 @@
 	return ANTLRTokenTypeInvalid;
 }
 
-- (NSString *) getText
+- (NSString *) text
 {
 	if (token)
-		return [token getText];
+		return [token text];
 	return nil;
 }
 
-- (NSUInteger) getLine
+- (NSUInteger) line
 {
 	if (token)
-		return [token getLine];
+		return token.line;
 	return 0;
 }
 
-- (NSUInteger) getCharPositionInLine
+- (NSUInteger) charPositionInLine
 {
 	if (token)
-		return [token getCharPositionInLine];
+		return token.charPositionInLine;
 	return 0;
 }
 
 - (void) setCharPositionInLine:(int)pos
 {
     if (token)
-        [token setCharPositionInLine:pos];
+        token.charPositionInLine = pos;
 }
 
 - (NSInteger) getTokenStartIndex
@@ -295,14 +287,14 @@
     return childIndex;
 }
 
-- (id<ANTLRBaseTree>) getParent
+- (ANTLRCommonTree *) getParent
 {
     return parent;
 }
 
-- (void) setParent:(id<ANTLRBaseTree>) t
+- (void) setParent:(ANTLRCommonTree *) t
 {
-    parent = (id<ANTLRBaseTree>)t;
+    parent = t;
 }
 
 - (void) setChildIndex:(NSInteger) anIndex
@@ -326,7 +318,13 @@
     if ( token==nil ) {
         return nil;
     }
-    return [token getText];
+    return token.text;
 }
+
+@synthesize token;
+@synthesize startIndex;
+@synthesize stopIndex;
+@synthesize parent;
+@synthesize childIndex;
 
 @end

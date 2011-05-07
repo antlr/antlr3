@@ -62,21 +62,21 @@
 {
 	if ((self = [super initWithName:NSStringFromClass([self class]) reason:aReason userInfo:nil]) != nil) {
 		[self setStream:anInputStream];
-		index = [anInputStream getIndex];
+		index = input.index;
 		
 		Class inputClass = [input class];
 		if ([inputClass conformsToProtocol:@protocol(ANTLRTokenStream)]) {
 			[self setToken:[(id<ANTLRTokenStream>)input LT:1]];
-			line = [token getLine];
-			charPositionInLine = [token getCharPositionInLine];
+			line = token.line;
+			charPositionInLine = token.charPositionInLine;
 		} else if ([inputClass conformsToProtocol:@protocol(ANTLRCharStream)]) {
 			c = (unichar)[input LA:1];
-			line = [(id<ANTLRCharStream>)input getLine];
-			charPositionInLine = [(id<ANTLRCharStream>)input getCharPositionInLine];
+			line = (id<ANTLRCharStream>)input.line;
+			charPositionInLine = (id<ANTLRCharStream>)input.charPositionInLine;
 		} else if ([inputClass conformsToProtocol:@protocol(ANTLRTreeNodeStream)]) {
 			[self setNode:[(id<ANTLRTreeNodeStream>)input LT:1]];
-			line = [node getLine];
-			charPositionInLine = [node getCharPositionInLine];
+			line = [node line];
+			charPositionInLine = [node charPositionInLine];
 		} else {
 			c = (unichar)[input LA:1];
 		}
@@ -148,7 +148,7 @@
 {
     if (input != aStream) {
         [aStream retain];
-        [input release];
+        if ( input ) [input release];
         input = aStream;
     }
 }
@@ -165,7 +165,7 @@
 {
     if (token != aToken) {
         [aToken retain];
-        [token release];
+        if ( token ) [token release];
         token = aToken;
     }
 }
@@ -182,7 +182,7 @@
 {
     if (node != aNode) {
         [aNode retain];
-        [node release];
+        if ( node ) [node release];
         node = aNode;
     }
 }
@@ -192,12 +192,12 @@
     return @"Fix getMessage in ANTLRRecognitionException";
 }
 
-- (NSInteger)getCharPositionInLine
+- (NSUInteger)charPositionInLine
 {
     return charPositionInLine;
 }
 
-- (void)setCharPositionInLine:(NSInteger)aPos
+- (void)setCharPositionInLine:(NSUInteger)aPos
 {
     charPositionInLine = aPos;
 }

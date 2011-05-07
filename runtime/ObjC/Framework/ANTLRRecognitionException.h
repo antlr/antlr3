@@ -37,15 +37,17 @@
 	id<ANTLRToken> token;
 	id<ANTLRBaseTree> node;
 	unichar c;
-	NSInteger line;
-	NSInteger charPositionInLine;
+	NSUInteger line;
+	NSUInteger charPositionInLine;
 }
 
 @property (retain, getter=getStream, setter=setStream:) id<ANTLRIntStream> input;
+@property (assign) NSInteger index;
 @property (retain, getter=getToken, setter=setToken:) id<ANTLRToken>token;
 @property (retain, getter=getNode, setter=setNode:) id<ANTLRBaseTree>node;
-@property (getter=getLine, setter=setLine:) NSInteger line;
-@property (getter=getCharPositionInLine, setter=setCharPositionInLine:) NSInteger charPositionInLine;
+@property (assign) unichar c;
+@property (assign) NSUInteger line;
+@property (assign) NSUInteger charPositionInLine;
 
 + (id) newException;
 + (id) newException:(id<ANTLRIntStream>) anInputStream; 
@@ -68,9 +70,5 @@
 
 - (NSString *)getMessage;
 
-- (NSInteger)getCharPositionInLine;
-- (void)setCharPositionInLine:(NSInteger)aPos;
 
-@property NSInteger index;
-@property unichar c;
 @end

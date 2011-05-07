@@ -81,7 +81,6 @@
 - (id<ANTLRToken>) getToken:(NSInteger)i;
 
 - (NSInteger) size;
-- (NSInteger) getIndex;
 - (void) rewind;
 - (void) rewind:(NSInteger)marker;
 - (void) seek:(NSInteger)index;

@@ -60,8 +60,8 @@
 {
     NSUInteger idx;
     
-	self = [super init];
-	if ( self != nil ) {
+    self = [super init];
+    if ( self != nil ) {
         BuffSize  = BUFFSIZE;
         ptr = 0;
         buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
@@ -69,7 +69,8 @@
         for( idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
         }
-	}
+        count = 0;
+    }
     return( self );
 }
 
@@ -77,8 +78,8 @@
 {
     NSUInteger idx;
     
-	self = [super init];
-	if ( self != nil ) {
+    self = [super init];
+    if ( self != nil ) {
         BuffSize  = cnt;
         ptr = 0;
         buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
@@ -86,7 +87,8 @@
         for( idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
         }
-	}
+        count = 0;
+    }
     return( self );
 }
 
@@ -94,7 +96,7 @@
 {
     ANTLRLinkBase *tmp, *rtmp;
     NSInteger idx;
-	
+    
     if ( self.fNext != nil ) {
         for( idx = 0; idx < BuffSize; idx++ ) {
             tmp = ptrBuffer[idx];
@@ -109,7 +111,7 @@
         }
     }
     [buffer release];
-	[super dealloc];
+    [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
@@ -141,11 +143,12 @@
         }
         ptrBuffer[idx] = nil;
     }
+    count = 0;
 }
 
 - (NSMutableData *)getBuffer
 {
-	return( buffer );
+    return( buffer );
 }
 
 - (void)setBuffer:(NSMutableData *)np
@@ -155,7 +158,7 @@
 
 - (NSUInteger)getCount
 {
-	return( count );
+    return( count );
 }
 
 - (void)setCount:(NSUInteger)aCount
@@ -165,7 +168,7 @@
 
 - (id *)getPtrBuffer
 {
-	return( ptrBuffer );
+    return( ptrBuffer );
 }
 
 - (void)setPtrBuffer:(id *)np
@@ -175,7 +178,7 @@
 
 - (NSUInteger)getPtr
 {
-	return( ptr );
+    return( ptr );
 }
 
 - (void)setPtr:(NSUInteger)aPtr
@@ -185,9 +188,9 @@
 
 - (void) addObject:(id) v
 {
-	[self ensureCapacity:ptr];
-    [v retain];
-	ptrBuffer[ptr++] = v;
+    [self ensureCapacity:ptr];
+    if ( v ) [v retain];
+    ptrBuffer[ptr++] = v;
     count++;
 }
 
@@ -196,34 +199,35 @@
     if ( ptr >= BuffSize - 1 ) {
         [self ensureCapacity:ptr];
     }
-    [v retain];
+    if ( v ) [v retain];
     ptrBuffer[ptr++] = v;
     count++;
 }
 
 - (id) pop
 {
-	id v = nil;
+    id v = nil;
     if ( ptr > 0 ) {
         v = ptrBuffer[--ptr];
         ptrBuffer[ptr] = nil;
     }
     count--;
-    [v release];
-	return v;
+    if ( v ) [v release];
+    return v;
 }
 
 - (id) peek
 {
-	id v = nil;
+    id v = nil;
     if ( ptr > 0 ) {
         v = ptrBuffer[ptr-1];
     }
-	return v;
+    return v;
 }
 
 - (NSUInteger)count
 {
+#ifdef DONTUSENOMO
     int cnt = 0;
     
     for (NSInteger i = 0; i < BuffSize; i++ ) {
@@ -231,8 +235,9 @@
             cnt++;
         }
     }
-    if (cnt != count) count = cnt;
-    return cnt;
+    if ( cnt != count ) count = cnt;
+#endif
+    return count;
 }
 
 - (NSUInteger)length
@@ -257,10 +262,11 @@
         [self ensureCapacity:idx];
     }
     if ( aRule != ptrBuffer[idx] ) {
-        if ( ptrBuffer[idx] != nil ) [ptrBuffer[idx] release];
-        [aRule retain];
+        if ( ptrBuffer[idx] ) [ptrBuffer[idx] release];
+        if ( aRule ) [aRule retain];
     }
     ptrBuffer[idx] = aRule;
+    count++;
 }
 
 - (id)objectAtIndex:(NSUInteger)idx
@@ -277,10 +283,10 @@
     cnt = [anArray count];
     for( i = 0; i < cnt; i++) {
         id tmp = [anArray objectAtIndex:i];
-        if (tmp != nil)
-            [tmp retain];
+        if ( tmp ) [tmp retain];
         [self insertObject:tmp atIndex:i];
     }
+    count += cnt;
     return;
 }
 
@@ -288,7 +294,7 @@
 {
     int i;
     for ( i = 0; i < BuffSize; i++ ) {
-        if ( ptrBuffer[i] != nil ) [ptrBuffer[i] release];
+        if ( ptrBuffer[i] ) [ptrBuffer[i] release];
         ptrBuffer[i] = nil;
     }
     count = 0;
@@ -299,7 +305,7 @@
 {
     int i;
     if ( idx >= 0 && idx < count ) {
-        if ( ptrBuffer[idx] != nil ) [ptrBuffer[idx] release];
+        if ( ptrBuffer[idx] ) [ptrBuffer[idx] release];
         for ( i = idx; i < count-1; i++ ) {
             ptrBuffer[i] = ptrBuffer[i+1];
         }
@@ -310,16 +316,16 @@
 
 - (void) ensureCapacity:(NSUInteger) anIndex
 {
-	if ((anIndex * sizeof(id)) >= [buffer length])
-	{
-		NSInteger newSize = ([buffer length] / sizeof(id)) * 2;
-		if (anIndex > newSize) {
-			newSize = anIndex + 1;
-		}
+    if ((anIndex * sizeof(id)) >= [buffer length])
+    {
+        NSInteger newSize = ([buffer length] / sizeof(id)) * 2;
+        if (anIndex > newSize) {
+            newSize = anIndex + 1;
+        }
         BuffSize = newSize;
-		[buffer setLength:(BuffSize * sizeof(id))];
+        [buffer setLength:(BuffSize * sizeof(id))];
         ptrBuffer = [buffer mutableBytes];
-	}
+    }
 }
 
 - (NSString *) description
@@ -330,7 +336,7 @@
     str = [NSMutableString stringWithCapacity:30];
     [str appendString:@"["];
     for (idx = 0; idx < cnt; idx++ ) {
-        [str appendString:[[self objectAtIndex:idx] toString]];
+        [str appendString:[[self objectAtIndex:idx] description]];
     }
     [str appendString:@"]"];
     return str;

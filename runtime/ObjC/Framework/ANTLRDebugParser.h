@@ -33,6 +33,16 @@
 	id<ANTLRDebugEventListener> debugListener;
 }
 
++ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
+        debugListener:(id<ANTLRDebugEventListener>)debugListener;
+
++ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
+                state:(ANTLRRecognizerSharedState *)state;
+
++ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
+        debugListener:(id<ANTLRDebugEventListener>)debugListener
+                state:(ANTLRRecognizerSharedState *)state;
+
 - (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream;
 - (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
 			  debuggerPort:(NSInteger)portNumber;

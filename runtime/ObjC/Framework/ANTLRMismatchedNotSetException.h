@@ -35,16 +35,16 @@
 
 @interface ANTLRMismatchedNotSetException : ANTLRRecognitionException
 {
-    ANTLRBitSet *expecting;
+    NSString *expecting;
 }
-@property (retain, getter=getExpecting, setter=setExpecting:) ANTLRBitSet *expecting;
+@property (retain, getter=getExpecting, setter=setExpecting:) NSString *expecting;
 
 - (ANTLRMismatchedNotSetException *)newException;
 - (ANTLRMismatchedNotSetException *)newException:(id<ANTLRIntStream>)anInput
-                                                               Follow:(ANTLRBitSet *)expecting;
+                                                               Follow:(NSString *)expecting;
 
 - (id) init;
-- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(ANTLRBitSet *)expecting;
+- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(NSString *)expecting;
 
 - (NSString *)toString;
 

@@ -29,7 +29,7 @@
 
 @implementation ANTLRParserRuleReturnScope
 
-@synthesize startToken;
+@synthesize start;
 @synthesize stopToken;
 
 - (void) dealloc
@@ -41,15 +41,15 @@
 
 - (id<ANTLRToken>) getStart
 {
-    return startToken; 
+    return start; 
 }
 
 - (void) setStart: (id<ANTLRToken>) aStart
 {
-    if (startToken != aStart) {
+    if (start != aStart) {
         [aStart retain];
-        [startToken release];
-        startToken = aStart;
+        if ( start ) [start release];
+        start = aStart;
     }
 }
 
@@ -62,7 +62,7 @@
 {
     if (stopToken != aStop) {
         [aStop retain];
-        [stopToken release];
+        if ( stopToken ) [stopToken release];
         stopToken = aStop;
     }
 }
@@ -72,7 +72,7 @@
 - (id) copyWithZone:(NSZone *)theZone
 {
     ANTLRParserRuleReturnScope *copy = [super copyWithZone:theZone];
-    copy.startToken = startToken;
+    copy.start = start;
     copy.stopToken = stopToken;
     return copy;
 }

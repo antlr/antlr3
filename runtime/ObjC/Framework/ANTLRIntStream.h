@@ -42,7 +42,11 @@
 // Return the current input symbol index 0..n where n indicates the
 // last symbol has been read.
 
-- (NSInteger) getIndex;
+- (NSInteger) index;
+
+- (NSUInteger) line;
+
+- (NSUInteger) charPositionInLine;
 
 // Reset the stream so that next call to index would return marker.
 // The marker will usually be -index but it doesn't have to be.  It's
@@ -77,7 +81,7 @@
 // Currently, this method is only used for efficient backtracking, but
 // in the future it may be used for incremental parsing.
 
-- (void) seek:(NSInteger) index;
+- (void) seek:(NSInteger) anIndex;
 
 /** Only makes sense for streams that buffer everything up probably, but
  *  might be useful to display the entire stream or for testing.  This
@@ -89,5 +93,10 @@
  *  for the file name or whatever.
  */
 - (NSString *)getSourceName;
+
+//@property (assign) NSInteger index;
+//@property (assign) NSUInteger line;
+//@property (assign) NSUInteger charPositionInLine;
+
 
 @end

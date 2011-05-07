@@ -29,10 +29,10 @@
 #import "ANTLRRuleReturnScope.h"
 
 @interface ANTLRParserRuleReturnScope : ANTLRRuleReturnScope {
-	id<ANTLRToken> startToken;
+	id<ANTLRToken> start;
 	id<ANTLRToken> stopToken;
 }
-@property (retain, getter=getStart, setter=setStart:) id<ANTLRToken> startToken;
+@property (retain, getter=getStart, setter=setStart:) id<ANTLRToken> start;
 @property (retain, getter=getStop, setter=setStop:)   id<ANTLRToken> stopToken;
 
 - (id<ANTLRToken>) getStart;
