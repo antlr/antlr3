@@ -27,16 +27,16 @@
 {
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:@"This is a string used for input"];
 	[stream consume];
-	STAssertTrue([stream getIndex] > 0, @"Index should be greater than 0 after consume");
+	STAssertTrue(stream.index > 0, @"Index should be greater than 0 after consume");
 	[stream reset];
-	STAssertTrue([stream getIndex] == 0, @"Index should be 0 after reset");
+	STAssertTrue(stream.index == 0, @"Index should be 0 after reset");
 	[stream release];
 }
 
 -(void) testConsumeWithNewLine
 {
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:@"This is a string\nused for input"];
-	while ([stream getIndex] < [stream size] && stream.line == 1)
+	while (stream.index < [stream size] && stream.line == 1)
 	{
 		[stream consume];
 	}
@@ -57,7 +57,7 @@
             break;
 		}
 	}
-	STAssertTrue(eofFound, @"EOF Was not found in stream, Length =%d, index = %d, i = %d", [stream size], [stream getIndex], i);
+	STAssertTrue(eofFound, @"EOF Was not found in stream, Length =%d, index = %d, i = %d", [stream size], stream.index, i);
 	[stream release];
 }
 
@@ -73,7 +73,7 @@
             break;
 		}
 	}
-	STAssertTrue(eofFound, @"EOF Was not found in stream, Length =%d, index = %d, i = %d", [stream size], [stream getIndex], i);
+	STAssertTrue(eofFound, @"EOF Was not found in stream, Length =%d, index = %d, i = %d", [stream size], stream.index, i);
 	[stream release];
 }
 
@@ -81,7 +81,7 @@
 {
 	ANTLRStringStream *stream =[ANTLRStringStream newANTLRStringStream:@"This is a string used for input"];
 	[stream seek:10];
-	STAssertTrue([stream getIndex] == 10, @"Index should be 10");
+	STAssertTrue(stream.index == 10, @"Index should be 10");
 	// Get char 10 which is s (with 0 being T)
 	STAssertTrue([stream LA:1] > -1 && (char)[stream LA:1] == 's', @"Char returned should be s");
 	[stream release];
@@ -92,16 +92,16 @@
 	ANTLRStringStream *stream =[ANTLRStringStream newANTLRStringStream:@"This is a string used for input"];
 	[stream mark];
 	[stream seek:10];
-	STAssertTrue([stream getIndex] == 10, @"Index should be 10");
+	STAssertTrue(stream.index == 10, @"Index should be 10");
 	[stream rewind];
-	STAssertTrue([stream getIndex] == 0, @"Index should be 0");
+	STAssertTrue(stream.index == 0, @"Index should be 0");
 	[stream seek:5];
-	STAssertTrue([stream getIndex] == 5, @"Index should be 5");
+	STAssertTrue(stream.index == 5, @"Index should be 5");
 	[stream mark]; // make a new marker to test a branch.
 	[stream seek:10];
-	STAssertTrue([stream getIndex] == 10, @"Index should be 10");
+	STAssertTrue(stream.index == 10, @"Index should be 10");
 	[stream rewind]; // should be marked to 5.
-	STAssertTrue([stream getIndex] == 5, @"Index should be 5");
+	STAssertTrue(stream.index == 5, @"Index should be 5");
 	[stream release];
 }
 
