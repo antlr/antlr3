@@ -15,14 +15,14 @@
 
 -(void) testInit
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue release];
 }
 
 -(void) testAddAndGet
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue addObject:@"My String"];
 	STAssertTrue([[queue objectAtIndex:0] isKindOfClass:[NSString class]], @"First object is not a NSString");
@@ -33,25 +33,26 @@
 
 -(void) testInvalidElementIndex
 {
-    //ANTLRRuntimeException *ANTLRNoSuchElementException = [ANTLRRuntimeException newANTLRNoSuchElementException:@"No such element exception"];
+    //ANTLRRuntimeException *ANTLRNoSuchElementException = [ANTLRNoSuchElementException newException:@"No such element exception"];
     id retVal;
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	@try 
 	{
 		retVal = [queue objectAtIndex:100];
 	}
-	@catch (ANTLRRuntimeException *e) 
+	@catch (ANTLRNoSuchElementException *e) 
 	{
 		STAssertTrue([[e name] isEqualTo:@"ANTLRNoSuchElementException"], @"Exception was not type: ANTLRNoSuchElementException -- %@", [e name]);
 		return;
 	}
 	STFail(@"Exception ANTLRNoSuchElementException was not thrown -- %@", [retVal name]);
+    [queue release];
 }
 
 -(void) testHead
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue addObject:@"Item 1"];
 	[queue addObject:@"Item 2"];
@@ -64,7 +65,7 @@
 
 -(void) testClear
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue addObject:@"Item 1"];
 	[queue addObject:@"Item 2"];
@@ -77,7 +78,7 @@
 
 -(void) testDescription
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue addObject:@"My"];
 	[queue addObject:@"String"];
@@ -87,7 +88,7 @@
 
 -(void) testRemove
 {
-	ANTLRFastQueue *queue = [ANTLRFastQueue newANTLRFastQueue];
+	ANTLRFastQueue *queue = [[ANTLRFastQueue newANTLRFastQueue] retain];
 	STAssertNotNil(queue, @"Queue was not created and was nil");
 	[queue addObject:@"My"];
 	[queue addObject:@"String"];
