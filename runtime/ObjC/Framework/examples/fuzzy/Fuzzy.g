@@ -36,12 +36,12 @@ CALL
 
 COMMENT
     :   '/*' (options {greedy=false;} : . )* '*/'
-        {NSLog(@"found comment \%@", [self getText]);}
+        {NSLog(@"found comment \%@", [self text]);}
     ;
 
 SL_COMMENT
     :   '//' (options {greedy=false;} : . )* '\n'
-        {NSLog(@"found // comment \%@", [self getText]);}
+        {NSLog(@"found // comment \%@", [self text]);}
     ;
 	
 STRING
