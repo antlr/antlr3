@@ -1,10 +1,10 @@
-// $ANTLR 3.2 Aug 24, 2010 10:45:57 TestLexer.g 2010-08-24 13:53:39
+// $ANTLR ${project.version} ${buildNumber} TestLexer.g 2011-05-06 19:16:22
 
 /* =============================================================================
  * Standard antlr3 OBJC runtime definitions
  */
 #import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
  */
@@ -14,19 +14,26 @@
 #pragma mark Rule return scopes start
 #pragma mark Rule return scopes end
 #pragma mark Tokens
-#define DIGIT 5
-#define ID 6
+#ifdef EOF
+#undef EOF
+#endif
 #define EOF -1
-#define LETTER 4
+#define DIGIT 4
+#define ID 5
+#define LETTER 6
+/* interface lexer class */
 @interface TestLexer : ANTLRLexer { // line 283
-// start of actions.lexer.memVars
-// start of action-actionScope-memVars
+/* ObjC start of actions.lexer.memVars */
+/* ObjC end of actions.lexer.memVars */
 }
++ (void) initialize;
 + (TestLexer *)newTestLexerWithCharStream:(id<ANTLRCharStream>)anInput;
-
-- (void)mID; 
-- (void)mDIGIT; 
-- (void)mLETTER; 
-- (void)mTokens; 
+/* ObjC start actions.lexer.methodsDecl */
+/* ObjC end actions.lexer.methodsDecl */
+- (void) mID ; 
+- (void) mDIGIT ; 
+- (void) mLETTER ; 
+- (void) mTokens ; 
 
 @end /* end of TestLexer interface */
+
