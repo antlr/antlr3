@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesStackState
+   version = "1.0">
+   <StackStates>
+      <StackState
+         stackFrameDescription = "-[ACBTree insertkey:value:]:ACBTree.m">
+         <expressions>
+         </expressions>
+      </StackState>
+      <StackState
+         stackFrameDescription = "-[ACBTree internalinsert:value:split:]:ACBTree.m">
+         <expressions>
+         </expressions>
+      </StackState>
+      <StackState
+         stackFrameDescription = "-[ACBTree insert:value:index:split:]:ACBTree.m">
+         <expressions>
+            <expression
+               value = "NSString">
+            </expression>
+         </expressions>
+      </StackState>
+      <StackState
+         stackFrameDescription = "-[TestDictionary test04remove]:TestDictionary.m">
+         <expressions>
+         </expressions>
+      </StackState>
+   </StackStates>
+</VariablesStackState>
