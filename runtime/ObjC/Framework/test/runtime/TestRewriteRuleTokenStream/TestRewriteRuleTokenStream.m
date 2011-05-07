@@ -36,10 +36,10 @@
     treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
     stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
                                                           description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newANTLRCommonToken:5];
-    token2 = [ANTLRCommonToken newANTLRCommonToken:6];
-    token3 = [ANTLRCommonToken newANTLRCommonToken:7];
-    token4 = [ANTLRCommonToken newANTLRCommonToken:8];
+    token1 = [ANTLRCommonToken newToken:5];
+    token2 = [ANTLRCommonToken newToken:6];
+    token3 = [ANTLRCommonToken newToken:7];
+    token4 = [ANTLRCommonToken newToken:8];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     [token3 setText:@"token 3"];
@@ -71,8 +71,8 @@
     treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
     stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
                                                              description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newANTLRCommonToken:5];
-    token2 = [ANTLRCommonToken newANTLRCommonToken:6];
+    token1 = [ANTLRCommonToken newToken:5];
+    token2 = [ANTLRCommonToken newToken:6];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     STAssertTrue([stream size] == 0,
@@ -91,10 +91,10 @@
     treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
     stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
                                                              description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newANTLRCommonToken:5];
-    token2 = [ANTLRCommonToken newANTLRCommonToken:6];
-    token3 = [ANTLRCommonToken newANTLRCommonToken:7];
-    token4 = [ANTLRCommonToken newANTLRCommonToken:8];
+    token1 = [ANTLRCommonToken newToken:5];
+    token2 = [ANTLRCommonToken newToken:6];
+    token3 = [ANTLRCommonToken newToken:7];
+    token4 = [ANTLRCommonToken newToken:8];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     [token3 setText:@"token 3"];
