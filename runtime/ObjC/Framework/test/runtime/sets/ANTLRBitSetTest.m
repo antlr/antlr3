@@ -26,7 +26,7 @@
 
 -(void) testWithBitArray
 {
-	NSMutableArray *bits = [NSMutableArray arrayWithCapacity:10];
+	AMutableArray *bits = [AMutableArray arrayWithCapacity:10];
 	[bits addObject:[NSNumber numberWithBool:YES]];
 	[bits addObject:[NSNumber numberWithBool:YES]];
 	[bits addObject:[NSNumber numberWithBool:NO]];
