@@ -14,12 +14,12 @@
 
 }
 
--(void) testGetEOFToken;
--(void) testInitAndRelease;
--(void) testInitWithTokenType;
--(void) testInitWithTokenTypeAndText;
--(void) testInitWithCharStream;
--(void) testInitWithToken;
--(void) testTokenDescription;
+-(void) test01InitAndRelease;
+-(void) test02GetEOFToken;
+-(void) test03InitWithTokenType;
+-(void) test04InitWithTokenTypeAndText;
+-(void) test05InitWithCharStream;
+-(void) test06InitWithToken;
+-(void) test07TokenDescription;
 
 @end
