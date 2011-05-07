@@ -1,89 +1,126 @@
-// $ANTLR 3.2 Aug 24, 2010 10:45:57 SimpleCTP.g 2010-08-25 11:11:23
+// $ANTLR ${project.version} ${buildNumber} SimpleCTP.g 2011-05-06 15:09:28
 
 /* =============================================================================
  * Standard antlr3 OBJC runtime definitions
  */
 #import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
  */
 
 /* treeParserHeaderFile */
+#ifndef ANTLR3TokenTypeAlreadyDefined
+#define ANTLR3TokenTypeAlreadyDefined
+typedef enum {
+    ANTLR_EOF = -1,
+    INVALID,
+    EOR,
+    DOWN,
+    UP,
+    MIN
+} ANTLR3TokenType;
+#endif
+
 #pragma mark Tokens
-#define K_ID 11
-#define K_RCURLY 19
-#define K_RCURVE 14
-#define K_INT 25
-#define K_EQEQ 22
-#define K_FOR 20
-#define FUNC_HDR 6
-#define FUNC_DEF 8
+#ifdef EOF
+#undef EOF
+#endif
 #define EOF -1
-#define K_SEMICOLON 10
-#define K_INT_TYPE 15
-#define FUNC_DECL 7
-#define K_COMMA 13
-#define ARG_DEF 5
-#define K_LCURLY 18
+#define ARG_DEF 4
+#define BLOCK 5
+#define FUNC_DECL 6
+#define FUNC_DEF 7
+#define FUNC_HDR 8
+#define K_CHAR 9
+#define K_COMMA 10
+#define K_EQ 11
+#define K_EQEQ 12
+#define K_FOR 13
+#define K_ID 14
+#define K_INT 15
+#define K_INT_TYPE 16
+#define K_LCURLY 17
+#define K_LCURVE 18
+#define K_LT 19
+#define K_PLUS 20
+#define K_RCURLY 21
+#define K_RCURVE 22
+#define K_SEMICOLON 23
+#define K_VOID 24
+#define VAR_DEF 25
 #define WS 26
-#define K_EQ 21
-#define BLOCK 9
-#define K_LCURVE 12
-#define K_LT 23
-#define K_CHAR 16
-#define K_VOID 17
-#define VAR_DEF 4
-#define K_PLUS 24
 #pragma mark Dynamic Global Scopes
-@interface Symbols_Scope : ANTLRSymbolsScope {  /* globalAttributeScopeDecl */
+/* globalAttributeScopeInterface */
+@interface Symbols_Scope : ANTLRSymbolsScope {
 ANTLRCommonTree * tree;
+
 }
-/* start of properties */
+/* start of globalAttributeScopeInterface properties */
 
-@property (retain, getter=gettree, setter=settree:) ANTLRCommonTree * tree;
+@property (assign, getter=gettree, setter=settree:) ANTLRCommonTree * tree;
 
-/* end properties */
+/* end globalAttributeScopeInterface properties */
+
 
 + (Symbols_Scope *)newSymbols_Scope;
-/* start of iterated get and set functions */
+- (id) init;
+/* start of globalAttributeScopeInterface methodsDecl */
 
 - (ANTLRCommonTree *)gettree;
 - (void)settree:(ANTLRCommonTree *)aVal;
 
-/* End of iterated get and set functions */
+/* End of globalAttributeScopeInterface methodsDecl */
 
 @end /* end of Symbols_Scope interface */
 
 #pragma mark Dynamic Rule Scopes
 #pragma mark Rule Return Scopes start
-/* returnScopeInterface */
-@interface SimpleCTP_expr_return :ANTLRTreeRuleReturnScope { /* returnScopeInterface line 1806 */
- /* start of memVars() */
+/* returnScopeInterface SimpleCTP_expr_return */
+@interface SimpleCTP_expr_return :ANTLRTreeRuleReturnScope { /* returnScopeInterface line 1838 */
+ /* ObjC start of memVars() */
 }
- /* start properties */
+/* start properties */
 + (SimpleCTP_expr_return *)newSimpleCTP_expr_return;
 /* this is start of set and get methods */
   /* methodsDecl */
 @end /* end of returnScopeInterface interface */
 
-#pragma mark Rule return scopes end
+
+
+
+/* Interface grammar class */
 @interface SimpleCTP : ANTLRTreeParser { /* line 572 */
-// start of globalAttributeScopeMemVar
+/* ObjC start of ruleAttributeScopeMemVar */
+
+
+/* ObjC end of ruleAttributeScopeMemVar */
+/* ObjC start of globalAttributeScopeMemVar */
 /* globalAttributeScopeMemVar */
-ANTLRSymbolStack *gStack;
+//ANTLRSymbolStack *gStack;
+ANTLRSymbolStack *Symbols_stack;
 Symbols_Scope *Symbols_scope;
 
-// start of action-actionScope-memVars
-// start of ruleAttributeScopeMemVar
-
-
-// Start of memVars
+/* ObjC end of globalAttributeScopeMemVar */
+/* ObjC start of actions.(actionScope).memVars */
+/* ObjC end of actions.(actionScope).memVars */
+/* ObjC start of memVars */
+/* ObjC end of memVars */
 
  }
 
-// start of action-actionScope-methodsDecl
+/* ObjC start of actions.(actionScope).properties */
+/* ObjC end of actions.(actionScope).properties */
+/* ObjC start of properties */
+/* ObjC end of properties */
 
++ (void) initialize;
++ (id) newSimpleCTP:(id<ANTLRTreeNodeStream>)aStream;
+/* ObjC start of actions.(actionScope).methodsDecl */
+/* ObjC end of actions.(actionScope).methodsDecl */
+
+/* ObjC start of methodsDecl */
+/* ObjC end of methodsDecl */
 
 - (void)program; 
 - (void)declaration; 
@@ -100,3 +137,4 @@ Symbols_Scope *Symbols_scope;
 
 
 @end /* end of SimpleCTP interface */
+
