@@ -147,8 +147,8 @@ parserMethods() ::= <<
 - (void) setTree:(<ASTLabelType> *)aTree
 {
     if (tree != aTree) {
-        if (tree != nil) [tree release];
-        if (aTree != nil) [aTree retain];
+        if ( tree ) [tree release];
+        if ( aTree ) [aTree retain];
         tree = aTree;
     }
 }
@@ -483,8 +483,7 @@ rewriteImaginaryTokenRef(args,token,terminalOptions,elementIndex) ::= <<
 >>
 
 rewriteImaginaryTokenRefRoot(args,token,terminalOptions,elementIndex) ::= <<
-root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:<createImaginaryNode(tokenType=token, ...)>
-                                                       old:root_<treeLevel>];<\n>
+root_<treeLevel> = (<ASTLabelType> *)[treeAdaptor becomeRoot:<createImaginaryNode(tokenType=token, ...)> old:root_<treeLevel>];<\n>
 >>
 
 /** plain -> {foo} action */

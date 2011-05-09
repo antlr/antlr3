@@ -1,0 +1,232 @@
+/*
+ [The "BSD license"]
+ Copyright (c) 2005-2006 Terence Parr
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/** Template subgroup to add template rewrite output
+ *  If debugging, then you'll also get STDbg.stg loaded.
+ */
+
+@outputFile.imports() ::= <<
+<@super.imports()>
+import org.stringtemplate.v4.*;
+import java.util.HashMap;
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturnMembers() ::= <<
+/* ST returnScope.ruleReturnMembers -- empty */
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturn.memvars() ::= <<
+ST *st;
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturn.properties() ::= <<
+@property (retain) ST *st;
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturn.methodsDecl() ::= <<
+- (ST *)getTemplate;
+- (NSString *)toString;
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturn.synthesize() ::= <<
+@synthesize st;
+>>
+
+/** Add this to each rule's return value struct */
+@returnScope.ruleReturn.methods() ::= <<
+- (ST *)getTemplate { return st; }
+- (NSString *)toString { return st==nil?nil:[st render]; }
+>>
+
+@genericParser.members() ::= <<
+<@super.members()>
+STGroup *templateLib = [STGroup newSTGroup];
+
+- (void)setTemplateLib:(STGroup *)aTemplateLib
+{
+    self.templateLib = aTemplateLib;
+}
+
+- (STGroup *)getTemplateLib
+{
+    return templateLib;
+}
+>>
+
+@genericParserHeaderFile.memVars() ::= <<
+<@super.memVars()>
+/* ST genericParserHeaderFile.memVars -- empty now */
+STGroup *templateLib; /* ST -- really a part of STAttrMap */
+>>
+
+@genericParserHeaderFile.properties() ::= <<
+<@super.properties()>
+/* ST genericParser.properties */
+@property (retain, getter=getTemplateLib, setter=setTemplateLib:) STGroup *templateLib;
+>>
+
+@genericParserHeaderFile.methodsDecl() ::= <<
+<@super.methodsDecl()>
+/* ST genericParser.methodsDecl */
+- init;
+- (STGroup *) getTemplateLib;
+- (void) setTemplateLib:(STGroup *)aTemplateLib;
+@end
+>>
+
+@genericParser.synthesize() ::= <<
+<@super.synthesize()>
+/* ST genericParserImplementation.synthesize */
+@synthesize templateLib;
+>>
+
+@genericParser.methods() ::= <<
+<@super.methods()>
+/* ST genericParser.methods */
+
+- (STGroup *)getTemplateLib
+{
+    return templateLib;
+}
+
+- (void) setTemplateLib:(STGroup *)aTemplateLib
+{
+    templateLib = aTemplateLib;
+}
+
+>>
+
+@genericParser.members() ::= <<
+<@super.members()>
+STGroup *templateLib = [STGroup newSTGroup];
+
+- (STGroup *) getTemplateLib
+{
+  return templateLib;
+}
+
+- (void) setTemplateLib:(STGroup *) templateLib
+{
+  this.templateLib = templateLib;
+}
+
+/** x+=rule when output=template */
+ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
+<ruleRef(rule,label,elementIndex,args,scope)>
+<listLabel(label, { [<label> getTemplate]; })>
+>>
+
+rewriteTemplate(alts) ::= <<
+
+// TEMPLATE REWRITE
+<if(backtracking)>
+if ( <actions.(actionScope).synpredgate> ) {
+  <alts:rewriteTemplateAlt(); separator="else ">
+  <if(rewriteMode)><replaceTextInLine()><endif>
+}
+<else>
+<alts:rewriteTemplateAlt(); separator="else ">
+<if(rewriteMode)><replaceTextInLine()><endif>
+<endif>
+>>
+
+replaceTextInLine() ::= <<
+<if(TREE_PARSER)>
+    [([(TokenRewriteStream)input getTokenStream]) 
+    replaceFromIndex:[[input getTreeAdaptor] getTokenStartIndex:retval.start]
+    ToIndex:[[input getTreeAdaptor] getTokenStopIndex:retval.start]
+    Text:[retval.st render]];
+<else>
+    [((TokenRewriteStream)input) 
+    replaceFromIndex:[((Token)retval.start) getTokenIndex]
+    ToIndex:[input LT:-1] getTokenIndex]
+    Text:[retval.st render]];
+<endif>
+>>
+
+rewriteTemplateAlt(alt) ::= <<
+// <alt.description>
+<if(alt.pred)>
+if (<alt.pred>) {
+    retval.st = <alt.alt>;
+}<\n>
+<else>
+{
+    retval.st = <alt.alt>;
+}<\n>
+<endif>
+>>
+
+rewriteEmptyTemplate(alts) ::= <<
+nil;
+>>
+
+/** Invoke a template with a set of attribute name/value pairs.
+ *  Set the value of the rule's template *after* having set
+ *  the attributes because the rule's template might be used as
+ *  an attribute to build a bigger template; you get a self-embedded
+ *  template.
+ */
+rewriteExternalTemplate(name,args) ::= <%
+<if(args)><args:{a | [}><endif>
+[templateLib getInstanceOf:@"<name>"]
+  <if(args)><args:{a | add:@"<a.name>" value:<a.value>]}><endif>;
+%>
+
+/** expr is a string expression that says what template to load */
+rewriteIndirectTemplate(expr,args) ::= <%
+<if(args)><args:{a | [}><endif>
+[templateLib getInstanceOf:<expr>];
+<if(args)><args:{a | add:@"<a.name>" value:<a.value>]}><endif>;
+%>
+
+/** Invoke an inline template with a set of attribute name/value pairs */
+rewriteInlineTemplate(args, template) ::= <%
+<if(args)><args:{a | [}><endif>
+[ST newST:templateLib template:"<template>"]
+  <if(args)><args:{a |  add:@"<a.name>" <a.value>]}><endif>;
+%>
+
+/** plain -> {foo} action */
+rewriteAction(action) ::= <<
+<action>
+>>
+
+/** An action has %st.attrName=expr; or %{st}.attrName=expr; */
+actionSetAttribute(st,attrName,expr) ::= <<
+[(<st>) setAttribute:@"<attrName>" value:<expr>];
+>>
+
+/** Translate %{stringExpr} */
+actionStringConstructor(stringExpr) ::= <<
+ [ST newST:templateLib template:<stringExpr>];
+>>
