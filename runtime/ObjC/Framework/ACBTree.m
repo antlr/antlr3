@@ -690,7 +690,7 @@ ACBTree *t;
         t = t.btNodes[0];
     }
     do {
-        keycnt = ((t.rnode != nil) ? t.numkeys : t.numkeys-1);
+        keycnt = t.numkeys;
         for ( i = 0; i < keycnt; i++ ) {
             if ( t.btNodes[i] != nil ) {
                 dict.ptrBuffer[idx++] = (id) t.keys[i].key;
@@ -717,7 +717,7 @@ ACBTree *t;
         t = t.btNodes[0];
     }
     do {
-        keycnt = ((t.rnode != nil) ? t.numkeys : t.numkeys-1);
+        keycnt = t.numkeys;
         for ( i = 0; i < keycnt; i++ ) {
             if ( t.btNodes[i] != nil ) {
                 dict.ptrBuffer[idx++] = (id) t.btNodes[i];
