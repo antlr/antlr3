@@ -568,7 +568,9 @@ typedef enum {
 
 /* Interface grammar class */
 @interface <className()> <@superClassName> : <superClass><@end> { /* line 572 */
-<rules:{rule | <rule.ruleDescriptor.ruleScope:ruleAttributeScopeMemVar(scope=it)>}>
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeDecl
+<rules:{rule | <rule.ruleDescriptor.ruleScope:ruleAttributeScopeDecl(scope=rule.ruleDescriptor.ruleScope)>}>
+#pragma mark Dynamic Global Rule Scopes globalAttributeScopeMemVar
 <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeMemVar(scope=it)><endif>}><\n>
 /* ObjC start of actions.(actionScope).memVars */
 <actions.(actionScope).memVars>
@@ -1747,6 +1749,7 @@ globalAttributeScopeDealloc(scope) ::= << [<scope.name>_stack release];<\n> >>
 globalAttributeScope(scope) ::= << static <scope.name>_stack;<\n> >>
 
 ruleAttributeScopeMemVar(scope) ::= <<
+/* ObjC ruleAttributeScopeMemVar */
 <if(scope.attributes)>
 <scope.name>_Scope *<scope.name>_scope;<\n> /* ObjC ruleAttributeScopeMemVar */
 <endif>
@@ -1806,6 +1809,13 @@ ruleAttributeScope(scope) ::= <<
 <if(scope.attributes)>
 /* ruleAttributeScope */
 static ANTLRSymbolStack *<scope.name>_stack;<\n>
+<endif>
+>>
+
+ruleAttributeScopeDecl(scope) ::= <<
+/* ruleAttributeScopeDecl */
+<if(scope.attributes)>
+<scope.name>_Scope *<scope.name>_scope;<\n>
 <endif>
 >>
 
