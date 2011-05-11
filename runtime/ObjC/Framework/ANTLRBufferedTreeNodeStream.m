@@ -112,11 +112,11 @@ extern NSInteger debug;
 		uniqueNavigationNodes = NO;
         root = [[ANTLRCommonTree alloc] init];
         //		tokens = tree;
-        adaptor = [[ANTLRCommonTreeAdaptor alloc] init];
-        nodes = [AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE];
-        down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-        up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-        eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+        adaptor = [[[ANTLRCommonTreeAdaptor alloc] init] retain];
+        nodes = [[AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE] retain];
+        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
     }
 	return self;
 }
@@ -129,11 +129,11 @@ extern NSInteger debug;
 		uniqueNavigationNodes = NO;
         root = aTree;
         //		tokens = aTree;
-        adaptor = [[ANTLRCommonTreeAdaptor alloc] init];
-        nodes = [AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE];
-        down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-        up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-        eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+        adaptor = [[[ANTLRCommonTreeAdaptor alloc] init] retain];
+        nodes = [[AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE] retain];
+        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
     }
 	return self;
 }
@@ -146,11 +146,11 @@ extern NSInteger debug;
 		uniqueNavigationNodes = NO;
         root = aTree;
         //		tokens = aTree;
-        adaptor = anAdaptor;
-        nodes = [AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE];
-        down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-        up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-        eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+        adaptor = [anAdaptor retain];
+        nodes = [[AMutableArray arrayWithCapacity:DEFAULT_INITIAL_BUFFER_SIZE] retain];
+        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
     }
 	return self;
 }
@@ -166,11 +166,11 @@ extern NSInteger debug;
 		uniqueNavigationNodes = NO;
         root = aTree;
         //		tokens = aTree;
-        adaptor = anAdaptor;
-        nodes = [AMutableArray arrayWithCapacity:bufferSize];
-        down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-        up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-        eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+        adaptor = [anAdaptor retain];
+        nodes = [[AMutableArray arrayWithCapacity:bufferSize] retain];
+        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
 	}
 	return self;
 }

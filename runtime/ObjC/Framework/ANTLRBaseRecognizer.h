@@ -53,10 +53,10 @@
 #import "ANTLRFailedPredicateException.h"
 
 @interface ANTLRBaseRecognizer : NSObject {
-    ANTLRRecognizerSharedState *state;  // the state of this recognizer. Might be shared with other recognizers, e.g. in grammar import scenarios.
-    NSString *grammarFileName;          // where did the grammar come from. filled in by codegeneration
-    NSString *sourceName;
-    AMutableArray *tokenNames;
+    __strong ANTLRRecognizerSharedState *state;  // the state of this recognizer. Might be shared with other recognizers, e.g. in grammar import scenarios.
+    __strong NSString *grammarFileName;          // where did the grammar come from. filled in by codegeneration
+    __strong NSString *sourceName;
+    __strong AMutableArray *tokenNames;
 }
 
 + (void) initialize;

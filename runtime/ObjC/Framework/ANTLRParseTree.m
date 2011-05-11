@@ -44,8 +44,9 @@
     
 - (id)initWithLabel:(id<ANTLRToken>)label
 {
-    if ((self = [super init]) != nil) {
-        payload = label;
+    self = [super init];
+    if ( self != nil) {
+        payload = [label retain];
     }
     return self;
 }
@@ -82,8 +83,8 @@
 - (void)setTokenStopIndex:(NSInteger)anIndex
 {
 }
-    
-- (NSString *)toString
+
+- (NSString *)description
 {
     if ( [payload isKindOfClass:[ANTLRCommonToken class]] ) {
         id<ANTLRToken> t = (id<ANTLRToken>)payload;
@@ -92,7 +93,12 @@
         }
         return [t text];
     }
-    return [payload toString];
+    return [payload description];
+}
+    
+- (NSString *)toString
+{
+    return [self description];
 }
     
 /** Emit a token and all hidden nodes before.  EOF node holds all

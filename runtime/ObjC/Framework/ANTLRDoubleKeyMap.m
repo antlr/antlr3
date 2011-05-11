@@ -6,7 +6,7 @@
 {
     self = [super init];
     if ( self  != nil ) {
-        data = [AMutableDictionary dictionaryWithCapacity:30];
+        data = [[AMutableDictionary dictionaryWithCapacity:30] retain];
     }
     return self;
 }
@@ -15,8 +15,8 @@
 {
     AMutableDictionary *data2 = [data objectForKey:k1];
     id prev = nil;
-    if (data2 == nil) {
-        data2 = [[AMutableDictionary dictionaryWithCapacity:30] retain];
+    if ( data2 == nil ) {
+        data2 = [AMutableDictionary dictionaryWithCapacity:30];
         [data setObject:data2 forKey:k1];
     }
     else {
@@ -29,7 +29,7 @@
 - (id) objectForKey1:(id)k1 forKey2:(id)k2
 {
     AMutableDictionary *data2 = [data objectForKey:k1];
-    if (data2 == nil)
+    if ( data2 == nil )
         return nil;
     return [data2 objectForKey:k2];
 }
@@ -46,7 +46,7 @@
 - (NSArray *) valuesForKey:(id)k1
 {
     AMutableDictionary *data2 = [data objectForKey:k1];
-    if (data2 == nil)
+    if ( data2 == nil )
         return nil;
     return [data2 allValues];
 }
@@ -67,7 +67,7 @@
 - (NSArray *) allKeys2:(id)k1
 {
     AMutableDictionary * data2 = [data objectForKey:k1];
-    if (data2 == nil)
+    if ( data2 == nil )
         return nil;
     return [data2 allKeys];
 }

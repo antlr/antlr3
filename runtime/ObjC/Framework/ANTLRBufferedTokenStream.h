@@ -28,18 +28,19 @@
 #import "ANTLRTokenStream.h"
 #import "ANTLRTokenSource.h"
 #import "ANTLRBitSet.h"
+#import "ANTLRCommonToken.h"
 #import "AMutableArray.h"
 
 @interface ANTLRBufferedTokenStream : NSObject <ANTLRTokenStream> 
 {
-id<ANTLRTokenSource> tokenSource;
+__strong id<ANTLRTokenSource> tokenSource;
     
     /** Record every single token pulled from the source so we can reproduce
      *  chunks of it later.  The buffer in LookaheadStream overlaps sometimes
      *  as its moving window moves through the input.  This list captures
      *  everything so we can access complete input text.
      */
-AMutableArray *tokens;
+__strong AMutableArray *tokens;
     
     /** Track the last mark() call result value for use in rewind(). */
 NSInteger lastMarker;
@@ -63,7 +64,10 @@ NSInteger range; // how deep have we gone?
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream;
 + (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource;
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)aSource;
+- (void)dealloc;
 - (id) copyWithZone:(NSZone *)aZone;
+- (NSUInteger)charPositionInLine;
+- (NSUInteger)line;
 - (NSInteger) getRange;
 - (void) setRange:(NSInteger)anInt;
 - (NSInteger) mark;

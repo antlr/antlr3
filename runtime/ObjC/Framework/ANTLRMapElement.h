@@ -33,8 +33,8 @@
 #import "ANTLRBaseMapElement.h"
 
 @interface ANTLRMapElement : ANTLRBaseMapElement {
-    NSString *name;
-    id        node;
+    __strong NSString *name;
+    __strong id        node;
 }
 @property (retain, getter=getName, setter=setName:) NSString *name;
 @property (retain, getter=getNode, setter=setNode:) id node;

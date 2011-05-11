@@ -28,6 +28,7 @@
 #import "ANTLRBaseTreeAdaptor.h"
 #import "ANTLRToken.h"
 // TODO: this shouldn't be here...but needed for invalidNode
+#import "AMutableArray.h"
 #import "ANTLRCommonTree.h"
 #import "ANTLRRuntimeException.h"
 #import "ANTLRError.h"
@@ -88,7 +89,7 @@ static id<ANTLRBaseTree> invalidNode = nil;
 {
     self = [super init];
     if ( self != nil ) {
-        children = nil;
+        children = [[AMutableArray arrayWithCapacity:5] retain];
         [children addObject:node];
         return self;
     }
@@ -113,7 +114,7 @@ static id<ANTLRBaseTree> invalidNode = nil;
 /** Get the children internal List; note that if you directly mess with
  *  the list, do so at your own risk.
  */
-- (AMutableArray *) getChildren
+- (AMutableArray *) children
 {
     return children; // [[children retain] autorelease];
 }
@@ -184,7 +185,7 @@ static id<ANTLRBaseTree> invalidNode = nil;
     }
     else { // child is not nil (don't care about children)
         if ( children == nil ) {
-            children = [AMutableArray arrayWithCapacity:5]; // create children list on demand
+            children = [[AMutableArray arrayWithCapacity:5] retain]; // create children list on demand
         }
         [children addObject:t];
         [childTree setParent:(id<ANTLRBaseTree>)self];
@@ -211,7 +212,7 @@ static id<ANTLRBaseTree> invalidNode = nil;
         @throw [ANTLRIllegalArgumentException newException:@"ANTLRBaseTree Can't set single child to a list"];        
     }
     if ( children == nil ) {
-        children = [AMutableArray arrayWithCapacity:5];
+        children = [[AMutableArray arrayWithCapacity:5] retain];
     }
     if ([children count] > i ) {
         [children replaceObjectAtIndex:i withObject:t];
@@ -432,7 +433,6 @@ static id<ANTLRBaseTree> invalidNode = nil;
         [ancestors insertObject:t atIndex:0]; // insert at start
         t = (id<ANTLRBaseTree>)[t getParent];
     }
-    [ancestors retain];
     return ancestors;
 }
 

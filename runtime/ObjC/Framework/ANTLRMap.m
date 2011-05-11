@@ -85,7 +85,7 @@
             while ( tmp ) {
                 rtmp = tmp;
                 tmp = (ANTLRMapElement *)tmp.fNext;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -103,7 +103,7 @@
             while ( tmp ) {
                 rtmp = tmp;
                 tmp = [tmp getfNext];
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -252,7 +252,7 @@
     for ( tmp = self->ptrBuffer[idx], np = self->ptrBuffer[idx]; np != nil; np = [np getfNext] ) {
         if ( [s isEqualToString:[np getName]] ) {
             tmp = [np getfNext];             /* get the next link  */
-            [np dealloc];
+            [np release];
             return( SUCCESS );            /* report SUCCESS     */
         }
         tmp = [np getfNext];              //  BAD!!!!!!

@@ -189,8 +189,7 @@ NSInteger debug = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    NSMutableData *dp = [[NSMutableData dataWithLength:size] retain];
-    short *data = (short *)[dp mutableBytes];
+    __strong short *data = (short *)calloc(size, sizeof(short));
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];
@@ -211,8 +210,7 @@ NSInteger debug = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    NSMutableData *dp = [[NSMutableData dataWithLength:size] retain];
-    char *data = (char *)[dp mutableBytes];
+    __strong short *data = (short *)calloc(size, sizeof(short));
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];
@@ -222,7 +220,7 @@ NSInteger debug = 0;
             data[di++] = v;
         }
     }
-    return data;
+    return (char *)data;
 }
 
 - (NSInteger)getDecision

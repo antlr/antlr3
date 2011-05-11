@@ -53,7 +53,7 @@
 - (id) init
 {
 	if ((self = [super init]) != nil) {
-		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
+		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = ANTLRTokenChannelDefault;
 	}
 	return self;
@@ -62,7 +62,7 @@
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
 {
 	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
-		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
+		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = ANTLRTokenChannelDefault;
 	}
 	return self;
@@ -71,7 +71,7 @@
 - (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel
 {
 	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
-		channelOverride = [[NSMutableDictionary dictionaryWithCapacity:100] retain];
+		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
 		channel = aChannel;
 	}
 	return self;
@@ -211,12 +211,12 @@
     channel = aChannel;
 }
 
-- (NSMutableDictionary *)getChannelOverride
+- (AMutableDictionary *)getChannelOverride
 {
     return channelOverride;
 }
 
-- (void)setChannelOverride:(NSMutableDictionary *)anOverride
+- (void)setChannelOverride:(AMutableDictionary *)anOverride
 {
     channelOverride = anOverride;
 }

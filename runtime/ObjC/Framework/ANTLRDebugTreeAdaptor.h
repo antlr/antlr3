@@ -26,20 +26,20 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ANTLRParser.h"
-#import "ANTLRBaseTreeAdaptor.h"
+#import "ANTLRCommonTreeAdaptor.h"
 #import "ANTLRDebugEventListener.h"
 
 @interface ANTLRDebugTreeAdaptor : ANTLRBaseTreeAdaptor {
 	id<ANTLRDebugEventListener> debugListener;
-	id<ANTLRTreeAdaptor> treeAdaptor;
+	ANTLRCommonTreeAdaptor *treeAdaptor;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener;
+- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener;
 
-- (id<ANTLRDebugEventListener>) debugListener;
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
+- (id<ANTLRDebugEventListener>)debugListener;
+- (void) setDebugListener:(id<ANTLRDebugEventListener>)aDebugListener;
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
-- (void) setTreeAdaptor: (id<ANTLRTreeAdaptor>) aTreeAdaptor;
+- (ANTLRCommonTreeAdaptor *) getTreeAdaptor;
+- (void) setTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor;
 
 @end

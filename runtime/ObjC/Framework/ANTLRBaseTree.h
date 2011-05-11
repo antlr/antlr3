@@ -39,7 +39,7 @@
 - (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
-- (AMutableArray *)getChildren;
+- (AMutableArray *)children;
 - (void) setChildren:(AMutableArray *)anArray;
 - (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;
@@ -102,8 +102,8 @@
 
 @interface ANTLRBaseTree : NSObject <ANTLRTree>
 {
-	AMutableArray *children;
-    NSException *anException;
+	__strong AMutableArray *children;
+    __strong NSException *anException;
 }
 
 + (id<ANTLRBaseTree>) INVALID_NODE;
@@ -114,7 +114,7 @@
 - (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
 
 - (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
-- (AMutableArray *)getChildren;
+- (AMutableArray *)children;
 - (void) setChildren:(AMutableArray *)anArray;
 - (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;

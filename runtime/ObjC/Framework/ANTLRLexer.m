@@ -31,12 +31,12 @@
 
 @synthesize input;
 @synthesize ruleNestingLevel;
-// init
 #pragma mark Initializer
 
 - (id) initWithCharStream:(id<ANTLRCharStream>)anInput
 {
-	if ((self = [super initWithState:[[ANTLRRecognizerSharedState alloc] init]]) != nil) {
+	self = [super initWithState:[[ANTLRRecognizerSharedState alloc] init]];
+	if ( self != nil ) {
         input = anInput;
         if (state.token != nil)
             [((ANTLRCommonToken *)state.token) setInput:anInput];
@@ -47,7 +47,8 @@
 
 - (id) initWithCharStream:(id<ANTLRCharStream>)anInput State:(ANTLRRecognizerSharedState *)aState
 {
-	if ((self = [super initWithState:aState]) != nil) {
+	self = [super initWithState:aState];
+	if ( self != nil ) {
         input = anInput;
         if (state.token != nil)
             [((ANTLRCommonToken *)state.token) setInput:anInput];

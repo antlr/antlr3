@@ -44,12 +44,12 @@ static NSInteger itIndex;
 
 +(id)newANTLRHashMap
 {
-    return [[[ANTLRHashMap alloc] init] retain];
+    return [[ANTLRHashMap alloc] init];
 }
 
 +(id)newANTLRHashMapWithLen:(NSInteger)aBuffSize
 {
-    return [[[ANTLRHashMap alloc] initWithLen:aBuffSize] retain];
+    return [[ANTLRHashMap alloc] initWithLen:aBuffSize];
 }
 
 -(id)init
@@ -58,8 +58,11 @@ static NSInteger itIndex;
     
     if ((self = [super init]) != nil) {
         fNext = nil;
-        BuffSize = HASHSIZE;
         Scope = 0;
+        ptr = 0;
+        BuffSize = HASHSIZE;
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        ptrBuffer = (ANTLRMapElement **) [buffer mutableBytes];
         if ( fNext != nil ) {
             Scope = ((ANTLRHashMap *)fNext)->Scope+1;
             for( idx = 0; idx < BuffSize; idx++ ) {
@@ -79,6 +82,9 @@ static NSInteger itIndex;
         fNext = nil;
         BuffSize = aBuffSize;
         Scope = 0;
+        ptr = 0;
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        ptrBuffer = (ANTLRMapElement **) [buffer mutableBytes];
         if ( fNext != nil ) {
             Scope = ((ANTLRHashMap *)fNext)->Scope+1;
             for( idx = 0; idx < BuffSize; idx++ ) {
@@ -94,7 +100,7 @@ static NSInteger itIndex;
 {
     ANTLRMapElement *tmp, *rtmp;
     NSInteger idx;
-    
+
     if ( self.fNext != nil ) {
         for( idx = 0; idx < BuffSize; idx++ ) {
             tmp = ptrBuffer[idx];
@@ -102,20 +108,20 @@ static NSInteger itIndex;
                 rtmp = tmp;
                 // tmp = [tmp getfNext];
                 tmp = (ANTLRMapElement *)tmp.fNext;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
+    if ( buffer ) [buffer release];
     [super dealloc];
 }
 
 - (NSInteger)count
 {
-    id anElement;
     NSInteger aCnt = 0;
     
     for (NSInteger i = 0; i < BuffSize; i++) {
-        if ((anElement = ptrBuffer[i]) != nil) {
+        if ( ptrBuffer[i] != nil ) {
             aCnt++;
         }
     }
@@ -124,11 +130,10 @@ static NSInteger itIndex;
                           
 - (NSInteger) size
 {
-    id anElement;
     NSInteger aSize = 0;
     
     for (NSInteger i = 0; i < BuffSize; i++) {
-        if ((anElement = ptrBuffer[i]) != nil) {
+        if ( ptrBuffer[i] != nil ) {
             aSize += sizeof(id);
         }
     }
@@ -147,7 +152,7 @@ static NSInteger itIndex;
             while ( tmp && tmp != (ANTLRLinkBase *)[((ANTLRHashMap *)fNext) getptrBufferEntry:idx] ) {
                 rtmp = tmp;
                 tmp = [tmp getfNext];
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -191,7 +196,7 @@ static NSInteger itIndex;
              * can not forget the debuggers
              */
             htmp->ptrBuffer[idx] = [tmp getfNext];
-            [ tmp dealloc];
+            [tmp release];
         }
         *map = (ANTLRHashMap *)htmp->fNext;
         //        gScopeLevel--;
@@ -319,7 +324,7 @@ static NSInteger itIndex;
     for ( tmp = self->ptrBuffer[idx], np = self->ptrBuffer[idx]; np != nil; np = [np getfNext] ) {
         if ( [s isEqualToString:[np getName]] ) {
             tmp = [np getfNext];             /* get the next link  */
-            [np dealloc];
+            [np release];
             return( SUCCESS );            /* report SUCCESS     */
         }
         tmp = [np getfNext];              //  BAD!!!!!!
@@ -392,7 +397,7 @@ static NSInteger itIndex;
     NSInteger aTType;
 
     aTType = ttype % BuffSize;
-    for( np = self->ptrBuffer[ttype]; np != nil; np = [np getfNext] ) {
+    for( np = self->ptrBuffer[aTType]; np != nil; np = [np getfNext] ) {
         if ( [(NSNumber *)np.node integerValue] == ttype ) {
             return( np );        /*   found it       */
         }
@@ -490,6 +495,7 @@ static NSInteger itIndex;
 
 - (NSEnumerator *)objectEnumerator
 {
+#pragma mark fix this its broken
     NSEnumerator *anEnumerator;
 
     itIndex = 0;
@@ -513,4 +519,8 @@ static NSInteger itIndex;
 }
 
 @synthesize BuffSize;
+@synthesize count;
+@synthesize ptr;
+@synthesize ptrBuffer;
+@synthesize buffer;
 @end

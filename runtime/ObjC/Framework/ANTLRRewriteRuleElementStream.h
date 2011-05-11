@@ -33,10 +33,10 @@
     BOOL dirty;        ///< indicates whether the stream should return copies of its elements, set to true after a call to -reset
     BOOL isSingleElement;
     id singleElement;
-    AMutableArray *elements;
+    __strong AMutableArray *elements;
     
-    NSString *elementDescription;
-    id<ANTLRTreeAdaptor> treeAdaptor;
+    __strong NSString *elementDescription;
+    __strong id<ANTLRTreeAdaptor> treeAdaptor;
 }
 
 @property (assign) NSInteger cursor;

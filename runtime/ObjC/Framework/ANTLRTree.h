@@ -75,7 +75,7 @@
  */
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id)t;	
 
-- (NSArray *) getChildren;
+- (NSArray *) children;
 // Add t as a child to this node.  If t is null, do nothing.  If t
 //  is nil, add all children of t to this' children.
 

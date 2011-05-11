@@ -35,17 +35,18 @@
 
 + (ANTLRIntArray *)newArray
 {
-    return [[[ANTLRIntArray alloc] init] retain];
+    return [[ANTLRIntArray alloc] init];
 }
 
 + (ANTLRIntArray *)newArrayWithLen:(NSUInteger)aLen
 {
-    return [[[ANTLRIntArray alloc] initWithLen:aLen] retain];
+    return [[ANTLRIntArray alloc] initWithLen:aLen];
 }
 
 -(id) init
 {
-	if ((self = [super initWithLen:ANTLR_INT_ARRAY_INITIAL_SIZE]) != nil) {
+	self = [super initWithLen:ANTLR_INT_ARRAY_INITIAL_SIZE];
+    if ( self != nil ) {
         ip = (NSUInteger *)ptrBuffer;
 	}
 	return self;
@@ -53,7 +54,8 @@
 
 -(id) initWithLen:(NSUInteger)aLen
 {
-	if ((self = [super initWithLen:aLen]) != nil) {
+	self = [super initWithLen:aLen];
+    if ( self != nil ) {
         ip = (NSUInteger *)ptrBuffer;
 	}
 	return self;

@@ -35,7 +35,7 @@
 @interface ANTLRFastQueue : NSObject <NSCopying>
 {
 //	NSAutoreleasePool *pool;
-	AMutableArray *data;
+	__strong AMutableArray *data;
 	NSUInteger p;
     NSUInteger range;
 }

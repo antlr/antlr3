@@ -37,15 +37,15 @@
 
 @interface ANTLRTreeIterator : NSObject 
 {
-	id<ANTLRTreeAdaptor> adaptor;
-	id<ANTLRBaseTree> root;
-	id<ANTLRBaseTree> tree;
+	__strong id<ANTLRTreeAdaptor> adaptor;
+	__strong id<ANTLRBaseTree> root;
+	__strong id<ANTLRBaseTree> tree;
 	BOOL firstTime;
-	id<ANTLRBaseTree> up;
-	id<ANTLRBaseTree> down;
-	id<ANTLRBaseTree> eof;
+	__strong id<ANTLRBaseTree> up;
+	__strong id<ANTLRBaseTree> down;
+	__strong id<ANTLRBaseTree> eof;
 	
-	ANTLRFastQueue *nodes;
+	__strong ANTLRFastQueue *nodes;
 }
 
 @property(retain, readwrite) id<ANTLRBaseTree> up;

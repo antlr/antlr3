@@ -30,7 +30,7 @@
 #import "ANTLRCharStream.h"
 
 @interface ANTLRCommonToken : NSObject < ANTLRToken > {
-	NSString *text;
+	__strong NSString *text;
 	NSInteger type;
 	// information about the Token's position in the input stream
 	NSUInteger line;
@@ -44,7 +44,7 @@
 	NSInteger startIndex;
 	NSInteger stopIndex;
 	// the actual input stream this token was found in
-	id<ANTLRCharStream> input;
+	__strong id<ANTLRCharStream> input;
 }
 
 + (void) initialize;

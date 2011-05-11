@@ -331,7 +331,8 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)theTokNams
 {
-    NSString *msg = [e getMessage];
+    // NSString *msg = [e getMessage];
+    NSString *msg;
     if ( [e isKindOfClass:[ANTLRUnwantedTokenException class]] ) {
         ANTLRUnwantedTokenException *ute = (ANTLRUnwantedTokenException *)e;
         NSString *tokenName=@"<unknown>";
@@ -844,7 +845,6 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     if ( state._fsp >= 0 && [state.following count] > 0 ) {
         fset = [state.following objectAtIndex:state._fsp--];
         [state.following removeLastObject];
-        [fset release];
         return fset;
     }
     else {
@@ -959,11 +959,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
     if ( tokens == nil )
         return nil;
-    AMutableArray *strings = [[AMutableArray arrayWithCapacity:[tokens count]] retain];
+    AMutableArray *strings = [AMutableArray arrayWithCapacity:[tokens count]];
     id object;
     NSInteger i = 0;
     for (object in tokens) {
-        [strings addObject:[[object text] retain]];
+        [strings addObject:[object text]];
         i++;
     }
     return strings;
@@ -984,7 +984,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     NSNumber *stopIndexI;
     ANTLRHashRule *aHashRule;
     if ( (aHashRule = [state.ruleMemo objectAtIndex:ruleIndex]) == nil ) {
-        aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
+        aHashRule = [ANTLRHashRule newANTLRHashRuleWithLen:17];
         [state.ruleMemo insertObject:aHashRule atIndex:ruleIndex];
     }
     stopIndexI = [aHashRule getRuleMemoStopIndex:ruleStartIndex];

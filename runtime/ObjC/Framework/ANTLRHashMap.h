@@ -41,7 +41,10 @@
     NSInteger Scope;
     NSInteger LastHash;
     NSInteger BuffSize;
-    ANTLRMapElement *ptrBuffer[HASHSIZE];
+    NSUInteger count;
+    NSUInteger ptr;
+    __strong NSMutableData *buffer;
+    __strong ANTLRMapElement **ptrBuffer;
     NSInteger mode;
 }
 
@@ -98,6 +101,10 @@
 @property (getter=getScope, setter=setScope:) NSInteger Scope;
 @property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 
-@property NSInteger BuffSize;
 @property (getter=getMode,setter=setMode:) NSInteger mode;
+@property NSInteger BuffSize;
+@property (getter=getCount, setter=setCount:) NSUInteger count;
+@property (assign) NSUInteger ptr;
+@property (retain, getter=getBuffer, setter=setBuffer:) NSMutableData *buffer;
+@property (assign, getter=getPtrBuffer, setter=setPtrBuffer:) ANTLRMapElement **ptrBuffer;
 @end

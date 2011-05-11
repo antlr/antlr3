@@ -49,7 +49,7 @@
 {
 	if ((self = [super init]) != nil ) {
 //		pool = [NSAutoreleasePool new];
-		data = [AMutableArray arrayWithCapacity:100];
+		data = [[AMutableArray arrayWithCapacity:100] retain];
 		p = 0;
 		range = -1;
 	}
@@ -91,7 +91,7 @@
 	id o = [self objectAtIndex:0];
 	p++;
 	// check to see if we have hit the end of the buffer
-	if (p == [data count])
+	if ( p == [data count] )
 	{
 		// if we have, then we need to clear it out
 		[self clear];
@@ -130,10 +130,10 @@
     NSUInteger absIndex;
 
     absIndex = p + i;
-	if (absIndex >= [data count]) {
+	if ( absIndex >= [data count] ) {
 		@throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d > last index %d", absIndex, [data count]-1]];
 	}
-	if (absIndex < 0) {
+	if ( absIndex < 0 ) {
 	    @throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d < 0", absIndex]];
 	}
 	if ( absIndex > range ) range = absIndex;
@@ -141,6 +141,11 @@
 }
 
 - (NSString *) toString
+{
+    return [self description];
+}
+
+- (NSString *) description
 {
 	NSMutableString *buf = [NSMutableString stringWithCapacity:30];
 	NSInteger n = [self size];
@@ -151,11 +156,6 @@
 		}
 	}
 	return buf;
-}
-
-- (NSString *) description
-{
-    return [self toString];
 }
 
 #ifdef DONTUSENOMO

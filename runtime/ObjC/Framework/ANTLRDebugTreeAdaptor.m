@@ -30,7 +30,7 @@
 @implementation ANTLRDebugTreeAdaptor
 
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener
+- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener
 {
 	self = [super init];
 	if (self) {
@@ -61,16 +61,16 @@
     }
 }
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor
+- (ANTLRCommonTreeAdaptor *) getTreeAdaptor
 {
     return treeAdaptor; 
 }
 
-- (void) setTreeAdaptor: (id<ANTLRTreeAdaptor>) aTreeAdaptor
+- (void) setTreeAdaptor: (ANTLRCommonTreeAdaptor *) aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
-        [(id<ANTLRTreeAdaptor,NSObject>)aTreeAdaptor retain];
-        [(id<ANTLRTreeAdaptor,NSObject>)treeAdaptor release];
+        [aTreeAdaptor retain];
+        [treeAdaptor release];
         treeAdaptor = aTreeAdaptor;
     }
 }

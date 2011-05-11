@@ -42,24 +42,26 @@
 
 +(id)newANTLRHashRule
 {
-    return [[[ANTLRHashRule alloc] init] retain];
+    return [[ANTLRHashRule alloc] init];
 }
 
 +(id)newANTLRHashRuleWithLen:(NSInteger)aBuffSize
 {
-    return [[[ANTLRHashRule alloc] initWithLen:aBuffSize] retain];
+    return [[ANTLRHashRule alloc] initWithLen:aBuffSize];
 }
 
 -(id)init
 {
-    if ((self = [super initWithLen:HASHSIZE]) != nil) {
+    self = [super initWithLen:HASHSIZE];
+    if ( self != nil ) {
     }
     return( self );
 }
 
 -(id)initWithLen:(NSInteger)aBuffSize
 {
-    if ((self = [super initWithLen:aBuffSize]) != nil) {
+    self = [super initWithLen:aBuffSize];
+    if ( self != nil ) {
         mode = 0;
     }
     return( self );
@@ -88,12 +90,10 @@
 
 - (NSInteger)count
 {
-    id anElement;
     NSInteger aCnt = 0;
     
     for (int i = 0; i < BuffSize; i++) {
-        anElement = ptrBuffer[i];
-        if ( anElement != nil ) {
+        if ( ptrBuffer[i] != nil ) {
             aCnt++;
         }
     }
@@ -107,11 +107,10 @@
 
 - (NSInteger) size
 {
-    id anElement;
     NSInteger aSize = 0;
     
     for (int i = 0; i < BuffSize; i++) {
-        if ((anElement = ptrBuffer[i]) != nil) {
+        if ( ptrBuffer[i] != nil ) {
             aSize += sizeof(id);
         }
     }
@@ -133,7 +132,7 @@
                     tmp = (ANTLRRuleMemo *)tmp.fNext;
                 else
                     tmp = nil;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -197,7 +196,8 @@
     NSInteger aMatchIndex;
 
     anIndex = (aStartIndex >= BuffSize) ? aStartIndex %= BuffSize : aStartIndex;
-    if ((aRule = ptrBuffer[anIndex]) == nil ) {
+    aRule = ptrBuffer[anIndex];
+    if ( aRule == nil ) {
         aRule = [ANTLRRuleMemo newANTLRRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
                                                     StopIndex:[NSNumber numberWithInteger:aStopIndex]];
         [aRule retain];

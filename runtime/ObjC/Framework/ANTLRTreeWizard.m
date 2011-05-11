@@ -52,7 +52,7 @@
     return self;
 }
 
-- (void) visit:(id<ANTLRBaseTree>)t Parent:(id<ANTLRBaseTree>)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels
+- (void) visit:(ANTLRCommonTree *)t Parent:(ANTLRCommonTree *)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels
 {
     switch (action) {
         case 0:
@@ -71,7 +71,7 @@
     return;
 }
 
-- (void) visit:(id<ANTLRBaseTree>)t
+- (void) visit:(ANTLRCommonTree *)t
 {
     [object1 addObject:t];
     return;
@@ -91,16 +91,16 @@
 @synthesize label;
 @synthesize hasTextArg;
 
-+ (id<ANTLRBaseTree>)newANTLRTreePattern:(id<ANTLRToken>)payload
++ (ANTLRCommonTree *)newANTLRTreePattern:(id<ANTLRToken>)payload
 {
-    return (id<ANTLRBaseTree>)[[ANTLRTreePattern alloc] initWithToken:payload];
+    return (ANTLRCommonTree *)[[ANTLRTreePattern alloc] initWithToken:payload];
 }
 
 - (id) initWithToken:(id<ANTLRToken>)payload
 {
     if ((self = [super initWithToken:payload]) != nil ) {
     }
-    return (id<ANTLRBaseTree>)self;
+    return (ANTLRCommonTree *)self;
 }
 
 - (NSString *)toString
@@ -162,9 +162,9 @@
 }
 #endif
 
-- (id<ANTLRBaseTree>)createTreePattern:(id<ANTLRToken>)payload
+- (ANTLRCommonTree *)createTreePattern:(id<ANTLRToken>)payload
 {
-    return (id<ANTLRBaseTree>)[super create:payload];
+    return (ANTLRCommonTree *)[super create:payload];
 }
           
 @end
@@ -293,7 +293,7 @@
  *
  *  TODO: save this index so that find and visit are faster
  */
-- (ANTLRMap *)index:(id<ANTLRBaseTree>)t
+- (ANTLRMap *)index:(ANTLRCommonTree *)t
 {
     ANTLRMap *m = [ANTLRMap newANTLRMap];
     [self _index:t Map:m];
@@ -301,7 +301,7 @@
 }
 
 /** Do the work for index */
-- (void) _index:(id<ANTLRBaseTree>)t Map:(ANTLRMap *)m
+- (void) _index:(ANTLRCommonTree *)t Map:(ANTLRMap *)m
 {
     if ( t==nil ) {
         return;
@@ -316,13 +316,13 @@
     [elements addObject:t];
     int n = [adaptor getChildCount:t];
     for (int i=0; i<n; i++) {
-        id<ANTLRBaseTree> child = [adaptor getChild:t At:i];
+        ANTLRCommonTree * child = [adaptor getChild:t At:i];
         [self _index:child Map:m];
     }
 }
 
 /** Return a List of tree nodes with token type ttype */
-- (AMutableArray *)find:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype
+- (AMutableArray *)find:(ANTLRCommonTree *)t Type:(NSInteger)ttype
 {
 #ifdef DONTUSENOMO
     final List nodes = new ArrayList();
@@ -339,7 +339,7 @@
 }
 
 /** Return a List of subtrees matching pattern. */
-- (AMutableArray *)find:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern
+- (AMutableArray *)find:(ANTLRCommonTree *)t Pattern:(NSString *)pattern
 {
     AMutableArray *subtrees = [AMutableArray arrayWithCapacity:100];
     // Create a TreePattern from the pattern
@@ -347,7 +347,7 @@
     ANTLRTreePatternParser *parser = [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer
                                                                                      Wizard:self
                                                                                     Adaptor:[ANTLRTreePatternTreeAdaptor newTreeAdaptor]];
-    id<ANTLRBaseTree>tpattern = [parser pattern];
+    ANTLRCommonTree *tpattern = (ANTLRCommonTree *)[parser pattern];
     // don't allow invalid patterns
     if ( tpattern == nil ||
         [tpattern isNil] ||
@@ -370,12 +370,12 @@
     return subtrees;
 }
 
-- (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Type:(NSInteger)ttype
+- (ANTLRTreeWizard *)findFirst:(ANTLRCommonTree *) t Type:(NSInteger)ttype
 {
     return nil;
 }
 
-- (ANTLRTreeWizard *)findFirst:(id<ANTLRBaseTree>) t Pattern:(NSString *)pattern
+- (ANTLRTreeWizard *)findFirst:(ANTLRCommonTree *) t Pattern:(NSString *)pattern
 {
     return nil;
 }
@@ -385,14 +385,14 @@
  *  of the visitor action method is never set (it's nil) since using
  *  a token type rather than a pattern doesn't let us set a label.
  */
-- (void) visit:(id<ANTLRBaseTree>)t Type:(NSInteger)ttype Visitor:(ANTLRVisitor *)visitor
+- (void) visit:(ANTLRCommonTree *)t Type:(NSInteger)ttype Visitor:(ANTLRVisitor *)visitor
 {
     [self _visit:t Parent:nil ChildIndex:0 Type:ttype Visitor:visitor];
 }
 
 /** Do the recursive work for visit */
-- (void) _visit:(id<ANTLRBaseTree>)t
-         Parent:(id<ANTLRBaseTree>)parent
+- (void) _visit:(ANTLRCommonTree *)t
+         Parent:(ANTLRCommonTree *)parent
      ChildIndex:(NSInteger)childIndex
            Type:(NSInteger)ttype
         Visitor:(ANTLRVisitor *)visitor
@@ -405,7 +405,7 @@
     }
     int n = [adaptor getChildCount:t];
     for (int i=0; i<n; i++) {
-        id<ANTLRBaseTree> child = [adaptor getChild:t At:i];
+        ANTLRCommonTree * child = [adaptor getChild:t At:i];
         [self _visit:child Parent:t ChildIndex:i Type:ttype Visitor:visitor];
     }
 }
@@ -415,13 +415,13 @@
  *  with visit(t, ttype, visitor) so nil-rooted patterns are not allowed.
  *  Patterns with wildcard roots are also not allowed.
  */
-- (void)visit:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern Visitor:(ANTLRVisitor *)visitor
+- (void)visit:(ANTLRCommonTree *)t Pattern:(NSString *)pattern Visitor:(ANTLRVisitor *)visitor
 {
     // Create a TreePattern from the pattern
     ANTLRTreePatternLexer *tokenizer = [ANTLRTreePatternLexer newANTLRTreePatternLexer:pattern];
     ANTLRTreePatternParser *parser =
     [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer Wizard:self Adaptor:[ANTLRTreePatternTreeAdaptor newTreeAdaptor]];
-    id<ANTLRBaseTree> tpattern = [parser pattern];
+    ANTLRCommonTree * tpattern = [parser pattern];
     // don't allow invalid patterns
     if ( tpattern == nil ||
         [tpattern isNil] ||
@@ -458,7 +458,7 @@
  *
  *  TODO: what's a better way to indicate bad pattern? Exceptions are a hassle 
  */
-- (BOOL)parse:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern Map:(ANTLRMap *)labels
+- (BOOL)parse:(ANTLRCommonTree *)t Pattern:(NSString *)pattern Map:(ANTLRMap *)labels
 {
 #ifdef DONTUSENOMO
     TreePatternLexer tokenizer = new TreePatternLexer(pattern);
@@ -476,7 +476,7 @@
     ANTLRTreePatternParser *parser = [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer
                                                                                 Wizard:self
                                                                                Adaptor:[ANTLRTreePatternTreeAdaptor newTreeAdaptor]];
-    id<ANTLRBaseTree> tpattern = [parser pattern];
+    ANTLRCommonTree * tpattern = [parser pattern];
     /*
      System.out.println("t="+((Tree)t).toStringTree());
      System.out.println("scant="+tpattern.toStringTree());
@@ -486,7 +486,7 @@
     return [self _parse:t Pattern:tpattern Map:labels];
 }
 
-- (BOOL) parse:(id<ANTLRBaseTree>)t Pattern:(NSString *)pattern
+- (BOOL) parse:(ANTLRCommonTree *)t Pattern:(NSString *)pattern
 {
     return [self parse:t Pattern:pattern Map:nil];
 }
@@ -496,7 +496,7 @@
  *  text arguments on nodes.  Fill labels map with pointers to nodes
  *  in tree matched against nodes in pattern with labels.
  */
-- (BOOL) _parse:(id<ANTLRBaseTree>)t1 Pattern:(id<ANTLRBaseTree>)aTPattern Map:(ANTLRMap *)labels
+- (BOOL) _parse:(ANTLRCommonTree *)t1 Pattern:(ANTLRCommonTree *)aTPattern Map:(ANTLRMap *)labels
 {
     ANTLRTreePattern *tpattern;
     // make sure both are non-nil
@@ -526,8 +526,8 @@
         return NO;
     }
     for (int i=0; i<n1; i++) {
-        id<ANTLRBaseTree> child1 = [adaptor getChild:t1 At:i];
-        id<ANTLRBaseTree>child2 = (id<ANTLRBaseTree>)[tpattern getChild:i];
+        ANTLRCommonTree * child1 = [adaptor getChild:t1 At:i];
+        ANTLRCommonTree *child2 = (ANTLRCommonTree *)[tpattern getChild:i];
         if ( ![self _parse:child1 Pattern:child2 Map:labels] ) {
             return NO;
         }
@@ -548,11 +548,11 @@
  *  nil is a special name meaning "give me a nil node".  Useful for
  *  making lists: (nil A B C) is a list of A B C.
  */
-- (id<ANTLRBaseTree>) createTree:(NSString *)pattern
+- (ANTLRCommonTree *) createTree:(NSString *)pattern
 {
     ANTLRTreePatternLexer *tokenizer = [ANTLRTreePatternLexer newANTLRTreePatternLexer:pattern];
     ANTLRTreePatternParser *parser = [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer Wizard:self Adaptor:adaptor];
-    id<ANTLRBaseTree> t = [parser pattern];
+    ANTLRCommonTree * t = [parser pattern];
     return t;
 }
 
@@ -598,8 +598,8 @@
         return NO;
     }
     for (int i=0; i<n1; i++) {
-        id<ANTLRBaseTree> child1 = [anAdaptor getChild:t1 At:i];
-        id<ANTLRBaseTree> child2 = [anAdaptor getChild:t2 At:i];
+        ANTLRCommonTree * child1 = [anAdaptor getChild:t1 At:i];
+        ANTLRCommonTree * child2 = [anAdaptor getChild:t2 At:i];
         if ( ![self _equals:child1 O2:child2 Adaptor:anAdaptor] ) {
             return NO;
         }
@@ -626,7 +626,7 @@
  *
  *  If you change this method, you will likely need to change
  *  getNodeIndex(), which extracts information.
-- (void)fillReverseIndex:(id<ANTLRBaseTree>)node Index:(NSInteger)streamIndex
+- (void)fillReverseIndex:(ANTLRCommonTree *)node Index:(NSInteger)streamIndex
 {
     //System.out.println("revIndex "+node+"@"+streamIndex);
     if ( tokenTypesToReverseIndex == nil ) {

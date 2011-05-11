@@ -56,8 +56,8 @@
 	} else {
 		treeNodeStream = theStream;
 	}
-	self = [super initWithTreeNodeStream:treeNodeStream];
-	if (self) {
+	self = [super initWithStream:treeNodeStream];
+	if ( self ) {
 		[self setDebugListener:debugger];
 		//[debugger release];
 		//[treeNodeStream release];

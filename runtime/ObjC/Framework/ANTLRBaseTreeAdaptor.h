@@ -137,6 +137,15 @@
 
 - (void) setParent:(id<ANTLRBaseTree>)t With:(id<ANTLRBaseTree>) parent;
 
+/** What index is this node in the child list? Range: 0..n-1
+ *  If your node type doesn't handle this, it's ok but the tree rewrites
+ *  in tree parsers need this functionality.
+ */
+- (NSInteger) getChildIndex:(id)t;
+- (void) setChildIndex:(id)t With:(NSInteger)index;
+
+- (void) replaceChildren:(id)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id)t;
+
 - (NSInteger) getUniqueID:(id<ANTLRBaseTree>)node;
 
 #ifdef DONTUSENOMO

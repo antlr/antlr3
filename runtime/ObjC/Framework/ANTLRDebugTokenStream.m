@@ -181,6 +181,11 @@
     return [[input getTokenSource] getSourceName];
 }
 
+- (NSString *) description
+{
+    return [input toString];
+}
+
 - (NSString *) toString
 {
     return [input toString];

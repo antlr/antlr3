@@ -40,6 +40,7 @@
 + (ANTLRTreeVisitor *)newANTLRTreeVisitor;
 - (id)init;
 - (id)initWithAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
+- (void) dealloc;
 - (ANTLRTreeVisitor *)visit:(id<ANTLRBaseTree>)t Action:(ANTLRTreeVisitorAction *)action;
 
 @property (retain) id<ANTLRTreeAdaptor> adaptor;

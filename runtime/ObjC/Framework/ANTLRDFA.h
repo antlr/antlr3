@@ -39,7 +39,7 @@
 	const int *special;
 	const int **transition;
 	
-	ANTLRBaseRecognizer *recognizer;
+	__strong ANTLRBaseRecognizer *recognizer;
 	NSInteger decisionNumber;
     NSInteger len;
 }

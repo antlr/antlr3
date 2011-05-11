@@ -118,21 +118,25 @@ static NSInteger RECNUM = 0;
 
 - (ACBTree *)deletekey:(NSString *)dkey
 {
-    ACBKey *del, *dkp;
+    ACBKey /* *del, */ *dkp;
     ACBTree *told, *sNode;
+    BOOL mustRelease = NO;
 
-    if ( [dkey isKindOfClass:[NSString class]] )
+    if ( [dkey isKindOfClass:[NSString class]] ) {
         dkp = [ACBKey newKeyWithKStr:dkey];
+        mustRelease = YES;
+    }
     else if ( [dkey isKindOfClass:[ACBKey class]] )
         dkp = (ACBKey *)dkey;
     else
         @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Don't understand this key:\"%@\"", dkey]];
     sNode = [self search:dkp.key];
     if ( sNode == nil || [sNode searchnode:dkp.key match:YES] == FAILURE ) {
+        if ( mustRelease ) [dkp release];
         return(self);
     }
     told = dict.root;
-    del = [self internaldelete:dkp];
+    /* del = */[self internaldelete:dkp];
     
     /*  check for shrink at the root  */
     if ( numkeys == 1 && nodeType != LEAF ) {
@@ -140,10 +144,11 @@ static NSInteger RECNUM = 0;
         told.nodeid = 1;
         told.updtd = YES;
         dict.root = told;
-   }
+    }
 #ifdef DONTUSENOMO
     if (debug == 'd') [self printtree];
 #endif
+    if ( mustRelease ) [dkp release];
     return(told);
 }
 
@@ -226,26 +231,6 @@ static NSInteger RECNUM = 0;
 - (NSInteger)searchnode:(NSString *)kstr match:(BOOL)match
 {
     NSInteger i, ret;
-#ifdef DONTUSEYET
-    /** binary search routine */
-    NSInteger lo = 0;
-    NSInteger hi = t.numkeys;
-    
-    lo = 0;
-    hi = t.numkeys; /* binary array search */
-    do {
-        i = (lo + hi) / 2;
-        ret = [t.keys[i].key compare:kstr];
-        if (ret <= 0) hi = i-1;
-        if (ret >= 0) lo = i+1;
-    } while (hi >= lo);
-    hi = i;
-    if ( ret == 0 ) { /* found */
-        *h = NO;
-        return i;
-    }
-#endif   
-    ret = 1;
     for ( i = 0; i < numkeys; i++ ) {
         ret = [keys[i].key compare:kstr];
         if ( ret >= 0 ) {         /* key node found */
@@ -267,12 +252,12 @@ static NSInteger RECNUM = 0;
 - (ACBKey *)internaldelete:(ACBKey *)dkp
 {
     NSInteger i, nkey;
-    ACBKey *del;
+    __strong ACBKey *del = nil;
     ACBTree *tsb;
     NSInteger srchlvl = 0;
     
     /* find deletion branch */
-    if ( nodeType != LEAF ) {
+    if ( self.nodeType != LEAF ) {
         srchlvl++;
         /* search for end of tree */
         i = [self searchnode:dkp.key match:NO];
@@ -382,7 +367,6 @@ static NSInteger RECNUM = 0;
 - (ACBTree *) insert:(ACBKey *)kp value:(id)value index:(NSInteger)hi split:(NSInteger *)h
 {
     ACBTree *b;
-    ACBKey *newitem;
     
     if ( numkeys < BTNODESIZE ) {
         *h = NO;
@@ -403,7 +387,6 @@ static NSInteger RECNUM = 0;
             btNodes[hi] = value;
             numrecs++;
             numkeys++;
-            newitem = keys[numkeys-1];
         }
         else {                                  /* insert key in right page */
             hi -= BTHNODESIZE;
@@ -413,7 +396,6 @@ static NSInteger RECNUM = 0;
             b.btNodes[hi] = value;
             b.numrecs++;
             b.numkeys++;
-            newitem = keys[b.numkeys-1];
         }
         numkeys = b.numkeys = BTHNODESIZE+1;
         b.updtd = updtd = YES;
@@ -684,7 +666,7 @@ ACBTree *t;
         return 0; // maybe I need to throw an exception here
     }
     t = self;
-    self.dict.data = [NSMutableData dataWithLength:(numkeys * sizeof(id))];
+    self.dict.data = [[NSMutableData dataWithLength:(numkeys * sizeof(id))] retain];
     self.dict.ptrBuffer = [self.dict.data mutableBytes];
     while ( t != nil && t.nodeType != LEAF ) {
         t = t.btNodes[0];
@@ -711,7 +693,7 @@ ACBTree *t;
         return 0; // maybe I need to throw an exception here
     }
     t = self;
-    self.dict.data = [NSMutableData dataWithLength:(numrecs * sizeof(id))];
+    self.dict.data = [[NSMutableData dataWithLength:(numrecs * sizeof(id))] retain];
     self.dict.ptrBuffer = [self.dict.data mutableBytes];
     while ( t != nil && t.nodeType != LEAF ) {
         t = t.btNodes[0];

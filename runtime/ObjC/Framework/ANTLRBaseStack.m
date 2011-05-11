@@ -44,24 +44,26 @@
 
 +(ANTLRBaseStack *)newANTLRBaseStack
 {
-    return [[[ANTLRBaseStack alloc] init] retain];
+    return [[ANTLRBaseStack alloc] init];
 }
 
 +(ANTLRBaseStack *)newANTLRBaseStackWithLen:(NSInteger)cnt
 {
-    return [[[ANTLRBaseStack alloc] initWithLen:cnt] retain];
+    return [[ANTLRBaseStack alloc] initWithLen:cnt];
 }
 
 -(id)init
 {
-	if ((self = [super initWithLen:HASHSIZE]) != nil) {
+	self = [super initWithLen:HASHSIZE];
+	if ( self != nil ) {
 	}
     return( self );
 }
 
 -(id)initWithLen:(NSInteger)cnt
 {
-	if ((self = [super initWithLen:cnt]) != nil) {
+	self = [super initWithLen:cnt];
+    if ( self != nil ) {
 	}
     return( self );
 }

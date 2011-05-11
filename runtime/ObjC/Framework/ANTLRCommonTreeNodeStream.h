@@ -37,19 +37,19 @@
 #define INITIAL_CALL_STACK_SIZE 10
     
 /** Pull nodes from which tree? */
-id root;
+__strong id root;
     
 /** If this tree (root) was created from a token stream, track it. */
-id <ANTLRTokenStream> tokens;
+__strong id <ANTLRTokenStream> tokens;
     
 	/** What tree adaptor was used to build these trees */
-ANTLRCommonTreeAdaptor *adaptor;
+__strong ANTLRCommonTreeAdaptor *adaptor;
     
 /** The tree iterator we using */
-ANTLRTreeIterator *it;
+__strong ANTLRTreeIterator *it;
     
 /** Stack of indexes used for push/pop calls */
-ANTLRIntArray *calls;    
+__strong ANTLRIntArray *calls;    
     
 /** Tree (nil A B C) trees like flat A B C streams */
 BOOL hasNilRoot;

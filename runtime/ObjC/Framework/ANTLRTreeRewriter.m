@@ -110,13 +110,13 @@
     return self;
 }
 
-- (ANTLRTreeRewriter *) applyOnce:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule
+- (id) applyOnce:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule
 {
     if ( t == nil ) return nil;
     @try {
         // share TreeParser object but not parsing-related state
         state = [ANTLRRecognizerSharedState newANTLRRecognizerSharedState];
-        input = [ANTLRCommonTreeNodeStream newANTLRCommonTreeNodeStream:(id<ANTLRTreeAdaptor>)originalAdaptor Tree:(id<ANTLRBaseTree>)t];
+        input = [ANTLRCommonTreeNodeStream newANTLRCommonTreeNodeStream:(ANTLRCommonTreeAdaptor *)originalAdaptor Tree:t];
         [(ANTLRCommonTreeNodeStream *)input setTokenStream:originalTokenStream];
         [self setBacktrackingLevel:1];
         ANTLRTreeRuleReturnScope *r = [(ANTLRfptr *)whichRule rule];
@@ -125,7 +125,7 @@
             return t;
         if ( showTransformations &&
             r != nil && !(t == r.start) && r.start != nil ) {
-            [self reportTransformation:(id<ANTLRBaseTree>)t Tree:r.start];
+            [self reportTransformation:t Tree:r.start];
         }
         if ( r != nil && r.start != nil )
             return r.start;
@@ -138,28 +138,28 @@
     return t;
 }
 
-- (ANTLRTreeRewriter *) applyRepeatedly:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule
+- (id) applyRepeatedly:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule
 {
     BOOL treeChanged = true;
     while ( treeChanged ) {
-        ANTLRTreeRewriter *u = [self applyOnce:(id<ANTLRBaseTree>)t Rule:whichRule];
+        ANTLRTreeRewriter *u = [self applyOnce:t Rule:whichRule];
         treeChanged = !(t == u);
         t = u;
     }
     return t;
 }
 
-- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t
+- (id) downup:(ANTLRCommonTree *)t
 {
     return [self downup:t XForm:NO];
 }
 
-- (ANTLRTreeRewriter *) pre:(id<ANTLRBaseTree>)t
+- (id) pre:(ANTLRCommonTree *)t
 {
     return [self applyOnce:t Rule:topdown_fptr];
 }
 
-- (ANTLRTreeRewriter *)post:(id<ANTLRBaseTree>)t
+- (id)post:(ANTLRCommonTree *)t
 {
     return [self applyRepeatedly:t Rule:bottomup_ftpr];
 }
@@ -177,7 +177,7 @@ public Object downup(Object t, boolean showTransformations) {
 }
 #endif
 
-- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t XForm:(BOOL)aShowTransformations
+- (id) downup:(ANTLRCommonTree *)t XForm:(BOOL)aShowTransformations
 {
     showTransformations = aShowTransformations;
     ANTLRTreeVisitor *v = [ANTLRTreeVisitor newANTLRTreeVisitor:[[originalAdaptor class] newTreeAdaptor]];
@@ -195,17 +195,17 @@ public Object downup(Object t, boolean showTransformations) {
 /** Override this if you need transformation tracing to go somewhere
  *  other than stdout or if you're not using Tree-derived trees.
  */
-- (void)reportTransformation:(id<ANTLRBaseTree>)oldTree Tree:(id<ANTLRBaseTree>)newTree
+- (void)reportTransformation:(ANTLRCommonTree *)oldTree Tree:(ANTLRCommonTree *)newTree
 {
     //System.out.println(((Tree)oldTree).toStringTree()+" -> "+ ((Tree)newTree).toStringTree());
 }
 
-- (ANTLRTreeRewriter *)topdown_fptr
+- (id)topdown_fptr
 {
     return [self topdown];
 }
 
-- (ANTLRTreeRewriter *)bottomup_ftpr
+- (id)bottomup_ftpr
 {
     return [self bottomup];
 }
@@ -213,14 +213,14 @@ public Object downup(Object t, boolean showTransformations) {
 // methods the downup strategy uses to do the up and down rules.
 // to override, just define tree grammar rule topdown and turn on
 // filter=true.
-- (ANTLRTreeRewriter *) topdown
+- (id) topdown
 // @throws RecognitionException
 {
-    [ANTLRRecognitionException newException:@"TopDown exception"];
+    @throw [ANTLRRecognitionException newException:@"TopDown exception"];
     return nil;
 }
 
-- (ANTLRTreeRewriter *) bottomup
+- (id) bottomup
 //@throws RecognitionException
 {
     @throw [ANTLRRecognitionException newException:@"BottomUp exception"];

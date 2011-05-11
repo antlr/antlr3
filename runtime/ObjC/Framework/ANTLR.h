@@ -84,6 +84,7 @@
 #import <ANTLR/ANTLRRecognitionException.h>
 #import <ANTLR/ANTLRRecognizerSharedState.h>
 #import <ANTLR/ANTLRRewriteRuleElementStream.h>
+#import <ANTLR/ANTLRRewriteRuleNodeStream.h>
 #import <ANTLR/ANTLRRewriteRuleSubtreeStream.h>
 #import <ANTLR/ANTLRRewriteRuleTokenStream.h>
 #import <ANTLR/ANTLRRuleMemo.h>

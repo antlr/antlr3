@@ -170,7 +170,7 @@
 
 - (void)setSval:(NSMutableData *)aSval
 {
-    sval = aSval;
+    sval = [aSval retain];
 }
 
 @end

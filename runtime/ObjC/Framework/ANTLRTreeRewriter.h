@@ -59,17 +59,17 @@
 + (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
 - (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput;
 - (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
-- (ANTLRTreeRewriter *) applyOnce:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule;
-- (ANTLRTreeRewriter *) applyRepeatedly:(id<ANTLRBaseTree>)t Rule:(ANTLRfptr *)whichRule;
-- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t;
-- (ANTLRTreeRewriter *) pre:(id<ANTLRBaseTree>)t;
-- (ANTLRTreeRewriter *) post:(id<ANTLRBaseTree>)t;
-- (ANTLRTreeRewriter *) downup:(id<ANTLRBaseTree>)t XForm:(BOOL)aShowTransformations;
-- (void)reportTransformation:(id<ANTLRBaseTree>)oldTree Tree:(id<ANTLRBaseTree>)newTree;
-- (ANTLRTreeRewriter *) topdown_fptr;
-- (ANTLRTreeRewriter *) bottomup_ftpr;
-- (ANTLRTreeRewriter *) topdown;
-- (ANTLRTreeRewriter *) bottomup;
+- (id) applyOnce:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule;
+- (id) applyRepeatedly:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule;
+- (id) downup:(ANTLRCommonTree *)t;
+- (id) pre:(ANTLRCommonTree *)t;
+- (id) post:(ANTLRCommonTree *)t;
+- (id) downup:(ANTLRCommonTree *)t XForm:(BOOL)aShowTransformations;
+- (void)reportTransformation:(ANTLRCommonTree *)oldTree Tree:(ANTLRCommonTree *)newTree;
+- (id) topdown_fptr;
+- (id) bottomup_ftpr;
+- (id) topdown;
+- (id) bottomup;
 
 @property BOOL showTransformations;
 @property (retain) id<ANTLRTokenStream> originalTokenStream;

@@ -124,7 +124,8 @@
 
 - (NSString *) description
 {
-	NSMutableString *desc = [[NSMutableString alloc] initWithString:NSStringFromClass([self class])];
+	//NSMutableString *desc = [[NSMutableString alloc] initWithString:NSStringFromClass([self class])];
+	NSMutableString *desc = [NSMutableString stringWithString:[self className]];
 	if (token) {
 		[desc appendFormat:@" token:%@", token];
 	} else if (node) {

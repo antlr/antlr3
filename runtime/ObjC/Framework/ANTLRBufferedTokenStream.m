@@ -65,7 +65,7 @@ extern NSInteger debug;
 {
 	if ((self = [super init]) != nil)
 	{
-        tokenSource = aSource;
+        tokenSource = [aSource retain];
         tokens = [[AMutableArray arrayWithCapacity:1000] retain];
         index = -1;
         range = -1;
@@ -85,6 +85,21 @@ extern NSInteger debug;
     copy.index = self.index;
     copy.range = self.range;
     return copy;
+}
+
+- (void)dealloc
+{
+    if ( tokens ) [tokens release];
+}
+
+- (NSUInteger)line
+{
+    return ((ANTLRCommonToken *)[tokens objectAtIndex:index]).line;
+}
+
+- (NSUInteger)charPositionInLine
+{
+    return ((ANTLRCommonToken *)[tokens objectAtIndex:index]).charPositionInLine;
 }
 
 - (id<ANTLRTokenSource>) getTokenSource
@@ -178,7 +193,6 @@ extern NSInteger debug;
         [t setTokenIndex:[tokens count]];
         if (debug > 1) NSLog(@"adding %@ at index %d\n", [t text], [tokens count]);
         [tokens addObject:t];
-        [t retain];
         if ( [t getType] == ANTLRTokenTypeEOF )
             break;
     }
@@ -295,7 +309,6 @@ extern NSInteger debug;
         id<ANTLRToken>t = [tokens objectAtIndex:i];
         if ( types == nil || [types member:[t getType]] ) {
             [filteredTokens addObject:t];
-            [t retain];
         }
     }
     if ( [filteredTokens count] == 0 ) {

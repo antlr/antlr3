@@ -45,8 +45,8 @@
 @interface ANTLRStreamIterator : ANTLRTreeIterator
 {
     NSInteger idx;
-    ANTLRBufferedTreeNodeStream *input;
-    AMutableArray *nodes;
+    __strong ANTLRBufferedTreeNodeStream *input;
+    __strong AMutableArray *nodes;
 }
 
 + (id) newANTLRStreamIterator:(ANTLRBufferedTreeNodeStream *) theStream;

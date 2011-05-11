@@ -51,9 +51,9 @@
 {
     if ((self = [super init]) != nil ) {
         root = theTree;
-        adaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
-        it = [ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root];
-        calls = [ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE];
+        adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
+        it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
+        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
         /** Tree (nil A B C) trees like flat A B C streams */
         hasNilRoot = NO;
         level = 0;
@@ -66,10 +66,10 @@
     if ((self = [super init]) != nil ) {
         [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"]; // set EOF
         root = theTree;
-        adaptor = anAdaptor;
+        adaptor = [anAdaptor retain];
         //    it = [root objectEnumerator];
-        it = [ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root];
-        calls = [ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE];
+        it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
+        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
         /** Tree (nil A B C) trees like flat A B C streams */
         hasNilRoot = NO;
         level = 0;
@@ -112,7 +112,7 @@
 
 - (BOOL) isEOF:(id<ANTLRBaseTree>) aTree
 {
-    return [adaptor getType:aTree] == ANTLRTokenTypeEOF;
+    return [adaptor getType:(ANTLRCommonTree *)aTree] == ANTLRTokenTypeEOF;
 }
 
 - (void) setUniqueNavigationNodes:(BOOL) uniqueNavigationNodes
@@ -166,7 +166,7 @@
 - (void) push:(NSInteger) anIndex
 {
     if ( calls == nil ) {
-        calls = [ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE];
+        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
     }
     [calls push:p]; // save current anIndex
     [self seek:anIndex];

@@ -75,10 +75,8 @@
 - (id) initWithName:(NSString *)aName Type:(NSInteger)aTType
 {
     if ((self = [super init]) != nil) {
-        index = [NSNumber numberWithInteger: aTType];
-        [index retain];
-        name  = [NSString stringWithString:aName];
-        [name retain];
+        index = [[NSNumber numberWithInteger: aTType] retain];
+        name  = [[NSString stringWithString:aName] retain];
     }
     return self;
 }
@@ -86,10 +84,8 @@
 - (id) initWithNode:(NSInteger)aTType Node:(id)aNode
 {
     if ((self = [super init]) != nil) {
-        index = [NSNumber numberWithInteger: aTType];
-        [index retain];
-        node  = aNode;
-        [node retain];
+        index = [[NSNumber numberWithInteger: aTType] retain];
+        node  = [aNode retain];
     }
     return self;
 }
@@ -97,10 +93,8 @@
 - (id) initWithName:(NSString *)aName Node:(id)aNode
 {
     if ((self = [super init]) != nil) {
-        name  = [NSString stringWithString:aName];
-        [name retain];
-        node = aNode;
-        [node retain];
+        name  = [[NSString stringWithString:aName] retain];
+        node = [aNode retain];
     }
     return self;
 }
@@ -108,10 +102,8 @@
 - (id) initWithObj1:(id)anObj1 Obj2:(id)anObj2
 {
     if ((self = [super init]) != nil) {
-        index  = anObj1;
-        [index retain];
-        node = anObj2;
-        [node retain];
+        index  = [anObj1 retain];
+        node = [anObj2 retain];
     }
     return self;
 }
@@ -174,14 +166,12 @@
 {
     index = ((ANTLRMapElement *)aNode).index;
     if (((ANTLRMapElement *)aNode).name) {
-        name = ((ANTLRMapElement *)aNode).name;
-        [name retain];
+        name = [((ANTLRMapElement *)aNode).name retain];
         node = nil;
     }
     if (((ANTLRMapElement *)aNode).node) {
         name = nil;
-        node = ((ANTLRMapElement *)aNode).node;
-        [node retain];
+        node = [((ANTLRMapElement *)aNode).node retain];
     }
 }
 
@@ -189,14 +179,12 @@
 {
     index = ((ANTLRMapElement *)aNode).index;
     if (((ANTLRMapElement *)aNode).name) {
-        name = ((ANTLRMapElement *)aNode).name;
-        [name retain];
+        name = [((ANTLRMapElement *)aNode).name retain];
         node = nil;
     }
     if (((ANTLRMapElement *)aNode).node) {
         name = nil;
-        node = ((ANTLRMapElement *)aNode).node;
-        [node retain];
+        node = [((ANTLRMapElement *)aNode).node retain];
     }
 }
 

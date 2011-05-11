@@ -31,16 +31,16 @@
 #import "AMutableArray.h"
 
 @interface ANTLRRecognizerSharedState : NSObject {
-	AMutableArray *following;          // a stack of FOLLOW bitsets used for context sensitive prediction and recovery
+	__strong AMutableArray *following;  // a stack of FOLLOW bitsets used for context sensitive prediction and recovery
     NSInteger _fsp;                     // Follow stack pointer
 	BOOL errorRecovery;                 // are we recovering?
 	NSInteger lastErrorIndex;
 	BOOL failed;                        // indicate that some match failed
     NSInteger syntaxErrors;
 	NSInteger backtracking;             // the level of backtracking
-	ANTLRRuleStack *ruleMemo;			// store previous results of matching rules so we don't have to do it again. Hook in incremental stuff here, too.
+	__strong ANTLRRuleStack *ruleMemo;	// store previous results of matching rules so we don't have to do it again. Hook in incremental stuff here, too.
 
-	id<ANTLRToken> token;
+	__strong id<ANTLRToken> token;
 	NSInteger  tokenStartCharIndex;
 	NSUInteger tokenStartLine;
 	NSUInteger tokenStartCharPositionInLine;

@@ -224,17 +224,17 @@ static unsigned lengthOfUTF8Ack = 0;
 
 - (void) consumeToken:(id<ANTLRToken>)t
 {
-	[self sendToDebugger:[NSString stringWithFormat:@"consumeToken %@", [self escapeNewlines:[t debuggerDescription]]]];
+	[self sendToDebugger:[NSString stringWithFormat:@"consumeToken %@", [self escapeNewlines:[t description]]]];
 }
 
 - (void) consumeHiddenToken:(id<ANTLRToken>)t
 {
-	[self sendToDebugger:[NSString stringWithFormat:@"consumeHiddenToken %@", [self escapeNewlines:[t debuggerDescription]]]];
+	[self sendToDebugger:[NSString stringWithFormat:@"consumeHiddenToken %@", [self escapeNewlines:[t description]]]];
 }
 
 - (void) LT:(NSInteger)i foundToken:(id<ANTLRToken>)t
 {
-	[self sendToDebugger:[NSString stringWithFormat:@"LT %d %@", i, [self escapeNewlines:[t debuggerDescription]]]];
+	[self sendToDebugger:[NSString stringWithFormat:@"LT %d %@", i, [self escapeNewlines:[t description]]]];
 }
 
 - (void) mark:(NSInteger)marker

@@ -47,12 +47,13 @@
 
 - (id) init
 {
-	if ((self = [super init]) != nil) {
+	self = [super init];
+    if ( self != nil ) {
 		firstTime = YES;
-		nodes = [ANTLRFastQueue newANTLRFastQueue];
-		down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-		up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-		eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+		nodes = [[ANTLRFastQueue newANTLRFastQueue] retain];
+		down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+		up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+		eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
 		tree = eof;
 		root = eof;
 	}
@@ -66,15 +67,16 @@
 
 -(id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)a andTree:(id<ANTLRBaseTree>)t
 {
-	if ((self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
 		firstTime = YES;
-		adaptor = a;
-		tree = t;
+		adaptor = [a retain];
+		tree = [t retain];
 		root = t;
-		nodes = [ANTLRFastQueue newANTLRFastQueue];
-		down = [adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"];
-		up = [adaptor createTree:ANTLRTokenTypeUP Text:@"UP"];
-		eof = [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"];
+		nodes = [[ANTLRFastQueue newANTLRFastQueue] retain];
+		down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
+		up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
+		eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
 	}
 	return self;
 }
@@ -88,16 +90,16 @@
 
 -(BOOL) hasNext
 {
-	if (firstTime) {
+	if ( firstTime ) {
         return root != nil;
     }
 	if ( nodes && [nodes size] > 0) {
         return YES;
     }
-	if (tree == nil) {
+	if ( tree == nil ) {
         return NO;
     }
-	if ([adaptor getChildCount:tree] > 0) {
+	if ( [adaptor getChildCount:tree] > 0 ) {
         return YES;
     }
 	return [adaptor getParent:tree] != nil;
@@ -106,7 +108,7 @@
 -(id) nextObject
 {
 	// is this the first time we are using this method?
-	if (firstTime) {
+	if ( firstTime ) {
 		firstTime = NO;
 		if ([adaptor getChildCount:tree] == 0) {
 			[nodes addObject:eof];
@@ -115,14 +117,14 @@
 		return tree;
 	}
 	// do we have any objects queued up?
-	if ( nodes && [nodes size] > 0) {
+	if ( nodes && [nodes size] > 0 ) {
 		return [nodes remove];
 	}
 	// no nodes left?
-	if (tree == nil) {
+	if ( tree == nil ) {
 		return eof;
 	}
-	if ([adaptor getChildCount:tree] > 0) {
+	if ( [adaptor getChildCount:tree] > 0 ) {
 		tree = [adaptor getChild:tree At:0];
 		[nodes addObject:tree]; // real node is next after down
 		return self.down;
@@ -134,7 +136,7 @@
 		tree = parent;
 		parent = [adaptor getParent:tree];
 	}
-	if (parent == nil) {
+	if ( parent == nil ) {
 		tree = nil;
 		[nodes addObject:self.eof];
 		return [nodes remove];
@@ -150,7 +152,7 @@
 -(NSArray *) allObjects
 {
 	AMutableArray *array = [AMutableArray arrayWithCapacity:10];
-	while ([self hasNext]) {
+	while ( [self hasNext] ) {
 		[array addObject:[self nextObject]];
 	}
 	return array;
@@ -160,6 +162,7 @@
 {
     @throw [ANTLRRuntimeException newException:@"ANTLRUnsupportedOperationException"];
 }
+
 @synthesize up;
 @synthesize down;
 @synthesize eof;

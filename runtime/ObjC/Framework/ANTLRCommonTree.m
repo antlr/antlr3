@@ -95,7 +95,7 @@
 {
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
-		token = aToken;
+		token = [aToken retain];
 		startIndex = -1;
 		stopIndex = -1;
         parent = nil;
@@ -108,7 +108,7 @@
 {
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
-		token = [ANTLRCommonToken newToken:aTokenType];
+		token = [[ANTLRCommonToken newToken:aTokenType] retain];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;
@@ -123,7 +123,7 @@
 {
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
-		token = [ANTLRCommonToken newToken:aTokenType Text:theText];
+		token = [[ANTLRCommonToken newToken:aTokenType Text:theText] retain];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;
@@ -136,7 +136,10 @@
 
 - (void) dealloc
 {
-	[self setToken:nil];
+    if ( token ) {
+        [token release];
+        token = nil;
+    }
 	[super dealloc];
 }
 
@@ -150,7 +153,7 @@
         copy.token = [self.token copyWithZone:aZone];
     copy.startIndex = startIndex;
     copy.stopIndex = stopIndex;
-    copy.parent = [self.parent copyWithZone:aZone];
+    copy.parent = (ANTLRCommonTree *)[self.parent copyWithZone:aZone];
     copy.childIndex = childIndex;
     return copy;
 }
@@ -167,10 +170,9 @@
 
 - (void) setToken:(ANTLRCommonToken *) aToken
 {
-	if (token != aToken) {
+	if ( token != aToken ) {
 		[token release];
-		token = aToken;
-		[token retain];
+		token = [aToken retain];
 	}
 }
 
@@ -200,6 +202,12 @@
 	return 0;
 }
 
+- (void) setLine:(NSUInteger)aLine
+{
+    if (token)
+        token.line = aLine;
+}
+
 - (NSUInteger) charPositionInLine
 {
 	if (token)
@@ -207,7 +215,7 @@
 	return 0;
 }
 
-- (void) setCharPositionInLine:(int)pos
+- (void) setCharPositionInLine:(NSUInteger)pos
 {
     if (token)
         token.charPositionInLine = pos;

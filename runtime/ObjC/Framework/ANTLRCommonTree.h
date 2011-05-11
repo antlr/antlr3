@@ -29,10 +29,10 @@
 #import "ANTLRBaseTree.h"
 
 @interface ANTLRCommonTree : ANTLRBaseTree <ANTLRTree> {
-	ANTLRCommonToken *token;
+	__strong ANTLRCommonToken *token;
 	NSInteger startIndex;
 	NSInteger stopIndex;
-    ANTLRCommonTree *parent;
+    __strong ANTLRCommonTree *parent;
     NSInteger childIndex;
 }
 
@@ -59,7 +59,9 @@
 - (NSInteger) getType;
 - (NSString *) text;
 - (NSUInteger) line;
+- (void) setLine:(NSUInteger)aLine;
 - (NSUInteger) charPositionInLine;
+- (void) setCharPositionInLine:(NSUInteger)pos;
 - (ANTLRCommonTree *) getParent;
 - (void) setParent:(ANTLRCommonTree *) t;
 
