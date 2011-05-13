@@ -26,10 +26,6 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* in sync with Java/AST.stg revision 36 */
-
-group AST;
-
 finishedBacktracking(block) ::= <<
 <if(backtracking)>
 if <actions.(actionScope).synpredgate>:
@@ -84,12 +80,12 @@ ruleLabelDefs() ::= <<
 <super.ruleLabelDefs()>
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,
   ruleDescriptor.wildcardTreeListLabels]
-    :{<it.label.text>_tree = None}; separator="\n">
-<ruleDescriptor.tokenListLabels:{<it.label.text>_tree = None}; separator="\n">
+    :{it | <it.label.text>_tree = None}; separator="\n">
+<ruleDescriptor.tokenListLabels:{it | <it.label.text>_tree = None}; separator="\n">
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>")}; separator="\n">
+    :{it | stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>")}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "rule <it>")}; separator="\n">
+    :{it | stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "rule <it>")}; separator="\n">
 >>
 
 /** When doing auto AST construction, we must define some variables;
@@ -108,7 +104,7 @@ root_0 = self._adaptor.nil()<\n>
 >>
 
 
-// // T r a c k i n g  R u l e  E l e m e n t s
+// T r a c k i n g  R u l e  E l e m e n t s
 
 /** ID and track it for use in a rewrite rule */
 tokenRefTrack(token,label,elementIndex,terminalOptions) ::= <<
@@ -145,7 +141,7 @@ ruleRefTrack(rule,label,elementIndex,args,scope) ::= <<
 /** x+=rule when output=AST and tracking for rewrite */
 ruleRefTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefTrack(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** ^(rule ...) rewrite */
@@ -157,7 +153,7 @@ ruleRefRuleRootTrack(rule,label,elementIndex,args,scope) ::= <<
 /** ^(x+=rule ...) rewrite */
 ruleRefRuleRootTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefRuleRootTrack(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 // R e w r i t e
@@ -214,23 +210,23 @@ self.input.replaceChildren(
 
 rewriteCodeLabels() ::= <<
 <referencedTokenLabels
-    :{stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>", <it>)};
+    :{it | stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>", <it>)};
     separator="\n"
 >
 <referencedTokenListLabels
-    :{stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>", list_<it>)};
+    :{it | stream_<it> = RewriteRule<rewriteElementType>Stream(self._adaptor, "token <it>", list_<it>)};
     separator="\n"
 >
 <referencedWildcardLabels
-    :{stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "wildcard <it>", <it>)};
+    :{it | stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "wildcard <it>", <it>)};
     separator="\n"
 >
 <referencedWildcardListLabels
-    :{stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "wildcard <it>", list_<it>)};
+    :{it | stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "wildcard <it>", list_<it>)};
     separator="\n"
 >
 <referencedRuleLabels
-    :{
+    :{it |
 if <it> is not None:
     stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "rule <it>", <it>.tree)
 else:
@@ -239,7 +235,7 @@ else:
     separator="\n"
 >
 <referencedRuleListLabels
-    :{stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "token <it>", list_<it>)};
+    :{it| stream_<it> = RewriteRuleSubtreeStream(self._adaptor, "token <it>", list_<it>)};
     separator="\n"
 >
 >>
@@ -290,12 +286,10 @@ while <referencedElements:{el | stream_<el>.hasNext()}; separator=" or ">:
 >>
 
 rewriteAltRest(a) ::= <<
-<if(a.pred)>
-if <a.pred>:
+<if(a.pred)>if <a.pred>:
     # <a.description>
     <a.alt>
-<else>
-se: <! little hack to get if .. elif .. else block right !>
+<else>se: <! little hack to get if .. elif .. else block right !>
     # <a.description>
     <a.alt>
 <endif>
@@ -359,11 +353,11 @@ root_<treeLevel> = self._adaptor.becomeRoot(<createRewriteNodeFromElement(...)>,
 >>
 
 rewriteImaginaryTokenRef(args,token,terminalOptions,elementIndex) ::= <<
-self._adaptor.addChild(root_<treeLevel>, <createImaginaryNode(tokenType=token, ...)>)<\n>
+self._adaptor.addChild(root_<treeLevel>, <createImaginaryNode(token, terminalOptions, args)>)<\n>
 >>
 
 rewriteImaginaryTokenRefRoot(args,token,terminalOptions,elementIndex) ::= <<
-root_<treeLevel> = self._adaptor.becomeRoot(<createImaginaryNode(tokenType=token, ...)>, root_<treeLevel>)<\n>
+root_<treeLevel> = self._adaptor.becomeRoot(<createImaginaryNode(token, terminalOptions, args)>, root_<treeLevel>)<\n>
 >>
 
 /** plain -> {foo} action */

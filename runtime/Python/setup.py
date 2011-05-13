@@ -210,6 +210,7 @@ class functest(Command):
         classpath.extend([
             os.path.join(rootDir, 'lib', 'antlr-2.7.7.jar'),
             os.path.join(rootDir, 'lib', 'stringtemplate-3.2.1.jar'),
+            os.path.join(rootDir, 'lib', 'ST-4.0.2.jar'),
             os.path.join(rootDir, 'lib', 'junit-4.2.jar')
             ])
         os.environ['CLASSPATH'] = ':'.join(classpath)
@@ -221,17 +222,15 @@ class functest(Command):
 
         # collect tests from all tests/t*.py files
         testFiles = []
-        for testPath in glob.glob(os.path.join(testDir, 't*.py')):
-            if (testPath.endswith('Lexer.py')
-                or testPath.endswith('Parser.py')
-                ):
+        test_glob = 't[0-9][0-9][0-9]*.py'
+        for testPath in glob.glob(os.path.join(testDir, test_glob)):
+            if testPath.endswith('Lexer.py') or testPath.endswith('Parser.py'):
                 continue
 
             # if a single testcase has been selected, filter out all other
             # tests
             if (self.testcase is not None
-                and os.path.basename(testPath)[:-3] != self.testcase
-                ):
+                and not os.path.basename(testPath)[:-3].startswith(self.testcase)):
                 continue
 
             testFiles.append(testPath)
@@ -245,20 +244,17 @@ class functest(Command):
                          = imp.find_module(testID, [testDir])
 
                 testMod = imp.load_module(
-                    testID, modFile, modPathname, modDescription
-                    )
+                    testID, modFile, modPathname, modDescription)
 
                 suite.addTests(
-                    unittest.defaultTestLoader.loadTestsFromModule(testMod)
-                    )
+                    unittest.defaultTestLoader.loadTestsFromModule(testMod))
 
             except Exception:
                 buf = StringIO.StringIO()
                 traceback.print_exc(file=buf)
 
                 loadFailures.append(
-                    (os.path.basename(testPath), buf.getvalue())
-                    )
+                    (os.path.basename(testPath), buf.getvalue()))
 
         if self.xml_output:
             import xmlrunner

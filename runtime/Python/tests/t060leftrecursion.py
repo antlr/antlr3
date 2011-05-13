@@ -341,7 +341,7 @@ class TestLeftRecursion(testbase.ANTLRTest):
                 |   e '.'^ 'this'
                 |   e '.'^ 'super' '('^ expressionList? ')'!
                 |   e '.'^ 'new'^ ID '('! expressionList? ')'!
-                    |       'new'^ type ( '(' expressionList? ')'! | (options {k=1;}:'[' e ']'!)+) // ugly; simplified
+                |       'new'^ type ( '(' expressionList? ')'! | (options {k=1;}:'[' e ']'!)+) // ugly; simplified
                 |   e '['^ e ']'!
                 |   '('^ type ')'! e
                 |   e ('++'^ | '--'^)

@@ -2790,6 +2790,9 @@ class RewriteRuleSubtreeStream(RewriteRuleElementStream):
 
         # test size above then fetch
         el = self._next()
+        while self.adaptor.isNil(el) and self.adaptor.getChildCount(el) == 1:
+            el = self.adaptor.getChild(el, 0)
+
         # dup just the root (want node here)
         return self.adaptor.dupNode(el)
 

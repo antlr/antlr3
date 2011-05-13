@@ -67,7 +67,7 @@ if 'CLASSPATH' not in os.environ:
     baseDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
     libDir = os.path.join(baseDir, 'lib')
 
-    jar = os.path.join(libDir, 'stringtemplate-3.1b1.jar')
+    jar = os.path.join(libDir, 'ST-4.0.1.jar')
     if not os.path.isfile(jar):
         raise DistutilsFileError(
             "Missing file '%s'. Grap it from a distribution package."
@@ -211,70 +211,69 @@ class ANTLRTest(unittest.TestCase):
             return
 
         try:
-            # get dependencies from antlr
-            if grammarName in dependencyCache:
-                dependencies = dependencyCache[grammarName]
+        #     # get dependencies from antlr
+        #     if grammarName in dependencyCache:
+        #         dependencies = dependencyCache[grammarName]
 
-            else:
-                dependencies = []
-                cmd = ('cd %s; java %s %s org.antlr.Tool -o . -depend %s 2>&1'
-                       % (self.baseDir, javaOptions, classpath, grammarPath)
-                       )
+        #     else:
+        #         dependencies = []
+        #         cmd = ('cd %s; java %s %s org.antlr.Tool -o . -depend %s 2>&1'
+        #                % (self.baseDir, javaOptions, classpath, grammarPath))
 
-                output = ""
-                failed = False
+        #         output = ""
+        #         failed = False
 
-                fp = os.popen(cmd)
-                for line in fp:
-                    output += line
+        #         fp = os.popen(cmd)
+        #         for line in fp:
+        #             output += line
 
-                    if line.startswith('error('):
-                        failed = True
-                    elif ':' in line:
-                        a, b = line.strip().split(':', 1)
-                        dependencies.append(
-                            (os.path.join(self.baseDir, a.strip()),
-                             [os.path.join(self.baseDir, b.strip())])
-                            )
+        #             if line.startswith('error('):
+        #                 failed = True
+        #             elif ':' in line:
+        #                 a, b = line.strip().split(':', 1)
+        #                 dependencies.append(
+        #                     (os.path.join(self.baseDir, a.strip()),
+        #                      [os.path.join(self.baseDir, b.strip())])
+        #                     )
 
-                rc = fp.close()
-                if rc is not None:
-                    failed = True
+        #         rc = fp.close()
+        #         if rc is not None:
+        #             failed = True
 
-                if failed:
-                    raise GrammarCompileError(
-                        "antlr -depend failed with code %s on grammar '%s':\n\n"
-                        % (rc, grammarName)
-                        + cmd
-                        + "\n"
-                        + output
-                        )
+        #         if failed:
+        #             raise GrammarCompileError(
+        #                 "antlr -depend failed with code %s on grammar '%s':\n\n"
+        #                 % (rc, grammarName)
+        #                 + cmd
+        #                 + "\n"
+        #                 + output
+        #                 )
 
-                # add dependencies to my .stg files
-                templateDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'tool', 'src', 'main', 'resources', 'org', 'antlr', 'codegen', 'templates', 'Python'))
-                templates = glob.glob(os.path.join(templateDir, '*.stg'))
+        #         # add dependencies to my .stg files
+        #         templateDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'tool', 'src', 'main', 'resources', 'org', 'antlr', 'codegen', 'templates', 'Python'))
+        #         templates = glob.glob(os.path.join(templateDir, '*.stg'))
 
-                for dst, src in dependencies:
-                    src.extend(templates)
+        #         for dst, src in dependencies:
+        #             src.extend(templates)
 
-                dependencyCache[grammarName] = dependencies
+        #         dependencyCache[grammarName] = dependencies
 
+        #     rebuild = False
+        #     for dest, sources in dependencies:
+        #         if not os.path.isfile(dest):
+        #             rebuild = True
+        #             break
 
-            rebuild = False
-
-            for dest, sources in dependencies:
-                if not os.path.isfile(dest):
-                    rebuild = True
-                    break
-
-                for source in sources:
-                    if os.path.getmtime(source) > os.path.getmtime(dest):
-                        rebuild = True
-                        break
+        #         for source in sources:
+        #             if os.path.getmtime(source) > os.path.getmtime(dest):
+        #                 rebuild = True
+        #                 break
 
 
-            if rebuild:
-                self._invokeantlr(self.baseDir, grammarPath, options, javaOptions)
+        #     if rebuild:
+        #         self._invokeantlr(self.baseDir, grammarPath, options, javaOptions)
+
+            self._invokeantlr(self.baseDir, grammarPath, options, javaOptions)
 
         except:
             # mark grammar as broken

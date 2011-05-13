@@ -16,15 +16,15 @@ class T1(testbase.ANTLRTest):
         cStream = antlr3.StringStream(input)
         lexer = self.getLexer(cStream)
         tStream = antlr3.TokenRewriteStream(lexer)
-        tStream.LT(1) # fill buffer
+        tStream.fillBuffer()
 
         return tStream
 
-   
+
     def testInsertBeforeIndex0(self):
         tokens = self._parse("abc")
         tokens.insertBefore(0, "0")
-        
+
         result = tokens.toString()
         expecting = "0abc"
         self.failUnlessEqual(result, expecting)
@@ -33,7 +33,7 @@ class T1(testbase.ANTLRTest):
     def testInsertAfterLastIndex(self):
         tokens = self._parse("abc")
         tokens.insertAfter(2, "x")
-        
+
         result = tokens.toString()
         expecting = "abcx"
         self.failUnlessEqual(result, expecting)
@@ -43,7 +43,7 @@ class T1(testbase.ANTLRTest):
         tokens = self._parse("abc")
         tokens.insertBefore(1, "x")
         tokens.insertAfter(1, "x")
-        
+
         result = tokens.toString()
         expecting = "axbxc"
         self.failUnlessEqual(result, expecting)
@@ -91,7 +91,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(0, "_")
         tokens.replace(1, "x")
         tokens.replace(1, "y")
-        
+
         result = tokens.toString()
         expecting = "_ayc"
         self.failUnlessEqual(expecting, result)
@@ -127,7 +127,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(0, "x")  # supercedes insert at 0
 
         result = tokens.toString()
-        expecting = "xbc"
+        expecting = "0xbc"
         self.failUnlessEqual(result, expecting)
 
 
@@ -148,7 +148,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(0, "z")
 
         result = tokens.toString()
-        expecting = "zbc"
+        expecting = "yxzbc"
         self.failUnlessEqual(result, expecting)
 
 
@@ -168,7 +168,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(2, "x")
 
         result = tokens.toString()
-        expecting = "abx"
+        expecting = "abyx"
         self.failUnlessEqual(result, expecting)
 
 
@@ -176,7 +176,7 @@ class T1(testbase.ANTLRTest):
         tokens = self._parse("abc")
         tokens.replace(2, "x")
         tokens.insertAfter(2, "y")
-        
+
         result = tokens.toString()
         expecting = "abxy"
         self.failUnlessEqual(result, expecting)
@@ -269,7 +269,7 @@ class T1(testbase.ANTLRTest):
         tokens = self._parse("abcba")
         tokens.replace(2, 2, "xyz")
         tokens.replace(0, 3, "foo")
-        
+
         result = tokens.toString()
         expecting = "fooa"
         self.failUnlessEqual(result, expecting)
@@ -374,11 +374,11 @@ class T1(testbase.ANTLRTest):
 
 
     def testDropPrevCoveredInsert(self):
-        tokens = self._parse("abcc")
+        tokens = self._parse("abc")
         tokens.insertBefore(1, "foo")
         tokens.replace(1, 2, "foo") # kill prev insert
         result = tokens.toString()
-        expecting = "afooc"
+        expecting = "afoofoo"
         self.failUnlessEqual(expecting, result)
 
 
@@ -400,6 +400,15 @@ class T1(testbase.ANTLRTest):
         self.failUnlessEqual(expecting, result)
 
 
+    def testInsertBeforeTokenThenDeleteThatToken(self):
+        tokens = self._parse("abc")
+        tokens.insertBefore(2, "y")
+        tokens.delete(2)
+        result = tokens.toString()
+        expecting = "aby"
+        self.failUnlessEqual(expecting, result)
+
+
 class T2(testbase.ANTLRTest):
     def setUp(self):
         self.compileGrammar('t048rewrite2.g')
@@ -409,11 +418,11 @@ class T2(testbase.ANTLRTest):
         cStream = antlr3.StringStream(input)
         lexer = self.getLexer(cStream)
         tStream = antlr3.TokenRewriteStream(lexer)
-        tStream.LT(1) # fill buffer
+        tStream.fillBuffer()
 
         return tStream
 
-   
+
     def testToStringStartStop(self):
         # Tokens: 0123456789
         # Input:  x = 3 * 0
@@ -468,7 +477,7 @@ class T2(testbase.ANTLRTest):
         self.failUnlessEqual(expecting, result)
 
         tokens.insertAfter(17, "// comment")
-        result = tokens.toString(12, 17)
+        result = tokens.toString(12, 18)
         expecting = "2 * 0;// comment"
         self.failUnlessEqual(expecting, result)
 
@@ -479,4 +488,3 @@ class T2(testbase.ANTLRTest):
 
 if __name__ == '__main__':
     unittest.main()
-

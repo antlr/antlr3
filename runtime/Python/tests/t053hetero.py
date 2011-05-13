@@ -125,6 +125,26 @@ class T(testbase.ANTLRTest):
         self.failUnlessEqual("a<V>", found)
 
 
+    def testTokenCommonTree(self):
+        grammar = textwrap.dedent(
+            r'''
+            grammar T;
+            options {
+                language=Python;
+                output=AST;
+            }
+            a : ID<CommonTree> ;
+            ID : 'a'..'z'+ ;
+            WS : (' '|'\n') {$channel=HIDDEN;} ;
+            ''')
+
+        found = self.execParser(
+            grammar, 'a',
+            input="a")
+
+        self.failUnlessEqual("a", found)
+
+
     def testTokenWithQualifiedType(self):
         grammar = textwrap.dedent(
             r'''

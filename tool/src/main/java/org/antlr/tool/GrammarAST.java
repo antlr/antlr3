@@ -389,7 +389,7 @@ public class GrammarAST extends CommonTree {
 			return this;
 		}
 		// else check children
-		Iterable<Tree> descendants = descendants(this);
+		List<Tree> descendants = descendants(this);
 		for (Tree child : descendants) {
 			if ( child.getType()==ttype ) {
 				return (GrammarAST)child;

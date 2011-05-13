@@ -323,7 +323,7 @@ public abstract class SemanticContext {
 			hashcode = calculateHashCode();
 		}
 
-		public CommutativePredicate(Iterable<SemanticContext> contexts){
+		public CommutativePredicate(HashSet<SemanticContext> contexts){
 			for (SemanticContext context : contexts){
 				if (context.getClass() == this.getClass()){
 					CommutativePredicate predicate = (CommutativePredicate)context;
@@ -442,7 +442,7 @@ public abstract class SemanticContext {
 			super(a,b);
 		}
 
-		public AND(Iterable<SemanticContext> contexts) {
+		public AND(HashSet<SemanticContext> contexts) {
 			super(contexts);
 		}
 
@@ -497,7 +497,7 @@ public abstract class SemanticContext {
 			super(a,b);
 		}
 
-		public OR(Iterable<SemanticContext> contexts) {
+		public OR(HashSet<SemanticContext> contexts) {
 			super(contexts);
 		}
 

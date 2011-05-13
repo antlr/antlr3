@@ -29,14 +29,14 @@ class T(testbase.ANTLRTest):
             def main(argv):
                 raise RuntimeError("no")
             }
-            
+
             ID: ('a'..'z' | '\u00c0'..'\u00ff')+;
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
-        
+
+
         stdout = StringIO()
-        
+
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
         try:
             lexerMod.main(
@@ -45,12 +45,12 @@ class T(testbase.ANTLRTest):
             self.fail()
         except RuntimeError:
             pass
-            
+
 
     def testLexerFromFile(self):
         input = "foo bar"
         inputPath = self.writeFile("input.txt", input)
-        
+
         grammar = textwrap.dedent(
             r"""lexer grammar T1;
             options {
@@ -60,10 +60,10 @@ class T(testbase.ANTLRTest):
             ID: 'a'..'z'+;
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
+
 
         stdout = StringIO()
-        
+
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
         lexerMod.main(
             ['lexer.py', inputPath],
@@ -71,11 +71,11 @@ class T(testbase.ANTLRTest):
             )
 
         self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
-        
+
 
     def testLexerFromStdIO(self):
         input = "foo bar"
-        
+
         grammar = textwrap.dedent(
             r"""lexer grammar T2;
             options {
@@ -85,10 +85,10 @@ class T(testbase.ANTLRTest):
             ID: 'a'..'z'+;
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
-        
+
+
         stdout = StringIO()
-        
+
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
         lexerMod.main(
             ['lexer.py'],
@@ -97,11 +97,11 @@ class T(testbase.ANTLRTest):
             )
 
         self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
-        
+
 
     def testLexerEncoding(self):
         input = u"föö bär".encode('utf-8')
-        
+
         grammar = textwrap.dedent(
             r"""lexer grammar T3;
             options {
@@ -111,10 +111,10 @@ class T(testbase.ANTLRTest):
             ID: ('a'..'z' | '\u00c0'..'\u00ff')+;
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
-        
+
+
         stdout = StringIO()
-        
+
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
         lexerMod.main(
             ['lexer.py', '--encoding', 'utf-8'],
@@ -123,11 +123,11 @@ class T(testbase.ANTLRTest):
             )
 
         self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
-        
+
 
     def testCombined(self):
         input = "foo bar"
-        
+
         grammar = textwrap.dedent(
             r"""grammar T4;
             options {
@@ -135,14 +135,14 @@ class T(testbase.ANTLRTest):
               }
 
             r returns [res]: (ID)+ EOF { $res = $text; };
-            
+
             ID: 'a'..'z'+;
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
-        
+
+
         stdout = StringIO()
-        
+
         lexerMod, parserMod = self.compileInlineGrammar(grammar, returnModule=True)
         parserMod.main(
             ['combined.py', '--rule', 'r'],
@@ -152,11 +152,11 @@ class T(testbase.ANTLRTest):
 
         stdout = stdout.getvalue()
         self.failUnlessEqual(len(stdout.splitlines()), 1, stdout)
-        
+
 
     def testCombinedOutputAST(self):
         input = "foo + bar"
-        
+
         grammar = textwrap.dedent(
             r"""grammar T5;
             options {
@@ -165,15 +165,15 @@ class T(testbase.ANTLRTest):
             }
 
             r: ID OP^ ID EOF!;
-            
+
             ID: 'a'..'z'+;
             OP: '+';
             WS: ' '+ { $channel = HIDDEN; };
             """)
-            
-        
+
+
         stdout = StringIO()
-        
+
         lexerMod, parserMod = self.compileInlineGrammar(grammar, returnModule=True)
         parserMod.main(
             ['combined.py', '--rule', 'r'],
@@ -183,7 +183,7 @@ class T(testbase.ANTLRTest):
 
         stdout = stdout.getvalue().strip()
         self.failUnlessEqual(stdout, "(+ foo bar)")
-        
+
 
     def testTreeParser(self):
         grammar = textwrap.dedent(
@@ -194,12 +194,12 @@ class T(testbase.ANTLRTest):
             }
 
             r: ID OP^ ID EOF!;
-            
+
             ID: 'a'..'z'+;
             OP: '+';
             WS: ' '+ { $channel = HIDDEN; };
             ''')
-        
+
         treeGrammar = textwrap.dedent(
             r'''tree grammar T6Walker;
             options {
@@ -224,7 +224,7 @@ class T(testbase.ANTLRTest):
 
         stdout = stdout.getvalue().strip()
         self.failUnlessEqual(stdout, "u'a + b'")
-        
+
 
     def testTreeParserRewrite(self):
         grammar = textwrap.dedent(
@@ -235,12 +235,12 @@ class T(testbase.ANTLRTest):
             }
 
             r: ID OP^ ID EOF!;
-            
+
             ID: 'a'..'z'+;
             OP: '+';
             WS: ' '+ { $channel = HIDDEN; };
             ''')
-        
+
         treeGrammar = textwrap.dedent(
             r'''tree grammar T7Walker;
             options {
@@ -268,7 +268,7 @@ class T(testbase.ANTLRTest):
         stdout = stdout.getvalue().strip()
         self.failUnlessEqual(stdout, "(+ (ARG a) (ARG b))")
 
-        
+
 
     def testGrammarImport(self):
         slave = textwrap.dedent(
@@ -277,7 +277,7 @@ class T(testbase.ANTLRTest):
             options {
               language=Python;
             }
-        
+
             a : B;
             ''')
 
@@ -288,7 +288,7 @@ class T(testbase.ANTLRTest):
             del sys.modules[parserName+'Parser']
         except KeyError:
             pass
-        
+
         master = textwrap.dedent(
             r'''
             grammar T8M;
@@ -302,7 +302,7 @@ class T(testbase.ANTLRTest):
             ''')
 
         stdout = StringIO()
-        
+
         lexerMod, parserMod = self.compileInlineGrammar(master, returnModule=True)
         parserMod.main(
             ['import.py', '--rule', 's'],

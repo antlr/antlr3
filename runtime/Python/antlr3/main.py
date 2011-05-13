@@ -43,7 +43,7 @@ class _Main(object):
         self.stdout = sys.stdout
         self.stderr = sys.stderr
 
-        
+
     def parseOptions(self, argv):
         optParser = optparse.OptionParser()
         optParser.add_option(
@@ -92,7 +92,7 @@ class _Main(object):
             )
 
         self.setupOptions(optParser)
-        
+
         return optParser.parse_args(argv[1:])
 
 
@@ -104,7 +104,7 @@ class _Main(object):
         options, args = self.parseOptions(argv)
 
         self.setUp(options)
-        
+
         if options.interactive:
             while True:
                 try:
@@ -112,10 +112,10 @@ class _Main(object):
                 except (EOFError, KeyboardInterrupt):
                     self.stdout.write("\nBye.\n")
                     break
-            
+
                 inStream = antlr3.ANTLRStringStream(input)
                 self.parseStream(options, inStream)
-            
+
         else:
             if options.input is not None:
                 inStream = antlr3.ANTLRStringStream(options.input)
@@ -166,7 +166,7 @@ class _Main(object):
     def setUp(self, options):
         pass
 
-    
+
     def parseStream(self, options, inStream):
         raise NotImplementedError
 
@@ -185,8 +185,8 @@ class LexerMain(_Main):
         _Main.__init__(self)
 
         self.lexerClass = lexerClass
-        
-    
+
+
     def parseStream(self, options, inStream):
         lexer = self.lexerClass(inStream)
         for token in lexer:
@@ -200,8 +200,8 @@ class ParserMain(_Main):
         self.lexerClassName = lexerClassName
         self.lexerClass = None
         self.parserClass = parserClass
-        
-    
+
+
     def setupOptions(self, optParser):
         optParser.add_option(
             "--lexer",
@@ -222,7 +222,7 @@ class ParserMain(_Main):
         lexerMod = __import__(options.lexerClass)
         self.lexerClass = getattr(lexerMod, options.lexerClass)
 
-        
+
     def parseStream(self, options, inStream):
         kwargs = {}
         if options.port is not None:
@@ -235,9 +235,8 @@ class ParserMain(_Main):
         parser = self.parserClass(tokenStream, **kwargs)
         result = getattr(parser, options.parserRule)()
         if result is not None:
-            if hasattr(result, 'tree'):
-                if result.tree is not None:
-                    self.writeln(options, result.tree.toStringTree())
+            if hasattr(result, 'tree') and result.tree is not None:
+                self.writeln(options, result.tree.toStringTree())
             else:
                 self.writeln(options, repr(result))
 
@@ -249,8 +248,8 @@ class WalkerMain(_Main):
         self.lexerClass = None
         self.parserClass = None
         self.walkerClass = walkerClass
-        
-    
+
+
     def setupOptions(self, optParser):
         optParser.add_option(
             "--lexer",
@@ -287,7 +286,7 @@ class WalkerMain(_Main):
         parserMod = __import__(options.parserClass)
         self.parserClass = getattr(parserMod, options.parserClass)
 
-        
+
     def parseStream(self, options, inStream):
         lexer = self.lexerClass(inStream)
         tokenStream = antlr3.CommonTokenStream(lexer)
@@ -304,4 +303,3 @@ class WalkerMain(_Main):
                     self.writeln(options, result.tree.toStringTree())
                 else:
                     self.writeln(options, repr(result))
-

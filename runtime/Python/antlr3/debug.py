@@ -940,7 +940,8 @@ class DebugEventSocketProxy(DebugEventListener):
 
 
     def enterDecision(self, decisionNumber, couldBacktrack):
-        self.transmit("enterDecision\t%d" % decisionNumber)
+        self.transmit(
+            "enterDecision\t%d\t%d" % (decisionNumber, couldBacktrack))
 
 
     def exitDecision(self, decisionNumber):

@@ -415,6 +415,9 @@ class BaseRecognizer(object):
         What is the error header, normally line/character position information?
         """
 
+        source_name = self.getSourceName()
+        if source_name is not None:
+            return "%s line %d:%d" % (source_name, e.line, e.charPositionInLine)
         return "line %d:%d" % (e.line, e.charPositionInLine)
 
 
@@ -1467,6 +1470,7 @@ class ParserRuleReturnScope(RuleReturnScope):
     def __init__(self):
         self.start = None
         self.stop = None
+        self.tree = None  # only used when output=AST
 
 
     def getStart(self):
@@ -1475,3 +1479,7 @@ class ParserRuleReturnScope(RuleReturnScope):
 
     def getStop(self):
         return self.stop
+
+
+    def getTree(self):
+        return self.tree

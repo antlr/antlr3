@@ -28,7 +28,6 @@
 /** Template overrides to add debugging to normal Python output;
  *  If ASTs are built, then you'll also get ASTDbg.stg loaded.
  */
-group Dbg;
 
 @outputFile.imports() ::= <<
 <@super.imports()>
@@ -188,11 +187,12 @@ try:
     if self.getRuleLevel() == 0:
         self._dbg.commence();
     self.incRuleLevel()
-    self._dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.column>)
+    <% ST uses zero-based columns, we want one-base %>
+    self._dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.charPositionInLine>+1)
 
     <@super.body()>
 
-    self._dbg.location(<ruleDescriptor.EORNode.line>, <ruleDescriptor.EORNode.column>)
+    self._dbg.location(<ruleDescriptor.EORNode.line>, <ruleDescriptor.EORNode.charPositionInLine>+1)
 finally:
     self._dbg.exitRule(self.getGrammarFileName(), "<ruleName>")
     self.decRuleLevel()
@@ -290,10 +290,10 @@ finally:
     self._dbg.exitDecision(<decisionNumber>)
 >>
 
-@altSwitchCase.prealt() ::= "<enterAlt(n=i)>"
+@altSwitchCase.prealt() ::= "<enterAlt(altNum)>"
 
 @element.prematch() ::=
-    "self._dbg.location(<it.line>, <it.pos>)"
+    "self._dbg.location(<e.line>, <e.pos>)"
 
 @matchSet.mismatchedSetException() ::=
     "self._dbg.recognitionException(mse)"

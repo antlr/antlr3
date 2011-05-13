@@ -5,8 +5,8 @@ import unittest
 class t009lexer(testbase.ANTLRTest):
     def setUp(self):
         self.compileGrammar()
-        
-        
+
+
     def lexerClass(self, base):
         class TLexer(base):
             def emitErrorMessage(self, msg):
@@ -18,8 +18,8 @@ class t009lexer(testbase.ANTLRTest):
                 raise re
 
         return TLexer
-    
-        
+
+
     def testValid(self):
         stream = antlr3.StringStream('085')
         lexer = self.getLexer(stream)
@@ -55,15 +55,13 @@ class t009lexer(testbase.ANTLRTest):
             token = lexer.nextToken()
             raise AssertionError, token
 
-        except antlr3.MismatchedRangeException, exc:
-            assert exc.a == '0', repr(exc.a)
-            assert exc.b == '9', repr(exc.b)
+        except antlr3.MismatchedSetException, exc:
+            # TODO: This should provide more useful information
+            assert exc.expecting is None
             assert exc.unexpectedType == 'a', repr(exc.unexpectedType)
             assert exc.charPositionInLine == 1, repr(exc.charPositionInLine)
             assert exc.line == 1, repr(exc.line)
-            
+
 
 if __name__ == '__main__':
     unittest.main()
-
-
