@@ -129,6 +129,9 @@ extern NSInteger debug;
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRStringStream" );
+#endif
     if ( markers && [markers count] ) {
         [markers removeAllObjects];
         [markers release];

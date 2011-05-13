@@ -66,6 +66,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRLinkBase" );
+#endif
 	if (fNext) [fNext dealloc];
 	if (fPrev) [fPrev dealloc];
 	[super dealloc];
@@ -80,8 +83,6 @@
     copy.fNext = fNext;
     return( copy );
 }
-
-
 
 -(id<ANTLRLinkList>)append:(id<ANTLRLinkList>)node
 {

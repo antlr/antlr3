@@ -36,7 +36,7 @@
 	if (self) {
 		[self setDebugListener:debugger];
 		[self setInput:theStream];
-		[[self getInput] LT:1];	// force reading first on-channel token
+		[self.input LT:1];	// force reading first on-channel token
 		initialStreamState = YES;
 	}
 	return self;
@@ -45,7 +45,7 @@
 - (void) dealloc
 {
     [self setDebugListener:nil];
-    [self setInput:nil];
+    self.input = nil;
     [super dealloc];
 }
 
@@ -64,7 +64,7 @@
     }
 }
 
-- (id<ANTLRTokenStream>) getInput
+- (id<ANTLRTokenStream>) input
 {
     return input; 
 }
@@ -93,7 +93,7 @@
 // forwarded to the actual token stream
 - (void) forwardInvocation:(NSInvocation *)anInvocation
 {
-	[anInvocation invokeWithTarget:[self getInput]];
+	[anInvocation invokeWithTarget:self.input];
 }
 
 - (void) consume

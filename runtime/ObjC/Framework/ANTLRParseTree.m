@@ -56,7 +56,7 @@
     return nil;
 }
     
-- (NSInteger)getType
+- (NSInteger)type
 {
     return 0;
 }
@@ -88,7 +88,7 @@
 {
     if ( [payload isKindOfClass:[ANTLRCommonToken class]] ) {
         id<ANTLRToken> t = (id<ANTLRToken>)payload;
-        if ( [t getType] == ANTLRTokenTypeEOF ) {
+        if ( t.type == ANTLRTokenTypeEOF ) {
             return @"<EOF>";
         }
         return [t text];

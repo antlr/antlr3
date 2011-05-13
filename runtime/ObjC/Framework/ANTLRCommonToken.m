@@ -198,11 +198,14 @@ static ANTLRCommonToken *INVALID_TOKEN;
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
-    [self setInput:nil];
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRCommonToken" );
+#endif
+    input = nil;
     [self setText:nil];
-    [super dealloc];
+	[super dealloc];
 }
 
 // create a copy, including the text if available
@@ -265,7 +268,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 	return [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
 }
 
-- (void) setText: (NSString *) aText
+- (void) setText:(NSString *)aText
 {
     if (text != aText) {
         if ( text ) [text release];
@@ -278,12 +281,12 @@ static ANTLRCommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  type 
 //---------------------------------------------------------- 
-- (NSInteger) getType
+- (NSInteger)type
 {
     return type;
 }
 
-- (void) setType: (NSInteger) aType
+- (void) setType:(NSInteger)aType
 {
     type = aType;
 }
@@ -291,12 +294,12 @@ static ANTLRCommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  channel 
 //---------------------------------------------------------- 
-- (NSUInteger) getChannel
+- (NSUInteger)channel
 {
     return channel;
 }
 
-- (void) setChannel: (NSUInteger) aChannel
+- (void) setChannel:(NSUInteger)aChannel
 {
     channel = aChannel;
 }
@@ -305,7 +308,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  input 
 //---------------------------------------------------------- 
-- (id<ANTLRCharStream>) getInput
+- (id<ANTLRCharStream>) input
 {
     return input; 
 }

@@ -110,6 +110,9 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRRewriteRuleElementStream" );
+#endif
     if ( singleElement && isSingleElement ) [singleElement release];
     else if ( elements && !isSingleElement ) [elements release];
     [self setDescription:nil];

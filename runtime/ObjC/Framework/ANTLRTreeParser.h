@@ -34,7 +34,7 @@
 	id<ANTLRTreeNodeStream> input;
 }
 
-@property (retain, getter=getInput, setter=setInput:) id<ANTLRTreeNodeStream> input;
+@property (retain, getter=input, setter=setInput:) id<ANTLRTreeNodeStream> input;
 
 + (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput;
 + (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)state;
@@ -44,7 +44,7 @@
                 State:(ANTLRRecognizerSharedState *)state;
 
 
-- (id<ANTLRTreeNodeStream>)getInput;
+- (id<ANTLRTreeNodeStream>)input;
 - (void) setInput:(id<ANTLRTreeNodeStream>)anInput;
 
 - (void) setTreeNodeStream:(id<ANTLRTreeNodeStream>) anInput;

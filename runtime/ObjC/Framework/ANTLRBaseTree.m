@@ -124,11 +124,11 @@ static id<ANTLRBaseTree> invalidNode = nil;
     children = anArray;
 }
 
-- (id<ANTLRBaseTree>) getFirstChildWithType:(NSInteger) type
+- (id<ANTLRBaseTree>) getFirstChildWithType:(NSInteger) aType
 {
     for (NSUInteger i = 0; children != nil && i < [children count]; i++) {
         id<ANTLRBaseTree> t = (id<ANTLRBaseTree>) [children objectAtIndex:i];
-        if ( [t getType] == type ) {
+        if ( t.type == aType ) {
             return t;
         }
     }	
@@ -412,7 +412,7 @@ static id<ANTLRBaseTree> invalidNode = nil;
     id<ANTLRBaseTree> t = (id<ANTLRBaseTree>)self;
     t = (id<ANTLRBaseTree>)[t getParent];
     while ( t != nil ) {
-        if ( [t getType]==ttype )
+        if ( t.type == ttype )
             return t;
         t = (id<ANTLRBaseTree>)[t getParent];
     }
@@ -436,22 +436,22 @@ static id<ANTLRBaseTree> invalidNode = nil;
     return ancestors;
 }
 
-- (NSInteger) getType
+- (NSInteger)type
 {
     return ANTLRTokenTypeInvalid;
 }
 
-- (NSString *) text
+- (NSString *)text
 {
     return nil;
 }
 
-- (NSUInteger) line
+- (NSUInteger)line
 {
     return 0;
 }
 
-- (NSUInteger) charPositionInLine
+- (NSUInteger)charPositionInLine
 {
     return 0;
 }

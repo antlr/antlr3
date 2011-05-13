@@ -37,6 +37,7 @@
 
 - (id) init;
 - (id) initWithCapacity:(NSUInteger)numItems;
+- (void) dealloc;
 
 - (BOOL) isEqual:(id)object;
 - (id) objectForKey:(id)aKey;

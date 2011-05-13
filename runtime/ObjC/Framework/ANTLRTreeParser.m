@@ -59,7 +59,10 @@
 
 - (void) dealloc
 {
-	[self setInput:nil];
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeParser" );
+#endif
+	if ( input ) [input release];
 	[super dealloc];
 }
 

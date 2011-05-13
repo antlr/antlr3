@@ -47,7 +47,7 @@
 - (id)initWithLabel:(id<ANTLRToken>)label;
 
 - (id<ANTLRBaseTree>)dupNode;
-- (NSInteger)getType;
+- (NSInteger)type;
 - (NSString *)text;
 - (NSInteger)getTokenStartIndex;
 - (void)setTokenStartIndex:(NSInteger)index;

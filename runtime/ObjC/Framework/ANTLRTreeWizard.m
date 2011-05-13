@@ -355,7 +355,7 @@
     {
         return nil;
     }
-    int rootTokenType = [tpattern getType];
+    int rootTokenType = [tpattern type];
 #ifdef DONTUSENOMO
     visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
         public void visit(Object t, Object parent, int childIndex, Map labels) {
@@ -430,7 +430,7 @@
         return;
     }
     ANTLRMapElement *labels = [ANTLRMap newANTLRMap]; // reused for each _parse
-    int rootTokenType = [tpattern getType];
+    int rootTokenType = [tpattern type];
 #pragma warning This is another one of those screwy nested constructs that I have to figure out
 #ifdef DONTUSENOMO
     visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
@@ -508,7 +508,7 @@
     }
     // check roots (wildcard matches anything)
     if ( [tpattern class] != [ANTLRWildcardTreePattern class] ) {
-        if ( [adaptor getType:t1] != [tpattern getType] )
+        if ( [adaptor getType:t1] != [tpattern type] )
             return NO;
         // if pattern has text, check node text
         if ( tpattern.hasTextArg && ![[adaptor getText:t1] isEqualToString:[tpattern text]] ) {

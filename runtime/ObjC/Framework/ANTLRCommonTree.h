@@ -56,11 +56,11 @@
 - (ANTLRCommonToken *) getToken;
 - (void) setToken:(ANTLRCommonToken *)aToken;
 - (ANTLRCommonToken *) dupNode;
-- (NSInteger) getType;
-- (NSString *) text;
-- (NSUInteger) line;
+- (NSInteger)type;
+- (NSString *)text;
+- (NSUInteger)line;
 - (void) setLine:(NSUInteger)aLine;
-- (NSUInteger) charPositionInLine;
+- (NSUInteger)charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger)pos;
 - (ANTLRCommonTree *) getParent;
 - (void) setParent:(ANTLRCommonTree *) t;

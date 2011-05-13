@@ -59,8 +59,8 @@
     if ((self = [super init]) != nil ) {
     //System.out.println("aStartToken: "+aStartToken+", aStopToken: "+aStopToken);
     if ( aStopToken == nil ||
-        ([ aStopToken getTokenIndex] < [aStartToken getTokenIndex] &&
-         [aStopToken getType] != ANTLRTokenTypeEOF) )
+        ([aStopToken getTokenIndex] < [aStartToken getTokenIndex] &&
+         aStopToken.type != ANTLRTokenTypeEOF) )
     {
             // sometimes resync does not consume a token (when LT(1) is
             // in follow set.  So, aStopToken will be 1 to left to aStartToken. adjust.
@@ -81,7 +81,7 @@
     return NO;
 }
 
-- (NSInteger) getType
+- (NSInteger)type
 {
     return ANTLRTokenTypeInvalid;
 }
@@ -92,7 +92,7 @@
     if ( [startToken isKindOfClass:[self class]] ) {
         int i = [(id<ANTLRToken>)startToken getTokenIndex];
         int j = [(id<ANTLRToken>)stopToken getTokenIndex];
-        if ( [(id<ANTLRToken>)stopToken getType] == ANTLRTokenTypeEOF ) {
+        if ( stopToken.type == ANTLRTokenTypeEOF ) {
             j = [(id<ANTLRTokenStream>)input size];
         }
         badText = [(id<ANTLRTokenStream>)input toStringFromStart:i ToEnd:j];

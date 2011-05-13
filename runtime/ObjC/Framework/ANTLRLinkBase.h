@@ -31,6 +31,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#ifndef DEBUG_DEALLOC
+#define DEBUG_DEALLOC
+#endif
+
 @protocol ANTLRLinkList <NSObject>
 
 + (id<ANTLRLinkList>)newANTLRLinkBase;

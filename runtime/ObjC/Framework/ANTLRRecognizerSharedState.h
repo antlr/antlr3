@@ -58,8 +58,8 @@
 @property (assign, getter=getBacktracking, setter=setBacktracking:) NSInteger backtracking;
 @property (retain, getter=getRuleMemo, setter=setRuleMemo:) ANTLRRuleStack *ruleMemo;
 @property (copy, getter=getToken, setter=setToken:) id<ANTLRToken> token;
-@property (getter=getType,setter=setType:) NSUInteger type;
-@property (getter=getChannel,setter=setChannel:) NSUInteger channel;
+@property (getter=type,setter=setType:) NSUInteger type;
+@property (getter=channel,setter=setChannel:) NSUInteger channel;
 @property (getter=getTokenStartLine,setter=setTokenStartLine:) NSUInteger tokenStartLine;
 @property (getter=charPositionInLine,setter=setCharPositionInLine:) NSUInteger tokenStartCharPositionInLine;
 @property (getter=getTokenStartCharIndex,setter=setTokenStartCharIndex:) NSInteger tokenStartCharIndex;
@@ -76,10 +76,10 @@
 - (id<ANTLRToken>) getToken;
 - (void) setToken:(id<ANTLRToken>) theToken;
 
-- (NSUInteger) getType;
+- (NSUInteger)type;
 - (void) setType:(NSUInteger) theTokenType;
 
-- (NSUInteger) getChannel;
+- (NSUInteger)channel;
 - (void) setChannel:(NSUInteger) theChannel;
 
 - (NSUInteger) getTokenStartLine;
@@ -91,7 +91,7 @@
 - (NSInteger) getTokenStartCharIndex;
 - (void) setTokenStartCharIndex:(NSInteger) theTokenStartCharIndex;
 
-- (NSString *) text;
+- (NSString *)text;
 - (void) setText:(NSString *) theText;
 
 

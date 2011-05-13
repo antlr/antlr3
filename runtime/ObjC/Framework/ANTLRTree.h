@@ -24,6 +24,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef DEBUG_DEALLOC
+#define DEBUG_DEALLOC
+#endif
+
 #import "AMutableArray.h"
 
 @protocol ANTLRTree < NSObject, NSCopying >
@@ -110,11 +114,11 @@
 - (id) deepCopyWithZone:(NSZone *)aZone;
 
 #pragma mark Tree Parser support
-- (NSInteger) getType;
-- (NSString *) text;
+- (NSInteger)type;
+- (NSString *)text;
 // In case we don't have a token payload, what is the line for errors?
-- (NSUInteger) line;
-- (NSUInteger) charPositionInLine;
+- (NSUInteger)line;
+- (NSUInteger)charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger)pos;
 
 #pragma mark Informational

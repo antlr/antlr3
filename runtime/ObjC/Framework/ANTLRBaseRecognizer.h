@@ -97,7 +97,7 @@
  * 
  *  This is ignored for lexers.
  */
-- (id) getInput;
+- (id) input;
 
 - (void)skip;
 

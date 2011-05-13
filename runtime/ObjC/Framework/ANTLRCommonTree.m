@@ -181,21 +181,21 @@
     return [ANTLRCommonTree newTreeWithTree:self ];
 }
 
-- (NSInteger) getType
+- (NSInteger)type
 {
 	if (token)
-		return [token getType];
+		return token.type;
 	return ANTLRTokenTypeInvalid;
 }
 
-- (NSString *) text
+- (NSString *)text
 {
 	if (token)
-		return [token text];
+		return token.text;
 	return nil;
 }
 
-- (NSUInteger) line
+- (NSUInteger)line
 {
 	if (token)
 		return token.line;
@@ -208,7 +208,7 @@
         token.line = aLine;
 }
 
-- (NSUInteger) charPositionInLine
+- (NSUInteger)charPositionInLine
 {
 	if (token)
 		return token.charPositionInLine;
@@ -320,7 +320,7 @@
     if ( [self isNil] ) {
         return @"nil";
     }
-    if ( [self getType] == ANTLRTokenTypeInvalid ) {
+    if ( [self type] == ANTLRTokenTypeInvalid ) {
         return @"<errornode>";
     }
     if ( token==nil ) {

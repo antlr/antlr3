@@ -71,8 +71,8 @@
 			charPositionInLine = token.charPositionInLine;
 		} else if ([inputClass conformsToProtocol:@protocol(ANTLRCharStream)]) {
 			c = (unichar)[input LA:1];
-			line = (id<ANTLRCharStream>)input.line;
-			charPositionInLine = (id<ANTLRCharStream>)input.charPositionInLine;
+			line = ((id<ANTLRCharStream>)input).line;
+			charPositionInLine = ((id<ANTLRCharStream>)input).charPositionInLine;
 		} else if ([inputClass conformsToProtocol:@protocol(ANTLRTreeNodeStream)]) {
 			[self setNode:[(id<ANTLRTreeNodeStream>)input LT:1]];
 			line = [node line];
@@ -100,6 +100,9 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRRecognitionException" );
+#endif
 	[self setStream:nil];
 	[self setToken:nil];
 	[self setNode:nil];
@@ -109,9 +112,9 @@
 - (NSInteger) unexpectedType
 {
 	if (token) {
-		return [token getType];
+		return token.type;
     } else if (node) {
-        return [node getType];
+        return [node type];
 	} else {
 		return c;
 	}

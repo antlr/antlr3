@@ -178,8 +178,11 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBitSet" );
+#endif
 	CFRelease(bitVector);
 	[super dealloc];
 }

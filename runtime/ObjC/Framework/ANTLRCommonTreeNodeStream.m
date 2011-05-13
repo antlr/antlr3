@@ -30,6 +30,10 @@
 #import "ANTLRCharStream.h"
 #import "AMutableArray.h"
 
+#ifndef DEBUG_DEALLOC
+#define DEBUG_DEALLOC
+#endif
+
 @implementation ANTLRCommonTreeNodeStream
 
 @synthesize root;
@@ -50,6 +54,7 @@
 - (id) initWithTree:(ANTLRCommonTree *)theTree
 {
     if ((self = [super init]) != nil ) {
+        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
         root = theTree;
         adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
@@ -64,9 +69,9 @@
 - (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor Tree:(ANTLRCommonTree *)theTree
 {
     if ((self = [super init]) != nil ) {
-        [adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"]; // set EOF
-        root = theTree;
         adaptor = [anAdaptor retain];
+        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
+        root = theTree;
         //    it = [root objectEnumerator];
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
         calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
@@ -76,6 +81,19 @@
     }
     //    eof = [self isEOF]; // make sure tree iterator returns the EOF we want
     return self;
+}
+
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRCommonTreeNodeStream" );
+#endif
+    if ( root ) [root release];
+    if ( tokens ) [tokens release];
+    if ( adaptor ) [adaptor release];
+    if ( it ) [it release];
+    if ( calls ) [calls release];    
+    [super dealloc];
 }
 
 - (void) reset

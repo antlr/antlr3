@@ -249,9 +249,9 @@
     return t;
 }
 
-- (NSInteger) getType:(id) t
+- (NSInteger) getType:(ANTLRCommonTree *) t
 {
-    return [(id)t getType];
+    return t.type;
 }
 
 - (void) setType:(id)t Type:(NSInteger)type
@@ -271,9 +271,9 @@
     return nil; // no idea what to do
 }
 
-- (NSString *)getText:(id)t
+- (NSString *)getText:(ANTLRCommonTree *)t
 {
-    return [(id)t text];
+    return t.text;
 }
 
 - (void) setText:(id)t Text:(NSString *)text

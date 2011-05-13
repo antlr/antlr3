@@ -47,7 +47,7 @@
 -(id) init
 {
 	if ((self = [super init]) != nil) {
-        eof = [ANTLRCommonToken eofToken];
+        eof = [[ANTLRCommonToken eofToken] retain];
 		eofElementIndex = UNITIALIZED_EOF_ELEMENT_INDEX;
 		markDepth = 0;
         index = 0;
@@ -58,7 +58,7 @@
 -(id) initWithEOF:(id) obj
 {
 	if ((self = [super init]) != nil) {
-		self.eof = obj;
+		self.eof = [obj retain];
 	}
 	return self;
 }
@@ -87,6 +87,7 @@
         // if so, it's an opportunity to start filling at index 0 again
         [self clear]; // size goes to 0, but retains memory
     }
+    [o release];
     return o;
 }
 

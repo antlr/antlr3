@@ -175,7 +175,7 @@
 - (id<ANTLRBaseTree>) newANTLRTreeWithToken:(id<ANTLRToken>)fromToken text:(NSString *)tokenText
 {
 	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithToken:fromToken text:tokenText];
-	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:tokenText type:[fromToken getType]];
+	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:tokenText type:fromToken.type];
 	return newTree;
 }
 

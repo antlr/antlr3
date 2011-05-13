@@ -54,11 +54,9 @@ ANTLRRecognitionException *trappedException;
            Exception:(ANTLRRecognitionException *) e;
 - (BOOL) isNil;
 
-- (NSInteger) getType;
-
-- (NSString *) text;
-
-- (NSString *) toString;
+- (NSInteger)type;
+- (NSString *)text;
+- (NSString *)toString;
 
 @property (retain) id<ANTLRIntStream> input;
 @property (retain) id<ANTLRToken> startToken;

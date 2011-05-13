@@ -94,6 +94,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRPtrBuffer" );
+#endif
     ANTLRLinkBase *tmp, *rtmp;
     NSInteger idx;
     
@@ -106,7 +109,7 @@
                     tmp = (id)tmp.fNext;
                 else
                     tmp = nil;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }

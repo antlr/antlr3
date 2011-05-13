@@ -44,7 +44,7 @@
 - (id<ANTLRDebugEventListener>) debugListener;
 - (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
 
-- (id<ANTLRTokenStream>) getInput;
+- (id<ANTLRTokenStream>) input;
 - (void) setInput:(id<ANTLRTokenStream>)aTokenStream;
 
 - (void) consume;

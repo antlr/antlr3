@@ -98,6 +98,9 @@ static NSInteger itIndex;
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRHashMap" );
+#endif
     ANTLRMapElement *tmp, *rtmp;
     NSInteger idx;
 

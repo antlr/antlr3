@@ -28,13 +28,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRPtrBuffer.h"
 
 #define ANTLR_INT_ARRAY_INITIAL_SIZE 10
 
-@interface ANTLRIntArray : ANTLRPtrBuffer 
+@interface ANTLRIntArray : NSObject 
 {
-    NSUInteger *ip;
+    NSUInteger BuffSize;
+    NSUInteger count;
+    NSInteger idx;
+    NSMutableData *buffer;
+    __strong NSInteger *intBuffer;
+    BOOL SPARSE;
 }
 
 + (ANTLRIntArray *)newArray;
@@ -47,16 +51,24 @@
 
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (void) addInteger:(NSInteger) v;
-- (void) push:(NSInteger) v;
+- (void) addInteger:(NSInteger) value;
 - (NSInteger) pop;
-- (NSInteger) integerAtIndex:(NSUInteger) i;
-- (void) insertInteger:(NSInteger)anInteger AtIndex:(NSUInteger) idx;
+- (void) push:(NSInteger) value;
+- (NSInteger) integerAtIndex:(NSUInteger) index;
+- (void) insertInteger:(NSInteger)anInteger AtIndex:(NSUInteger) anIndex;
+- (NSInteger)removeIntegerAtIndex:(NSUInteger) anIndex;
+- (void)replaceInteger:(NSInteger)aValue AtIndex:(NSUInteger)anIndex;
 - (void) reset;
 
 - (NSUInteger) count;
 - (NSUInteger) size;
-- (void) ensureCapacity:(NSUInteger) index;
+- (void) ensureCapacity:(NSUInteger) anIndex;
 
-@property NSUInteger *ip;
+@property (assign) NSUInteger BuffSize;
+@property (assign) NSUInteger count;
+@property (assign) NSInteger idx;
+@property (retain) NSMutableData *buffer;
+@property (assign) NSInteger *intBuffer;
+@property (assign) BOOL SPARSE;
+
 @end

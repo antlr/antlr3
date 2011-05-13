@@ -83,6 +83,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRSymbolStack" );
+#endif
 	[super dealloc];
 }
 

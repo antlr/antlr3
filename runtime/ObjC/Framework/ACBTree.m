@@ -712,6 +712,9 @@ ACBTree *t;
 
 - (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ACBTree" );
+#endif
     [super dealloc];
 }
 

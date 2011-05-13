@@ -51,6 +51,9 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeException" );
+#endif
 	[self setOldRoot:nil];
 	[self setNewRoot:nil];
 	[super dealloc];

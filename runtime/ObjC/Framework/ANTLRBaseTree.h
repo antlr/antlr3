@@ -81,11 +81,11 @@
 - (id) deepCopyWithZone:(NSZone *)aZone;
 
 #pragma mark Tree Parser support
-- (NSInteger) getType;
-- (NSString *) text;
+- (NSInteger)type;
+- (NSString *)text;
 // In case we don't have a token payload, what is the line for errors?
-- (NSUInteger) line;
-- (NSUInteger) charPositionInLine;
+- (NSUInteger)line;
+- (NSUInteger)charPositionInLine;
 
 
 #pragma mark Informational
@@ -157,12 +157,12 @@
 - (id) deepCopyWithZone:(NSZone *)aZone;
 
 	// Return a token type; needed for tree parsing
-- (NSInteger) getType;
-- (NSString *) text;
+- (NSInteger)type;
+- (NSString *)text;
 
 	// In case we don't have a token payload, what is the line for errors?
-- (NSUInteger) line;
-- (NSUInteger) charPositionInLine;
+- (NSUInteger)line;
+- (NSUInteger)charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger)pos;
 
 - (NSString *) treeDescription;
@@ -183,6 +183,7 @@
 @interface ANTLRTreeNavigationNodeDown : ANTLRTreeNavigationNode {
 }
 + (ANTLRTreeNavigationNodeDown *) getNavigationNodeDown;
+- (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end
@@ -190,6 +191,7 @@
 @interface ANTLRTreeNavigationNodeUp : ANTLRTreeNavigationNode {
 }
 + (ANTLRTreeNavigationNodeUp *) getNavigationNodeUp;
+- (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end
@@ -197,6 +199,7 @@
 @interface ANTLRTreeNavigationNodeEOF : ANTLRTreeNavigationNode {
 }
 + (ANTLRTreeNavigationNodeEOF *) getNavigationNodeEOF;
+- (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end

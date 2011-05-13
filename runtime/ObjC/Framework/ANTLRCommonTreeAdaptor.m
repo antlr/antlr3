@@ -152,7 +152,7 @@
 {
     if ( t==nil )
         return ANTLRTokenTypeInvalid;
-    return [(id<ANTLRBaseTree>) t getType];
+    return [(id<ANTLRBaseTree>) t type];
 }
 
 - (void) setType:(id<ANTLRBaseTree>)t Type:(NSInteger)tokenType

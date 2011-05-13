@@ -68,6 +68,9 @@ extern NSInteger debug;
 
 - (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRRuleStack" );
+#endif
 	[super dealloc];
 }
 

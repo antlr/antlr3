@@ -41,7 +41,7 @@
 - (id<ANTLRDebugEventListener>) debugListener;
 - (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
 
-- (id<ANTLRTreeNodeStream>) getInput;
+- (id<ANTLRTreeNodeStream>) input;
 - (void) setInput: (id<ANTLRTreeNodeStream>) aTreeNodeStream;
 
 - (id<ANTLRTreeAdaptor>) getTreeAdaptor;

@@ -71,7 +71,7 @@
 
 - (BOOL)isEOF:(id<ANTLRToken>)aToken
 {
-    return [aToken getType] == ANTLRTokenTypeEOF;
+    return (aToken.type == ANTLRTokenTypeEOF);
 }    
 
 - (id<ANTLRTokenSource>)getTokenSource
@@ -91,7 +91,7 @@
 
 - (NSInteger)LA:(NSInteger)anIdx
 {
-    return [[self LT:anIdx] getType];
+    return [[self LT:anIdx] type];
 }
 
 - (id<ANTLRToken>)objectAtIndex:(NSInteger)anIdx

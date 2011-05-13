@@ -69,6 +69,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRHashRule" );
+#endif
     ANTLRRuleMemo *tmp, *rtmp;
     int Index;
     

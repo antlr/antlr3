@@ -89,7 +89,11 @@ extern NSInteger debug;
 
 - (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBufferedTokenStream" );
+#endif
     if ( tokens ) [tokens release];
+	[super dealloc];
 }
 
 - (NSUInteger)line
@@ -193,7 +197,7 @@ extern NSInteger debug;
         [t setTokenIndex:[tokens count]];
         if (debug > 1) NSLog(@"adding %@ at index %d\n", [t text], [tokens count]);
         [tokens addObject:t];
-        if ( [t getType] == ANTLRTokenTypeEOF )
+        if ( t.type == ANTLRTokenTypeEOF )
             break;
     }
 }
@@ -220,7 +224,7 @@ extern NSInteger debug;
         stopIndex = [tokens count]-1;
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
         id<ANTLRToken>t = [tokens objectAtIndex:i];
-        if ( [t getType] == ANTLRTokenTypeEOF )
+        if ( t.type == ANTLRTokenTypeEOF )
             break;
         [subset addObject:t];
     }
@@ -229,7 +233,7 @@ extern NSInteger debug;
 
 - (NSInteger) LA:(NSInteger)i
 {
-    return [[self LT:i] getType];
+    return [[self LT:i] type];
 }
 
 - (id<ANTLRToken>) LB:(NSInteger)k
@@ -307,7 +311,7 @@ extern NSInteger debug;
     AMutableArray *filteredTokens = [AMutableArray arrayWithCapacity:5];
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
         id<ANTLRToken>t = [tokens objectAtIndex:i];
-        if ( types == nil || [types member:[t getType]] ) {
+        if ( types == nil || [types member:t.type] ) {
             [filteredTokens addObject:t];
         }
     }
@@ -354,7 +358,7 @@ extern NSInteger debug;
     NSMutableString *buf = [NSMutableString stringWithCapacity:5];
     for (NSInteger i = startIdx; i <= stopIdx; i++) {
         id<ANTLRToken>t = [tokens objectAtIndex:i];
-        if ( [t getType] == ANTLRTokenTypeEOF )
+        if ( t.type == ANTLRTokenTypeEOF )
             break;
         [buf appendString:[t text]];
     }
@@ -373,12 +377,12 @@ extern NSInteger debug;
 - (void) fill
 {
     if ( index == -1 ) [self setup];
-    if ( [[tokens objectAtIndex:index] getType] == ANTLRTokenTypeEOF )
+    if ( [((ANTLRCommonToken *)[tokens objectAtIndex:index]) type] == ANTLRTokenTypeEOF )
         return;
     
     NSInteger i = index+1;
     [self sync:i];
-    while ( [[tokens objectAtIndex:i] getType] != ANTLRTokenTypeEOF ) {
+    while ( [((ANTLRCommonToken *)[tokens objectAtIndex:i]) type] != ANTLRTokenTypeEOF ) {
         i++;
         [self sync:i];
     }

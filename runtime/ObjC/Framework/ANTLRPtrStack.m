@@ -44,6 +44,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRPtrStack" );
+#endif
 	[super dealloc];
 }
 

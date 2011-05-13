@@ -110,6 +110,15 @@
     return self;
 }
 
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ArrayIterator" );
+#endif
+    if ( anArray ) [anArray release];
+    [super dealloc];
+}
+
 - (BOOL) hasNext
 {
     if ( peekObj == nil ) {
@@ -168,12 +177,6 @@
 - (void) setCount:(NSInteger)cnt
 {
     count = cnt;
-}
-
-- (void) dealloc
-{
-    if ( anArray ) [anArray release];
-    [super dealloc];
 }
 
 @end

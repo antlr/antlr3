@@ -39,7 +39,7 @@
 - (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream;
 - (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream State:(ANTLRRecognizerSharedState *)aState;
 
-- (id<ANTLRTokenStream>) getInput;
+- (id<ANTLRTokenStream>) input;
 - (void) setInput: (id<ANTLRTokenStream>) anInput;
 
 - (void) reset;

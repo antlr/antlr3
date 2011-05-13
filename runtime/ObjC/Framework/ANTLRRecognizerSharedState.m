@@ -67,7 +67,7 @@
 {
     ANTLRHashRule *aHashRule;
 	if ((self = [super init]) != nil ) {
-        following = [AMutableArray arrayWithCapacity:10];
+        following = [[AMutableArray arrayWithCapacity:10] retain];
         _fsp = -1;
         errorRecovery = NO;			// are we recovering?
         lastErrorIndex = -1;
@@ -169,6 +169,10 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRRecognizerSharedState" );
+#endif
+    if ( token ) [token release];
 	if ( following ) [following release];
 	if ( ruleMemo ) [ruleMemo release];
 	[super dealloc];
@@ -191,7 +195,7 @@
     }
 }
 
-- (NSUInteger) getChannel
+- (NSUInteger)channel
 {
     return channel;
 }
@@ -244,6 +248,10 @@
 
 - (void)setFollowing:(AMutableArray *)aFollow
 {
+    if ( following != aFollow ) {
+        if ( following ) [following release];
+        [aFollow retain];
+    }
     following = aFollow;
 }
 
@@ -254,6 +262,10 @@
 
 - (void)setRuleMemo:(ANTLRRuleStack *)aRuleMemo
 {
+    if ( ruleMemo != aRuleMemo ) {
+        if ( ruleMemo ) [ruleMemo release];
+        [aRuleMemo retain];
+    }
     ruleMemo = aRuleMemo;
 }
 

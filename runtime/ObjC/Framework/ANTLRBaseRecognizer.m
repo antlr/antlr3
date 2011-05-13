@@ -147,8 +147,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBaseRecognizer" );
+#endif
 	[state release];
 	[super dealloc];
 }
@@ -200,7 +203,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	}
 }
 
-- (id)getInput
+- (id)input
 {
     return nil; // Must be overriden in inheriting class
 }
@@ -447,7 +450,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
             s = @"<EOF>";
         }
         else {
-            s = [NSString stringWithFormat:@"<%@>", [t getType]];
+            s = [NSString stringWithFormat:@"<%@>", t.type];
         }
     }
     s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@"\\\\n"];
@@ -1092,8 +1095,8 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     id<ANTLRIntStream> input;
 
     state.backtracking++;
-    // input = [((ANTLRCommonToken*)state.token) getInput];
-    input = [self getInput];
+    // input = state.token.input;
+    input = self.input;
     int start = [input mark];
     @try {
         [self performSelector:synpredFragment];

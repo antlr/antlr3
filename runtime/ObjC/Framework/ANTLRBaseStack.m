@@ -68,8 +68,11 @@
     return( self );
 }
 
--(void)dealloc
+- (void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBaseStack" );
+#endif
 	[super dealloc];
 }
 

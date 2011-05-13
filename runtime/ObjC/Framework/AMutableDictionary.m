@@ -76,8 +76,11 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in AMutableDictionary" );
+#endif
     if ( root ) [root release];
     [super dealloc];
 }

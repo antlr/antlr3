@@ -8,7 +8,7 @@
 #import "AMutableArray.h"
 #import "ArrayIterator.h"
 
-#define BUFFSIZE 101
+#define BUFFSIZE 25
 
 @implementation AMutableArray
 
@@ -32,8 +32,8 @@
 {
     self=[super init];
     if ( self != nil ) {
-        BuffSize  = BUFFSIZE;
-        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        BuffSize = BUFFSIZE;
+        buffer = [[NSMutableData dataWithLength:(BuffSize * sizeof(id))] retain];
         ptrBuffer = (id *)[buffer mutableBytes];
         for( int idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
@@ -46,14 +46,24 @@
 {
     self=[super init];
     if ( self != nil ) {
-        BuffSize  = ((len>=25)?len:25);
-        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        BuffSize = (len >= BUFFSIZE) ? len : BUFFSIZE;
+        buffer = [[NSMutableData dataWithLength:(BuffSize * sizeof(id))] retain];
         ptrBuffer = (id *)[buffer mutableBytes];
         for( int idx = 0; idx < BuffSize; idx++ ) {
             ptrBuffer[idx] = nil;
         }
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in AMutableArray" );
+#endif
+    if ( count ) [self removeAllObjects];
+    if ( buffer ) [buffer release];
+    [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
@@ -282,13 +292,6 @@
 		[buffer setLength:(BuffSize * sizeof(id))];
         ptrBuffer = [buffer mutableBytes];
 	}
-}
-
-- (void) dealloc
-{
-    if ( count ) [self removeAllObjects];
-    if ( buffer ) [buffer release];
-    [super dealloc];
 }
 
 @end

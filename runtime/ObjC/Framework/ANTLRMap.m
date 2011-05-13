@@ -76,6 +76,9 @@
 
 -(void)dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRMMap" );
+#endif
     ANTLRMapElement *tmp, *rtmp;
     NSInteger idx;
 	
@@ -264,7 +267,7 @@
 {
     if ( [np getfNext] != nil )
 		[self delete_chain:[np getfNext]];
-	[np dealloc];
+	[np release];
 }
 
 #ifdef DONTUSEYET
@@ -305,7 +308,7 @@
     ANTLRMapElement *np;
     NSInteger idx;
 
-    idx = [(id<ANTLRBaseTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode type];
     idx %= HASHSIZE;
     np = ptrBuffer[idx];
     return( [(NSNumber *)np.node integerValue] );

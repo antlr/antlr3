@@ -152,7 +152,7 @@
     ANTLRNodeMapElement *np;
     NSInteger idx;
     
-    idx = [(id<ANTLRBaseTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode type];
     np = ptrBuffer[idx];
     while ( np != nil ) {
         if (np.node == aNode) {
@@ -168,7 +168,7 @@
     ANTLRNodeMapElement *np, *np1;
     NSInteger idx;
     
-    idx = [(id<ANTLRBaseTree>)aNode getType];
+    idx = [(id<ANTLRBaseTree>)aNode type];
     idx %= HASHSIZE;
     np = [ANTLRNodeMapElement newANTLRNodeMapElementWithIndex:anID Node:aNode];
     np1 = ptrBuffer[idx];

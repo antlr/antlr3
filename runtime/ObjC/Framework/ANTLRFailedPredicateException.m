@@ -48,6 +48,9 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRFailedPredicateException" );
+#endif
 	[self setPredicate:nil];
 	[self setRuleName:nil];
 	[super dealloc];

@@ -111,7 +111,7 @@ extern NSInteger debug;
 - (NSInteger) execute:(NSMutableString *)buf
 {
     [buf appendString:text];
-    if ( [[tokens objectAtIndex:rwIndex] getType] != ANTLRTokenTypeEOF ) {
+    if ( [[tokens objectAtIndex:rwIndex] type] != ANTLRTokenTypeEOF ) {
         [buf appendString:[[tokens objectAtIndex:rwIndex] text]];
     }
     return rwIndex+1;
@@ -433,7 +433,7 @@ extern NSInteger debug;
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     for (int i = start; i >= MIN_TOKEN_INDEX && i <= end && i< [tokens count]; i++) {
-        if ( [[lastRewriteTokenIndexes objectAtIndex:i] getType] != ANTLRTokenTypeEOF )
+        if ( [[lastRewriteTokenIndexes objectAtIndex:i] type] != ANTLRTokenTypeEOF )
             [buf appendString:[[tokens objectAtIndex:i] text]];
     }
     return [NSString stringWithString:buf];
@@ -481,8 +481,8 @@ extern NSInteger debug;
         id<ANTLRToken>t = (id<ANTLRToken>) [tokens objectAtIndex:i];
         if ( op == nil ) {
             // no operation at that rwIndex, just dump token
-            if ( [t getType] != ANTLRTokenTypeEOF )
-                [buf appendString:[t text]];
+            if ( t.type != ANTLRTokenTypeEOF )
+                [buf appendString:t.text];
             i++; // move to next token
         }
         else {

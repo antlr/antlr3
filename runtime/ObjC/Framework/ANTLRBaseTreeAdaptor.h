@@ -121,7 +121,7 @@
 
 - (id<ANTLRToken>)getToken:(ANTLRCommonTree *)t;
 
-- (NSString *)getText:(id<ANTLRBaseTree>)aTree;
+- (NSString *)getText:(ANTLRCommonTree *)aTree;
 
 - (void) setText:(id<ANTLRBaseTree>)aTree Text:(NSString *)theText;
 

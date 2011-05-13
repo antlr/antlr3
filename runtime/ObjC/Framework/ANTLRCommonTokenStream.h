@@ -40,7 +40,7 @@
 }
 
 @property (retain, getter=getChannelOverride,setter=setChannelOverride:) AMutableDictionary *channelOverride;
-@property (assign, getter=getChannel,setter=setChannel:) NSUInteger channel;
+@property (assign, getter=channel,setter=setChannel:) NSUInteger channel;
 
 + (ANTLRCommonTokenStream *)newANTLRCommonTokenStream;
 + (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource;
@@ -65,10 +65,10 @@
 // - (id<ANTLRTokenSource>) getTokenSource;
 - (void) setTokenSource: (id<ANTLRTokenSource>) aTokenSource;
 
-- (NSUInteger)getChannel;
+- (NSUInteger)channel;
 - (void)setChannel:(NSUInteger)aChannel;
 
-- (AMutableDictionary *)getChannelOverride;
+- (AMutableDictionary *)channelOverride;
 - (void)setChannelOverride:(AMutableDictionary *)anOverride;
 
 - (id) copyWithZone:(NSZone *)aZone;

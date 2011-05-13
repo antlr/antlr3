@@ -29,9 +29,16 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "ANTLRIntArray.h"
-
+#import "ANTLRRuntimeException.h"
 
 @implementation ANTLRIntArray
+
+@synthesize BuffSize;
+@synthesize count;
+@synthesize idx;
+@synthesize buffer;
+@synthesize intBuffer;
+@synthesize SPARSE;
 
 + (ANTLRIntArray *)newArray
 {
@@ -43,100 +50,150 @@
     return [[ANTLRIntArray alloc] initWithLen:aLen];
 }
 
--(id) init
+- (id)init
 {
-	self = [super initWithLen:ANTLR_INT_ARRAY_INITIAL_SIZE];
+    self = [super init];
     if ( self != nil ) {
-        ip = (NSUInteger *)ptrBuffer;
-	}
-	return self;
+        BuffSize  = (ANTLR_INT_ARRAY_INITIAL_SIZE * (sizeof(NSInteger)/sizeof(id)));
+        count == 0;
+        idx = -1;
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        intBuffer = (NSInteger *)[buffer mutableBytes];
+        SPARSE = NO;
+    }
+    return self;
 }
 
--(id) initWithLen:(NSUInteger)aLen
+- (id)initWithLen:(NSUInteger)aLen
 {
-	self = [super initWithLen:aLen];
+    self = [super init];
     if ( self != nil ) {
-        ip = (NSUInteger *)ptrBuffer;
-	}
-	return self;
+        BuffSize  = (ANTLR_INT_ARRAY_INITIAL_SIZE * (sizeof(NSInteger)/sizeof(id)));
+        count = 0;
+        idx = -1;
+        buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
+        intBuffer = (NSInteger *)[buffer mutableBytes];
+        SPARSE = NO;
+    }
+    return self;
 }
 
--(void) dealloc
+- (void)dealloc
 {
-	[super dealloc];
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRIntArray" );
+#endif
+    if ( buffer ) [buffer release];
+    [super dealloc];
 }
 
-- (id) copyWithZone:(NSZone *)aZone
+- (id)copyWithZone:(NSZone *)aZone
 {
     ANTLRIntArray *copy;
     
-    copy = [super copyWithZone:aZone];
+    copy = [[[self class] alloc] initWithLen:BuffSize];
+    copy.idx = self.idx;
+    NSInteger anIndex;
+    for ( anIndex = 0; anIndex < BuffSize; anIndex++ ) {
+        [copy addInteger:intBuffer[anIndex]];
+    }
     return copy;
 }
 
 - (NSUInteger)count
 {
-    return ptr;
+    return count;
 }
 
 // FIXME: Java runtime returns p, I'm not so sure it's right so have added p + 1 to show true size!
--(NSUInteger) size
+- (NSUInteger)size
 {
-	return (ptr * sizeof(NSUInteger));
+    if ( count > 0 )
+        return ( count * sizeof(NSInteger));
+    return 0;
 }
 
--(void) addInteger:(NSInteger) v
+- (void)addInteger:(NSInteger) value
 {
-	[self ensureCapacity:ptr];
-	ip[ptr++] = (NSInteger) v;
+    [self ensureCapacity:idx+1];
+    intBuffer[++idx] = (NSInteger) value;
+    count++;
 }
 
--(void) push:(NSInteger) v
+- (NSInteger)pop
 {
-	[self addInteger:v];
+    if ( idx < 0 ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Nothing to pop, count = %d", count]];
+    }
+    NSInteger value = (NSInteger) intBuffer[idx--];
+    count--;
+    return value;
 }
 
--(NSInteger) pop
+- (void)push:(NSInteger)aValue
 {
-	NSInteger v = (NSInteger) ip[--ptr];
-	return v;
+    [self addInteger:aValue];
 }
 
--(NSInteger) integerAtIndex:(NSUInteger) i
+- (NSInteger)integerAtIndex:(NSUInteger) anIndex
 {
-    if (i >= BuffSize) {
+    if ( SPARSE==NO  && anIndex > idx ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
+    }
+    else if ( SPARSE == YES && anIndex >= BuffSize ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
+    }
+    return intBuffer[anIndex];
+}
+
+- (void)insertInteger:(NSInteger)aValue AtIndex:(NSUInteger)anIndex
+{
+    [self replaceInteger:aValue AtIndex:anIndex];
+    count++;
+}
+
+- (NSInteger)removeIntegerAtIndex:(NSUInteger) anIndex
+{
+    if ( SPARSE==NO && anIndex > idx ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
         return (NSInteger)-1;
+    } else if ( SPARSE==YES && anIndex >= BuffSize ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
     }
-	return (NSInteger) ip[i];
+    count--;
+    return intBuffer[anIndex];
 }
 
--(void) insertInteger:(NSInteger)anInteger AtIndex:(NSUInteger)idx
+- (void)replaceInteger:(NSInteger)aValue AtIndex:(NSUInteger)anIndex
 {
-    if ( idx >= BuffSize ) {
-        [self ensureCapacity:idx];
+    if ( SPARSE == NO && anIndex > idx ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
     }
-    ip[idx] = (NSInteger) anInteger;
+    else if ( SPARSE == YES && anIndex >= BuffSize ) {
+        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
+    }
+    intBuffer[anIndex] = aValue;
 }
+
 -(void) reset
 {
-	ptr = 0;
+    count = 0;
+    idx = -1;
 }
 
 - (void) ensureCapacity:(NSUInteger) anIndex
 {
-	if ((anIndex * sizeof(NSUInteger)) >= [buffer length])
-	{
-		NSUInteger newSize = ([buffer length] / sizeof(NSUInteger)) * 2;
-		if (anIndex > newSize) {
-			newSize = anIndex + 1;
-		}
+    if ( (anIndex * sizeof(NSUInteger)) >= [buffer length] )
+    {
+        NSUInteger newSize = ([buffer length] / sizeof(NSInteger)) * 2;
+        if (anIndex > newSize) {
+            newSize = anIndex + 1;
+        }
         BuffSize = newSize;
-		[buffer setLength:(BuffSize * sizeof(NSUInteger))];
-        ptrBuffer = (id *)[buffer mutableBytes];
-        ip = (NSUInteger *)ptrBuffer;
-	}
+        [buffer setLength:(BuffSize * sizeof(NSUInteger))];
+        intBuffer = (NSInteger *)[buffer mutableBytes];
+    }
 }
 
-@synthesize ip;
 @end
 

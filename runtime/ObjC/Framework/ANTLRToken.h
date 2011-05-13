@@ -27,17 +27,21 @@
 
 #import <Cocoa/Cocoa.h>
 
+#ifndef DEBUG_DEALLOC
+#define DEBUG_DEALLOC
+#endif
+
 typedef enum {
-	ANTLRTokenTypeEOF = -1,
-	ANTLRTokenTypeInvalid,
-	ANTLRTokenTypeEOR,
-	ANTLRTokenTypeDOWN,
-	ANTLRTokenTypeUP,
-	ANTLRTokenTypeMIN
+    ANTLRTokenTypeEOF = -1,
+    ANTLRTokenTypeInvalid,
+    ANTLRTokenTypeEOR,
+    ANTLRTokenTypeDOWN,
+    ANTLRTokenTypeUP,
+    ANTLRTokenTypeMIN
 } ANTLRTokenType;
 
 typedef enum {
-	ANTLRTokenChannelDefault = 0,
+    ANTLRTokenChannelDefault = 0,
     ANTLRTokenChannelHidden = 99
 } ANTLRTokenChannel;
 
@@ -59,21 +63,21 @@ typedef enum {
 - (NSString *) text;
 - (void) setText:(NSString *)theText;
 
-- (NSInteger) getType;
+- (NSInteger)type;
 - (void) setType: (NSInteger) aType;
 
 // ANTLR v3 provides automatic line and position tracking. Subclasses do not need to
 // override these, if they do not want to store line/pos tracking information
-- (NSUInteger) line;
+- (NSUInteger)line;
 - (void) setLine: (NSUInteger) aLine;
 
-- (NSUInteger) charPositionInLine;
+- (NSUInteger)charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger)aCharPositionInLine;
 
 // explicitely change the channel this Token is on. The default parser implementation
 // just sees the defaultChannel
 // Common idiom is to put whitespace tokens on channel 99.
-- (NSUInteger) getChannel;
+- (NSUInteger)channel;
 - (void) setChannel: (NSUInteger) aChannel;
 
 // the index of this Token into the TokenStream

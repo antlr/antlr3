@@ -47,8 +47,8 @@
 
 - (id) init
 {
-	if ((self = [super init]) != nil ) {
-//		pool = [NSAutoreleasePool new];
+	self = [super init];
+	if ( self != nil ) {
 		data = [[AMutableArray arrayWithCapacity:100] retain];
 		p = 0;
 		range = -1;
@@ -58,7 +58,10 @@
 
 - (void) dealloc
 {
-//	[pool drain];
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRFastQueue" );
+#endif
+	if ( data ) [data release];
 	[super dealloc];
 }
 
@@ -67,9 +70,9 @@
     ANTLRFastQueue *copy;
     
     copy = [[[self class] allocWithZone:aZone] init];
-//    copy.pool = pool;
     copy.data = [data copyWithZone:nil];
     copy.p = p;
+    copy.range = range;
     return copy;
 }
 
@@ -91,8 +94,7 @@
 	id o = [self objectAtIndex:0];
 	p++;
 	// check to see if we have hit the end of the buffer
-	if ( p == [data count] )
-	{
+	if ( p == [data count] ) {
 		// if we have, then we need to clear it out
 		[self clear];
 	}
@@ -101,7 +103,6 @@
 
 - (void) addObject:(id) o
 {
-	[o retain];
     [data addObject:o];
 }
 
