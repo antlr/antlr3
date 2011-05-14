@@ -175,6 +175,20 @@ extern NSInteger debug;
 	return self;
 }
 
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBufferedTreeNodeStream" );
+#endif
+    if ( adaptor ) [adaptor release];
+    if ( nodes ) [nodes release];
+    if ( root ) [root release];
+    if ( down ) [down release];
+    if ( up ) [up release];
+    if ( eof ) [eof release];
+	[super dealloc];
+}
+
 - (id) copyWithZone:(NSZone *)aZone
 {
     ANTLRBufferedTreeNodeStream *copy;

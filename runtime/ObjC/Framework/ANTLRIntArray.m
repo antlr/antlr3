@@ -55,7 +55,7 @@
     self = [super init];
     if ( self != nil ) {
         BuffSize  = (ANTLR_INT_ARRAY_INITIAL_SIZE * (sizeof(NSInteger)/sizeof(id)));
-        count == 0;
+        count = 0;
         idx = -1;
         buffer = [[NSMutableData dataWithLength:(NSUInteger)BuffSize * sizeof(id)] retain];
         intBuffer = (NSInteger *)[buffer mutableBytes];

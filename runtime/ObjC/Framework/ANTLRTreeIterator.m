@@ -81,7 +81,22 @@
 	return self;
 }
 
--(void) reset
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeIterator" );
+#endif
+    if ( adaptor ) [adaptor release];
+    if ( nodes ) [nodes release];
+    if ( tree && tree != eof ) [tree release];
+    if ( root && root != tree && root != eof ) [root release];
+    if ( down ) [down release];    
+    if ( up ) [up release];    
+    if ( eof ) [eof release];    
+    [super dealloc];
+}
+
+- (void)reset
 {
 	firstTime = YES;
 	tree = root;
@@ -110,7 +125,7 @@
 	// is this the first time we are using this method?
 	if ( firstTime ) {
 		firstTime = NO;
-		if ([adaptor getChildCount:tree] == 0) {
+		if ( [adaptor getChildCount:tree] == 0 ) {
 			[nodes addObject:eof];
 			return tree;
 		}
@@ -163,13 +178,14 @@
     @throw [ANTLRRuntimeException newException:@"ANTLRUnsupportedOperationException"];
 }
 
+@synthesize firstTime;
+@synthesize adaptor;
+@synthesize root;
+@synthesize tree;
+@synthesize nodes;
+
 @synthesize up;
 @synthesize down;
 @synthesize eof;
 
-@synthesize adaptor;
-@synthesize root;
-@synthesize tree;
-@synthesize firstTime;
-@synthesize nodes;
 @end

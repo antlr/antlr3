@@ -50,6 +50,8 @@ id<ANTLRTreeAdaptor> adaptor;
 - (id) initWithTokenizer:(ANTLRTreePatternLexer *)tokenizer
                   Wizard:(ANTLRTreeWizard *)aWizard
                  Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
+
+- (void) dealloc;
 - (id<ANTLRBaseTree>) pattern;
 - (id<ANTLRBaseTree>) parseTree;
 - (id<ANTLRBaseTree>) parseNode;

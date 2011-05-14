@@ -55,7 +55,7 @@
 {
     if ((self = [super init]) != nil ) {
         navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
-        root = theTree;
+        root = [theTree retain];
         adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
         calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
@@ -71,7 +71,7 @@
     if ((self = [super init]) != nil ) {
         adaptor = [anAdaptor retain];
         navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
-        root = theTree;
+        root = [theTree retain];
         //    it = [root objectEnumerator];
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
         calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
@@ -154,6 +154,10 @@
 
 - (void) setTokenStream:(id<ANTLRTokenStream>)theTokens
 {
+    if ( tokens != theTokens ) {
+        if ( tokens ) [tokens release];
+        [theTokens retain];
+    }
     tokens = theTokens;
 }
 
@@ -164,6 +168,10 @@
 
 - (void) setTreeAdaptor:(ANTLRCommonTreeAdaptor *) anAdaptor
 {
+    if ( adaptor != anAdaptor ) {
+        if ( adaptor ) [adaptor release];
+        [anAdaptor retain];
+    }
     adaptor = anAdaptor;
 }
 

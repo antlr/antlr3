@@ -46,7 +46,8 @@
 
 - (id) init
 {
-    if ((self = [super init]) != nil ) {
+    self = [super init];
+    if ( self != nil ) {
     }
     return self;
 }
@@ -56,12 +57,13 @@
                   To:(id<ANTLRToken>)aStopToken
            Exception:(ANTLRRecognitionException *) e
 {
-    if ((self = [super init]) != nil ) {
-    //System.out.println("aStartToken: "+aStartToken+", aStopToken: "+aStopToken);
-    if ( aStopToken == nil ||
-        ([aStopToken getTokenIndex] < [aStartToken getTokenIndex] &&
-         aStopToken.type != ANTLRTokenTypeEOF) )
-    {
+    self = [super init];
+    if ( self != nil ) {
+        //System.out.println("aStartToken: "+aStartToken+", aStopToken: "+aStopToken);
+        if ( aStopToken == nil ||
+            ([aStopToken getTokenIndex] < [aStartToken getTokenIndex] &&
+             aStopToken.type != ANTLRTokenTypeEOF) )
+        {
             // sometimes resync does not consume a token (when LT(1) is
             // in follow set.  So, aStopToken will be 1 to left to aStartToken. adjust.
             // Also handle case where aStartToken is the first token and no token
@@ -69,11 +71,27 @@
             aStopToken = aStartToken;
         }
         input = anInput;
+        if ( input ) [input retain];
         startToken = aStartToken;
+        if ( startToken ) [startToken retain];
         stopToken = aStopToken;
+        if ( stopToken ) [stopToken retain];
         trappedException = e;
+        if ( trappedException ) [trappedException retain];
     }
     return self;
+}
+
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRCommonErrorNode" );
+#endif
+    if ( input ) [input release];
+    if ( startToken ) [startToken release];
+    if ( stopToken ) [stopToken release];
+    if ( trappedException ) [trappedException release];
+	[super dealloc];
 }
 
 - (BOOL) isNil

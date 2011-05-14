@@ -177,14 +177,14 @@
 {
     if ( t == nil )
         return nil;
-    return [(id<ANTLRBaseTree>) t getChild:i];
+    return [(id<ANTLRBaseTree>)t getChild:i];
 }
 
 - (void) setChild:(id<ANTLRBaseTree>)t At:(NSInteger)i Child:(id<ANTLRBaseTree>)child
 {
     if ( t == nil )
         return;
-    [(id<ANTLRBaseTree>) t setChild:i With:child];
+    [(id<ANTLRBaseTree>)t setChild:i With:child];
 }
 
 - (id) deleteChild:(id<ANTLRBaseTree>)t Index:(NSInteger)anIndex

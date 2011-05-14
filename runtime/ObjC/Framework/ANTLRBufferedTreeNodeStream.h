@@ -105,6 +105,7 @@
 - (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree;
 - (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree WithBufferSize:(NSInteger)bufferSize;
 
+- (void)dealloc;
 - (id) copyWithZone:(NSZone *)aZone;
 
 // protected methods. DO NOT USE

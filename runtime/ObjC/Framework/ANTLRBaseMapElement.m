@@ -63,6 +63,15 @@
     return (self);
 }
 
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBaseMapElement" );
+#endif
+    if ( index ) [index release];
+    [super dealloc];
+}
+
 - (id) copyWithZone:(NSZone *)aZone
 {
     ANTLRBaseMapElement *copy;

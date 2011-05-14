@@ -57,12 +57,26 @@
                  Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor
 {
     if ((self = [super init]) != nil) {
-        tokenizer = aTokenizer;
-        wizard = aWizard;
         adaptor = anAdaptor;
+        if ( adaptor ) [adaptor retain];
+        tokenizer = aTokenizer;
+        if ( tokenizer ) [tokenizer retain];
+        wizard = aWizard;
+        if ( wizard ) [wizard retain];
         ttype = [aTokenizer nextToken]; // kickstart
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreePatternParser" );
+#endif
+	if ( adaptor ) [adaptor release];
+	if ( tokenizer ) [tokenizer release];
+	if ( wizard ) [wizard release];
+	[super dealloc];
 }
 
 - (id<ANTLRBaseTree>)pattern

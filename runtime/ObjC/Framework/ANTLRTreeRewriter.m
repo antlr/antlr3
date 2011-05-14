@@ -82,9 +82,11 @@
 
     if ((self = [super initWithStream:anInput]) != nil) {
         showTransformations = NO;
-        state = [ANTLRRecognizerSharedState newANTLRRecognizerSharedState];
+        state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedState] retain];
         originalAdaptor = [input getTreeAdaptor];
+        if ( originalAdaptor ) [originalAdaptor retain];
         originalTokenStream = [input getTokenStream];        
+        if ( originalTokenStream ) [originalTokenStream retain];
         aRuleSel = @selector(topdown);
         topdown_fptr = [ANTLRfptr newANTLRfptrWithRule:(SEL)aRuleSel withObject:self];
         aRuleSel = @selector(bottomup);
@@ -100,14 +102,28 @@
     if ((self = [super initWithStream:anInput]) != nil) {
         showTransformations = NO;
         state = aState;
+        if ( state ) [state retain];
         originalAdaptor = [input getTreeAdaptor];
+        if ( originalAdaptor ) [originalAdaptor retain];
         originalTokenStream = [input getTokenStream];        
+        if ( originalTokenStream ) [originalTokenStream retain];
         aRuleSel = @selector(topdown);
         topdown_fptr = [ANTLRfptr newANTLRfptrWithRule:(SEL)aRuleSel withObject:self];
         aRuleSel = @selector(bottomup);
         bottomup_ftpr = [ANTLRfptr newANTLRfptrWithRule:(SEL)aRuleSel withObject:self];        
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeRewriter" );
+#endif
+	if ( state ) [state release];
+	if ( originalAdaptor ) [originalAdaptor release];
+	if ( originalTokenStream ) [originalTokenStream release];
+	[super dealloc];
 }
 
 - (id) applyOnce:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule

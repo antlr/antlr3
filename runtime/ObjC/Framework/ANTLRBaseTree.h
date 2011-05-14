@@ -177,6 +177,7 @@
 
 @interface ANTLRTreeNavigationNode : ANTLRBaseTree {
 }
+- (id) init;
 - (id) copyWithZone:(NSZone *)aZone;
 @end
 

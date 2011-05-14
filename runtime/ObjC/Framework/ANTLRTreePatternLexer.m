@@ -56,6 +56,7 @@
         data = [sval mutableBytes];
         pattern = @"";
         n = [pattern length];
+        if ( pattern ) [pattern retain];
         [self consume];
     }
     return self;
@@ -69,11 +70,21 @@
         error = NO;
         sval = [[NSMutableData dataWithLength:1000] retain];
         data = [sval mutableBytes];
-        pattern = aPattern;
+        pattern = [aPattern retain];
         n = [pattern length];
         [self consume];
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreePatternLexer" );
+#endif
+	if ( pattern ) [pattern release];
+	if ( sval ) [sval release];
+	[super dealloc];
 }
 
 - (NSInteger) nextToken
@@ -170,7 +181,11 @@
 
 - (void)setSval:(NSMutableData *)aSval
 {
-    sval = [aSval retain];
+    if ( sval != aSval ) {
+        if ( sval ) [sval release];
+        [aSval retain];
+    }
+    sval = aSval;
 }
 
 @end

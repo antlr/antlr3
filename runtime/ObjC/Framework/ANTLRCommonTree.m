@@ -83,6 +83,7 @@
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
 		token = aNode.token;
+        if ( token ) [token retain];
 		startIndex = aNode.startIndex;
 		stopIndex = aNode.stopIndex;
         parent = nil;
@@ -95,7 +96,8 @@
 {
 	self = (ANTLRCommonTree *)[super init];
 	if ( self != nil ) {
-		token = [aToken retain];
+		token = aToken;
+        if ( token ) [token retain];
 		startIndex = -1;
 		stopIndex = -1;
         parent = nil;
@@ -140,6 +142,10 @@
         [token release];
         token = nil;
     }
+    if ( parent ) {
+        [parent release];
+        parent = nil;
+    }
 	[super dealloc];
 }
 
@@ -171,7 +177,7 @@
 - (void) setToken:(ANTLRCommonToken *) aToken
 {
 	if ( token != aToken ) {
-		[token release];
+		if ( token ) [token release];
 		token = [aToken retain];
 	}
 }

@@ -38,7 +38,7 @@
 // This is fast, so there is no need to reinvent the wheel just yet.
 
 @interface ANTLRBitSet : NSObject < NSMutableCopying > {
-	CFMutableBitVectorRef bitVector;
+	__strong CFMutableBitVectorRef bitVector;
 }
 
 #pragma mark Class Methods

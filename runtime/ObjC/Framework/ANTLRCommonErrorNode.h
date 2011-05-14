@@ -52,6 +52,8 @@ ANTLRRecognitionException *trappedException;
                 From:(id<ANTLRToken>)startToken
                   To:(id<ANTLRToken>)stopToken
            Exception:(ANTLRRecognitionException *) e;
+
+- (void)dealloc;
 - (BOOL) isNil;
 
 - (NSInteger)type;

@@ -39,7 +39,7 @@
 - (NSUInteger) getTokenType;
 - (void) setTokenType:(unsigned int) theTokenType;
 
-- (NSUInteger) getChannel;
+- (NSUInteger) channel;
 - (void) setChannel:(unsigned int) theChannel;
 
 - (NSUInteger) getTokenStartLine;

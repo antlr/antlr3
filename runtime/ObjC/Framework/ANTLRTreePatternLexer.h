@@ -60,7 +60,7 @@ NSInteger n;
     
 /** Set when token type is ID or ARG (name mimics Java's StreamTokenizer) */
 NSMutableData *sval;
-char *data;
+__strong char *data;
     
 BOOL error;
 
@@ -77,6 +77,8 @@ BOOL error;
 + (ANTLRTreePatternLexer *)newANTLRTreePatternLexer:(NSString *)aPattern;
 - (id) init;
 - (id) initWithPattern:(NSString *)aPattern;
+
+- (void) dealloc;
 - (NSInteger) nextToken;
 - (void) consume;
 - (NSString *)toString;

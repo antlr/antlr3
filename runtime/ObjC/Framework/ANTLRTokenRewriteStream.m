@@ -111,7 +111,7 @@ extern NSInteger debug;
 - (NSInteger) execute:(NSMutableString *)buf
 {
     [buf appendString:text];
-    if ( [[tokens objectAtIndex:rwIndex] type] != ANTLRTokenTypeEOF ) {
+    if ( ((ANTLRCommonToken *)[tokens objectAtIndex:rwIndex]).type != ANTLRTokenTypeEOF ) {
         [buf appendString:[[tokens objectAtIndex:rwIndex] text]];
     }
     return rwIndex+1;
@@ -641,7 +641,7 @@ extern NSInteger debug;
         [m setObject:op atIndex:op.rwIndex];
     }
     //System.out.println("rwIndex to op: "+m);
-    if (debug > 1) NSLog(@"rwIndex to  op %d\n", m);
+    if (debug > 1) NSLog(@"rwIndex to  op %d\n", (NSInteger)m);
     return m;
 }
 

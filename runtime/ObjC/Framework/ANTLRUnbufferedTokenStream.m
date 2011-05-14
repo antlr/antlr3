@@ -56,10 +56,20 @@
 {
     if ((self = [super init]) != nil) {
         tokenSource = aTokenSource;
+        if ( tokenSource ) [tokenSource retain];
         tokenIndex = 0;
         channel = ANTLRTokenChannelDefault;
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRUnbufferedTokenStream" );
+#endif
+    if ( tokenSource ) [tokenSource release];
+    [super dealloc];
 }
 
 - (id<ANTLRToken>)nextElement

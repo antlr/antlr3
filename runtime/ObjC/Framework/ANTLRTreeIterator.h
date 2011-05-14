@@ -37,17 +37,22 @@
 
 @interface ANTLRTreeIterator : NSObject 
 {
+	BOOL firstTime;
 	__strong id<ANTLRTreeAdaptor> adaptor;
 	__strong id<ANTLRBaseTree> root;
 	__strong id<ANTLRBaseTree> tree;
-	BOOL firstTime;
+	
+	__strong ANTLRFastQueue *nodes;
 	__strong id<ANTLRBaseTree> up;
 	__strong id<ANTLRBaseTree> down;
 	__strong id<ANTLRBaseTree> eof;
-	
-	__strong ANTLRFastQueue *nodes;
 }
 
+@property BOOL firstTime;
+@property(retain) id<ANTLRTreeAdaptor> adaptor;
+@property(retain) id<ANTLRBaseTree> root;
+@property(retain) id<ANTLRBaseTree> tree;
+@property(retain) ANTLRFastQueue *nodes;
 @property(retain, readwrite) id<ANTLRBaseTree> up;
 @property(retain, readwrite) id<ANTLRBaseTree> down;
 @property(retain, readwrite) id<ANTLRBaseTree> eof;
@@ -64,9 +69,4 @@
 - (id) nextObject;
 - (NSArray *) allObjects;
 
-@property (retain) id<ANTLRTreeAdaptor> adaptor;
-@property (retain) id<ANTLRBaseTree> root;
-@property (retain) id<ANTLRBaseTree> tree;
-@property BOOL firstTime;
-@property (retain) ANTLRFastQueue *nodes;
 @end

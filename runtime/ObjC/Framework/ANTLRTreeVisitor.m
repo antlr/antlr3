@@ -63,6 +63,9 @@
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeVisitor" );
+#endif
     if ( adaptor ) [adaptor release];
     [super dealloc];
 }

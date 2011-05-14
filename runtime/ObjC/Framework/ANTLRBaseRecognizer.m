@@ -78,13 +78,19 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 
 + (void)setTokenNames:(AMutableArray *)theTokNams
 {
+    if ( _tokenNames != theTokNams ) {
+        if ( _tokenNames ) [_tokenNames release];
+        [theTokNams retain];
+    }
     _tokenNames = theTokNams;
-    [_tokenNames retain];
 }
 
 + (void)setGrammarFileName:(NSString *)aFileName
 {
-    _grammarFileName = aFileName;
+    if ( _grammarFileName != aFileName ) {
+        if ( _grammarFileName ) [_grammarFileName release];
+        [aFileName retain];
+    }
     [_grammarFileName retain];
 }
 
@@ -95,7 +101,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
             state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedState] retain];
         }
         tokenNames = _tokenNames;
+        if ( tokenNames ) [tokenNames retain];
         grammarFileName = _grammarFileName;
+        if ( grammarFileName ) [grammarFileName retain];
         state._fsp = -1;
         state.errorRecovery = NO;		// are we recovering?
         state.lastErrorIndex = -1;
@@ -114,7 +122,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
             state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:aLen] retain];
         }
         tokenNames = _tokenNames;
+        if ( tokenNames ) [tokenNames retain];
         grammarFileName = _grammarFileName;
+        if ( grammarFileName ) [grammarFileName retain];
         state._fsp = -1;
         state.errorRecovery = NO;		// are we recovering?
         state.lastErrorIndex = -1;
@@ -135,7 +145,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         }
         [state retain];
         tokenNames = _tokenNames;
+        if ( tokenNames ) [tokenNames retain];
         grammarFileName = _grammarFileName;
+        if ( grammarFileName ) [grammarFileName retain];
         state._fsp = -1;
         state.errorRecovery = NO;		// are we recovering?
         state.lastErrorIndex = -1;
@@ -152,7 +164,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in ANTLRBaseRecognizer" );
 #endif
-	[state release];
+	if ( grammarFileName ) [grammarFileName release];
+	if ( tokenNames ) [tokenNames release];
+	if ( state ) [state release];
 	[super dealloc];
 }
 

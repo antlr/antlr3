@@ -33,16 +33,40 @@
 
 
 @implementation ANTLRTreeRuleReturnScope
-@synthesize startNode;
+@synthesize start;
+
++ (id) newReturnScope
+{
+    return [[ANTLRTreeRuleReturnScope alloc] init];
+}
+
+- (id) init
+{
+    self = [super init];
+    return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreeRuleReturnScope" );
+#endif
+	if ( start ) [start release];
+	[super dealloc];
+}
 
 - (ANTLRCommonTree *)getStart
 {
-    return startNode;
+    return start;
 }	
 
 - (void)setStart:(ANTLRCommonTree *)aStart
 {
-    startNode = aStart;
+    if ( start != aStart ) {
+        if ( start ) [start release];
+        [aStart retain];
+    }
+    start = aStart;
 }	
 
 // create a copy, including the text if available
@@ -50,7 +74,7 @@
 - (id) copyWithZone:(NSZone *)theZone
 {
     ANTLRTreeRuleReturnScope *copy = [super copyWithZone:theZone];
-    copy.startNode = startNode;
+    copy.start = start;
     return copy;
 }
 

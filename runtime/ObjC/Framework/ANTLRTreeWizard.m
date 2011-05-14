@@ -45,11 +45,27 @@
 {
     if ((self = [super init]) != nil) {
         action = anAction;
+        if ( action ) [action retain];
         actor = anActor;
+        if ( actor ) [actor retain];
         object1 = anObject1;
+        if ( object1 ) [object1 retain];
         object2 = anObject2;
+        if ( object2 ) [object2 retain];
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRVisitor" );
+#endif
+    if ( action ) [action release];
+    if ( actor ) [actor release];
+    if ( object1 ) [object1 release];
+    if ( object2 ) [object2 release];
+    [super dealloc];
 }
 
 - (void) visit:(ANTLRCommonTree *)t Parent:(ANTLRCommonTree *)parent ChildIndex:(NSInteger)childIndex Map:(ANTLRMap *)labels
@@ -98,9 +114,19 @@
 
 - (id) initWithToken:(id<ANTLRToken>)payload
 {
-    if ((self = [super initWithToken:payload]) != nil ) {
+    self = [super initWithToken:payload];
+    if ( self != nil ) {
     }
     return (ANTLRCommonTree *)self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreePattern" );
+#endif
+    if ( label ) [label release];
+    [super dealloc];
 }
 
 - (NSString *)toString
@@ -124,7 +150,8 @@
 
 - (id) initWithToken:(id<ANTLRToken>)payload
 {
-    if ((self = [super initWithToken:payload]) != nil ) {
+    self = [super initWithToken:payload];
+    if ( self != nil ) {
     }
     return self;
 }
@@ -139,28 +166,13 @@
     return [[ANTLRTreePatternTreeAdaptor alloc] init];
 }
 
-#ifdef DONTUSENOMO
-+ (ANTLRTreePatternTreeAdaptor *)newTreeAdaptor:(id<ANTLRToken>)payload
-{
-    return (ANTLRTreePatternTreeAdaptor *)[[ANTLRTreePatternTreeAdaptor alloc] initWithToken:payload];
-}
-#endif
-
 - (id) init
 {
-    if ((self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
     }
     return self;
 }
-
-#ifdef DONTUSENOMO
-- (id) initWithToken:(id<ANTLRToken>)payload
-{
-    if ((self = [super initWithToken:payload]) != nil) {
-    }
-    return self;
-}
-#endif
 
 - (ANTLRCommonTree *)createTreePattern:(id<ANTLRToken>)payload
 {
@@ -223,6 +235,7 @@
 {
     if ((self = [super init]) != nil) {
         adaptor = anAdaptor;
+        if ( adaptor ) [adaptor retain];
     }
     return self;
 }
@@ -231,6 +244,7 @@
 {
     if ((self = [super init]) != nil) {
         adaptor = anAdaptor;
+        if ( adaptor ) [adaptor retain];
         tokenNameToTypeMap = aTokenNameToTypeMap;
    }
     return self;
@@ -242,7 +256,7 @@
 #pragma warning Fix initWithTokenNames.
         // adaptor = anAdaptor;
         //tokenNameToTypeMap = aTokenNameToTypeMap;
-        tokenNameToTypeMap = [self computeTokenTypes:theTokNams];
+        tokenNameToTypeMap = [[self computeTokenTypes:theTokNams] retain];
     }
     return self;
 }
@@ -251,12 +265,23 @@
 {
     if ((self = [super init]) != nil) {
         adaptor = anAdaptor;
+        if ( adaptor ) [adaptor retain];
         // tokenNameToTypeMap = aTokenNameToTypeMap;
-        tokenNameToTypeMap = [self computeTokenTypes:theTokNams ];
+        tokenNameToTypeMap = [[self computeTokenTypes:theTokNams] retain];
     }
     return self;
 }
             
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRTreePatternTreeAdaptor" );
+#endif
+    if ( adaptor ) [adaptor release];
+    if ( tokenNameToTypeMap ) [tokenNameToTypeMap release];
+    [super dealloc];
+}
+
 /** Compute a Map<String, Integer> that is an inverted index of
  *  tokenNames (which maps int token types to names).
  */

@@ -98,6 +98,9 @@ static id<ANTLRBaseTree> invalidNode = nil;
 
 - (void) dealloc
 {
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRBaseTree" );
+#endif
 	if ( children ) [children release];
 	children = nil;
 	[super dealloc];
@@ -121,6 +124,10 @@ static id<ANTLRBaseTree> invalidNode = nil;
 
 - (void) setChildren:(AMutableArray *)anArray
 {
+    if ( children != anArray ) {
+        if ( children ) [children release];
+        [anArray retain];
+    }
     children = anArray;
 }
 
@@ -539,6 +546,12 @@ static id<ANTLRBaseTree> invalidNode = nil;
 #pragma mark -
 
 @implementation ANTLRTreeNavigationNode
+- (id)init
+{
+    self = (ANTLRTreeNavigationNode *)[super init];
+    return self;
+}
+
 - (id) copyWithZone:(NSZone *)aZone
 {
 	return nil;
@@ -551,6 +564,12 @@ static id<ANTLRBaseTree> invalidNode = nil;
     if ( navigationNodeDown == nil )
         navigationNodeDown = [[ANTLRTreeNavigationNodeDown alloc] init];
     return navigationNodeDown;
+}
+
+- (id)init
+{
+    self = [super init];
+    return self;
 }
 
 - (NSInteger) tokenType { return ANTLRTokenTypeDOWN; }
@@ -566,6 +585,12 @@ static id<ANTLRBaseTree> invalidNode = nil;
 }
 
 
+- (id)init
+{
+    self = [super init];
+    return self;
+}
+
 - (NSInteger) tokenType { return ANTLRTokenTypeUP; }
 - (NSString *) description { return @"UP"; }
 @end
@@ -576,6 +601,12 @@ static id<ANTLRBaseTree> invalidNode = nil;
     if ( navigationNodeEOF == nil )
         navigationNodeEOF = [[ANTLRTreeNavigationNodeEOF alloc] init];
     return navigationNodeEOF;
+}
+
+- (id)init
+{
+    self = [super init];
+    return self;
 }
 
 - (NSInteger) tokenType { return ANTLRTokenTypeEOF; }

@@ -89,13 +89,7 @@
 @interface ANTLRTreePatternTreeAdaptor : ANTLRCommonTreeAdaptor {
 }
 + (ANTLRTreePatternTreeAdaptor *)newTreeAdaptor;
-#ifdef DONTUSENOMO
-+ (ANTLRTreePatternTreeAdaptor *)newTreeAdaptor:(id<ANTLRToken>)payload;
-#endif
 - (id) init;
-#ifdef DONTUSENOMO
-- initWithToken:(id<ANTLRToken>)payload;
-#endif
 - (ANTLRCommonTree *)createTreePattern:(id<ANTLRToken>)payload;
 
 @end
@@ -113,6 +107,7 @@
 - (id) initWithAdaptor:(id<ANTLRTreeAdaptor>)adaptor Map:(ANTLRMap *)tokenNameToTypeMap;
 - (id) initWithTokenNames:(NSArray *)theTokNams;
 - (id) initWithTokenNames:(id<ANTLRTreeAdaptor>)anAdaptor TokenNames:(NSArray *)theTokNams;
+- (void) dealloc;
 - (ANTLRMap *)computeTokenTypes:(NSArray *)theTokNams;
 - (NSInteger)getTokenType:(NSString *)tokenName;
 - (ANTLRMap *)index:(ANTLRCommonTree *)t;

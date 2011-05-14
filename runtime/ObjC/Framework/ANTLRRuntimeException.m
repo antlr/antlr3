@@ -243,6 +243,12 @@
 	return self;
 }
 
+- (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:aName reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
 - (NSString *) description
 {
 	return [self name];

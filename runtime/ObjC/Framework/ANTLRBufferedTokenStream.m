@@ -93,6 +93,7 @@ extern NSInteger debug;
     NSLog( @"called dealloc in ANTLRBufferedTokenStream" );
 #endif
     if ( tokens ) [tokens release];
+    if ( tokenSource ) [tokenSource release];
 	[super dealloc];
 }
 

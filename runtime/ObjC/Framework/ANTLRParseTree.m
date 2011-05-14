@@ -143,4 +143,7 @@
     
 @synthesize payload;
 @synthesize hiddenTokens;
+@synthesize children;
+@synthesize anException;
+
 @end

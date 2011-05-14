@@ -41,6 +41,9 @@
 
 /** First node or root node of tree matched for this rule. */
 
++ (id) newReturnScope;
+- (id) init;
+- (void) dealloc;
 - (ANTLRCommonTree *)getStart;
 - (void)setStart:(ANTLRCommonTree *)aStart;
 
