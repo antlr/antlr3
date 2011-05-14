@@ -28,8 +28,6 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-group AST;
-
 /** Add an adaptor property that knows how to build trees */
 @headerFile.members() ::= <<
 /* @headerFile.members() */
@@ -76,12 +74,12 @@ root_0 = NULL;<\n>
 
 ruleLabelDefs() ::= <<
 <super.ruleLabelDefs()>
-<ruleDescriptor.tokenLabels:{<ASTLabelType> <it.label.text>_tree;}; separator="\n">
-<ruleDescriptor.tokenListLabels:{<ASTLabelType> <it.label.text>_tree;}; separator="\n">
+<ruleDescriptor.tokenLabels:{it | <ASTLabelType> <it.label.text>_tree;}; separator="\n">
+<ruleDescriptor.tokenListLabels:{it | <ASTLabelType> <it.label.text>_tree;}; separator="\n">
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;}; separator="\n">
+    :{it | pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;}; separator="\n">
+    :{it | pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;}; separator="\n">
 >>
 
 /* Note that we defer the actual creation of any rewrite streams we need here and just initialize
@@ -92,14 +90,14 @@ ruleLabelDefs() ::= <<
  */
 ruleLabelInitializations() ::= <<
 <super.ruleLabelInitializations()>
-<ruleDescriptor.tokenLabels:{<it.label.text>_tree   = NULL;}; separator="\n">
-<ruleDescriptor.tokenListLabels:{<it.label.text>_tree   = NULL;}; separator="\n">
+<ruleDescriptor.tokenLabels:{it | <it.label.text>_tree   = NULL;}; separator="\n">
+<ruleDescriptor.tokenListLabels:{it | <it.label.text>_tree   = NULL;}; separator="\n">
 
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-:{stream_<it>   = NULL;
+:{it | stream_<it>   = NULL;
 #define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRule<rewriteElementType>StreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"token <it>"); } }; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-:{stream_<it>   = NULL;
+:{it | stream_<it>   = NULL;
 #define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRuleSubtreeStreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"rule <it>"); }}; separator="\n">
 
 <if(ruleDescriptor.hasMultipleReturnValues)>
@@ -290,56 +288,56 @@ if ( <actions.(actionScope).synpredgate> ) <\n>
 
 rewriteCodeLabelsDecl() ::= <<
 <referencedTokenLabels
-    :{pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;};
+    :{it | pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;};
     separator="\n"
 >
 <referencedTokenListLabels
-    :{pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;};
+    :{it | pANTLR3_REWRITE_RULE_<rewriteElementType>_STREAM stream_<it>;};
     separator="\n"
 >
 <referencedRuleLabels
-    :{pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;};
+    :{it | pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;};
     separator="\n"
 >
 <referencedRuleListLabels
-    :{pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;};
+    :{it | pANTLR3_REWRITE_RULE_SUBTREE_STREAM stream_<it>;};
     separator="\n"
 >
 >>
 
 rewriteCodeLabelsInit() ::= <<
 <referencedTokenLabels
-:{stream_<it>=antlr3RewriteRule<rewriteElementType>StreamNewAEE(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", <it>);};
+:{it | stream_<it>=antlr3RewriteRule<rewriteElementType>StreamNewAEE(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", <it>);};
 separator="\n"
 >
 <referencedTokenListLabels
-:{stream_<it>=antlr3RewriteRule<rewriteElementType>StreamNewAEV(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", list_<it>); };
+:{it | stream_<it>=antlr3RewriteRule<rewriteElementType>StreamNewAEV(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", list_<it>); };
 separator="\n"
 >
 <referencedRuleLabels
-:{stream_<it>=antlr3RewriteRuleSubtreeStreamNewAEE(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", <it>.tree != NULL ? <it>.tree : NULL);};
+:{it | stream_<it>=antlr3RewriteRuleSubtreeStreamNewAEE(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", <it>.tree != NULL ? <it>.tree : NULL);};
 separator="\n"
 >
 <referencedRuleListLabels
-:{stream_<it>=antlr3RewriteRuleSubtreeStreamNewAEV(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", list_<it>);};
+:{it | stream_<it>=antlr3RewriteRuleSubtreeStreamNewAEV(ADAPTOR,  RECOGNIZER, (pANTLR3_UINT8)"token <it>", list_<it>);};
 separator="\n"
 >
 >>
 rewriteCodeLabelsFree() ::= <<
 <referencedTokenLabels
-:{if (stream_<it> != NULL) stream_<it>->free(stream_<it>); };
+:{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>); };
 separator="\n"
 >
 <referencedTokenListLabels
-:{if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
+:{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
 separator="\n"
 >
 <referencedRuleLabels
-:{if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
+:{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
 separator="\n"
 >
 <referencedRuleListLabels
-:{if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
+:{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>);};
 separator="\n"
 >
 >>

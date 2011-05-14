@@ -31,8 +31,6 @@
 /** Template overrides to add debugging to normal C output;
  *  If ASTs are built, then you'll also get ASTDbg.stg loaded.
  */
-group Dbg;
-
 @genericParser.members() ::= <<
 <if(grammar.grammarIsRoot)>
 const char *
@@ -211,10 +209,10 @@ enterAlt(n) ::= "DBG->enterAlt(DBG, <n>);<\n>"
 
 @closureBlock.postdecision() ::= "<exitDecision()>"
 
-@altSwitchCase.prealt() ::= "<enterAlt(n=i)>"
+@altSwitchCase.prealt() ::= "<enterAlt(altNum)>"
 
 @element.prematch() ::=
-    "DBG->location(DBG, <it.line>, <it.pos>);"
+    "DBG->location(DBG, <e.line>, <e.pos>);" // e is arg of element
 
 @matchSet.mismatchedSetException() ::=
     "DBG->recognitionException(DBG, EXCEPTION);"
