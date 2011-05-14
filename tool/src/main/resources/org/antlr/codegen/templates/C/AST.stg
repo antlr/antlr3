@@ -95,10 +95,10 @@ ruleLabelInitializations() ::= <<
 
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
 :{it | stream_<it>   = NULL;
-#define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRule<rewriteElementType>StreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"token <it>"); } }; separator="\n">
+#define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRule<rewriteElementType>StreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"token <it>"); \} }; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
 :{it | stream_<it>   = NULL;
-#define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRuleSubtreeStreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"rule <it>"); }}; separator="\n">
+#define CREATE_stream_<it>  if (stream_<it> == NULL) {stream_<it> = antlr3RewriteRuleSubtreeStreamNewAE(ADAPTOR, RECOGNIZER, (pANTLR3_UINT8)"rule <it>"); \}}; separator="\n">
 
 <if(ruleDescriptor.hasMultipleReturnValues)>
 retval.tree  = NULL;
@@ -441,7 +441,6 @@ rewriteElement(e) ::= <<
 /** Gen ID or ID[args] */
 rewriteTokenRef(token,elementIndex,terminalOptions,args) ::= <<
 ADAPTOR->addChild(ADAPTOR, root_<treeLevel>, <createRewriteNodeFromElement(...)>);<\n>
-<endif>
 >>
 
 /** Gen $label ... where defined via label=ID */

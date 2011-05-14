@@ -161,7 +161,7 @@ outputFile( LEXER,
  *  we perform this little trick of defining the literals as arrays of UINT32
  *  and passing in the address of these.
  */
-<literals:{static ANTLR3_UCHAR	lit_<i>[]  = <it>;}; separator="\n">
+<literals:{it | static ANTLR3_UCHAR	lit_<i>[]  = <it>;}; separator="\n">
 
 <endif>
 
@@ -587,7 +587,7 @@ has the callable functions (rules) shown below,
 <endif>
  * The methods in p<name> are  as follows:
  *
- * <rules: {r | <if(!r.ruleDescriptor.isSynPred)> - <headerReturnType(ruleDescriptor=r.ruleDescriptor,...)>      p<name>-><r.ruleDescriptor.name>(p<name>)<endif>}; separator="\n * ">
+ * <rules:{r | <if(!r.ruleDescriptor.isSynPred)> - <headerReturnType(ruleDescriptor=r.ruleDescriptor,...)>      p<name>-><r.ruleDescriptor.name>(p<name>)<endif>}; separator="\n * ">
  *
  * The return type for any particular rule is of course determined by the source
  * grammar file.
@@ -727,15 +727,15 @@ struct <name>_Ctx_struct
 <endif>}>
 
 <if(LEXER)>
-    <rules:{r | <if(!r.ruleDescriptor.isSynPred)><headerReturnType(ruleDescriptor=r.ruleDescriptor)> (*m<r.ruleDescriptor.name>)	(struct <name>_Ctx_struct * ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n";>
+    <rules:{r | <if(!r.ruleDescriptor.isSynPred)><headerReturnType(ruleDescriptor=r.ruleDescriptor)> (*m<r.ruleDescriptor.name>)	(struct <name>_Ctx_struct * ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
 <endif>
 <if(!LEXER)>
-    <rules:{r | <headerReturnType(ruleDescriptor=r.ruleDescriptor)> (*<r.ruleDescriptor.name>)	(struct <name>_Ctx_struct * ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n";>
+    <rules:{r | <headerReturnType(ruleDescriptor=r.ruleDescriptor)> (*<r.ruleDescriptor.name>)	(struct <name>_Ctx_struct * ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n">
 <! generate rule/method definitions for imported rules so they
    appear to be defined in this recognizer. !>
     // Delegated rules
 <recognizer.grammar.delegatedRules:{ruleDescriptor|
-    <headerReturnType(ruleDescriptor)> (*<ruleDescriptor.name>)(struct <name>_Ctx_struct * ctx<if(ruleDescriptor.parameterScope)>, <endif><ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n";>
+    <headerReturnType(ruleDescriptor)> (*<ruleDescriptor.name>)(struct <name>_Ctx_struct * ctx<if(ruleDescriptor.parameterScope)>, <endif><ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n">
 <endif>
 
     const char * (*getGrammarFileName)();
@@ -770,7 +770,7 @@ extern pANTLR3_UINT8   <recognizer.grammar.composite.rootGrammar.recognizerName>
 #ifdef	Tokens
 #undef	Tokens
 #endif
-<tokens:{#define <it.name>      <it.type>}; separator="\n">
+<tokens:{it | #define <it.name>      <it.type>}; separator="\n">
 #ifdef	EOF
 #undef	EOF
 #define	EOF	ANTLR3_TOKEN_EOF
@@ -835,13 +835,13 @@ headerReturnScope(ruleDescriptor) ::= "<returnScope(...)>"
 
 headerReturnType(ruleDescriptor) ::= <<
 <if(LEXER)>
-<if(!r.ruleDescriptor.isSynPred)>
+<if(!ruleDescriptor.isSynPred)>
  void
 <else>
- <ruleDescriptor:returnType()>
+ <returnType()>
 <endif>
 <else>
- <ruleDescriptor:returnType()>
+ <returnType()>
 <endif>
 >>
 
@@ -878,7 +878,7 @@ static pANTLR3_COMMON_TOKEN <name>NextToken   (pANTLR3_TOKEN_SOURCE toksource);
 
 /* Forward declare the locally static matching functions we have generated and any predicate functions.
  */
-<rules:{r | static ANTLR3_INLINE <headerReturnType(ruleDescriptor=r.ruleDescriptor)>	<if(!r.ruleDescriptor.isSynPred)>m<endif><r.ruleDescriptor.name>    (p<name> ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n";>
+<rules:{r | static ANTLR3_INLINE <headerReturnType(ruleDescriptor=r.ruleDescriptor)>	<if(!r.ruleDescriptor.isSynPred)>m<endif><r.ruleDescriptor.name>    (p<name> ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n">
 static void	<name>Free(p<name> ctx);
 
 /* =========================================================================
@@ -1002,7 +1002,7 @@ ANTLR3_API p<name> <name>NewSSD
 
     /* Install the implementation of our <name> interface
      */
-    <rules:{r | <if(!r.ruleDescriptor.isSynPred)>ctx->m<r.ruleDescriptor.name>	= m<r.ruleDescriptor.name>;<endif>}; separator="\n";>
+    <rules:{r | <if(!r.ruleDescriptor.isSynPred)>ctx->m<r.ruleDescriptor.name>	= m<r.ruleDescriptor.name>;<endif>}; separator="\n">
 
     /** When the nextToken() call is made to this lexer's pANTLR3_TOKEN_SOURCE
      *  it will call mTokens() in this generated code, and will pass it the ctx
@@ -1181,7 +1181,7 @@ genericParser(  grammar,
                 labelType,
 				members,
 				rewriteElementType, filterMode,
-                ASTLabelType="pANTLR3_BASE_TREE",
+                ASTLabelType="pANTLR3_BASE_TREE"
               ) ::= <<
 
 
@@ -1207,7 +1207,7 @@ pANTLR3_UINT8   <name>TokenNames[<length(tokenNames)>+4]
 
 // Forward declare the locally static matching functions we have generated.
 //
-<rules:{r | static <headerReturnType(ruleDescriptor=r.ruleDescriptor)>	<r.ruleDescriptor.name>    (p<name> ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n";>
+<rules:{r | static <headerReturnType(ruleDescriptor=r.ruleDescriptor)>	<r.ruleDescriptor.name>    (p<name> ctx<if(r.ruleDescriptor.parameterScope)>, <endif><r.ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n">
 static void	<name>Free(p<name> ctx);
 static void     <name>Reset (p<name> ctx);
 
@@ -1217,7 +1217,7 @@ static void     <name>Reset (p<name> ctx);
 <if(recognizer.grammar.delegatedRules)>
 // Delegated rules
 //
-<recognizer.grammar.delegatedRules:{ruleDescriptor|static <headerReturnType(ruleDescriptor)> <ruleDescriptor.name>(p<name> ctx<if(ruleDescriptor.parameterScope)>, <endif><ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n";>
+<recognizer.grammar.delegatedRules:{ruleDescriptor|static <headerReturnType(ruleDescriptor)> <ruleDescriptor.name>(p<name> ctx<if(ruleDescriptor.parameterScope)>, <endif><ruleDescriptor.parameterScope:parameterScope()>);}; separator="\n">
 
 <endif>
 <endif>
@@ -1299,12 +1299,12 @@ ANTLR3_API p<name>
 
     /* Install the implementation of our <name> interface
      */
-    <rules:{r | ctx-><r.ruleDescriptor.name>	= <r.ruleDescriptor.name>;}; separator="\n";>
+    <rules:{r | ctx-><r.ruleDescriptor.name>	= <r.ruleDescriptor.name>;}; separator="\n">
 <if(grammar.delegatedRules)>
 	// Install the delegated methods so that they appear to be a part of this
 	// parser
 	//
-    <grammar.delegatedRules:{ruleDescriptor | ctx-><ruleDescriptor.name>	= <ruleDescriptor.name>;}; separator="\n";>
+    <grammar.delegatedRules:{ruleDescriptor | ctx-><ruleDescriptor.name>	= <ruleDescriptor.name>;}; separator="\n">
 <endif>
 
     ctx->free			= <name>Free;
@@ -1422,7 +1422,7 @@ static pANTLR3_UINT8    *getTokenNames()
 
 /* Declare the bitsets
  */
-<bitsets:{it | bitsetDeclare(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
+<bitsets:{it | <bitsetDeclare(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
                     words64=it.bits)>}>
 
 
@@ -1597,7 +1597,7 @@ ruleBacktrackFailure() ::= <<
 <if(backtracking)>
 if (BACKTRACKING>0)
 {
-    FAILEDFLAG = <true()>;
+    FAILEDFLAG = <true_value()>;
     <scopeClean()>
     return <ruleReturnValue()>;
 }
@@ -2503,7 +2503,7 @@ static const ANTLR3_INT32 dfa<dfa.decisionNumber>_special[<dfa.numberOfStates>] 
 static const ANTLR3_INT32 dfa<dfa.decisionNumber>_T<i0>[] =
     {
 	<table; separator=", ", wrap="\n", null="-1">
-    };}; null = "">
+    \};}; null = "">
 
 /* Transition tables are a table of sub tables, with some tables
  * reused for efficiency.
