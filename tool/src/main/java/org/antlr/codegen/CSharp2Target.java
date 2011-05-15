@@ -27,20 +27,6 @@
  */
 package org.antlr.codegen;
 
-import org.antlr.Tool;
-import org.stringtemplate.v4.ST;
-import org.antlr.tool.Grammar;
-
-public class CSharp2Target extends Target 
+public class CSharp2Target extends CSharp3Target
 {
-    @Override
-    public String encodeIntAsCharEscape(int v) {
-        return "\\x" + Integer.toHexString(v).toUpperCase();
-    }
-
-    @Override
-    public String getTarget64BitStringFromValue(long word) {
-        return "0x" + Long.toHexString(word).toUpperCase();
-    }
 }
-
