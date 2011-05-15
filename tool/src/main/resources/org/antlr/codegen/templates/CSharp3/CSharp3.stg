@@ -73,6 +73,7 @@ outputFile(	LEXER,PARSER,TREE_PARSER, actionScope, actions,
 <@imports>
 using System.Collections.Generic;
 using Antlr.Runtime;
+using Antlr.Runtime.Misc;
 <if(TREE_PARSER)>
 using Antlr.Runtime.Tree;
 using RewriteRuleITokenStream = Antlr.Runtime.Tree.RewriteRuleTokenStream;
@@ -1430,7 +1431,7 @@ protected void <scope.name>_scopeAfter( <scope.name>_scope scope )
 <else>
 partial void <scope.name>_scopeAfter( <scope.name>_scope scope );
 <endif>
-protected readonly Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();
+protected readonly ListStack\<<scope.name>_scope\> <scope.name>_stack = new ListStack\<<scope.name>_scope\>();
 <endif>
 >>
 
@@ -1524,10 +1525,10 @@ parameterSetAttributeRef(attr,expr) ::= <<
 
 scopeAttributeRef(scope,attr,index,negIndex) ::= <%
 <if(negIndex)>
-System.Linq.Enumerable.ElementAt(<scope>_stack, <negIndex>).<attr.name; format="id">
+<scope>_stack[<scope>_stack.Count - <negIndex> - 1].<attr.name; format="id">
 <else>
 <if(index)>
-System.Linq.Enumerable.ElementAt(<scope>_stack, <scope>_stack.Count-<index>-1).<attr.name; format="id">
+<scope>_stack[<index>].<attr.name; format="id">
 <else>
 <scope>_stack.Peek().<attr.name; format="id">
 <endif>
@@ -1536,10 +1537,10 @@ System.Linq.Enumerable.ElementAt(<scope>_stack, <scope>_stack.Count-<index>-1).<
 
 scopeSetAttributeRef(scope,attr,expr,index,negIndex) ::= <%
 <if(negIndex)>
-System.Linq.Enumerable.ElementAt(<scope>_stack, <negIndex>).<attr.name; format="id"> = <expr>;
+<scope>_stack[<scope>_stack.Count - <negIndex> - 1].<attr.name; format="id"> = <expr>;
 <else>
 <if(index)>
-System.Linq.Enumerable.ElementAt(<scope>_stack, <scope>_stack.Count-<index>-1).<attr.name; format="id"> = <expr>;
+<scope>_stack[<index>].<attr.name; format="id"> = <expr>;
 <else>
 <scope>_stack.Peek().<attr.name; format="id"> = <expr>;
 <endif>
