@@ -326,7 +326,7 @@ lexer(  grammar,
 
 - (id) initWithCharStream:(id\<ANTLRCharStream>)anInput
 {
-    self = [super initWithCharStream:anInput State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
+    self = [super initWithCharStream:anInput State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]];
     if ( self != nil ) {
 <if(memoize)>
         if ( state.ruleMemo == nil ) {
@@ -708,7 +708,7 @@ genericParser(  grammar,
 <if(PARSER)>
 - (id) initWithTokenStream:(<inputStreamType>)aStream
 {
-    self = [super initWithTokenStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
+    self = [super initWithTokenStream:aStream State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]];
     if ( self != nil ) {
 <else><! TREE_PARSER !>
 - (id) initWithStream:(<inputStreamType>)aStream
@@ -906,8 +906,8 @@ NSInteger <ruleDescriptor.name>_StartIndex = input.index;
 
 ruleScopeSetUp() ::= <<
 /* ruleScopeSetUp */
-<ruleDescriptor.useScopes:{it | [<it>_stack push:[[<it>_Scope new<it>_Scope] retain]];}>
-<ruleDescriptor.ruleScope:{it | [<it.name>_stack push:[[<it.name>_Scope new<it.name>_Scope] retain]];}>
+<ruleDescriptor.useScopes:{it | [<it>_stack push:[<it>_Scope new<it>_Scope]];}>
+<ruleDescriptor.ruleScope:{it | [<it.name>_stack push:[<it.name>_Scope new<it.name>_Scope]];}>
 >>
 
 ruleScopeCleanUp() ::= <<
@@ -1563,7 +1563,7 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
 <if(backtracking)>
     if ( [recognizer getBacktrackingLevel] > 0 ) { [recognizer setFailed:YES]; return -1; }<\n>
 <endif>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<dfa.decisionNumber> state:s stream:[recognizer getInput]];
+    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<dfa.decisionNumber> state:s stream:recognizer.input];
     // nvae.c = s;
     /* [self error:nvae]; */ <! for debugger - do later !>
     @throw nvae;
@@ -1677,43 +1677,43 @@ synthesize(scope) ::= <<
 <scope.attributes:{a|@synthesize <a.name>;}; separator="\n">
 >>
 
-methods(scope) ::= <<
+methods(scope) ::= <%
 <scope.attributes:{a|
 - (<a.type>)get<a.name> { return( <a.name> ); \}<\n>
 - (void)set<a.name>:(<a.type>)aVal { <a.name> = aVal; \}<\n>}; separator="\n">
->>
+%>
 
-globalAttributeScopeInterface(scope) ::= <<
-/* globalAttributeScopeInterface */
-@interface <scope.name>_Scope : ANTLRSymbolsScope {
+globalAttributeScopeInterface(scope) ::= <%
+/* globalAttributeScopeInterface */<\n>
+@interface <scope.name>_Scope : ANTLRSymbolsScope {<\n>
 <if(scope.attributes)>
 <memVars(scope)>
 <endif>
-}
+}<\n>
 <if(scope.attributes)>
 /* start of globalAttributeScopeInterface properties */<\n>
 <properties(scope)>
 /* end globalAttributeScopeInterface properties */<\n>
 <endif>
 
-+ (<scope.name>_Scope *)new<scope.name>_Scope;
-- (id) init;
++ (<scope.name>_Scope *)new<scope.name>_Scope;<\n>
+- (id) init;<\n>
 <if(scope.attributes)>
 /* start of globalAttributeScopeInterface methodsDecl */<\n>
 <methodsDecl(scope)>
 /* End of globalAttributeScopeInterface methodsDecl */<\n>
 <endif>
 @end /* end of <scope.name>_Scope interface */<\n>
->>
+%>
 
-globalAttributeScopeMemVar(scope) ::= <<
-/* globalAttributeScopeMemVar */
-ANTLRSymbolStack *<scope.name>_stack;
-<scope.name>_Scope *<scope.name>_scope;
->>
+globalAttributeScopeMemVar(scope) ::= <%
+/* globalAttributeScopeMemVar */<\n>
+ANTLRSymbolStack *<scope.name>_stack;<\n>
+<scope.name>_Scope *<scope.name>_scope;<\n>
+%>
 
 globalAttributeScopeImplementation(scope) ::= <<
-@implementation <scope.name>_Scope  /* globalAttributeScopeImplementation */
+@implementation <scope.name>_Scope  /* globalAttributeScopeImplementation */<\n>
 <if(scope.attributes)>
 /* start of synthesize -- OBJC-Line 1750 */<\n>
 <synthesize(scope)>
@@ -1721,7 +1721,7 @@ globalAttributeScopeImplementation(scope) ::= <<
 
 + (<scope.name>_Scope *)new<scope.name>_Scope
 {
-    return [[[<scope.name>_Scope alloc] init] retain];
+    return [[<scope.name>_Scope alloc] init];
 }
 
 - (id) init
@@ -1779,7 +1779,7 @@ ruleAttributeScopeImplementation(scope) ::= <<
 
 + (<scope.name>_Scope *)new<scope.name>_Scope
 {
-    return [[[<scope.name>_Scope alloc] init] retain];
+    return [[<scope.name>_Scope alloc] init];
 }
 
 - (id) init
@@ -1888,24 +1888,24 @@ returnScopeInterface(scope) ::= <<
 <endif>
 >>
 
-returnScopeImplementation(scope) ::= <<
+returnScopeImplementation(scope) ::= <%
 <if(ruleDescriptor.hasMultipleReturnValues)>
-@implementation <ruleDescriptor:returnStructName()> /* returnScopeImplementation */
-<@synthesize()> /* start of synthesize -- OBJC-Line 1837 */
+@implementation <ruleDescriptor:returnStructName()> /* returnScopeImplementation */<\n>
+<@synthesize()> /* start of synthesize -- OBJC-Line 1837 */<\n>
 <if(scope.attributes)>
 <synthesize(scope)>
 <endif>
-+ (<ruleDescriptor:returnStructName()> *)new<ruleDescriptor:returnStructName()>
-{
-    return [[[<ruleDescriptor:returnStructName()> alloc] init] retain];
-}
-
-- (id) init
-{
-    self = [super init];
-    return self;
-}
-
++ (<ruleDescriptor:returnStructName()> *)new<ruleDescriptor:returnStructName()><\n>
+{<\n>
+    return [[[<ruleDescriptor:returnStructName()> alloc] init] retain];<\n>
+}<\n>
+<\n>
+- (id) init<\n>
+{<\n>
+    self = [super init];<\n>
+    return self;<\n>
+}<\n>
+<\n>
 <@methods()>
 <if(scope.attributes)>
 /* start of iterate get and set functions */<\n>
@@ -1916,7 +1916,7 @@ returnScopeImplementation(scope) ::= <<
 <@ruleReturnMembers()><\n>
 @end /* end of returnScope implementation */<\n>
 <endif>
->>
+%>
 
 parameterScope(scope) ::= <<
 <! <scope.attributes:{it | :(<it.type>)<it.name>}; separator=" "> !>
@@ -1982,21 +1982,21 @@ ruleLabelRef(referencedRule,scope,attr) ::= <<
 <endif>
 >>
 
-returnAttributeRef(ruleDescriptor,attr) ::= <<
+returnAttributeRef(ruleDescriptor,attr) ::= <%
 <if(ruleDescriptor.hasMultipleReturnValues)>
-retval.<attr.name>  /* added to returnAttributeRef */
+retval.<attr.name>  /* added to returnAttributeRef */<\n>
 <else>
-<attr.name>
+<attr.name><\n>
 <endif>
->>
+%>
 
-returnSetAttributeRef(ruleDescriptor,attr,expr) ::= <<
+returnSetAttributeRef(ruleDescriptor,attr,expr) ::= <%
 <if(ruleDescriptor.hasMultipleReturnValues)>
- retval.<attr.name> =<expr>; /* added to returnSetAttributeRef */
+ retval.<attr.name> =<expr>; /* added to returnSetAttributeRef */<\n>
 <else>
-<attr.name> = <expr>;
+<attr.name> = <expr>;<\n>
 <endif>
->>
+%>
 
 /** How to translate $tokenLabel */
 tokenLabelRef(label) ::= "<label>"
@@ -2009,10 +2009,10 @@ listLabelRef(label) ::= "list_<label>"
 /* they cannot see TREE_PARSER or PARSER attributes for example. :( */
 
 tokenLabelPropertyRef_text(scope,attr) ::= "(<scope>!=nil?<scope>.text:nil)"
-tokenLabelPropertyRef_type(scope,attr) ::= "(<scope>!=nil?[<scope> getType]:0)"
+tokenLabelPropertyRef_type(scope,attr) ::= "(<scope>!=nil?<scope>.type:0)"
 tokenLabelPropertyRef_line(scope,attr) ::= "(<scope>!=nil?<scope>.line:0)"
 tokenLabelPropertyRef_pos(scope,attr) ::= "(<scope>!=nil?<scope>.charPositionInLine:0)"
-tokenLabelPropertyRef_channel(scope,attr) ::= "(<scope>!=nil?[<scope> getChannel]:0)"
+tokenLabelPropertyRef_channel(scope,attr) ::= "(<scope>!=nil?<scope>.channel:0)"
 tokenLabelPropertyRef_index(scope,attr) ::= "(<scope>!=nil?[<scope> getTokenIndex]:0)"
 tokenLabelPropertyRef_tree(scope,attr) ::= "<scope>_tree"
 tokenLabelPropertyRef_int(scope,attr) ::= "(<scope>!=nil?[<scope>.text integerValue]:0)"
@@ -2033,10 +2033,10 @@ ruleLabelPropertyRef_st(scope,attr) ::= "(<scope>!=nil?[<scope> st]:nil)"
 /** Isolated $RULE ref ok in lexer as it's a Token */
 lexerRuleLabel(label) ::= "<label>"
 
-lexerRuleLabelPropertyRef_type(scope,attr) ::= "(<scope>!=nil?[<scope> getType]:0)"
+lexerRuleLabelPropertyRef_type(scope,attr) ::= "(<scope>!=nil?<scope>.type:0)"
 lexerRuleLabelPropertyRef_line(scope,attr) ::= "(<scope>!=nil?<scope>.line:0)"
 lexerRuleLabelPropertyRef_pos(scope,attr) ::= "(<scope>!=nil?<scope>.charPositionInLine:-1)"
-lexerRuleLabelPropertyRef_channel(scope,attr) ::= "(<scope>!=nil?[<scope> getChannel]:0)"
+lexerRuleLabelPropertyRef_channel(scope,attr) ::= "(<scope>!=nil?<scope>.channel:0)"
 lexerRuleLabelPropertyRef_index(scope,attr) ::= "(<scope>!=nil?[<scope> getTokenIndex]:0)"
 lexerRuleLabelPropertyRef_text(scope,attr) ::= "(<scope>!=nil?<scope>.text:nil)"
 lexerRuleLabelPropertyRef_int(scope,attr) ::="(<scope>!=nil?[<scope>.text integerValue]:0)"

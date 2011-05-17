@@ -543,9 +543,9 @@ createImaginaryNode(tokenType,terminalOptions,args) ::= <<
     [<terminalOptions.node> new<terminalOptions.node>:<tokenType> <if(args)>, <args; separator=", "><endif>]
 <else>
     <if(args)>
-        [treeAdaptor createTree:<tokenType> <if(first(args))>FromToken:<first(args)><endif> <if(first(rest(args)))>Text:<first(rest(args))><else>Text:@"<tokenType>"<endif>]
+        [[treeAdaptor createTree:<tokenType> <if(first(args))>FromToken:<first(args)><endif> <if(first(rest(args)))>Text:<first(rest(args))><else>Text:@"<tokenType>"<endif>] retain]
     <else>
-        [treeAdaptor createTree:<tokenType> Text:@"<tokenType>"]
+        [[treeAdaptor createTree:<tokenType> Text:@"<tokenType>"] retain]
     <endif>
 <endif>
 >>
@@ -555,7 +555,7 @@ createRewriteNodeFromElement(token,terminalOptions,args) ::= <<
     [<terminalOptions.node> new<terminalOptions.node>:[stream_<token> nextToken]<if(args)>, <args; separator=", "><endif>]
 <else>
     <if(args)> <! must create new node from old !>
-        [treeAdaptor createTree:<token> Text:<first(rest(args))> <args; separator=", ">]
+        [[treeAdaptor createTree:<token> Text:<first(rest(args))> <args; separator=", ">] retain]
     <else>
         [stream_<token> nextNode]
     <endif>
