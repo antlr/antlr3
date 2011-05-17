@@ -51,7 +51,7 @@
 @property (assign, getter=getMarkDepth, setter=setMarkDepth:) NSInteger markDepth;
 @property (retain) id prevElement;
 
-- (id) initWithEOF:(id) o;
+- (id) initWithEOF:(id) obj;
 - (id) nextElement;
 - (id) remove;
 - (void) consume;

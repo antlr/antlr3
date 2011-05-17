@@ -124,7 +124,7 @@
 - (NSInteger) LA:(NSUInteger) i
 {
 	id<ANTLRBaseTree> node = [self LT:1];
-	return [node getType];
+	return node.type;
 }
 
 - (NSUInteger) mark

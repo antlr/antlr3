@@ -45,7 +45,6 @@
 {
     if ((self = [super init]) != nil) {
         action = anAction;
-        if ( action ) [action retain];
         actor = anActor;
         if ( actor ) [actor retain];
         object1 = anObject1;
@@ -61,7 +60,6 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in ANTLRVisitor" );
 #endif
-    if ( action ) [action release];
     if ( actor ) [actor release];
     if ( object1 ) [object1 release];
     if ( object2 ) [object2 release];
@@ -446,7 +444,7 @@
     ANTLRTreePatternLexer *tokenizer = [ANTLRTreePatternLexer newANTLRTreePatternLexer:pattern];
     ANTLRTreePatternParser *parser =
     [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer Wizard:self Adaptor:[ANTLRTreePatternTreeAdaptor newTreeAdaptor]];
-    ANTLRCommonTree * tpattern = [parser pattern];
+    ANTLRCommonTree *tpattern = [parser pattern];
     // don't allow invalid patterns
     if ( tpattern == nil ||
         [tpattern isNil] ||
@@ -501,7 +499,7 @@
     ANTLRTreePatternParser *parser = [ANTLRTreePatternParser newANTLRTreePatternParser:tokenizer
                                                                                 Wizard:self
                                                                                Adaptor:[ANTLRTreePatternTreeAdaptor newTreeAdaptor]];
-    ANTLRCommonTree * tpattern = [parser pattern];
+    ANTLRCommonTree *tpattern = [parser pattern];
     /*
      System.out.println("t="+((Tree)t).toStringTree());
      System.out.println("scant="+tpattern.toStringTree());

@@ -39,7 +39,7 @@
 	AMutableArray *nodes;
 }
 
--(id) initWithNodes:(AMutableArray *) n andEOF:(id) o;
+-(id) initWithNodes:(AMutableArray *) n andEOF:(id) obj;
 -(BOOL) hasNext;
 
 @property NSInteger i;

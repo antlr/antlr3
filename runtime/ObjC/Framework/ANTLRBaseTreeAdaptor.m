@@ -251,7 +251,7 @@
 
 - (NSInteger) getType:(ANTLRCommonTree *) t
 {
-    return t.type;
+    return [t type];
 }
 
 - (void) setType:(id)t Type:(NSInteger)type
@@ -273,7 +273,7 @@
 
 - (NSString *)getText:(ANTLRCommonTree *)t
 {
-    return t.text;
+    return [t text];
 }
 
 - (void) setText:(id)t Text:(NSString *)text

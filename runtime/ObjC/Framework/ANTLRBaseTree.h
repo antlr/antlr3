@@ -143,7 +143,7 @@
 - (void) freshenParentAndChildIndexes;
 - (void) freshenParentAndChildIndexes:(NSInteger) offset;
 - (void) sanityCheckParentAndChildIndexes;
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>) parent At:(NSInteger) i;
+- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>)parent At:(NSInteger) i;
 
 - (NSInteger) getChildIndex;
 - (void) setChildIndex:(NSInteger)i;

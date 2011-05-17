@@ -164,7 +164,7 @@
     NSNumber *stopIndex;
     NSInteger anIndex;
     
-    anIndex = ( aStartIndex >= BuffSize ) ? aStartIndex %= BuffSize : aStartIndex;
+    anIndex = ( aStartIndex >= BuffSize ) ? aStartIndex % BuffSize : aStartIndex;
     if ((aRule = ptrBuffer[anIndex]) == nil) {
         return nil;
     }
@@ -198,7 +198,7 @@
     NSInteger anIndex;
     NSInteger aMatchIndex;
 
-    anIndex = (aStartIndex >= BuffSize) ? aStartIndex %= BuffSize : aStartIndex;
+    anIndex = (aStartIndex >= BuffSize) ? aStartIndex % BuffSize : aStartIndex;
     aRule = ptrBuffer[anIndex];
     if ( aRule == nil ) {
         aRule = [ANTLRRuleMemo newANTLRRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
@@ -259,7 +259,7 @@
 {
     NSInteger Index;
     
-    Index = ( anIndex >= BuffSize ) ? anIndex %= BuffSize : anIndex;
+    Index = ( anIndex >= BuffSize ) ? anIndex % BuffSize : anIndex;
     if (aRule != ptrBuffer[Index]) {
         if (ptrBuffer[Index] != nil) {
             [ptrBuffer[Index] release];
@@ -273,7 +273,7 @@
 {
     NSInteger anIdx;
 
-    anIdx = ( anIndex >= BuffSize ) ? anIndex %= BuffSize : anIndex;
+    anIdx = ( anIndex >= BuffSize ) ? anIndex % BuffSize : anIndex;
     return ptrBuffer[anIdx];
 }
 

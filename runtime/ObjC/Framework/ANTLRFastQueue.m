@@ -91,19 +91,19 @@
 
 - (id) remove
 {
-	id o = [self objectAtIndex:0];
+	id obj = [self objectAtIndex:0];
 	p++;
 	// check to see if we have hit the end of the buffer
 	if ( p == [data count] ) {
 		// if we have, then we need to clear it out
 		[self clear];
 	}
-	return o;
+	return obj;
 }
 
-- (void) addObject:(id) o
+- (void) addObject:(id) obj
 {
-    [data addObject:o];
+    [data addObject:obj];
 }
 
 - (NSUInteger) count

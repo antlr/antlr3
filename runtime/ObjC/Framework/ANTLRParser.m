@@ -107,7 +107,7 @@
         tokenText = [NSString stringWithFormat:@"<missing %@>\n",[[ANTLRBaseRecognizer getTokenNames] objectAtIndex:expectedTokenType]];
     ANTLRCommonToken *t = [[ANTLRCommonToken newToken:expectedTokenType Text:tokenText] retain];
     ANTLRCommonToken *current = [anInput LT:1];
-    if ( [current type] == ANTLRTokenTypeEOF ) {
+    if ( current.type == ANTLRTokenTypeEOF ) {
         current = [anInput LT:-1];
     }
     t.line = current.line;

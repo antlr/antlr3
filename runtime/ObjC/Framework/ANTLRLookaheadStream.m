@@ -46,7 +46,8 @@
 
 -(id) init
 {
-	if ((self = [super init]) != nil) {
+	self = [super init];
+	if ( self != nil ) {
         eof = [[ANTLRCommonToken eofToken] retain];
 		eofElementIndex = UNITIALIZED_EOF_ELEMENT_INDEX;
 		markDepth = 0;
@@ -55,7 +56,7 @@
 	return self;
 }
 
--(id) initWithEOF:(id) obj
+-(id) initWithEOF:(id)obj
 {
 	if ((self = [super init]) != nil) {
 		self.eof = [obj retain];
@@ -80,15 +81,15 @@
 
 - (id) remove
 {
-    id o = [self objectAtIndex:0];
+    id obj = [self objectAtIndex:0];
     p++;
     // have we hit end of buffer and not backtracking?
     if ( p == [data count] && markDepth==0 ) {
         // if so, it's an opportunity to start filling at index 0 again
         [self clear]; // size goes to 0, but retains memory
     }
-    [o release];
-    return o;
+    [obj release];
+    return obj;
 }
 
 -(void) consume
@@ -101,21 +102,22 @@
 -(void) sync:(NSInteger) need
 {
 	NSInteger n = (p + need - 1) - [data count] + 1;
-	if (n > 0) {
+	if ( n > 0 ) {
 		[self fill:n];
 	}
 }
 
 -(void) fill:(NSInteger) n
 {
+    id obj;
 	for (NSInteger i = 1; i <= n; i++) {
-		id o = [self nextElement];
-		if (o == eof) {
+		obj = [self nextElement];
+		if ( obj == eof ) {
 			[data addObject:self.eof];
 			eofElementIndex = [data count] - 1;
 		}
 		else {
-			[data addObject:o];
+			[data addObject:obj];
 		}
 	}
 }

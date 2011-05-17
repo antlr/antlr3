@@ -76,7 +76,7 @@ NSInteger level;
      */
 - (id) nextElement;
     
-- (BOOL) isEOF:(id<ANTLRBaseTree>) o;
+- (BOOL) isEOF:(id<ANTLRBaseTree>) obj;
 - (void) setUniqueNavigationNodes:(BOOL) uniqueNavigationNodes;
     
 - (id) getTreeSource;

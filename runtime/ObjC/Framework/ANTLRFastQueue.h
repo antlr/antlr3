@@ -51,7 +51,7 @@
 
 - (void) reset;
 - (id) remove;
-- (void) addObject:(id) o;
+- (void) addObject:(id) obj;
 - (NSUInteger) count;
 - (NSUInteger) size;
 - (NSUInteger) range;

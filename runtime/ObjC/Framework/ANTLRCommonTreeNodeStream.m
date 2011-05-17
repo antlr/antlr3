@@ -29,6 +29,7 @@
 #import "ANTLRIntStream.h"
 #import "ANTLRCharStream.h"
 #import "AMutableArray.h"
+#import "ANTLRCommonTreeAdaptor.h"
 
 #ifndef DEBUG_DEALLOC
 #define DEBUG_DEALLOC
@@ -54,9 +55,9 @@
 - (id) initWithTree:(ANTLRCommonTree *)theTree
 {
     if ((self = [super init]) != nil ) {
-        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
-        root = [theTree retain];
         adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
+        root = [theTree retain];
+        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
         calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
         /** Tree (nil A B C) trees like flat A B C streams */
@@ -70,8 +71,8 @@
 {
     if ((self = [super init]) != nil ) {
         adaptor = [anAdaptor retain];
-        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
         root = [theTree retain];
+        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
         //    it = [root objectEnumerator];
         it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
         calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
@@ -229,14 +230,14 @@
 {
     [self reset];
     NSMutableString *buf = [NSMutableString stringWithCapacity:5];
-    id o = [self LT:1];
-    NSInteger type = [adaptor getType:o];
+    id obj = [self LT:1];
+    NSInteger type = [adaptor getType:obj];
     while ( type != ANTLRTokenTypeEOF ) {
         [buf appendString:@" "];
         [buf appendString:[NSString stringWithFormat:@"%d", type]];
         [self consume];
-        o = [self LT:1];
-        type = [adaptor getType:o];
+        obj = [self LT:1];
+        type = [adaptor getType:obj];
     }
     return buf;
 }

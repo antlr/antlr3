@@ -44,13 +44,13 @@
 	return self;
 }
 
--(id) initWithNodes:(AMutableArray *) n andEOF:(id) o
+-(id) initWithNodes:(AMutableArray *) n andEOF:(id) obj
 {
 	self = [self init];
 	if (self)
 	{
 		nodes = n;
-		eof = o;
+		eof = obj;
 	}
 	return self;
 }
