@@ -37,7 +37,6 @@
  *  Each combination has its own template except that label/no label
  *  is combined into tokenRef, ruleRef, ...
  */
-group ASTTreeParser;
 
 finishedBacktracking(block) ::= <<
 <if(backtracking)>
@@ -115,7 +114,7 @@ _last = _save_last_<treeLevel>
 /** ID! and output=AST (same as plain tokenRef) 'cept add
  *  setting of _last
  */
-tokenRefBang(token,label,elementIndex) ::= <<
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
 _last = self.input.LT(1)
 <super.tokenRef(...)>
 >>
@@ -189,7 +188,7 @@ if _first_<treeLevel> is None:
 // SET AST
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = self.input.LT(1)
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <finishedBacktracking({
 <if(terminalOptions.node)>
@@ -200,21 +199,21 @@ _last = self.input.LT(1)
 self._adaptor.addChild(root_<treeLevel>, <label>_tree)
 })>
 <endif>
-})>
+}, ...)>
 >>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 <matchSet(...)>
-<noRewrite()> <! set return tree !>
+<noRewrite(...)> <! set return tree !>
 >>
 
-matchSetBang(s,label,elementIndex,postmatchCode) ::= <<
+matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = self.input.LT(1)
 <super.matchSet(...)>
 >>
 
 matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <finishedBacktracking({
 <if(terminalOptions.node)>
@@ -225,7 +224,7 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 root_<treeLevel> = self._adaptor.becomeRoot(<label>_tree, root_<treeLevel>)
 })>
 <endif>
-})>
+}, ...)>
 >>
 
 // RULE REF AST
@@ -247,7 +246,7 @@ if _first_<treeLevel> is None:
 /** x+=rule auto construct */
 ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRef(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** ^(rule ...) auto construct */
@@ -264,7 +263,7 @@ root_<treeLevel> = self._adaptor.becomeRoot(<label>.tree, root_<treeLevel>)
 /** ^(x+=rule ...) auto construct */
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefRuleRoot(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** rule when output=AST and tracking for rewrite */

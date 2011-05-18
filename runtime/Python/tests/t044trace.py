@@ -6,7 +6,7 @@ import unittest
 class T(testbase.ANTLRTest):
     def setUp(self):
         self.compileGrammar(options='-trace')
-        
+
 
     def lexerClass(self, base):
         class TLexer(base):
@@ -29,8 +29,8 @@ class T(testbase.ANTLRTest):
                 raise
 
         return TLexer
-    
-        
+
+
     def parserClass(self, base):
         class TParser(base):
             def __init__(self, *args, **kwargs):
@@ -53,10 +53,10 @@ class T(testbase.ANTLRTest):
 
             def getRuleInvocationStack(self):
                 return self._getRuleInvocationStack(base.__module__)
-            
+
         return TParser
-    
-        
+
+
     def testTrace(self):
         cStream = antlr3.StringStream('< 1 + 2 + 3 >')
         lexer = self.getLexer(cStream)
@@ -66,10 +66,10 @@ class T(testbase.ANTLRTest):
 
         self.failUnlessEqual(
             lexer.traces,
-            [ '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__8', '<T__8', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__8', '<T__8', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__7', '<T__7']
+            [ '>T__7', '<T__7', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__8', '<T__8']
             )
 
         self.failUnlessEqual(
@@ -77,8 +77,8 @@ class T(testbase.ANTLRTest):
             [ '>a', '>synpred1_t044trace_fragment', '<synpred1_t044trace_fragment', '>b', '>c',
               '<c', '>c', '<c', '>c', '<c', '<b', '<a' ]
             )
-    
-        
+
+
     def testInvokationStack(self):
         cStream = antlr3.StringStream('< 1 + 2 + 3 >')
         lexer = self.getLexer(cStream)
@@ -90,7 +90,6 @@ class T(testbase.ANTLRTest):
             parser._stack,
             ['a', 'b', 'c']
             )
-        
+
 if __name__ == '__main__':
     unittest.main()
-    
