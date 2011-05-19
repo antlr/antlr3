@@ -19,7 +19,9 @@ class Debugger(threading.Thread):
 
     def run(self):
         # create listening socket
-        while True:
+        s = None
+        tstart = time.time()
+        while time.time() - tstart < 10:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(('127.0.0.1', self.port))
@@ -29,32 +31,43 @@ class Debugger(threading.Thread):
                     raise
                 time.sleep(0.1)
 
+        if s is None:
+            self.events.append(['nosocket'])
+            return
+
         s.setblocking(1)
+        s.settimeout(10.0)
 
         output = s.makefile('w', 0)
         input = s.makefile('r', 0)
 
-        # handshake
-        l = input.readline().strip()
-        assert l == 'ANTLR 2'
-        l = input.readline().strip()
-        assert l.startswith('grammar "')
-
-        output.write('ACK\n')
-        output.flush()
-
-        while True:
-            event = input.readline().strip()
-            self.events.append(event.split('\t'))
+        try:
+            # handshake
+            l = input.readline().strip()
+            assert l == 'ANTLR 2'
+            l = input.readline().strip()
+            assert l.startswith('grammar "')
 
             output.write('ACK\n')
             output.flush()
 
-            if event == 'terminate':
-                break
+            while True:
+                event = input.readline().strip()
+                self.events.append(event.split('\t'))
+
+                output.write('ACK\n')
+                output.flush()
+
+                if event == 'terminate':
+                    self.success = True
+                    break
+
+        except socket.timeout:
+            self.events.append(['timeout'])
+        except socket.error, exc:
+            self.events.append(['socketerror', exc.args])
 
         s.close()
-        self.success = True
 
 
 class T(testbase.ANTLRTest):
@@ -514,23 +527,23 @@ class T(testbase.ANTLRTest):
                      ['location', '6', '1'],
                      ['enterAlt', '1'],
                      ['location', '6', '5'],
-                     ['LT', '1', '0', '4', '0', '1', '0', '"a'],
-                     ['LT', '1', '0', '4', '0', '1', '0', '"a'],
-                     ['consumeToken', '0', '4', '0', '1', '0', '"a'],
+                     ['LT', '1', '0', '5', '0', '1', '0', '"a'],
+                     ['LT', '1', '0', '5', '0', '1', '0', '"a'],
+                     ['consumeToken', '0', '5', '0', '1', '0', '"a'],
                      ['consumeHiddenToken', '1', '7', '99', '1', '1', '"'],
                      ['location', '6', '8'],
                      ['enterSubRule', '1'],
                      ['enterDecision', '1', '0'],
-                     ['LT', '1', '2', '6', '0', '1', '2', '"!'],
-                     ['LT', '1', '2', '6', '0', '1', '2', '"!'],
-                     ['LT', '1', '2', '6', '0', '1', '2', '"!'],
+                     ['LT', '1', '2', '4', '0', '1', '2', '"!'],
+                     ['LT', '1', '2', '4', '0', '1', '2', '"!'],
+                     ['LT', '1', '2', '4', '0', '1', '2', '"!'],
                      ['exception', 'NoViableAltException', '2', '1', '2'],
                      ['exitDecision', '1'],
                      ['exitSubRule', '1'],
                      ['exception', 'NoViableAltException', '2', '1', '2'],
                      ['beginResync'],
-                     ['LT', '1', '2', '6', '0', '1', '2', '"!'],
-                     ['consumeToken', '2', '6', '0', '1', '2', '"!'],
+                     ['LT', '1', '2', '4', '0', '1', '2', '"!'],
+                     ['consumeToken', '2', '4', '0', '1', '2', '"!'],
                      ['LT', '1', '-1', '-1', '0', '1', '3', '"<EOF>'],
                      ['endResync'],
                      ['location', '6', '21'],
@@ -695,10 +708,10 @@ class T(testbase.ANTLRTest):
                     ['enterSubRule', '1'],
                     ['enterDecision', '1', '0'],
                     ['mark', '0'],
-                    ['LT', '1', '0', '4', '0', '1', '0', '"a'],
-                    ['consumeToken', '0', '4', '0', '1', '0', '"a'],
-                    ['LT', '1', '1', '6', '0', '1', '1', '"!'],
-                    ['consumeToken', '1', '6', '0', '1', '1', '"!'],
+                    ['LT', '1', '0', '5', '0', '1', '0', '"a'],
+                    ['consumeToken', '0', '5', '0', '1', '0', '"a'],
+                    ['LT', '1', '1', '4', '0', '1', '1', '"!'],
+                    ['consumeToken', '1', '4', '0', '1', '1', '"!'],
                     ['rewind', '0'],
                     ['exitDecision', '1'],
                     ['enterAlt', '2'],
@@ -709,21 +722,21 @@ class T(testbase.ANTLRTest):
                     ['location', '8', '5'],
                     ['enterSubRule', '3'],
                     ['enterDecision', '3', '0'],
-                    ['LT', '1', '0', '4', '0', '1', '0', '"a'],
+                    ['LT', '1', '0', '5', '0', '1', '0', '"a'],
                     ['exitDecision', '3'],
                     ['enterAlt', '1'],
                     ['location', '8', '5'],
-                    ['LT', '1', '0', '4', '0', '1', '0', '"a'],
-                    ['LT', '1', '0', '4', '0', '1', '0', '"a'],
-                    ['consumeToken', '0', '4', '0', '1', '0', '"a'],
+                    ['LT', '1', '0', '5', '0', '1', '0', '"a'],
+                    ['LT', '1', '0', '5', '0', '1', '0', '"a'],
+                    ['consumeToken', '0', '5', '0', '1', '0', '"a'],
                     ['enterDecision', '3', '0'],
-                    ['LT', '1', '1', '6', '0', '1', '1', '"!'],
+                    ['LT', '1', '1', '4', '0', '1', '1', '"!'],
                     ['exitDecision', '3'],
                     ['exitSubRule', '3'],
                     ['location', '8', '9'],
-                    ['LT', '1', '1', '6', '0', '1', '1', '"!'],
-                    ['LT', '1', '1', '6', '0', '1', '1', '"!'],
-                    ['consumeToken', '1', '6', '0', '1', '1', '"!'],
+                    ['LT', '1', '1', '4', '0', '1', '1', '"!'],
+                    ['LT', '1', '1', '4', '0', '1', '1', '"!'],
+                    ['consumeToken', '1', '4', '0', '1', '1', '"!'],
                     ['location', '8', '13'],
                     ['exitRule', 'T.g', 'c'],
                     ['exitSubRule', '1'],

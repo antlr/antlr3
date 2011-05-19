@@ -187,7 +187,7 @@ try:
     if self.getRuleLevel() == 0:
         self._dbg.commence();
     self.incRuleLevel()
-    <% ST uses zero-based columns, we want one-base %>
+    <! ST uses zero-based columns, we want one-base !>
     self._dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.charPositionInLine>+1)
 
     <@super.body()>
