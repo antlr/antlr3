@@ -198,7 +198,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
     if ((self = [super init]) != nil) {
         self.type = aTType;
         self.text = [NSString stringWithString:tokenText];
-        [text retain];
+        if ( text ) [text retain];
     }
     return self;
 }

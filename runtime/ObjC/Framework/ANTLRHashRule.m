@@ -261,9 +261,7 @@
     
     Index = ( anIndex >= BuffSize ) ? anIndex % BuffSize : anIndex;
     if (aRule != ptrBuffer[Index]) {
-        if (ptrBuffer[Index] != nil) {
-            [ptrBuffer[Index] release];
-        }
+        if ( ptrBuffer[Index] ) [ptrBuffer[Index] release];
         [aRule retain];
     }
     ptrBuffer[Index] = aRule;

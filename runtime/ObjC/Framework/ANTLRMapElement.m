@@ -65,7 +65,8 @@
 
 - (id) init
 {
-    if ((self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
         index = nil;
         name  = nil;
     }
@@ -74,7 +75,8 @@
 
 - (id) initWithName:(NSString *)aName Type:(NSInteger)aTType
 {
-    if ((self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
         index = [[NSNumber numberWithInteger: aTType] retain];
         name  = [[NSString stringWithString:aName] retain];
     }
@@ -83,29 +85,43 @@
 
 - (id) initWithNode:(NSInteger)aTType Node:(id)aNode
 {
-    if ((self = [super init]) != nil) {
-        index = [[NSNumber numberWithInteger: aTType] retain];
-        node  = [aNode retain];
+    self = [super initWithAnIndex:[NSNumber numberWithInteger:aTType]];
+    if ( self != nil ) {
+        node  = aNode;
+        if ( node ) [node retain];
     }
     return self;
 }
 
 - (id) initWithName:(NSString *)aName Node:(id)aNode
 {
-    if ((self = [super init]) != nil) {
+    self = [super init];
+    if ( self != nil ) {
         name  = [[NSString stringWithString:aName] retain];
-        node = [aNode retain];
+        node = aNode;
+        if ( node ) [node retain];
     }
     return self;
 }
 
-- (id) initWithObj1:(id)anObj1 Obj2:(id)anObj2
+- (id) initWithObj1:(id)anIndex Obj2:(id)aNode
 {
-    if ((self = [super init]) != nil) {
-        index  = [anObj1 retain];
-        node = [anObj2 retain];
+    self = [super initWithAnIndex:anIndex];
+    if ( self != nil ) {
+        node = aNode;
+        if ( node ) [node retain];
     }
     return self;
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ANTLRMapElement" );
+#endif
+    if ( name ) [name release];
+    if ( node ) [node release];
+    [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
@@ -129,8 +145,8 @@
 - (NSInteger)size
 {
     NSInteger aSize = 0;
-    if ( name != nil ) aSize += sizeof(id);
-    if ( node != nil ) aSize += sizeof(id);
+    if ( name ) aSize += sizeof(id);
+    if ( node ) aSize += sizeof(id);
     return aSize;
 }
 
@@ -155,8 +171,8 @@
 }
 
 - (void)setNode:(id)aNode
-{   if (aNode != node) {
-        if (node != nil) [node release];
+{   if ( aNode != node ) {
+        if ( node ) [node release];
         [aNode retain];
     }
     node = aNode;

@@ -167,7 +167,7 @@
 
 - (void) removeObjectAtIndex:(NSInteger)idx
 {
-    @throw [[ANTLRUnsupportedOperationException newException:@"Cant remove object from ArrayIterator"] autorelease];
+    @throw [ANTLRUnsupportedOperationException newException:@"Cant remove object from ArrayIterator"];
 }
 
 - (NSInteger) count

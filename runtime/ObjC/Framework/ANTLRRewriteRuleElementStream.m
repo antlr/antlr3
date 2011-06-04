@@ -251,7 +251,7 @@
     if ( description != nil && description != elementDescription ) {
         if (elementDescription != nil) [elementDescription release];
         elementDescription = [NSString stringWithString:description];
-        [description release];
+        [elementDescription retain];
     }
 }
 

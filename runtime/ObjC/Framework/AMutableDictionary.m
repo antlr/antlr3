@@ -81,6 +81,7 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in AMutableDictionary" );
 #endif
+    if ( data ) [data release];
     if ( root ) [root release];
     [super dealloc];
 }
@@ -113,7 +114,6 @@
         if ( ret >= 0 && ret < node.numkeys ) {
             obj = node.btNodes[ret];
             if ( obj == [NSNull null] ) {
-                [obj release];
                 obj = nil;
             }
         }

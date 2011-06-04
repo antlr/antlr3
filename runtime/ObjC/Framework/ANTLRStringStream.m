@@ -344,7 +344,11 @@ extern NSInteger debug;
 
 - (void) setSourceName:(NSString *)aName
 {
-    name = aName;
+    if ( name != aName ) {
+        if ( name ) [name release];
+        if ( aName ) [aName retain];
+        name = aName;
+    }
 }
 
 
@@ -374,9 +378,9 @@ extern NSInteger debug;
 - (void) setData: (NSString *) aData
 {
     if (data != aData) {
+        if ( data ) [data release];
         data = [NSString stringWithString:aData];
         [data retain];
-        [aData release];
     }
 }
 

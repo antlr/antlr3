@@ -178,7 +178,8 @@
 {
 	if ( token != aToken ) {
 		if ( token ) [token release];
-		token = [aToken retain];
+		[aToken retain];
+		token = aToken;
 	}
 }
 

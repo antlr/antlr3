@@ -59,7 +59,8 @@
 -(id) initWithEOF:(id)obj
 {
 	if ((self = [super init]) != nil) {
-		self.eof = [obj retain];
+		self.eof = obj;
+        if ( self.eof ) [self.eof retain];
 	}
 	return self;
 }

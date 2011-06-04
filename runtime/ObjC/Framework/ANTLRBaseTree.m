@@ -89,8 +89,9 @@ static id<ANTLRBaseTree> invalidNode = nil;
 {
     self = [super init];
     if ( self != nil ) {
-        children = [[AMutableArray arrayWithCapacity:5] retain];
-        [children addObject:node];
+        // children = [[AMutableArray arrayWithCapacity:5] retain];
+        // [children addObject:node];
+        [self addChild:node];
         return self;
     }
     return nil;
@@ -102,7 +103,6 @@ static id<ANTLRBaseTree> invalidNode = nil;
     NSLog( @"called dealloc in ANTLRBaseTree" );
 #endif
 	if ( children ) [children release];
-	children = nil;
 	[super dealloc];
 }
 
@@ -119,14 +119,14 @@ static id<ANTLRBaseTree> invalidNode = nil;
  */
 - (AMutableArray *) children
 {
-    return children; // [[children retain] autorelease];
+    return children;
 }
 
 - (void) setChildren:(AMutableArray *)anArray
 {
     if ( children != anArray ) {
         if ( children ) [children release];
-        [anArray retain];
+        if ( anArray ) [anArray retain];
     }
     children = anArray;
 }

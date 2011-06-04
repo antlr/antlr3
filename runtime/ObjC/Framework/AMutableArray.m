@@ -111,7 +111,6 @@
     ptrBuffer = [buffer mutableBytes];
     obj = ptrBuffer[anIdx];
     if ( obj == [NSNull null] ) {
-        [obj release];
         obj = nil;
     }
     return obj;

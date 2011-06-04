@@ -33,7 +33,7 @@
 #import "ANTLRLinkBase.h"
 
 @interface ANTLRBaseMapElement : ANTLRLinkBase {
-    __strong NSNumber *index;
+    NSNumber *index;
 }
 
 @property (retain) NSNumber *index;

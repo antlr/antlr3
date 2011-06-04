@@ -57,8 +57,8 @@
 - (id) initWithAnIndex:(NSNumber *)aNumber
 {
     if ((self = [super init]) != nil ) {
-        [aNumber retain];
         index = aNumber;
+        if ( index ) [index retain];
     }
     return (self);
 }

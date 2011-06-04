@@ -139,7 +139,7 @@
 - (void) addChild:(id)child toTree:(id)t
 {
     if ( t != nil && child != nil ) {
-        [(id)t addChild:[(id)child retain]];
+        [(id)t addChild:child];
     }
 }
 
