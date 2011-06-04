@@ -186,7 +186,7 @@ headerFile( LEXER,
 /* =============================================================================
  * Standard antlr3 OBJC runtime definitions
  */
-#import \<Cocoa/Cocoa.h>
+#import \<Foundation/Foundation.h>
 #import \<ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -1661,9 +1661,7 @@ setTest(ranges) ::= "<ranges; separator=\"||\">"
 
 // A T T R I B U T E S
 
-memVars(scope) ::= <<
-<scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n">
->>
+memVars(scope) ::= << <scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n"> >>
 
 properties(scope) ::= <<
 <scope.attributes:{a|@property (assign, getter=get<a.name>, setter=set<a.name>:) <a.type> <a.name>;<\n>}; separator="\n">
@@ -1673,9 +1671,7 @@ methodsDecl(scope) ::= <<
 <scope.attributes:{a|- (<a.type>)get<a.name>;<\n>- (void)set<a.name>:(<a.type>)aVal;<\n>}; separator="\n">
 >>
 
-synthesize(scope) ::= <<
-<scope.attributes:{a|@synthesize <a.name>;}; separator="\n">
->>
+synthesize(scope) ::= << <scope.attributes:{a|@synthesize <a.name>;}; separator="\n"> >>
 
 methods(scope) ::= <%
 <scope.attributes:{a|
@@ -1712,112 +1708,110 @@ ANTLRSymbolStack *<scope.name>_stack;<\n>
 <scope.name>_Scope *<scope.name>_scope;<\n>
 %>
 
-globalAttributeScopeImplementation(scope) ::= <<
+globalAttributeScopeImplementation(scope) ::= <%
 @implementation <scope.name>_Scope  /* globalAttributeScopeImplementation */<\n>
 <if(scope.attributes)>
 /* start of synthesize -- OBJC-Line 1750 */<\n>
-<synthesize(scope)>
+<synthesize(scope)><\n>
 <endif>
-
-+ (<scope.name>_Scope *)new<scope.name>_Scope
-{
-    return [[<scope.name>_Scope alloc] init];
-}
-
-- (id) init
-{
-    self = [super init];
-    return self;
-}
-
+<\n>
++ (<scope.name>_Scope *)new<scope.name>_Scope<\n>
+{<\n>
+    return [[<scope.name>_Scope alloc] init];<\n>
+}<\n>
+<\n>
+- (id) init<\n>
+{<\n>
+    self = [super init];<\n>
+    return self;<\n>
+}<\n>
+<\n>
 <if(scope.attributes)>
 /* start of iterate get and set functions */<\n>
-<methods(scope)>
+<methods(scope)><\n>
 /* End of iterate get and set functions */<\n>
 <endif>
-@end /* end of <scope.name>_Scope implementation */<\n>
->>
+@end /* end of <scope.name>_Scope implementation */<\n><\n>
+%>
 
 globalAttributeScopeInit(scope) ::= <<
-/* globalAttributeScopeInit */
-<scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];
-<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];
+/* globalAttributeScopeInit */<\n>
+<scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];<\n>
+<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];<\n>
 >>
 
 globalAttributeScopeDealloc(scope) ::= << [<scope.name>_stack release];<\n> >>
 
 globalAttributeScope(scope) ::= << static <scope.name>_stack;<\n> >>
 
-ruleAttributeScopeMemVar(scope) ::= <<
-/* ObjC ruleAttributeScopeMemVar */
+ruleAttributeScopeMemVar(scope) ::= <%
+/* ObjC ruleAttributeScopeMemVar */<\n>
 <if(scope.attributes)>
-<scope.name>_Scope *<scope.name>_scope;<\n> /* ObjC ruleAttributeScopeMemVar */
+<scope.name>_Scope *<scope.name>_scope; /* ObjC ruleAttributeScopeMemVar */<\n>
 <endif>
->>
+%>
 
-ruleAttributeScopeInterface(scope) ::= <<
+ruleAttributeScopeInterface(scope) ::= <%
 <if(scope.attributes)>
 /* start of ruleAttributeScopeInterface */<\n>
-@interface <scope.name>_Scope : ANTLRSymbolsScope {
-    <memVars(scope)>
-}
-
+@interface <scope.name>_Scope : ANTLRSymbolsScope {<\n>
+    <memVars(scope)><\n>
+}<\n>
+<\n>
 /* start property declarations */<\n>
-<properties(scope)>
+<properties(scope)><\n>
 /* start method declarations */<\n>
-+ (<scope.name>_Scope *)new<scope.name>_Scope;
-- (id) init;
-<methodsDecl(scope)>
-@end /* end of ruleAttributeScopeInterface */<\n>
++ (<scope.name>_Scope *)new<scope.name>_Scope;<\n>
+- (id) init;<\n>
+<methodsDecl(scope)><\n>
+@end /* end of ruleAttributeScopeInterface */<\n><\n>
 <endif>
->>
+%>
 
-ruleAttributeScopeImplementation(scope) ::= <<
+ruleAttributeScopeImplementation(scope) ::= <%
 <if(scope.attributes)>
-@implementation <scope.name>_Scope  /* start of ruleAttributeScopeImplementation */
-<synthesize(scope)>
-
-+ (<scope.name>_Scope *)new<scope.name>_Scope
-{
-    return [[<scope.name>_Scope alloc] init];
-}
-
-- (id) init
-{
-    self = [super init];
-    return self;
-}
-
+@implementation <scope.name>_Scope  /* start of ruleAttributeScopeImplementation */<\n>
+<synthesize(scope)><\n>
+<\n>
++ (<scope.name>_Scope *)new<scope.name>_Scope<\n>
+{<\n>
+    return [[<scope.name>_Scope alloc] init];<\n>
+}<\n>
+<\n>
+- (id) init<\n>
+{<\n>
+    self = [super init];<\n>
+    return self;<\n>
+}<\n>
+<\n>
 /* start of <scope.name>_Scope get and set functions */<\n>
-<methods(scope)>
+<methods(scope)><\n>
 /* End of <scope.name>_Scope get and set functions */<\n>
-@end /* end of ruleAttributeScopeImplementation */<\n>
+@end /* end of ruleAttributeScopeImplementation */<\n><\n>
 <endif>
->>
+%>
 
-ruleAttributeScopeInit(scope) ::= <<
-/* ruleAttributeScopeInit */
-<scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];
-<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];
->>
+ruleAttributeScopeInit(scope) ::= <%
+/* ruleAttributeScopeInit */<\n>
+<scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];<\n>
+<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];<\n>
+%>
 
-ruleAttributeScopeDealloc(scope) ::= <<
-[<scope.name>_Scope release];
->>
+ruleAttributeScopeDealloc(scope) ::= <% [<scope.name>_Scope release];<\n> %>
 
-ruleAttributeScope(scope) ::= <<
+ruleAttributeScope(scope) ::= <%
 <if(scope.attributes)>
-/* ruleAttributeScope */
+/* ruleAttributeScope */<\n>
 static ANTLRSymbolStack *<scope.name>_stack;<\n>
 <endif>
->>
+%>
 
-ruleAttributeScopeDecl(scope) ::= <<
-/* ruleAttributeScopeDecl */
+ruleAttributeScopeDecl(scope) ::= <%
+/* ruleAttributeScopeDecl */<\n>
 <if(scope.attributes)>
 <scope.name>_Scope *<scope.name>_scope;<\n>
 <endif>
->>
+%>
 
 returnStructName(r) ::= "<className()>_<r.name>_return"
 
@@ -1853,7 +1847,7 @@ delegateName(d) ::= << <if(d.label)><d.label><else>g<d.name><endif> >>
 /** Using a type to init value map, try to init a type; if not in table
  *  must be an object, default value is "null".
  */
-initValue(typeName) ::= << <objcTypeInitMap.(typeName)> >>
+initValue(typeName) ::= <% <objcTypeInitMap.(typeName)> %>
 
 /** Define a rule label including default value */
 ruleLabelDef(label) ::= << <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n> >>
@@ -1866,23 +1860,23 @@ returnScopeInterface(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 /* returnScopeInterface <ruleDescriptor:returnStructName()> */
 @interface <ruleDescriptor:returnStructName()> : ANTLR<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope { /* returnScopeInterface line 1838 */
-<@memVars()> /* ObjC start of memVars() */
+<@memVars()> /* ObjC start of memVars() */<\n>
 <if(scope.attributes)>
-<memVars(scope)>
+<memVars(scope)><\n>
 <endif>
 }
 /* start property declarations */
-<@properties()>
+<@properties()><\n>
 <if(scope.attributes)>
-<properties(scope)>
+<properties(scope)><\n>
 <endif>
 /* start of method declarations */<\n>
 + (<ruleDescriptor:returnStructName()> *)new<ruleDescriptor:returnStructName()>;
 /* this is start of set and get methods */
-<@methodsDecl()>  /* methodsDecl */
+<@methodsDecl()>  /* methodsDecl */<\n>
 <if(scope.attributes)>
 /* start of iterated get and set functions */<\n>
-<methodsDecl(scope)>
+<methodsDecl(scope)><\n>
 <endif>
 @end /* end of returnScopeInterface interface */<\n>
 <endif>
@@ -1893,7 +1887,7 @@ returnScopeImplementation(scope) ::= <%
 @implementation <ruleDescriptor:returnStructName()> /* returnScopeImplementation */<\n>
 <@synthesize()> /* start of synthesize -- OBJC-Line 1837 */<\n>
 <if(scope.attributes)>
-<synthesize(scope)>
+    <synthesize(scope)><\n>
 <endif>
 + (<ruleDescriptor:returnStructName()> *)new<ruleDescriptor:returnStructName()><\n>
 {<\n>
@@ -1906,15 +1900,15 @@ returnScopeImplementation(scope) ::= <%
     return self;<\n>
 }<\n>
 <\n>
-<@methods()>
+<@methods()><\n>
 <if(scope.attributes)>
 /* start of iterate get and set functions */<\n>
-<methods(scope)>
+<methods(scope)><\n>
 /* End of iterate get and set functions */<\n>
 <endif>
 <actions.(actionScope).ruleReturnMethods>
 <@ruleReturnMembers()><\n>
-@end /* end of returnScope implementation */<\n>
+@end /* end of returnScope implementation */<\n><\n>
 <endif>
 %>
 
