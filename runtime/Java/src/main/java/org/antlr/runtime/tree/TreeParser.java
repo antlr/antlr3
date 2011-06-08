@@ -29,8 +29,8 @@ package org.antlr.runtime.tree;
 
 import org.antlr.runtime.*;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** A parser for a stream of tree nodes.  "tree grammars" result in a subclass
  *  of this.  All the error reporting and recovery is shared with Parser via
@@ -157,6 +157,75 @@ public class TreeParser extends BaseRecognizer {
 			}
 		}
 		return super.getErrorMessage(e, tokenNames);
+	}
+
+	/** Check if current node in input has a context.  Context means sequence
+	 *  of nodes towards root of tree.  For example, you might say context
+	 *  is "MULT" which means my parent must be MULT.  "CLASS VARDEF" says
+	 *  current node must be child of a VARDEF and whose parent is a CLASS node.
+	 *  You can use "..." to mean zero-or-more nodes.  "METHOD ... VARDEF"
+	 *  means my parent is VARDEF and somewhere above that is a METHOD node.
+	 *  The first node in the context is not necessarily the root.  The context
+	 *  matcher stops matching and returns true when it runs out of context.
+	 *  There is no way to force the first node to be the root.
+	 */
+	public boolean inContext(String context) {
+		return inContext(input.getTreeAdaptor(), getTokenNames(), input.LT(1), context);
+	}
+
+	/** The worker for inContext.  It's static and full of parameters for
+	 *  testing purposes.
+	 */
+	public static boolean inContext(TreeAdaptor adaptor,
+									String[] tokenNames,
+									Object t,
+									String context)
+	{
+		Matcher dotdotMatcher = dotdotPattern.matcher(context);
+		Matcher doubleEtcMatcher = doubleEtcPattern.matcher(context);
+		if ( dotdotMatcher.find() ) { // don't allow "..", must be "..."
+			throw new IllegalArgumentException("invalid syntax: ..");
+		}
+		if ( doubleEtcMatcher.find() ) { // don't allow double "..."
+			throw new IllegalArgumentException("invalid syntax: ... ...");
+		}
+		context = context.replaceAll("\\.\\.\\.", " ... "); // ensure spaces around ...
+		context = context.trim();
+		String[] nodes = context.split("\\s+");
+		int ni = nodes.length-1;
+		t = adaptor.getParent(t);
+		while ( ni>=0 && t!=null ) {
+			if ( nodes[ni].equals("...") ) {
+				// walk upwards until we see nodes[ni-1] then continue walking
+				if ( ni==0 ) return true; // ... at start is no-op
+				String goal = nodes[ni-1];
+				Object ancestor = getAncestor(adaptor, tokenNames, t, goal);
+				if ( ancestor==null ) return false;
+				t = ancestor;
+				ni--;
+			}
+			String name = tokenNames[adaptor.getType(t)];
+			if ( !name.equals(nodes[ni]) ) {
+				//System.err.println("not matched: "+nodes[ni]+" at "+t);
+				return false;
+			}
+			// advance to parent and to previous element in context node list
+			ni--;
+			t = adaptor.getParent(t);
+		}
+
+		if ( t==null && ni>=0 ) return false; // at root but more nodes to match
+		return true;
+	}
+
+	/** Helper for static inContext */
+	protected static Object getAncestor(TreeAdaptor adaptor, String[] tokenNames, Object t, String goal) {
+		while ( t!=null ) {
+			String name = tokenNames[adaptor.getType(t)];
+			if ( name.equals(goal) ) return t;
+			t = adaptor.getParent(t);
+		}
+		return null;
 	}
 
 	public void traceIn(String ruleName, int ruleIndex)  {

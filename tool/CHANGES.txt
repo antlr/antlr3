@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+June 8, 2011
+
+* Added inContext(String context) back into TreeParser.
+
 April 21, 2011
 
 * Updated for ST v4.0.2 (setting iterateAcrossValues = true as instance var)
