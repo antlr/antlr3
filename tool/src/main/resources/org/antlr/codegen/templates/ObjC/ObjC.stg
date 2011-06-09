@@ -1160,7 +1160,7 @@ noRewrite(rewriteBlockLevel, treeLevel) ::= ""
 // E L E M E N T S
 
 /** Dump the elements one per line */
-element(e) ::= <<<@prematch()><\n><e.el><\n>>>
+element(e) ::= << <@prematch()><\n><e.el><\n> >>
 
 /** match a token optionally with a label in front */
 tokenRef(token,label,elementIndex,terminalOptions) ::= <<
