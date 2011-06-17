@@ -411,7 +411,7 @@ partial void LeaveRule_<ruleName>_fragment();
 // $ANTLR start <ruleName>
 public <!final !>void <ruleName>_fragment(<ruleDescriptor.parameterScope:parameterScope()>)
 {
-	<ruleLabelDefs()>
+	<ruleLabelDefs(...)>
 	EnterRule_<ruleName>_fragment();
 	EnterRule("<ruleName>_fragment", <ruleDescriptor.index>);
 	TraceIn("<ruleName>_fragment", <ruleDescriptor.index>);
@@ -498,7 +498,7 @@ partial void LeaveRule_<ruleName>();
 	TraceIn("<ruleName>", <ruleDescriptor.index>);
 	<ruleScopeSetUp()>
 	<ruleDeclarations()>
-	<ruleLabelDefs()>
+	<ruleLabelDefs(...)>
 	<ruleDescriptor.actions.init>
 	try { DebugEnterRule(GrammarFileName, "<ruleName>");
 	DebugLocation(<ruleDescriptor.tree.line>, <ruleDescriptor.EORNode.charPositionInLine>);
@@ -584,7 +584,7 @@ ruleScopeCleanUp() ::= <<
 <ruleDescriptor.ruleScope:{it|<it.name>_scopeAfter(<it.name>_stack.Peek());<it.name>_stack.Pop();}; separator="\n">
 >>
 
-ruleLabelDefs() ::= <<
+ruleLabelDefs(ruleDescriptor, labelType, ASTLabelType, rewriteElementType) ::= <<
 <[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels,ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
     :{it|<labelType> <it.label.text> = default(<labelType>);}; separator="\n"
 >
@@ -1485,7 +1485,7 @@ default(<typeName>)
 
 /** Define a rule label including default value */
 ruleLabelDef(label) ::= <%
-<ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;
+<ruleLabelType(label.referencedRule)> <label.label.text> = <initValue(ruleLabelType(label.referencedRule))>;
 %>
 
 /** Define a return struct for a rule if the code needs to access its
