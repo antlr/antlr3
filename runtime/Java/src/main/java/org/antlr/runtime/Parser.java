@@ -27,6 +27,8 @@
  */
 package org.antlr.runtime;
 
+import org.antlr.runtime.debug.DebugTokenStream;
+
 /** A parser for TokenStreams.  "parser grammars" result in a subclass
  *  of this.
  */
@@ -70,7 +72,7 @@ public class Parser extends BaseRecognizer {
 		t.line = current.getLine();
 		t.charPositionInLine = current.getCharPositionInLine();
 		t.channel = DEFAULT_TOKEN_CHANNEL;
-		t.input = (CharStream)input;
+		t.input = current.getInputStream();
 		return t;
 	}
 
