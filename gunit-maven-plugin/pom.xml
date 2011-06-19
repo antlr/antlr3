@@ -43,7 +43,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>maven-gunit-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
 
     <name>Maven plugin for gUnit ANTLR V3 </name>
 	<description>A Maven plugin for incorporating gUnit testing of grammars</description>

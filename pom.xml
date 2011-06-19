@@ -4,7 +4,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
     <packaging>pom</packaging>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
     <name>ANTLR Master build control POM</name>
     <url>http://maven.apache.org</url>
 

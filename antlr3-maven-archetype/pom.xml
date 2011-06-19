@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.antlr</groupId>
     <artifactId>antlr3-maven-archetype</artifactId>
-    <version>3.3-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
     <packaging>maven-archetype</packaging>
     <name>ANTLR3 Maven Archetype</name>
     

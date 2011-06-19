@@ -64,7 +64,7 @@
          we cannot use the paren pom to control the version number
          and MUST update <version> in this pom manually!
          -->
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
     <name>Maven plugin for ANTLR V3</name>
     <prerequisites>
         <maven>2.0</maven>
@@ -273,7 +273,7 @@ Jim Idle - March 2009
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
-            <version>3.4</version>
+            <version>3.4.1</version>
         </dependency>
 
         <!--

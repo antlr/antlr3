@@ -16,7 +16,7 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.4-SNAPSHOT</version>
+        <version>3.4.1-SNAPSHOT</version>
     </parent>
 
     <url>http://www.antlr.org/wiki/display/ANTLR3/gUnit+-+Grammar+Unit+Testing</url>
