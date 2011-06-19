@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+June 19, 2011
+
+* Udo noticed that Parser.getMissingSymbol() didn't set invented token's input
+
 June 8, 2011
 
 * Added inContext(String context) back into TreeParser.

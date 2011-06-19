@@ -70,6 +70,7 @@ public class Parser extends BaseRecognizer {
 		t.line = current.getLine();
 		t.charPositionInLine = current.getCharPositionInLine();
 		t.channel = DEFAULT_TOKEN_CHANNEL;
+		t.input = (CharStream)input;
 		return t;
 	}
 
