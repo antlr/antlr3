@@ -273,7 +273,7 @@ Jim Idle - March 2009
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
-            <version>3.4.1</version>
+            <version>3.3</version>
         </dependency>
 
         <!--
