@@ -453,7 +453,7 @@ public class Tool {
                     System.out.println("output: "+outputFiles);
                     System.out.println("dependents: "+dependents);
                      */
-                    System.out.println(dep.getDependencies());
+                    System.out.println(dep.getDependencies().render());
                     continue;
                 }
 
