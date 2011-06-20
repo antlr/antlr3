@@ -41,7 +41,7 @@ import java.util.*;
 public class Tool {
 
     public final Properties antlrSettings = new Properties();
-    public String VERSION = "!Unknown version!";
+    public String VERSION = "3.4";
     //public static final String VERSION = "${project.version}";
     public static final String UNINITIALIZED_DIR = "<unset-dir>";
     private List<String> grammarFileNames = new ArrayList<String>();
@@ -118,8 +118,7 @@ public class Tool {
 
                 // Set any variables that we need to populate from the resources
                 //
-                VERSION = antlrSettings.getProperty("antlr.version");
-
+//                VERSION = antlrSettings.getProperty("antlr.version");
             } catch (Exception e) {
                 // Do nothing, just leave the defaults in place
             }
