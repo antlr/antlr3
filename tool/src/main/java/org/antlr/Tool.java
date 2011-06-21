@@ -535,8 +535,7 @@ public class Tool {
             }
             catch (IOException e) {
                 if (exceptionWhenWritingLexerFile) {
-                    ErrorManager.error(ErrorManager.MSG_CANNOT_WRITE_FILE,
-                                       lexerGrammarFileName, e);
+                    ErrorManager.error(ErrorManager.MSG_CANNOT_WRITE_FILE, e);
                 }
                 else {
                     ErrorManager.error(ErrorManager.MSG_CANNOT_OPEN_FILE,

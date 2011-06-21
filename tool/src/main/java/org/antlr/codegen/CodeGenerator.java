@@ -472,9 +472,7 @@ public class CodeGenerator {
 			//System.out.println(outputFileST.getDOTForDependencyGraph(false));
 		}
 		catch (IOException ioe) {
-			ErrorManager.error(ErrorManager.MSG_CANNOT_WRITE_FILE,
-							   getVocabFileName(),
-							   ioe);
+			ErrorManager.error(ErrorManager.MSG_CANNOT_WRITE_FILE, ioe);
 		}
 		/*
 		System.out.println("num obj.prop refs: "+ ASTExpr.totalObjPropRefs);
