@@ -2643,7 +2643,7 @@ lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
 ((LA<decisionNumber>_<stateNumber> >= <lower>) && (LA<decisionNumber>_<stateNumber> \<= <upper>))
 %>
 
-isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "((LA(<k>) \>= <lower>) && (LA(<k>) \<= <upper>))"
+isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "((LA(<k>) >= <lower>) && (LA(<k>) \<= <upper>))"
 
 setTest(ranges) ::= "<ranges; separator=\" || \">"
 
@@ -2732,8 +2732,8 @@ void
     // we want to reuse scope entries if we do continuous push and pops. Most scopes don't
     // next too far so we don't want to keep freeing and allocating them
     //
-    ctx-\><scopeStack(sname=scope.name,...)>_limit--;
-    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-\><scopeStack(sname=scope.name,...)>-\>get(ctx-\><scopeStack(sname=scope.name,...)>, ctx-\><scopeStack(sname=scope.name,...)>_limit - 1));
+    ctx-><scopeStack(sname=scope.name,...)>_limit--;
+    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-><scopeStack(sname=scope.name,...)>->get(ctx-><bscopeStack(sname=scope.name,...)>, ctx-><scopeStack(sname=scope.name,...)>_limit - 1));
 }
 <endif>
 >>
@@ -2775,8 +2775,8 @@ void
     // we want to reuse scope entries if we do continuous push and pops. Most scopes don't
     // next too far so we don't want to keep freeing and allocating them
     //
-    ctx-\><scopeStack(sname=scope.name,...)>_limit--;
-    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-\><scopeStack(sname=scope.name,...)>-\>get(ctx-\><scopeStack(sname=scope.name,...)>, ctx-\><scopeStack(sname=scope.name,...)>_limit - 1));
+    ctx-><scopeStack(sname=scope.name,...)>_limit--;
+    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-><scopeStack(sname=scope.name,...)>->get(ctx-><scopeStack(sname=scope.name,...)>, ctx-><scopeStack(sname=scope.name,...)>_limit - 1));
 }
 
 <endif>
@@ -2857,7 +2857,7 @@ globalAttributeScopeFree(scope) ::= <<
 <if(scope.attributes)>
 /* globalAttributeScope(scope)
  */
-ctx-><scopeStack(sname=scope.name,...)>-\>free(ctx-><scopeStack(sname=scope.name,...)>);
+ctx-><scopeStack(sname=scope.name,...)>->free(ctx-><scopeStack(sname=scope.name,...)>);
 <endif>
 >>
 
@@ -2866,7 +2866,7 @@ ruleAttributeScopeFree(scope) ::=
 <if(scope.attributes)>
 /* ruleAttributeScope(scope)
  */
-ctx-><scopeStack(sname=scope.name,...)>-\>free(ctx-><scopeStack(sname=scope.name,...)>);
+ctx-><scopeStack(sname=scope.name,...)>->free(ctx-><scopeStack(sname=scope.name,...)>);
 <endif>
 >>
 
@@ -2947,13 +2947,13 @@ static <scopeType(sname=scope.name)>
 
     /* Allocate the memory for a new structure if we need one.
      */
-    if (ctx-\><scopeStack(sname=scope.name)>-\>size(ctx-\><scopeStack(sname=scope.name)>) \> ctx-\><scopeStack(sname=scope.name)>_limit)
+    if (ctx-><scopeStack(sname=scope.name)>->size(ctx-><scopeStack(sname=scope.name)>) > ctx-><scopeStack(sname=scope.name)>_limit)
     {
         // The current limit value was less than the number of scopes available on the stack so
         // we can just reuse one. Our limit tracks the stack count, so the index of the entry we want
         // is one less than that, or conveniently, the current value of limit.
         //
-        newAttributes = (<scopeType(sname=scope.name)>)ctx-><scopeStack(sname=scope.name)>->get(ctx-><scopeStack(sname=scope.name)>, ctx-\><scopeStack(sname=scope.name)>_limit);
+        newAttributes = (<scopeType(sname=scope.name)>)ctx-><scopeStack(sname=scope.name)>->get(ctx-><scopeStack(sname=scope.name)>, ctx-><scopeStack(sname=scope.name)>_limit);
     }
     else
     {
@@ -2964,7 +2964,7 @@ static <scopeType(sname=scope.name)>
         {
             /* Standard ANTLR3 library implementation
              */
-            ctx-\><scopeStack(sname=scope.name)>-\>push(ctx-\><scopeStack(sname=scope.name)>, newAttributes, (void (*)(void *))<scope.name>Free);
+            ctx-><scopeStack(sname=scope.name)>->push(ctx-><scopeStack(sname=scope.name)>, newAttributes, (void (*)(void *))<scope.name>Free);
         }
     }
 
