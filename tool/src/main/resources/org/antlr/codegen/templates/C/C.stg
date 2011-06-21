@@ -1910,7 +1910,7 @@ block(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK,max
     <@prebranch()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | altSwitchCase(i,a)}>
+	<alts:{a | <altSwitchCase(i,a)>}>
     }
     <@postbranch()>
 }
@@ -1931,7 +1931,7 @@ ruleBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK
     <@postdecision()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | altSwitchCase(i,a)}>
+	<alts:{a | <altSwitchCase(i,a)>}>
     }
 }
 >>
@@ -1969,7 +1969,7 @@ positiveClosureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decision
 	<@postdecision()>
 	switch (alt<decisionNumber>)
 	{
-	    <alts:{a | altSwitchCase(i,a)}>
+	    <alts:{a | <altSwitchCase(i,a)>}>
 	    default:
 
 		if ( cnt<decisionNumber> >= 1 )
@@ -2013,7 +2013,7 @@ for (;;)
     <@postdecision()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | altSwitchCase(i,a)}>
+	<alts:{a | <altSwitchCase(i,a)>}>
 	default:
 	    goto loop<decisionNumber>;	/* break out of the loop */
 	    break;
