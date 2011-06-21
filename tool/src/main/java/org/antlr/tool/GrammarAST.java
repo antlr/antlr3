@@ -471,25 +471,6 @@ public class GrammarAST extends CommonTree {
         return dup(this);
     }
 
-    private static List<GrammarAST> getChildrenForDupTree(GrammarAST t) {
-        List<GrammarAST> result = new ArrayList<GrammarAST>();
-        for (int i = 0; i < t.getChildCount(); i++){
-            GrammarAST child = (GrammarAST)t.getChild(i);
-            int ttype = child.getType();
-            if (ttype == ANTLRParser.REWRITE)
-                continue;
-
-            if (ttype == ANTLRParser.BANG || ttype == ANTLRParser.ROOT) {
-                for (GrammarAST subchild : getChildrenForDupTree(child))
-                    result.add(subchild);
-            } else {
-                result.add(child);
-            }
-        }
-
-        return result;
-    }
-
 	/**Duplicate a tree, assuming this is a root node of a tree--
 	 * duplicate that node and what's below; ignore siblings of root node.
 	 */
@@ -498,8 +479,29 @@ public class GrammarAST extends CommonTree {
 			return null;
 		}
 		GrammarAST result = (GrammarAST)t.dupNode();
-		for (GrammarAST subchild : getChildrenForDupTree(t))
+		for (GrammarAST subchild : getChildrenForDupTree(t)) {
 			result.addChild(dupTreeNoActions(subchild, result));
+		}
+		return result;
+	}
+
+	private static List<GrammarAST> getChildrenForDupTree(GrammarAST t) {
+		List<GrammarAST> result = new ArrayList<GrammarAST>();
+		for (int i = 0; i < t.getChildCount(); i++){
+			GrammarAST child = (GrammarAST)t.getChild(i);
+			int ttype = child.getType();
+			if (ttype == ANTLRParser.REWRITE || ttype==ANTLRParser.ACTION) {
+				continue;
+			}
+
+			if (ttype == ANTLRParser.BANG || ttype == ANTLRParser.ROOT) {
+				for (GrammarAST subchild : getChildrenForDupTree(child))
+					result.add(subchild);
+			} else {
+				result.add(child);
+			}
+		}
+
 		return result;
 	}
 

@@ -466,6 +466,34 @@ public class TestAttributes extends BaseTest {
 		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
 	}
 
+	@Test public void testActionNotMovedToSynPred() throws Exception {
+		String action = "$b = true;";
+		String expecting = "retval.b = true;";
+
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);
+		Grammar g = new Grammar(
+			"grammar t;\n"+
+			"options {output=AST;}\n" + // push b into retval struct
+			"a returns [boolean b]\n" +
+			"options {backtrack=true;}\n" +
+			"   : 'a' {"+action+"}\n" +
+			"   | 'a'\n" +
+			"   ;\n");
+		Tool antlr = newTool();
+		CodeGenerator generator = new CodeGenerator(antlr, g, "Java");
+		g.setCodeGenerator(generator);
+		generator.genRecognizer(); // forces load of templates
+		ActionTranslator translator =
+			new ActionTranslator(generator,
+				"a",
+				new CommonToken(ANTLRParser.ACTION,action),1);
+		String found =	translator.translate();
+		assertEquals(expecting, found);
+
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+	}
+
 	@Test public void testReturnValueWithNumber() throws Exception {
 		String action = "$x.i1";
 		String expecting = "x";
