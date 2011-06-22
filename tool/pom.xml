@@ -4,7 +4,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr</artifactId>
     <packaging>jar</packaging>
-    <name>ANTLR Tool 3.4-SNAPSHOT</name>
+    <name>ANTLR Tool 3.4.1-SNAPSHOT</name>
     <url>http://antlr.org</url>
 
 
@@ -59,13 +59,12 @@
 
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.4</version>
                 <configuration>
                     <libDirectory>target/generated-sources/antlr/org/antlr/grammar/v3</libDirectory>
                 </configuration>
                 <executions>
                     <execution>
-
                         <goals>
                             <goal>antlr</goal>
                         </goals>

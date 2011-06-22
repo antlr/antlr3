@@ -4,7 +4,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
     <packaging>pom</packaging>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
     <name>ANTLR Master build control POM</name>
     <url>http://maven.apache.org</url>
 
@@ -221,7 +221,7 @@
                   -->
 
                 <artifactId>maven-assembly-plugin</artifactId>
-
+                <version>2.2.1</version>
                 <!--
                     Do not make the child modules build an assembly
                   -->
@@ -233,7 +233,6 @@
                         <descriptor>antlrsources.xml</descriptor>
                     </descriptors>
                         <!--
-
                             Specify that we want the resulting jar to be executable
                             via java -jar, which we do by modifying the manifest
                             of course.
@@ -244,14 +243,12 @@
                         </manifest>
                     </archive>
                 </configuration>
-
-
-
             </plugin>
 
 	    <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
