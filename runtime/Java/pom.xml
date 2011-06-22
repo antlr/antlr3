@@ -16,9 +16,11 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr-master</artifactId>
       <version>3.4.1-SNAPSHOT</version>
+
   </parent>
   
-  <name>Antlr 3 Runtime</name>
+  <name>Antlr Runtime 3.4-SNAPSHOT</name>
+
   <description>A framework for constructing recognizers, compilers, and translators from grammatical descriptions containing Java, C#, C++, or Python actions.</description>
   <url>http://www.antlr.org</url>
       <developers>
