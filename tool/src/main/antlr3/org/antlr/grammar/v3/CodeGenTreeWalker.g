@@ -456,7 +456,7 @@ rule returns [ST code=null]
 					}
 				}
 				$code = templates.getInstanceOf(stName);
-				if ( $code.getName().equals("rule") )
+				if ( $code.getName().equals("/rule") )
 				{
 					$code.add("emptyRule", grammar.isEmptyRule(block2));
 				}

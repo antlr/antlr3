@@ -2964,7 +2964,7 @@ public class TestAttributes extends BaseTest {
 		for (int i = 0; i < translator.chunks.size(); i++) {
 			Object chunk = translator.chunks.get(i);
 			if (chunk instanceof ST) {
-				if (((ST)chunk).getName().equals("scopeSetAttributeRef")) {
+				if (((ST)chunk).getName().equals("/scopeSetAttributeRef")) {
 					foundScopeSetAttributeRef = true;
 				}
 			}
