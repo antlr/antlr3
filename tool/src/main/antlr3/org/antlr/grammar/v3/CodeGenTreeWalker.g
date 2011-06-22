@@ -1417,7 +1417,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 										  grammar,
 										  ((GrammarAST)($r)).getToken(),
 										  ruleRefName);
-				$code = new ST(); // blank; no code gen
+				$code = new ST(""); // blank; no code gen
 			}
 			else
 			{
@@ -1468,7 +1468,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 										  grammar,
 										  ((GrammarAST)($start)).getToken(),
 										  tokenName);
-				$code = new ST(); // blank; no code gen
+				$code = new ST(""); // blank; no code gen
 			}
 		}
 
@@ -1498,7 +1498,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 										  grammar,
 										  ((GrammarAST)($LABEL)).getToken(),
 										  labelName);
-				$code = new ST();
+				$code = new ST("");
 			}
 			else
 			{
