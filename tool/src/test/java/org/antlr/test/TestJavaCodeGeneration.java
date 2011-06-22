@@ -117,7 +117,7 @@ public class TestJavaCodeGeneration extends BaseTest {
             "B : '\\\"';\n" +            // this is B: '\"', which shodl give "\"" at Java level;
             "C : '\\'\\'';\n" +          // this is C: '\'\'', which shoudl give "''" at Java level
             "D : '\\k';\n";              // this is D: '\k', which shoudl give just "k" at Java level;
-        
+
 		boolean found =
 			rawGenerateAndBuildRecognizer(
 				"T.g", grammar, null, "T", false);
@@ -125,4 +125,16 @@ public class TestJavaCodeGeneration extends BaseTest {
 		assertEquals(expecting, found);
 	}
 
+	@Test public void testBlankRuleGetsNoException() {
+		String grammar =
+			"grammar T;\n" +
+			"a : sync (ID sync)* ;\n" +
+			"sync : ;\n" +
+			"ID : 'a'..'z'+;\n";
+		boolean found =
+			rawGenerateAndBuildRecognizer(
+				"T.g", grammar, "TParser", "TLexer", false);
+		boolean expecting = true; // should be ok
+		assertEquals(expecting, found);
+	}
 }
