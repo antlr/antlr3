@@ -979,15 +979,6 @@
 				RelativePath="..\..\tool\src\main\resources\org\antlr\codegen\templates\C\Dbg.stg"
 				>
 			</File>
-			<Filter
-				Name="Interfaces"
-				Filter="*.sti"
-				>
-				<File
-					RelativePath="..\..\tool\src\main\resources\org\antlr\codegen\templates\ANTLRCore.sti"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Java"
