@@ -545,7 +545,7 @@ static  pANTLR3_STRING    toString		(pANTLR3_COMMON_TOKEN token)
 
 	if	(text->factory == NULL)
 	{
-		return text;		// This usall ymeans it is the EOF token
+		return text;		// This usally means it is the EOF token
 	}
 
     /* A new empty string to assemble all the stuff in
@@ -570,9 +570,9 @@ static  pANTLR3_STRING    toString		(pANTLR3_COMMON_TOKEN token)
 
     if	(token->getChannel(token) > ANTLR3_TOKEN_DEFAULT_CHANNEL)
     {
-	outtext->append8(outtext, "(channel = ");
-	outtext->addi	(outtext, (ANTLR3_INT32)token->getChannel(token));
-	outtext->append8(outtext, ") ");
+		outtext->append8(outtext, "(channel = ");
+		outtext->addi	(outtext, (ANTLR3_INT32)token->getChannel(token));
+		outtext->append8(outtext, ") ");
     }
 
     outtext->append8(outtext, "Line: ");

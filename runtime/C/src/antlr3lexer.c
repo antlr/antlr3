@@ -104,7 +104,7 @@ antlr3LexerNew(ANTLR3_UINT32 sizeHint, pANTLR3_RECOGNIZER_SHARED_STATE state)
 	*/
 	if	(lexer->rec->state->tokSource == NULL) 
 	{
-		lexer->rec->state->tokSource	= (pANTLR3_TOKEN_SOURCE)ANTLR3_MALLOC(sizeof(ANTLR3_TOKEN_SOURCE));
+		lexer->rec->state->tokSource	= (pANTLR3_TOKEN_SOURCE)ANTLR3_CALLOC(1, sizeof(ANTLR3_TOKEN_SOURCE));
 
 		if	(lexer->rec->state->tokSource == NULL) 
 		{
