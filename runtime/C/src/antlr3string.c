@@ -101,7 +101,7 @@ antlr3StringFactoryNew(ANTLR3_UINT32 encoding)
 
 	/* Allocate memory
 	*/
-	factory	= (pANTLR3_STRING_FACTORY) ANTLR3_MALLOC(sizeof(ANTLR3_STRING_FACTORY));
+	factory	= (pANTLR3_STRING_FACTORY) ANTLR3_CALLOC(1, sizeof(ANTLR3_STRING_FACTORY));
 
 	if	(factory == NULL)
 	{
