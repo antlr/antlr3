@@ -121,62 +121,57 @@ antlr3StringFactoryNew(ANTLR3_UINT32 encoding)
 
     // Install the API
     //
+    // TODO: These encodings need equivalent functions to
+    // UTF16 and 8Bit if I am going to support those encodings in the STRING stuff.
+	// The STRING stuff was intended as a quick and dirty hack for people that did not
+	// want to worry about memory and performance very much, but nobody ever reads the 
+	// notes or comments or uses the email list search. I want to discourage using these
+	// interfaces as it is much more efficient to use the pointers within the tokens
+	// directly, so I am not implementing the string stuff for the newer encodings.
+    // We install the standard 8 and 16 bit functions for the UTF 8 and 16 but they
+	// will not be useful beyond returning the text.
+	// 
     switch(encoding)
     {
+		case    ANTLR3_ENC_UTF32:
+			break;
 
-    case    ANTLR3_ENC_UTF16:
+		case    ANTLR3_ENC_UTF32BE:
+			break;
 
-        factory->newRaw	    =  newRawUTF16;
-        factory->newSize	=  newSizeUTF16;
-        factory->newPtr	    =  newPtrUTF16_UTF16;
-        factory->newPtr8	=  newPtrUTF16_8;
-        factory->newStr	    =  newStrUTF16_UTF16;
-        factory->newStr8	=  newStrUTF16_8;
-        factory->printable	=  printableUTF16;
-        factory->destroy	=  destroy;
-        factory->close	    =  closeFactory;
-        break;
+		case    ANTLR3_ENC_UTF32LE:
+			break;
 
-        // TODO: These encodings need equivalent functions to
-        // UTF16 and 8Bit if I am going to support those encodings in the STRING stuff.
-		// The STRING stuff was intended as a quick and dirty hack for people that did not
-		// want to worry about memory and performance very much, but nobody ever reads the 
-		// notes or comments or uses the email list search. I want to discourage using these
-		// interfaces as it is much more efficient to use the pointers within the tokens
-		// directly, so I am not implementing the string stuff for the newer encodings.
-        //
-    case    ANTLR3_ENC_UTF8:
-		break;
+		case    ANTLR3_ENC_UTF16BE:
+		case    ANTLR3_ENC_UTF16LE:
+		case    ANTLR3_ENC_UTF16:
 
-    case    ANTLR3_ENC_UTF32:
-		break;
+			factory->newRaw	    =  newRawUTF16;
+			factory->newSize	=  newSizeUTF16;
+			factory->newPtr	    =  newPtrUTF16_UTF16;
+			factory->newPtr8	=  newPtrUTF16_8;
+			factory->newStr	    =  newStrUTF16_UTF16;
+			factory->newStr8	=  newStrUTF16_8;
+			factory->printable	=  printableUTF16;
+			factory->destroy	=  destroy;
+			factory->close	    =  closeFactory;
+			break;
+	 
+		case    ANTLR3_ENC_UTF8:
+		case    ANTLR3_ENC_EBCDIC:
+		case    ANTLR3_ENC_8BIT:
+		default:
 
-    case    ANTLR3_ENC_UTF16BE:
-		break;
-
-    case    ANTLR3_ENC_UTF16LE:
-		break;
-
-    case    ANTLR3_ENC_UTF32BE:
-		break;
-
-    case    ANTLR3_ENC_UTF32LE:
-		break;
-
-    case    ANTLR3_ENC_EBCDIC:
-    case    ANTLR3_ENC_8BIT:
-    default:
-
-        factory->newRaw	    =  newRaw8;
-        factory->newSize	=  newSize8;
-        factory->newPtr	    =  newPtr8;
-        factory->newPtr8	=  newPtr8;
-        factory->newStr	    =  newStr8;
-        factory->newStr8	=  newStr8;
-        factory->printable	=  printable8;
-        factory->destroy	=  destroy;
-        factory->close	    =  closeFactory;
-        break;
+			factory->newRaw	    =  newRaw8;
+			factory->newSize	=  newSize8;
+			factory->newPtr	    =  newPtr8;
+			factory->newPtr8	=  newPtr8;
+			factory->newStr	    =  newStr8;
+			factory->newStr8	=  newStr8;
+			factory->printable	=  printable8;
+			factory->destroy	=  destroy;
+			factory->close	    =  closeFactory;
+			break;
     }
 	return  factory;
 }
