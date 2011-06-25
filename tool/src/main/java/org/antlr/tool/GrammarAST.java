@@ -501,6 +501,12 @@ public class GrammarAST extends CommonTree {
 				result.add(child);
 			}
 		}
+		if ( result.size()==1 && result.get(0).getType()==ANTLRParser.EOA &&
+			 t.getType()==ANTLRParser.ALT )
+		{
+			// can't have an empty alt, insert epsilon
+			result.add(0, new GrammarAST(ANTLRParser.EPSILON, "epsilon"));
+		}
 
 		return result;
 	}

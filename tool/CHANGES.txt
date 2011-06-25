@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+June 24, 2011
+
+* empty alts with actions didn't have EPSILON dummy alt node.
+
 June 19, 2011
 
 * Udo noticed that Parser.getMissingSymbol() didn't set invented token's input

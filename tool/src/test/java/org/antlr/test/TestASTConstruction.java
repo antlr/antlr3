@@ -46,6 +46,16 @@ public class TestASTConstruction extends BaseTest {
 		assertEquals(expecting, found);
 	}
 
+	@Test public void testEmptyAlt() throws Exception {
+		Grammar g = new Grammar(
+				"parser grammar P;\n"+
+				"a : ;");
+		String expecting =
+			"(rule a ARG RET scope (BLOCK (ALT epsilon <end-of-alt>) <end-of-block>) <end-of-rule>)";
+		String found = g.getRule("a").tree.toStringTree();
+		assertEquals(expecting, found);
+	}
+
 	@Test public void testNakeRulePlusInLexer() throws Exception {
 		Grammar g = new Grammar(
 				"lexer grammar P;\n"+
