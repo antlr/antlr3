@@ -382,7 +382,7 @@ this.state.ruleMemo = new System.Collections.Generic.Dictionary\<int, int>[<leng
 parser(grammar, name, scopes, tokens, tokenNames, rules, numRules, bitsets,
        ASTLabelType="object", superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Parser<endif>}, labelType="IToken",
        members={<actions.parser.members>}) ::= <<
-<genericParser(inputStreamType="ITokenStream", rewriteElementType="IToken", ...)>
+<genericParser(inputStreamType="ITokenStream", rewriteElementType="IToken", filterMode=false, ...)>
 >>
 
 /** How to generate a tree parser; same as parser except the input

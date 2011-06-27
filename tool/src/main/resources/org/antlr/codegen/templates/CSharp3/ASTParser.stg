@@ -61,7 +61,7 @@ tokenRef(token,label,elementIndex,terminalOptions) ::= <%
 %>
 
 /** ID! and output=AST (same as plain tokenRef) */
-tokenRefBang(token,label,elementIndex) ::= "<super.tokenRef(...)>"
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(...)>"
 
 /** ID^ and output=AST */
 tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <%
