@@ -337,6 +337,7 @@ finallyClause
 
 rewrite
 	:	^(REWRITES single_rewrite+)
+	|	REWRITES
 	|
 	;
 
@@ -432,7 +433,7 @@ atom
 				(rarg=ARG_ACTION	{out("["+$rarg.toString()+"]");})?
 				(ast_suffix)?
 			)
-		|	^(	TOKEN_REF		{out($start.toString());} 
+		|	^(	TOKEN_REF		{out($start.toString());}
 				(targ=ARG_ACTION	{out("["+$targ.toString()+"]");} )?
 				(ast_suffix)?
 			)
