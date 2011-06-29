@@ -7,6 +7,12 @@ University of San Francisco
 
 CHANGES
 
+June 29, 2011
+
+* Sam noticed CommonToken.getText() cached substring pulled from input, which
+  defeated purpose of pointing into input char array.  Altered to not cache.
+  Should reduce memory footprint.
+
 June 24, 2011
 
 * empty alts with actions didn't have EPSILON dummy alt node.
