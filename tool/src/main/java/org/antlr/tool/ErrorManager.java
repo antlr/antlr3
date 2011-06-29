@@ -407,9 +407,10 @@ public class ErrorManager {
 		ErrorManager.locale = locale;
 		String language = locale.getLanguage();
 		String fileName = "org/antlr/tool/templates/messages/languages/"+language+".stg";
-		messages = new STGroupFile(fileName);
-		messages.setListener(initSTListener);
-		if ( !messages.isDefined("INTERNAL_ERROR") ) { // pick random msg to load
+		try {
+			messages = new STGroupFile(fileName);
+		}
+		catch (IllegalArgumentException iae) {
 			if ( language.equals(Locale.US.getLanguage()) ) {
 				rawError("ANTLR installation corrupted; cannot find English messages file "+fileName);
 				panic();
