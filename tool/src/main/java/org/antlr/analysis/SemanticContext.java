@@ -301,11 +301,10 @@ public abstract class SemanticContext {
 	}
 
 	public static abstract class CommutativePredicate extends SemanticContext {
-		protected Set<SemanticContext> operands;
+		protected final Set<SemanticContext> operands = new HashSet<SemanticContext>();
 		protected int hashcode;
 
 		public CommutativePredicate(SemanticContext a, SemanticContext b) {
-			operands = new HashSet<SemanticContext>();
 			if (a.getClass() == this.getClass()){
 				CommutativePredicate predicate = (CommutativePredicate)a;
 				operands.addAll(predicate.operands);
