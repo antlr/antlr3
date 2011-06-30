@@ -67,6 +67,8 @@ outputFile(	LEXER,PARSER,TREE_PARSER, actionScope, actions,
 #pragma warning disable 162
 // Missing XML comment for publicly visible type or member 'Type_or_Member'
 #pragma warning disable 1591
+// CLS compliance checking will not be performed on 'type' because it is not visible from outside this assembly.
+#pragma warning disable 3019
 
 <actions.(actionScope).header>
 
@@ -96,7 +98,8 @@ lexerInputStreamType() ::= <<
 >>
 
 lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="CommonToken",
-      superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Lexer<endif>}) ::= <<
+      superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Lexer<endif>},
+	  rewriteElementType={}, ASTLabelType={}) ::= <<
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "<ANTLRVersion>")]
 [System.CLSCompliant(false)]
 <parserModifier(grammar=grammar, actions=actions)> partial class <grammar.recognizerName> : <@superClassName><superClass><@end>
