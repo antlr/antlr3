@@ -490,7 +490,7 @@ public class GrammarAST extends CommonTree {
 		for (int i = 0; i < t.getChildCount(); i++){
 			GrammarAST child = (GrammarAST)t.getChild(i);
 			int ttype = child.getType();
-			if (ttype == ANTLRParser.REWRITE || ttype==ANTLRParser.ACTION) {
+			if (ttype == ANTLRParser.REWRITES || ttype == ANTLRParser.REWRITE || ttype==ANTLRParser.ACTION) {
 				continue;
 			}
 

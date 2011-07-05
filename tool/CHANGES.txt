@@ -10,6 +10,7 @@ CHANGES
 July 5, 2011
 
 * Sam fixes rare infinite loop upon error in nextToken().
+* rewrites weren't pulled from syntactic predicates.
 
 June 29, 2011
 

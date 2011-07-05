@@ -138,8 +138,11 @@ protected final ST getRuleElementST( String name,
                                           GrammarAST elementAST,
                                           GrammarAST ast_suffix,
                                           String label ) {
-    String suffix = getSTSuffix( elementAST, ast_suffix, label );
-    name += suffix;
+	Rule r = grammar.getRule( currentRuleName );
+	String suffix = getSTSuffix( elementAST, ast_suffix, label );
+	if ( !r.isSynPred ) {
+		name += suffix;
+	}
     // if we're building trees and there is no label, gen a label
     // unless we're in a synpred rule.
     Rule r = grammar.getRule( currentRuleName );
