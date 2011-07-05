@@ -95,13 +95,17 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 				}
 				return state.token;
 			}
-			catch (NoViableAltException nva) {
-				reportError(nva);
-				recover(nva); // throw out current char and try again
+			catch (MismatchedRangeException re) {
+				reportError(re);
+				// matchRange() routine has already called recover()
+			}
+			catch (MismatchedTokenException re) {
+				reportError(re);
+				// match() routine has already called recover()
 			}
 			catch (RecognitionException re) {
 				reportError(re);
-				// match() routine has already called recover()
+				recover(re); // throw out current char and try again
 			}
 		}
 	}
