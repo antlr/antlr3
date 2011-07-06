@@ -99,7 +99,7 @@ public class CommonTokenStream extends BufferedTokenStream {
             i = skipOffTokenChannels(i+1);
             n++;
         }
-		if ( i>range ) range = i;		
+		if ( i>range ) range = i;
         return tokens.get(i);
     }
 
@@ -122,7 +122,12 @@ public class CommonTokenStream extends BufferedTokenStream {
         return i;
     }
 
-    protected void setup() {
+	public void reset() {
+		super.reset();
+		p = skipOffTokenChannels(0);
+	}
+
+	protected void setup() {
         p = 0;
         sync(0);
         int i = 0;
