@@ -7,6 +7,11 @@ University of San Francisco
 
 CHANGES
 
+July 14, 2011
+
+* Added BaesTree.freshenParentAndChildIndexesDeeply() to recursively
+  walk tree and set ptrs.
+
 July 6, 2011
 
 * reset() for token stream didn't skip initial off-channel tokens.

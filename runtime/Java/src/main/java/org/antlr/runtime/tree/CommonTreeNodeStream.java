@@ -51,7 +51,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
     protected TreeIterator it;
 
     /** Stack of indexes used for push/pop calls */
-    protected IntArray calls;    
+    protected IntArray calls;
 
     /** Tree (nil A B C) trees like flat A B C streams */
     protected boolean hasNilRoot = false;
@@ -76,7 +76,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         level = 0;
         if ( calls != null ) calls.clear();
     }
-    
+
     /** Pull elements from tree iterator.  Track tree level 0..max_level.
      *  If nil rooted tree, don't give initial nil and DOWN nor final UP.
      */
@@ -137,7 +137,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         int ret = calls.pop();
         seek(ret);
         return ret;
-    }    
+    }
 
 	// TREE REWRITE INTERFACE
 

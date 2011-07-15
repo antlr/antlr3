@@ -320,8 +320,42 @@ public class TestTreeNodeStream extends BaseTest {
         String v = toNodesOnlyString(stream); // scan all
         stream.reset();
         String v2 = toNodesOnlyString(stream); // scan all
-        assertEquals(v,v2);
+        assertEquals(v, v2);
     }
+
+	@Test public void testDeepTree() throws Exception {
+		// ^(10 100 101 ^(20 ^(30 40 (50 (60 70)))) (80 90)))
+		// stream has 8 real + 10 nav nodes
+		int n = 9;
+		CommonTree[] nodes = new CommonTree[n];
+		for (int i=0; i< n; i++) {
+			nodes[i] = new CommonTree(new CommonToken((i+1)*10));
+		}
+		Tree g = nodes[0];
+		Tree rules = nodes[1];
+		Tree rule1 = nodes[2];
+		Tree id = nodes[3];
+		Tree block = nodes[4];
+		Tree alt = nodes[5];
+		Tree s = nodes[6];
+		Tree rule2 = nodes[7];
+		Tree id2 = nodes[8];
+		g.addChild(new CommonTree(new CommonToken(100)));
+		g.addChild(new CommonTree(new CommonToken(101)));
+		g.addChild(rules);
+		rules.addChild(rule1);
+		rule1.addChild(id);
+		rule1.addChild(block);
+		block.addChild(alt);
+		alt.addChild(s);
+		rules.addChild(rule2);
+		rule2.addChild(id2);
+
+		TreeNodeStream stream = newStream(g);
+		String expecting = " 10 2 100 101 20 2 30 2 40 50 2 60 2 70 3 3 3 80 2 90 3 3 3";
+		String found = toTokenTypeString(stream);
+		assertEquals(expecting, found);
+	}
 
 	public String toNodesOnlyString(TreeNodeStream nodes) {
         TreeAdaptor adaptor = nodes.getTreeAdaptor();

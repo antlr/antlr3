@@ -44,7 +44,7 @@ public abstract class BaseTree implements Tree {
 
 	/** Create a new node from an existing node does nothing for BaseTree
 	 *  as there are no fields other than the children list, which cannot
-	 *  be copied as the children are not considered part of this node. 
+	 *  be copied as the children are not considered part of this node.
 	 */
 	public BaseTree(Tree node) {
 	}
@@ -69,7 +69,7 @@ public abstract class BaseTree implements Tree {
 			if ( t.getType()==type ) {
 				return t;
 			}
-		}	
+		}
 		return null;
 	}
 
@@ -150,7 +150,7 @@ public abstract class BaseTree implements Tree {
 		t.setParent(this);
 		t.setChildIndex(i);
 	}
-	
+
 	public Object deleteChild(int i) {
 		if ( children==null ) {
 			return null;
@@ -247,6 +247,20 @@ public abstract class BaseTree implements Tree {
 			Tree child = (Tree)getChild(c);
 			child.setChildIndex(c);
 			child.setParent(this);
+		}
+	}
+
+	public void freshenParentAndChildIndexesDeeply() {
+		freshenParentAndChildIndexesDeeply(0);
+	}
+
+	public void freshenParentAndChildIndexesDeeply(int offset) {
+		int n = getChildCount();
+		for (int c = offset; c < n; c++) {
+			BaseTree child = (BaseTree)getChild(c);
+			child.setChildIndex(c);
+			child.setParent(this);
+			child.freshenParentAndChildIndexesDeeply();
 		}
 	}
 
