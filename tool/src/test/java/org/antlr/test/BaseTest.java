@@ -43,6 +43,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
+import javax.tools.*;
 import java.io.*;
 import java.util.*;
 
@@ -106,49 +107,41 @@ public abstract class BaseTest {
 	}
 
 	protected boolean compile(String fileName) {
-		String compiler = "javac";
 		String classpathOption = "-classpath";
 
-		if (jikes!=null) {
-			compiler = jikes;
-			classpathOption = "-bootclasspath";
-		}
-
-		String inputFile = tmpdir + File.separator + fileName;
 		String[] args = new String[] {
-					compiler, "-d", tmpdir,
+					"javac", "-d", tmpdir,
 					classpathOption, tmpdir+pathSep+CLASSPATH,
-					inputFile
+					tmpdir+"/"+fileName
 		};
-		String cmdLine = compiler+" -d "+tmpdir+" "+classpathOption+" "+tmpdir+pathSep+CLASSPATH+" "+fileName;
+		String cmdLine = "javac" +" -d "+tmpdir+" "+classpathOption+" "+tmpdir+pathSep+CLASSPATH+" "+fileName;
 		//System.out.println("compile: "+cmdLine);
-		File outputDir = new File(tmpdir);
+
+
+		File f = new File(tmpdir, fileName);
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+
+		StandardJavaFileManager fileManager =
+			compiler.getStandardFileManager(null, null, null);
+
+		Iterable<? extends JavaFileObject> compilationUnits =
+			fileManager.getJavaFileObjectsFromFiles(Arrays.asList(f));
+
+		Iterable<String> compileOptions =
+			Arrays.asList(new String[]{"-d", tmpdir, "-cp", tmpdir+pathSep+CLASSPATH} );
+
+		JavaCompiler.CompilationTask task =
+			compiler.getTask(null, fileManager, null, compileOptions, null,
+							 compilationUnits);
+		boolean ok = task.call();
+
 		try {
-			Process process =
-				Runtime.getRuntime().exec(args, null, outputDir);
-			StreamVacuum stdout = new StreamVacuum(process.getInputStream(), inputFile);
-			StreamVacuum stderr = new StreamVacuum(process.getErrorStream(), inputFile);
-			stdout.start();
-			stderr.start();
-			process.waitFor();
-            stdout.join();
-            stderr.join();
-			if ( stdout.toString().length()>0 ) {
-				System.err.println("compile stdout from: "+cmdLine);
-				System.err.println(stdout);
-			}
-			if ( stderr.toString().length()>0 ) {
-				System.err.println("compile stderr from: "+cmdLine);
-				System.err.println(stderr);
-			}
-			int ret = process.exitValue();
-			return ret==0;
+			fileManager.close();
 		}
-		catch (Exception e) {
-			System.err.println("can't exec compilation");
-			e.printStackTrace(System.err);
-			return false;
+		catch (IOException ioe) {
+			ioe.printStackTrace(System.err);
 		}
+		return ok;
 	}
 
 	/** Return true if all is ok, no errors */
