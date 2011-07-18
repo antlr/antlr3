@@ -1,5 +1,5 @@
-ANTLR 3.3 Release
-November 29, 2010
+ANTLR 3.4 Release
+July 18, 2011
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
@@ -7,7 +7,7 @@ University of San Francisco
 
 CHANGES
 
-July 18, 2011
+July 18, 2011 -- release 3.4
 
 * Added tree method insertChild(int i, Object t).
 

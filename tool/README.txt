@@ -1,11 +1,11 @@
-ANTLR v3.3
-November 29, 2010
+ANTLR v3.4
+July 18, 2011
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
 University of San Francisco
 
-INTRODUCTION 
+INTRODUCTION
 
 Welcome to ANTLR v3!  ANTLR (ANother Tool for Language Recognition) is
 a language tool that provides a framework for constructing
@@ -18,7 +18,7 @@ version of ANTLR for 7 years.
 
 You should use v3 in conjunction with ANTLRWorks:
 
-    http://www.antlr.org/works/index.html 
+    http://www.antlr.org/works/index.html
 
 and gUnit (grammar unit testing tool included in distribution):
 
@@ -113,26 +113,26 @@ See migration guide:
 
 How do I install this damn thing?
 
-Just untar antlr-3.3.tar.gz and you'll get:
+Just untar antlr-3.4.tar.gz and you'll get:
 
-antlr-3.3/BUILD.txt
-antlr-3.3/antlr3-maven-plugin
-antlr-3.3/antlrjar.xml
-antlr-3.3/antlrsources.xml
-antlr-3.3/gunit
-antlr-3.3/gunit-maven-plugin
-antlr-3.3/pom.xml
-antlr-3.3/runtime
-antlr-3.3/tool
-antlr-3.3/lib
+antlr-3.4/BUILD.txt
+antlr-3.4/antlr3-maven-plugin
+antlr-3.4/antlrjar.xml
+antlr-3.4/antlrsources.xml
+antlr-3.4/gunit
+antlr-3.4/gunit-maven-plugin
+antlr-3.4/pom.xml
+antlr-3.4/runtime
+antlr-3.4/tool
+antlr-3.4/lib
 
 This is the source and java binaries.  You could grab the
-antlr-3.3-complete.jar file from the website, but it's in lib dir.
+antlr-3.4-complete.jar file from the website, but it's in lib dir.
 It has all of the jars you need combined into one. Then you need to
-add antlr-3.3-complete.jar to your CLASSPATH or add
+add antlr-3.4-complete.jar to your CLASSPATH or add
 to arg list; e.g., on unix:
 
-$ java -cp "/usr/local/lib/antlr-3.3-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
+$ java -cp "/usr/local/lib/antlr-3.4-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
 
 Please see the FAQ
 
