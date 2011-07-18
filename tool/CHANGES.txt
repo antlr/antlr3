@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+July 18, 2011
+
+* Added tree method insertChild(int i, Object t).
+
 July 14, 2011
 
 * Added BaesTree.freshenParentAndChildIndexesDeeply() to recursively

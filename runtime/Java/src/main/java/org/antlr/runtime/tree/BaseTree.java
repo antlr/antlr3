@@ -151,6 +151,18 @@ public abstract class BaseTree implements Tree {
 		t.setChildIndex(i);
 	}
 
+	/** Insert child t at child position i (0..n-1) by shifting children
+		i+1..n-1 to the right one position. Set parent / indexes properly
+	 	but does NOT collapse nil-rooted t's that come in here like addChild.
+	 */
+	public void insertChild(int i, Object t) {
+		if ( children==null ) return;
+		children.add(i, t);
+		// walk others to increment their child indexes
+		// set index, parent of this one too
+		this.freshenParentAndChildIndexes(i);
+	}
+
 	public Object deleteChild(int i) {
 		if ( children==null ) {
 			return null;
