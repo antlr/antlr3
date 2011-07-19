@@ -139,27 +139,27 @@ protected final ST getRuleElementST( String name,
                                           GrammarAST ast_suffix,
                                           String label ) {
 	Rule r = grammar.getRule( currentRuleName );
-	String suffix = getSTSuffix( elementAST, ast_suffix, label );
+	String suffix = getSTSuffix(elementAST, ast_suffix, label);
 	if ( !r.isSynPred ) {
 		name += suffix;
 	}
-    // if we're building trees and there is no label, gen a label
-    // unless we're in a synpred rule.
-    Rule r = grammar.getRule( currentRuleName );
-    if ( ( grammar.buildAST() || suffix.length() > 0 ) && label == null &&
-         ( r == null || !r.isSynPred ) ) {
-        // we will need a label to do the AST or tracking, make one
-        label = generator.createUniqueLabel( ruleTargetName );
-        CommonToken labelTok = new CommonToken( ANTLRParser.ID, label );
-        grammar.defineRuleRefLabel( currentRuleName, labelTok, elementAST );
-    }
+	// if we're building trees and there is no label, gen a label
+	// unless we're in a synpred rule.
+	if ( ( grammar.buildAST() || suffix.length() > 0 ) && label == null &&
+		 ( r == null || !r.isSynPred ) ) {
+		// we will need a label to do the AST or tracking, make one
+		label = generator.createUniqueLabel( ruleTargetName );
+		CommonToken labelTok = new CommonToken( ANTLRParser.ID, label );
+		grammar.defineRuleRefLabel( currentRuleName, labelTok, elementAST );
+	}
 
-    ST elementST = templates.getInstanceOf( name );
-    if ( label != null ) {
-        elementST.add( "label", label );
-    }
+	ST elementST = templates.getInstanceOf( name );
+	if ( label != null ) {
+		elementST.add( "label", label );
+	}
 
-    return elementST;
+
+	return elementST;
 }
 
 protected final ST getTokenElementST( String name,
