@@ -1696,7 +1696,7 @@ ruleDeclarations() ::= <<
 }>
 <endif>
 <if(memoize)>
-ANTLR3_UINT32 <ruleDescriptor.name>_StartIndex;
+ANTLR3_MARKER <ruleDescriptor.name>_StartIndex;
 <endif>
 >>
 
