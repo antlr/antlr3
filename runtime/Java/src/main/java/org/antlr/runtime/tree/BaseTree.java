@@ -156,7 +156,10 @@ public abstract class BaseTree implements Tree {
 	 	but does NOT collapse nil-rooted t's that come in here like addChild.
 	 */
 	public void insertChild(int i, Object t) {
-		if ( children==null ) return;
+		if (i < 0 || i >= getChildCount()) {
+			throw new IndexOutOfBoundsException(i+" out or range");
+		}
+
 		children.add(i, t);
 		// walk others to increment their child indexes
 		// set index, parent of this one too

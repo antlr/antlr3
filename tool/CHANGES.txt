@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+July 30, 2011
+
+* added range check to BaseTree.insertChild()
+
 July 18, 2011 -- release 3.4
 
 * Added tree method insertChild(int i, Object t).
