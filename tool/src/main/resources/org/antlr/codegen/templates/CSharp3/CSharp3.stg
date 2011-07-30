@@ -1119,7 +1119,7 @@ else
 	alt<decisionNumber> = <eotPredictsAlt>;
 <else>
 	<ruleBacktrackFailure()>
-	NoViableAltException nvae = new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);
+	NoViableAltException nvae = new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input, <k>);
 	DebugRecognitionException(nvae);
 	<@noViableAltException()>
 	throw nvae;
@@ -1188,7 +1188,7 @@ default:
 <else>
 	{
 		<ruleBacktrackFailure()>
-		NoViableAltException nvae = new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);
+		NoViableAltException nvae = new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input, <k>);
 		DebugRecognitionException(nvae);
 		<@noViableAltException()>
 		throw nvae;
