@@ -504,7 +504,7 @@ ruleBacktrackFailure() ::= <<
 ruleWrapperMap ::= [
 	"bottomup":{<ruleWrapperBottomup()>},
 	"topdown":{<ruleWrapperTopdown()>},
-	default:null
+	default:""
 ]
 
 ruleWrapperBottomup() ::= <<
