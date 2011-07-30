@@ -482,6 +482,24 @@ ruleBacktrackFailure() ::= <<
 <if(backtracking)>if (state.backtracking>0) {state.failed=true; <returnFromRule()>}<endif>
 >>
 
+ruleWrapperMap ::= [
+	"bottomup":{<ruleWrapperBottomup()>},
+	"topdown":{<ruleWrapperTopdown()>},
+	default:null
+]
+
+ruleWrapperBottomup() ::= <<
+<if(TREE_PARSER && filterMode)>
+public override IAstRuleReturnScope Bottomup() { return bottomup(); }
+<endif>
+>>
+
+ruleWrapperTopdown() ::= <<
+<if(TREE_PARSER && filterMode)>
+public override IAstRuleReturnScope Topdown() { return topdown(); }
+<endif>
+>>
+
 /** How to generate code for a rule.  This includes any return type
  *  data aggregates required for multiple return values.
  */
@@ -490,7 +508,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
 <returnScope(ruleDescriptor.returnScope)>
 partial void EnterRule_<ruleName>();
 partial void LeaveRule_<ruleName>();
-
+<ruleWrapperMap.(ruleName)>
 // $ANTLR start "<ruleName>"
 // <fileName>:<description>
 [GrammarRule("<ruleName>")]
