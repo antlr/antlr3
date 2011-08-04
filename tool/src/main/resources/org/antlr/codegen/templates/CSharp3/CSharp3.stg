@@ -162,6 +162,14 @@ lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="Com
 		}
 	}
 
+<if(grammar.delegates)>
+	public override void SetState(RecognizerSharedState state)
+	{
+		base.SetState(state);
+		<grammar.delegates:{g|<g:delegateName()>.SetState(state);}; separator="\n">
+	}
+<endif>
+
 <endif>
 <if(filterMode)>
 	<filteringNextToken()>
@@ -289,6 +297,22 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 	<grammar.delegators:
 		 {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
 	<last(grammar.delegators):{g|private <g.recognizerName> gParent;}>
+<endif>
+
+<if(grammar.delegates)>
+	public override void SetState(RecognizerSharedState state)
+	{
+		base.SetState(state);
+		<grammar.delegates:{g|<g:delegateName()>.SetState(state);}; separator="\n">
+	}
+
+<if(TREE_PARSER)>
+	public override void SetTreeNodeStream(ITreeNodeStream input)
+	{
+		base.SetTreeNodeStream(input);
+		<grammar.delegates:{g|<g:delegateName()>.SetTreeNodeStream(input);}; separator="\n">
+	}
+<endif>
 <endif>
 
 	<scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
