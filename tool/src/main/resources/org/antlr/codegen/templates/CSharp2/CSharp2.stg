@@ -455,7 +455,7 @@ protected virtual void EnterRule_<ruleName>_fragment() {}
 protected virtual void LeaveRule_<ruleName>_fragment() {}
 
 // $ANTLR start <ruleName>
-public <!final !>void <ruleName>_fragment(<ruleDescriptor.parameterScope:parameterScope()>)
+<ruleModifier(grammar,ruleDescriptor)> void <ruleName>_fragment(<ruleDescriptor.parameterScope:parameterScope()>)
 {
 	<ruleLabelDefs()>
 	EnterRule_<ruleName>_fragment();
@@ -1532,9 +1532,7 @@ returnType(ruleDescriptor) ::= <%
  *  values.
  */
 ruleLabelType(referencedRule) ::= <%
-<if(referencedRule.returnScope.attributes&&referencedRule.hasMultipleReturnValues)>
-	<referencedRule.grammar.recognizerName>.<referencedRule:returnStructName()>
-<elseif(referencedRule.hasMultipleReturnValues)>
+<if(referencedRule.hasMultipleReturnValues)>
 	<ruleReturnBaseType()>
 <elseif(referencedRule.hasSingleReturnValue)>
 	<referencedRule.singleValueReturnType>
@@ -1625,7 +1623,7 @@ isolatedDynamicScopeRef(scope) ::= "<scope>_stack"
 /** reference an attribute of rule; might only have single return value */
 ruleLabelRef(referencedRule,scope,attr) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-(<scope>!=null?<scope>.<attr.name; format="id">:<initValue(attr.type)>)
+(<scope>!=null?((<returnType(referencedRule)>)<scope>).<attr.name; format="id">:<initValue(attr.type)>)
 <else>
 <scope>
 <endif>
@@ -1656,7 +1654,7 @@ listLabelRef(label) ::= "list_<label>"
 
 // not sure the next are the right approach
 
-tokenLabelPropertyRef_text(scope,attr) ::= "(<scope>!=null?<scope>.Text:null)"
+tokenLabelPropertyRef_text(scope,attr) ::= "(<scope>!=null?<scope>.Text:default(string))"
 tokenLabelPropertyRef_type(scope,attr) ::= "(<scope>!=null?<scope>.Type:0)"
 tokenLabelPropertyRef_line(scope,attr) ::= "(<scope>!=null?<scope>.Line:0)"
 tokenLabelPropertyRef_pos(scope,attr) ::= "(<scope>!=null?<scope>.CharPositionInLine:0)"
@@ -1672,9 +1670,9 @@ ruleLabelPropertyRef_text(scope,attr) ::= <%
 <if(TREE_PARSER)>
 (<scope>!=null?(input.TokenStream.ToString(
   input.TreeAdaptor.GetTokenStartIndex(<scope>.Start),
-  input.TreeAdaptor.GetTokenStopIndex(<scope>.Start))):null)
+  input.TreeAdaptor.GetTokenStopIndex(<scope>.Start))):default(string))
 <else>
-(<scope>!=null?input.ToString(<scope>.Start,<scope>.Stop):null)
+(<scope>!=null?input.ToString(<scope>.Start,<scope>.Stop):default(string))
 <endif>
 %>
 
@@ -1699,7 +1697,7 @@ lexerRuleLabelPropertyRef_index(scope,attr) ::=
     "(<scope>!=null?<scope>.TokenIndex:0)"
 
 lexerRuleLabelPropertyRef_text(scope,attr) ::=
-    "(<scope>!=null?<scope>.Text:null)"
+    "(<scope>!=null?<scope>.Text:default(string))"
 
 lexerRuleLabelPropertyRef_int(scope,attr) ::=
     "(<scope>!=null?int.Parse(<scope>.Text):0)"
