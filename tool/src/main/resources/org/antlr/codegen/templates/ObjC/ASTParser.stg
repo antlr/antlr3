@@ -175,7 +175,7 @@ wildcard(token,label,elementIndex,terminalOptions) ::= <<
 /* ASTParser wildcard */
 <super.wildcard(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-    [treeAdaptor addChild:[[treeAdaptor createTree:<label>] retain] toTree:root_0];
+    [treeAdaptor addChild:[[treeAdaptor create:<label>] retain] toTree:root_0];
 <if(backtracking)>}<endif>
 >>
 
@@ -185,7 +185,7 @@ wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 /* ASTParser wildcardRuleRoot */
 <super.wildcard(...)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
-    <label>_tree = [[treeAdaptor createTree:<label>] retain]
+    <label>_tree = [[treeAdaptor create:<label>] retain]
     root_0 = (<ASTLabelType> *)[treeAdaptor becomeRoot:<label>_tree old:root_0];
 <if(backtracking)>}<endif>
 >>
@@ -195,7 +195,7 @@ createNodeFromToken(label,terminalOptions) ::= <<
 <if(terminalOptions.node)>
 [ANTLR<terminalOptions.node> newANTLR<terminalOptions.node>:<label>] <! new MethodNode(IDLabel) !>
 <else>
-(<ASTLabelType> *)[[treeAdaptor createTree:<label>] retain]
+(<ASTLabelType> *)[[treeAdaptor create:<label>] retain]
 <endif>
 >>
 
