@@ -606,6 +606,9 @@ public abstract class SemanticContext {
 
 	public static SemanticContext and(SemanticContext a, SemanticContext b) {
 		//System.out.println("AND: "+a+"&&"+b);
+		if (a instanceof FalsePredicate || b instanceof FalsePredicate)
+			return new FalsePredicate();
+
 		SemanticContext[] terms = factorOr(a, b);
 		SemanticContext commonTerms = terms[0];
 		a = terms[1];
@@ -643,6 +646,9 @@ public abstract class SemanticContext {
 
 	public static SemanticContext or(SemanticContext a, SemanticContext b) {
 		//System.out.println("OR: "+a+"||"+b);
+		if (a instanceof TruePredicate || b instanceof TruePredicate)
+			return new TruePredicate();
+
 		SemanticContext[] terms = factorAnd(a, b);
 		SemanticContext commonTerms = terms[0];
 		a = terms[1];

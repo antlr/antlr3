@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+August 10, 2011
+
+* (Sam) fix stack overflow in semantic context analysis
+
 July 30, 2011
 
 * added range check to BaseTree.insertChild()
