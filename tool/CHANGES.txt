@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+October 25, 2011
+
+* (Sam) Rule.setOption didn't do memoize option right.
+
 August 10, 2011
 
 * (Sam) fix stack overflow in semantic context analysis

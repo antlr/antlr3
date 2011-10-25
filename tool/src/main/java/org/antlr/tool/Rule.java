@@ -535,7 +535,7 @@ public class Rule {
 			options = new HashMap();
 		}
         if ( key.equals("memoize") && value.toString().equals("true") ) {
-            grammar.atLeastOneRuleMemoizes = true;
+			grammar.composite.getRootGrammar().atLeastOneRuleMemoizes = true;
         }
         if ( key.equals("backtrack") && value.toString().equals("true") ) {
             grammar.composite.getRootGrammar().atLeastOneBacktrackOption = true;
