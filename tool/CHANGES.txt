@@ -7,6 +7,12 @@ University of San Francisco
 
 CHANGES
 
+October 27, 2011
+
+* Dieter Habelitz reported bug in java code gen with synpreds. labels were
+  being carried from grammar into synpreds but weren't typed properly (they
+  were "void x=null;" for x=ruleref labels)
+
 October 25, 2011
 
 * (Sam) Rule.setOption didn't do memoize option right.
