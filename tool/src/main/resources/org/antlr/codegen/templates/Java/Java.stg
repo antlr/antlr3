@@ -897,11 +897,42 @@ else {
     alt<decisionNumber>=<eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    NoViableAltException nvae =
-        new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
-    <@noViableAltException()>
-    throw nvae;<\n>
+	<(nvaExceptionWrapperMap.(k))({NoViableAltException nvae =
+	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
+<@noViableAltException()>
+throw nvae;})>
 <endif>
+}
+>>
+
+nvaExceptionWrapperMap ::= [
+	"1":"wrapNvaExceptionForK1",
+	"2":"wrapNvaExceptionForK2",
+	default:"wrapNvaExceptionForKN"
+]
+
+wrapNvaExceptionForK1(exceptionCode) ::= <<
+<exceptionCode>
+>>
+
+wrapNvaExceptionForK2(exceptionCode) ::= <<
+int nvaeMark = input.mark();
+try {
+	input.consume();
+	<exceptionCode>
+} finally {
+	input.rewind(nvaeMark);
+}
+>>
+
+wrapNvaExceptionForKN(exceptionCode) ::= <<
+int nvaeMark = input.mark();
+try {
+	for (int nvaeConsume = 0; nvaeConsume \< <k> - 1; nvaeConsume++)
+		input.consume();
+	<exceptionCode>
+} finally {
+	input.rewind(nvaeMark);
 }
 >>
 
@@ -961,10 +992,10 @@ default:
     alt<decisionNumber>=<eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    NoViableAltException nvae =
-        new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
-    <@noViableAltException()>
-    throw nvae;<\n>
+	<(nvaExceptionWrapperMap.(k))({NoViableAltException nvae =
+	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
+<@noViableAltException()>
+throw nvae;})>
 <endif>
 }<\n>
 >>
