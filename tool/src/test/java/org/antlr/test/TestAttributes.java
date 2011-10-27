@@ -368,7 +368,7 @@ public class TestAttributes extends BaseTest {
 	 */
 	@Test public void testRefToReturnValueBeforeRefToPredefinedAttr() throws Exception {
 		String action = "$x.foo";
-		String expecting = "(x!=null?x.foo:0)";
+		String expecting = "(x!=null?((t.b_return)x).foo:0)";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -633,9 +633,9 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleLabels() throws Exception {
 		String action = "$r.x; $r.start;\n $r.stop;\n $r.tree; $a.x; $a.stop;";
-		String expecting = "(r!=null?r.x:0); (r!=null?((Token)r.start):null);" + newline +
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null);" + newline +
 			"             (r!=null?((Token)r.stop):null);" + newline +
-			"             (r!=null?((Object)r.tree):null); (r!=null?r.x:0); (r!=null?((Token)r.stop):null);";
+			"             (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -677,7 +677,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleLabelsWithSpecialToken() throws Exception {
 		String action = "$r.x; $r.start; $r.stop; $r.tree; $a.x; $a.stop;";
-		String expecting = "(r!=null?r.x:0); (r!=null?((MYTOKEN)r.start):null); (r!=null?((MYTOKEN)r.stop):null); (r!=null?((Object)r.tree):null); (r!=null?r.x:0); (r!=null?((MYTOKEN)r.stop):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((MYTOKEN)r.start):null); (r!=null?((MYTOKEN)r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((MYTOKEN)r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -705,7 +705,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testForwardRefRuleLabels() throws Exception {
 		String action = "$r.x; $r.start; $r.stop; $r.tree; $a.x; $a.tree;";
-		String expecting = "(r!=null?r.x:0); (r!=null?((Token)r.start):null); (r!=null?((Token)r.stop):null); (r!=null?((Object)r.tree):null); (r!=null?r.x:0); (r!=null?((Object)r.tree):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null); (r!=null?((Token)r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Object)r.getTree()):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2980,7 +2980,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testTreeRuleStopAttributeIsInvalid() throws Exception {
 		String action = "$r.x; $r.start; $r.stop";
-		String expecting = "(r!=null?r.x:0); (r!=null?((CommonTree)r.start):null); $r.stop";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((CommonTree)r.start):null); $r.stop";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);

@@ -119,7 +119,7 @@ public class TestSemanticPredicates extends BaseTest {
 			"a : {p1}? {p1a}? A | {p2}? A ;");
 		String expecting =
 			".s0-A->.s1\n" +
-			".s1-{(p1&&p1a)}?->:s2=>1\n" +
+			".s1-{(p1a&&p1)}?->:s2=>1\n" +
 			".s1-{p2}?->:s3=>2\n";
 		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
 	}
@@ -548,7 +548,7 @@ public class TestSemanticPredicates extends BaseTest {
 		String expecting =
 			".s0-B->.s1\n" +
 			".s0-C&&{(q&&r)}?->:s3=>2\n" +
-			".s1-{(q&&s)}?->:s3=>2\n" +
+			".s1-{(s&&q)}?->:s3=>2\n" +
 			".s1-{p}?->:s2=>1\n";
 		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
 	}
@@ -731,7 +731,7 @@ public class TestSemanticPredicates extends BaseTest {
 			"  ;\n");
 		String expecting =
 			".s0-X->.s1\n" +
-            ".s1-{((a&&c)||(b&&c))}?->:s2=>1\n" +
+            ".s1-{((b||a)&&c)}?->:s2=>1\n" +
             ".s1-{c}?->:s3=>2\n";
 		int[] unreachableAlts = null;
 		int[] nonDetAlts = null;
