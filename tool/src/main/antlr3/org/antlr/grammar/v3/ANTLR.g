@@ -51,6 +51,7 @@ grammar ANTLR;
 
 options
 {
+	language=Java;
 	output=AST;
 	ASTLabelType=GrammarAST;
 }

@@ -27,6 +27,7 @@
 */
 lexer grammar ActionTranslator;
 options {
+  language=Java;
   filter=true;  // try all non-fragment rules in order specified
   // output=template;  TODO: can we make tokens return templates somehow?
 }

@@ -32,6 +32,7 @@
 tree grammar DefineGrammarItemsWalker;
 
 options {
+	language=Java;
 	tokenVocab = ANTLR;
 	ASTLabelType = GrammarAST;
 }

@@ -29,6 +29,7 @@
 grammar ANTLRv3;
 
 options {
+	language=Java;
 	output=AST;
 	ASTLabelType=CommonTree;
 }

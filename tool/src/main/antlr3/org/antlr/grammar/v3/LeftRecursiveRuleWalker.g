@@ -34,6 +34,7 @@
 tree grammar LeftRecursiveRuleWalker;
 
 options {
+	language=Java;
 	tokenVocab=ANTLR;
     ASTLabelType=GrammarAST;
 }

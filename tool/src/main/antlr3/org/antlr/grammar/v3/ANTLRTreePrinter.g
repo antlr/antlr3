@@ -40,6 +40,7 @@ tree grammar ANTLRTreePrinter;
 
 options
 {
+	language=Java;
 	tokenVocab = ANTLR;
 	ASTLabelType = GrammarAST;
 }

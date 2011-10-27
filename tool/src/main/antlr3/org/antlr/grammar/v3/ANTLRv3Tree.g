@@ -30,6 +30,7 @@
 tree grammar ANTLRv3Tree;
 
 options {
+	language=Java;
 	tokenVocab = ANTLRv3;
 	ASTLabelType = CommonTree;
 }

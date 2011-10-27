@@ -35,6 +35,7 @@
  */
 lexer grammar ActionAnalysis;
 options {
+  language=Java;
   filter=true;  // try all non-fragment rules in order specified
 }
 

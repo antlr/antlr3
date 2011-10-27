@@ -34,6 +34,7 @@
 tree grammar TreeToNFAConverter;
 
 options {
+	language=Java;
 	tokenVocab = ANTLR;
 	ASTLabelType = GrammarAST;
 }

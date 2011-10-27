@@ -40,6 +40,7 @@
 tree grammar CodeGenTreeWalker;
 
 options {
+	language=Java;
 	tokenVocab = ANTLR;
 	ASTLabelType=GrammarAST;
 }
@@ -697,7 +698,7 @@ alternative returns [ST code]
 			(
 				e=element[null,null]
 				{
-					if (e != null && e.code != null)
+					if ($e.code != null)
 					{
 						$code.addAggr("elements.{el,line,pos}",
 										  $e.code,
@@ -724,8 +725,8 @@ options { k=1; }
 	|	^(BANG e=element[label,$BANG])
 		{ $code = $e.code; }
 
-	|	^( n=NOT notElement[$n, $label, $astSuffix] )
-		{ $code = $notElement.code; }
+	|	^( n=NOT ne=notElement[$n, $label, $astSuffix] )
+		{ $code = $ne.code; }
 
 	|	^( ASSIGN alabel=ID e=element[$alabel,$astSuffix] )
 		{ $code = $e.code; }
