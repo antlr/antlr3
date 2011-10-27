@@ -490,31 +490,14 @@ public class GrammarAST extends CommonTree {
 		for (int i = 0; i < t.getChildCount(); i++){
 			GrammarAST child = (GrammarAST)t.getChild(i);
 			int ttype = child.getType();
-			if ( ttype == ANTLRParser.REWRITES ||
-				 ttype == ANTLRParser.REWRITE ||
-				 ttype==ANTLRParser.ACTION )
-			{
+			if (ttype == ANTLRParser.REWRITES || ttype == ANTLRParser.REWRITE || ttype==ANTLRParser.ACTION) {
 				continue;
 			}
 
-			// strip labels
-			if ( ttype == ANTLRParser.ASSIGN ||
-				 ttype == ANTLRParser.PLUS_ASSIGN )
-			{
-				// get element from (= x element)
-				result.add((GrammarAST)child.getChild(1));
-			}
-			// strip ast opts
-			else if ( ttype == ANTLRParser.BANG ||
-				 ttype == ANTLRParser.ROOT ||
-				 ttype == ANTLRParser.ASSIGN ||
-				 ttype == ANTLRParser.PLUS_ASSIGN )
-			{
-				for (GrammarAST subchild : getChildrenForDupTree(child)) {
+			if (ttype == ANTLRParser.BANG || ttype == ANTLRParser.ROOT) {
+				for (GrammarAST subchild : getChildrenForDupTree(child))
 					result.add(subchild);
-				}
-			}
-			else {
+			} else {
 				result.add(child);
 			}
 		}
