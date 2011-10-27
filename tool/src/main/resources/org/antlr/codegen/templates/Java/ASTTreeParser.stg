@@ -74,8 +74,8 @@ _last = (<ASTLabelType>)input.LT(1);
 <if(rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> )<endif>
 <if(root.el.rule)>
-if ( _first_<enclosingTreeLevel>==null ) _first_<enclosingTreeLevel> = <root.el.label>.tree;
-<else>
+if ( _first_<enclosingTreeLevel>==null ) _first_<enclosingTreeLevel> = (<ASTLabelType>)<root.el.label>.getTree();
+<elseif(root.el.label)>
 if ( _first_<enclosingTreeLevel>==null ) _first_<enclosingTreeLevel> = <root.el.label>;
 <endif>
 <endif>
@@ -225,7 +225,7 @@ _last = (<ASTLabelType>)input.LT(1);
 <if(!rewriteMode)>
 adaptor.addChild(root_<treeLevel>, <label>.getTree());
 <else> <! rewrite mode !>
-if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>.tree;
+if ( _first_<treeLevel>==null ) _first_<treeLevel> = (<ASTLabelType>)<label>.getTree();
 <endif>
 >>
 

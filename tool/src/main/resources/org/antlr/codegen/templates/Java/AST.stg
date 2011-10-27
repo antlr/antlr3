@@ -66,10 +66,17 @@ ruleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,
   ruleDescriptor.wildcardTreeListLabels]:{it | <ASTLabelType> <it.label.text>_tree=null;}; separator="\n">
 <ruleDescriptor.tokenListLabels:{it | <ASTLabelType> <it.label.text>_tree=null;}; separator="\n">
+<if(ruleDescriptor.supportsLabelOptimization)>
+<ruleDescriptor.allTokenRefsInRewrites
+    :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
+<ruleDescriptor.allRuleRefsInRewrites
+    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
+<else>
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
     :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
     :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
+<endif>
 >>
 
 /** When doing auto AST construction, we must define some variables;
@@ -208,7 +215,7 @@ rewriteCodeLabels() ::= <<
     separator="\n"
 >
 <referencedRuleLabels
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.tree:null);};
+    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.getTree():null);};
     separator="\n"
 >
 <referencedRuleListLabels

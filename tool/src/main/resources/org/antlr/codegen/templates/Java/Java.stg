@@ -248,7 +248,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
    appear to be defined in this recognizer. !>
     // Delegated rules
 <grammar.delegatedRules:{ruleDescriptor|
-    public <returnType()> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
+    public <returnType(ruleDescriptor)> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
 
     <synpreds:{p | <synpred(p)>}>
 
@@ -368,7 +368,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
 
 // $ANTLR start "<ruleName>"
 // <fileName>:<description>
-public final <returnType()> <ruleName>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec:{x|<x>}; separator=", "> {
+public final <returnType(ruleDescriptor)> <ruleName>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec:{x|<x>}; separator=", "> {
     <if(trace)>traceIn("<ruleName>", <ruleDescriptor.index>);<endif>
     <ruleScopeSetUp()>
     <ruleDeclarations()>
@@ -417,7 +417,7 @@ catch (<e.decl>) {
 
 ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
-<returnType()> retval = new <returnType()>();
+<returnType(ruleDescriptor)> retval = new <returnType(ruleDescriptor)>();
 retval.start = input.LT(1);<\n>
 <else>
 <ruleDescriptor.returnScope.attributes:{ a |
@@ -1175,15 +1175,13 @@ protected Stack <scope.name>_stack = new Stack();<\n>
 
 returnStructName(r) ::= "<r.name>_return"
 
-returnType() ::= <%
+returnType(ruleDescriptor) ::= <%
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <ruleDescriptor.grammar.recognizerName>.<ruleDescriptor:returnStructName()>
-<else>
-<if(ruleDescriptor.hasSingleReturnValue)>
+<elseif(ruleDescriptor.hasSingleReturnValue)>
 <ruleDescriptor.singleValueReturnType>
 <else>
 void
-<endif>
 <endif>
 %>
 
@@ -1192,13 +1190,11 @@ void
  */
 ruleLabelType(referencedRule) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-<referencedRule.grammar.recognizerName>.<referencedRule.name>_return
-<else>
-<if(referencedRule.hasSingleReturnValue)>
+<returnScopeBaseType()>
+<elseif(referencedRule.hasSingleReturnValue)>
 <referencedRule.singleValueReturnType>
 <else>
 void
-<endif>
 <endif>
 %>
 
@@ -1225,12 +1221,16 @@ ruleLabelDef(label) ::= <%
  */
 returnScope(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
-public static class <ruleDescriptor:returnStructName()> extends <if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope {
+public static class <ruleDescriptor:returnStructName()> extends <returnScopeBaseType()> {
     <scope.attributes:{it |public <it.decl>;}; separator="\n">
     <@ruleReturnMembers()>
 };
 <endif>
 >>
+
+returnScopeBaseType() ::= <%
+<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope
+%>
 
 parameterScope(scope) ::= <<
 <scope.attributes:{it |<it.decl>}; separator=", ">
@@ -1272,7 +1272,7 @@ isolatedDynamicScopeRef(scope) ::= "<scope>_stack"
 /** reference an attribute of rule; might only have single return value */
 ruleLabelRef(referencedRule,scope,attr) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-(<scope>!=null?<scope>.<attr.name>:<initValue(attr.type)>)
+(<scope>!=null?((<returnType(referencedRule)>)<scope>).<attr.name>:<initValue(attr.type)>)
 <else>
 <scope>
 <endif>
@@ -1314,7 +1314,7 @@ tokenLabelPropertyRef_int(scope,attr) ::= "(<scope>!=null?Integer.valueOf(<scope
 
 ruleLabelPropertyRef_start(scope,attr) ::= "(<scope>!=null?((<labelType>)<scope>.start):null)"
 ruleLabelPropertyRef_stop(scope,attr) ::= "(<scope>!=null?((<labelType>)<scope>.stop):null)"
-ruleLabelPropertyRef_tree(scope,attr) ::= "(<scope>!=null?((<ASTLabelType>)<scope>.tree):null)"
+ruleLabelPropertyRef_tree(scope,attr) ::= "(<scope>!=null?((<ASTLabelType>)<scope>.getTree()):null)"
 ruleLabelPropertyRef_text(scope,attr) ::= <%
 <if(TREE_PARSER)>
 (<scope>!=null?(input.getTokenStream().toString(
@@ -1325,7 +1325,7 @@ ruleLabelPropertyRef_text(scope,attr) ::= <%
 <endif>
 %>
 
-ruleLabelPropertyRef_st(scope,attr) ::= "(<scope>!=null?<scope>.st:null)"
+ruleLabelPropertyRef_st(scope,attr) ::= "(<scope>!=null?((StringTemplate)<scope>.getTemplate()):null)"
 
 /** Isolated $RULE ref ok in lexer as it's a Token */
 lexerRuleLabel(label) ::= "<label>"
