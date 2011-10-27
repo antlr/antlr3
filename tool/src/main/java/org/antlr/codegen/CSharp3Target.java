@@ -69,6 +69,11 @@ public class CSharp3Target extends Target {
         }};
 
     @Override
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return false;
+    }
+
+    @Override
     public String encodeIntAsCharEscape(int v) {
         return "\\x" + Integer.toHexString(v).toUpperCase();
     }

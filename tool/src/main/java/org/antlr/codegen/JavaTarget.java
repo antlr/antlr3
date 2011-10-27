@@ -35,6 +35,11 @@ import org.stringtemplate.v4.ST;
 import java.util.Set;
 
 public class JavaTarget extends Target {
+    @Override
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return false;
+    }
+
 	protected ST chooseWhereCyclicDFAsGo(Tool tool,
 										 CodeGenerator generator,
 										 Grammar grammar,

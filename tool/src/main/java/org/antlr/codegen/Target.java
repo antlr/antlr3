@@ -83,6 +83,10 @@ public class Target {
 		targetCharValueEscape['"'] = "\\\"";
 	}
 
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return true;
+    }
+
 	protected void genRecognizerFile(Tool tool,
 									 CodeGenerator generator,
 									 Grammar grammar,

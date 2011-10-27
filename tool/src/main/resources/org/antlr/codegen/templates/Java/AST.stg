@@ -63,6 +63,7 @@ ruleDeclarations() ::= <<
 
 ruleLabelDefs() ::= <<
 <super.ruleLabelDefs()>
+<if(!ruleDescriptor.isSynPred)>
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,
   ruleDescriptor.wildcardTreeListLabels]:{it | <ASTLabelType> <it.label.text>_tree=null;}; separator="\n">
 <ruleDescriptor.tokenListLabels:{it | <ASTLabelType> <it.label.text>_tree=null;}; separator="\n">
@@ -77,6 +78,7 @@ ruleLabelDefs() ::= <<
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
     :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
 <endif>
+<endif>
 >>
 
 /** When doing auto AST construction, we must define some variables;
@@ -87,7 +89,7 @@ ruleLabelDefs() ::= <<
 @alt.declarations() ::= <<
 <if(autoAST)>
 <if(outerAlt)>
-<if(!rewriteMode)>
+<if(!rewriteMode && !ruleDescriptor.isSynPred)>
 root_0 = (<ASTLabelType>)adaptor.nil();<\n>
 <endif>
 <endif>

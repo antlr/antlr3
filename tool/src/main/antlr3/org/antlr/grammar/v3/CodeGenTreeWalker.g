@@ -410,7 +410,7 @@ rule returns [ST code=null]
 	// For syn preds, we don't want any AST code etc... in there.
 	// Save old templates ptr and restore later.  Base templates include Dbg.
 	STGroup saveGroup = templates;
-	if ( ruleDescr.isSynPred )
+	if ( ruleDescr.isSynPred && generator.target.useBaseTemplatesForSynPredFragments() )
 	{
 		templates = generator.getBaseTemplates();
 	}

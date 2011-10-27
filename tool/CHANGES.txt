@@ -10,6 +10,9 @@ CHANGES
 October 25, 2011
 
 * (Sam) Rule.setOption didn't do memoize option right.
+* (Sam) Fix labels in synpreds
+* (Sam) Fix input index for NoViableAltException during inline prediction
+* (Sam) Fix label aliasing errors in cases like (x=y|x=z)
 
 August 10, 2011
 
