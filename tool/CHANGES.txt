@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+November 25, 2011
+
+* stderr not test correctly in gunit examineExecResult
+
 October 25, 2011
 
 * (Sam) Rule.setOption didn't do memoize option right.
