@@ -1,5 +1,5 @@
 //
-//  ANTLRBaseMapElement.h
+//  BaseMapElement.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -29,23 +29,67 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Cocoa/Cocoa.h>
-#import "ANTLRLinkBase.h"
+#import "BaseMapElement.h"
 
-@interface ANTLRBaseMapElement : ANTLRLinkBase {
-    NSNumber *index;
+
+@implementation BaseMapElement
+
+@synthesize index;
+
++ (BaseMapElement *)newBaseMapElement
+{
+    return [[BaseMapElement alloc] init];
 }
 
-@property (retain) NSNumber *index;
++ (BaseMapElement *)newBaseMapElementWithIndex:(NSNumber *)aNumber
+{
+    return [[BaseMapElement alloc] initWithAnIndex:(NSNumber *)aNumber];
+}
 
-+ (id) newANTLRBaseMapElement;
-+ (id) newANTLRBaseMapElementWithIndex:(NSNumber *)anIdx;
-- (id) init;
-- (id) initWithAnIndex:(NSNumber *)anIdx;
+- (id) init
+{
+    if ((self = [super init]) != nil ) {
+        index = nil;
+    }
+    return (self);
+}
 
-- (id) copyWithZone:(NSZone *)aZone;
+- (id) initWithAnIndex:(NSNumber *)aNumber
+{
+    if ((self = [super init]) != nil ) {
+        index = aNumber;
+        if ( index ) [index retain];
+    }
+    return (self);
+}
 
-- (NSInteger)count;
-- (NSInteger)size;
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in BaseMapElement" );
+#endif
+    if ( index ) [index release];
+    [super dealloc];
+}
+
+- (id) copyWithZone:(NSZone *)aZone
+{
+    BaseMapElement *copy;
+    
+    copy = [super copyWithZone:aZone];
+    copy.index = index;
+    return( copy );
+}
+
+- (NSInteger)count
+{
+    return 1;
+}
+                          
+                          
+- (NSInteger)size
+{
+    return(  sizeof(index) );
+}
 
 @end
