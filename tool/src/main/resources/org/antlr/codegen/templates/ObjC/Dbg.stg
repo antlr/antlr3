@@ -30,7 +30,7 @@
  */
 @headerFile.imports() ::= <<
 <@super.imports()>
-#import \<ANTLR/ANTLRDebug.h>
+#import \<ANTLR/Debug.h>
 >>
 
 @parserHeaderFile.memVars() ::= <<
@@ -81,7 +81,7 @@ AMutableArray *ruleNames = [AMutableArray arrayWithArray:{
     [(Profiler)dbg examineRuleMemoization:input, ruleIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames objectAtIndex:ruleIndex];
     return super.alreadyParsedRule(input, ruleIndex);
 }<\n>
-- (void) memoize:(id<ANTLRIntStream>)input RuleIndex:(NSInteger)ruleIndex StartIndex:(NSInteger)ruleStartIndex
+- (void) memoize:(id<IntStream>)input RuleIndex:(NSInteger)ruleIndex StartIndex:(NSInteger)ruleStartIndex
 {
     [((Profiler)dbg) memoize:input RuleIndex:ruleIndex StartIndex:ruleStartIndex [<grammar.composite.rootGrammar.recognizerName> ruleNames[ruleIndex]];
     [super memoize:input RuleIndex:ruleIndex StartIndex:ruleStartIndex];
@@ -111,7 +111,7 @@ ruleNames = [NSArray arrayWithObjects:<rules:{rST | @"<rST.ruleName>"}; separato
 >>
 
 /* bug: can't use @super.superClassName()> */
-@parserHeaderFile.superClassName() ::= "ANTLRDebug<if(TREE_PARSER)>Tree<endif>Parser"
+@parserHeaderFile.superClassName() ::= "Debug<if(TREE_PARSER)>Tree<endif>Parser"
 
 @rule.preamble() ::= <<
 @try { [debugListener enterRule:@"<ruleName>"];
@@ -209,14 +209,14 @@ dfaDecision(decisionNumber,description) ::= <<
     // isCyclicDecision = YES;
     <super.dfaDecision(...)>
 }
-@catch (ANTLRNoViableAltException *nvae) {
+@catch (NoViableAltException *nvae) {
     [debugListener recognitionException:nvae];
     @throw nvae;
 }
 >>
 
 @cyclicDFA.errorMethod() ::= <<
--(void) error:(ANTLRNoViableAltException *)nvae
+-(void) error:(NoViableAltException *)nvae
 {
     [[recognizer debugListener] recognitionException:nvae];
 }

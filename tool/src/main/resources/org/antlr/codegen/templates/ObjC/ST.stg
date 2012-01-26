@@ -51,7 +51,7 @@ ST *st;
 
 @returnScopeInterface() ::= <<
 /* ST returnScopeInterface */
-@interface <returnScopeInterface.name> : ANTLRReturnScope {
+@interface <returnScopeInterface.name> : ReturnScope {
 <returnScopeInterface.memVars()>
 }
 <returnScopeInterface.properties()>
@@ -173,7 +173,7 @@ static class STAttrMap extends HashMap {
 
 @STAttrMap.interface() ::= <<
 /* -------- ST start STAttrMap.interface ------------ */
-@interface STAttrMap : ANTLRHashMap {
+@interface STAttrMap : HashMap {
 /*    <@STAttrMap.memVars()> */
     STGroup *templateLib;
 }
@@ -284,13 +284,13 @@ if ( <actions.(actionScope).synpredgate> ) {
 replaceTextInLine() ::= <<
 /* -------- ST start replaceTextInLine ------------ */
 <if(TREE_PARSER)>
-[[(ANTLRTokenRewriteStream *)input getTokenStream]
+[[(TokenRewriteStream *)input getTokenStream]
     replaceFromIndex:[[input getTreeAdaptor] getTokenStartIndex:retval.start]
              ToIndex:[[input getTreeAdaptor] getTokenStopIndex:retval.start]
                 Text:retval.st];
 <else>
-[(ANTLRTokenRewriteStream *)input)
-        replaceFromIndex:[((ANTLRCommonToken *)retval.start) getTokenIndex]
+[(TokenRewriteStream *)input)
+        replaceFromIndex:[((CommonToken *)retval.start) getTokenIndex]
                  ToIndex:[[input LT:-1] getTokenIndex]
                     Text:retval.st];
 <endif>

@@ -193,7 +193,7 @@ wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 createNodeFromToken(label,terminalOptions) ::= <<
 /* ASTParser createNodeFromToken */
 <if(terminalOptions.node)>
-[ANTLR<terminalOptions.node> newANTLR<terminalOptions.node>:<label>] <! new MethodNode(IDLabel) !>
+[<terminalOptions.node> new<terminalOptions.node>:<label>] <! new MethodNode(IDLabel) !>
 <else>
 (<ASTLabelType> *)[[treeAdaptor create:<label>] retain]
 <endif>

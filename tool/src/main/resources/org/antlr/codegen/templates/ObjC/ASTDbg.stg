@@ -30,21 +30,21 @@
  *  hierarchy is set up as ASTDbg : AST : Dbg : Java by code generator.
  */
 parserMembers() ::= <<
-ANTLRDebugTreeAdaptor *adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:(id)dbg Adaptor:[ANTLRCommonTreeAdaptor newTreeAdaptor]];
+DebugTreeAdaptor *adaptor = [DebugTreeAdaptor newTreeAdaptor:(id)dbg Adaptor:[CommonTreeAdaptor newTreeAdaptor]];
 
 // fix this
-- (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (void) setTreeAdaptor:(id<TreeAdaptor>)anAdaptor
 {
-    adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:dbg Adaptor:anAdaptor];
+    adaptor = [DebugTreeAdaptor newTreeAdaptor:dbg Adaptor:anAdaptor];
 <if(grammar.grammarIsRoot)>
-    adaptor = [ANTLRDebugTreeAdaptor newTreeAdaptor:adaptor withDBG:dbg];
+    adaptor = [DebugTreeAdaptor newTreeAdaptor:adaptor withDBG:dbg];
 <else>
-    adaptor = (ANTLRDebugTreeAdaptor *)adaptor; // delegator sends dbg adaptor
+    adaptor = (DebugTreeAdaptor *)adaptor; // delegator sends dbg adaptor
 <endif><\n>
     <grammar.directDelegates:{g|[<g:delegateName()> setTreeAdaptor:adaptor];}>
 }
 
-- (id<ANTLRTreeAdaptor>)getTreeAdaptor
+- (id<TreeAdaptor>)getTreeAdaptor
 {
     return adaptor;
 }<\n>
@@ -55,10 +55,10 @@ parserCtorBody() ::= <<
 >>
 
 createListenerAndHandshake() ::= <<
-ANTLRDebugEventSocketProxy proxy =
-    [ANTLRDebugEventSocketProxy newANTLRDebugEventSocketProxy:self, port, <if(TREE_PARSER)>[input getTreeAdaptor]<else>adaptor<endif>];
+DebugEventSocketProxy proxy =
+    [DebugEventSocketProxy newDebugEventSocketProxy:self, port, <if(TREE_PARSER)>[input getTreeAdaptor]<else>adaptor<endif>];
 [self setDebugListener:proxy];
-[self set<inputStreamType>:[ANTLRANTLRDebug<inputStreamType> newANTLRDebug<inputStreamType>:input with:proxy]];
+[self set<inputStreamType>:[Debug<inputStreamType> newDebug<inputStreamType>:input with:proxy]];
 try {
     [proxy handshake];
 }
@@ -68,13 +68,13 @@ try {
 >>
 
 @ctorForRootGrammar.finally() ::= <<
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
+CommonTreeAdaptor *adap = [CommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];
 [proxy setTreeAdaptor:adap];
 >>
 
 @ctorForProfilingRootGrammar.finally() ::=<<
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
+CommonTreeAdaptor *adap = [CommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];
 [proxy setTreeAdaptor:adap];
 >>
@@ -83,11 +83,11 @@ ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
 
 @ctorForPredefinedListener.finally() ::=<<
 <if(grammar.grammarIsRoot)> <! don't create new adaptor for delegates !>
-ANTLRCommonTreeAdaptor *adap = [ANTLRCommonTreeAdaptor newTreeAdaptor];
+CommonTreeAdaptor *adap = [CommonTreeAdaptor newTreeAdaptor];
 [self setTreeAdaptor:adap];<\n>
 <endif>
 >>
 
-@treeParserHeaderFile.superClassName ::= "ANTLRDebugTreeParser"
+@treeParserHeaderFile.superClassName ::= "DebugTreeParser"
 
 @rewriteElement.pregen() ::= "[debugListener locationLine:<e.line> column:<e.pos>];"

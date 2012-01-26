@@ -230,7 +230,7 @@ lexerHeaderFile( LEXER,
             generatedTimestamp,
             trace,
             scopes,
-            superClass="ANTLRLexer"
+            superClass="Lexer"
             ) ::=
 <<
 
@@ -265,7 +265,7 @@ lexerHeaderFile( LEXER,
 /* ObjC end of actions.lexer.memVars */
 }
 + (void) initialize;
-+ (<className()> *)new<className()>WithCharStream:(id\<ANTLRCharStream>)anInput;
++ (<className()> *)new<className()>WithCharStream:(id\<CharStream>)anInput;
 /* ObjC start actions.lexer.methodsDecl */
 <actions.lexer.methodsDecl>
 /* ObjC end actions.lexer.methodsDecl */
@@ -294,8 +294,8 @@ lexer(  grammar,
         rules,
         numRules,
         filterMode,
-        labelType="ANTLRCommonToken",
-        superClass="ANTLRLexer"
+        labelType="CommonToken",
+        superClass="Lexer"
         ) ::= <<
 <cyclicDFAs:cyclicDFA()>
 
@@ -311,7 +311,7 @@ lexer(  grammar,
 
 + (void) initialize
 {
-    [ANTLRBaseRecognizer setGrammarFileName:@"<fileName>"];
+    [BaseRecognizer setGrammarFileName:@"<fileName>"];
 }
 
 + (NSString *) tokenNameForType:(NSInteger)aTokenType
@@ -319,24 +319,24 @@ lexer(  grammar,
     return [[self getTokenNames] objectAtIndex:aTokenType];
 }
 
-+ (<grammar.recognizerName> *)new<grammar.recognizerName>WithCharStream:(id\<ANTLRCharStream>)anInput
++ (<grammar.recognizerName> *)new<grammar.recognizerName>WithCharStream:(id\<CharStream>)anInput
 {
     return [[<grammar.recognizerName> alloc] initWithCharStream:anInput];
 }
 
-- (id) initWithCharStream:(id\<ANTLRCharStream>)anInput
+- (id) initWithCharStream:(id\<CharStream>)anInput
 {
-    self = [super initWithCharStream:anInput State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]];
+    self = [super initWithCharStream:anInput State:[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1]];
     if ( self != nil ) {
 <if(memoize)>
         if ( state.ruleMemo == nil ) {
-            state.ruleMemo = [[ANTLRRuleStack newANTLRRuleStackWithSize:<numRules>+1] retain];
+            state.ruleMemo = [[RuleStack newRuleStackWithSize:<numRules>+1] retain];
         }
         if ( [state.ruleMemo count] == 0 ) {
             // initialize the memoization cache - the indices are 1-based in the runtime code!
             <! [state.ruleMemo addObject:[NSNull null]];     /* dummy entry to ensure 1-basedness. */ !>
             for (NSInteger i = 0; i \< <numRules>; i++) {
-                [state.ruleMemo addObject:[ANTLRHashRule newANTLRHashRuleWithLen:17]];
+                [state.ruleMemo addObject:[HashRule newHashRuleWithLen:17]];
             }
         }
 <endif>
@@ -385,14 +385,14 @@ lexer(  grammar,
  *  at backtracking==1.
  */
 filteringNextToken() ::= <<
-- (id\<ANTLRToken>) nextToken
+- (id\<Token>) nextToken
 {
     while (YES) {
-        if ( [input LA:1] == ANTLRCharStreamEOF ) {
+        if ( [input LA:1] == CharStreamEOF ) {
             return [<labelType> eofToken];
         }
         state.token = nil;
-        state.channel = ANTLRTokenChannelDefault;
+        state.channel = TokenChannelDefault;
         state.tokenStartCharIndex = input.index;
         state.tokenStartCharPositionInLine = input.charPositionInLine;
         state.tokenStartLine = input.line;
@@ -413,7 +413,7 @@ filteringNextToken() ::= <<
                 return state.token;
             }
         }
-        @catch (ANTLRRecognitionException *re) {
+        @catch (RecognitionException *re) {
             // shouldn't happen in backtracking mode, but...
             [self reportError:re];
             [self recover:re];
@@ -421,14 +421,14 @@ filteringNextToken() ::= <<
     }
 }
 
-- (void)memoize:(id\<ANTLRIntStream\>)anInput
+- (void)memoize:(id\<IntStream\>)anInput
       RuleIndex:(NSInteger)ruleIndex
      StartIndex:(NSInteger)ruleStartIndex
 {
     if ( state.backtracking > 1 ) [super memoize:anInput RuleIndex:ruleIndex StartIndex:ruleStartIndex];
 }
 
-- (BOOL)alreadyParsedRule:(id\<ANTLRIntStream\>)anInput RuleIndex:(NSInteger)ruleIndex
+- (BOOL)alreadyParsedRule:(id\<IntStream\>)anInput RuleIndex:(NSInteger)ruleIndex
 {
     if ( state.backtracking > 1 ) return [super alreadyParsedRule:anInput RuleIndex:ruleIndex];
     return NO;
@@ -464,10 +464,10 @@ parserHeaderFile( LEXER,
             trace,
             scopes,
             literals,
-            superClass="ANTLRParser"
+            superClass="Parser"
             ) ::= <<
 /* parserHeaderFile */
-<genericParserHeaderFile(inputStreamType="id\<ANTLRTokenStream>",...)>
+<genericParserHeaderFile(inputStreamType="id\<TokenStream>",...)>
 >>
 
 treeParserHeaderFile( LEXER,
@@ -495,10 +495,10 @@ treeParserHeaderFile( LEXER,
             trace,
             scopes,
             literals,
-            superClass="ANTLRTreeParser"
+            superClass="TreeParser"
             ) ::= <<
 /* treeParserHeaderFile */
-<genericParserHeaderFile(inputStreamType="id\<ANTLRTreeNodeStream>",...)>
+<genericParserHeaderFile(inputStreamType="id\<TreeNodeStream>",...)>
 >>
 
 genericParserHeaderFile( LEXER,
@@ -614,12 +614,12 @@ parser( grammar,
         rules,
         numRules,
         bitsets,
-        ASTLabelType="ANTLRCommonTree",
-        superClass="ANTLRParser",
-        labelType="ANTLRCommonToken",
+        ASTLabelType="CommonTree",
+        superClass="Parser",
+        labelType="CommonToken",
         members={<actions.parser.members>}
         ) ::= <<
-<genericParser(inputStreamType="id\<ANTLRTokenStream>", rewriteElementType="Token", ...)>
+<genericParser(inputStreamType="id\<TokenStream>", rewriteElementType="Token", ...)>
 >>
 
 /** How to generate a tree parser; same as parser except the input
@@ -636,11 +636,11 @@ treeParser( grammar,
         bitsets,
         filterMode,
         labelType={<ASTLabelType>},
-        ASTLabelType="ANTLRCommonTree",
-        superClass={<if(filterMode)><if(buildAST)>ANTLRTreeRewriter<else>ANTLRTreeFilter<endif><else>ANTLRTreeParser<endif>},
+        ASTLabelType="CommonTree",
+        superClass={<if(filterMode)><if(buildAST)>TreeRewriter<else>TreeFilter<endif><else>TreeParser<endif>},
         members={<actions.treeparser.members>}
         ) ::= <<
-<genericParser(inputStreamType="id\<ANTLRTreeNodeStream>", rewriteElementType="Node", ...)>
+<genericParser(inputStreamType="id\<TreeNodeStream>", rewriteElementType="Node", ...)>
 >>
 
 /** How to generate a parser */
@@ -691,8 +691,8 @@ genericParser(  grammar,
 {
     #pragma mark Bitsets
     <bitsets:{it | <bitsetInit(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>}, words64=it.bits)>}>
-    [ANTLRBaseRecognizer setTokenNames:[[AMutableArray arrayWithObjects:@"\<invalid>", @"\<EOR>", @"\<DOWN>", @"\<UP>", <tokenNames:{it | @<it>}; separator=", ", wrap="\n ">, nil] retain]];
-    [ANTLRBaseRecognizer setGrammarFileName:@"<fileName>"];
+    [BaseRecognizer setTokenNames:[[AMutableArray arrayWithObjects:@"\<invalid>", @"\<EOR>", @"\<DOWN>", @"\<UP>", <tokenNames:{it | @<it>}; separator=", ", wrap="\n ">, nil] retain]];
+    [BaseRecognizer setGrammarFileName:@"<fileName>"];
     <synpreds:{pred | <synpred(pred)>}>
 }
 
@@ -708,12 +708,12 @@ genericParser(  grammar,
 <if(PARSER)>
 - (id) initWithTokenStream:(<inputStreamType>)aStream
 {
-    self = [super initWithTokenStream:aStream State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1]];
+    self = [super initWithTokenStream:aStream State:[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1]];
     if ( self != nil ) {
 <else><! TREE_PARSER !>
 - (id) initWithStream:(<inputStreamType>)aStream
 {
-    self = [super initWithStream:aStream State:[[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
+    self = [super initWithStream:aStream State:[[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
     if ( self != nil ) {
 <endif>
         <! <parserCtorBody()> !>
@@ -753,7 +753,7 @@ genericParser(  grammar,
 parserCtorBody() ::= <<
 <if(memoize)> /* parserCtorBody */
 <if(grammar.grammarIsRoot)>
-state.ruleMemo = [[ANTLRRuleStack newANTLRRuleStack:<numRules>+1] retain];<\n> <! index from 1..n !>
+state.ruleMemo = [[RuleStack newRuleStack:<numRules>+1] retain];<\n> <! index from 1..n !>
 <endif>
 <endif>
 <grammar.delegators:
@@ -798,7 +798,7 @@ SEL <name>Selector = @selector(<name>_fragment);
     @try {
         [self <name>_fragment]; // can never throw exception
     }
-    @catch (ANTLRRecognitionException *re) {
+    @catch (RecognitionException *re) {
         NSLog(@"impossible: %@\n", re.name);
     }
     BOOL success = (state.failed == NO);
@@ -859,7 +859,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
 <else><if(!emptyRule)><if(actions.(actionScope).rulecatch)>
     <actions.(actionScope).rulecatch>
 <else>
-    @catch (ANTLRRecognitionException *re) {
+    @catch (RecognitionException *re) {
         [self reportError:re];
         [self recover:input Exception:re];
         <@setErrorReturnValue()>
@@ -924,7 +924,7 @@ ruleLabelDefs() ::= <<
     :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
-<ruleDescriptor.ruleListLabels:{ll|ANTLRParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n">
+<ruleDescriptor.ruleListLabels:{ll|ParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n">
 >>
 
 lexerRuleLabelDefs() ::= <<
@@ -991,7 +991,7 @@ lexerRule(ruleName, nakedBlock, ruleDescriptor, block, memoize) ::= <<
         <block><\n>
 <else>
         NSInteger _type = <ruleName>;
-        NSInteger _channel = ANTLRTokenChannelDefault;
+        NSInteger _channel = TokenChannelDefault;
         <ruleMemoization(name=ruleName)>
         <lexerRuleLabelDefs()>
         <ruleDescriptor.actions.init>
@@ -1089,8 +1089,8 @@ do {
             if ( cnt<decisionNumber> >= 1 )
                 goto loop<decisionNumber>;
             <ruleBacktrackFailure()>
-            ANTLREarlyExitException *eee =
-                [ANTLREarlyExitException newException:input decisionNumber:<decisionNumber>];
+            EarlyExitException *eee =
+                [EarlyExitException newException:input decisionNumber:<decisionNumber>];
             <@earlyExitException()>
             @throw eee;
     }
@@ -1207,7 +1207,7 @@ if (<s>) {
     <if(backtracking)>state.failed = NO;<\n><endif>
 } else {
     <ruleBacktrackFailure()>
-    ANTLRMismatchedSetException *mse = [ANTLRMismatchedSetException newException:nil stream:input];
+    MismatchedSetException *mse = [MismatchedSetException newException:nil stream:input];
     <@mismatchedSetException()>
 <if(LEXER)>
 <if(label)>
@@ -1237,7 +1237,7 @@ NSInteger <label>Start = input.index;
 [self matchString:<string>]; <checkRuleBacktrackFailure()>
 NSInteger StartLine<elementIndex> = self.line;
 NSInteger <label>StartCharPos<elementIndex> = self.charPositionInLine;
-<label> = [[<labelType> newToken:input Type:ANTLRTokenTypeInvalid Channel:ANTLRTokenChannelDefault Start:<label>Start Stop:input.index] retain];
+<label> = [[<labelType> newToken:input Type:TokenTypeInvalid Channel:TokenChannelDefault Start:<label>Start Stop:input.index] retain];
 [self setLine:<label>StartLine<elementIndex>];
 [self setCharPositionInLine:<label>StartCharPos<elementIndex>];
 <else>
@@ -1300,7 +1300,7 @@ lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
 <if(label)>
 NSInteger <label>Start<elementIndex> = input.index;
 [self m<rule.name><if(args)>:<args; separator=" :"><endif>]; <checkRuleBacktrackFailure()><\n>
-<label> = [[<labelType> newToken:input Type:ANTLRTokenTypeInvalid Channel:ANTLRTokenChannelDefault Start:<label>Start<elementIndex> Stop:input.index-1] retain];
+<label> = [[<labelType> newToken:input Type:TokenTypeInvalid Channel:TokenChannelDefault Start:<label>Start<elementIndex> Stop:input.index-1] retain];
 <label>.line = self.line;
 <else>
 [self <if(scope)><scope:delegateName()>.<endif>m<rule.name><if(args)>:<args; separator=" :"><endif>]; <checkRuleBacktrackFailure()><\n>
@@ -1317,11 +1317,11 @@ lexerRuleRefAndListLabel(rule,label,args,elementIndex,scope) ::= <<
 lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 NSInteger <label>Start<elementIndex> = input.index;
-[self matchChar:ANTLRCharStreamEOF]; <checkRuleBacktrackFailure()><\n>
-<labelType> <label> = [[<labelType> newToken:input Type:ANTLRTokenTypeEOF Channel:ANTLRTokenChannelDefault Start:<label>Start<elementIndex> Stop:input.index-1] retain];
+[self matchChar:CharStreamEOF]; <checkRuleBacktrackFailure()><\n>
+<labelType> <label> = [[<labelType> newToken:input Type:TokenTypeEOF Channel:TokenChannelDefault Start:<label>Start<elementIndex> Stop:input.index-1] retain];
 <label>.line = self.line;
 <else>
-[self matchChar:ANTLRCharStreamEOF]; <checkRuleBacktrackFailure()><\n>
+[self matchChar:CharStreamEOF]; <checkRuleBacktrackFailure()><\n>
 <endif>
 >>
 
@@ -1355,7 +1355,7 @@ if ( [input LA:1] == DOWN ) {
 validateSemanticPredicate(pred,description) ::= <<
 if ( !(<evalPredicate(...)>) ) {
     <ruleBacktrackFailure()>
-    @throw [ANTLRFailedPredicateException newException:@"<ruleName>" predicate:@"<description>" stream:input];
+    @throw [FailedPredicateException newException:@"<ruleName>" predicate:@"<description>" stream:input];
 }
 >>
 
@@ -1369,7 +1369,7 @@ else {
     alt<decisionNumber> = <eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
+    NoViableAltException *nvae = [NoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
     nvae.c = LA<decisionNumber>_<stateNumber>;
     <@noViableAltException()>
     @throw nvae;<\n>
@@ -1433,7 +1433,7 @@ default: ;
     alt<decisionNumber> = <eotPredictsAlt>;
 <else>
     <ruleBacktrackFailure()>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
+    NoViableAltException *nvae = [NoViableAltException newException:<decisionNumber> state:<stateNumber> stream:input];
     nvae.c = charLA<decisionNumber>;
     <@noViableAltException()>
     @throw nvae;<\n>
@@ -1479,10 +1479,10 @@ alt<decisionNumber> = [dfa<decisionNumber> predict:input];
 /** Used in headerFile */
 cyclicDFAInterface(dfa) ::= <<
 #pragma mark Cyclic DFA interface start DFA<dfa.decisionNumber>
-@interface DFA<dfa.decisionNumber> : ANTLRDFA {
+@interface DFA<dfa.decisionNumber> : DFA {
 }
-+ newDFA<dfa.decisionNumber>WithRecognizer:(ANTLRBaseRecognizer *)theRecognizer;
-- initWithRecognizer:(ANTLRBaseRecognizer *)recognizer;
++ newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)theRecognizer;
+- initWithRecognizer:(BaseRecognizer *)recognizer;
 @end /* end of DFA<dfa.decisionNumber> interface  */<\n>
 #pragma mark Cyclic DFA interface end DFA<dfa.decisionNumber><\n>
 >>
@@ -1516,12 +1516,12 @@ const static NSInteger dfa<dfa.decisionNumber>_transition[] = {};
 const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separator=", ", wrap="\n ", null="-1">\};
 }; null="">
 
-+ (id) newDFA<dfa.decisionNumber>WithRecognizer:(ANTLRBaseRecognizer *)aRecognizer
++ (id) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)aRecognizer
 {
     return [[[DFA<dfa.decisionNumber> alloc] initWithRecognizer:aRecognizer] retain];
 }
 
-- (id) initWithRecognizer:(ANTLRBaseRecognizer *) theRecognizer
+- (id) initWithRecognizer:(BaseRecognizer *) theRecognizer
 {
     self = [super initWithRecognizer:theRecognizer];
     if ( self != nil ) {
@@ -1544,16 +1544,16 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
 
 <if(dfa.specialStateSTs)>
 /* start dfa.specialStateSTs */
-- (NSInteger) specialStateTransition:(NSInteger)s Stream:(id\<ANTLRIntStream\>)anInput
+- (NSInteger) specialStateTransition:(NSInteger)s Stream:(id\<IntStream\>)anInput
 {
 <if(LEXER)>
-    id\<ANTLRIntStream\> input = anInput;<\n>
+    id\<IntStream\> input = anInput;<\n>
 <endif>
 <if(PARSER)>
-    id\<ANTLRTokenStream\> input = (id\<ANTLRTokenStream\>)anInput;<\n>
+    id\<TokenStream\> input = (id\<TokenStream\>)anInput;<\n>
 <endif>
 <if(TREE_PARSER)>
-    id\<ANTLRTreeNodeStream\> input = (id\<ANTLRTreeNodeStream\>)anInput;<\n>
+    id\<TreeNodeStream\> input = (id\<TreeNodeStream\>)anInput;<\n>
 <endif>
     switch (s) {
         <dfa.specialStateSTs:{state |
@@ -1563,7 +1563,7 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
 <if(backtracking)>
     if ( [recognizer getBacktrackingLevel] > 0 ) { [recognizer setFailed:YES]; return -1; }<\n>
 <endif>
-    ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:<dfa.decisionNumber> state:s stream:recognizer.input];
+    NoViableAltException *nvae = [NoViableAltException newException:<dfa.decisionNumber> state:s stream:recognizer.input];
     // nvae.c = s;
     /* [self error:nvae]; */ <! for debugger - do later !>
     @throw nvae;
@@ -1638,7 +1638,7 @@ evalPredicate(pred,description) ::= "(<pred>)"
  *
  * synpreds are broken in cyclic DFA special states
  *  Damn! For now, work around with using the selectors directly, and by providing a trampoline evalSynPred method in
- *  ANTLRDFA
+ *  DFA
  */
 /* evalSynPredicate(pred,description) ::= "[self evaluateSyntacticPredicate:<pred>Selector stream:input]" */
 evalSynPredicate(pred,description) ::= "[self evaluateSyntacticPredicate:@selector(<pred>_fragment)]"
@@ -1681,7 +1681,7 @@ methods(scope) ::= <%
 
 globalAttributeScopeInterface(scope) ::= <%
 /* globalAttributeScopeInterface */<\n>
-@interface <scope.name>_Scope : ANTLRSymbolsScope {<\n>
+@interface <scope.name>_Scope : SymbolsScope {<\n>
 <if(scope.attributes)>
 <memVars(scope)>
 <endif>
@@ -1704,7 +1704,7 @@ globalAttributeScopeInterface(scope) ::= <%
 
 globalAttributeScopeMemVar(scope) ::= <%
 /* globalAttributeScopeMemVar */<\n>
-ANTLRSymbolStack *<scope.name>_stack;<\n>
+SymbolStack *<scope.name>_stack;<\n>
 <scope.name>_Scope *<scope.name>_scope;<\n>
 %>
 
@@ -1737,7 +1737,7 @@ globalAttributeScopeImplementation(scope) ::= <%
 globalAttributeScopeInit(scope) ::= <<
 /* globalAttributeScopeInit */<\n>
 <scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];<\n>
-<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];<\n>
+<scope.name>_stack = [SymbolStack newSymbolStackWithLen:30];<\n>
 >>
 
 globalAttributeScopeDealloc(scope) ::= << [<scope.name>_stack release];<\n> >>
@@ -1754,7 +1754,7 @@ ruleAttributeScopeMemVar(scope) ::= <%
 ruleAttributeScopeInterface(scope) ::= <%
 <if(scope.attributes)>
 /* start of ruleAttributeScopeInterface */<\n>
-@interface <scope.name>_Scope : ANTLRSymbolsScope {<\n>
+@interface <scope.name>_Scope : SymbolsScope {<\n>
     <memVars(scope)><\n>
 }<\n>
 <\n>
@@ -1794,7 +1794,7 @@ ruleAttributeScopeImplementation(scope) ::= <%
 ruleAttributeScopeInit(scope) ::= <%
 /* ruleAttributeScopeInit */<\n>
 <scope.name>_scope = [<scope.name>_Scope new<scope.name>_Scope];<\n>
-<scope.name>_stack = [ANTLRSymbolStack newANTLRSymbolStackWithLen:30];<\n>
+<scope.name>_stack = [SymbolStack newSymbolStackWithLen:30];<\n>
 %>
 
 ruleAttributeScopeDealloc(scope) ::= <% [<scope.name>_Scope release];<\n> %>
@@ -1802,7 +1802,7 @@ ruleAttributeScopeDealloc(scope) ::= <% [<scope.name>_Scope release];<\n> %>
 ruleAttributeScope(scope) ::= <%
 <if(scope.attributes)>
 /* ruleAttributeScope */<\n>
-static ANTLRSymbolStack *<scope.name>_stack;<\n>
+static SymbolStack *<scope.name>_stack;<\n>
 <endif>
 %>
 
@@ -1859,7 +1859,7 @@ ruleLabelDef(label) ::= << <ruleLabelType(referencedRule=label.referencedRule)> 
 returnScopeInterface(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 /* returnScopeInterface <ruleDescriptor:returnStructName()> */
-@interface <ruleDescriptor:returnStructName()> : ANTLR<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope { /* returnScopeInterface line 1838 */
+@interface <ruleDescriptor:returnStructName()> : <if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope { /* returnScopeInterface line 1838 */
 <@memVars()> /* ObjC start of memVars() */<\n>
 <if(scope.attributes)>
 <memVars(scope)><\n>
@@ -2099,7 +2099,7 @@ static const unsigned long long <name>_data[] = { <words64:{it | <it>LL};separat
 >>
 
 bitsetInit(name, words64) ::= <<
-<name> = [[ANTLRBitSet newANTLRBitSetWithBits:(const unsigned long long *)<name>_data Count:(NSUInteger)<length(words64)>] retain];<\n>
+<name> = [[ANTLRBitSet newBitSetWithBits:(const unsigned long long *)<name>_data Count:(NSUInteger)<length(words64)>] retain];<\n>
 >>
 
 codeFileExtension() ::= ".m"
