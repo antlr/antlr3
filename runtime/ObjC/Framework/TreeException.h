@@ -25,18 +25,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTree.h"
-#import "ANTLRRecognitionException.h"
+#import "Tree.h"
+#import "RecognitionException.h"
 
-@interface ANTLRTreeException : ANTLRRecognitionException {
-	id<ANTLRBaseTree> oldRoot;
-	id<ANTLRBaseTree> newRoot;
+@interface TreeException : RecognitionException {
+	id<BaseTree> oldRoot;
+	id<BaseTree> newRoot;
 }
 
-+ (id) newException:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
-- (id) initWithOldRoot:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
++ (id) newException:(id<BaseTree>)theOldRoot newRoot:(id<BaseTree>)theNewRoot stream:(id<IntStream>)aStream;
+- (id) initWithOldRoot:(id<BaseTree>)theOldRoot newRoot:(id<BaseTree>)theNewRoot stream:(id<IntStream>)aStream;
 
-- (void) setOldRoot:(id<ANTLRBaseTree>)aTree;
-- (void) setNewRoot:(id<ANTLRBaseTree>)aTree;
+- (void) setOldRoot:(id<BaseTree>)aTree;
+- (void) setNewRoot:(id<BaseTree>)aTree;
 
 @end

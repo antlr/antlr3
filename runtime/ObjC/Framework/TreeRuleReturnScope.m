@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeRuleReturnScope.m
+//  TreeRuleReturnScope.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -29,15 +29,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeRuleReturnScope.h"
+#import "TreeRuleReturnScope.h"
 
 
-@implementation ANTLRTreeRuleReturnScope
+@implementation TreeRuleReturnScope
 @synthesize start;
 
 + (id) newReturnScope
 {
-    return [[ANTLRTreeRuleReturnScope alloc] init];
+    return [[TreeRuleReturnScope alloc] init];
 }
 
 - (id) init
@@ -49,18 +49,18 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeRuleReturnScope" );
+    NSLog( @"called dealloc in TreeRuleReturnScope" );
 #endif
 	if ( start ) [start release];
 	[super dealloc];
 }
 
-- (ANTLRCommonTree *)getStart
+- (CommonTree *)getStart
 {
     return start;
 }	
 
-- (void)setStart:(ANTLRCommonTree *)aStart
+- (void)setStart:(CommonTree *)aStart
 {
     if ( start != aStart ) {
         if ( start ) [start release];
@@ -73,7 +73,7 @@
 // the input stream is *not* copied!
 - (id) copyWithZone:(NSZone *)theZone
 {
-    ANTLRTreeRuleReturnScope *copy = [super copyWithZone:theZone];
+    TreeRuleReturnScope *copy = [super copyWithZone:theZone];
     copy.start = start;
     return copy;
 }

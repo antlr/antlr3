@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleMapElement.h
+//  RuleMapElement.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -30,17 +30,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseMapElement.h"
+#import "BaseMapElement.h"
 
-@interface ANTLRRuleMapElement : ANTLRBaseMapElement {
+@interface RuleMapElement : BaseMapElement {
     NSNumber *ruleNum;
 }
 
 @property (retain, getter=getRuleNum, setter=setRuleNum:) NSNumber *ruleNum;
 
-+ (ANTLRRuleMapElement *) newANTLRRuleMapElement;
-+ (ANTLRRuleMapElement *) newANTLRRuleMapElementWithIndex:(NSNumber *)anIdx;
-+ (ANTLRRuleMapElement *) newANTLRRuleMapElementWithIndex:(NSNumber *)anIdx RuleNum:(NSNumber *)aRuleNum;
++ (RuleMapElement *) newRuleMapElement;
++ (RuleMapElement *) newRuleMapElementWithIndex:(NSNumber *)anIdx;
++ (RuleMapElement *) newRuleMapElementWithIndex:(NSNumber *)anIdx RuleNum:(NSNumber *)aRuleNum;
 - (id) init;
 - (id) initWithAnIndex:(NSNumber *)anIdx;
 - (id) initWithAnIndex:(NSNumber *)anIdx RuleNum:(NSNumber *)aRuleNum;

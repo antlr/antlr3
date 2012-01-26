@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleReturnScope.h
+//  RuleReturnScope.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -30,17 +30,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
+#import "Token.h"
 
-@interface ANTLRRuleReturnScope : NSObject <NSCopying> {
+@interface RuleReturnScope : NSObject <NSCopying> {
 
 }
 
 /** Return the start token or tree */
-- (id<ANTLRToken>) getStart;
+- (id<Token>) getStart;
 
 /** Return the stop token or tree */
-- (id<ANTLRToken>) getStop;
+- (id<Token>) getStop;
 
 /** Has a value potentially if output=AST; */
 - (id) getTree;

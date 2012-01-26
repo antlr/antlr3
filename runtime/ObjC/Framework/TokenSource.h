@@ -25,14 +25,14 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRToken.h"
+#import "Token.h"
 
 // Anything that responds to -nextToken can be treated as a lexer.
 // For instance this can be a flex lexer or a handwritten one or even
 // a proxy for a remotely running token source (database, lexer, whatever).
-@protocol ANTLRTokenSource <NSObject, NSCopying>
+@protocol TokenSource <NSObject, NSCopying>
 
-- (id<ANTLRToken>) nextToken;
+- (id<Token>) nextToken;
 - (NSString *)getSourceName;
 
 @end

@@ -24,23 +24,23 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeParser.h"
+#import "TreeParser.h"
 
-@implementation ANTLRTreeParser
+@implementation TreeParser
 
 @synthesize input;
 
-+ (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput
++ (id) newTreeParser:(id<TreeNodeStream>)anInput
 {
-    return [[ANTLRTreeParser alloc] initWithStream:anInput];
+    return [[TreeParser alloc] initWithStream:anInput];
 }
 
-+ (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)theState
++ (id) newTreeParser:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)theState
 {
-    return [[ANTLRTreeParser alloc] initWithStream:anInput State:theState];
+    return [[TreeParser alloc] initWithStream:anInput State:theState];
 }
 
-- (id) initWithStream:(id<ANTLRTreeNodeStream>)theInput
+- (id) initWithStream:(id<TreeNodeStream>)theInput
 {
 	if ((self = [super init]) != nil) {
 		[self setInput:theInput];
@@ -48,7 +48,7 @@
 	return self;
 }
 
-- (id) initWithStream:(id<ANTLRTreeNodeStream>)theInput State:(ANTLRRecognizerSharedState *)theState
+- (id) initWithStream:(id<TreeNodeStream>)theInput State:(RecognizerSharedState *)theState
 {
 	if ((self = [super init]) != nil) {
 		[self setInput:theInput];
@@ -60,7 +60,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeParser" );
+    NSLog( @"called dealloc in TreeParser" );
 #endif
 	if ( input ) [input release];
 	[super dealloc];
@@ -74,19 +74,19 @@
     }
 }
 
-- (void) mismatch:(id<ANTLRIntStream>)aStream tokenType:(ANTLRTokenType)aTType follow:(ANTLRBitSet *)aBitset
+- (void) mismatch:(id<IntStream>)aStream tokenType:(TokenType)aTType follow:(ANTLRBitSet *)aBitset
 {
-	ANTLRMismatchedTreeNodeException *mte = [ANTLRMismatchedTreeNodeException newException:aTType Stream:aStream];
-    [mte setNode:[((id<ANTLRTreeNodeStream>)aStream) LT:1]];
+	MismatchedTreeNodeException *mte = [MismatchedTreeNodeException newException:aTType Stream:aStream];
+    [mte setNode:[((id<TreeNodeStream>)aStream) LT:1]];
 	[self recoverFromMismatchedToken:aStream Type:aTType Follow:aBitset];
 }
 
-- (void) setTreeNodeStream:(id<ANTLRTreeNodeStream>) anInput
+- (void) setTreeNodeStream:(id<TreeNodeStream>) anInput
 {
     input = anInput;
 }
 
-- (id<ANTLRTreeNodeStream>) getTreeNodeStream
+- (id<TreeNodeStream>) getTreeNodeStream
 {
     return input;
 }
@@ -96,47 +96,47 @@
     return [input getSourceName];
 }
 
-- (id) getCurrentInputSymbol:(id<ANTLRIntStream>) anInput
+- (id) getCurrentInputSymbol:(id<IntStream>) anInput
 {
-    return [(id<ANTLRTreeNodeStream>)anInput LT:1];
+    return [(id<TreeNodeStream>)anInput LT:1];
 }
 
-- (id) getMissingSymbol:(id<ANTLRIntStream>)anInput
-              Exception:(ANTLRRecognitionException *)e
+- (id) getMissingSymbol:(id<IntStream>)anInput
+              Exception:(RecognitionException *)e
           ExpectedToken:(NSInteger)expectedTokenType
                  BitSet:(ANTLRBitSet *)follow
 {
     NSString *tokenText =[NSString stringWithFormat:@"<missing %@ %d>", [self getTokenNames], expectedTokenType];
-    //id<ANTLRTreeAdaptor> anAdaptor = (id<ANTLRTreeAdaptor>)[((id<ANTLRTreeNodeStream>)e.input) getTreeAdaptor];
+    //id<TreeAdaptor> anAdaptor = (id<TreeAdaptor>)[((id<TreeNodeStream>)e.input) getTreeAdaptor];
     //return [anAdaptor createToken:expectedTokenType Text:tokenText];
-    return [ANTLRCommonToken newToken:expectedTokenType Text:tokenText];
+    return [CommonToken newToken:expectedTokenType Text:tokenText];
 }
 
 /** Match '.' in tree parser has special meaning.  Skip node or
  *  entire tree if node has children.  If children, scan until
  *  corresponding UP node.
  */
-- (void) matchAny:(id<ANTLRIntStream>)ignore
+- (void) matchAny:(id<IntStream>)ignore
 { // ignore stream, copy of input
     state.errorRecovery = NO;
     state.failed = NO;
     id look = [input LT:1];
-    if ( [((ANTLRCommonTreeAdaptor *)[input getTreeAdaptor]) getChildCount:look] == 0) {
+    if ( [((CommonTreeAdaptor *)[input getTreeAdaptor]) getChildCount:look] == 0) {
         [input consume]; // not subtree, consume 1 node and return
         return;
     }
     // current node is a subtree, skip to corresponding UP.
     // must count nesting level to get right UP
     int level=0;
-    int tokenType = [((id<ANTLRTreeAdaptor>)[input getTreeAdaptor]) getType:look];
-    while ( tokenType != ANTLRTokenTypeEOF && !( tokenType == ANTLRTokenTypeUP && level == 0) ) {
+    int tokenType = [((id<TreeAdaptor>)[input getTreeAdaptor]) getType:look];
+    while ( tokenType != TokenTypeEOF && !( tokenType == TokenTypeUP && level == 0) ) {
         [input consume];
         look = [input LT:1];
-        tokenType = [((id<ANTLRTreeAdaptor>)[input getTreeAdaptor]) getType:look];
-        if ( tokenType == ANTLRTokenTypeDOWN ) {
+        tokenType = [((id<TreeAdaptor>)[input getTreeAdaptor]) getType:look];
+        if ( tokenType == TokenTypeDOWN ) {
             level++;
         }
-        else if ( tokenType == ANTLRTokenTypeUP ) {
+        else if ( tokenType == TokenTypeUP ) {
             level--;
         }
     }
@@ -147,16 +147,16 @@
  *  plus we want to alter the exception type.  Don't try to recover
  *  from tree parser errors inline...
  */
-- (id) recoverFromMismatchedToken:(id<ANTLRIntStream>)anInput Type:(NSInteger)ttype Follow:(ANTLRBitSet *)follow
+- (id) recoverFromMismatchedToken:(id<IntStream>)anInput Type:(NSInteger)ttype Follow:(ANTLRBitSet *)follow
 {
-    @throw [ANTLRMismatchedTreeNodeException newException:ttype Stream:anInput];
+    @throw [MismatchedTreeNodeException newException:ttype Stream:anInput];
 }
 
 /** Prefix error message with the grammar name because message is
  *  always intended for the programmer because the parser built
  *  the input tree not the user.
  */
-- (NSString *)getErrorHeader:(ANTLRRecognitionException *)e
+- (NSString *)getErrorHeader:(RecognitionException *)e
 {
      return [NSString stringWithFormat:@"%@: node after line %@:%@",
             [self getGrammarFileName], e.line, e.charPositionInLine];
@@ -165,13 +165,13 @@
 /** Tree parsers parse nodes they usually have a token object as
  *  payload. Set the exception token and do the default behavior.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e  TokenNames:(AMutableArray *) theTokNams
+- (NSString *)getErrorMessage:(RecognitionException *)e  TokenNames:(AMutableArray *) theTokNams
 {
-    if ( [self isKindOfClass:[ANTLRTreeParser class]] ) {
-        ANTLRCommonTreeAdaptor *adaptor = (ANTLRCommonTreeAdaptor *)[((id<ANTLRTreeNodeStream>)e.input) getTreeAdaptor];
-        e.token = [adaptor getToken:((id<ANTLRBaseTree>)e.node)];
+    if ( [self isKindOfClass:[TreeParser class]] ) {
+        CommonTreeAdaptor *adaptor = (CommonTreeAdaptor *)[((id<TreeNodeStream>)e.input) getTreeAdaptor];
+        e.token = [adaptor getToken:((id<BaseTree>)e.node)];
         if ( e.token == nil ) { // could be an UP/DOWN node
-            e.token = [ANTLRCommonToken newToken:[adaptor getType:e.node]
+            e.token = [CommonToken newToken:[adaptor getType:e.node]
                                                         Text:[adaptor getText:e.node]];
         }
     }

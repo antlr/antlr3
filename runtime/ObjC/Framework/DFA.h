@@ -25,11 +25,11 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseRecognizer.h"
-#import "ANTLRCharStream.h"
-#import "ANTLRNoViableAltException.h"
+#import "BaseRecognizer.h"
+#import "CharStream.h"
+#import "NoViableAltException.h"
 
-@interface ANTLRDFA : NSObject {
+@interface DFA : NSObject {
 	// the tables are set by subclasses to their own static versions.
 	const int *eot;
 	const int *eof;
@@ -39,22 +39,22 @@
 	const int *special;
 	const int **transition;
 	
-	__strong ANTLRBaseRecognizer *recognizer;
+	__strong BaseRecognizer *recognizer;
 	NSInteger decisionNumber;
     NSInteger len;
 }
 
 - (id) initWithRecognizer:(id) theRecognizer;
 // simulate the DFA using the static tables and predict an alternative
-- (NSInteger) predict:(id<ANTLRCharStream>)anInput;
-- (void) noViableAlt:(NSInteger)state Stream:(id<ANTLRIntStream>)anInput;
+- (NSInteger) predict:(id<CharStream>)anInput;
+- (void) noViableAlt:(NSInteger)state Stream:(id<IntStream>)anInput;
 
-- (NSInteger) specialStateTransition:(NSInteger)state Stream:(id<ANTLRIntStream>)anInput;
+- (NSInteger) specialStateTransition:(NSInteger)state Stream:(id<IntStream>)anInput;
 // - (NSInteger) specialStateTransition:(NSInteger) state;
 //- (unichar) specialTransition:(unichar) state symbol:(NSInteger) symbol;
 
 // hook for debugger support
-- (void) error:(ANTLRNoViableAltException *)nvae;
+- (void) error:(NoViableAltException *)nvae;
 
 - (NSString *) description;
 - (BOOL) evaluateSyntacticPredicate:(SEL)synpredFragment;
@@ -64,8 +64,8 @@
 - (NSInteger)getDecision;
 - (void)setDecision:(NSInteger)aDecison;
 
-- (ANTLRBaseRecognizer *)getRecognizer;
-- (void)setRecognizer:(ANTLRBaseRecognizer *)aRecognizer;
+- (BaseRecognizer *)getRecognizer;
+- (void)setRecognizer:(BaseRecognizer *)aRecognizer;
 - (NSInteger)length;
 
 @property const int *eot;
@@ -76,7 +76,7 @@
 @property const int *special;
 @property const int **transition;
 
-@property (retain, getter=getRecognizer,setter=setRecognizer:) ANTLRBaseRecognizer *recognizer;
+@property (retain, getter=getRecognizer,setter=setRecognizer:) BaseRecognizer *recognizer;
 @property (assign, getter=getDecision,setter=setDecision:) NSInteger decisionNumber;
 @property (assign, getter=getLen,setter=setLen:) NSInteger len;
 @end

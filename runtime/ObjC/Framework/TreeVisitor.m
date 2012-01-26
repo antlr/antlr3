@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeVisitor.m
+//  TreeVisitor.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -29,31 +29,31 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeVisitor.h"
-#import "ANTLRCommonTreeAdaptor.h"
+#import "TreeVisitor.h"
+#import "CommonTreeAdaptor.h"
 
-@implementation ANTLRTreeVisitor
+@implementation TreeVisitor
 
-+ (ANTLRTreeVisitor *)newANTLRTreeVisitor:(id<ANTLRTreeAdaptor>)anAdaptor
++ (TreeVisitor *)newTreeVisitor:(id<TreeAdaptor>)anAdaptor
 {
-    return [[ANTLRTreeVisitor alloc] initWithAdaptor:anAdaptor];
+    return [[TreeVisitor alloc] initWithAdaptor:anAdaptor];
 }
 
-+ (ANTLRTreeVisitor *)newANTLRTreeVisitor
++ (TreeVisitor *)newTreeVisitor
 {
-    return [[ANTLRTreeVisitor alloc] init];
+    return [[TreeVisitor alloc] init];
 }
 
 
 - (id)init
 {
     if ((self = [super init]) != nil) {
-        adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
+        adaptor = [[CommonTreeAdaptor newTreeAdaptor] retain];
     }
     return self;
 }
 
-- (id)initWithAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id)initWithAdaptor:(id<TreeAdaptor>)anAdaptor
 {
     if ((self = [super init]) != nil) {
         adaptor = [anAdaptor retain];
@@ -64,7 +64,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeVisitor" );
+    NSLog( @"called dealloc in TreeVisitor" );
 #endif
     if ( adaptor ) [adaptor release];
     [super dealloc];
@@ -80,22 +80,22 @@
  *
  *  Return result of applying post action to this node.
  */
-- (ANTLRTreeVisitor *)visit:(ANTLRCommonTree *)t Action:(ANTLRTreeVisitorAction *)action
+- (TreeVisitor *)visit:(CommonTree *)t Action:(TreeVisitorAction *)action
 {
     // System.out.println("visit "+((Tree)t).toStringTree());
     BOOL isNil = [adaptor isNil:t];
     if ( action != nil && !isNil ) {
-        t = [action pre:(ANTLRTreeVisitorAction *)t]; // if rewritten, walk children of new t
+        t = [action pre:(TreeVisitorAction *)t]; // if rewritten, walk children of new t
     }
     for (int i=0; i < [adaptor getChildCount:t]; i++) {
-        ANTLRCommonTree *child = [adaptor getChild:t At:i];
-        ANTLRCommonTree *visitResult = [self visit:child Action:action];
-        ANTLRCommonTree *childAfterVisit = [adaptor getChild:t At:i];
+        CommonTree *child = [adaptor getChild:t At:i];
+        CommonTree *visitResult = [self visit:child Action:action];
+        CommonTree *childAfterVisit = [adaptor getChild:t At:i];
         if ( visitResult !=  childAfterVisit ) { // result & child differ?
             [adaptor setChild:t At:i Child:visitResult];
         }
     }
-    if ( action != nil && !isNil ) t = [action post:(ANTLRTreeVisitorAction *)t];
+    if ( action != nil && !isNil ) t = [action post:(TreeVisitorAction *)t];
     return t;
 }
 

@@ -1,5 +1,5 @@
 //
-//  ANTLRParseTree.h
+//  ParseTree.h
 //  ANTLR
 //
 //  Created by Alan Condit on 7/12/10.
@@ -30,12 +30,12 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseTree.h"
-#import "ANTLRCommonToken.h"
+#import "BaseTree.h"
+#import "CommonToken.h"
 #import "AMutableArray.h"
 
-@interface ANTLRParseTree : ANTLRBaseTree <ANTLRBaseTree> {
-	__strong id<ANTLRToken> payload;
+@interface ParseTree : BaseTree <BaseTree> {
+	__strong id<Token> payload;
 	__strong AMutableArray *hiddenTokens;
 }
 /** A record of the rules used to match a token sequence.  The tokens
@@ -43,10 +43,10 @@
  *  This really adds no functionality, it is just an alias for CommonTree
  *  that is more meaningful (specific) and holds a String to display for a node.
  */
-+ (id<ANTLRBaseTree>)newANTLRParseTree:(id<ANTLRToken>)label;
-- (id)initWithLabel:(id<ANTLRToken>)label;
++ (id<BaseTree>)newParseTree:(id<Token>)label;
+- (id)initWithLabel:(id<Token>)label;
 
-- (id<ANTLRBaseTree>)dupNode;
+- (id<BaseTree>)dupNode;
 - (NSInteger)type;
 - (NSString *)text;
 - (NSInteger)getTokenStartIndex;
@@ -59,6 +59,6 @@
 - (NSString *)toInputString;
 - (void)_toStringLeaves:(NSMutableString *)buf;
 
-@property (retain) id<ANTLRToken> payload;
+@property (retain) id<Token> payload;
 @property (retain) AMutableArray *hiddenTokens;
 @end

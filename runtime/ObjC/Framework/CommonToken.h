@@ -26,10 +26,10 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
-#import "ANTLRCharStream.h"
+#import "Token.h"
+#import "CharStream.h"
 
-@interface ANTLRCommonToken : NSObject < ANTLRToken > {
+@interface CommonToken : NSObject < Token > {
 	__strong NSString *text;
 	NSInteger type;
 	// information about the Token's position in the input stream
@@ -44,37 +44,37 @@
 	NSInteger startIndex;
 	NSInteger stopIndex;
 	// the actual input stream this token was found in
-	__strong id<ANTLRCharStream> input;
+	__strong id<CharStream> input;
 }
 
 + (void) initialize;
 + (NSInteger) DEFAULT_CHANNEL;
-+ (id<ANTLRToken>)INVALID_TOKEN;
++ (id<Token>)INVALID_TOKEN;
 + (NSInteger) INVALID_TOKEN_TYPE;
-+ (id<ANTLRToken>) newToken;
-+ (id<ANTLRToken>) newToken:(id<ANTLRCharStream>)anInput
++ (id<Token>) newToken;
++ (id<Token>) newToken:(id<CharStream>)anInput
                        Type:(NSInteger)aTType
                     Channel:(NSInteger)aChannel
                       Start:(NSInteger)aStart
                        Stop:(NSInteger)aStop;
-+ (id<ANTLRToken>) newToken:(ANTLRTokenType)aType;
-+ (id<ANTLRToken>) newToken:(NSInteger)tokenType Text:(NSString *)tokenText;
-+ (id<ANTLRToken>) newTokenWithToken:(ANTLRCommonToken *)fromToken;
-+ (id<ANTLRToken>) eofToken;
-+ (id<ANTLRToken>) skipToken;
-+ (id<ANTLRToken>) invalidToken;
-+ (ANTLRTokenChannel) defaultChannel;
++ (id<Token>) newToken:(TokenType)aType;
++ (id<Token>) newToken:(NSInteger)tokenType Text:(NSString *)tokenText;
++ (id<Token>) newTokenWithToken:(CommonToken *)fromToken;
++ (id<Token>) eofToken;
++ (id<Token>) skipToken;
++ (id<Token>) invalidToken;
++ (TokenChannel) defaultChannel;
 
 // designated initializer. This is used as the default way to initialize a Token in the generated code.
 - (id) init;
-- (id) initWithInput:(id<ANTLRCharStream>)anInput
+- (id) initWithInput:(id<CharStream>)anInput
                                 Type:(NSInteger)aTType
                              Channel:(NSInteger)aChannel
                                Start:(NSInteger)theStart
                                 Stop:(NSInteger)theStop;
-- (id) initWithToken:(id<ANTLRToken>)aToken;
-- (id) initWithType:(ANTLRTokenType)aType;
-- (id) initWithType:(ANTLRTokenType)aTType Text:(NSString *)tokenText;
+- (id) initWithToken:(id<Token>)aToken;
+- (id) initWithType:(TokenType)aType;
+- (id) initWithType:(TokenType)aTType Text:(NSString *)tokenText;
 
 //---------------------------------------------------------- 
 //  text 
@@ -97,8 +97,8 @@
 //---------------------------------------------------------- 
 //  input 
 //---------------------------------------------------------- 
-- (id<ANTLRCharStream>)input;
-- (void) setInput:(id<ANTLRCharStream>)anInput;
+- (id<CharStream>)input;
+- (void) setInput:(id<CharStream>)anInput;
 
 - (NSInteger)getStart;
 - (void) setStart: (NSInteger)aStart;
@@ -124,6 +124,6 @@
 @property (assign) NSInteger index;
 @property (assign, getter=getStart, setter=setStart:) NSInteger startIndex;
 @property (assign, getter=getStop, setter=setStop:) NSInteger stopIndex;
-@property (retain) id<ANTLRCharStream> input;
+@property (retain) id<CharStream> input;
 
 @end

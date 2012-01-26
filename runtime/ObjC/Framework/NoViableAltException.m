@@ -25,19 +25,19 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRNoViableAltException.h"
+#import "NoViableAltException.h"
 
 
-@implementation ANTLRNoViableAltException
+@implementation NoViableAltException
 
 
-+ (ANTLRNoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream
++ (NoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<IntStream>)theStream
 {
 	return [[self alloc] initWithDecision:theDecisionNumber state:theStateNumber stream:theStream];
 }
 
 
-- (ANTLRNoViableAltException *) initWithDecision:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream
+- (NoViableAltException *) initWithDecision:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<IntStream>)theStream
 {
 	if ((self = [super initWithStream:theStream]) != nil) {
 		decisionNumber = theDecisionNumber;

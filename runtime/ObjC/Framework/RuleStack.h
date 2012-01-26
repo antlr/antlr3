@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleStack.h
+//  RuleStack.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -30,20 +30,20 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseStack.h"
-#import "ANTLRHashRule.h"
+#import "BaseStack.h"
+#import "HashRule.h"
 
 //#define GLOBAL_SCOPE       0
 //#define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRRuleStack : ANTLRBaseStack {
+@interface RuleStack : BaseStack {
 }
 
 // Contruction/Destruction
-+(ANTLRRuleStack *)newANTLRRuleStack;
-+(ANTLRRuleStack *)newANTLRRuleStack:(NSInteger)cnt;
++(RuleStack *)newRuleStack;
++(RuleStack *)newRuleStack:(NSInteger)cnt;
 -(id)init;
 -(id)initWithLen:(NSInteger)cnt;
 -(void)dealloc;
@@ -55,9 +55,9 @@
 - (NSInteger)count;
 - (NSInteger)size;
 
-- (ANTLRHashRule *) pop;
+- (HashRule *) pop;
 
-- (void) insertObject:(ANTLRHashRule *)aHashRule atIndex:(NSInteger)idx;
-- (ANTLRHashRule *)objectAtIndex:(NSInteger)idx;
+- (void) insertObject:(HashRule *)aHashRule atIndex:(NSInteger)idx;
+- (HashRule *)objectAtIndex:(NSInteger)idx;
 - (void)putHashRuleAtRuleIndex:(NSInteger)aRuleIndex StartIndex:(NSInteger)aStartIndex StopIndex:(NSInteger)aStopIndex;
 @end

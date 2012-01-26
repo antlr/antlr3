@@ -24,12 +24,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugTreeNodeStream.h"
+#import "DebugTreeNodeStream.h"
 
 
-@implementation ANTLRDebugTreeNodeStream
+@implementation DebugTreeNodeStream
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream debugListener:(id<ANTLRDebugEventListener>)debugger
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream debugListener:(id<DebugEventListener>)debugger
 {
 	self = [super init];
 	if (self) {
@@ -48,52 +48,52 @@
     [super dealloc];
 }
 
-- (id<ANTLRDebugEventListener>) debugListener
+- (id<DebugEventListener>) debugListener
 {
     return debugListener; 
 }
 
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener
 {
     if (debugListener != aDebugListener) {
-        [(id<ANTLRDebugEventListener,NSObject>)aDebugListener retain];
-        [(id<ANTLRDebugEventListener,NSObject>)debugListener release];
+        [(id<DebugEventListener,NSObject>)aDebugListener retain];
+        [(id<DebugEventListener,NSObject>)debugListener release];
         debugListener = aDebugListener;
     }
 }
 
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor
+- (id<TreeAdaptor>) getTreeAdaptor
 {
     return treeAdaptor; 
 }
 
-- (void) setTreeAdaptor: (id<ANTLRTreeAdaptor>) aTreeAdaptor
+- (void) setTreeAdaptor: (id<TreeAdaptor>) aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
-        [(id<ANTLRTreeAdaptor,NSObject>)aTreeAdaptor retain];
-        [(id<ANTLRTreeAdaptor,NSObject>)treeAdaptor release];
+        [(id<TreeAdaptor,NSObject>)aTreeAdaptor retain];
+        [(id<TreeAdaptor,NSObject>)treeAdaptor release];
         treeAdaptor = aTreeAdaptor;
     }
 }
 
 
-- (id<ANTLRTreeNodeStream>) input
+- (id<TreeNodeStream>) input
 {
     return input; 
 }
 
-- (void) setInput:(id<ANTLRTreeNodeStream>) aTreeNodeStream
+- (void) setInput:(id<TreeNodeStream>) aTreeNodeStream
 {
     if (input != aTreeNodeStream) {
         [input release];
-        [(id<ANTLRTreeNodeStream,NSObject>)aTreeNodeStream retain];
+        [(id<TreeNodeStream,NSObject>)aTreeNodeStream retain];
     }
     input = aTreeNodeStream;
 }
 
 
-#pragma mark ANTLRTreeNodeStream conformance
+#pragma mark TreeNodeStream conformance
 
 - (id) LT:(NSInteger)k
 {
@@ -110,7 +110,7 @@
 	[input setUniqueNavigationNodes:flag];
 }
 
-#pragma mark ANTLRIntStream conformance
+#pragma mark IntStream conformance
 - (void) consume
 {
 	id node = [input LT:1];
@@ -123,7 +123,7 @@
 
 - (NSInteger) LA:(NSUInteger) i
 {
-	id<ANTLRBaseTree> node = [self LT:1];
+	id<BaseTree> node = [self LT:1];
 	return node.type;
 }
 
@@ -169,7 +169,7 @@
 
 - (NSString *) toStringFromToken:(id)startNode ToToken:(id)stopNode
 {
-    return [input toStringFromToken:(id<ANTLRToken>)startNode ToToken:(id<ANTLRToken>)stopNode];
+    return [input toStringFromToken:(id<Token>)startNode ToToken:(id<Token>)stopNode];
 }
 
 @end

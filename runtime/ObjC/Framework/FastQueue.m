@@ -1,5 +1,5 @@
 //
-//  ANTLRFastQueue.m
+//  FastQueue.m
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -29,20 +29,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRFastQueue.h"
+#import "FastQueue.h"
 #import "ANTLRError.h"
-#import "ANTLRRuntimeException.h"
+#import "RuntimeException.h"
 
-@implementation ANTLRFastQueue
+@implementation FastQueue
 
 //@synthesize pool;
 @synthesize data;
 @synthesize p;
 @synthesize range;
 
-+ (id) newANTLRFastQueue
++ (id) newFastQueue
 {
-    return [[ANTLRFastQueue alloc] init];
+    return [[FastQueue alloc] init];
 }
 
 - (id) init
@@ -59,7 +59,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRFastQueue" );
+    NSLog( @"called dealloc in FastQueue" );
 #endif
 	if ( data ) [data release];
 	[super dealloc];
@@ -67,7 +67,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRFastQueue *copy;
+    FastQueue *copy;
     
     copy = [[[self class] allocWithZone:aZone] init];
     copy.data = [data copyWithZone:nil];
@@ -126,16 +126,16 @@
 	return [self objectAtIndex:0];
 }
 
-- (id) objectAtIndex:(NSUInteger) i
+- (id) objectAtIndex:(NSInteger) i
 {
-    NSUInteger absIndex;
+    NSInteger absIndex;
 
     absIndex = p + i;
 	if ( absIndex >= [data count] ) {
-		@throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d > last index %d", absIndex, [data count]-1]];
+		@throw [NoSuchElementException newException:[NSString stringWithFormat:@"queue index %d > last index %d", absIndex, [data count]-1]];
 	}
 	if ( absIndex < 0 ) {
-	    @throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"queue index %d < 0", absIndex]];
+	    @throw [NoSuchElementException newException:[NSString stringWithFormat:@"queue index %d < 0", absIndex]];
 	}
 	if ( absIndex > range ) range = absIndex;
 	return [data objectAtIndex:absIndex];

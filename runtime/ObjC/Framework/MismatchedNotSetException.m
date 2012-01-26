@@ -1,5 +1,5 @@
 //
-//  ANTLRMismatchedNotSetException.m
+//  MismatchedNotSetException.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/13/10.
@@ -29,21 +29,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRMismatchedNotSetException.h"
+#import "MismatchedNotSetException.h"
 
-@implementation ANTLRMismatchedNotSetException
+@implementation MismatchedNotSetException
 
 @synthesize expecting;
 
-- (ANTLRMismatchedNotSetException *)newException
+- (MismatchedNotSetException *)newException
 {
-    return [[ANTLRMismatchedNotSetException alloc] init];
+    return [[MismatchedNotSetException alloc] init];
 }
 
-- (ANTLRMismatchedNotSetException *)newException:(id<ANTLRIntStream>)anInput
+- (MismatchedNotSetException *)newException:(id<IntStream>)anInput
                                                                Follow:(NSString *)expected
 {
-    return [[ANTLRMismatchedNotSetException alloc] initWithStream:anInput Follow:(NSString *)expected];
+    return [[MismatchedNotSetException alloc] initWithStream:anInput Follow:(NSString *)expected];
 }
 
 - (id) init
@@ -53,7 +53,7 @@
     return(self);
 }
 
-- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(NSString *)expected
+- (id) initWithStream:(id<IntStream>)anInput Follow:(NSString *)expected
 {
     if ((self = [super initWithStream:anInput]) != nil ) {
         expecting = expected;

@@ -30,24 +30,24 @@
 
 #import "AMutableArray.h"
 
-@protocol ANTLRTree < NSObject, NSCopying >
+@protocol Tree < NSObject, NSCopying >
 
-//+ (id<ANTLRTree>) invalidNode;
+//+ (id<Tree>) invalidNode;
 
-- (id<ANTLRTree>) getChild:(NSUInteger)index;
+- (id<Tree>) getChild:(NSUInteger)index;
 - (NSUInteger) getChildCount;
 
 // Tree tracks parent and child index now > 3.0
 
-- (id<ANTLRTree>)getParent;
+- (id<Tree>)getParent;
 
-- (void) setParent:(id<ANTLRTree>)t;
+- (void) setParent:(id<Tree>)t;
 
 /** Is there is a node above with token type ttype? */
 - (BOOL) hasAncestor:(NSInteger)ttype;
 
 /** Walk upwards and get first ancestor with this token type. */
-- (id<ANTLRTree>) getAncestor:(NSInteger) ttype;
+- (id<Tree>) getAncestor:(NSInteger) ttype;
 
 /** Return a list of all ancestors of this node.  The first node of
  *  list is the root and the last is the parent of this node.
@@ -65,10 +65,10 @@
 /** Add t as a child to this node.  If t is null, do nothing.  If t
  *  is nil, add all children of t to this' children.
  */
-- (void) addChild:(id<ANTLRTree>) t;
+- (void) addChild:(id<Tree>) t;
 
 /** Set ith child (0..n-1) to t; t must be non-null and non-nil node */
-- (void) setChild:(NSInteger)i With:(id<ANTLRTree>) t;
+- (void) setChild:(NSInteger)i With:(id<Tree>) t;
 
 - (id) deleteChild:(NSInteger) i;
 
@@ -104,7 +104,7 @@
 - (NSInteger) getTokenStopIndex;
 - (void) setTokenStopIndex:(NSInteger) index;
 
-- (id<ANTLRTree>) dupNode;
+- (id<Tree>) dupNode;
 
 - (NSString *) toString;
 

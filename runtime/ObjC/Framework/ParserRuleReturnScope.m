@@ -24,10 +24,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRParserRuleReturnScope.h"
+#import "ParserRuleReturnScope.h"
 
 
-@implementation ANTLRParserRuleReturnScope
+@implementation ParserRuleReturnScope
 
 @synthesize start;
 @synthesize stopToken;
@@ -39,12 +39,12 @@
     [super dealloc];
 }
 
-- (id<ANTLRToken>) getStart
+- (id<Token>) getStart
 {
     return start; 
 }
 
-- (void) setStart: (id<ANTLRToken>) aStart
+- (void) setStart: (id<Token>) aStart
 {
     if (start != aStart) {
         [aStart retain];
@@ -53,12 +53,12 @@
     }
 }
 
-- (id<ANTLRToken>) getStop
+- (id<Token>) getStop
 {
     return stopToken; 
 }
 
-- (void) setStop: (id<ANTLRToken>) aStop
+- (void) setStop: (id<Token>) aStop
 {
     if (stopToken != aStop) {
         [aStop retain];
@@ -71,7 +71,7 @@
 // the input stream is *not* copied!
 - (id) copyWithZone:(NSZone *)theZone
 {
-    ANTLRParserRuleReturnScope *copy = [super copyWithZone:theZone];
+    ParserRuleReturnScope *copy = [super copyWithZone:theZone];
     copy.start = start;
     copy.stopToken = stopToken;
     return copy;

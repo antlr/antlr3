@@ -25,14 +25,14 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCommonTree.h"
-#import "ANTLRCommonTreeNodeStream.h"
-#import "ANTLRLookaheadStream.h"
-#import "ANTLRTreeNodeStream.h"
-#import "ANTLRTreeIterator.h"
-#import "ANTLRIntArray.h"
+#import "CommonTree.h"
+#import "CommonTreeNodeStream.h"
+#import "LookaheadStream.h"
+#import "TreeNodeStream.h"
+#import "TreeIterator.h"
+#import "IntArray.h"
 
-@interface ANTLRCommonTreeNodeStream : ANTLRLookaheadStream <ANTLRTreeNodeStream> {
+@interface CommonTreeNodeStream : LookaheadStream <TreeNodeStream> {
 #define DEFAULT_INITIAL_BUFFER_SIZE 100
 #define INITIAL_CALL_STACK_SIZE 10
     
@@ -40,16 +40,16 @@
 __strong id root;
     
 /** If this tree (root) was created from a token stream, track it. */
-__strong id <ANTLRTokenStream> tokens;
+__strong id <TokenStream> tokens;
     
 	/** What tree adaptor was used to build these trees */
-__strong ANTLRCommonTreeAdaptor *adaptor;
+__strong CommonTreeAdaptor *adaptor;
     
 /** The tree iterator we using */
-__strong ANTLRTreeIterator *it;
+__strong TreeIterator *it;
     
 /** Stack of indexes used for push/pop calls */
-__strong ANTLRIntArray *calls;    
+__strong IntArray *calls;    
     
 /** Tree (nil A B C) trees like flat A B C streams */
 BOOL hasNilRoot;
@@ -57,17 +57,17 @@ BOOL hasNilRoot;
 /** Tracks tree depth.  Level=0 means we're at root node level. */
 NSInteger level;
 }
-@property (retain, getter=getRoot, setter=setRoot:) ANTLRCommonTree *root;
-@property (retain, getter=getTokens,setter=setTokens:) id<ANTLRTokenStream> tokens;
-@property (retain, getter=getTreeAdaptor, setter=setTreeAdaptor:) ANTLRCommonTreeAdaptor *adaptor;
+@property (retain, getter=getRoot, setter=setRoot:) CommonTree *root;
+@property (retain, getter=getTokens,setter=setTokens:) id<TokenStream> tokens;
+@property (retain, getter=getTreeAdaptor, setter=setTreeAdaptor:) CommonTreeAdaptor *adaptor;
 @property (assign, getter=getLevel, setter=setLevel:) NSInteger level;
 
-+ (ANTLRCommonTreeNodeStream *) newANTLRCommonTreeNodeStream:(ANTLRCommonTree *)theTree;
-+ (ANTLRCommonTreeNodeStream *) newANTLRCommonTreeNodeStream:(id<ANTLRTreeAdaptor>)anAdaptor Tree:(ANTLRCommonTree *)theTree;
++ (CommonTreeNodeStream *) newCommonTreeNodeStream:(CommonTree *)theTree;
++ (CommonTreeNodeStream *) newCommonTreeNodeStream:(id<TreeAdaptor>)anAdaptor Tree:(CommonTree *)theTree;
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree;
+- (id) initWithTree:(CommonTree *)theTree;
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)adaptor Tree:(ANTLRCommonTree *)theTree;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)adaptor Tree:(CommonTree *)theTree;
     
 - (void) reset;
     
@@ -76,28 +76,26 @@ NSInteger level;
      */
 - (id) nextElement;
     
-- (BOOL) isEOF:(id<ANTLRBaseTree>) obj;
+- (BOOL) isEOF:(id<BaseTree>) obj;
 - (void) setUniqueNavigationNodes:(BOOL) uniqueNavigationNodes;
     
 - (id) getTreeSource;
     
 - (NSString *) getSourceName;
     
-- (id<ANTLRTokenStream>) getTokenStream;
+- (id<TokenStream>) getTokenStream;
     
-- (void) setTokenStream:(id<ANTLRTokenStream>) tokens;
+- (void) setTokenStream:(id<TokenStream>) tokens;
     
-- (ANTLRCommonTreeAdaptor *) getTreeAdaptor;
+- (CommonTreeAdaptor *) getTreeAdaptor;
     
-- (void) setTreeAdaptor:(ANTLRCommonTreeAdaptor *) adaptor;
+- (void) setTreeAdaptor:(CommonTreeAdaptor *) adaptor;
     
 - (NSInteger) LA:(NSInteger) i;
     
     /** Make stream jump to a new location, saving old location.
      *  Switch back with pop().
      */
-- (ANTLRCommonTree *)getNode:(NSInteger) i;
-
 - (void) push:(NSInteger) index;
     
     /** Seek back to previous index saved during last push() call.
@@ -109,12 +107,12 @@ NSInteger level;
     
 - (void) replaceChildren:(id)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
     
-- (NSString *) toStringFromNode:(id<ANTLRBaseTree>)startNode ToNode:(id<ANTLRBaseTree>)stopNode;
+- (NSString *) toStringFromNode:(id<BaseTree>)startNode ToNode:(id<BaseTree>)stopNode;
 
 /** For debugging; destructive: moves tree iterator to end. */
 - (NSString *) toTokenTypeString;
 
-@property (retain) ANTLRTreeIterator *it;
-@property (retain) ANTLRIntArray *calls;
+@property (retain) TreeIterator *it;
+@property (retain) IntArray *calls;
 @property BOOL hasNilRoot;
 @end

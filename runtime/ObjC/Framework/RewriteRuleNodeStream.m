@@ -1,32 +1,32 @@
 //
-//  ANTLRRewriteRuleNodeStream.m
+//  RewriteRuleNodeStream.m
 //  ANTLR
 //
 //  Created by Kay Röpke on 7/16/07.
 //  Copyright 2007 classDump. All rights reserved.
 //
 
-#import "ANTLRRewriteRuleNodeStream.h"
-#import "ANTLRRuntimeException.h"
+#import "RewriteRuleNodeStream.h"
+#import "RuntimeException.h"
 
-@implementation ANTLRRewriteRuleNodeStream
+@implementation RewriteRuleNodeStream
 
-+ (ANTLRRewriteRuleNodeStream*) newANTLRRewriteRuleNodeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
++ (RewriteRuleNodeStream*) newRewriteRuleNodeStream:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
 {
-    return [[ANTLRRewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription];
+    return [[RewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription];
 }
 
-+ (ANTLRRewriteRuleNodeStream*) newANTLRRewriteRuleNodeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
++ (RewriteRuleNodeStream*) newRewriteRuleNodeStream:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
 {
-    return [[ANTLRRewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription element:anElement];
+    return [[RewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription element:anElement];
 }
 
-+ (ANTLRRewriteRuleNodeStream*) newANTLRRewriteRuleNode:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
++ (RewriteRuleNodeStream*) newRewriteRuleNode:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 {
-    return [[ANTLRRewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription elements:theElements];
+    return [[RewriteRuleNodeStream alloc] initWithTreeAdaptor:aTreeAdaptor description:anElementDescription elements:theElements];
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
 {
     if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription]) != nil) {
         dirty = NO;
@@ -35,7 +35,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
 {
     if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription element:anElement]) != nil) {
         dirty = NO;
@@ -43,7 +43,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
 {
     if ((self = [super init]) != nil) {
         dirty = NO;
@@ -60,7 +60,7 @@
         return [self _next];
 }
 
-- (id<ANTLRBaseTree>) toTree:(id<ANTLRBaseTree>)element
+- (id<BaseTree>) toTree:(id<BaseTree>)element
 {
     return [treeAdaptor dupNode:element];
 }
@@ -68,7 +68,7 @@
 - (id) dup:(id)element
 {
     return [treeAdaptor dupTree:element];
-    @throw [ANTLRRuntimeException newException:@"ANTLRUnsupportedOperationException" reason:@"dup can't be called for a node stream."];
+    @throw [RuntimeException newException:@"UnsupportedOperationException" reason:@"dup can't be called for a node stream."];
 }
 
 @end

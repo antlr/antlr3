@@ -1,5 +1,5 @@
 //
-//  ANTLRUnbufferedTokenStream.h
+//  UnbufferedTokenStream.h
 //  ANTLR
 //
 //  Created by Alan Condit on 7/12/10.
@@ -30,32 +30,32 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRuntimeException.h"
-#import "ANTLRTokenSource.h"
-#import "ANTLRLookaheadStream.h"
-#import "ANTLRToken.h"
+#import "RuntimeException.h"
+#import "TokenSource.h"
+#import "LookaheadStream.h"
+#import "Token.h"
 
-@interface ANTLRUnbufferedTokenStream : ANTLRLookaheadStream {
-	id<ANTLRTokenSource> tokenSource;
+@interface UnbufferedTokenStream : LookaheadStream {
+	id<TokenSource> tokenSource;
     NSInteger tokenIndex; // simple counter to set token index in tokens
     NSInteger channel;
 }
 
-@property (retain, getter=getTokenSource, setter=setTokenSource:) id<ANTLRTokenSource> tokenSource;
+@property (retain, getter=getTokenSource, setter=setTokenSource:) id<TokenSource> tokenSource;
 @property (getter=getTokenIndex, setter=setTokenIndex:) NSInteger tokenIndex;
 @property (getter=channel, setter=setChannel:) NSInteger channel;
 
-+ (ANTLRUnbufferedTokenStream *)newANTLRUnbufferedTokenStream:(id<ANTLRTokenSource>)aTokenSource;
++ (UnbufferedTokenStream *)newUnbufferedTokenStream:(id<TokenSource>)aTokenSource;
 - (id) init;
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)aTokenSource;
+- (id) initWithTokenSource:(id<TokenSource>)aTokenSource;
 
-- (id<ANTLRToken>)nextElement;
-- (BOOL)isEOF:(id<ANTLRToken>) aToken;
-- (id<ANTLRTokenSource>)getTokenSource;
+- (id<Token>)nextElement;
+- (BOOL)isEOF:(id<Token>) aToken;
+- (id<TokenSource>)getTokenSource;
 - (NSString *)toStringFromStart:(NSInteger)aStart ToEnd:(NSInteger)aStop;
-- (NSString *)toStringFromToken:(id<ANTLRToken>)aStart ToEnd:(id<ANTLRToken>)aStop;
+- (NSString *)toStringFromToken:(id<Token>)aStart ToEnd:(id<Token>)aStop;
 - (NSInteger)LA:(NSInteger)anIdx;
-- (id<ANTLRToken>)objectAtIndex:(NSInteger)anIdx;
+- (id<Token>)objectAtIndex:(NSInteger)anIdx;
 - (NSString *)getSourceName;
 
 

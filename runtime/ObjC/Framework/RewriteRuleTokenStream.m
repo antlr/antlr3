@@ -1,5 +1,5 @@
 //
-//  ANTLRRewriteRuleTokenStream.m
+//  RewriteRuleTokenStream.m
 //  ANTLR
 //
 //  Created by Kay Röpke on 7/16/07.
@@ -29,36 +29,36 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRewriteRuleTokenStream.h"
-#import "ANTLRRuntimeException.h"
-#import "ANTLRHashMap.h"
-#import "ANTLRMapElement.h"
+#import "RewriteRuleTokenStream.h"
+#import "RuntimeException.h"
+#import "HashMap.h"
+#import "MapElement.h"
 
-@implementation ANTLRRewriteRuleTokenStream
+@implementation RewriteRuleTokenStream
 
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)anAdaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)anAdaptor
                           description:(NSString *)elementDescription
 {
-    return [[ANTLRRewriteRuleTokenStream alloc] initWithTreeAdaptor:anAdaptor
+    return [[RewriteRuleTokenStream alloc] initWithTreeAdaptor:anAdaptor
                                                         description:elementDescription];
 }
 
 /** Create a stream with one element */
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)adaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)adaptor
                           description:(NSString *)elementDescription
                               element:(id) oneElement
 {
-    return [[ANTLRRewriteRuleTokenStream alloc] initWithTreeAdaptor:adaptor
+    return [[RewriteRuleTokenStream alloc] initWithTreeAdaptor:adaptor
                                                         description:elementDescription
                                                             element:oneElement];
 }
 
 /** Create a stream, but feed off an existing list */
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)adaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)adaptor
                           description:(NSString *)elementDescription
                              elements:(AMutableArray *)elements
 {
-    return [[ANTLRRewriteRuleTokenStream alloc] initWithTreeAdaptor:adaptor
+    return [[RewriteRuleTokenStream alloc] initWithTreeAdaptor:adaptor
                                                         description:elementDescription
                                                            elements:elements];
 }
@@ -70,7 +70,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor
                description:(NSString *)aDescription
 {
     if ((self = [super initWithTreeAdaptor:anAdaptor
@@ -79,7 +79,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor
                description:(NSString *)aDescription
                    element:(id)anElement
 {
@@ -90,7 +90,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor
                description:(NSString *)aDescription
                   elements:(AMutableArray *)elementList
 {
@@ -101,9 +101,9 @@
     return self;
 }
 
-- (id<ANTLRBaseTree>) nextNode
+- (id<BaseTree>) nextNode
 {
-    id<ANTLRToken> t = [self _next];
+    id<Token> t = (id<Token>)[self _next];
     return [treeAdaptor create:t];
 }
 
@@ -115,14 +115,14 @@
 /** Don't convert to a tree unless they explicitly call nextTree.
  *  This way we can do hetero tree nodes in rewrite.
  */
-- (id<ANTLRBaseTree>) toTree:(id<ANTLRToken>)element
+- (id<BaseTree>) toTree:(id<Token>)element
 {
-    return element;
+    return (id<BaseTree>)element;
 }
 
 - (id) copyElement:(id)element
 {
-    @throw [ANTLRRuntimeException newException:@"copy can't be called for a token stream."];
+    @throw [RuntimeException newException:@"copy can't be called for a token stream."];
 }
 
 @end

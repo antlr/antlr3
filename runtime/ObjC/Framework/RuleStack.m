@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleStack.m
+//  RuleStack.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -34,22 +34,22 @@
 
 extern NSInteger debug;
 
-#import "ANTLRRuleStack.h"
-#import "ANTLRTree.h"
+#import "RuleStack.h"
+#import "Tree.h"
 
 /*
- * Start of ANTLRRuleStack
+ * Start of RuleStack
  */
-@implementation ANTLRRuleStack
+@implementation RuleStack
 
-+ (ANTLRRuleStack *)newANTLRRuleStack
++ (RuleStack *)newRuleStack
 {
-    return [[ANTLRRuleStack alloc] init];
+    return [[RuleStack alloc] init];
 }
 
-+ (ANTLRRuleStack *)newANTLRRuleStack:(NSInteger)cnt
++ (RuleStack *)newRuleStack:(NSInteger)cnt
 {
-    return [[ANTLRRuleStack alloc] initWithLen:cnt];
+    return [[RuleStack alloc] initWithLen:cnt];
 }
 
 - (id)init
@@ -69,7 +69,7 @@ extern NSInteger debug;
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRRuleStack" );
+    NSLog( @"called dealloc in RuleStack" );
 #endif
 	[super dealloc];
 }
@@ -81,7 +81,7 @@ extern NSInteger debug;
 
 - (NSInteger)count
 {
-    ANTLRRuleMemo *anElement;
+    RuleMemo *anElement;
     NSInteger aCnt = 0;
     for( int i = 0; i < BuffSize; i++ ) {
         if ((anElement = ptrBuffer[i]) != nil)
@@ -92,7 +92,7 @@ extern NSInteger debug;
 
 - (NSInteger)size
 {
-    ANTLRRuleMemo *anElement;
+    RuleMemo *anElement;
     NSInteger aSize = 0;
     for( int i = 0; i < BuffSize; i++ ) {
         if ((anElement = ptrBuffer[i]) != nil) {
@@ -102,15 +102,15 @@ extern NSInteger debug;
     return aSize;
 }
 
-- (ANTLRHashRule *)pop
+- (HashRule *)pop
 {
-    return (ANTLRHashRule *)[super pop];
+    return (HashRule *)[super pop];
 }
 
-- (void) insertObject:(ANTLRHashRule *)aRule atIndex:(NSInteger)idx
+- (void) insertObject:(HashRule *)aRule atIndex:(NSInteger)idx
 {
     if ( idx >= BuffSize ) {
-        if ( debug > 2 ) NSLog( @"In ANTLRRuleStack attempting to insert aRule at Index %d, but Buffer is only %d long\n", idx, BuffSize );
+        if ( debug > 2 ) NSLog( @"In RuleStack attempting to insert aRule at Index %d, but Buffer is only %d long\n", idx, BuffSize );
         [self ensureCapacity:idx];
     }
     if ( aRule != ptrBuffer[idx] ) {
@@ -120,7 +120,7 @@ extern NSInteger debug;
     ptrBuffer[idx] = aRule;
 }
 
-- (ANTLRHashRule *)objectAtIndex:(NSInteger)idx
+- (HashRule *)objectAtIndex:(NSInteger)idx
 {
     if (idx < BuffSize) {
         return ptrBuffer[idx];
@@ -130,19 +130,19 @@ extern NSInteger debug;
 
 - (void)putHashRuleAtRuleIndex:(NSInteger)aRuleIndex StartIndex:(NSInteger)aStartIndex StopIndex:(NSInteger)aStopIndex
 {
-    ANTLRHashRule *aHashRule;
-    ANTLRRuleMemo *aRuleMemo;
+    HashRule *aHashRule;
+    RuleMemo *aRuleMemo;
 
     if (aRuleIndex >= BuffSize) {
         if ( debug) NSLog( @"putHashRuleAtRuleIndex attempting to insert aRule at Index %d, but Buffer is only %d long\n", aRuleIndex, BuffSize );
         [self ensureCapacity:aRuleIndex];
     }
     if ((aHashRule = ptrBuffer[aRuleIndex]) == nil) {
-        aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
+        aHashRule = [[HashRule newHashRuleWithLen:17] retain];
         ptrBuffer[aRuleIndex] = aHashRule;
     }
     if (( aRuleMemo = [aHashRule objectAtIndex:aStartIndex] ) == nil ) {
-        aRuleMemo = [[ANTLRRuleMemo newANTLRRuleMemo] retain];
+        aRuleMemo = [[RuleMemo newRuleMemo] retain];
         [aHashRule insertObject:aRuleMemo atIndex:aStartIndex];
     }
     [aRuleMemo setStartIndex:[NSNumber numberWithInteger:aStartIndex]];

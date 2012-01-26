@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleMemo.h
+//  RuleMemo.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -30,9 +30,9 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRLinkBase.h"
+#import "LinkBase.h"
 
-@interface ANTLRRuleMemo : ANTLRLinkBase {
+@interface RuleMemo : LinkBase {
     NSNumber *startIndex;
     NSNumber *stopIndex;
 }
@@ -40,8 +40,8 @@
 @property (retain, getter=getStartIndex, setter=setStartIndex:) NSNumber *startIndex;
 @property (retain, getter=getStopIndex, setter=setStopIndex:) NSNumber *stopIndex;
 
-+ (ANTLRRuleMemo *)newANTLRRuleMemo;
-+ (ANTLRRuleMemo *)newANTLRRuleMemoWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;
++ (RuleMemo *)newRuleMemo;
++ (RuleMemo *)newRuleMemoWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;
 
 - (id) init;
 - (id) initWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;
@@ -49,7 +49,7 @@
 - (NSInteger)count;
 - (NSInteger)size;
 
-- (ANTLRRuleMemo *)getRuleWithStartIndex:(NSInteger)aStartIndex;
+- (RuleMemo *)getRuleWithStartIndex:(NSInteger)aStartIndex;
 - (NSNumber *)getStartIndex:(NSInteger)aStartIndex;
 - (NSNumber *)getStopIndex:(NSInteger)aStartIndex;
 - (NSNumber *)getStartIndex;

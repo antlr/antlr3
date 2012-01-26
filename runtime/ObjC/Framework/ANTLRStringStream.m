@@ -67,10 +67,10 @@ extern NSInteger debug;
         line = 1;
         charPositionInLine = 0;
         markDepth = 0;
-		markers = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:10];
+		markers = [PtrBuffer newPtrBufferWithLen:10];
         [markers retain];
         [markers addObject:[NSNull null]]; // ANTLR generates code that assumes markers to be 1-based,
-        charState = [[ANTLRCharStreamState newANTLRCharStreamState] retain];
+        charState = [[CharStreamState newCharStreamState] retain];
 	}
 	return self;
 }
@@ -85,9 +85,9 @@ extern NSInteger debug;
         line = 1;
         charPositionInLine = 0;
         markDepth = 0;
-		markers = [[ANTLRPtrBuffer newANTLRPtrBufferWithLen:10] retain];
+		markers = [[PtrBuffer newPtrBufferWithLen:10] retain];
         [markers addObject:[NSNull null]]; // ANTLR generates code that assumes markers to be 1-based,
-        charState = [[ANTLRCharStreamState newANTLRCharStreamState] retain];
+        charState = [[CharStreamState newCharStreamState] retain];
 	}
 	return self;
 }
@@ -102,10 +102,10 @@ extern NSInteger debug;
         line = 1;
         charPositionInLine = 0;
         markDepth = 0;
-		markers = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:100];
+		markers = [PtrBuffer newPtrBufferWithLen:100];
         [markers retain];
         [markers addObject:[NSNull null]]; // ANTLR generates code that assumes markers to be 1-based,
-        charState = [[ANTLRCharStreamState newANTLRCharStreamState] retain];
+        charState = [[CharStreamState newCharStreamState] retain];
 	}
 	return self;
 }
@@ -119,10 +119,10 @@ extern NSInteger debug;
         line = 1;
         charPositionInLine = 0;
         markDepth = 0;
-		markers = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:100];
+		markers = [PtrBuffer newPtrBufferWithLen:100];
         [markers retain];
         [markers addObject:[NSNull null]]; // ANTLR generates code that assumes markers to be 1-based,
-        charState = [[ANTLRCharStreamState newANTLRCharStreamState] retain];
+        charState = [[CharStreamState newCharStreamState] retain];
     }
     return( self );
 }
@@ -204,11 +204,11 @@ extern NSInteger debug;
     if ( i < 0 ) {
         i++;
         if ( index+i-1 < 0 ) {
-		    return ANTLRCharStreamEOF;
+		    return CharStreamEOF;
 		}
 	}
     if ( (index+i-1) >= n ) {
-		return ANTLRCharStreamEOF;
+		return CharStreamEOF;
 	}
     c = [data characterAtIndex:index+i-1];
 	return (NSInteger)c;
@@ -231,15 +231,15 @@ extern NSInteger debug;
 {
     if (debug > 1) NSLog(@"mark entry -- markers=%x, markDepth=%d\n", (int)markers, markDepth);
     if ( markers == nil ) {
-        markers = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:100];
+        markers = [PtrBuffer newPtrBufferWithLen:100];
 		[markers addObject:[NSNull null]]; // ANTLR generates code that assumes markers to be 1-based,
         markDepth = markers.ptr;
     }
     markDepth++;
-	ANTLRCharStreamState *State = nil;
+	CharStreamState *State = nil;
 	if ( (markDepth) >= [markers count] ) {
         if ( markDepth > 1 ) {
-            State = [ANTLRCharStreamState newANTLRCharStreamState];
+            State = [CharStreamState newCharStreamState];
             [State retain];
         }
         if ( markDepth == 1 )
@@ -251,7 +251,7 @@ extern NSInteger debug;
         if (debug > 1) NSLog(@"mark retrieve markers=%x markDepth=%d\n", (NSUInteger)markers, markDepth);
         State = [markers objectAtIndex:markDepth];
         [State retain];
-        State = (ANTLRCharStreamState *)[markers objectAtIndex:markDepth];
+        State = (CharStreamState *)[markers objectAtIndex:markDepth];
         if (debug > 1) NSLog(@"mark retrieve charState %x from %d, index=%d, line=%d, charPositionInLine=%d\n", (NSUInteger)State, markDepth, State.index, State.line, State.charPositionInLine);
 	}
     State.index = index;
@@ -264,12 +264,12 @@ extern NSInteger debug;
 
 - (void) rewind:(NSInteger) marker 
 {
-    ANTLRCharStreamState *State;
+    CharStreamState *State;
     if (debug > 1) NSLog(@"rewind entry -- markers=%x marker=%d\n", (NSUInteger)markers, marker);
     if ( marker == 1 )
         State = charState;
     else
-        State = (ANTLRCharStreamState *)[markers objectAtIndex:marker];
+        State = (CharStreamState *)[markers objectAtIndex:marker];
     if (debug > 1) NSLog(@"rewind entry -- marker=%d charState=%x, index=%d, line=%d, charPositionInLine=%d\n", marker, (NSUInteger)charState, charState.index, charState.line, charState.charPositionInLine);
 	// restore stream charState
 	[self seek:State.index];
@@ -327,12 +327,32 @@ extern NSInteger debug;
 }
 
 
-- (ANTLRPtrBuffer *)getMarkers
+- (NSUInteger) getLine
+{
+    return line;
+}
+
+- (NSUInteger) getCharPositionInLine
+{
+    return charPositionInLine;
+}
+
+- (void) setLine:(NSUInteger) aLine
+{
+    line = aLine;
+}
+
+- (void) setCharPositionInLine:(NSUInteger) pos
+{
+    charPositionInLine = pos;
+}
+
+- (PtrBuffer *)getMarkers
 {
     return markers;
 }
 
-- (void) setMarkers:(ANTLRPtrBuffer *)aMarkerList
+- (void) setMarkers:(PtrBuffer *)aMarkerList
 {
     markers = aMarkerList;
 }
@@ -352,12 +372,12 @@ extern NSInteger debug;
 }
 
 
-- (ANTLRCharStreamState *)getCharState
+- (CharStreamState *)getCharState
 {
     return charState;
 }
 
-- (void) setCharState:(ANTLRCharStreamState *)aCharState
+- (void) setCharState:(CharStreamState *)aCharState
 {
     charState = aCharState;
 }

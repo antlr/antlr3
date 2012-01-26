@@ -1,5 +1,5 @@
 //
-//  ANTLRStreamEnumertor.m
+//  StreamEnumertor.m
 //  ANTLR
 //
 //  Created by Ian Michell on 29/04/2010.
@@ -29,10 +29,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRStreamEnumerator.h"
+#import "StreamEnumerator.h"
 
 
-@implementation ANTLRStreamEnumerator
+@implementation StreamEnumerator
 
 -(id) init
 {

@@ -24,13 +24,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRIntStream.h"
+#import "IntStream.h"
 
-#define	ANTLRCharStreamEOF -1
+#define	CharStreamEOF -1
 
 
-@protocol ANTLRCharStream < ANTLRIntStream >
+@protocol CharStream < IntStream >
 
+/** For infinite streams, you don't need this; primarily I'm providing
+ *  a useful interface for action code.  Just make sure actions don't
+ *  use this on streams that don't support it.
+ */
 - (NSString *) substringWithRange:(NSRange) theRange;
 
 /** Get the ith character of lookahead.  This is the same usually as
@@ -41,9 +45,14 @@
 - (NSInteger)LT:(NSInteger) i;
 
 // ANTLR tracks the line information automatically
-
+- (NSInteger)getLine;
 // Because this stream can rewind, we need to be able to reset the line
+- (void)setLine:(NSInteger)aLine;
+
+- (void)setCharPositionInLine:(NSInteger)pos;
+
 
 // The index of the character relative to the beginning of the line 0..n-1
+- (NSInteger)getCharPositionInLine;
 
 @end

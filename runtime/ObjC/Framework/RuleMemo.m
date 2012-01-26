@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleMemo.m
+//  RuleMemo.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -29,22 +29,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRuleMemo.h"
+#import "RuleMemo.h"
 
 
-@implementation ANTLRRuleMemo
+@implementation RuleMemo
 
 @synthesize startIndex;
 @synthesize stopIndex;
 
-+ (ANTLRRuleMemo *)newANTLRRuleMemo
++ (RuleMemo *)newRuleMemo
 {
-    return [[ANTLRRuleMemo alloc] init];
+    return [[RuleMemo alloc] init];
 }
 
-+ (ANTLRRuleMemo *)newANTLRRuleMemoWithStartIndex:(NSNumber *)anIndex StopIndex:(NSNumber *)aStopIndex
++ (RuleMemo *)newRuleMemoWithStartIndex:(NSNumber *)anIndex StopIndex:(NSNumber *)aStopIndex
 {
-    return [[ANTLRRuleMemo alloc] initWithStartIndex:anIndex StopIndex:aStopIndex];
+    return [[RuleMemo alloc] initWithStartIndex:anIndex StopIndex:aStopIndex];
 }
 
 - (id) init
@@ -69,7 +69,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRRuleMemo *copy;
+    RuleMemo *copy;
     
     copy = [super copyWithZone:aZone];
     copy.startIndex = startIndex;
@@ -91,9 +91,9 @@
     return (2 * sizeof(id));
 }
 
-- (ANTLRRuleMemo *)getRuleWithStartIndex:(NSInteger)aStartIndex
+- (RuleMemo *)getRuleWithStartIndex:(NSInteger)aStartIndex
 {
-    ANTLRRuleMemo *aMatchMemo = self;
+    RuleMemo *aMatchMemo = self;
     do {
         if (aStartIndex == [aMatchMemo.startIndex integerValue] ) {
             return aMatchMemo;
@@ -105,7 +105,7 @@
 
 - (NSNumber *)getStartIndex:(NSInteger)aStartIndex
 {
-    ANTLRRuleMemo *aMatchMemo = self;
+    RuleMemo *aMatchMemo = self;
     do {
         if (aStartIndex == [aMatchMemo.startIndex integerValue] ) {
             return aMatchMemo.stopIndex;
@@ -117,7 +117,7 @@
 
 - (NSNumber *)getStopIndex:(NSInteger)aStartIndex
 {
-    ANTLRRuleMemo *aMatchMemo = self;
+    RuleMemo *aMatchMemo = self;
     do {
         if (aStartIndex == [aMatchMemo.startIndex integerValue] ) {
             return aMatchMemo.stopIndex;

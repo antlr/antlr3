@@ -25,14 +25,14 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 
-@interface ANTLREarlyExitException : ANTLRRecognitionException {
+@interface EarlyExitException : RecognitionException {
 	int decisionNumber;
 }
 
-+ (ANTLREarlyExitException *) newException:(id<ANTLRIntStream>)anInputStream decisionNumber:(NSInteger)aDecisionNumber;
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream decisionNumber:(NSInteger) aDecisionNumber;
++ (EarlyExitException *) newException:(id<IntStream>)anInputStream decisionNumber:(NSInteger)aDecisionNumber;
+- (id) initWithStream:(id<IntStream>)anInputStream decisionNumber:(NSInteger) aDecisionNumber;
 
 @property int decisionNumber;
 @end

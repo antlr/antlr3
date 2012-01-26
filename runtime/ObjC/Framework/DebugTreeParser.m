@@ -24,35 +24,35 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugTreeParser.h"
+#import "DebugTreeParser.h"
 
 
-@implementation ANTLRDebugTreeParser
+@implementation DebugTreeParser
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream
 {
 	return [self initWithTreeNodeStream:theStream debugListener:nil debuggerPort:-1];
 }
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream
 				 debuggerPort:(NSInteger)portNumber
 {
 	return [self initWithTreeNodeStream:theStream debugListener:nil debuggerPort:portNumber];
 }
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream
-				debugListener:(id<ANTLRDebugEventListener>)theDebugListener
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream
+				debugListener:(id<DebugEventListener>)theDebugListener
 				 debuggerPort:(NSInteger)portNumber
 {
-	id<ANTLRDebugEventListener,NSObject> debugger = nil;
-	id<ANTLRTreeNodeStream> treeNodeStream = nil;
+	id<DebugEventListener,NSObject> debugger = nil;
+	id<TreeNodeStream> treeNodeStream = nil;
 	if (theDebugListener) {
-		debugger = (id<ANTLRDebugEventListener>)theDebugListener;
+		debugger = (id<DebugEventListener>)theDebugListener;
 	} else {
-		debugger = [[ANTLRDebugEventProxy alloc] initWithGrammarName:[self grammarFileName] debuggerPort:portNumber];
+		debugger = [[DebugEventSocketProxy alloc] initWithGrammarName:[self grammarFileName] debuggerPort:portNumber];
 	}
-	if (theStream && ![theStream isKindOfClass:[ANTLRDebugTreeNodeStream class]]) {
-		treeNodeStream = [[ANTLRDebugTreeNodeStream alloc] initWithTreeNodeStream:theStream debugListener:debugger];
+	if (theStream && ![theStream isKindOfClass:[DebugTreeNodeStream class]]) {
+		treeNodeStream = [[DebugTreeNodeStream alloc] initWithTreeNodeStream:theStream debugListener:debugger];
 	} else {
 		treeNodeStream = theStream;
 	}
@@ -72,16 +72,16 @@
     [super dealloc];
 }
 
-- (id<ANTLRDebugEventListener>) debugListener
+- (id<DebugEventListener>) debugListener
 {
     return debugListener; 
 }
 
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener
 {
     if (debugListener != aDebugListener) {
-        [(id<ANTLRDebugEventListener,NSObject>)aDebugListener retain];
-        [(id<ANTLRDebugEventListener,NSObject>)debugListener release];
+        [(id<DebugEventListener,NSObject>)aDebugListener retain];
+        [(id<DebugEventListener,NSObject>)debugListener release];
         debugListener = aDebugListener;
     }
 }
@@ -108,16 +108,16 @@
 	[debugListener endBacktrack:level wasSuccessful:successful];
 }
 
-- (void) recoverFromMismatchedToken:(id<ANTLRIntStream>)inputStream 
+- (void) recoverFromMismatchedToken:(id<IntStream>)inputStream 
 						  exception:(NSException *)e 
-						  tokenType:(ANTLRTokenType)ttype 
+						  tokenType:(TokenType)ttype 
 							 follow:(ANTLRBitSet *)follow
 {
 #warning TODO: recoverFromMismatchedToken in debugger
 	[self recoverFromMismatchedToken:inputStream exception:e follow:follow];
 }
 
-- (void) recoverFromMismatchedSet:(id<ANTLRIntStream>)inputStream
+- (void) recoverFromMismatchedSet:(id<IntStream>)inputStream
 						exception:(NSException *)e
 						   follow:(ANTLRBitSet *)follow
 {

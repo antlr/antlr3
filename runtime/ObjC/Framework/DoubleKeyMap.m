@@ -1,6 +1,6 @@
-#import "ANTLRDoubleKeyMap.h"
+#import "DoubleKeyMap.h"
 
-@implementation ANTLRDoubleKeyMap
+@implementation DoubleKeyMap
 
 - (id) init
 {
@@ -74,7 +74,7 @@
 
 - (AMutableArray *) values
 {
-//    ANTLRHashMap *s = [[ANTLRHashMap newANTLRHashMapWithLen:30];
+//    HashMap *s = [[HashMap newHashMapWithLen:30];
     AMutableArray *s = [AMutableArray arrayWithCapacity:30];
     
     for (AMutableDictionary *k2 in [data allValues]) {
@@ -91,7 +91,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRCommonToken" );
+    NSLog( @"called dealloc in CommonToken" );
 #endif
     [data release];
     [super dealloc];

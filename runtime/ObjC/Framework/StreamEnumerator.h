@@ -1,5 +1,5 @@
 //
-//  ANTLRStreamEnumertor.h
+//  StreamEnumertor.h
 //  ANTLR
 //
 //  Created by Ian Michell on 29/04/2010.
@@ -32,7 +32,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AMutableArray.h"
 
-@interface ANTLRStreamEnumerator : NSEnumerator 
+@interface StreamEnumerator : NSEnumerator 
 {
 	NSInteger i;
 	id eof;

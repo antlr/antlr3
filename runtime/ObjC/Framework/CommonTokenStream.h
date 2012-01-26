@@ -25,15 +25,15 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTokenStream.h"
-#import "ANTLRToken.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRTokenSource.h"
+#import "TokenStream.h"
+#import "Token.h"
+#import "CommonToken.h"
+#import "TokenSource.h"
 #import "ANTLRBitSet.h"
-#import "ANTLRBufferedTokenStream.h"
+#import "BufferedTokenStream.h"
 #import "AMutableDictionary.h"
 
-@interface ANTLRCommonTokenStream : ANTLRBufferedTokenStream < ANTLRTokenStream >
+@interface CommonTokenStream : BufferedTokenStream < TokenStream >
 {
 	__strong AMutableDictionary *channelOverride;
 	NSUInteger channel;
@@ -42,18 +42,18 @@
 @property (retain, getter=getChannelOverride,setter=setChannelOverride:) AMutableDictionary *channelOverride;
 @property (assign, getter=channel,setter=setChannel:) NSUInteger channel;
 
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStream;
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource;
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
++ (CommonTokenStream *)newCommonTokenStream;
++ (CommonTokenStream *)newCommonTokenStreamWithTokenSource:(id<TokenSource>)theTokenSource;
++ (CommonTokenStream *)newCommonTokenStreamWithTokenSource:(id<TokenSource>)theTokenSource
                                                                Channel:(NSUInteger)aChannel;
 
 - (id) init;
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource;
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel;
+- (id) initWithTokenSource:(id<TokenSource>)theTokenSource;
+- (id) initWithTokenSource:(id<TokenSource>)theTokenSource Channel:(NSUInteger)aChannel;
 
 - (void) consume;
-- (id<ANTLRToken>) LB:(NSInteger)k;
-- (id<ANTLRToken>) LT:(NSInteger)k;
+- (id<Token>) LB:(NSInteger)k;
+- (id<Token>) LT:(NSInteger)k;
 
 - (NSInteger) skipOffChannelTokens:(NSInteger) i;
 - (NSInteger) skipOffChannelTokensReverse:(NSInteger) i;
@@ -62,8 +62,8 @@
 
 - (NSInteger) getNumberOfOnChannelTokens;
 
-// - (id<ANTLRTokenSource>) getTokenSource;
-- (void) setTokenSource: (id<ANTLRTokenSource>) aTokenSource;
+// - (id<TokenSource>) getTokenSource;
+- (void) setTokenSource: (id<TokenSource>) aTokenSource;
 
 - (NSUInteger)channel;
 - (void)setChannel:(NSUInteger)aChannel;
@@ -79,7 +79,7 @@
 - (NSArray *) tokensInRange:(NSRange)aRange withTypes:(NSArray *)tokenTypes;
 - (NSArray *) tokensInRange:(NSRange)aRange withType:(NSInteger)tokenType;
 
-- (id<ANTLRToken>) getToken:(NSInteger)i;
+- (id<Token>) getToken:(NSInteger)i;
 
 - (NSInteger) size;
 - (void) rewind;
@@ -88,7 +88,7 @@
 
 - (NSString *) toString;
 - (NSString *) toStringFromStart:(NSInteger)startIndex ToEnd:(NSInteger)stopIndex;
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken;
+- (NSString *) toStringFromToken:(id<Token>)startToken ToToken:(id<Token>)stopToken;
 
 #endif
 

@@ -1,5 +1,5 @@
 //
-//  ANTLRCharStreamState.h
+//  CharStreamState.h
 //  ANTLR
 //
 // [The "BSD licence"]
@@ -31,7 +31,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface ANTLRCharStreamState : NSObject
+@interface CharStreamState : NSObject
 {
 NSInteger index;
 NSUInteger line;
@@ -42,7 +42,7 @@ NSUInteger charPositionInLine;
 @property (assign) NSUInteger line;
 @property (assign) NSUInteger charPositionInLine;
 
-+ newANTLRCharStreamState;
++ newCharStreamState;
 
 - (id) init;
 

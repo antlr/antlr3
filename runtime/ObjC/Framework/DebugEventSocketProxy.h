@@ -25,8 +25,8 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRParser.h"
-#import "ANTLRDebugEventListener.h"
+#import "Parser.h"
+#import "DebugEventListener.h"
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <netinet/tcp.h>
@@ -35,7 +35,7 @@
 // default port for ANTLRWorks
 #define DEFAULT_DEBUGGER_PORT 49001
 
-@interface ANTLRDebugEventProxy : NSObject <ANTLRDebugEventListener> {
+@interface DebugEventSocketProxy : NSObject <DebugEventListener> {
 	int serverSocket;
 	
 	struct sockaddr debugger_sockaddr;
@@ -78,16 +78,16 @@
 - (void) exitSubRule:(NSInteger)decisionNumber;
 - (void) enterDecision:(NSInteger)decisionNumber;
 - (void) exitDecision:(NSInteger)decisionNumber;
-- (void) consumeToken:(id<ANTLRToken>)t;
-- (void) consumeHiddenToken:(id<ANTLRToken>)t;
-- (void) LT:(NSInteger)i foundToken:(id<ANTLRToken>)t;
+- (void) consumeToken:(id<Token>)t;
+- (void) consumeHiddenToken:(id<Token>)t;
+- (void) LT:(NSInteger)i foundToken:(id<Token>)t;
 - (void) mark:(NSInteger)marker;
 - (void) rewind:(NSInteger)marker;
 - (void) rewind;
 - (void) beginBacktrack:(NSInteger)level;
 - (void) endBacktrack:(NSInteger)level wasSuccessful:(BOOL)successful;
 - (void) locationLine:(NSInteger)line column:(NSInteger)pos;
-- (void) recognitionException:(ANTLRRecognitionException *)e;
+- (void) recognitionException:(RecognitionException *)e;
 - (void) beginResync;
 - (void) endResync;
 - (void) semanticPredicate:(NSString *)predicate matched:(BOOL)result;

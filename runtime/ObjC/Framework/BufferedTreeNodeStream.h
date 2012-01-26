@@ -1,5 +1,5 @@
 //
-//  ANTLRBufferedTreeNodeStream.h
+//  BufferedTreeNodeStream.h
 //  ANTLR
 //
 // [The "BSD licence"]
@@ -29,29 +29,29 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTree.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRTokenStream.h"
-#import "ANTLRCommonTreeNodeStream.h"
-#import "ANTLRLookaheadStream.h"
-#import "ANTLRTreeIterator.h"
-#import "ANTLRIntArray.h"
+#import "Tree.h"
+#import "CommonTreeAdaptor.h"
+#import "TokenStream.h"
+#import "CommonTreeNodeStream.h"
+#import "LookaheadStream.h"
+#import "TreeIterator.h"
+#import "IntArray.h"
 #import "AMutableArray.h"
 
 #define DEFAULT_INITIAL_BUFFER_SIZE 100
 #define INITIAL_CALL_STACK_SIZE 10
 
 #ifdef DONTUSENOMO
-@interface ANTLRStreamIterator : ANTLRTreeIterator
+@interface StreamIterator : TreeIterator
 {
     NSInteger idx;
-    __strong ANTLRBufferedTreeNodeStream *input;
+    __strong BufferedTreeNodeStream *input;
     __strong AMutableArray *nodes;
 }
 
-+ (id) newANTLRStreamIterator:(ANTLRBufferedTreeNodeStream *) theStream;
++ (id) newStreamIterator:(BufferedTreeNodeStream *) theStream;
 
-- (id) initWithStream:(ANTLRBufferedTreeNodeStream *) theStream;
+- (id) initWithStream:(BufferedTreeNodeStream *) theStream;
 
 - (BOOL) hasNext;
 - (id) next;
@@ -59,7 +59,7 @@
 @end
 #endif
 
-@interface ANTLRBufferedTreeNodeStream : NSObject <ANTLRTreeNodeStream> 
+@interface BufferedTreeNodeStream : NSObject <TreeNodeStream> 
 {
 	id up;
 	id down;
@@ -69,13 +69,13 @@
 	
 	id root; // root
 	
-	id<ANTLRTokenStream> tokens;
-	ANTLRCommonTreeAdaptor *adaptor;
+	id<TokenStream> tokens;
+	CommonTreeAdaptor *adaptor;
 	
 	BOOL uniqueNavigationNodes;
 	NSInteger index;
 	NSInteger lastMarker;
-	ANTLRIntArray *calls;
+	IntArray *calls;
 	
 	NSEnumerator *e;
     id currentSymbol;
@@ -87,23 +87,23 @@
 @property (retain, getter=eof, setter=setEof:) id eof;
 @property (retain, getter=getNodes, setter=setNodes:) AMutableArray *nodes;
 @property (retain, getter=getTreeSource, setter=setTreeSource:) id root;
-@property (retain, getter=getTokenStream, setter=setTokenStream:) id<ANTLRTokenStream> tokens;
-@property (retain, getter=getAdaptor, setter=setAdaptor:) ANTLRCommonTreeAdaptor *adaptor;
+@property (retain, getter=getTokenStream, setter=setTokenStream:) id<TokenStream> tokens;
+@property (retain, getter=getAdaptor, setter=setAdaptor:) CommonTreeAdaptor *adaptor;
 @property (assign, getter=getUniqueNavigationNodes, setter=setUniqueNavigationNodes:) BOOL uniqueNavigationNodes;
 @property (assign) NSInteger index;
 @property (assign, getter=getLastMarker, setter=setLastMarker:) NSInteger lastMarker;
-@property (retain, getter=getCalls, setter=setCalls:) ANTLRIntArray *calls;
+@property (retain, getter=getCalls, setter=setCalls:) IntArray *calls;
 @property (retain, getter=getEnum, setter=setEnum:) NSEnumerator *e;
 @property (retain, getter=getCurrentSymbol, setter=setCurrentSymbol:) id currentSymbol;
 
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(ANTLRCommonTree *)tree;
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(ANTLRCommonTree *)tree;
-+ (ANTLRBufferedTreeNodeStream *) newANTLRBufferedTreeNodeStream:(id<ANTLRTreeAdaptor>)adaptor Tree:(ANTLRCommonTree *)tree withBufferSize:(NSInteger)initialBufferSize;
++ (BufferedTreeNodeStream *) newBufferedTreeNodeStream:(CommonTree *)tree;
++ (BufferedTreeNodeStream *) newBufferedTreeNodeStream:(id<TreeAdaptor>)adaptor Tree:(CommonTree *)tree;
++ (BufferedTreeNodeStream *) newBufferedTreeNodeStream:(id<TreeAdaptor>)adaptor Tree:(CommonTree *)tree withBufferSize:(NSInteger)initialBufferSize;
 
 #pragma mark Constructor
-- (id) initWithTree:(ANTLRCommonTree *)tree;
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree;
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)anAdaptor Tree:(ANTLRCommonTree *)tree WithBufferSize:(NSInteger)bufferSize;
+- (id) initWithTree:(CommonTree *)tree;
+- (id) initWithTreeAdaptor:(CommonTreeAdaptor *)anAdaptor Tree:(CommonTree *)tree;
+- (id) initWithTreeAdaptor:(CommonTreeAdaptor *)anAdaptor Tree:(CommonTree *)tree WithBufferSize:(NSInteger)bufferSize;
 
 - (void)dealloc;
 - (id) copyWithZone:(NSZone *)aZone;
@@ -111,20 +111,20 @@
 // protected methods. DO NOT USE
 #pragma mark Protected Methods
 - (void) fillBuffer;
-- (void) fillBufferWithTree:(ANTLRCommonTree *) tree;
-- (NSInteger) getNodeIndex:(ANTLRCommonTree *) node;
+- (void) fillBufferWithTree:(CommonTree *) tree;
+- (NSInteger) getNodeIndex:(CommonTree *) node;
 - (void) addNavigationNode:(NSInteger) type;
-- (id) getNode:(NSUInteger) i;
+- (id) get:(NSUInteger) i;
 - (id) LT:(NSInteger) k;
 - (id) getCurrentSymbol;
 - (id) LB:(NSInteger) i;
 #pragma mark General Methods
 - (NSString *) getSourceName;
 
-- (id<ANTLRTokenStream>) getTokenStream;
-- (void) setTokenStream:(id<ANTLRTokenStream>) tokens;
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
-- (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>) anAdaptor;
+- (id<TokenStream>) getTokenStream;
+- (void) setTokenStream:(id<TokenStream>) tokens;
+- (id<TreeAdaptor>) getTreeAdaptor;
+- (void) setTreeAdaptor:(id<TreeAdaptor>) anAdaptor;
 
 - (BOOL)getUniqueNavigationNodes;
 - (void) setUniqueNavigationNodes:(BOOL)aVal;

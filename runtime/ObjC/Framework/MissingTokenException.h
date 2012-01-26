@@ -1,5 +1,5 @@
 //
-//  ANTLRMissingTokenException.h
+//  MissingTokenException.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -30,23 +30,23 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRMismatchedTokenException.h"
-#import "ANTLRToken.h"
+#import "MismatchedTokenException.h"
+#import "Token.h"
 
-@interface ANTLRMissingTokenException : ANTLRMismatchedTokenException {
-    id<ANTLRToken> inserted;
+@interface MissingTokenException : MismatchedTokenException {
+    id<Token> inserted;
 }
 /** Used for remote debugger deserialization */
 + (id) newException;
 + (id) newException:(NSInteger)expected
-             Stream:(id<ANTLRIntStream>)anInput
-               With:(id<ANTLRToken>)insertedToken;
+             Stream:(id<IntStream>)anInput
+               With:(id<Token>)insertedToken;
 - (id) init;
-- (id) init:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput With:(id<ANTLRToken>)insertedToken;
+- (id) init:(NSInteger)expected Stream:(id<IntStream>)anInput With:(id<Token>)insertedToken;
 
 - (NSInteger) getMissingType;
 
 - (NSString *)toString;
 
-@property (retain) id<ANTLRToken> inserted;
+@property (retain) id<Token> inserted;
 @end

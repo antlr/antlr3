@@ -26,16 +26,16 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 
-@interface ANTLRMismatchedSetException : ANTLRRecognitionException {
+@interface MismatchedSetException : RecognitionException {
 	NSString *expecting;
 }
 
 @property (retain, getter=getExpecting, setter=setExpecting:) NSString *expecting;
 
-+ (id) newException:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
-- (id) initWithSet:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream;
++ (id) newException:(NSString *) theExpectedSet stream:(id<IntStream>) theStream;
+- (id) initWithSet:(NSString *) theExpectedSet stream:(id<IntStream>) theStream;
 
 - (NSString *) getExpecting;
 - (void) setExpecting: (NSString *) anExpectedSet;

@@ -24,20 +24,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRBaseTreeAdaptor.h"
-#import "ANTLRRuntimeException.h"
-#import "ANTLRUniqueIDMap.h"
-#import "ANTLRMapElement.h"
-#import "ANTLRCommonTree.h"
+#import "BaseTreeAdaptor.h"
+#import "RuntimeException.h"
+#import "UniqueIDMap.h"
+#import "MapElement.h"
+#import "CommonTree.h"
 
-@implementation ANTLRBaseTreeAdaptor
+@implementation BaseTreeAdaptor
 
 @synthesize treeToUniqueIDMap;
 @synthesize uniqueNodeID;
 
-+ (id<ANTLRTree>) newEmptyTree
++ (id<Tree>) newEmptyTree
 {
-    return [[ANTLRCommonTree alloc] init];
+    return [[CommonTree alloc] init];
 }
 
 - (id) init
@@ -50,7 +50,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRBaseTreeAdaptor *copy;
+    BaseTreeAdaptor *copy;
     
     copy = [[[self class] alloc] init];
     if (treeToUniqueIDMap)
@@ -62,12 +62,12 @@
 
 - (id) createNil
 {
-    return [ANTLRCommonTree newTreeWithToken:nil];
+    return [CommonTree newTreeWithToken:nil];
 }
 
 - (id) emptyNode
 {
-    return [ANTLRCommonTree newTreeWithToken:nil];
+    return [CommonTree newTreeWithToken:nil];
 }
 
 /** create tree node that holds the start and stop tokens associated
@@ -81,13 +81,13 @@
  *  You don't have to subclass CommonErrorNode; you will likely need to
  *  subclass your own tree node class to avoid class cast exception.
  */
-- (id) errorNode:(id<ANTLRTokenStream>)anInput
-            From:(id<ANTLRToken>)startToken
-              To:(id<ANTLRToken>)stopToken
-       Exception:(ANTLRRecognitionException *) e;
+- (id) errorNode:(id<TokenStream>)anInput
+            From:(id<Token>)startToken
+              To:(id<Token>)stopToken
+       Exception:(RecognitionException *) e;
 {
     //System.out.println("returning error node '"+t+"' @index="+anInput.index());
-    return [ANTLRCommonErrorNode newANTLRCommonErrorNode:anInput
+    return [CommonErrorNode newCommonErrorNode:anInput
                                                     From:startToken
                                                       To:stopToken
                                                Exception:e];
@@ -183,7 +183,7 @@
         if ( nc == 1 ) newRootTree = [(id)newRootTree getChild:0];
         else if ( nc > 1 ) {
             // TODO: make tree run time exceptions hierarchy
-            @throw [ANTLRRuntimeException newException:NSStringFromClass([self class]) reason:@"more than one node as root (TODO: make exception hierarchy)"];
+            @throw [RuntimeException newException:NSStringFromClass([self class]) reason:@"more than one node as root (TODO: make exception hierarchy)"];
         }
     }
     // add oldRoot to newRoot; addChild takes care of case where oldRoot
@@ -212,17 +212,17 @@
     return r;
 }
 
-- (id)becomeRootfromToken:(id<ANTLRToken>)newRoot old:(id)oldRoot
+- (id)becomeRootfromToken:(id<Token>)newRoot old:(id)oldRoot
 {
     return [self becomeRoot:(id)[self create:newRoot] old:oldRoot];
 }
 
-- (id) create:(id<ANTLRToken>)aToken
+- (id) create:(id<Token>)aToken
 {
-    return [ANTLRCommonTree newTreeWithToken:aToken];
+    return [CommonTree newTreeWithToken:aToken];
 }
 
-- (id)createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken
+- (id)createTree:(NSInteger)tokenType FromToken:(id<Token>)fromToken
 {
     fromToken = [self createToken:fromToken];
     //((ClassicToken)fromToken).setType(tokenType);
@@ -231,7 +231,7 @@
     return t;
 }
 
-- (id)createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken Text:(NSString *)text
+- (id)createTree:(NSInteger)tokenType FromToken:(id<Token>)fromToken Text:(NSString *)text
 {
     if (fromToken == nil)
         return [self createTree:tokenType Text:text];
@@ -244,41 +244,41 @@
 
 - (id)createTree:(NSInteger)tokenType Text:(NSString *)text
 {
-    id<ANTLRToken> fromToken = [self createToken:tokenType Text:text];
+    id<Token> fromToken = [self createToken:tokenType Text:text];
     id t = (id)[self create:fromToken];
     return t;
 }
 
-- (NSInteger) getType:(ANTLRCommonTree *) t
+- (NSInteger) getType:(CommonTree *) t
 {
     return [t type];
 }
 
 - (void) setType:(id)t Type:(NSInteger)type
 {
-    @throw [ANTLRNoSuchElementException newException:@"don't know enough about Tree node"];
+    @throw [NoSuchElementException newException:@"don't know enough about Tree node"];
 }
 
 /** What is the Token associated with this node?  If
- *  you are not using ANTLRCommonTree, then you must
+ *  you are not using CommonTree, then you must
  *  override this in your own adaptor.
  */
-- (id<ANTLRToken>) getToken:(ANTLRCommonTree *) t
+- (id<Token>) getToken:(CommonTree *) t
 {
-    if ( [t isKindOfClass:[ANTLRCommonTree class]] ) {
+    if ( [t isKindOfClass:[CommonTree class]] ) {
         return [t getToken];
     }
     return nil; // no idea what to do
 }
 
-- (NSString *)getText:(ANTLRCommonTree *)t
+- (NSString *)getText:(CommonTree *)t
 {
     return [t text];
 }
 
 - (void) setText:(id)t Text:(NSString *)text
 {
-    @throw [ANTLRNoSuchElementException newException:@"don't know enough about Tree node"];
+    @throw [NoSuchElementException newException:@"don't know enough about Tree node"];
 }
 
 - (id) getChild:(id)t At:(NSInteger)index
@@ -301,17 +301,17 @@
     return [(id)t getChildCount];
 }
 
-- (id<ANTLRBaseTree>) getParent:(id<ANTLRBaseTree>) t
+- (id<BaseTree>) getParent:(id<BaseTree>) t
 {
     if ( t == nil )
         return nil;
-    return (id<ANTLRBaseTree>)[t getParent];
+    return (id<BaseTree>)[t getParent];
 }
 
-- (void) setParent:(id<ANTLRBaseTree>)t With:(id<ANTLRBaseTree>) parent
+- (void) setParent:(id<BaseTree>)t With:(id<BaseTree>) parent
 {
     if ( t != nil )
-        [(id<ANTLRBaseTree>) t setParent:(id<ANTLRBaseTree>)parent];
+        [(id<BaseTree>) t setParent:(id<BaseTree>)parent];
 }
 
 /** What index is this node in the child list? Range: 0..n-1
@@ -320,12 +320,12 @@
  */
 - (NSInteger) getChildIndex:(id)t
 {
-    return ((ANTLRCommonTree *)t).childIndex;
+    return ((CommonTree *)t).childIndex;
 }
 
 - (void) setChildIndex:(id)t With:(NSInteger)index
 {
-    ((ANTLRCommonTree *)t).childIndex = index;
+    ((CommonTree *)t).childIndex = index;
 }
 
 - (void) replaceChildren:(id)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id)t
@@ -336,14 +336,14 @@
 - (NSInteger) getUniqueID:(id)node
 {
     if ( treeToUniqueIDMap == nil ) {
-        treeToUniqueIDMap = [ANTLRUniqueIDMap newANTLRUniqueIDMap];
+        treeToUniqueIDMap = [UniqueIDMap newUniqueIDMap];
     }
     NSNumber *prevID = [treeToUniqueIDMap getNode:node];
     if ( prevID != nil ) {
         return [prevID integerValue];
     }
     NSInteger anID = uniqueNodeID;
-    // ANTLRMapElement *aMapNode = [ANTLRMapElement newANTLRMapElementWithObj1:[NSNumber numberWithInteger:anID] Obj2:node];
+    // MapElement *aMapNode = [MapElement newMapElementWithObj1:[NSNumber numberWithInteger:anID] Obj2:node];
     [treeToUniqueIDMap putID:[NSNumber numberWithInteger:anID] Node:node];
     uniqueNodeID++;
     return anID;
@@ -359,7 +359,7 @@
  *  If you care what the token payload objects' type is, you should
  *  override this method and any other createToken variant.
  */
-- (id<ANTLRToken>) createToken:(NSInteger)aTType Text:(NSString *)text
+- (id<Token>) createToken:(NSInteger)aTType Text:(NSString *)text
 {
     return nil;
 }
@@ -378,7 +378,7 @@
  *  If you care what the token payload objects' type is, you should
  *  override this method and any other createToken variant.
  */
-- (id<ANTLRToken>) createToken:(id<ANTLRToken>) fromToken
+- (id<Token>) createToken:(id<Token>) fromToken
 {
     return nil;
 }
@@ -388,7 +388,7 @@
  *  seems like this will yield start=i and stop=i-1 in a nil node.
  *  Might be useful info so I'll not force to be i..i.
  */
-- (void) setTokenBoundaries:(id)aTree From:(id<ANTLRToken>)startToken To:(id<ANTLRToken>)stopToken
+- (void) setTokenBoundaries:(id)aTree From:(id<Token>)startToken To:(id<Token>)stopToken
 {
     return;
 }
@@ -414,12 +414,12 @@
     uniqueNodeID = aUniqueNodeID;
 }
 
-- (ANTLRUniqueIDMap *)getTreeToUniqueIDMap
+- (UniqueIDMap *)getTreeToUniqueIDMap
 {
     return treeToUniqueIDMap;
 }
 
-- (void) setTreeToUniqueIDMap:(ANTLRUniqueIDMap *)aMapListNode
+- (void) setTreeToUniqueIDMap:(UniqueIDMap *)aMapListNode
 {
     treeToUniqueIDMap = aMapListNode;
 }

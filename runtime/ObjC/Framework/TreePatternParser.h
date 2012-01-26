@@ -1,5 +1,5 @@
 //
-//  ANTLRTreePatternParser.h
+//  TreePatternParser.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -30,34 +30,34 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreePatternLexer.h"
-#import "ANTLRTreeWizard.h"
-#import "ANTLRTreeAdaptor.h"
+#import "TreePatternLexer.h"
+#import "TreeWizard.h"
+#import "TreeAdaptor.h"
 
-@interface ANTLRTreePatternParser : NSObject {
+@interface TreePatternParser : NSObject {
 
-ANTLRTreePatternLexer *tokenizer;
+TreePatternLexer *tokenizer;
 NSInteger ttype;
-ANTLRTreeWizard *wizard;
-id<ANTLRTreeAdaptor> adaptor;
+TreeWizard *wizard;
+id<TreeAdaptor> adaptor;
     
 }
 
-+ (ANTLRTreePatternParser *)newANTLRTreePatternParser:(ANTLRTreePatternLexer *)aTokenizer
-                                               Wizard:(ANTLRTreeWizard *)aWizard
-                                              Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
++ (TreePatternParser *)newTreePatternParser:(TreePatternLexer *)aTokenizer
+                                               Wizard:(TreeWizard *)aWizard
+                                              Adaptor:(id<TreeAdaptor>)anAdaptor;
 - (id) init;
-- (id) initWithTokenizer:(ANTLRTreePatternLexer *)tokenizer
-                  Wizard:(ANTLRTreeWizard *)aWizard
-                 Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
+- (id) initWithTokenizer:(TreePatternLexer *)tokenizer
+                  Wizard:(TreeWizard *)aWizard
+                 Adaptor:(id<TreeAdaptor>)anAdaptor;
 
 - (void) dealloc;
-- (id<ANTLRBaseTree>) pattern;
-- (id<ANTLRBaseTree>) parseTree;
-- (id<ANTLRBaseTree>) parseNode;
+- (id<BaseTree>) pattern;
+- (id<BaseTree>) parseTree;
+- (id<BaseTree>) parseNode;
 
-@property (retain) ANTLRTreePatternLexer *tokenizer;
+@property (retain) TreePatternLexer *tokenizer;
 @property NSInteger ttype;
-@property (retain) ANTLRTreeWizard *wizard;
-@property (retain) id<ANTLRTreeAdaptor> adaptor;
+@property (retain) TreeWizard *wizard;
+@property (retain) id<TreeAdaptor> adaptor;
 @end

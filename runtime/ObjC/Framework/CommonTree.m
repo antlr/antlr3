@@ -24,50 +24,50 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRCommonTree.h"
+#import "CommonTree.h"
 
 
-@implementation ANTLRCommonTree
+@implementation CommonTree
 
-+ (ANTLRCommonTree *)INVALID_NODE
++ (CommonTree *)INVALID_NODE
 {
-	return [[ANTLRCommonTree alloc] initWithToken:[ANTLRCommonToken invalidToken]];
+	return [[CommonTree alloc] initWithToken:[CommonToken invalidToken]];
 }
 
-+ (ANTLRCommonTree *)invalidNode
++ (CommonTree *)invalidNode
 {
-    // Had to cast to ANTLRCommonTree * here, because GCC is dumb.
-	return [[ANTLRCommonTree alloc] initWithToken:ANTLRCommonToken.INVALID_TOKEN];
+    // Had to cast to CommonTree * here, because GCC is dumb.
+	return [[CommonTree alloc] initWithToken:CommonToken.INVALID_TOKEN];
 }
 
-+ (ANTLRCommonTree *)newTree
++ (CommonTree *)newTree
 {
-    return [[ANTLRCommonTree alloc] init];
+    return [[CommonTree alloc] init];
 }
 
-+ (ANTLRCommonTree *)newTreeWithTree:(ANTLRCommonTree *)aTree
++ (CommonTree *)newTreeWithTree:(CommonTree *)aTree
 {
-    return [[ANTLRCommonTree alloc] initWithTreeNode:aTree];
+    return [[CommonTree alloc] initWithTreeNode:aTree];
 }
 
-+ (ANTLRCommonTree *)newTreeWithToken:(id<ANTLRToken>)aToken
++ (CommonTree *)newTreeWithToken:(id<Token>)aToken
 {
-	return [[ANTLRCommonTree alloc] initWithToken:aToken];
+	return [[CommonTree alloc] initWithToken:aToken];
 }
 
-+ (ANTLRCommonTree *)newTreeWithTokenType:(NSInteger)aTType
++ (CommonTree *)newTreeWithTokenType:(NSInteger)aTType
 {
-	return [[ANTLRCommonTree alloc] initWithTokenType:(NSInteger)aTType];
+	return [[CommonTree alloc] initWithTokenType:(NSInteger)aTType];
 }
 
-+ (ANTLRCommonTree *)newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText
++ (CommonTree *)newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText
 {
-	return [[ANTLRCommonTree alloc] initWithTokenType:(NSInteger)aTType Text:theText];
+	return [[CommonTree alloc] initWithTokenType:(NSInteger)aTType Text:theText];
 }
 
 - (id)init
 {
-	self = (ANTLRCommonTree *)[super init];
+	self = (CommonTree *)[super init];
 	if ( self != nil ) {
         token = nil;
 		startIndex = -1;
@@ -75,12 +75,12 @@
         parent = nil;
         childIndex = -1;
 	}
-	return (ANTLRCommonTree *)self;
+	return (CommonTree *)self;
 }
 
-- (id)initWithTreeNode:(ANTLRCommonTree *)aNode
+- (id)initWithTreeNode:(CommonTree *)aNode
 {
-	self = (ANTLRCommonTree *)[super init];
+	self = (CommonTree *)[super init];
 	if ( self != nil ) {
 		token = aNode.token;
         if ( token ) [token retain];
@@ -92,9 +92,9 @@
 	return self;
 }
 
-- (id)initWithToken:(id<ANTLRToken>)aToken
+- (id)initWithToken:(id<Token>)aToken
 {
-	self = (ANTLRCommonTree *)[super init];
+	self = (CommonTree *)[super init];
 	if ( self != nil ) {
 		token = aToken;
         if ( token ) [token retain];
@@ -108,9 +108,9 @@
 
 - (id)initWithTokenType:(NSInteger)aTokenType
 {
-	self = (ANTLRCommonTree *)[super init];
+	self = (CommonTree *)[super init];
 	if ( self != nil ) {
-		token = [[ANTLRCommonToken newToken:aTokenType] retain];
+		token = [[CommonToken newToken:aTokenType] retain];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;
@@ -123,9 +123,9 @@
 
 - (id) initWithTokenType:(NSInteger)aTokenType Text:(NSString *)theText
 {
-	self = (ANTLRCommonTree *)[super init];
+	self = (CommonTree *)[super init];
 	if ( self != nil ) {
-		token = [[ANTLRCommonToken newToken:aTokenType Text:theText] retain];
+		token = [[CommonToken newToken:aTokenType Text:theText] retain];
 //		startIndex = token.startIndex;
 		startIndex = -1;
 //		stopIndex = token.stopIndex;
@@ -151,15 +151,15 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRCommonTree *copy;
+    CommonTree *copy;
 	
     //    copy = [[[self class] allocWithZone:aZone] init];
-    copy = [super copyWithZone:aZone]; // allocation occurs in ANTLRBaseTree
+    copy = [super copyWithZone:aZone]; // allocation occurs in BaseTree
     if ( self.token )
         copy.token = [self.token copyWithZone:aZone];
     copy.startIndex = startIndex;
     copy.stopIndex = stopIndex;
-    copy.parent = (ANTLRCommonTree *)[self.parent copyWithZone:aZone];
+    copy.parent = (CommonTree *)[self.parent copyWithZone:aZone];
     copy.childIndex = childIndex;
     return copy;
 }
@@ -169,12 +169,12 @@
 	return token == nil;
 }
 
-- (ANTLRCommonToken *) getToken
+- (CommonToken *) getToken
 {
 	return token;
 }
 
-- (void) setToken:(ANTLRCommonToken *) aToken
+- (void) setToken:(CommonToken *) aToken
 {
 	if ( token != aToken ) {
 		if ( token ) [token release];
@@ -183,16 +183,16 @@
 	}
 }
 
-- (ANTLRCommonTree *) dupNode
+- (CommonTree *) dupNode
 {
-    return [ANTLRCommonTree newTreeWithTree:self ];
+    return [CommonTree newTreeWithTree:self ];
 }
 
 - (NSInteger)type
 {
 	if (token)
 		return token.type;
-	return ANTLRTokenTypeInvalid;
+	return TokenTypeInvalid;
 }
 
 - (NSString *)text
@@ -290,8 +290,8 @@
     if ( startIndex >= 0 && stopIndex >= 0 )
          return; // already set
     if ( [children count] > 0 ) {
-        ANTLRCommonTree *firstChild = (ANTLRCommonTree *)[children objectAtIndex:0];
-        ANTLRCommonTree *lastChild = (ANTLRCommonTree *)[children objectAtIndex:[children count]-1];
+        CommonTree *firstChild = (CommonTree *)[children objectAtIndex:0];
+        CommonTree *lastChild = (CommonTree *)[children objectAtIndex:[children count]-1];
         startIndex = [firstChild getTokenStartIndex];
         stopIndex = [lastChild getTokenStopIndex];
     }
@@ -302,12 +302,12 @@
     return childIndex;
 }
 
-- (ANTLRCommonTree *) getParent
+- (CommonTree *) getParent
 {
     return parent;
 }
 
-- (void) setParent:(ANTLRCommonTree *) t
+- (void) setParent:(CommonTree *) t
 {
     parent = t;
 }
@@ -327,7 +327,7 @@
     if ( [self isNil] ) {
         return @"nil";
     }
-    if ( [self type] == ANTLRTokenTypeInvalid ) {
+    if ( [self type] == TokenTypeInvalid ) {
         return @"<errornode>";
     }
     if ( token==nil ) {

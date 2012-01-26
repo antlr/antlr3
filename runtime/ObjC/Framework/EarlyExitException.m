@@ -24,17 +24,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLREarlyExitException.h"
+#import "EarlyExitException.h"
 
 
-@implementation ANTLREarlyExitException
+@implementation EarlyExitException
 
-+ (ANTLREarlyExitException *) newException:(id<ANTLRIntStream>) anInputStream decisionNumber:(NSInteger) aDecisionNumber
++ (EarlyExitException *) newException:(id<IntStream>) anInputStream decisionNumber:(NSInteger) aDecisionNumber
 {
 	return [[self alloc] initWithStream:anInputStream decisionNumber:aDecisionNumber];
 }
 
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream decisionNumber:(NSInteger) aDecisionNumber
+- (id) initWithStream:(id<IntStream>)anInputStream decisionNumber:(NSInteger) aDecisionNumber
 {
 	if ((self = [super initWithStream:anInputStream]) != nil) {
 		decisionNumber = aDecisionNumber;

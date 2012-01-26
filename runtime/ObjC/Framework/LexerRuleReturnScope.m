@@ -24,10 +24,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRLexerRuleReturnScope.h"
+#import "LexerRuleReturnScope.h"
 
 
-@implementation ANTLRLexerRuleReturnScope
+@implementation LexerRuleReturnScope
 
 @synthesize start;
 

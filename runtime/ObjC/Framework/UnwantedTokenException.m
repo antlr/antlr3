@@ -1,5 +1,5 @@
 //
-//  ANTLRUnwantedTokenException.m
+//  UnwantedTokenException.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -29,18 +29,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRUnwantedTokenException.h"
+#import "UnwantedTokenException.h"
 
-@implementation ANTLRUnwantedTokenException : ANTLRMismatchedTokenException
+@implementation UnwantedTokenException : MismatchedTokenException
 	/** Used for remote debugger deserialization */
-+ (ANTLRUnwantedTokenException *)newException
++ (UnwantedTokenException *)newException
 {
-    return [[ANTLRUnwantedTokenException alloc] init];
+    return [[UnwantedTokenException alloc] init];
 }
     
-+ (ANTLRUnwantedTokenException *)newException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput
++ (UnwantedTokenException *)newException:(NSInteger)expected Stream:(id<IntStream>)anInput
 {
-    return [[ANTLRUnwantedTokenException alloc] initWithStream:anInput And:expected];
+    return [[UnwantedTokenException alloc] initWithStream:anInput And:expected];
 }
 
 - (id) init
@@ -51,7 +51,7 @@
     return self;
 }
      
-- (id) initWithStream:(id<ANTLRIntStream>)anInput And:(NSInteger)expected
+- (id) initWithStream:(id<IntStream>)anInput And:(NSInteger)expected
 {
     self = [super initWithStream:anInput];
     if (self) {
@@ -60,7 +60,7 @@
     return self;
 }
     
-- (id<ANTLRToken>)getUnexpectedToken
+- (id<Token>)getUnexpectedToken
 {
     return token;
 }
@@ -68,7 +68,7 @@
 - (NSString *)toString
 {
     NSString *exp1 = [NSString stringWithFormat:@", expected %d", expecting];
-    if ( expecting == ANTLRTokenTypeInvalid ) {
+    if ( expecting == TokenTypeInvalid ) {
         exp1 = @"";
     }
     if ( token==nil ) {

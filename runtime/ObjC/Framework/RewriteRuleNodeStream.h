@@ -25,22 +25,22 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRewriteRuleElementStream.h"
+#import "RewriteRuleElementStream.h"
 
-@interface ANTLRRewriteRuleNodeStream : ANTLRRewriteRuleElementStream {
+@interface RewriteRuleNodeStream : RewriteRuleElementStream {
 
 }
 
-+ (ANTLRRewriteRuleNodeStream *) newANTLRRewriteRuleNodeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
-+ (ANTLRRewriteRuleNodeStream *) newANTLRRewriteRuleNodeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
-+ (ANTLRRewriteRuleNodeStream *) newANTLRRewriteRuleNode:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
++ (RewriteRuleNodeStream *) newRewriteRuleNodeStream:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
++ (RewriteRuleNodeStream *) newRewriteRuleNodeStream:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
++ (RewriteRuleNodeStream *) newRewriteRuleNode:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 
 - (id) nextNode;
-- (id) toTree:(id<ANTLRBaseTree>)element;
+- (id) toTree:(id<BaseTree>)element;
 - (id) dup:(id)element;
 
 @end

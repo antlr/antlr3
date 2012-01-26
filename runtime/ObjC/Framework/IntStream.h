@@ -28,11 +28,11 @@
 #define DEBUG_DEALLOC
 #endif
 
-@protocol ANTLRIntStream < NSObject, NSCopying >
+@protocol IntStream < NSObject, NSCopying >
 
 - (void) consume;
 
-// Get unichar at current input pointer + i ahead where i=1 is next character as int for including ANTLRCharStreamEOF (-1) in the data range
+// Get unichar at current input pointer + i ahead where i=1 is next character as int for including CharStreamEOF (-1) in the data range
 - (NSInteger) LA:(NSInteger) i;
 
 // Tell the stream to start buffering if it hasn't already.  Return
@@ -47,10 +47,6 @@
 // last symbol has been read.
 
 - (NSInteger) index;
-
-- (NSUInteger) line;
-
-- (NSUInteger) charPositionInLine;
 
 // Reset the stream so that next call to index would return marker.
 // The marker will usually be -index but it doesn't have to be.  It's

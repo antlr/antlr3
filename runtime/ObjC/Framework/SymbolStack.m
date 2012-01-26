@@ -1,5 +1,5 @@
 //
-//  ANTLRSymbolStack.m
+//  SymbolStack.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -32,15 +32,15 @@
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#import "ANTLRSymbolStack.h"
-#import "ANTLRTree.h"
+#import "SymbolStack.h"
+#import "Tree.h"
 
 
-@implementation ANTLRSymbolsScope
+@implementation SymbolsScope
 
-+ (ANTLRSymbolsScope *)newANTLRSymbolsScope
++ (SymbolsScope *)newSymbolsScope
 {
-    return( [[ANTLRSymbolsScope alloc] init] );
+    return( [[SymbolsScope alloc] init] );
 }
 
 - (id)init
@@ -53,18 +53,18 @@
 @end
 
 /*
- * Start of ANTLRSymbolStack
+ * Start of SymbolStack
  */
-@implementation ANTLRSymbolStack
+@implementation SymbolStack
 
-+(ANTLRSymbolStack *)newANTLRSymbolStack
++(SymbolStack *)newSymbolStack
 {
-    return [[ANTLRSymbolStack alloc] initWithLen:30];
+    return [[SymbolStack alloc] initWithLen:30];
 }
 
-+(ANTLRSymbolStack *)newANTLRSymbolStackWithLen:(NSInteger)cnt
++(SymbolStack *)newSymbolStackWithLen:(NSInteger)cnt
 {
-    return [[ANTLRSymbolStack alloc] initWithLen:cnt];
+    return [[SymbolStack alloc] initWithLen:cnt];
 }
 
 -(id)init
@@ -84,7 +84,7 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRSymbolStack" );
+    NSLog( @"called dealloc in SymbolStack" );
 #endif
 	[super dealloc];
 }
@@ -94,22 +94,22 @@
     return [super copyWithZone:aZone];
 }
 
--(ANTLRSymbolsScope *)getHashMapEntry:(NSInteger)idx
+-(SymbolsScope *)getHashMapEntry:(NSInteger)idx
 {
-	return( (ANTLRSymbolsScope *)[super objectAtIndex:idx] );
+	return( (SymbolsScope *)[super objectAtIndex:idx] );
 }
 
--(ANTLRSymbolsScope **)getHashMap
+-(SymbolsScope **)getHashMap
 {
-	return( (ANTLRSymbolsScope **)ptrBuffer );
+	return( (SymbolsScope **)ptrBuffer );
 }
 
--(ANTLRSymbolsScope *) pop
+-(SymbolsScope *) pop
 {
-    return (ANTLRSymbolsScope *)[super pop];
+    return (SymbolsScope *)[super pop];
 }
 
-- (void) insertObject:(ANTLRSymbolsScope *)aRule atIndex:(NSInteger)idx
+- (void) insertObject:(SymbolsScope *)aRule atIndex:(NSInteger)idx
 {
     if ( aRule != ptrBuffer[idx] ) {
         if ( ptrBuffer[idx] ) [ptrBuffer[idx] release];
@@ -118,9 +118,9 @@
     ptrBuffer[idx] = aRule;
 }
 
-- (ANTLRSymbolsScope *)objectAtIndex:(NSInteger)idx
+- (SymbolsScope *)objectAtIndex:(NSInteger)idx
 {
-    return (ANTLRSymbolsScope *)[super objectAtIndex:idx];
+    return (SymbolsScope *)[super objectAtIndex:idx];
 }
 
 @end

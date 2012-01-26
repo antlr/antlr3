@@ -27,7 +27,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <CoreFoundation/CoreFoundation.h>
-#import "ANTLRToken.h"
+#import "Token.h"
 #import "AMutableArray.h"
 
 #define BITS (sizeof(NSUInteger) * 8)
@@ -43,14 +43,14 @@
 
 #pragma mark Class Methods
 
-+ (ANTLRBitSet *) newANTLRBitSet;
-+ (ANTLRBitSet *) newANTLRBitSetWithType:(ANTLRTokenType)type;
++ (ANTLRBitSet *) newBitSet;
++ (ANTLRBitSet *) newBitSetWithType:(TokenType)type;
 /** Construct a ANTLRBitSet given the size
  * @param nbits The size of the ANTLRBitSet in bits
  */
-+ (ANTLRBitSet *) newANTLRBitSetWithNBits:(NSUInteger)nbits;
-+ (ANTLRBitSet *) newANTLRBitSetWithArray:(AMutableArray *)types;
-+ (ANTLRBitSet *) newANTLRBitSetWithBits:(const unsigned long long *)theBits Count:(NSUInteger)longCount;
++ (ANTLRBitSet *) newBitSetWithNBits:(NSUInteger)nbits;
++ (ANTLRBitSet *) newBitSetWithArray:(AMutableArray *)types;
++ (ANTLRBitSet *) newBitSetWithBits:(const unsigned long long *)theBits Count:(NSUInteger)longCount;
 
 + (ANTLRBitSet *) of:(NSUInteger)el;
 + (ANTLRBitSet *) of:(NSUInteger)a And2:(NSUInteger)b;
@@ -60,7 +60,7 @@
 #pragma mark Initializer
 
 - (ANTLRBitSet *) init;
-- (ANTLRBitSet *) initWithType:(ANTLRTokenType)type;
+- (ANTLRBitSet *) initWithType:(TokenType)type;
 - (ANTLRBitSet *) initWithNBits:(NSUInteger)nbits;
 - (ANTLRBitSet *) initWithBitVector:(CFMutableBitVectorRef)theBitVector;
 - (ANTLRBitSet *) initWithBits:(const unsigned long long const*)theBits Count:(NSUInteger)theCount;

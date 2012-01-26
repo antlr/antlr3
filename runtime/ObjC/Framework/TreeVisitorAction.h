@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeVisitorAction.h
+//  TreeVisitorAction.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -32,12 +32,12 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface ANTLRTreeVisitorAction : NSObject
+@interface TreeVisitorAction : NSObject
 {
 
 }
 
-+ (ANTLRTreeVisitorAction *)newANTLRTreeVisitorAction;
++ (TreeVisitorAction *)newTreeVisitorAction;
 - (id) init;
 
 /** Execute an action before visiting children of t.  Return t or
@@ -45,12 +45,12 @@
  *  with the return value.  Children of returned value will be
  *  visited if using TreeVisitor.visit().
  */
-- (ANTLRTreeVisitorAction *)pre:(ANTLRTreeVisitorAction *) t;
+- (TreeVisitorAction *)pre:(TreeVisitorAction *) t;
 
 /** Execute an action after visiting children of t.  Return t or
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.
  */
-- (ANTLRTreeVisitorAction *)post:(ANTLRTreeVisitorAction *) t;
+- (TreeVisitorAction *)post:(TreeVisitorAction *) t;
 
 @end

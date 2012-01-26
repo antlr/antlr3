@@ -24,51 +24,51 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRToken.h"
-#import "ANTLRCommonTokenStream.h"
+#import "Token.h"
+#import "CommonTokenStream.h"
 
 
-@implementation ANTLRCommonTokenStream
+@implementation CommonTokenStream
 
 @synthesize channelOverride;
 @synthesize channel;
 
 #pragma mark Initialization
 
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStream
++ (CommonTokenStream *)newCommonTokenStream
 {
-    return [[ANTLRCommonTokenStream alloc] init];
+    return [[CommonTokenStream alloc] init];
 }
 
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
++ (CommonTokenStream *)newCommonTokenStreamWithTokenSource:(id<TokenSource>)theTokenSource
 {
-    return [[ANTLRCommonTokenStream alloc] initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource];
+    return [[CommonTokenStream alloc] initWithTokenSource:(id<TokenSource>)theTokenSource];
 }
 
-+ (ANTLRCommonTokenStream *)newANTLRCommonTokenStreamWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel
++ (CommonTokenStream *)newCommonTokenStreamWithTokenSource:(id<TokenSource>)theTokenSource Channel:(NSUInteger)aChannel
 {
-    return [[ANTLRCommonTokenStream alloc] initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:aChannel];
+    return [[CommonTokenStream alloc] initWithTokenSource:(id<TokenSource>)theTokenSource Channel:aChannel];
 }
 
 - (id) init
 {
 	if ((self = [super init]) != nil) {
 		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
-		channel = ANTLRTokenChannelDefault;
+		channel = TokenChannelDefault;
 	}
 	return self;
 }
 
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource
+- (id) initWithTokenSource:(id<TokenSource>)theTokenSource
 {
 	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
 		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
-		channel = ANTLRTokenChannelDefault;
+		channel = TokenChannelDefault;
 	}
 	return self;
 }
 
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)theTokenSource Channel:(NSUInteger)aChannel
+- (id) initWithTokenSource:(id<TokenSource>)theTokenSource Channel:(NSUInteger)aChannel
 {
 	if ((self = [super initWithTokenSource:theTokenSource]) != nil) {
 		channelOverride = [[AMutableDictionary dictionaryWithCapacity:100] retain];
@@ -80,7 +80,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRCommonTokenStream" );
+    NSLog( @"called dealloc in CommonTokenStream" );
 #endif
 	if ( channelOverride ) [channelOverride release];
 	if ( tokens ) [tokens release];
@@ -94,7 +94,7 @@
     if (index == -1) [self setup];
     index++;
     [self sync:index];
-    while ( ((ANTLRCommonToken *)[tokens objectAtIndex:index]).channel != channel ) {
+    while ( ((CommonToken *)[tokens objectAtIndex:index]).channel != channel ) {
 		index++;
 		[self sync:index];
 	}
@@ -102,7 +102,7 @@
 
 #pragma mark Lookahead
 
-- (id<ANTLRToken>) LB:(NSInteger)k
+- (id<Token>) LB:(NSInteger)k
 {
 	if ( k == 0 || (index-k) < 0 ) {
 		return nil;
@@ -120,7 +120,7 @@
 	return [tokens objectAtIndex:i];
 }
 
-- (id<ANTLRToken>) LT:(NSInteger)k
+- (id<Token>) LT:(NSInteger)k
 {
 	if ( index == -1 ) [self setup];
 	if ( k == 0 ) return nil;
@@ -132,7 +132,7 @@
 		n++;
 	}
 //	if ( i >= (NSInteger)[tokens count] ) {
-//		return [ANTLRCommonToken eofToken];
+//		return [CommonToken eofToken];
 //	}
     if ( i > range ) range = i;
 	return [tokens objectAtIndex:i];
@@ -143,7 +143,7 @@
 - (NSInteger) skipOffChannelTokens:(NSInteger) idx
 {
     [self sync:idx];
-	while ( ((ANTLRCommonToken *)[tokens objectAtIndex:idx]).channel != channel ) {
+	while ( ((CommonToken *)[tokens objectAtIndex:idx]).channel != channel ) {
 		idx++;
         [self sync:idx];
 	}
@@ -152,7 +152,7 @@
 
 - (NSInteger) skipOffChannelTokensReverse:(NSInteger) i
 {
-	while ( i >= 0 && ((ANTLRCommonToken *)[tokens objectAtIndex:i]).channel != channel ) {
+	while ( i >= 0 && ((CommonToken *)[tokens objectAtIndex:i]).channel != channel ) {
 		i--;
 	}
 	return i;
@@ -163,7 +163,7 @@
     index = 0;
     [self sync:0];
     int i = 0;
-    while ( ((ANTLRCommonToken *)[tokens objectAtIndex:i]).channel != channel ) {
+    while ( ((CommonToken *)[tokens objectAtIndex:i]).channel != channel ) {
         i++;
         [self sync:i];
     }
@@ -176,28 +176,28 @@
     NSInteger n = 0;
     [self fill];
     for( int i = 0; i < [tokens count]; i++ ) {
-        ANTLRCommonToken *t = [tokens objectAtIndex:i];
+        CommonToken *t = [tokens objectAtIndex:i];
         if ( t.channel == channel )
             n++;
-        if ( t.type == ANTLRTokenTypeEOF )
+        if ( t.type == TokenTypeEOF )
             break;
     }
     return n;
 }
 
 /** Reset this token stream by setting its token source. */
-- (void) setTokenSource:(id<ANTLRTokenSource>)aTokenSource
+- (void) setTokenSource:(id<TokenSource>)aTokenSource
 {
     [super setTokenSource:aTokenSource];
-    channel = ANTLRTokenChannelDefault;
+    channel = TokenChannelDefault;
 }
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRCommonTokenStream *copy;
+    CommonTokenStream *copy;
 	
     //    copy = [[[self class] allocWithZone:aZone] init];
-    copy = [super copyWithZone:aZone]; // allocation occurs in ANTLRBaseTree
+    copy = [super copyWithZone:aZone]; // allocation occurs in BaseTree
     if ( self.channelOverride )
         copy.channelOverride = [channelOverride copyWithZone:aZone];
     copy.channel = channel;
@@ -234,7 +234,7 @@
 
 #pragma mark Accessors
 
-- (id<ANTLRTokenSource>) getTokenSource
+- (id<TokenSource>) getTokenSource
 {
     return tokenSource; 
 }
@@ -252,7 +252,7 @@
 	AMutableArray *filteredTokens = [AMutableArray arrayWithCapacity:100];
 	unsigned int i=0;
 	for (i = startIndex; i<=stopIndex; i++) {
-		id<ANTLRToken> token = [tokens objectAtIndex:i];
+		id<Token> token = [tokens objectAtIndex:i];
 		if (aBitSet == nil || [aBitSet member:token.type]) {
 			[filteredTokens addObject:token];
 		}
@@ -282,7 +282,7 @@
 	return returnTokens;
 }
 
-- (id<ANTLRToken>) getToken:(NSInteger)i
+- (id<Token>) getToken:(NSInteger)i
 {
 	return [tokens objectAtIndex:i];
 }
@@ -319,7 +319,7 @@
 - (NSString *) toStringFromStart:(NSInteger)startIdx ToEnd:(NSInteger) stopIdx
 {
     NSMutableString *stringBuffer;
-    id<ANTLRToken> t;
+    id<Token> t;
 
     if ( startIdx < 0 || stopIdx < 0 ) {
         return nil;
@@ -332,13 +332,13 @@
     }
     stringBuffer = [NSMutableString stringWithCapacity:30];
     for (int i = startIdx; i <= stopIdx; i++) {
-        t = (id<ANTLRToken>)[tokens objectAtIndex:i];
+        t = (id<Token>)[tokens objectAtIndex:i];
         [stringBuffer appendString:[t text]];
     }
     return stringBuffer;
 }
 
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken
+- (NSString *) toStringFromToken:(id<Token>)startToken ToToken:(id<Token>)stopToken
 {
 	if (startToken && stopToken) {
 		int startIdx = [startToken getTokenIndex];

@@ -24,20 +24,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRFailedPredicateException.h"
+#import "FailedPredicateException.h"
 
 
-@implementation ANTLRFailedPredicateException
+@implementation FailedPredicateException
 
 @synthesize predicate;
 @synthesize ruleName;
 
-+ (ANTLRFailedPredicateException *) newException:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream
++ (FailedPredicateException *) newException:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<IntStream>)theStream
 {
-	return [[ANTLRFailedPredicateException alloc] initWithRuleName:theRuleName predicate:thePredicate stream:theStream];
+	return [[FailedPredicateException alloc] initWithRuleName:theRuleName predicate:thePredicate stream:theStream];
 }
 
-- (ANTLRFailedPredicateException *) initWithRuleName:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream
+- (FailedPredicateException *) initWithRuleName:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<IntStream>)theStream
 {
 	if ((self = [super initWithStream:theStream])) {
 		[self setPredicate:thePredicate];
@@ -49,7 +49,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRFailedPredicateException" );
+    NSLog( @"called dealloc in FailedPredicateException" );
 #endif
 	[self setPredicate:nil];
 	[self setRuleName:nil];

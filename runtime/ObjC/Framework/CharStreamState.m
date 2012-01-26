@@ -25,18 +25,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRCharStreamState.h"
+#import "CharStreamState.h"
 
 
-@implementation ANTLRCharStreamState
+@implementation CharStreamState
 
 @synthesize index;
 @synthesize line;
 @synthesize charPositionInLine;
 
-+ newANTLRCharStreamState
++ newCharStreamState
 {
-    return [[ANTLRCharStreamState alloc] init];
+    return [[CharStreamState alloc] init];
 }
 
 - (id) init

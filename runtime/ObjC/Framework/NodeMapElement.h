@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleMapElement.h
+//  RuleMapElement.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -30,26 +30,26 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseMapElement.h"
-#import "ANTLRBaseTree.h"
+#import "BaseMapElement.h"
+#import "BaseTree.h"
 
-@interface ANTLRNodeMapElement : ANTLRBaseMapElement {
-    id<ANTLRBaseTree> node;
+@interface NodeMapElement : BaseMapElement {
+    id<BaseTree> node;
 }
 
-@property (retain, getter=getNode, setter=setNode:) id<ANTLRBaseTree> node;
+@property (retain, getter=getNode, setter=setNode:) id<BaseTree> node;
 
 + (void)initialize;
 
-+ (id) newANTLRNodeMapElement;
-+ (id) newANTLRNodeMapElementWithIndex:(id)anIndex Node:(id<ANTLRBaseTree>)aNode;
++ (id) newNodeMapElement;
++ (id) newNodeMapElementWithIndex:(id)anIndex Node:(id<BaseTree>)aNode;
 - (id) init;
 - (id) initWithAnIndex:(id)anIndex Node:(id)aNode;
 
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (id<ANTLRBaseTree>)getNode;
-- (void)setNode:(id<ANTLRBaseTree>)aNode;
+- (id<BaseTree>)getNode;
+- (void)setNode:(id<BaseTree>)aNode;
 
 - (NSInteger)size;
 

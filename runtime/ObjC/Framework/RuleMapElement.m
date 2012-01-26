@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleMapElement.m
+//  RuleMapElement.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -29,26 +29,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRuleMapElement.h"
+#import "RuleMapElement.h"
 
 
-@implementation ANTLRRuleMapElement
+@implementation RuleMapElement
 
 @synthesize ruleNum;
 
-+ (ANTLRRuleMapElement *)newANTLRRuleMapElement
++ (RuleMapElement *)newRuleMapElement
 {
-    return [[ANTLRRuleMapElement alloc] init];
+    return [[RuleMapElement alloc] init];
 }
 
-+ (ANTLRRuleMapElement *)newANTLRRuleMapElementWithIndex:(NSNumber *)aNumber
++ (RuleMapElement *)newRuleMapElementWithIndex:(NSNumber *)aNumber
 {
-    return [[ANTLRRuleMapElement alloc] initWithAnIndex:(NSNumber *)aNumber];
+    return [[RuleMapElement alloc] initWithAnIndex:(NSNumber *)aNumber];
 }
 
-+ (ANTLRRuleMapElement *)newANTLRRuleMapElementWithIndex:(NSNumber *)aNumber RuleNum:(NSNumber *)aRuleNum
++ (RuleMapElement *)newRuleMapElementWithIndex:(NSNumber *)aNumber RuleNum:(NSNumber *)aRuleNum
 {
-    return [[ANTLRRuleMapElement alloc] initWithAnIndex:aNumber RuleNum:aRuleNum];
+    return [[RuleMapElement alloc] initWithAnIndex:aNumber RuleNum:aRuleNum];
 }
 
 - (id) init
@@ -79,7 +79,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRRuleMapElement *copy;
+    RuleMapElement *copy;
     
     copy = [super copyWithZone:aZone];
     copy.ruleNum = ruleNum;

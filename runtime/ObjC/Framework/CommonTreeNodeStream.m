@@ -24,42 +24,42 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRCommonTreeNodeStream.h"
-#import "ANTLRTokenStream.h"
-#import "ANTLRIntStream.h"
-#import "ANTLRCharStream.h"
+#import "CommonTreeNodeStream.h"
+#import "TokenStream.h"
+#import "IntStream.h"
+#import "CharStream.h"
 #import "AMutableArray.h"
-#import "ANTLRCommonTreeAdaptor.h"
+#import "CommonTreeAdaptor.h"
 
 #ifndef DEBUG_DEALLOC
 #define DEBUG_DEALLOC
 #endif
 
-@implementation ANTLRCommonTreeNodeStream
+@implementation CommonTreeNodeStream
 
 @synthesize root;
 @synthesize tokens;
 @synthesize adaptor;
 @synthesize level;
 
-+ (ANTLRCommonTreeNodeStream *) newANTLRCommonTreeNodeStream:(ANTLRCommonTree *)theTree
++ (CommonTreeNodeStream *) newCommonTreeNodeStream:(CommonTree *)theTree
 {
-    return [[ANTLRCommonTreeNodeStream alloc] initWithTree:theTree];
+    return [[CommonTreeNodeStream alloc] initWithTree:theTree];
 }
 
-+ (ANTLRCommonTreeNodeStream *) newANTLRCommonTreeNodeStream:(id<ANTLRTreeAdaptor>)anAdaptor Tree:(ANTLRCommonTree *)theTree
++ (CommonTreeNodeStream *) newCommonTreeNodeStream:(id<TreeAdaptor>)anAdaptor Tree:(CommonTree *)theTree
 {
-    return [[ANTLRCommonTreeNodeStream alloc] initWithTreeAdaptor:anAdaptor Tree:theTree];
+    return [[CommonTreeNodeStream alloc] initWithTreeAdaptor:anAdaptor Tree:theTree];
 }
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree
+- (id) initWithTree:(CommonTree *)theTree
 {
     if ((self = [super init]) != nil ) {
-        adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
+        adaptor = [[CommonTreeAdaptor newTreeAdaptor] retain];
         root = [theTree retain];
-        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
-        it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
-        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
+        navigationNodeEOF = [[adaptor createTree:TokenTypeEOF Text:@"EOF"] retain]; // set EOF
+        it = [[TreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
+        calls = [[IntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
         /** Tree (nil A B C) trees like flat A B C streams */
         hasNilRoot = NO;
         level = 0;
@@ -67,15 +67,15 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor Tree:(ANTLRCommonTree *)theTree
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor Tree:(CommonTree *)theTree
 {
     if ((self = [super init]) != nil ) {
         adaptor = [anAdaptor retain];
         root = [theTree retain];
-        navigationNodeEOF = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain]; // set EOF
+        navigationNodeEOF = [[adaptor createTree:TokenTypeEOF Text:@"EOF"] retain]; // set EOF
         //    it = [root objectEnumerator];
-        it = [[ANTLRTreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
-        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
+        it = [[TreeIterator newANTRLTreeIteratorWithAdaptor:adaptor andTree:root] retain];
+        calls = [[IntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
         /** Tree (nil A B C) trees like flat A B C streams */
         hasNilRoot = NO;
         level = 0;
@@ -87,7 +87,7 @@
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRCommonTreeNodeStream" );
+    NSLog( @"called dealloc in CommonTreeNodeStream" );
 #endif
     if ( root ) [root release];
     if ( tokens ) [tokens release];
@@ -129,9 +129,9 @@
     return t;
 }
 
-- (BOOL) isEOF:(id<ANTLRBaseTree>) aTree
+- (BOOL) isEOF:(id<BaseTree>) aTree
 {
-    return [adaptor getType:(ANTLRCommonTree *)aTree] == ANTLRTokenTypeEOF;
+    return [adaptor getType:(CommonTree *)aTree] == TokenTypeEOF;
 }
 
 - (void) setUniqueNavigationNodes:(BOOL) uniqueNavigationNodes
@@ -148,12 +148,12 @@
     return [[self getTokenStream] getSourceName];
 }
 
-- (id<ANTLRTokenStream>) getTokenStream
+- (id<TokenStream>) getTokenStream
 {
     return tokens;
 }
 
-- (void) setTokenStream:(id<ANTLRTokenStream>)theTokens
+- (void) setTokenStream:(id<TokenStream>)theTokens
 {
     if ( tokens != theTokens ) {
         if ( tokens ) [tokens release];
@@ -162,12 +162,12 @@
     tokens = theTokens;
 }
 
-- (ANTLRCommonTreeAdaptor *) getTreeAdaptor
+- (CommonTreeAdaptor *) getTreeAdaptor
 {
     return adaptor;
 }
 
-- (void) setTreeAdaptor:(ANTLRCommonTreeAdaptor *) anAdaptor
+- (void) setTreeAdaptor:(CommonTreeAdaptor *) anAdaptor
 {
     if ( adaptor != anAdaptor ) {
         if ( adaptor ) [adaptor release];
@@ -176,9 +176,9 @@
     adaptor = anAdaptor;
 }
 
-- (ANTLRCommonTree *)getNode:(NSInteger) i
+- (CommonTree *)getNode:(NSInteger) i
 {
-    @throw [ANTLRRuntimeException newException:@"Absolute node indexes are meaningless in an unbuffered stream"];
+    @throw [RuntimeException newException:@"Absolute node indexes are meaningless in an unbuffered stream"];
     return nil;
 }
 
@@ -193,7 +193,7 @@
 - (void) push:(NSInteger) anIndex
 {
     if ( calls == nil ) {
-        calls = [[ANTLRIntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
+        calls = [[IntArray newArrayWithLen:INITIAL_CALL_STACK_SIZE] retain];
     }
     [calls push:p]; // save current anIndex
     [self seek:anIndex];
@@ -218,7 +218,7 @@
     }
 }
 
-- (NSString *) toStringFromNode:(id<ANTLRBaseTree>)startNode ToNode:(id<ANTLRBaseTree>)stopNode
+- (NSString *) toStringFromNode:(id<BaseTree>)startNode ToNode:(id<BaseTree>)stopNode
 {
     // we'll have to walk from start to stop in tree; we're not keeping
     // a complete node stream buffer
@@ -232,7 +232,7 @@
     NSMutableString *buf = [NSMutableString stringWithCapacity:5];
     id obj = [self LT:1];
     NSInteger type = [adaptor getType:obj];
-    while ( type != ANTLRTokenTypeEOF ) {
+    while ( type != TokenTypeEOF ) {
         [buf appendString:@" "];
         [buf appendString:[NSString stringWithFormat:@"%d", type]];
         [self consume];

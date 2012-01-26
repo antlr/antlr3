@@ -25,16 +25,16 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRCommonToken.h"
+#import "CommonToken.h"
 
-static ANTLRCommonToken *SKIP_TOKEN;
-static ANTLRCommonToken *EOF_TOKEN;
-static ANTLRCommonToken *INVALID_TOKEN;
+static CommonToken *SKIP_TOKEN;
+static CommonToken *EOF_TOKEN;
+static CommonToken *INVALID_TOKEN;
 
-@implementation ANTLRCommonToken
+@implementation CommonToken
 
-    static NSInteger DEFAULT_CHANNEL = ANTLRTokenChannelDefault;
-    static NSInteger INVALID_TOKEN_TYPE = ANTLRTokenTypeInvalid;
+    static NSInteger DEFAULT_CHANNEL = TokenChannelDefault;
+    static NSInteger INVALID_TOKEN_TYPE = TokenTypeInvalid;
 
 
 @synthesize text;
@@ -49,15 +49,15 @@ static ANTLRCommonToken *INVALID_TOKEN;
 
 + (void) initialize
 {
-    EOF_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeEOF Text:@"EOF"];
-    SKIP_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Skip"];
-    INVALID_TOKEN = [ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Invalid"];
+    EOF_TOKEN = [CommonToken newToken:TokenTypeEOF Text:@"EOF"];
+    SKIP_TOKEN = [CommonToken newToken:TokenTypeInvalid Text:@"Skip"];
+    INVALID_TOKEN = [CommonToken newToken:TokenTypeInvalid Text:@"Invalid"];
     [EOF_TOKEN retain];
     [SKIP_TOKEN retain];
     [INVALID_TOKEN retain];
 }
 
-+ (ANTLRCommonToken *)INVALID_TOKEN
++ (CommonToken *)INVALID_TOKEN
 {
     return INVALID_TOKEN;
 }
@@ -72,70 +72,70 @@ static ANTLRCommonToken *INVALID_TOKEN;
     return INVALID_TOKEN_TYPE;
 }
 
-+ (ANTLRCommonToken *) newToken
++ (CommonToken *) newToken
 {
-    return [[ANTLRCommonToken alloc] init];
+    return [[CommonToken alloc] init];
 }
 
-+ (ANTLRCommonToken *) newToken:(id<ANTLRCharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop
++ (CommonToken *) newToken:(id<CharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop
 {
-    return [[ANTLRCommonToken alloc] initWithInput:(id<ANTLRCharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop];
+    return [[CommonToken alloc] initWithInput:(id<CharStream>)anInput Type:(NSInteger)aTType Channel:(NSInteger)aChannel Start:(NSInteger)aStart Stop:(NSInteger)aStop];
 }
 
-+ (ANTLRCommonToken *) newToken:(ANTLRTokenType)tokenType
++ (CommonToken *) newToken:(TokenType)tokenType
 {
-    return( [[ANTLRCommonToken alloc] initWithType:tokenType] );
+    return( [[CommonToken alloc] initWithType:tokenType] );
 }
 
-+ (ANTLRCommonToken *) newToken:(NSInteger)tokenType Text:(NSString *)tokenText
++ (CommonToken *) newToken:(NSInteger)tokenType Text:(NSString *)tokenText
 {
-    return( [[ANTLRCommonToken alloc] initWithType:tokenType Text:tokenText] );
+    return( [[CommonToken alloc] initWithType:tokenType Text:tokenText] );
 }
 
-+ (ANTLRCommonToken *) newTokenWithToken:(ANTLRCommonToken *)fromToken
++ (CommonToken *) newTokenWithToken:(CommonToken *)fromToken
 {
-    return( [[ANTLRCommonToken alloc] initWithToken:fromToken] );
+    return( [[CommonToken alloc] initWithToken:fromToken] );
 }
 
 // return the singleton EOF Token 
-+ (id<ANTLRToken>) eofToken
++ (id<Token>) eofToken
 {
     if (EOF_TOKEN == nil) {
-        EOF_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeEOF Text:@"EOF"] retain];
+        EOF_TOKEN = [[CommonToken newToken:TokenTypeEOF Text:@"EOF"] retain];
     }
     return EOF_TOKEN;
 }
 
 // return the singleton skip Token 
-+ (id<ANTLRToken>) skipToken
++ (id<Token>) skipToken
 {
     if (SKIP_TOKEN == nil) {
-        SKIP_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Skip"] retain];
+        SKIP_TOKEN = [[CommonToken newToken:TokenTypeInvalid Text:@"Skip"] retain];
     }
     return SKIP_TOKEN;
 }
 
 // return the singleton skip Token 
-+ (id<ANTLRToken>) invalidToken
++ (id<Token>) invalidToken
 {
     if (INVALID_TOKEN == nil) {
-        INVALID_TOKEN = [[ANTLRCommonToken newToken:ANTLRTokenTypeInvalid Text:@"Invalid"] retain];
+        INVALID_TOKEN = [[CommonToken newToken:TokenTypeInvalid Text:@"Invalid"] retain];
     }
     return SKIP_TOKEN;
 }
 
 // the default channel for this class of Tokens
-+ (ANTLRTokenChannel) defaultChannel
++ (TokenChannel) defaultChannel
 {
-    return ANTLRTokenChannelDefault;
+    return TokenChannelDefault;
 }
 
 - (id) init
 {
     if ((self = [super init]) != nil) {
         input = nil;
-        type = ANTLRTokenTypeInvalid;
-        channel = ANTLRTokenChannelDefault;
+        type = TokenTypeInvalid;
+        channel = TokenChannelDefault;
         startIndex = 0;
         stopIndex = 0;
     }
@@ -143,7 +143,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 }
 
 // designated initializer
-- (id) initWithInput:(id<ANTLRCharStream>)anInput
+- (id) initWithInput:(id<CharStream>)anInput
                            Type:(NSInteger)aTType
                              Channel:(NSInteger)aChannel
                                Start:(NSInteger)aStart
@@ -156,7 +156,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
         channel = aChannel;
         startIndex = aStart;
         stopIndex = aStop;
-        if (type == ANTLRTokenTypeEOF)
+        if (type == TokenTypeEOF)
             text = @"EOF";
         else
             text = [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
@@ -165,7 +165,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
     return self;
 }
 
-- (id) initWithToken:(ANTLRCommonToken *)oldToken
+- (id) initWithToken:(CommonToken *)oldToken
 {
     if ((self = [super init]) != nil) {
         text = [NSString stringWithString:oldToken.text];
@@ -177,7 +177,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
         channel = oldToken.channel;
         input = oldToken.input;
         if ( input ) [input retain];
-        if ( [oldToken isKindOfClass:[ANTLRCommonToken class]] ) {
+        if ( [oldToken isKindOfClass:[CommonToken class]] ) {
             startIndex = oldToken.startIndex;
             stopIndex = oldToken.stopIndex;
         }
@@ -185,7 +185,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
     return self;
 }
 
-- (id) initWithType:(ANTLRTokenType)aTType
+- (id) initWithType:(TokenType)aTType
 {
     if ((self = [super init]) != nil) {
         self.type = aTType;
@@ -193,7 +193,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
     return self;
 }
 
-- (id) initWithType:(ANTLRTokenType)aTType Text:(NSString *)tokenText
+- (id) initWithType:(TokenType)aTType Text:(NSString *)tokenText
 {
     if ((self = [super init]) != nil) {
         self.type = aTType;
@@ -206,7 +206,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRCommonToken" );
+    NSLog( @"called dealloc in CommonToken" );
 #endif
     if ( input ) [input release];
     if ( text ) [text release];
@@ -217,7 +217,7 @@ static ANTLRCommonToken *INVALID_TOKEN;
 // the input stream is *not* copied!
 - (id) copyWithZone:(NSZone *)theZone
 {
-    ANTLRCommonToken *copy = [[[self class] allocWithZone:theZone] init];
+    CommonToken *copy = [[[self class] allocWithZone:theZone] init];
     
     if (text)
         copy.text = [text copyWithZone:nil];
@@ -313,12 +313,12 @@ static ANTLRCommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  input 
 //---------------------------------------------------------- 
-- (id<ANTLRCharStream>) input
+- (id<CharStream>) input
 {
     return input; 
 }
 
-- (void) setInput: (id<ANTLRCharStream>) anInput
+- (void) setInput: (id<CharStream>) anInput
 {
     if (input != anInput) {
         if ( input ) [input release];

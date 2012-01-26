@@ -25,37 +25,37 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseRecognizer.h"
-#import "ANTLRTreeNodeStream.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRMismatchedTreeNodeException.h"
+#import "BaseRecognizer.h"
+#import "TreeNodeStream.h"
+#import "CommonTreeAdaptor.h"
+#import "MismatchedTreeNodeException.h"
 
-@interface ANTLRTreeParser : ANTLRBaseRecognizer {
-	id<ANTLRTreeNodeStream> input;
+@interface TreeParser : BaseRecognizer {
+	id<TreeNodeStream> input;
 }
 
-@property (retain, getter=input, setter=setInput:) id<ANTLRTreeNodeStream> input;
+@property (retain, getter=input, setter=setInput:) id<TreeNodeStream> input;
 
-+ (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput;
-+ (id) newANTLRTreeParser:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)state;
++ (id) newTreeParser:(id<TreeNodeStream>)anInput;
++ (id) newTreeParser:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)state;
 
-- (id) initWithStream:(id<ANTLRTreeNodeStream>)theInput;
-- (id) initWithStream:(id<ANTLRTreeNodeStream>)theInput
-                State:(ANTLRRecognizerSharedState *)state;
+- (id) initWithStream:(id<TreeNodeStream>)theInput;
+- (id) initWithStream:(id<TreeNodeStream>)theInput
+                State:(RecognizerSharedState *)state;
 
 
-- (id<ANTLRTreeNodeStream>)input;
-- (void) setInput:(id<ANTLRTreeNodeStream>)anInput;
+- (id<TreeNodeStream>)input;
+- (void) setInput:(id<TreeNodeStream>)anInput;
 
-- (void) setTreeNodeStream:(id<ANTLRTreeNodeStream>) anInput;
-- (id<ANTLRTreeNodeStream>) getTreeNodeStream;
+- (void) setTreeNodeStream:(id<TreeNodeStream>) anInput;
+- (id<TreeNodeStream>) getTreeNodeStream;
 
 - (NSString *)getSourceName;
 
-- (id) getCurrentInputSymbol:(id<ANTLRIntStream>) anInput;
+- (id) getCurrentInputSymbol:(id<IntStream>) anInput;
 
-- (id) getMissingSymbol:(id<ANTLRIntStream>)input
-              Exception:(ANTLRRecognitionException *) e
+- (id) getMissingSymbol:(id<IntStream>)input
+              Exception:(RecognitionException *) e
           ExpectedToken:(NSInteger) expectedTokenType
                  BitSet:(ANTLRBitSet *)follow;
 
@@ -63,13 +63,13 @@
  *  entire tree if node has children.  If children, scan until
  *  corresponding UP node.
  */
-- (void) matchAny:(id<ANTLRIntStream>)ignore;
+- (void) matchAny:(id<IntStream>)ignore;
 
 /** We have DOWN/UP nodes in the stream that have no line info; override.
  *  plus we want to alter the exception type.  Don't try to recover
  *  from tree parser errors inline...
  */
-- (id) recoverFromMismatchedToken:(id<ANTLRIntStream>)anInput
+- (id) recoverFromMismatchedToken:(id<IntStream>)anInput
                              Type:(NSInteger)ttype
                            Follow:(ANTLRBitSet *)follow;
 
@@ -77,9 +77,9 @@
  *  always intended for the programmer because the parser built
  *  the input tree not the user.
  */
-- (NSString *)getErrorHeader:(ANTLRRecognitionException *)e;
+- (NSString *)getErrorHeader:(RecognitionException *)e;
 
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *) tokenNames;
+- (NSString *)getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *) tokenNames;
 
 - (void) traceIn:(NSString *)ruleName Index:(NSInteger)ruleIndex;
 - (void) traceOut:(NSString *)ruleName Index:(NSInteger)ruleIndex;

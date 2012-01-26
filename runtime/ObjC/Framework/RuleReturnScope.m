@@ -1,5 +1,5 @@
 //
-//  ANTLRRuleReturnScope.m
+//  RuleReturnScope.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -29,10 +29,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRuleReturnScope.h"
+#import "RuleReturnScope.h"
 
 
-@implementation ANTLRRuleReturnScope
+@implementation RuleReturnScope
 
 /** Return the start token or tree */
 - (id) getStart
@@ -64,7 +64,7 @@
 // the input stream is *not* copied!
 - (id) copyWithZone:(NSZone *)theZone
 {
-    ANTLRRuleReturnScope *copy = [[[self class] allocWithZone:theZone] init];
+    RuleReturnScope *copy = [[[self class] allocWithZone:theZone] init];
     return copy;
 }
 

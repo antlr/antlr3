@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeIterator.h
+//  TreeIterator.h
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -30,39 +30,39 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRFastQueue.h"
-#import "ANTLRTreeAdaptor.h"
-#import "ANTLRTree.h"
+#import "CommonTreeAdaptor.h"
+#import "FastQueue.h"
+#import "TreeAdaptor.h"
+#import "Tree.h"
 
-@interface ANTLRTreeIterator : NSObject 
+@interface TreeIterator : NSObject 
 {
 	BOOL firstTime;
-	__strong id<ANTLRTreeAdaptor> adaptor;
-	__strong id<ANTLRBaseTree> root;
-	__strong id<ANTLRBaseTree> tree;
+	__strong id<TreeAdaptor> adaptor;
+	__strong id<BaseTree> root;
+	__strong id<BaseTree> tree;
 	
-	__strong ANTLRFastQueue *nodes;
-	__strong id<ANTLRBaseTree> up;
-	__strong id<ANTLRBaseTree> down;
-	__strong id<ANTLRBaseTree> eof;
+	__strong FastQueue *nodes;
+	__strong id<BaseTree> up;
+	__strong id<BaseTree> down;
+	__strong id<BaseTree> eof;
 }
 
 @property BOOL firstTime;
-@property(retain) id<ANTLRTreeAdaptor> adaptor;
-@property(retain) id<ANTLRBaseTree> root;
-@property(retain) id<ANTLRBaseTree> tree;
-@property(retain) ANTLRFastQueue *nodes;
-@property(retain, readwrite) id<ANTLRBaseTree> up;
-@property(retain, readwrite) id<ANTLRBaseTree> down;
-@property(retain, readwrite) id<ANTLRBaseTree> eof;
+@property(retain) id<TreeAdaptor> adaptor;
+@property(retain) id<BaseTree> root;
+@property(retain) id<BaseTree> tree;
+@property(retain) FastQueue *nodes;
+@property(retain, readwrite) id<BaseTree> up;
+@property(retain, readwrite) id<BaseTree> down;
+@property(retain, readwrite) id<BaseTree> eof;
 
 + newANTRLTreeIterator;
-+ (ANTLRTreeIterator *) newANTRLTreeIteratorWithAdaptor:(ANTLRCommonTreeAdaptor *)adaptor
-                                                andTree:(id<ANTLRBaseTree>)tree;
++ (TreeIterator *) newANTRLTreeIteratorWithAdaptor:(CommonTreeAdaptor *)adaptor
+                                                andTree:(id<BaseTree>)tree;
 - (id) init;
-- (id) initWithTree:(id<ANTLRBaseTree>) t;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>) a andTree:(id<ANTLRBaseTree>) t;
+- (id) initWithTree:(id<BaseTree>) t;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>) a andTree:(id<BaseTree>) t;
 
 - (void) reset;
 - (BOOL) hasNext;

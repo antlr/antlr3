@@ -1,5 +1,5 @@
 //
-//  ANTLRRuntimeException.m
+//  RuntimeException.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/5/10.
@@ -29,52 +29,52 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRuntimeException.h"
+#import "RuntimeException.h"
 
 
-@implementation ANTLRRuntimeException
+@implementation RuntimeException
 
 + (id) newException
 {
-    return [[ANTLRRuntimeException alloc] init];
+    return [[RuntimeException alloc] init];
 }
 
 + (id) newException:(NSString *)aReason
 {
-    return [[ANTLRRuntimeException alloc] init:aReason];
+    return [[RuntimeException alloc] init:aReason];
 }
 
 + (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    return [[ANTLRRuntimeException alloc] init:aReason userInfo:aUserInfo];
+    return [[RuntimeException alloc] init:aReason userInfo:aUserInfo];
 }
 
 + (id) newException:(NSString *)aName reason:(NSString *)aReason;
 {
-    return [[ANTLRRuntimeException alloc] initWithName:aName reason:aReason];
+    return [[RuntimeException alloc] initWithName:aName reason:aReason];
 }
 
 + (id) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 {
-    return [[ANTLRRuntimeException alloc] initWithName:aName reason:aReason userInfo:aUserInfo];
+    return [[RuntimeException alloc] initWithName:aName reason:aReason userInfo:aUserInfo];
 }
 
 
 - (id) init
 {
-    self = [super initWithName:@"ANTLRRuntimeException" reason:@"UnknownException" userInfo:nil];
+    self = [super initWithName:@"RuntimeException" reason:@"UnknownException" userInfo:nil];
     return(self);
 }
 
 - (id) init:(NSString *)aReason
 {
-    self = [super initWithName:(NSString *)@"ANTLRRuntimeException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
+    self = [super initWithName:(NSString *)@"RuntimeException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
     return(self);
 }
 
 - (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    self = [super initWithName:@"ANTLRRuntimeException" reason:aReason userInfo:aUserInfo];
+    self = [super initWithName:@"RuntimeException" reason:aReason userInfo:aUserInfo];
     return(self);
 }
 
@@ -187,38 +187,38 @@
 
 @end
 
-@implementation ANTLRNoSuchElementException
+@implementation NoSuchElementException
 
 + (id) newException
 {
-    return [[ANTLRNoSuchElementException alloc] init];
+    return [[NoSuchElementException alloc] init];
 }
 
 + (id) newException:(NSString *)aReason
 {
-    return [[ANTLRNoSuchElementException alloc] init:aReason];
+    return [[NoSuchElementException alloc] init:aReason];
 }
 
 + (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    return [[ANTLRNoSuchElementException alloc] init:aReason userInfo:(NSDictionary *)aUserInfo];
+    return [[NoSuchElementException alloc] init:aReason userInfo:(NSDictionary *)aUserInfo];
 }
 
 - (id) init
 {
-    self = [super initWithName:@"ANTLRNoSuchElementException" reason:@"UnknownException" userInfo:nil];
+    self = [super initWithName:@"NoSuchElementException" reason:@"UnknownException" userInfo:nil];
     return(self);
 }
 
 - (id) init:(NSString *)aReason
 {
-    self = [super initWithName:@"ANTLRNoSuchElementException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
+    self = [super initWithName:@"NoSuchElementException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
     return(self);
 }
 
 - (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
-    self = [super initWithName:@"ANTLRNoSuchElementException" reason:aReason userInfo:aUserInfo];
+    self = [super initWithName:@"NoSuchElementException" reason:aReason userInfo:aUserInfo];
     return(self);
 }
 
@@ -230,7 +230,7 @@
 
 @end
 
-@implementation ANTLRRewriteEarlyExitException
+@implementation RewriteEarlyExitException
 
 + (id) newException
 {
@@ -256,11 +256,11 @@
 
 @end
 
-@implementation ANTLRUnsupportedOperationException
+@implementation UnsupportedOperationException
 
 + (id) newException:(NSString *)aReason
 {
-    return [[ANTLRRuntimeException alloc] initWithName:@"Unsupported Operation Exception" reason:aReason userInfo:nil];
+    return [[RuntimeException alloc] initWithName:@"Unsupported Operation Exception" reason:aReason userInfo:nil];
 }
 
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason

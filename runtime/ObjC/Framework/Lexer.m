@@ -25,33 +25,33 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <ANTLR/antlr.h>
-#import "ANTLRLexer.h"
+#import "Lexer.h"
 
-@implementation ANTLRLexer
+@implementation Lexer
 
 @synthesize input;
 @synthesize ruleNestingLevel;
 #pragma mark Initializer
 
-- (id) initWithCharStream:(id<ANTLRCharStream>)anInput
+- (id) initWithCharStream:(id<CharStream>)anInput
 {
-	self = [super initWithState:[[ANTLRRecognizerSharedState alloc] init]];
+	self = [super initWithState:[[RecognizerSharedState alloc] init]];
 	if ( self != nil ) {
         input = [anInput retain];
         if (state.token != nil)
-            [((ANTLRCommonToken *)state.token) setInput:anInput];
+            [((CommonToken *)state.token) setInput:anInput];
 		ruleNestingLevel = 0;
 	}
 	return self;
 }
 
-- (id) initWithCharStream:(id<ANTLRCharStream>)anInput State:(ANTLRRecognizerSharedState *)aState
+- (id) initWithCharStream:(id<CharStream>)anInput State:(RecognizerSharedState *)aState
 {
 	self = [super initWithState:aState];
 	if ( self != nil ) {
         input = [anInput retain];
         if (state.token != nil)
-            [((ANTLRCommonToken *)state.token) setInput:anInput];
+            [((CommonToken *)state.token) setInput:anInput];
 		ruleNestingLevel = 0;
 	}
 	return self;
@@ -65,7 +65,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRLexer *copy;
+    Lexer *copy;
 	
     copy = [[[self class] allocWithZone:aZone] init];
     //    copy = [super copyWithZone:aZone]; // allocation occurs here
@@ -86,8 +86,8 @@
         return; // no shared state work to do
     }
     state.token = nil;
-    state.type = ANTLRCommonToken.INVALID_TOKEN_TYPE;
-    state.channel = ANTLRCommonToken.DEFAULT_CHANNEL;
+    state.type = CommonToken.INVALID_TOKEN_TYPE;
+    state.channel = CommonToken.DEFAULT_CHANNEL;
     state.tokenStartCharIndex = -1;
     state.tokenStartCharPositionInLine = -1;
     state.tokenStartLine = -1;
@@ -97,12 +97,12 @@
 // token stuff
 #pragma mark Tokens
 
-- (id<ANTLRToken>)getToken
+- (id<Token>)getToken
 {
     return [state getToken]; 
 }
 
-- (void) setToken: (id<ANTLRToken>) aToken
+- (void) setToken: (id<Token>) aToken
 {
     if (state.token != aToken) {
         [aToken retain];
@@ -112,25 +112,25 @@
 
 
 // this method may be overridden in the generated lexer if we generate a filtering lexer.
-- (id<ANTLRToken>) nextToken
+- (id<Token>) nextToken
 {
 	while (YES) {
         [self setToken:nil];
-        state.channel = ANTLRCommonToken.DEFAULT_CHANNEL;
+        state.channel = CommonToken.DEFAULT_CHANNEL;
         state.tokenStartCharIndex = input.index;
-        state.tokenStartCharPositionInLine = input.charPositionInLine;
-        state.tokenStartLine = input.line;
+        state.tokenStartCharPositionInLine = input.getCharPositionInLine;
+        state.tokenStartLine = input.getLine;
         state.text = nil;
         
         // [self setText:[self text]];
-		if ([input LA:1] == ANTLRCharStreamEOF) {
-            ANTLRCommonToken *eof = [ANTLRCommonToken newToken:input
-                                                          Type:ANTLRTokenTypeEOF
-                                                       Channel:ANTLRCommonToken.DEFAULT_CHANNEL
+		if ([input LA:1] == CharStreamEOF) {
+            CommonToken *eof = [CommonToken newToken:input
+                                                          Type:TokenTypeEOF
+                                                       Channel:CommonToken.DEFAULT_CHANNEL
                                                          Start:input.index
                                                           Stop:input.index];
-            [eof setLine:input.line];
-            [eof setCharPositionInLine:input.charPositionInLine];
+            [eof setLine:input.getLine];
+            [eof setCharPositionInLine:input.getCharPositionInLine];
 			return eof;
 		}
 		@try {
@@ -139,16 +139,16 @@
             // [[self class] instancesRespondToSelector:aMethod];
             if ( state.token == nil)
                 [self emit];
-            else if ( state.token == [ANTLRCommonToken skipToken] ) {
+            else if ( state.token == [CommonToken skipToken] ) {
                 continue;
             }
 			return state.token;
 		}
-		@catch (ANTLRNoViableAltException *nva) {
+		@catch (NoViableAltException *nva) {
 			[self reportError:nva];
 			[self recover:nva];
 		}
-		@catch (ANTLRRecognitionException *e) {
+		@catch (RecognitionException *e) {
 			[self reportError:e];
 		}
 	}
@@ -161,15 +161,15 @@
 
 - (void) skip
 {
-    state.token = [ANTLRCommonToken skipToken];
+    state.token = [CommonToken skipToken];
 }
 
-- (id<ANTLRCharStream>) input
+- (id<CharStream>) input
 {
     return input; 
 }
 
-- (void) setInput:(id<ANTLRCharStream>) anInput
+- (void) setInput:(id<CharStream>) anInput
 {
     if ( anInput != input ) {
         if ( input ) [input release];
@@ -185,7 +185,7 @@
  *  nextToken (to push tokens into a list and pull from that list rather
  *  than a single variable as this implementation does).
  */
-- (void) emit:(id<ANTLRToken>)aToken
+- (void) emit:(id<Token>)aToken
 {
 	state.token = aToken;
 }
@@ -201,7 +201,7 @@
  */
 - (void) emit
 {
-	id<ANTLRToken> aToken = [ANTLRCommonToken newToken:input
+	id<Token> aToken = [CommonToken newToken:input
                                                   Type:state.type
                                                Channel:state.channel
                                                  Start:state.tokenStartCharIndex
@@ -228,7 +228,7 @@
 				state.failed = YES;
 				return;
 			}
-			ANTLRMismatchedTokenException *mte = [ANTLRMismatchedTokenException newExceptionChar:[aString characterAtIndex:i] Stream:input];
+			MismatchedTokenException *mte = [MismatchedTokenException newExceptionChar:[aString characterAtIndex:i] Stream:input];
             mte.c = c;
 			[self recover:mte];
 			@throw mte;
@@ -255,7 +255,7 @@
 			state.failed = YES;
 			return;
 		}
-		ANTLRMismatchedTokenException  *mte = [ANTLRMismatchedTokenException newExceptionChar:aChar Stream:input];
+		MismatchedTokenException  *mte = [MismatchedTokenException newExceptionChar:aChar Stream:input];
         mte.c = charLA;
 		[self recover:mte];
 		@throw mte;
@@ -272,7 +272,7 @@
 			state.failed = YES;
 			return;
 		}
-		ANTLRMismatchedRangeException  *mre = [ANTLRMismatchedRangeException
+		MismatchedRangeException  *mre = [MismatchedRangeException
 					newException:NSMakeRange((NSUInteger)fromChar,(NSUInteger)toChar)
 							   stream:input];
         mre.c = charLA;
@@ -288,12 +288,12 @@
 
 - (NSUInteger) line
 {
-	return input.line;
+	return input.getLine;
 }
 
 - (NSUInteger) charPositionInLine
 {
-	return input.charPositionInLine;
+	return input.getCharPositionInLine;
 }
 
 - (NSInteger) index
@@ -315,7 +315,7 @@
 }
 
 	// error handling
-- (void) reportError:(ANTLRRecognitionException *)e
+- (void) reportError:(RecognitionException *)e
 {
     /** TODO: not thought about recovery in lexer yet.
      *
@@ -331,43 +331,43 @@
     [self displayRecognitionError:[self getTokenNames] Exception:e];
 }
 
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)tokenNames
+- (NSString *)getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *)tokenNames
 {
-/*    NSString *msg = [NSString stringWithFormat:@"Gotta fix getErrorMessage in ANTLRLexer.m--%@\n",
+/*    NSString *msg = [NSString stringWithFormat:@"Gotta fix getErrorMessage in Lexer.m--%@\n",
                      e.name];
  */
     NSString *msg = nil;
-    if ( [e isKindOfClass:[ANTLRMismatchedTokenException class]] ) {
-        ANTLRMismatchedTokenException *mte = (ANTLRMismatchedTokenException *)e;
+    if ( [e isKindOfClass:[MismatchedTokenException class]] ) {
+        MismatchedTokenException *mte = (MismatchedTokenException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\" expecting \"%@\"",
                [self getCharErrorDisplay:mte.c], [self getCharErrorDisplay:mte.expecting]];
     }
-    else if ( [e isKindOfClass:[ANTLRNoViableAltException class]] ) {
-        ANTLRNoViableAltException *nvae = (ANTLRNoViableAltException *)e;
+    else if ( [e isKindOfClass:[NoViableAltException class]] ) {
+        NoViableAltException *nvae = (NoViableAltException *)e;
         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
         // and "(decision="+nvae.decisionNumber+") and
         // "state "+nvae.stateNumber
         msg = [NSString stringWithFormat:@"no viable alternative at character \"%@\"",
                [self getCharErrorDisplay:(nvae.c)]];
     }
-    else if ( [e isKindOfClass:[ANTLREarlyExitException class]] ) {
-        ANTLREarlyExitException *eee = (ANTLREarlyExitException *)e;
+    else if ( [e isKindOfClass:[EarlyExitException class]] ) {
+        EarlyExitException *eee = (EarlyExitException *)e;
         // for development, can add "(decision="+eee.decisionNumber+")"
         msg = [NSString stringWithFormat:@"required (...)+ loop did not match anything at character \"%@\"",
                [self getCharErrorDisplay:(eee.c)]];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedNotSetException class]] ) {
-        ANTLRMismatchedNotSetException *mse = (ANTLRMismatchedNotSetException *)e;
+    else if ( [e isKindOfClass:[MismatchedNotSetException class]] ) {
+        MismatchedNotSetException *mse = (MismatchedNotSetException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\"  expecting set \"%@\"",
                [self getCharErrorDisplay:(mse.c)], mse.expecting];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedSetException class]] ) {
-        ANTLRMismatchedSetException *mse = (ANTLRMismatchedSetException *)e;
+    else if ( [e isKindOfClass:[MismatchedSetException class]] ) {
+        MismatchedSetException *mse = (MismatchedSetException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\" expecting set \"%@\"",
                [self getCharErrorDisplay:(mse.c)], mse.expecting];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedRangeException class]] ) {
-        ANTLRMismatchedRangeException *mre = (ANTLRMismatchedRangeException *)e;
+    else if ( [e isKindOfClass:[MismatchedRangeException class]] ) {
+        MismatchedRangeException *mre = (MismatchedRangeException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\" \"%@..%@\"",
                [self getCharErrorDisplay:(mre.c)], [self getCharErrorDisplay:(mre.range.location)],
                [self getCharErrorDisplay:(mre.range.location+mre.range.length-1)]];
@@ -382,7 +382,7 @@
 {
     NSString *s;
     switch ( c ) {
-        case ANTLRTokenTypeEOF :
+        case TokenTypeEOF :
             s = @"<EOF>";
             break;
         case '\n' :
@@ -406,7 +406,7 @@
  *  it all works out.  You can instead use the rule invocation stack
  *  to do sophisticated error recovery if you are in a fragment rule.
  */
-- (void)recover:(ANTLRRecognitionException *)re
+- (void)recover:(RecognitionException *)re
 {
     //System.out.println("consuming char "+(char)input.LA(1)+" during recovery");
     //re.printStackTrace();
@@ -415,13 +415,13 @@
 
 - (void)traceIn:(NSString *)ruleName Index:(NSInteger)ruleIndex
 {
-    NSString *inputSymbol = [NSString stringWithFormat:@"%c line=%d:%d\n", [input LT:1], input.line, input.charPositionInLine];
+    NSString *inputSymbol = [NSString stringWithFormat:@"%c line=%d:%d\n", [input LT:1], input.getLine, input.getCharPositionInLine];
     [super traceIn:ruleName Index:ruleIndex Object:inputSymbol];
 }
 
 - (void)traceOut:(NSString *)ruleName Index:(NSInteger)ruleIndex
 {
-    NSString *inputSymbol = [NSString stringWithFormat:@"%c line=%d:%d\n", [input LT:1], input.line, input.charPositionInLine];
+    NSString *inputSymbol = [NSString stringWithFormat:@"%c line=%d:%d\n", [input LT:1], input.getLine, input.getCharPositionInLine];
     [super traceOut:ruleName Index:ruleIndex Object:inputSymbol];
 }
 

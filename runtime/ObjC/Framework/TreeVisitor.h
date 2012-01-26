@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeVisitor.h
+//  TreeVisitor.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -30,18 +30,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreeAdaptor.h"
-#import "ANTLRTreeVisitorAction.h"
+#import "TreeAdaptor.h"
+#import "TreeVisitorAction.h"
 
-@interface ANTLRTreeVisitor : NSObject {
-   id<ANTLRTreeAdaptor> adaptor;
+@interface TreeVisitor : NSObject {
+   id<TreeAdaptor> adaptor;
 }
-+ (ANTLRTreeVisitor *)newANTLRTreeVisitor:(id<ANTLRTreeAdaptor>) anAdaptor;
-+ (ANTLRTreeVisitor *)newANTLRTreeVisitor;
++ (TreeVisitor *)newTreeVisitor:(id<TreeAdaptor>) anAdaptor;
++ (TreeVisitor *)newTreeVisitor;
 - (id)init;
-- (id)initWithAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor;
+- (id)initWithAdaptor:(id<TreeAdaptor>)anAdaptor;
 - (void) dealloc;
-- (ANTLRTreeVisitor *)visit:(id<ANTLRBaseTree>)t Action:(ANTLRTreeVisitorAction *)action;
+- (TreeVisitor *)visit:(id<BaseTree>)t Action:(TreeVisitorAction *)action;
 
-@property (retain) id<ANTLRTreeAdaptor> adaptor;
+@property (retain) id<TreeAdaptor> adaptor;
 @end

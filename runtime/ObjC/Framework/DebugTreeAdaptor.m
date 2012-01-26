@@ -24,13 +24,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugTreeAdaptor.h"
+#import "DebugTreeAdaptor.h"
 
 
-@implementation ANTLRDebugTreeAdaptor
+@implementation DebugTreeAdaptor
 
 
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener
+- (id) initWithTreeAdaptor:(CommonTreeAdaptor *)aTreeAdaptor debugListener:(id<DebugEventListener>)aDebugListener
 {
 	self = [super init];
 	if (self) {
@@ -47,26 +47,26 @@
     [super dealloc];
 }
 
-- (id<ANTLRDebugEventListener>) debugListener
+- (id<DebugEventListener>) debugListener
 {
     return debugListener; 
 }
 
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener
 {
     if (debugListener != aDebugListener) {
-        [(id<ANTLRTreeAdaptor,NSObject>)aDebugListener retain];
-        [(id<ANTLRTreeAdaptor,NSObject>)debugListener release];
+        [(id<TreeAdaptor,NSObject>)aDebugListener retain];
+        [(id<TreeAdaptor,NSObject>)debugListener release];
         debugListener = aDebugListener;
     }
 }
 
-- (ANTLRCommonTreeAdaptor *) getTreeAdaptor
+- (CommonTreeAdaptor *) getTreeAdaptor
 {
     return treeAdaptor; 
 }
 
-- (void) setTreeAdaptor: (ANTLRCommonTreeAdaptor *) aTreeAdaptor
+- (void) setTreeAdaptor: (CommonTreeAdaptor *) aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
         [aTreeAdaptor retain];
@@ -89,92 +89,92 @@
 
 #pragma mark Construction
 
-- (id<ANTLRBaseTree>) newANTLRTreeWithToken:(id<ANTLRToken>) payload
+- (id<BaseTree>) newTreeWithToken:(id<Token>) payload
 {
-	id<ANTLRBaseTree> newTree = [ANTLRCommonTree newTreeWithToken:payload];
+	id<BaseTree> newTree = [CommonTree newTreeWithToken:payload];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] fromTokenAtIndex:[payload getTokenIndex]];
 	return newTree;
 }
 
-- (id<ANTLRBaseTree>) emptyTree
+- (id<BaseTree>) emptyTree
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newEmptyTree];
+	id<BaseTree> newTree = [treeAdaptor newEmptyTree];
 	[debugListener createNilNode:[treeAdaptor uniqueIdForTree:newTree]];
 	return newTree;
 }
 
 /*	We don't have debug events for those:
- - (id) copyNode:(id<ANTLRBaseTree>)aNode
+ - (id) copyNode:(id<BaseTree>)aNode
 {
 }
-- (id) copyTree:(id<ANTLRBaseTree>)aTree
+- (id) copyTree:(id<BaseTree>)aTree
 {
 }
 */
 
-- (void) addChild:(id<ANTLRBaseTree>)child toTree:(id<ANTLRBaseTree>)aTree
+- (void) addChild:(id<BaseTree>)child toTree:(id<BaseTree>)aTree
 {
 	[treeAdaptor addChild:child toTree:aTree];
 	[debugListener addChild:[treeAdaptor uniqueIdForTree:child] toTree:[self uniqueIdForTree:aTree]];
 }
 
-- (id<ANTLRBaseTree>) becomeRoot:(id<ANTLRBaseTree>)newRoot old:(id<ANTLRBaseTree>)oldRoot
+- (id<BaseTree>) becomeRoot:(id<BaseTree>)newRoot old:(id<BaseTree>)oldRoot
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor becomeRoot:newRoot old:oldRoot];
+	id<BaseTree> newTree = [treeAdaptor becomeRoot:newRoot old:oldRoot];
 	[debugListener becomeRoot:[treeAdaptor uniqueIdForTree:newTree] old:[self uniqueIdForTree:oldRoot]];
 	return newTree;
 }
 
 /* handle by forwardInvocation: 
-- (NSUInteger) uniqueIdForTree:(id<ANTLRBaseTree>)aNode
+- (NSUInteger) uniqueIdForTree:(id<BaseTree>)aNode
 {
 }
 */
 
 #pragma mark Rewrite Rules
 
- - (void) addTokenAsChild:(id<ANTLRToken>)child toTree:(id<ANTLRBaseTree>)aTree
+ - (void) addTokenAsChild:(id<Token>)child toTree:(id<BaseTree>)aTree
 {
-	id<ANTLRBaseTree> newChild = [self newANTLRTreeWithToken:child];
+	id<BaseTree> newChild = [self newTreeWithToken:child];
 	[self addChild:newChild toTree:aTree];
 }
 
-- (id<ANTLRBaseTree>) makeToken:(id<ANTLRToken>)newRoot parentOf:(id<ANTLRBaseTree>)oldRoot
+- (id<BaseTree>) makeToken:(id<Token>)newRoot parentOf:(id<BaseTree>)oldRoot
 {
-	id<ANTLRBaseTree> newNode = [self newANTLRTreeWithToken:newRoot];
+	id<BaseTree> newNode = [self newTreeWithToken:newRoot];
 	return [self becomeRoot:newNode old:oldRoot];
 }
 
-- (id<ANTLRBaseTree>) newANTLRTreeWithTokenType:(NSInteger)tokenType
+- (id<BaseTree>) newTreeWithTokenType:(NSInteger)tokenType
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithTokenType:tokenType];
+	id<BaseTree> newTree = [treeAdaptor newTreeWithTokenType:tokenType];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:nil type:tokenType];
 	return newTree;
 }
 
-- (id<ANTLRBaseTree>) newANTLRTreeWithTokenType:(NSInteger)tokenType text:(NSString *)tokenText
+- (id<BaseTree>) newTreeWithTokenType:(NSInteger)tokenType text:(NSString *)tokenText
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithTokenType:tokenType text:tokenText];
+	id<BaseTree> newTree = [treeAdaptor newTreeWithTokenType:tokenType text:tokenText];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:tokenText type:tokenType];
 	return newTree;
 }
-- (id<ANTLRBaseTree>) newANTLRTreeWithToken:(id<ANTLRToken>)fromToken tokenType:(NSInteger)tokenType
+- (id<BaseTree>) newTreeWithToken:(id<Token>)fromToken tokenType:(NSInteger)tokenType
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithToken:fromToken tokenType:tokenType];
+	id<BaseTree> newTree = [treeAdaptor newTreeWithToken:fromToken tokenType:tokenType];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:fromToken.text type:tokenType];
 	return newTree;
 }
 
-- (id<ANTLRBaseTree>) newANTLRTreeWithToken:(id<ANTLRToken>)fromToken tokenType:(NSInteger)tokenType text:(NSString *)tokenText
+- (id<BaseTree>) newTreeWithToken:(id<Token>)fromToken tokenType:(NSInteger)tokenType text:(NSString *)tokenText
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithToken:fromToken tokenType:tokenType text:tokenText];
+	id<BaseTree> newTree = [treeAdaptor newTreeWithToken:fromToken tokenType:tokenType text:tokenText];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:tokenText type:tokenType];
 	return newTree;
 }
 
-- (id<ANTLRBaseTree>) newANTLRTreeWithToken:(id<ANTLRToken>)fromToken text:(NSString *)tokenText
+- (id<BaseTree>) newTreeWithToken:(id<Token>)fromToken text:(NSString *)tokenText
 {
-	id<ANTLRBaseTree> newTree = [treeAdaptor newANTLRTreeWithToken:fromToken text:tokenText];
+	id<BaseTree> newTree = [treeAdaptor newTreeWithToken:fromToken text:tokenText];
 	[debugListener createNode:[treeAdaptor uniqueIdForTree:newTree] text:tokenText type:fromToken.type];
 	return newTree;
 }
@@ -182,7 +182,7 @@
 #pragma mark Content
 
 /* handled by forwardInvocation:
-- (NSInteger) tokenTypeForNode:(id<ANTLRBaseTree>)aNode
+- (NSInteger) tokenTypeForNode:(id<BaseTree>)aNode
 {
 }
  
@@ -190,15 +190,15 @@
 {
 }
 
-- (NSString *) textForNode:(id<ANTLRBaseTree>)aNode
+- (NSString *) textForNode:(id<BaseTree>)aNode
 {
 }
  
-- (void) setText:(NSString *)tokenText forNode:(id<ANTLRBaseTree>)aNode
+- (void) setText:(NSString *)tokenText forNode:(id<BaseTree>)aNode
 {
 }
 */
-- (void) setBoundariesForTree:(id<ANTLRBaseTree>)aTree fromToken:(id<ANTLRToken>)startToken toToken:(id<ANTLRToken>)stopToken
+- (void) setBoundariesForTree:(id<BaseTree>)aTree fromToken:(id<Token>)startToken toToken:(id<Token>)stopToken
 {
 	[treeAdaptor setBoundariesForTree:aTree fromToken:startToken toToken:stopToken];
 	if (aTree && startToken && stopToken) {
@@ -206,22 +206,22 @@
 	}
 }
 /* handled by forwardInvocation:
-- (NSInteger) tokenStartIndexForTree:(id<ANTLRBaseTree>)aTree
+- (NSInteger) tokenStartIndexForTree:(id<BaseTree>)aTree
 {
 }
  
-- (NSInteger) tokenStopIndexForTree:(id<ANTLRBaseTree>)aTree
+- (NSInteger) tokenStopIndexForTree:(id<BaseTree>)aTree
 {
 }
 */
 
 #pragma mark Navigation / Tree Parsing
 /* handled by forwardInvocation:
-- (id<ANTLRBaseTree>) childForNode:(id<ANTLRBaseTree>) aNode atIndex:(NSInteger) i
+- (id<BaseTree>) childForNode:(id<BaseTree>) aNode atIndex:(NSInteger) i
 {
 }
  
-- (NSInteger) childCountForTree:(id<ANTLRBaseTree>) aTree
+- (NSInteger) childCountForTree:(id<BaseTree>) aTree
 {
 }
 */

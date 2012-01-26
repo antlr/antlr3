@@ -29,12 +29,12 @@
 @implementation ANTLRBitSet
 #pragma mark Class Methods
 
-+ (ANTLRBitSet *) newANTLRBitSet
++ (ANTLRBitSet *) newBitSet
 {
     return [[ANTLRBitSet alloc] init];
 }
 
-+ (ANTLRBitSet *) newANTLRBitSetWithType:(ANTLRTokenType)type
++ (ANTLRBitSet *) newBitSetWithType:(TokenType)type
 {
     return [[ANTLRBitSet alloc] initWithType:type];
 }
@@ -42,17 +42,17 @@
 /** Construct a ANTLRBitSet given the size
  * @param nbits The size of the ANTLRBitSet in bits
  */
-+ (ANTLRBitSet *) newANTLRBitSetWithNBits:(NSUInteger)nbits
++ (ANTLRBitSet *) newBitSetWithNBits:(NSUInteger)nbits
 {
     return [[ANTLRBitSet alloc] initWithNBits:nbits];
 }
 
-+ (ANTLRBitSet *) newANTLRBitSetWithArray:(AMutableArray *)types
++ (ANTLRBitSet *) newBitSetWithArray:(AMutableArray *)types
 {
     return [[ANTLRBitSet alloc] initWithArrayOfBits:types];
 }
 
-+ (ANTLRBitSet *) newANTLRBitSetWithBits:(const unsigned long long *)theBits Count:(NSUInteger)longCount
++ (ANTLRBitSet *) newBitSetWithBits:(const unsigned long long *)theBits Count:(NSUInteger)longCount
 {
     return [[ANTLRBitSet alloc] initWithBits:theBits Count:longCount];
 }
@@ -60,7 +60,7 @@
 
 + (ANTLRBitSet *) of:(NSUInteger) el
 {
-    ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:(el + 1)];
+    ANTLRBitSet *s = [ANTLRBitSet newBitSetWithNBits:(el + 1)];
     [s add:el];
     return s;
 }
@@ -68,7 +68,7 @@
 + (ANTLRBitSet *) of:(NSUInteger) a And2:(NSUInteger) b
 {
     NSInteger c = (((a>b)?a:b)+1);
-    ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:c];
+    ANTLRBitSet *s = [ANTLRBitSet newBitSetWithNBits:c];
     [s add:a];
     [s add:b];
     return s;
@@ -78,7 +78,7 @@
 {
     NSUInteger d = ((a>b)?a:b);
     d = ((c>d)?c:d)+1;
-    ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:d];
+    ANTLRBitSet *s = [ANTLRBitSet newBitSetWithNBits:d];
     [s add:a];
     [s add:b];
     [s add:c];
@@ -90,7 +90,7 @@
     NSUInteger e = ((a>b)?a:b);
     NSUInteger f = ((c>d)?c:d);
     e = ((e>f)?e:f)+1;
-    ANTLRBitSet *s = [ANTLRBitSet newANTLRBitSetWithNBits:e];
+    ANTLRBitSet *s = [ANTLRBitSet newBitSetWithNBits:e];
     [s add:a];
     [s add:b];
     [s add:c];
@@ -109,7 +109,7 @@
 	return self;
 }
 
-- (ANTLRBitSet *) initWithType:(ANTLRTokenType)type
+- (ANTLRBitSet *) initWithType:(TokenType)type
 {
 	if ((self = [super init]) != nil) {
 		bitVector = CFBitVectorCreateMutable(kCFAllocatorDefault,0);

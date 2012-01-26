@@ -25,12 +25,12 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
+#import "Token.h"
 #import "ANTLRBitSet.h"
-#import "ANTLRRuleStack.h"
+#import "RuleStack.h"
 #import "AMutableArray.h"
 
-@interface ANTLRRecognizerSharedState : NSObject {
+@interface RecognizerSharedState : NSObject {
 	__strong AMutableArray *following;  // a stack of FOLLOW bitsets used for context sensitive prediction and recovery
     NSInteger _fsp;                     // Follow stack pointer
 	BOOL errorRecovery;                 // are we recovering?
@@ -38,9 +38,9 @@
 	BOOL failed;                        // indicate that some match failed
     NSInteger syntaxErrors;
 	NSInteger backtracking;             // the level of backtracking
-	__strong ANTLRRuleStack *ruleMemo;	// store previous results of matching rules so we don't have to do it again. Hook in incremental stuff here, too.
+	__strong RuleStack *ruleMemo;	// store previous results of matching rules so we don't have to do it again. Hook in incremental stuff here, too.
 
-	__strong id<ANTLRToken> token;
+	__strong id<Token> token;
 	NSInteger  tokenStartCharIndex;
 	NSUInteger tokenStartLine;
 	NSUInteger tokenStartCharPositionInLine;
@@ -56,8 +56,8 @@
 @property (assign, getter=getFailed, setter=setFailed:) BOOL failed;
 @property (assign) NSInteger syntaxErrors;
 @property (assign, getter=getBacktracking, setter=setBacktracking:) NSInteger backtracking;
-@property (retain, getter=getRuleMemo, setter=setRuleMemo:) ANTLRRuleStack *ruleMemo;
-@property (copy, getter=getToken, setter=setToken:) id<ANTLRToken> token;
+@property (retain, getter=getRuleMemo, setter=setRuleMemo:) RuleStack *ruleMemo;
+@property (copy, getter=getToken, setter=setToken:) id<Token> token;
 @property (getter=type,setter=setType:) NSUInteger type;
 @property (getter=channel,setter=setChannel:) NSUInteger channel;
 @property (getter=getTokenStartLine,setter=setTokenStartLine:) NSUInteger tokenStartLine;
@@ -65,16 +65,16 @@
 @property (getter=getTokenStartCharIndex,setter=setTokenStartCharIndex:) NSInteger tokenStartCharIndex;
 @property (retain, getter=text, setter=setText:) NSString *text;
 
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState;
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedStateWithRuleLen:(NSInteger)aLen;
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState:(ANTLRRecognizerSharedState *)aState;
++ (RecognizerSharedState *) newRecognizerSharedState;
++ (RecognizerSharedState *) newRecognizerSharedStateWithRuleLen:(NSInteger)aLen;
++ (RecognizerSharedState *) newRecognizerSharedState:(RecognizerSharedState *)aState;
 
 - (id) init;
 - (id) initWithRuleLen:(NSInteger)aLen;
-- (id) initWithState:(ANTLRRecognizerSharedState *)state;
+- (id) initWithState:(RecognizerSharedState *)state;
 
-- (id<ANTLRToken>) getToken;
-- (void) setToken:(id<ANTLRToken>) theToken;
+- (id<Token>) getToken;
+- (void) setToken:(id<Token>) theToken;
 
 - (NSUInteger)type;
 - (void) setType:(NSUInteger) theTokenType;
@@ -97,8 +97,8 @@
 
 - (AMutableArray *) getFollowing;
 - (void)setFollowing:(AMutableArray *)aFollow;
-- (ANTLRRuleStack *) getRuleMemo;
-- (void)setRuleMemo:(ANTLRRuleStack *)aRuleMemo;
+- (RuleStack *) getRuleMemo;
+- (void)setRuleMemo:(RuleStack *)aRuleMemo;
 - (BOOL) isErrorRecovery;
 - (void) setIsErrorRecovery: (BOOL) flag;
 

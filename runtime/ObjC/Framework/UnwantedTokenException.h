@@ -1,5 +1,5 @@
 //
-//  ANTLRUnwantedTokenException.h
+//  UnwantedTokenException.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -30,17 +30,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRMismatchedTokenException.h"
+#import "MismatchedTokenException.h"
 
-@interface ANTLRUnwantedTokenException : ANTLRMismatchedTokenException {
+@interface UnwantedTokenException : MismatchedTokenException {
 
 }
-+ (ANTLRUnwantedTokenException *)newException;
-+ (ANTLRUnwantedTokenException *)newException:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput;
++ (UnwantedTokenException *)newException;
++ (UnwantedTokenException *)newException:(NSInteger)expected Stream:(id<IntStream>)anInput;
 
 - (id) init;
-- (id) initWithStream:(id<ANTLRIntStream>)anInput And:(NSInteger)expected;
-- (id<ANTLRToken>)getUnexpectedToken;
+- (id) initWithStream:(id<IntStream>)anInput And:(NSInteger)expected;
+- (id<Token>)getUnexpectedToken;
 - (NSString *)toString;
                      
     

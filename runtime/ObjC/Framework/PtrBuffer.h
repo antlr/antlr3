@@ -1,5 +1,5 @@
 //
-//  ANTLRPtrBuffer.h
+//  PtrBuffer.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -30,13 +30,13 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRLinkBase.h"
+#import "LinkBase.h"
 
 //#define GLOBAL_SCOPE       0
 //#define LOCAL_SCOPE        1
 #define BUFFSIZE         101
 
-@interface ANTLRPtrBuffer : ANTLRLinkBase {
+@interface PtrBuffer : LinkBase {
     NSUInteger BuffSize;
     NSUInteger count;
     NSUInteger ptr;
@@ -51,8 +51,8 @@
 @property (assign, getter=getPtrBuffer, setter=setPtrBuffer:) id *ptrBuffer;
 
 // Contruction/Destruction
-+(ANTLRPtrBuffer *)newANTLRPtrBuffer;
-+(ANTLRPtrBuffer *)newANTLRPtrBufferWithLen:(NSInteger)cnt;
++(PtrBuffer *)newPtrBuffer;
++(PtrBuffer *)newPtrBufferWithLen:(NSInteger)cnt;
 -(id)init;
 -(id)initWithLen:(NSUInteger)cnt;
 -(void)dealloc;
@@ -80,7 +80,7 @@
 - (id) peek;
 
 - (void) addObject:(id) v;
-- (void) addObjectsFromArray:(ANTLRPtrBuffer *)anArray;
+- (void) addObjectsFromArray:(PtrBuffer *)anArray;
 - (void) insertObject:(id)aRule atIndex:(NSUInteger)idx;
 - (id)   objectAtIndex:(NSUInteger)idx;
 - (void) removeAllObjects;

@@ -1,5 +1,5 @@
 //
-//  ANTLRFastQueue.h
+//  FastQueue.h
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -32,7 +32,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AMutableArray.h"
 
-@interface ANTLRFastQueue : NSObject <NSCopying>
+@interface FastQueue : NSObject <NSCopying>
 {
     __strong AMutableArray *data;
     NSUInteger p;
@@ -43,7 +43,7 @@
 @property (assign) NSUInteger p;
 @property (assign) NSUInteger range;
 
-+ (id) newANTLRFastQueue;
++ (id) newFastQueue;
 
 - (id) init;
 
@@ -56,7 +56,7 @@
 - (NSUInteger) size;
 - (NSUInteger) range;
 - (id) head;
-- (id) objectAtIndex:(NSUInteger) i;
+- (id) objectAtIndex:(NSInteger) i;
 - (void) clear;
 - (NSString *) toString;
 - (NSString *) description;

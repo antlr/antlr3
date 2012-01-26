@@ -25,18 +25,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 
-@protocol ANTLRIntStream;
+@protocol IntStream;
 
 
-@interface ANTLRMismatchedRangeException : ANTLRRecognitionException {
+@interface MismatchedRangeException : RecognitionException {
 	NSRange range;
 }
 
 @property (assign) NSRange range;
 
-+ (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
-- (id) initWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput;
++ (id) newException:(NSRange) aRange stream:(id<IntStream>) theInput;
+- (id) initWithRange:(NSRange) aRange stream:(id<IntStream>) theInput;
 
 @end

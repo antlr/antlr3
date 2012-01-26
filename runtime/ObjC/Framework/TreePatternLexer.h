@@ -1,5 +1,5 @@
 //
-//  ANTLRTreePatternLexer.h
+//  TreePatternLexer.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -32,19 +32,19 @@
 #import <Cocoa/Cocoa.h>
 
 typedef enum {
-	ANTLRLexerTokenTypeEOF = -1,
-	ANTLRLexerTokenTypeInvalid,
-	ANTLRLexerTokenTypeBEGIN,
-	ANTLRLexerTokenTypeEND,
-	ANTLRLexerTokenTypeID,
-	ANTLRLexerTokenTypeARG,
-	ANTLRLexerTokenTypePERCENT,
-	ANTLRLexerTokenTypeCOLON,
-	ANTLRLexerTokenTypeDOT,
-} ANTLRLexerTokenType;
+	LexerTokenTypeEOF = -1,
+	LexerTokenTypeInvalid,
+	LexerTokenTypeBEGIN,
+	LexerTokenTypeEND,
+	LexerTokenTypeID,
+	LexerTokenTypeARG,
+	LexerTokenTypePERCENT,
+	LexerTokenTypeCOLON,
+	LexerTokenTypeDOT,
+} LexerTokenType;
 
 
-@interface ANTLRTreePatternLexer : NSObject {
+@interface TreePatternLexer : NSObject {
 
 /** The tree pattern to lex like "(A B C)" */
 NSString *pattern;
@@ -74,7 +74,7 @@ BOOL error;
 @property (assign) char *data;
 @property (assign) BOOL error;
 
-+ (ANTLRTreePatternLexer *)newANTLRTreePatternLexer:(NSString *)aPattern;
++ (TreePatternLexer *)newTreePatternLexer:(NSString *)aPattern;
 - (id) init;
 - (id) initWithPattern:(NSString *)aPattern;
 

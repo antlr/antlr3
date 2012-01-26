@@ -1,5 +1,5 @@
 //
-//  ANTLRMap.m
+//  Map.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -32,24 +32,24 @@
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#import "ANTLRMap.h"
-#import "ANTLRBaseTree.h"
+#import "Map.h"
+#import "BaseTree.h"
 
 /*
- * Start of ANTLRMap
+ * Start of Map
  */
-@implementation ANTLRMap
+@implementation Map
 
 @synthesize lastHash;
 
-+(id)newANTLRMap
++(id)newMap
 {
-    return [[ANTLRMap alloc] init];
+    return [[Map alloc] init];
 }
 
-+(id)newANTLRMapWithLen:(NSInteger)aBuffSize
++(id)newMapWithLen:(NSInteger)aBuffSize
 {
-    return [[ANTLRMap alloc] initWithLen:aBuffSize];
+    return [[Map alloc] initWithLen:aBuffSize];
 }
 
 -(id)init
@@ -77,9 +77,9 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRMMap" );
+    NSLog( @"called dealloc in MMap" );
 #endif
-    ANTLRMapElement *tmp, *rtmp;
+    MapElement *tmp, *rtmp;
     NSInteger idx;
 	
     if ( self.fNext != nil ) {
@@ -87,7 +87,7 @@
             tmp = ptrBuffer[idx];
             while ( tmp ) {
                 rtmp = tmp;
-                tmp = (ANTLRMapElement *)tmp.fNext;
+                tmp = (MapElement *)tmp.fNext;
                 [rtmp release];
             }
         }
@@ -95,9 +95,9 @@
 	[super dealloc];
 }
 
--(void)deleteANTLRMap:(ANTLRMapElement *)np
+-(void)deleteMap:(MapElement *)np
 {
-    ANTLRMapElement *tmp, *rtmp;
+    MapElement *tmp, *rtmp;
     NSInteger idx;
     
     if ( self.fNext != nil ) {
@@ -114,7 +114,7 @@
 
 - (void)clear
 {
-    ANTLRMapElement *tmp, *rtmp;
+    MapElement *tmp, *rtmp;
     NSInteger idx;
 
     for( idx = 0; idx < BuffSize; idx++ ) {
@@ -147,7 +147,7 @@
 
 - (NSInteger)size
 {
-    ANTLRMapElement *anElement;
+    MapElement *anElement;
     NSInteger aSize = 0;
     
     for (int i = 0; i < BuffSize; i++) {
@@ -161,7 +161,7 @@
 #ifdef USERDOC
 /*
  *  HASH        hash entry to get index to table
- *  NSInteger hash( ANTLRMap *self, char *s );
+ *  NSInteger hash( Map *self, char *s );
  *
  *     Inputs:  NSString *s         string to find
  *
@@ -185,18 +185,18 @@
 #ifdef USERDOC
 /*
  *  LOOKUP  search hashed list for entry
- *  ANTLRMapElement *lookup:(NSString *)s;
+ *  MapElement *lookup:(NSString *)s;
  *
  *     Inputs:  NSString  *s       string to find
  *
- *     Returns: ANTLRMapElement  *        pointer to entry
+ *     Returns: MapElement  *        pointer to entry
  *
  *  Last Revision 9/03/90
  */
 #endif
 -(id)lookup:(NSString *)s
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     
     for( np = self->ptrBuffer[[self hash:s]]; np != nil; np = [np getfNext] ) {
         if ( [s isEqualToString:[np getName]] ) {
@@ -209,9 +209,9 @@
 #ifdef USERDOC
 /*
  *  INSTALL search hashed list for entry
- *  NSInteger install( ANTLRMap *self, ANTLRMapElement *sym );
+ *  NSInteger install( Map *self, MapElement *sym );
  *
- *     Inputs:  ANTLRMapElement    *sym   -- symbol ptr to install
+ *     Inputs:  MapElement    *sym   -- symbol ptr to install
  *              NSInteger         scope -- level to find
  *
  *     Returns: Boolean     TRUE   if installed
@@ -220,9 +220,9 @@
  *  Last Revision 9/03/90
  */
 #endif
--(ANTLRMapElement *)install:(ANTLRMapElement *)sym
+-(MapElement *)install:(MapElement *)sym
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     
     np = [self lookup:[sym getName]];
     if ( np == nil ) {
@@ -237,7 +237,7 @@
 #ifdef USERDOC
 /*
  *  RemoveSym  search hashed list for entry
- *  NSInteger RemoveSym( ANTLRMap *self, char *s );
+ *  NSInteger RemoveSym( Map *self, char *s );
  *
  *     Inputs:  char     *s          string to find
  *
@@ -248,7 +248,7 @@
 #endif
 -(NSInteger)RemoveSym:(NSString *)s
 {
-    ANTLRMapElement *np, *tmp;
+    MapElement *np, *tmp;
     NSInteger idx;
     
     idx = [self hash:s];
@@ -263,7 +263,7 @@
     return( FAILURE );                    /*   not found      */
 }
 
--(void)delete_chain:(ANTLRMapElement *)np
+-(void)delete_chain:(MapElement *)np
 {
     if ( [np getfNext] != nil )
 		[self delete_chain:[np getfNext]];
@@ -274,11 +274,11 @@
 -(NSInteger)bld_symtab:(KW_TABLE *)toknams
 {
     NSInteger i;
-    ANTLRMapElement *np;
+    MapElement *np;
     
     for( i = 0; *(toknams[i].name) != '\0'; i++ ) {
         // install symbol in ptrBuffer
-        np = [ANTLRMapElement newANTLRMapElement:[NSString stringWithFormat:@"%s", toknams[i].name]];
+        np = [MapElement newMapElement:[NSString stringWithFormat:@"%s", toknams[i].name]];
         //        np->fType = toknams[i].toknum;
         [self install:np Scope:0];
     }
@@ -289,9 +289,9 @@
 /*
  * works only for maplist indexed not by name but by TokenNumber
  */
-- (ANTLRMapElement *)getName:(NSInteger)ttype
+- (MapElement *)getName:(NSInteger)ttype
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     NSInteger aTType;
 
     aTType = ttype % HASHSIZE;
@@ -303,18 +303,18 @@
     return( nil );              /*   not found      */
 }
 
-- (NSInteger)getNode:(id<ANTLRBaseTree>)aNode
+- (NSInteger)getNode:(id<BaseTree>)aNode
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     NSInteger idx;
 
-    idx = [(id<ANTLRBaseTree>)aNode type];
+    idx = [(id<BaseTree>)aNode type];
     idx %= HASHSIZE;
     np = ptrBuffer[idx];
     return( [(NSNumber *)np.node integerValue] );
 }
 
-- (ANTLRMapElement *)getTType:(NSString *)name
+- (MapElement *)getTType:(NSString *)name
 {
     return [self lookup:name];
 }
@@ -322,20 +322,20 @@
 // create node and install node in ptrBuffer
 - (void)putName:(NSString *)name TType:(NSInteger)ttype
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     
-    np = [ANTLRMapElement newANTLRMapElementWithName:[NSString stringWithString:name] Type:ttype];
+    np = [MapElement newMapElementWithName:[NSString stringWithString:name] Type:ttype];
     [self install:np];
 }
 
 // create node and install node in ptrBuffer
 - (void)putName:(NSString *)name Node:(id)aNode
 {
-    ANTLRMapElement *np, *np1;
+    MapElement *np, *np1;
     NSInteger idx;
     
     idx = [self hash:name];
-    np1 = [ANTLRMapElement newANTLRMapElementWithName:[NSString stringWithString:name] Type:idx];
+    np1 = [MapElement newMapElementWithName:[NSString stringWithString:name] Type:idx];
     np = [self lookup:name];
     if ( np == nil ) {
         [np1 setFNext:self->ptrBuffer[ self->lastHash ]];
@@ -351,11 +351,11 @@
 // create node and install node in ptrBuffer
 - (void)putNode:(NSInteger)aTType Node:(id)aNode
 {
-    ANTLRMapElement *np;
+    MapElement *np;
     NSInteger ttype;
     
     ttype = aTType % HASHSIZE;
-    np = [ANTLRMapElement newANTLRMapElementWithNode:ttype Node:(id)aNode];
+    np = [MapElement newMapElementWithNode:ttype Node:(id)aNode];
     ptrBuffer[ttype] = np;
 }
 

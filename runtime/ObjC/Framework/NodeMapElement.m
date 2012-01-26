@@ -1,5 +1,5 @@
 //
-//  ANTLRNodeMapElement.m
+//  NodeMapElement.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -29,11 +29,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRNodeMapElement.h"
+#import "NodeMapElement.h"
 
 static NSInteger _aUniqueID;
 
-@implementation ANTLRNodeMapElement
+@implementation NodeMapElement
 
 @synthesize node;
 
@@ -42,14 +42,14 @@ static NSInteger _aUniqueID;
     _aUniqueID = 0;
 }
 
-+ (ANTLRNodeMapElement *)newANTLRNodeMapElement
++ (NodeMapElement *)newNodeMapElement
 {
-    return [[ANTLRNodeMapElement alloc] init];
+    return [[NodeMapElement alloc] init];
 }
 
-+ (ANTLRNodeMapElement *)newANTLRNodeMapElementWithIndex:(id)anIndex Node:(id<ANTLRBaseTree>)aNode
++ (NodeMapElement *)newNodeMapElementWithIndex:(id)anIndex Node:(id<BaseTree>)aNode
 {
-    return [[ANTLRNodeMapElement alloc] initWithAnIndex:anIndex Node:aNode];
+    return [[NodeMapElement alloc] initWithAnIndex:anIndex Node:aNode];
 }
 
 - (id) init
@@ -76,19 +76,19 @@ static NSInteger _aUniqueID;
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRNodeMapElement *copy;
+    NodeMapElement *copy;
     
     copy = [super copyWithZone:aZone];
     copy.node = node;
     return( copy );
 }
 
-- (id<ANTLRBaseTree>)getNode
+- (id<BaseTree>)getNode
 {
     return node;
 }
 
-- (void)setNode:(id<ANTLRBaseTree>)aNode
+- (void)setNode:(id<BaseTree>)aNode
 {
     if ( aNode != node ) {
         if ( node ) [node release];

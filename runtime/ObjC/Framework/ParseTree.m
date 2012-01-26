@@ -1,5 +1,5 @@
 //
-//  ANTLRParseTree.m
+//  ParseTree.m
 //  ANTLR
 //
 //  Created by Alan Condit on 7/12/10.
@@ -29,20 +29,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRParseTree.h"
+#import "ParseTree.h"
 
 /** A record of the rules used to match a token sequence.  The tokens
  *  end up as the leaves of this tree and rule nodes are the interior nodes.
  *  This really adds no functionality, it is just an alias for CommonTree
  *  that is more meaningful (specific) and holds a String to display for a node.
  */
-@implementation ANTLRParseTree
-+ (ANTLRParseTree *)newANTLRParseTree:(id<ANTLRToken>)label
+@implementation ParseTree
++ (ParseTree *)newParseTree:(id<Token>)label
 {
-    return [[ANTLRParseTree alloc] initWithLabel:label];
+    return [[ParseTree alloc] initWithLabel:label];
 }
     
-- (id)initWithLabel:(id<ANTLRToken>)label
+- (id)initWithLabel:(id<Token>)label
 {
     self = [super init];
     if ( self != nil) {
@@ -51,7 +51,7 @@
     return self;
 }
 
-- (id<ANTLRBaseTree>)dupNode
+- (id<BaseTree>)dupNode
 {
     return nil;
 }
@@ -86,9 +86,9 @@
 
 - (NSString *)description
 {
-    if ( [payload isKindOfClass:[ANTLRCommonToken class]] ) {
-        id<ANTLRToken> t = (id<ANTLRToken>)payload;
-        if ( t.type == ANTLRTokenTypeEOF ) {
+    if ( [payload isKindOfClass:[CommonToken class]] ) {
+        id<Token> t = (id<Token>)payload;
+        if ( t.type == TokenTypeEOF ) {
             return @"<EOF>";
         }
         return [t text];
@@ -109,7 +109,7 @@
     NSMutableString *buf = [NSMutableString stringWithCapacity:25];
     if ( hiddenTokens!=nil ) {
         for (NSUInteger i = 0; i < [hiddenTokens count]; i++) {
-            id<ANTLRToken>  hidden = (id<ANTLRToken> ) [hiddenTokens objectAtIndex:i];
+            id<Token>  hidden = (id<Token> ) [hiddenTokens objectAtIndex:i];
             [buf appendString:[hidden text]];
         }
     }
@@ -131,12 +131,12 @@
     
 - (void)_toStringLeaves:(NSMutableString *)buf
 {
-    if ( [payload isKindOfClass:[ANTLRCommonToken class]] ) { // leaf node token?
+    if ( [payload isKindOfClass:[CommonToken class]] ) { // leaf node token?
         [buf appendString:[self toStringWithHiddenTokens]];
         return;
     }
     for (int i = 0; children!=nil && i < [children count]; i++) {
-        ANTLRParseTree *t = (ANTLRParseTree *) [children objectAtIndex:i];
+        ParseTree *t = (ParseTree *) [children objectAtIndex:i];
         [t _toStringLeaves:buf];
     }
 }

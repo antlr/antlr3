@@ -25,45 +25,45 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCommonToken.h"
-#import "ANTLRBaseTree.h"
+#import "CommonToken.h"
+#import "BaseTree.h"
 
-@interface ANTLRCommonTree : ANTLRBaseTree <ANTLRTree> {
-	__strong ANTLRCommonToken *token;
+@interface CommonTree : BaseTree <Tree> {
+	__strong CommonToken *token;
 	NSInteger startIndex;
 	NSInteger stopIndex;
-    __strong ANTLRCommonTree *parent;
+    __strong CommonTree *parent;
     NSInteger childIndex;
 }
 
-+ (ANTLRCommonTree *) invalidNode;
-+ (ANTLRCommonTree *) newTree;
-+ (ANTLRCommonTree *) newTreeWithTree:(ANTLRCommonTree *)aTree;
-+ (ANTLRCommonTree *) newTreeWithToken:(ANTLRCommonToken *)aToken;
-+ (ANTLRCommonTree *) newTreeWithTokenType:(NSInteger)tokenType;
-+ (ANTLRCommonTree *) newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText;
++ (CommonTree *) invalidNode;
++ (CommonTree *) newTree;
++ (CommonTree *) newTreeWithTree:(CommonTree *)aTree;
++ (CommonTree *) newTreeWithToken:(CommonToken *)aToken;
++ (CommonTree *) newTreeWithTokenType:(NSInteger)tokenType;
++ (CommonTree *) newTreeWithTokenType:(NSInteger)aTType Text:(NSString *)theText;
 
 - (id) init;
-- (id) initWithTreeNode:(ANTLRCommonTree *)aNode;
-- (id) initWithToken:(ANTLRCommonToken *)aToken;
+- (id) initWithTreeNode:(CommonTree *)aNode;
+- (id) initWithToken:(CommonToken *)aToken;
 - (id) initWithTokenType:(NSInteger)aTokenType;
 - (id) initWithTokenType:(NSInteger)aTokenType Text:(NSString *)theText;
 
-- (id<ANTLRBaseTree>) copyWithZone:(NSZone *)aZone;
+- (id<BaseTree>) copyWithZone:(NSZone *)aZone;
 
 - (BOOL) isNil;
 
-- (ANTLRCommonToken *) getToken;
-- (void) setToken:(ANTLRCommonToken *)aToken;
-- (ANTLRCommonToken *) dupNode;
+- (CommonToken *) getToken;
+- (void) setToken:(CommonToken *)aToken;
+- (CommonToken *) dupNode;
 - (NSInteger)type;
 - (NSString *)text;
 - (NSUInteger)line;
 - (void) setLine:(NSUInteger)aLine;
 - (NSUInteger)charPositionInLine;
 - (void) setCharPositionInLine:(NSUInteger)pos;
-- (ANTLRCommonTree *) getParent;
-- (void) setParent:(ANTLRCommonTree *) t;
+- (CommonTree *) getParent;
+- (void) setParent:(CommonTree *) t;
 
 #ifdef DONTUSENOMO
 - (NSString *) treeDescription;
@@ -76,17 +76,17 @@
 - (void) setTokenStopIndex: (NSInteger) aStopIndex;
 
 /*
- @property (retain, getter=getANTLRCommonToken, setter=setANTLRCommonToken:) ANTLRCommonToken *token;
+ @property (retain, getter=getCommonToken, setter=setCommonToken:) CommonToken *token;
  @property (assign, getter=getTokenStartIndex, setter=setTokenStartIndex:) NSInteger startIndex;
  @property (assign, getter=getTokenStopIndex, setter=setTokenStopIndex:) NSInteger stopIndex;
- @property (retain, getter=getParent, setter=setParent:) id<ANTLRBaseTree> parentparent;
+ @property (retain, getter=getParent, setter=setParent:) id<BaseTree> parentparent;
  @property (assign, getter=getChildIndex, setter=setChildIndex:) NSInteger childIndex;
  */
 
-@property (retain) ANTLRCommonToken *token;
+@property (retain) CommonToken *token;
 @property (assign) NSInteger startIndex;
 @property (assign) NSInteger stopIndex;
-@property (retain) ANTLRCommonTree *parent;
+@property (retain) CommonTree *parent;
 @property (assign) NSInteger childIndex;
 
 @end

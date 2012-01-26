@@ -26,21 +26,21 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCharStream.h"
-#import "ANTLRCharStreamState.h"
-#import "ANTLRPtrBuffer.h"
+#import "CharStream.h"
+#import "CharStreamState.h"
+#import "PtrBuffer.h"
 
-@interface ANTLRStringStream : NSObject < ANTLRCharStream > {
+@interface ANTLRStringStream : NSObject < CharStream > {
 	NSString *data;
 	NSInteger n;
 	NSInteger index;
 	NSUInteger line;
 	NSUInteger charPositionInLine;
 	NSInteger markDepth;
-	ANTLRPtrBuffer *markers;
+	PtrBuffer *markers;
 	NSInteger lastMarker;
 	NSString *name;
-    ANTLRCharStreamState *charState;
+    CharStreamState *charState;
 }
 
 + newANTLRStringStream;
@@ -86,8 +86,13 @@
 - (NSString *) substring:(NSInteger)startIndex To:(NSInteger)stopIndex;
 - (NSString *) substringWithRange:(NSRange) theRange;
 
-- (ANTLRPtrBuffer *)getMarkers;
-- (void) setMarkers:(ANTLRPtrBuffer *)aMarkerList;
+- (NSUInteger) getLine;
+- (NSUInteger) getCharPositionInLine;
+- (void) setLine:(NSUInteger) aLine;
+- (void) setCharPositionInLine:(NSUInteger) pos;
+
+- (PtrBuffer *)getMarkers;
+- (void) setMarkers:(PtrBuffer *)aMarkerList;
 
 - (NSString *)getSourceName;
 
@@ -101,9 +106,9 @@
 @property (assign) NSUInteger line;
 @property (assign) NSUInteger charPositionInLine;
 @property (assign) NSInteger markDepth;
-@property (retain) ANTLRPtrBuffer *markers;
+@property (retain) PtrBuffer *markers;
 @property (assign) NSInteger lastMarker;
 @property (retain) NSString *name;
-@property (retain) ANTLRCharStreamState *charState;
+@property (retain) CharStreamState *charState;
 
 @end

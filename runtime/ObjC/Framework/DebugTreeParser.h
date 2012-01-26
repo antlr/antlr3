@@ -25,28 +25,28 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreeParser.h"
-#import "ANTLRDebugEventProxy.h"
-#import "ANTLRDebugTreeNodeStream.h"
+#import "TreeParser.h"
+#import "DebugEventSocketProxy.h"
+#import "DebugTreeNodeStream.h"
 
-@interface ANTLRDebugTreeParser : ANTLRTreeParser {
-	id<ANTLRDebugEventListener> debugListener;
+@interface DebugTreeParser : TreeParser {
+	id<DebugEventListener> debugListener;
 }
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream;
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream;
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream
 				 debuggerPort:(NSInteger)portNumber;
 	// designated initializer
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream
-				debugListener:(id<ANTLRDebugEventListener>)theDebugListener
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream
+				debugListener:(id<DebugEventListener>)theDebugListener
 				 debuggerPort:(NSInteger)portNumber;
 
-- (id<ANTLRDebugEventListener>) debugListener;
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
+- (id<DebugEventListener>) debugListener;
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener;
 
-- (void) recoverFromMismatchedToken:(id<ANTLRIntStream>)inputStream 
+- (void) recoverFromMismatchedToken:(id<IntStream>)inputStream 
 						  exception:(NSException *)e 
-						  tokenType:(ANTLRTokenType)ttype 
+						  tokenType:(TokenType)ttype 
 							 follow:(ANTLRBitSet *)follow;
 
 @end

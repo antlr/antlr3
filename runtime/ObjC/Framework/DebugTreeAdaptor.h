@@ -25,21 +25,21 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRParser.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRDebugEventListener.h"
+#import "Parser.h"
+#import "CommonTreeAdaptor.h"
+#import "DebugEventListener.h"
 
-@interface ANTLRDebugTreeAdaptor : ANTLRBaseTreeAdaptor {
-	id<ANTLRDebugEventListener> debugListener;
-	ANTLRCommonTreeAdaptor *treeAdaptor;
+@interface DebugTreeAdaptor : BaseTreeAdaptor {
+	id<DebugEventListener> debugListener;
+	CommonTreeAdaptor *treeAdaptor;
 }
 
-- (id) initWithTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor debugListener:(id<ANTLRDebugEventListener>)aDebugListener;
+- (id) initWithTreeAdaptor:(CommonTreeAdaptor *)aTreeAdaptor debugListener:(id<DebugEventListener>)aDebugListener;
 
-- (id<ANTLRDebugEventListener>)debugListener;
-- (void) setDebugListener:(id<ANTLRDebugEventListener>)aDebugListener;
+- (id<DebugEventListener>)debugListener;
+- (void) setDebugListener:(id<DebugEventListener>)aDebugListener;
 
-- (ANTLRCommonTreeAdaptor *) getTreeAdaptor;
-- (void) setTreeAdaptor:(ANTLRCommonTreeAdaptor *)aTreeAdaptor;
+- (CommonTreeAdaptor *) getTreeAdaptor;
+- (void) setTreeAdaptor:(CommonTreeAdaptor *)aTreeAdaptor;
 
 @end

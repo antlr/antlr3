@@ -1,5 +1,5 @@
 //
-//  ANTLRPtrStack.m
+//  PtrStack.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -8,22 +8,22 @@
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#import "ANTLRPtrStack.h"
-#import "ANTLRTree.h"
+#import "PtrStack.h"
+#import "Tree.h"
 
 /*
- * Start of ANTLRPtrStack
+ * Start of PtrStack
  */
-@implementation ANTLRPtrStack
+@implementation PtrStack
 
-+(ANTLRPtrStack *)newANTLRPtrStack
++(PtrStack *)newPtrStack
 {
-    return [[ANTLRPtrStack alloc] init];
+    return [[PtrStack alloc] init];
 }
 
-+(ANTLRPtrStack *)newANTLRPtrStack:(NSInteger)cnt
++(PtrStack *)newPtrStack:(NSInteger)cnt
 {
-    return [[ANTLRPtrStack alloc] initWithLen:cnt];
+    return [[PtrStack alloc] initWithLen:cnt];
 }
 
 -(id)init
@@ -45,14 +45,14 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRPtrStack" );
+    NSLog( @"called dealloc in PtrStack" );
 #endif
 	[super dealloc];
 }
 
--(void)deleteANTLRPtrStack:(ANTLRPtrStack *)np
+-(void)deletePtrStack:(PtrStack *)np
 {
-    ANTLRLinkBase *tmp, *rtmp;
+    LinkBase *tmp, *rtmp;
     NSInteger idx;
     
     if ( self.fNext != nil ) {
@@ -71,7 +71,7 @@
 #ifdef USERDOC
 /*
  *  HASH        hash entry to get index to table
- *  NSInteger hash( ANTLRPtrStack *self, char *s );
+ *  NSInteger hash( PtrStack *self, char *s );
  *
  *     Inputs:  NSString *s         string to find
  *
@@ -99,14 +99,14 @@
  *
  *     Inputs:  NSString  *s       string to find
  *
- *     Returns: ANTLRRuleMemo  *        pointer to entry
+ *     Returns: RuleMemo  *        pointer to entry
  *
  *  Last Revision 9/03/90
  */
 #endif
 -(id)lookup:(NSString *)s
 {
-    ANTLRLinkBase *np;
+    LinkBase *np;
     
     for( np = ptrBuffer[[self hash:s]]; np != nil; np = [np getfNext] ) {
         if ( [s isEqualToString:[np getName]] ) {
@@ -119,9 +119,9 @@
 #ifdef USERDOC
 /*
  *  INSTALL search hashed list for entry
- *  NSInteger install( ANTLRPtrStack *self, id sym );
+ *  NSInteger install( PtrStack *self, id sym );
  *
- *     Inputs:  ANTLRRuleMemo    *sym   -- symbol ptr to install
+ *     Inputs:  RuleMemo    *sym   -- symbol ptr to install
  *              NSInteger         scope -- level to find
  *
  *     Returns: Boolean     TRUE   if installed
@@ -132,7 +132,7 @@
 #endif
 -(id)install:(id)sym
 {
-    ANTLRLinkBase *np;
+    LinkBase *np;
     
     np = [self lookup:[sym getName]];
     if ( np == nil ) {

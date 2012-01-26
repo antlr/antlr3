@@ -25,10 +25,10 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 
 
-@interface ANTLRFailedPredicateException : ANTLRRecognitionException
+@interface FailedPredicateException : RecognitionException
 {
 	NSString *predicate;
 	NSString *ruleName;
@@ -37,8 +37,8 @@
 @property (retain) NSString *predicate;
 @property (retain) NSString *ruleName;
 
-+ (ANTLRFailedPredicateException *) newException:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream;
-- (ANTLRFailedPredicateException *) initWithRuleName:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<ANTLRIntStream>)theStream;
++ (FailedPredicateException *) newException:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<IntStream>)theStream;
+- (FailedPredicateException *) initWithRuleName:(NSString *)theRuleName predicate:(NSString *)thePredicate stream:(id<IntStream>)theStream;
 
 #ifdef DONTUSEYET
 - (NSString *) getPredicate;

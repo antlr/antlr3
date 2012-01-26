@@ -24,36 +24,36 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugParser.h"
+#import "DebugParser.h"
 
 
-@implementation ANTLRDebugParser
+@implementation DebugParser
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
+- (id) initWithTokenStream:(id<TokenStream>)theStream
 {
 	return [self initWithTokenStream:theStream debugListener:nil debuggerPort:-1];
 }
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
+- (id) initWithTokenStream:(id<TokenStream>)theStream
 			  debuggerPort:(NSInteger)portNumber
 {
 	return [self initWithTokenStream:theStream debugListener:nil debuggerPort:portNumber];
 }
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
-			 debugListener:(id<ANTLRDebugEventListener>)theDebugListener
+- (id) initWithTokenStream:(id<TokenStream>)theStream
+			 debugListener:(id<DebugEventListener>)theDebugListener
 			  debuggerPort:(NSInteger)portNumber
 {
-	id<ANTLRDebugEventListener,NSObject> debugger = nil;
-	id<ANTLRTokenStream> tokenStream = nil;
+	id<DebugEventListener,NSObject> debugger = nil;
+	id<TokenStream> tokenStream = nil;
 	if (theDebugListener) {
-		debugger = [(id<ANTLRDebugEventListener,NSObject>)theDebugListener retain];
+		debugger = [(id<DebugEventListener,NSObject>)theDebugListener retain];
 		debugger = theDebugListener;
 	} else {
-		debugger = [[ANTLRDebugEventProxy alloc] initWithGrammarName:[self grammarFileName] debuggerPort:portNumber];
+		debugger = [[DebugEventSocketProxy alloc] initWithGrammarName:[self grammarFileName] debuggerPort:portNumber];
 	}
-	if (theStream && ![theStream isKindOfClass:[ANTLRDebugTokenStream class]]) {
-		tokenStream = [[ANTLRDebugTokenStream alloc] initWithTokenStream:theStream debugListener:debugger];
+	if (theStream && ![theStream isKindOfClass:[DebugTokenStream class]]) {
+		tokenStream = [[DebugTokenStream alloc] initWithTokenStream:theStream debugListener:debugger];
 	} else {
 		tokenStream = [theStream retain];
 		tokenStream = theStream;
@@ -74,16 +74,16 @@
     [super dealloc];
 }
 
-- (id<ANTLRDebugEventListener>) debugListener
+- (id<DebugEventListener>) debugListener
 {
     return debugListener; 
 }
 
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener
 {
     if (debugListener != aDebugListener) {
-        [(id<ANTLRDebugEventListener,NSObject>)aDebugListener retain];
-        [(id<ANTLRDebugEventListener,NSObject>)debugListener release];
+        [(id<DebugEventListener,NSObject>)aDebugListener retain];
+        [(id<DebugEventListener,NSObject>)debugListener release];
         debugListener = aDebugListener;
     }
 }

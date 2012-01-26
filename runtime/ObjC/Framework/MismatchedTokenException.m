@@ -24,39 +24,39 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRMismatchedTokenException.h"
+#import "MismatchedTokenException.h"
 
 
-@implementation ANTLRMismatchedTokenException
+@implementation MismatchedTokenException
 
 @synthesize expecting;
 @synthesize expectingChar;
 @synthesize isTokenType;
 
 
-+ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput
 {
-	return [[ANTLRMismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput];
+	return [[MismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput];
 }
 
 + (id) newExceptionMissing:(NSInteger)expectedTokenType
-                                        Stream:(id<ANTLRIntStream>)anInput
-                                         Token:(id<ANTLRToken>)inserted
+                                        Stream:(id<IntStream>)anInput
+                                         Token:(id<Token>)inserted
 {
-	return [[ANTLRMismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput Token:inserted];
+	return [[MismatchedTokenException alloc] initWithTokenType:expectedTokenType Stream:anInput Token:inserted];
 }
 
-+ (id) newExceptionChar:(unichar) expectedCharacter Stream:(id<ANTLRIntStream>)anInput
++ (id) newExceptionChar:(unichar) expectedCharacter Stream:(id<IntStream>)anInput
 {
-	return [[ANTLRMismatchedTokenException alloc] initWithCharacter:expectedCharacter Stream:anInput];
+	return [[MismatchedTokenException alloc] initWithCharacter:expectedCharacter Stream:anInput];
 }
 
-+ (id) newExceptionStream:(id<ANTLRIntStream>)anInput Exception:(NSException *)e Follow:(ANTLRBitSet *) follow
++ (id) newExceptionStream:(id<IntStream>)anInput Exception:(NSException *)e Follow:(ANTLRBitSet *) follow
 {
-	return [[ANTLRMismatchedTokenException alloc] initWithStream:anInput];
+	return [[MismatchedTokenException alloc] initWithStream:anInput];
 }
 
--(id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
+-(id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput
 {
 	if ((self = [super initWithStream:anInput]) != nil) {
 		expecting = expectedTokenType;
@@ -66,8 +66,8 @@
 }
 
 -(id) initWithTokenType:(NSInteger)expectedTokenType
-                 Stream:(id<ANTLRIntStream>)anInput
-                  Token:(id<ANTLRToken>)inserted
+                 Stream:(id<IntStream>)anInput
+                  Token:(id<Token>)inserted
 {
 	if ((self = [super initWithStream:anInput]) != nil) {
 		expecting = expectedTokenType;
@@ -76,7 +76,7 @@
 	return self;
 }
 
-- (id) initWithCharacter:(unichar) expectedCharacter Stream:(id<ANTLRIntStream>)anInput
+- (id) initWithCharacter:(unichar) expectedCharacter Stream:(id<IntStream>)anInput
 {
 	if ((self = [super initWithStream:anInput]) != nil) {
 		expectingChar = expectedCharacter;

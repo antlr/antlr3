@@ -1,5 +1,5 @@
 //
-//  ANTLRUniqueIDMap.m
+//  UniqueIDMap.m
 //  ANTLR
 //
 //  Created by Alan Condit on 7/7/10.
@@ -29,26 +29,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRUniqueIDMap.h"
-#import "ANTLRTree.h"
+#import "UniqueIDMap.h"
+#import "Tree.h"
 
-@implementation ANTLRUniqueIDMap
+@implementation UniqueIDMap
 @synthesize lastHash;
 
-+(id)newANTLRUniqueIDMap
++(id)newUniqueIDMap
 {
-    ANTLRUniqueIDMap *aNewANTLRUniqueIDMap;
+    UniqueIDMap *aNewUniqueIDMap;
     
-    aNewANTLRUniqueIDMap = [[ANTLRUniqueIDMap alloc] init];
-	return( aNewANTLRUniqueIDMap );
+    aNewUniqueIDMap = [[UniqueIDMap alloc] init];
+	return( aNewUniqueIDMap );
 }
 
-+(id)newANTLRUniqueIDMapWithLen:(NSInteger)aBuffSize
++(id)newUniqueIDMapWithLen:(NSInteger)aBuffSize
 {
-    ANTLRUniqueIDMap *aNewANTLRUniqueIDMap;
+    UniqueIDMap *aNewUniqueIDMap;
     
-    aNewANTLRUniqueIDMap = [[ANTLRUniqueIDMap alloc] initWithLen:aBuffSize];
-	return( aNewANTLRUniqueIDMap );
+    aNewUniqueIDMap = [[UniqueIDMap alloc] initWithLen:aBuffSize];
+	return( aNewUniqueIDMap );
 }
 
 -(id)init
@@ -74,9 +74,9 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRUniqueIDMap" );
+    NSLog( @"called dealloc in UniqueIDMap" );
 #endif
-    ANTLRNodeMapElement *tmp, *rtmp;
+    NodeMapElement *tmp, *rtmp;
     NSInteger idx;
 	
     if ( self.fNext != nil ) {
@@ -84,7 +84,7 @@
             tmp = ptrBuffer[idx];
             while ( tmp ) {
                 rtmp = tmp;
-                tmp = (ANTLRNodeMapElement *)tmp.fNext;
+                tmp = (NodeMapElement *)tmp.fNext;
                 [rtmp release];
             }
         }
@@ -92,9 +92,9 @@
 	[super dealloc];
 }
 
--(void)deleteANTLRUniqueIDMap:(ANTLRNodeMapElement *)np
+-(void)deleteUniqueIDMap:(NodeMapElement *)np
 {
-    ANTLRNodeMapElement *tmp, *rtmp;
+    NodeMapElement *tmp, *rtmp;
     NSInteger idx;
     
     if ( self.fNext != nil ) {
@@ -111,7 +111,7 @@
 
 - (void)clear
 {
-    ANTLRNodeMapElement *tmp, *rtmp;
+    NodeMapElement *tmp, *rtmp;
     NSInteger idx;
     
     for( idx = 0; idx < HASHSIZE; idx++ ) {
@@ -143,19 +143,19 @@
     return BuffSize;
 }
 
--(void)delete_chain:(ANTLRNodeMapElement *)np
+-(void)delete_chain:(NodeMapElement *)np
 {
     if ( np.fNext != nil )
 		[self delete_chain:np.fNext];
 	[np release];
 }
 
-- (id)getNode:(id<ANTLRBaseTree>)aNode
+- (id)getNode:(id<BaseTree>)aNode
 {
-    ANTLRNodeMapElement *np;
+    NodeMapElement *np;
     NSInteger idx;
     
-    idx = [(id<ANTLRBaseTree>)aNode type];
+    idx = [(id<BaseTree>)aNode type];
     np = ptrBuffer[idx];
     while ( np != nil ) {
         if (np.node == aNode) {
@@ -166,14 +166,14 @@
     return( nil );
 }
 
-- (void)putID:(id)anID Node:(id<ANTLRBaseTree>)aNode
+- (void)putID:(id)anID Node:(id<BaseTree>)aNode
 {
-    ANTLRNodeMapElement *np, *np1;
+    NodeMapElement *np, *np1;
     NSInteger idx;
     
-    idx = [(id<ANTLRBaseTree>)aNode type];
+    idx = [(id<BaseTree>)aNode type];
     idx %= HASHSIZE;
-    np = [[ANTLRNodeMapElement newANTLRNodeMapElementWithIndex:anID Node:aNode] retain];
+    np = [[NodeMapElement newNodeMapElementWithIndex:anID Node:aNode] retain];
     np1 = ptrBuffer[idx];
     np.fNext = np1;
     ptrBuffer[idx] = np;

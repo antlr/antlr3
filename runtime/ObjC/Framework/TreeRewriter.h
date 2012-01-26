@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeRewriter.h
+//  TreeRewriter.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -30,7 +30,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreeParser.h"
+#import "TreeParser.h"
 
 @interface ANTLRfptr : NSObject {
     id  actor;
@@ -46,33 +46,33 @@
 @property SEL ruleSEL;
 @end
 
-@interface ANTLRTreeRewriter : ANTLRTreeParser {
+@interface TreeRewriter : TreeParser {
     BOOL showTransformations;
-    id<ANTLRTokenStream> originalTokenStream;
-    id<ANTLRTreeAdaptor> originalAdaptor;
+    id<TokenStream> originalTokenStream;
+    id<TreeAdaptor> originalAdaptor;
     ANTLRfptr *rule;
     ANTLRfptr *topdown_fptr;
     ANTLRfptr *bottomup_ftpr;
 }
 
-+ (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput;
-+ (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
-- (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput;
-- (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
-- (id) applyOnce:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule;
-- (id) applyRepeatedly:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule;
-- (id) downup:(ANTLRCommonTree *)t;
-- (id) pre:(ANTLRCommonTree *)t;
-- (id) post:(ANTLRCommonTree *)t;
-- (id) downup:(ANTLRCommonTree *)t XForm:(BOOL)aShowTransformations;
-- (void)reportTransformation:(ANTLRCommonTree *)oldTree Tree:(ANTLRCommonTree *)newTree;
++ (TreeRewriter *) newTreeRewriter:(id<TreeNodeStream>)anInput;
++ (TreeRewriter *) newTreeRewriter:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)aState;
+- (id)initWithStream:(id<TreeNodeStream>)anInput;
+- (id)initWithStream:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)aState;
+- (id) applyOnce:(CommonTree *)t Rule:(ANTLRfptr *)whichRule;
+- (id) applyRepeatedly:(CommonTree *)t Rule:(ANTLRfptr *)whichRule;
+- (id) downup:(CommonTree *)t;
+- (id) pre:(CommonTree *)t;
+- (id) post:(CommonTree *)t;
+- (id) downup:(CommonTree *)t XForm:(BOOL)aShowTransformations;
+- (void)reportTransformation:(CommonTree *)oldTree Tree:(CommonTree *)newTree;
 - (id) topdown_fptr;
 - (id) bottomup_ftpr;
 - (id) topdown;
 - (id) bottomup;
 
 @property BOOL showTransformations;
-@property (retain) id<ANTLRTokenStream> originalTokenStream;
-@property (retain) id<ANTLRTreeAdaptor> originalAdaptor;
+@property (retain) id<TokenStream> originalTokenStream;
+@property (retain) id<TreeAdaptor> originalAdaptor;
 @property (retain) ANTLRfptr *rule;
 @end

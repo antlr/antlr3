@@ -29,7 +29,7 @@
 
 /** This is a char buffer stream that is loaded from a file
  *  all at once when you construct the object.  This looks very
- *  much like an ANTLReader or ANTLRInputStream, but it's a special case
+ *  much like an ANTLRReader or ANTLRInputStream, but it's a special case
  *  since we know the exact size of the object to load.  We can avoid lots
  *  of data copying. 
  */

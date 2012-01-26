@@ -1,5 +1,5 @@
 //
-//  ANTLRToken+DebuggerSupport.m
+//  Token+DebuggerSupport.m
 //  ANTLR
 //
 //  Created by Kay Röpke on 03.12.2006.
@@ -29,10 +29,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRToken+DebuggerSupport.h"
+#import "Token+DebuggerSupport.h"
 
 
-@implementation ANTLRCommonToken(DebuggerSupport)
+@implementation CommonToken(DebuggerSupport)
 
 - (NSString *)debuggerDescription
 {

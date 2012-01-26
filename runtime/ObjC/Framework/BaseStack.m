@@ -1,5 +1,5 @@
 //
-//  ANTLRBaseRecognizer.m
+//  BaseRecognizer.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -32,24 +32,24 @@
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#import "ANTLRBaseStack.h"
-#import "ANTLRTree.h"
+#import "BaseStack.h"
+#import "Tree.h"
 
 /*
- * Start of ANTLRBaseStack
+ * Start of BaseStack
  */
-@implementation ANTLRBaseStack
+@implementation BaseStack
 
 @synthesize LastHash;
 
-+(ANTLRBaseStack *)newANTLRBaseStack
++(BaseStack *)newBaseStack
 {
-    return [[ANTLRBaseStack alloc] init];
+    return [[BaseStack alloc] init];
 }
 
-+(ANTLRBaseStack *)newANTLRBaseStackWithLen:(NSInteger)cnt
++(BaseStack *)newBaseStackWithLen:(NSInteger)cnt
 {
-    return [[ANTLRBaseStack alloc] initWithLen:cnt];
+    return [[BaseStack alloc] initWithLen:cnt];
 }
 
 -(id)init
@@ -71,14 +71,14 @@
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRBaseStack" );
+    NSLog( @"called dealloc in BaseStack" );
 #endif
 	[super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRBaseStack *copy;
+    BaseStack *copy;
     
     copy = [super copyWithZone:aZone];
     return copy;
@@ -101,14 +101,14 @@
     return BuffSize;
 }
 
--(void)deleteANTLRBaseStack:(ANTLRBaseStack *)np
+-(void)deleteBaseStack:(BaseStack *)np
 {
     id tmp, rtmp;
     NSInteger idx;
     
     if ( self.fNext != nil ) {
         for( idx = 0; idx < BuffSize; idx++ ) {
-            tmp = (ANTLRLinkBase *)ptrBuffer[idx];
+            tmp = (LinkBase *)ptrBuffer[idx];
             while ( tmp ) {
                 rtmp = tmp;
                 tmp = [tmp getfNext];

@@ -24,22 +24,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRParser.h"
+#import "Parser.h"
 
 
-@implementation ANTLRParser
+@implementation Parser
 
-+ (ANTLRParser *)newANTLRParser:(id<ANTLRTokenStream>)anInput
++ (Parser *)newParser:(id<TokenStream>)anInput
 {
-    return [[ANTLRParser alloc] initWithTokenStream:anInput];
+    return [[Parser alloc] initWithTokenStream:anInput];
 }
 
-+ (ANTLRParser *)newANTLRParser:(id<ANTLRTokenStream>)anInput State:(ANTLRRecognizerSharedState *)aState
++ (Parser *)newParser:(id<TokenStream>)anInput State:(RecognizerSharedState *)aState
 {
-    return [[ANTLRParser alloc] initWithTokenStream:anInput State:aState];
+    return [[Parser alloc] initWithTokenStream:anInput State:aState];
 }
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
+- (id) initWithTokenStream:(id<TokenStream>)theStream
 {
 	if ((self = [super init]) != nil) {
 		input = theStream;
@@ -47,7 +47,7 @@
 	return self;
 }
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream State:(ANTLRRecognizerSharedState *)aState
+- (id) initWithTokenStream:(id<TokenStream>)theStream State:(RecognizerSharedState *)aState
 {
 	if ((self = [super initWithState:aState]) != nil) {
         input = theStream;
@@ -66,7 +66,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRParser" );
+    NSLog( @"called dealloc in Parser" );
 #endif
 	[self setInput:nil];
 	[super dealloc];
@@ -75,12 +75,12 @@
 //---------------------------------------------------------- 
 //  input 
 //---------------------------------------------------------- 
-- (id<ANTLRTokenStream>) input
+- (id<TokenStream>) input
 {
     return input; 
 }
 
-- (void) setInput: (id<ANTLRTokenStream>) anInput
+- (void) setInput: (id<TokenStream>) anInput
 {
     if (input != anInput) {
         if ( input ) [input release];
@@ -89,42 +89,42 @@
     input = anInput;
 }
 
-- (id) getCurrentInputSymbol:(id<ANTLRTokenStream>)anInput
+- (id) getCurrentInputSymbol:(id<TokenStream>)anInput
 {
     state.token = [input LT:1];
     return state.token;
 }
 
-- (ANTLRCommonToken *)getMissingSymbol:(id<ANTLRTokenStream>)anInput
-                             Exception:(ANTLRRecognitionException *)e
+- (CommonToken *)getMissingSymbol:(id<TokenStream>)anInput
+                             Exception:(RecognitionException *)e
                                  TType:(NSInteger)expectedTokenType
                                 BitSet:(ANTLRBitSet *)follow
 {
     NSString *tokenText = nil;
-    if ( expectedTokenType == ANTLRTokenTypeEOF )
+    if ( expectedTokenType == TokenTypeEOF )
         tokenText = @"<missing EOF>";
     else
-        tokenText = [NSString stringWithFormat:@"<missing %@>\n",[[ANTLRBaseRecognizer getTokenNames] objectAtIndex:expectedTokenType]];
-    ANTLRCommonToken *t = [[ANTLRCommonToken newToken:expectedTokenType Text:tokenText] retain];
-    ANTLRCommonToken *current = [anInput LT:1];
-    if ( current.type == ANTLRTokenTypeEOF ) {
+        tokenText = [NSString stringWithFormat:@"<missing %@>\n",[[BaseRecognizer getTokenNames] objectAtIndex:expectedTokenType]];
+    CommonToken *t = [[CommonToken newToken:expectedTokenType Text:tokenText] retain];
+    CommonToken *current = [anInput LT:1];
+    if ( current.type == TokenTypeEOF ) {
         current = [anInput LT:-1];
     }
     t.line = current.line;
     t.charPositionInLine = current.charPositionInLine;
-    t.channel = ANTLRTokenChannelDefault;
+    t.channel = TokenChannelDefault;
     return t;
 }
 
 /** Set the token stream and reset the parser */
-- (void) setTokenStream:(id<ANTLRTokenStream>)anInput
+- (void) setTokenStream:(id<TokenStream>)anInput
 {
     input = nil;
     [self reset];
     input = anInput;
 }
 
-- (id<ANTLRTokenStream>)getTokenStream
+- (id<TokenStream>)getTokenStream
 {
     return input;
 }

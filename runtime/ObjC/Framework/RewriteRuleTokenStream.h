@@ -25,31 +25,31 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRewriteRuleElementStream.h"
+#import "RewriteRuleElementStream.h"
 
 
-@interface ANTLRRewriteRuleTokenStream : ANTLRRewriteRuleElementStream {
+@interface RewriteRuleTokenStream : RewriteRuleElementStream {
 
 }
 
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)anAdaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)anAdaptor
                           description:(NSString *)elementDescription;
 /** Create a stream with one element */
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)adaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)adaptor
                           description:(NSString *)elementDescription
                               element:(id) oneElement;
 /** Create a stream, but feed off an existing list */
-+ (id) newANTLRRewriteRuleTokenStream:(id<ANTLRTreeAdaptor>)adaptor
++ (id) newRewriteRuleTokenStream:(id<TreeAdaptor>)adaptor
                           description:(NSString *)elementDescription
                              elements:(AMutableArray *)elements;
 
 - (id) init;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor
                description:(NSString *)aDescription;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor 
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor 
                description:(NSString *)aDescription
                    element:(id)element;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)anAdaptor
                description:(NSString *)aDescription
                   elements:(AMutableArray *)elements;
                                
@@ -61,6 +61,6 @@
 /** Don't convert to a tree unless they explicitly call nextTree.
  *  This way we can do hetero tree nodes in rewrite.
  */
-- (id<ANTLRBaseTree>) toTree:(id<ANTLRToken>)element;
+- (id<BaseTree>) toTree:(id<Token>)element;
 
 @end

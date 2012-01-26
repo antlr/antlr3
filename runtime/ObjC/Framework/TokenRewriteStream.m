@@ -1,5 +1,5 @@
 //
-//  ANTLRTokenRewriteStream.m
+//  TokenRewriteStream.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/19/10.
@@ -29,8 +29,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTokenRewriteStream.h"
-#import "ANTLRRuntimeException.h"
+#import "TokenRewriteStream.h"
+#import "RuntimeException.h"
 
 static NSString *DEFAULT_PROGRAM_NAME = @"default";
 static NSInteger PROGRAM_INIT_SIZE = 100;
@@ -40,15 +40,15 @@ extern NSInteger debug;
 
 // Define the rewrite operation hierarchy
 
-@implementation ANTLRRewriteOperation
+@implementation RewriteOperation
 
 @synthesize instructionIndex;
 @synthesize rwIndex;
 @synthesize text;
 
-+ (ANTLRRewriteOperation *) newANTLRRewriteOperation:(NSInteger)anIndex Text:(NSString *)theText
++ (RewriteOperation *) newRewriteOperation:(NSInteger)anIndex Text:(NSString *)theText
 {
-    return [[ANTLRRewriteOperation alloc] initWithIndex:anIndex Text:theText];
+    return [[RewriteOperation alloc] initWithIndex:anIndex Text:theText];
 }
     
 - (id) initWithIndex:(NSInteger)anIndex Text:(NSString *)theText
@@ -111,7 +111,7 @@ extern NSInteger debug;
 - (NSInteger) execute:(NSMutableString *)buf
 {
     [buf appendString:text];
-    if ( ((ANTLRCommonToken *)[tokens objectAtIndex:rwIndex]).type != ANTLRTokenTypeEOF ) {
+    if ( ((CommonToken *)[tokens objectAtIndex:rwIndex]).type != TokenTypeEOF ) {
         [buf appendString:[[tokens objectAtIndex:rwIndex] text]];
     }
     return rwIndex+1;
@@ -179,65 +179,65 @@ extern NSInteger debug;
 @end
 
 
-@implementation ANTLRTokenRewriteStream
+@implementation TokenRewriteStream
 
 @synthesize programs;
 @synthesize lastRewriteTokenIndexes;
 
-+ (ANTLRTokenRewriteStream *)newANTLRTokenRewriteStream
++ (TokenRewriteStream *)newTokenRewriteStream
 {
-    return [[ANTLRTokenRewriteStream alloc] init];
+    return [[TokenRewriteStream alloc] init];
 }
 
-+ (ANTLRTokenRewriteStream *)newANTLRTokenRewriteStream:(id<ANTLRTokenSource>) aTokenSource
++ (TokenRewriteStream *)newTokenRewriteStream:(id<TokenSource>) aTokenSource
 {
-    return [[ANTLRTokenRewriteStream alloc] initWithTokenSource:aTokenSource];
+    return [[TokenRewriteStream alloc] initWithTokenSource:aTokenSource];
 }
 
-+ (ANTLRTokenRewriteStream *)newANTLRTokenRewriteStream:(id<ANTLRTokenSource>) aTokenSource Channel:(NSInteger)aChannel
++ (TokenRewriteStream *)newTokenRewriteStream:(id<TokenSource>) aTokenSource Channel:(NSInteger)aChannel
 {
-    return [[ANTLRTokenRewriteStream alloc] initWithTokenSource:aTokenSource Channel:aChannel];
+    return [[TokenRewriteStream alloc] initWithTokenSource:aTokenSource Channel:aChannel];
 }
  
 - (id) init
 {
     if ((self = [super init]) != nil) {
-        programs = [ANTLRHashMap newANTLRHashMap];
-        [programs addObject:[ANTLRMapElement newANTLRMapElementWithName:DEFAULT_PROGRAM_NAME Node:[ANTLRHashMap newANTLRHashMapWithLen:PROGRAM_INIT_SIZE]]];
-        lastRewriteTokenIndexes = [ANTLRHashMap newANTLRHashMap];
+        programs = [HashMap newHashMap];
+        [programs addObject:[MapElement newMapElementWithName:DEFAULT_PROGRAM_NAME Node:[HashMap newHashMapWithLen:PROGRAM_INIT_SIZE]]];
+        lastRewriteTokenIndexes = [HashMap newHashMap];
     }
     return self;
 }
  
-- (id)initWithTokenSource:(id<ANTLRTokenSource>)aTokenSource
+- (id)initWithTokenSource:(id<TokenSource>)aTokenSource
 {
     if ((self = [super init]) != nil) {
-        programs = [ANTLRHashMap newANTLRHashMap];
-        [programs addObject:[ANTLRMapElement newANTLRMapElementWithName:DEFAULT_PROGRAM_NAME Node:[ANTLRHashMap newANTLRHashMapWithLen:PROGRAM_INIT_SIZE]]];
-        lastRewriteTokenIndexes = [ANTLRHashMap newANTLRHashMap];
+        programs = [HashMap newHashMap];
+        [programs addObject:[MapElement newMapElementWithName:DEFAULT_PROGRAM_NAME Node:[HashMap newHashMapWithLen:PROGRAM_INIT_SIZE]]];
+        lastRewriteTokenIndexes = [HashMap newHashMap];
         tokenSource = aTokenSource;
     }
     return self;
 }
 
-- (id)initWithTokenSource:(id<ANTLRTokenSource>)aTokenSource Channel:(NSInteger)aChannel
+- (id)initWithTokenSource:(id<TokenSource>)aTokenSource Channel:(NSInteger)aChannel
 {
     if ((self = [super init]) != nil) {
-        programs = [ANTLRHashMap newANTLRHashMap];
-        [programs addObject:[ANTLRMapElement newANTLRMapElementWithName:DEFAULT_PROGRAM_NAME Node:[ANTLRHashMap newANTLRHashMapWithLen:PROGRAM_INIT_SIZE]]];
-        lastRewriteTokenIndexes = [ANTLRHashMap newANTLRHashMap];
+        programs = [HashMap newHashMap];
+        [programs addObject:[MapElement newMapElementWithName:DEFAULT_PROGRAM_NAME Node:[HashMap newHashMapWithLen:PROGRAM_INIT_SIZE]]];
+        lastRewriteTokenIndexes = [HashMap newHashMap];
         tokenSource = aTokenSource;
         channel = aChannel;
     }
     return self;
 }
  
-- (ANTLRHashMap *)getPrograms
+- (HashMap *)getPrograms
 {
     return programs;
 }
  
-- (void)setPrograms:(ANTLRHashMap *)aProgList
+- (void)setPrograms:(HashMap *)aProgList
 {
     programs = aProgList;
 }
@@ -254,7 +254,7 @@ extern NSInteger debug;
 - (void) rollback:(NSString *)programName Index:(NSInteger)anInstructionIndex
 {
     id object;
-    ANTLRHashMap *is;
+    HashMap *is;
 
     //    AMutableArray *is = [programs get(programName)];
     is = [self getPrograms];
@@ -276,7 +276,7 @@ extern NSInteger debug;
     [self rollback:programName Index:MIN_TOKEN_INDEX];
 }
 
-- (void) insertAfterToken:(id<ANTLRToken>)t Text:(NSString *)theText
+- (void) insertAfterToken:(id<Token>)t Text:(NSString *)theText
 {
     [self insertAfterProgNam:DEFAULT_PROGRAM_NAME Index:[t getTokenIndex] Text:theText];
 }
@@ -301,7 +301,7 @@ extern NSInteger debug;
 
 
 
-- (void) insertBeforeToken:(id<ANTLRToken>)t Text:(NSString *)theText
+- (void) insertBeforeToken:(id<Token>)t Text:(NSString *)theText
 {
     [self insertBeforeProgName:DEFAULT_PROGRAM_NAME Index:[t getTokenIndex] Text:theText];
 }
@@ -314,8 +314,8 @@ extern NSInteger debug;
 - (void) insertBeforeProgName:(NSString *)programName Index:(NSInteger)rwIndex Text:(NSString *)theText
 {
     //addToSortedRewriteList(programName, new ANTLRInsertBeforeOp(rwIndex,text));
-    ANTLRRewriteOperation *op = [ANTLRInsertBeforeOp newANTLRInsertBeforeOp:rwIndex Text:theText];
-    ANTLRHashMap *rewrites = [self getProgram:programName];
+    RewriteOperation *op = [ANTLRInsertBeforeOp newANTLRInsertBeforeOp:rwIndex Text:theText];
+    HashMap *rewrites = [self getProgram:programName];
     op.instructionIndex = [rewrites count];
     [rewrites addObject:op];		
 }
@@ -330,17 +330,17 @@ extern NSInteger debug;
     [self replaceProgNam:DEFAULT_PROGRAM_NAME FromIndex:from ToIndex:to Text:theText];
 }
 
-- (void) replaceFromToken:(id<ANTLRToken>)anIndexT Text:(NSString *)theText
+- (void) replaceFromToken:(id<Token>)anIndexT Text:(NSString *)theText
 {
     [self replaceProgNam:DEFAULT_PROGRAM_NAME FromIndex:[anIndexT getTokenIndex] ToIndex:[anIndexT getTokenIndex] Text:theText];
 }
 
-- (void) replaceFromToken:(id<ANTLRToken>)from ToToken:(id<ANTLRToken>)to Text:(NSString *)theText
+- (void) replaceFromToken:(id<Token>)from ToToken:(id<Token>)to Text:(NSString *)theText
 {
     [self replaceProgNam:DEFAULT_PROGRAM_NAME FromIndex:[from getTokenIndex] ToIndex:[to getTokenIndex] Text:theText];
 }
 
-- (void) replaceProgNam:(NSString *)programName Token:(id<ANTLRToken>)from Token:(id<ANTLRToken>)to Text:(NSString *)theText
+- (void) replaceProgNam:(NSString *)programName Token:(id<Token>)from Token:(id<Token>)to Text:(NSString *)theText
 {
     [self replaceProgNam:programName FromIndex:[from getTokenIndex] ToIndex:[to getTokenIndex] Text:theText];
 }
@@ -350,8 +350,8 @@ extern NSInteger debug;
     if ( from > to || from < 0 || to < 0 || to >= [tokens count] ) {
         @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"replace: range invalid: %d..%d size=%d\n", from, to, [tokens count]]];
     }
-    ANTLRRewriteOperation *op = [ANTLRReplaceOp newANTLRReplaceOp:from ToIndex:to Text:theText];
-    ANTLRHashMap *rewrites = (ANTLRHashMap *)[lastRewriteTokenIndexes getName:programName];
+    RewriteOperation *op = [ANTLRReplaceOp newANTLRReplaceOp:from ToIndex:to Text:theText];
+    HashMap *rewrites = (HashMap *)[lastRewriteTokenIndexes getName:programName];
     op.instructionIndex = [rewrites count];
     [rewrites addObject:op];
 }
@@ -366,17 +366,17 @@ extern NSInteger debug;
     [self delete:DEFAULT_PROGRAM_NAME FromIndex:from ToIndex:to];
 }
 
-- (void) deleteToken:(id<ANTLRToken>)anIndexT
+- (void) deleteToken:(id<Token>)anIndexT
 {
     [self delete:DEFAULT_PROGRAM_NAME FromIndex:[anIndexT getTokenIndex] ToIndex:[anIndexT getTokenIndex]];
 }
 
-- (void) deleteFromToken:(id<ANTLRToken>)from ToToken:(id<ANTLRToken>)to
+- (void) deleteFromToken:(id<Token>)from ToToken:(id<Token>)to
 {
     [self delete:DEFAULT_PROGRAM_NAME FromIndex:[from getTokenIndex] ToIndex:[to getTokenIndex]];
 }
 
-- (void) delete:(NSString *)programName FromToken:(id<ANTLRToken>)from ToToken:(id<ANTLRToken>)to
+- (void) delete:(NSString *)programName FromToken:(id<Token>)from ToToken:(id<Token>)to
 {
     [self replaceProgNam:programName FromIndex:[from getTokenIndex] ToIndex:[to getTokenIndex] Text:nil];
 }
@@ -395,7 +395,7 @@ extern NSInteger debug;
 {
 #pragma warning fix this to look up the hashed name
     NSInteger anInt = -1;
-    ANTLRMapElement *node = [lastRewriteTokenIndexes lookup:programName Scope:0];
+    MapElement *node = [lastRewriteTokenIndexes lookup:programName Scope:0];
     if ( node != nil ) {
         anInt = [lastRewriteTokenIndexes hash:programName];
     }
@@ -407,18 +407,18 @@ extern NSInteger debug;
     [lastRewriteTokenIndexes insertObject:programName atIndex:anInt];
 }
 
--(ANTLRHashMap *) getProgram:(NSString *)name
+-(HashMap *) getProgram:(NSString *)name
 {
-   ANTLRHashMap *is = (ANTLRHashMap *)[programs getName:name];
+   HashMap *is = (HashMap *)[programs getName:name];
     if ( is == nil ) {
         is = [self initializeProgram:name];
     }
     return is;
 }
 
--(ANTLRHashMap *) initializeProgram:(NSString *)name
+-(HashMap *) initializeProgram:(NSString *)name
 {
-    ANTLRHashMap *is = [ANTLRHashMap newANTLRHashMapWithLen:PROGRAM_INIT_SIZE];
+    HashMap *is = [HashMap newHashMapWithLen:PROGRAM_INIT_SIZE];
     [is putName:name Node:nil];
     return is;
 }
@@ -433,7 +433,7 @@ extern NSInteger debug;
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     for (int i = start; i >= MIN_TOKEN_INDEX && i <= end && i< [tokens count]; i++) {
-        if ( [[lastRewriteTokenIndexes objectAtIndex:i] type] != ANTLRTokenTypeEOF )
+        if ( [[lastRewriteTokenIndexes objectAtIndex:i] type] != TokenTypeEOF )
             [buf appendString:[[tokens objectAtIndex:i] text]];
     }
     return [NSString stringWithString:buf];
@@ -458,7 +458,7 @@ extern NSInteger debug;
 
 - (NSString *)toString:(NSString *)programName FromStart:(NSInteger)start ToEnd:(NSInteger)end
 {
-    ANTLRHashMap *rewrites = (ANTLRHashMap *)[programs getName:programName];
+    HashMap *rewrites = (HashMap *)[programs getName:programName];
     
     // ensure start/end are in range
     if ( end > [tokens count]-1 ) end = [tokens count]-1;
@@ -471,17 +471,17 @@ extern NSInteger debug;
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     
     // First, optimize instruction stream
-    ANTLRHashMap *indexToOp = [self reduceToSingleOperationPerIndex:rewrites];
+    HashMap *indexToOp = [self reduceToSingleOperationPerIndex:rewrites];
     
     // Walk buffer, executing instructions and emitting tokens
     int i = start;
     while ( i <= end && i < [tokens count] ) {
-        ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[indexToOp objectAtIndex:i];
+        RewriteOperation *op = (RewriteOperation *)[indexToOp objectAtIndex:i];
         [indexToOp setObject:nil atIndex:i]; // remove so any left have rwIndex size-1
-        id<ANTLRToken>t = (id<ANTLRToken>) [tokens objectAtIndex:i];
+        id<Token>t = (id<Token>) [tokens objectAtIndex:i];
         if ( op == nil ) {
             // no operation at that rwIndex, just dump token
-            if ( t.type != ANTLRTokenTypeEOF )
+            if ( t.type != TokenTypeEOF )
                 [buf appendString:t.text];
             i++; // move to next token
         }
@@ -499,7 +499,7 @@ extern NSInteger debug;
         // should be included (they will be inserts).
         int i2 = 0;
         while ( i2 < [indexToOp count] - 1 ) {
-            ANTLRRewriteOperation *op = [indexToOp objectAtIndex:i2];
+            RewriteOperation *op = [indexToOp objectAtIndex:i2];
             if ( op.rwIndex >= [tokens count]-1 ) {
                 [buf appendString:op.text];
             }
@@ -553,13 +553,13 @@ extern NSInteger debug;
  *
  *  Return a map from token rwIndex to operation.
  */
-- (ANTLRHashMap *)reduceToSingleOperationPerIndex:(ANTLRHashMap *)rewrites
+- (HashMap *)reduceToSingleOperationPerIndex:(HashMap *)rewrites
 {
     //System.out.println("rewrites="+rewrites);
     if (debug > 1) NSLog(@"rewrites=%@\n", [rewrites getName:DEFAULT_PROGRAM_NAME]);
     // WALK REPLACES
     for (int i = 0; i < [rewrites count]; i++) {
-        ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[rewrites objectAtIndex:i];
+        RewriteOperation *op = (RewriteOperation *)[rewrites objectAtIndex:i];
         if ( op==nil )
             continue;
         if ( !([[op class] isKindOfClass:[ANTLRReplaceOp class]]) )
@@ -567,7 +567,7 @@ extern NSInteger debug;
         ANTLRReplaceOp *rop = (ANTLRReplaceOp *)[rewrites objectAtIndex:i];
         // Wipe prior inserts within range
         //List inserts = getKindOfOps(rewrites, ANTLRInsertBeforeOp.class, i);
-        ANTLRHashMap *inserts = [self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
+        HashMap *inserts = [self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
         for (int j = 0; j < [inserts size]; j++) {
             ANTLRInsertBeforeOp *iop = (ANTLRInsertBeforeOp *)[inserts objectAtIndex:j];
             if ( iop.rwIndex >= rop.rwIndex && iop.rwIndex <= rop.lastIndex ) {
@@ -576,7 +576,7 @@ extern NSInteger debug;
             }
         }
         // Drop any prior replaces contained within
-        ANTLRHashMap *prevReplaces = [self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
+        HashMap *prevReplaces = [self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
         for (int j = 0; j < [prevReplaces count]; j++) {
             ANTLRReplaceOp *prevRop = (ANTLRReplaceOp *) [prevReplaces objectAtIndex:j];
             if ( prevRop.rwIndex>=rop.rwIndex && prevRop.lastIndex <= rop.lastIndex ) {
@@ -596,14 +596,14 @@ extern NSInteger debug;
     
     // WALK INSERTS
     for (int i = 0; i < [rewrites count]; i++) {
-        ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[rewrites objectAtIndex:i];
+        RewriteOperation *op = (RewriteOperation *)[rewrites objectAtIndex:i];
         if ( op == nil )
             continue;
         if ( !([[op class] isKindOfClass:[ANTLRInsertBeforeOp class]]) )
             continue;
         ANTLRInsertBeforeOp *iop = (ANTLRInsertBeforeOp *)[rewrites objectAtIndex:i];
         // combine current insert with prior if any at same rwIndex
-        ANTLRHashMap *prevInserts = (ANTLRHashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
+        HashMap *prevInserts = (HashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRInsertBeforeOp class] Index:i];
         for (int j = 0; j < [prevInserts count]; j++) {
             ANTLRInsertBeforeOp *prevIop = (ANTLRInsertBeforeOp *) [prevInserts objectAtIndex:j];
             if ( prevIop.rwIndex == iop.rwIndex ) { // combine objects
@@ -615,7 +615,7 @@ extern NSInteger debug;
             }
         }
         // look for replaces where iop.rwIndex is in range; error
-        ANTLRHashMap *prevReplaces = (ANTLRHashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
+        HashMap *prevReplaces = (HashMap *)[self getKindOfOps:rewrites KindOfClass:[ANTLRReplaceOp class] Index:i];
         for (int j = 0; j < [prevReplaces count]; j++) {
             ANTLRReplaceOp *rop = (ANTLRReplaceOp *) [prevReplaces objectAtIndex:j];
             if ( iop.rwIndex == rop.rwIndex ) {
@@ -629,13 +629,13 @@ extern NSInteger debug;
         }
     }
     // System.out.println("rewrites after="+rewrites);
-    ANTLRHashMap *m = [ANTLRHashMap newANTLRHashMapWithLen:15];
+    HashMap *m = [HashMap newHashMapWithLen:15];
     for (int i = 0; i < [rewrites count]; i++) {
-        ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[rewrites objectAtIndex:i];
+        RewriteOperation *op = (RewriteOperation *)[rewrites objectAtIndex:i];
         if ( op == nil )
             continue; // ignore deleted ops
         if ( [m objectAtIndex:op.rwIndex] != nil ) {
-            @throw [ANTLRRuntimeException newException:@"should only be one op per rwIndex\n"];
+            @throw [RuntimeException newException:@"should only be one op per rwIndex\n"];
         }
         //[m put(new Integer(op.rwIndex), op);
         [m setObject:op atIndex:op.rwIndex];
@@ -656,17 +656,17 @@ extern NSInteger debug;
     return [NSString stringWithFormat:@"%@%@",x, y];
 }
 
-- (ANTLRHashMap *)getKindOfOps:(ANTLRHashMap *)rewrites KindOfClass:(Class)kind
+- (HashMap *)getKindOfOps:(HashMap *)rewrites KindOfClass:(Class)kind
 {
     return [self getKindOfOps:rewrites KindOfClass:kind Index:[rewrites count]];
 }
 
 /** Get all operations before an rwIndex of a particular kind */
-- (ANTLRHashMap *)getKindOfOps:(ANTLRHashMap *)rewrites KindOfClass:(Class)kind Index:(NSInteger)before
+- (HashMap *)getKindOfOps:(HashMap *)rewrites KindOfClass:(Class)kind Index:(NSInteger)before
 {
-    ANTLRHashMap *ops = [ANTLRHashMap newANTLRHashMapWithLen:15];
+    HashMap *ops = [HashMap newHashMapWithLen:15];
     for (int i = 0; i < before && i < [rewrites count]; i++) {
-        ANTLRRewriteOperation *op = (ANTLRRewriteOperation *)[rewrites objectAtIndex:i];
+        RewriteOperation *op = (RewriteOperation *)[rewrites objectAtIndex:i];
         if ( op == nil )
             continue; // ignore deleted
         if ( [op isKindOfClass:(Class)kind] )

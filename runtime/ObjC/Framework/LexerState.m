@@ -24,10 +24,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRLexerState.h"
+#import "LexerState.h"
 
 
-@implementation ANTLRLexerState
+@implementation LexerState
 
 - (id) init
 {
@@ -52,19 +52,19 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRLexerState" );
+    NSLog( @"called dealloc in LexerState" );
 #endif
 	[self setText:nil];
 	[self setToken:nil];
 	[super dealloc];
 }
 
-- (id<ANTLRToken>) getToken
+- (id<Token>) getToken
 {
 	return token;
 }
 
-- (void) setToken:(id<ANTLRToken>) theToken
+- (void) setToken:(id<Token>) theToken
 {
 	if (theToken != token) {
 		if ( token ) [token release];

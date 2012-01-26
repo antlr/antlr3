@@ -26,12 +26,12 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 #import "ANTLRBitSet.h"
 
-@protocol ANTLRIntStream;
+@protocol IntStream;
 
-@interface ANTLRMismatchedTokenException : ANTLRRecognitionException {
+@interface MismatchedTokenException : RecognitionException {
 	NSInteger expecting;
 	unichar expectingChar;
 	BOOL isTokenType;
@@ -41,18 +41,18 @@
 @property (assign, getter=getExpectingChar, setter=setExpectingChar:) unichar expectingChar;
 @property (assign, getter=getIsTokenType, setter=setIsTokenType:) BOOL isTokenType;
 
-+ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput;
 + (id) newExceptionMissing:(NSInteger)expectedTokenType
-                                        Stream:(id<ANTLRIntStream>)anInput
-                                         Token:(id<ANTLRToken>)inserted;
-+ (id) newExceptionChar:(unichar)expectedCharacter Stream:(id<ANTLRIntStream>)anInput;
-+ (id) newExceptionStream:(id<ANTLRIntStream>)anInput
+                                        Stream:(id<IntStream>)anInput
+                                         Token:(id<Token>)inserted;
++ (id) newExceptionChar:(unichar)expectedCharacter Stream:(id<IntStream>)anInput;
++ (id) newExceptionStream:(id<IntStream>)anInput
                                     Exception:(NSException *)e
                                        Follow:(ANTLRBitSet *)follow;
-- (id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
+- (id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput;
 -(id) initWithTokenType:(NSInteger)expectedTokenType
-                 Stream:(id<ANTLRIntStream>)anInput
-                  Token:(id<ANTLRToken>)inserted;
-- (id) initWithCharacter:(unichar)expectedCharacter Stream:(id<ANTLRIntStream>)anInput;
+                 Stream:(id<IntStream>)anInput
+                  Token:(id<Token>)inserted;
+- (id) initWithCharacter:(unichar)expectedCharacter Stream:(id<IntStream>)anInput;
 
 @end

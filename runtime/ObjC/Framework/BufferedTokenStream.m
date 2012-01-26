@@ -24,14 +24,14 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRBufferedTokenStream.h"
-#import "ANTLRTokenSource.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRRuntimeException.h"
+#import "BufferedTokenStream.h"
+#import "TokenSource.h"
+#import "CommonTreeAdaptor.h"
+#import "RuntimeException.h"
 
 extern NSInteger debug;
 
-@implementation ANTLRBufferedTokenStream
+@implementation BufferedTokenStream
 
 @synthesize tokenSource;
 @synthesize tokens;
@@ -39,17 +39,17 @@ extern NSInteger debug;
 @synthesize index;
 @synthesize range;
 
-+ (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream
++ (BufferedTokenStream *) newBufferedTokenStream
 {
-    return [[ANTLRBufferedTokenStream alloc] init];
+    return [[BufferedTokenStream alloc] init];
 }
 
-+ (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource
++ (BufferedTokenStream *) newBufferedTokenStreamWith:(id<TokenSource>)aSource
 {
-    return [[ANTLRBufferedTokenStream alloc] initWithTokenSource:aSource];
+    return [[BufferedTokenStream alloc] initWithTokenSource:aSource];
 }
 
-- (ANTLRBufferedTokenStream *) init
+- (BufferedTokenStream *) init
 {
 	if ((self = [super init]) != nil)
 	{
@@ -61,7 +61,7 @@ extern NSInteger debug;
 	return self;
 }
 
--(id) initWithTokenSource:(id<ANTLRTokenSource>)aSource
+-(id) initWithTokenSource:(id<TokenSource>)aSource
 {
 	if ((self = [super init]) != nil)
 	{
@@ -75,7 +75,7 @@ extern NSInteger debug;
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRBufferedTokenStream *copy;
+    BufferedTokenStream *copy;
     
     copy = [[[self class] allocWithZone:aZone] init];
     copy.tokenSource = self.tokenSource;
@@ -90,7 +90,7 @@ extern NSInteger debug;
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRBufferedTokenStream" );
+    NSLog( @"called dealloc in BufferedTokenStream" );
 #endif
     if ( tokens ) [tokens release];
     if ( tokenSource ) [tokenSource release];
@@ -99,15 +99,15 @@ extern NSInteger debug;
 
 - (NSUInteger)line
 {
-    return ((ANTLRCommonToken *)[tokens objectAtIndex:index]).line;
+    return ((CommonToken *)[tokens objectAtIndex:index]).line;
 }
 
 - (NSUInteger)charPositionInLine
 {
-    return ((ANTLRCommonToken *)[tokens objectAtIndex:index]).charPositionInLine;
+    return ((CommonToken *)[tokens objectAtIndex:index]).charPositionInLine;
 }
 
-- (id<ANTLRTokenSource>) getTokenSource
+- (id<TokenSource>) getTokenSource
 {
     return tokenSource;
 }
@@ -194,19 +194,19 @@ extern NSInteger debug;
 - (void) fetch:(NSInteger)n
 {
     for (NSInteger i=1; i <= n; i++) {
-        id<ANTLRToken> t = [tokenSource nextToken];
+        id<Token> t = [tokenSource nextToken];
         [t setTokenIndex:[tokens count]];
         if (debug > 1) NSLog(@"adding %@ at index %d\n", [t text], [tokens count]);
         [tokens addObject:t];
-        if ( t.type == ANTLRTokenTypeEOF )
+        if ( t.type == TokenTypeEOF )
             break;
     }
 }
 
-- (id<ANTLRToken>) getToken:(NSInteger) i
+- (id<Token>) getToken:(NSInteger) i
 {
     if ( i < 0 || i >= [tokens count] ) {
-        @throw [ANTLRNoSuchElementException newException:[NSString stringWithFormat:@"token index %d out of range 0..%d", i, [tokens count]-1]];
+        @throw [NoSuchElementException newException:[NSString stringWithFormat:@"token index %d out of range 0..%d", i, [tokens count]-1]];
     }
     return [tokens objectAtIndex:i];
 }
@@ -224,8 +224,8 @@ extern NSInteger debug;
     if ( stopIndex >= [tokens count] )
         stopIndex = [tokens count]-1;
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
-        id<ANTLRToken>t = [tokens objectAtIndex:i];
-        if ( t.type == ANTLRTokenTypeEOF )
+        id<Token>t = [tokens objectAtIndex:i];
+        if ( t.type == TokenTypeEOF )
             break;
         [subset addObject:t];
     }
@@ -237,14 +237,14 @@ extern NSInteger debug;
     return [[self LT:i] type];
 }
 
-- (id<ANTLRToken>) LB:(NSInteger)k
+- (id<Token>) LB:(NSInteger)k
 {
     if ( (index - k) < 0 )
         return nil;
     return [tokens objectAtIndex:(index-k)];
 }
 
-- (id<ANTLRToken>) LT:(NSInteger)k
+- (id<Token>) LT:(NSInteger)k
 {
     if ( index == -1 ) {
         [self setup];
@@ -273,7 +273,7 @@ extern NSInteger debug;
 }
 
 /** Reset this token stream by setting its token source. */
-- (void) setTokenSource:(id<ANTLRTokenSource>) aTokenSource
+- (void) setTokenSource:(id<TokenSource>) aTokenSource
 {
     tokenSource = aTokenSource;
     if ( [tokens count] )
@@ -311,7 +311,7 @@ extern NSInteger debug;
     // list = tokens[start:stop]:{Token t, t.getType() in types}
     AMutableArray *filteredTokens = [AMutableArray arrayWithCapacity:5];
     for (NSInteger i = startIndex; i <= stopIndex; i++) {
-        id<ANTLRToken>t = [tokens objectAtIndex:i];
+        id<Token>t = [tokens objectAtIndex:i];
         if ( types == nil || [types member:t.type] ) {
             [filteredTokens addObject:t];
         }
@@ -329,7 +329,7 @@ extern NSInteger debug;
 
 - (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithList:(AMutableArray *)types
 {
-    return [self getTokensFrom:startIndex To:stopIndex With:[ANTLRBitSet newANTLRBitSetWithArray:types]];
+    return [self getTokensFrom:startIndex To:stopIndex With:[ANTLRBitSet newBitSetWithArray:types]];
 }
             
 - (NSString *)getSourceName
@@ -358,15 +358,15 @@ extern NSInteger debug;
         stopIdx = [tokens count]-1;
     NSMutableString *buf = [NSMutableString stringWithCapacity:5];
     for (NSInteger i = startIdx; i <= stopIdx; i++) {
-        id<ANTLRToken>t = [tokens objectAtIndex:i];
-        if ( t.type == ANTLRTokenTypeEOF )
+        id<Token>t = [tokens objectAtIndex:i];
+        if ( t.type == TokenTypeEOF )
             break;
         [buf appendString:[t text]];
     }
     return buf;
 }
 
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken
+- (NSString *) toStringFromToken:(id<Token>)startToken ToToken:(id<Token>)stopToken
 {
     if ( startToken != nil && stopToken != nil ) {
         return [self toStringFromStart:[startToken getTokenIndex] ToEnd:[stopToken getTokenIndex]];
@@ -378,12 +378,12 @@ extern NSInteger debug;
 - (void) fill
 {
     if ( index == -1 ) [self setup];
-    if ( [((ANTLRCommonToken *)[tokens objectAtIndex:index]) type] == ANTLRTokenTypeEOF )
+    if ( [((CommonToken *)[tokens objectAtIndex:index]) type] == TokenTypeEOF )
         return;
     
     NSInteger i = index+1;
     [self sync:i];
-    while ( [((ANTLRCommonToken *)[tokens objectAtIndex:i]) type] != ANTLRTokenTypeEOF ) {
+    while ( [((CommonToken *)[tokens objectAtIndex:i]) type] != TokenTypeEOF ) {
         i++;
         [self sync:i];
     }

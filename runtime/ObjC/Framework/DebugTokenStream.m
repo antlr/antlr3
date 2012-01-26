@@ -24,13 +24,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugTokenStream.h"
+#import "DebugTokenStream.h"
 
 
-@implementation ANTLRDebugTokenStream
+@implementation DebugTokenStream
 
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream debugListener:(id<ANTLRDebugEventListener>)debugger
+- (id) initWithTokenStream:(id<TokenStream>)theStream debugListener:(id<DebugEventListener>)debugger
 {
 	self = [super init];
 	if (self) {
@@ -50,26 +50,26 @@
 }
 
 
-- (id<ANTLRDebugEventListener>) debugListener
+- (id<DebugEventListener>) debugListener
 {
     return debugListener; 
 }
 
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener
 {
     if (debugListener != aDebugListener) {
-        [(id<ANTLRDebugEventListener,NSObject>)aDebugListener retain];
-        [(id<ANTLRDebugEventListener,NSObject>)debugListener release];
+        [(id<DebugEventListener,NSObject>)aDebugListener retain];
+        [(id<DebugEventListener,NSObject>)debugListener release];
         debugListener = aDebugListener;
     }
 }
 
-- (id<ANTLRTokenStream>) input
+- (id<TokenStream>) input
 {
     return input; 
 }
 
-- (void) setInput: (id<ANTLRTokenStream>) aTokenStream
+- (void) setInput: (id<TokenStream>) aTokenStream
 {
     if (input != aTokenStream) {
         if ( input ) [input release];
@@ -101,7 +101,7 @@
 	if ( initialStreamState )
 		[self consumeInitialHiddenTokens];
 	int a = input.index;
-	id<ANTLRToken> token = [input LT:1];
+	id<Token> token = [input LT:1];
 	[input consume];
 	int b = input.index;
 	[debugListener consumeToken:token];
@@ -129,7 +129,7 @@
 	[input rewind:marker];
 }
 
-- (id<ANTLRToken>) LT:(NSInteger)k
+- (id<Token>) LT:(NSInteger)k
 {
 	if ( initialStreamState )
 		[self consumeInitialHiddenTokens];
@@ -145,7 +145,7 @@
 	return [input LA:k];
 }
 
-- (id<ANTLRToken>) getToken:(NSInteger)i
+- (id<Token>) getToken:(NSInteger)i
 {
     return [input getToken:i];
 }
@@ -171,7 +171,7 @@
     return [input size];
 }
 
-- (id<ANTLRTokenSource>) getTokenSource
+- (id<TokenSource>) getTokenSource
 {
     return [input getTokenSource];
 }
@@ -196,9 +196,9 @@
     return [input toStringFromStart:startIndex ToEnd:stopIndex];
 }
 
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken
+- (NSString *) toStringFromToken:(CommonToken *)startToken ToToken:(CommonToken *)stopToken
 {
-    return [input toStringFromStart:[startToken getStart] ToEnd:[stopToken getStopToken]];
+    return [input toStringFromStart:startToken.startIndex ToEnd:stopToken.stopIndex];
 }
 
 @end

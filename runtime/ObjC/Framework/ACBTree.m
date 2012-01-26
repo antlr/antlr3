@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "ACBTree.h"
 #import "AMutableDictionary.h"
-#import "ANTLRRuntimeException.h"
+#import "RuntimeException.h"
 
 @class AMutableDictionary;
 

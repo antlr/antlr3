@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeException.m
+//  TreeException.m
 //  ANTLR
 //
 //  Created by Kay Röpke on 24.10.2006.
@@ -30,17 +30,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRTreeException.h"
+#import "TreeException.h"
 
 
-@implementation ANTLRTreeException
+@implementation TreeException
 
-+ (id) newException:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
++ (id) newException:(id<BaseTree>)theOldRoot newRoot:(id<BaseTree>)theNewRoot stream:(id<IntStream>)aStream;
 {
-	return [[ANTLRTreeException alloc] initWithOldRoot:theOldRoot newRoot:theNewRoot stream:aStream];
+	return [[TreeException alloc] initWithOldRoot:theOldRoot newRoot:theNewRoot stream:aStream];
 }
 
-- (id) initWithOldRoot:(id<ANTLRBaseTree>)theOldRoot newRoot:(id<ANTLRBaseTree>)theNewRoot stream:(id<ANTLRIntStream>)aStream;
+- (id) initWithOldRoot:(id<BaseTree>)theOldRoot newRoot:(id<BaseTree>)theNewRoot stream:(id<IntStream>)aStream;
 {
 	if ((self = [super initWithStream:aStream reason:@"The new root has more than one child. Cannot make it the root node."]) != nil ) {
 		[self setOldRoot:theOldRoot];
@@ -52,14 +52,14 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeException" );
+    NSLog( @"called dealloc in TreeException" );
 #endif
 	[self setOldRoot:nil];
 	[self setNewRoot:nil];
 	[super dealloc];
 }
 
-- (void) setNewRoot:(id<ANTLRBaseTree>)aTree
+- (void) setNewRoot:(id<BaseTree>)aTree
 {
 	if (newRoot != aTree) {
 		[aTree retain];
@@ -68,7 +68,7 @@
 	}
 }
 
-- (void) setOldRoot:(id<ANTLRBaseTree>)aTree
+- (void) setOldRoot:(id<BaseTree>)aTree
 {
 	if (oldRoot != aTree) {
 		[aTree retain];

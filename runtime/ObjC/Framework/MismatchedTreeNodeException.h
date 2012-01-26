@@ -25,18 +25,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 
-@protocol ANTLRIntStream;
+@protocol IntStream;
 
-@interface ANTLRMismatchedTreeNodeException : ANTLRRecognitionException {
+@interface MismatchedTreeNodeException : RecognitionException {
 	NSInteger expecting;
 }
 
 @property (getter=getExpecting, setter=setExpecting:) NSInteger expecting;
 
-+ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
-- (id) initWithTokenType:(NSInteger) expectedTokenType Stream:(id<ANTLRIntStream>)anInput;
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput;
+- (id) initWithTokenType:(NSInteger) expectedTokenType Stream:(id<IntStream>)anInput;
 
 
 @end

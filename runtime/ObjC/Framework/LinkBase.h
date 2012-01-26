@@ -1,5 +1,5 @@
 //
-//  ANTLRLinkBase.h
+//  LinkBase.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/14/10.
@@ -35,46 +35,46 @@
 #define DEBUG_DEALLOC
 #endif
 
-@protocol ANTLRLinkList <NSObject>
+@protocol LinkList <NSObject>
 
-+ (id<ANTLRLinkList>)newANTLRLinkBase;
-+ (id<ANTLRLinkList>)newANTLRLinkBase:(id<ANTLRLinkList>)np Prev:(id<ANTLRLinkList>)pp;
++ (id<LinkList>)newLinkBase;
++ (id<LinkList>)newLinkBase:(id<LinkList>)np Prev:(id<LinkList>)pp;
 
 - (void) dealloc;
 
-- (id<ANTLRLinkList>) append:(id<ANTLRLinkList>)node;
-- (id<ANTLRLinkList>) insert:(id<ANTLRLinkList>)node;
+- (id<LinkList>) append:(id<LinkList>)node;
+- (id<LinkList>) insert:(id<LinkList>)node;
 
-- (id<ANTLRLinkList>) getfNext;
-- (void) setFNext:(id<ANTLRLinkList>)np;
-- (id<ANTLRLinkList>)getfPrev;
-- (void) setFPrev:(id<ANTLRLinkList>)pp;
+- (id<LinkList>) getfNext;
+- (void) setFNext:(id<LinkList>)np;
+- (id<LinkList>)getfPrev;
+- (void) setFPrev:(id<LinkList>)pp;
 
-@property (retain) id<ANTLRLinkList> fPrev;
-@property (retain) id<ANTLRLinkList> fNext;
+@property (retain) id<LinkList> fPrev;
+@property (retain) id<LinkList> fNext;
 @end
 
-@interface ANTLRLinkBase : NSObject <ANTLRLinkList> {
-	id<ANTLRLinkList> fPrev;
-	id<ANTLRLinkList> fNext;
+@interface LinkBase : NSObject <LinkList> {
+	id<LinkList> fPrev;
+	id<LinkList> fNext;
 }
 
-@property (retain) id<ANTLRLinkList> fPrev;
-@property (retain) id<ANTLRLinkList> fNext;
+@property (retain) id<LinkList> fPrev;
+@property (retain) id<LinkList> fNext;
 
-+ (id<ANTLRLinkList>)newANTLRLinkBase;
-+ (id<ANTLRLinkList>)newANTLRLinkBase:(id<ANTLRLinkList>)np Prev:(id<ANTLRLinkList>)pp;
-- (id<ANTLRLinkList>)init;
-- (id<ANTLRLinkList>)initWithPtr:(id)np Prev:(id)pp;
++ (id<LinkList>)newLinkBase;
++ (id<LinkList>)newLinkBase:(id<LinkList>)np Prev:(id<LinkList>)pp;
+- (id<LinkList>)init;
+- (id<LinkList>)initWithPtr:(id)np Prev:(id)pp;
 - (void)dealloc;
 
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (id<ANTLRLinkList>)append:(id<ANTLRLinkList>)node;
-- (id<ANTLRLinkList>)insert:(id<ANTLRLinkList>)node;
+- (id<LinkList>)append:(id<LinkList>)node;
+- (id<LinkList>)insert:(id<LinkList>)node;
 
-- (id<ANTLRLinkList>)getfNext;
-- (void)setfNext:(id<ANTLRLinkList>) np;
-- (id<ANTLRLinkList>)getfPrev;
-- (void)setfPrev:(id<ANTLRLinkList>) pp;
+- (id<LinkList>)getfNext;
+- (void)setfNext:(id<LinkList>) np;
+- (id<LinkList>)getfPrev;
+- (void)setfPrev:(id<LinkList>) pp;
 @end

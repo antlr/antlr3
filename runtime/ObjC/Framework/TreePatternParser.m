@@ -1,5 +1,5 @@
 //
-//  ANTLRTreePatternParser.m
+//  TreePatternParser.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -29,16 +29,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreePatternParser.h"
-#import "ANTLRTreePatternLexer.h"
+#import "TreePatternParser.h"
+#import "TreePatternLexer.h"
 
-@implementation ANTLRTreePatternParser
+@implementation TreePatternParser
 
-+ (ANTLRTreePatternParser *)newANTLRTreePatternParser:(ANTLRTreePatternLexer *)aTokenizer
-                                               Wizard:(ANTLRTreeWizard *)aWizard
-                                              Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor
++ (TreePatternParser *)newTreePatternParser:(TreePatternLexer *)aTokenizer
+                                               Wizard:(TreeWizard *)aWizard
+                                              Adaptor:(id<TreeAdaptor>)anAdaptor
 {
-    return [[ANTLRTreePatternParser alloc] initWithTokenizer:aTokenizer Wizard:aWizard Adaptor:anAdaptor];
+    return [[TreePatternParser alloc] initWithTokenizer:aTokenizer Wizard:aWizard Adaptor:anAdaptor];
 }
 
 - (id) init
@@ -52,9 +52,9 @@
     return self;
 }
 
-- (id) initWithTokenizer:(ANTLRTreePatternLexer *)aTokenizer
-                  Wizard:(ANTLRTreeWizard *)aWizard
-                 Adaptor:(id<ANTLRTreeAdaptor>)anAdaptor
+- (id) initWithTokenizer:(TreePatternLexer *)aTokenizer
+                  Wizard:(TreeWizard *)aWizard
+                 Adaptor:(id<TreeAdaptor>)anAdaptor
 {
     if ((self = [super init]) != nil) {
         adaptor = anAdaptor;
@@ -71,7 +71,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreePatternParser" );
+    NSLog( @"called dealloc in TreePatternParser" );
 #endif
 	if ( adaptor ) [adaptor release];
 	if ( tokenizer ) [tokenizer release];
@@ -79,14 +79,14 @@
 	[super dealloc];
 }
 
-- (id<ANTLRBaseTree>)pattern
+- (id<BaseTree>)pattern
 {
-    if ( ttype==ANTLRLexerTokenTypeBEGIN ) {
+    if ( ttype==LexerTokenTypeBEGIN ) {
         return [self parseTree];
     }
-    else if ( ttype==ANTLRLexerTokenTypeID ) {
-        id<ANTLRBaseTree> node = [self parseNode];
-        if ( ttype==ANTLRLexerTokenTypeEOF ) {
+    else if ( ttype==LexerTokenTypeID ) {
+        id<BaseTree> node = [self parseNode];
+        if ( ttype==LexerTokenTypeEOF ) {
             return node;
         }
         return nil; // extra junk on end
@@ -94,62 +94,62 @@
     return nil;
 }
 
-- (id<ANTLRBaseTree>) parseTree
+- (id<BaseTree>) parseTree
 {
-    if ( ttype != ANTLRLexerTokenTypeBEGIN ) {
-        @throw [ANTLRRuntimeException newException:@"no BEGIN"];
+    if ( ttype != LexerTokenTypeBEGIN ) {
+        @throw [RuntimeException newException:@"no BEGIN"];
     }
     ttype = [tokenizer nextToken];
-    id<ANTLRBaseTree> root = [self parseNode];
+    id<BaseTree> root = [self parseNode];
     if ( root==nil ) {
         return nil;
     }
-    while ( ttype==ANTLRLexerTokenTypeBEGIN  ||
-           ttype==ANTLRLexerTokenTypeID      ||
-           ttype==ANTLRLexerTokenTypePERCENT ||
-           ttype==ANTLRLexerTokenTypeDOT )
+    while ( ttype==LexerTokenTypeBEGIN  ||
+           ttype==LexerTokenTypeID      ||
+           ttype==LexerTokenTypePERCENT ||
+           ttype==LexerTokenTypeDOT )
     {
-        if ( ttype==ANTLRLexerTokenTypeBEGIN ) {
-            id<ANTLRBaseTree> subtree = [self parseTree];
+        if ( ttype==LexerTokenTypeBEGIN ) {
+            id<BaseTree> subtree = [self parseTree];
             [adaptor addChild:subtree toTree:root];
         }
         else {
-            id<ANTLRBaseTree> child = [self parseNode];
+            id<BaseTree> child = [self parseNode];
             if ( child == nil ) {
                 return nil;
             }
             [adaptor addChild:child toTree:root];
         }
     }
-    if ( ttype != ANTLRLexerTokenTypeEND ) {
-        @throw [ANTLRRuntimeException newException:@"no END"];
+    if ( ttype != LexerTokenTypeEND ) {
+        @throw [RuntimeException newException:@"no END"];
     }
     ttype = [tokenizer nextToken];
     return root;
 }
 
-- (id<ANTLRBaseTree>) parseNode
+- (id<BaseTree>) parseNode
 {
     // "%label:" prefix
     NSString *label = nil;
-    ANTLRTreePattern *node;
-    if ( ttype == ANTLRLexerTokenTypePERCENT ) {
+    TreePattern *node;
+    if ( ttype == LexerTokenTypePERCENT ) {
         ttype = [tokenizer nextToken];
-        if ( ttype != ANTLRLexerTokenTypeID ) {
+        if ( ttype != LexerTokenTypeID ) {
             return nil;
         }
         label = [tokenizer toString];
         ttype = [tokenizer nextToken];
-        if ( ttype != ANTLRLexerTokenTypeCOLON ) {
+        if ( ttype != LexerTokenTypeCOLON ) {
             return nil;
         }
         ttype = [tokenizer nextToken]; // move to ID following colon
     }
     
     // Wildcard?
-    if ( ttype == ANTLRLexerTokenTypeDOT ) {
+    if ( ttype == LexerTokenTypeDOT ) {
         ttype = [tokenizer nextToken];
-        id<ANTLRToken> wildcardPayload = [ANTLRCommonToken newToken:0 Text:@"."];
+        id<Token> wildcardPayload = [CommonToken newToken:0 Text:@"."];
         node = [ANTLRWildcardTreePattern newANTLRWildcardTreePattern:wildcardPayload];
         if ( label != nil ) {
             node.label = label;
@@ -158,7 +158,7 @@
     }
     
     // "ID" or "ID[arg]"
-    if ( ttype != ANTLRLexerTokenTypeID ) {
+    if ( ttype != LexerTokenTypeID ) {
         return nil;
     }
     NSString *tokenName = [tokenizer toString];
@@ -169,7 +169,7 @@
     NSString *text = tokenName;
     // check for arg
     NSString *arg = nil;
-    if ( ttype == ANTLRLexerTokenTypeARG ) {
+    if ( ttype == LexerTokenTypeARG ) {
         arg = [tokenizer toString];
         text = arg;
         ttype = [tokenizer nextToken];
@@ -177,15 +177,15 @@
     
     // create node
     int treeNodeType = [wizard getTokenType:tokenName];
-    if ( treeNodeType==ANTLRTokenTypeInvalid ) {
+    if ( treeNodeType==TokenTypeInvalid ) {
         return nil;
     }
     node = [adaptor createTree:treeNodeType Text:text];
-    if ( label!=nil && [node class] == [ANTLRTreePattern class] ) {
-        ((ANTLRTreePattern *)node).label = label;
+    if ( label!=nil && [node class] == [TreePattern class] ) {
+        ((TreePattern *)node).label = label;
     }
-    if ( arg!=nil && [node class] == [ANTLRTreePattern class] ) {
-        ((ANTLRTreePattern *)node).hasTextArg = YES;
+    if ( arg!=nil && [node class] == [TreePattern class] ) {
+        ((TreePattern *)node).hasTextArg = YES;
     }
     return node;
 }

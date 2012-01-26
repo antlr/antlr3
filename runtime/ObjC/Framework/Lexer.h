@@ -26,45 +26,45 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTokenSource.h"
-#import "ANTLRBaseRecognizer.h"
-#import "ANTLRRecognizerSharedState.h"
-#import "ANTLRCharStream.h"
-#import "ANTLRToken.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRRecognitionException.h"
-#import "ANTLRMismatchedTokenException.h"
-#import "ANTLRMismatchedRangeException.h"
+#import "TokenSource.h"
+#import "BaseRecognizer.h"
+#import "RecognizerSharedState.h"
+#import "CharStream.h"
+#import "Token.h"
+#import "CommonToken.h"
+#import "RecognitionException.h"
+#import "MismatchedTokenException.h"
+#import "MismatchedRangeException.h"
 
-@interface ANTLRLexer : ANTLRBaseRecognizer <ANTLRTokenSource> {
-	id<ANTLRCharStream> input;      ///< The character stream we pull tokens out of.
+@interface Lexer : BaseRecognizer <TokenSource> {
+	id<CharStream> input;      ///< The character stream we pull tokens out of.
 	NSUInteger ruleNestingLevel;
 }
 
-@property (retain, getter=input, setter=setInput:) id<ANTLRCharStream> input;
+@property (retain, getter=input, setter=setInput:) id<CharStream> input;
 @property (getter=getRuleNestingLevel, setter=setRuleNestingLevel:) NSUInteger ruleNestingLevel;
 
 #pragma mark Initializer
-- (id) initWithCharStream:(id<ANTLRCharStream>) anInput;
-- (id) initWithCharStream:(id<ANTLRCharStream>)anInput State:(ANTLRRecognizerSharedState *)state;
+- (id) initWithCharStream:(id<CharStream>) anInput;
+- (id) initWithCharStream:(id<CharStream>)anInput State:(RecognizerSharedState *)state;
 
 - (id) copyWithZone:(NSZone *)zone;
 
 - (void) reset;
 
-// - (ANTLRRecognizerSharedState *) state;
+// - (RecognizerSharedState *) state;
 
 #pragma mark Tokens
-- (id<ANTLRToken>)getToken;
-- (void) setToken: (id<ANTLRToken>) aToken;
-- (id<ANTLRToken>) nextToken;
+- (id<Token>)getToken;
+- (void) setToken: (id<Token>) aToken;
+- (id<Token>) nextToken;
 - (void) mTokens;		// abstract, defined in generated sources
 - (void) skip;
-- (id<ANTLRCharStream>) input;
-- (void) setInput:(id<ANTLRCharStream>)aCharStream;
+- (id<CharStream>) input;
+- (void) setInput:(id<CharStream>)aCharStream;
 
 - (void) emit;
-- (void) emit:(id<ANTLRToken>)aToken;
+- (void) emit:(id<Token>)aToken;
 
 #pragma mark Matching
 - (void) matchString:(NSString *)aString;
@@ -80,10 +80,10 @@
 - (void) setText:(NSString *) theText;
 
 // error handling
-- (void) reportError:(ANTLRRecognitionException *)e;
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)tokenNames;
+- (void) reportError:(RecognitionException *)e;
+- (NSString *)getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *)tokenNames;
 - (NSString *)getCharErrorDisplay:(NSInteger)c;
-- (void) recover:(ANTLRRecognitionException *)e;
+- (void) recover:(RecognitionException *)e;
 - (void)traceIn:(NSString *)ruleName Index:(NSInteger)ruleIndex;
 - (void)traceOut:(NSString *)ruleName Index:(NSInteger)ruleIndex;
 

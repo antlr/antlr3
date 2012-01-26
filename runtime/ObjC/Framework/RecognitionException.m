@@ -24,11 +24,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRecognitionException.h"
-#import "ANTLRTokenStream.h"
-#import "ANTLRTreeNodeStream.h"
+#import "RecognitionException.h"
+#import "TokenStream.h"
+#import "TreeNodeStream.h"
 
-@implementation ANTLRRecognitionException
+@implementation RecognitionException
 
 @synthesize input;
 @synthesize token;
@@ -38,17 +38,17 @@
 
 + (id) newException
 {
-	return [[ANTLRRecognitionException alloc] init];
+	return [[RecognitionException alloc] init];
 }
 
-+ (id) newException:(id<ANTLRIntStream>) anInputStream
++ (id) newException:(id<IntStream>) anInputStream
 {
-	return [[ANTLRRecognitionException alloc] initWithStream:anInputStream];
+	return [[RecognitionException alloc] initWithStream:anInputStream];
 }
 
-+ (id) newException:(id<ANTLRIntStream>) anInputStream reason:(NSString *)aReason
++ (id) newException:(id<IntStream>) anInputStream reason:(NSString *)aReason
 {
-	return [[ANTLRRecognitionException alloc] initWithStream:anInputStream reason:aReason];
+	return [[RecognitionException alloc] initWithStream:anInputStream reason:aReason];
 }
 
 - (id) init
@@ -59,7 +59,7 @@
 	return self;
 }
 
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream reason:(NSString *)aReason
+- (id) initWithStream:(id<IntStream>)anInputStream reason:(NSString *)aReason
 {
 	self = [super initWithName:NSStringFromClass([self class]) reason:aReason userInfo:nil];
 	if ( self != nil ) {
@@ -67,16 +67,16 @@
 		index = input.index;
 		
 		Class inputClass = [input class];
-		if ([inputClass conformsToProtocol:@protocol(ANTLRTokenStream)]) {
-			[self setToken:[(id<ANTLRTokenStream>)input LT:1]];
+		if ([inputClass conformsToProtocol:@protocol(TokenStream)]) {
+			[self setToken:[(id<TokenStream>)input LT:1]];
 			line = token.line;
 			charPositionInLine = token.charPositionInLine;
-		} else if ([inputClass conformsToProtocol:@protocol(ANTLRCharStream)]) {
+		} else if ([inputClass conformsToProtocol:@protocol(CharStream)]) {
 			c = (unichar)[input LA:1];
-			line = ((id<ANTLRCharStream>)input).line;
-			charPositionInLine = ((id<ANTLRCharStream>)input).charPositionInLine;
-		} else if ([inputClass conformsToProtocol:@protocol(ANTLRTreeNodeStream)]) {
-			[self setNode:[(id<ANTLRTreeNodeStream>)input LT:1]];
+			line = ((id<CharStream>)input).getLine;
+			charPositionInLine = ((id<CharStream>)input).getCharPositionInLine;
+		} else if ([inputClass conformsToProtocol:@protocol(TreeNodeStream)]) {
+			[self setNode:[(id<TreeNodeStream>)input LT:1]];
 			line = [node line];
 			charPositionInLine = [node charPositionInLine];
 		} else {
@@ -86,7 +86,7 @@
 	return self;
 }
 
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream
+- (id) initWithStream:(id<IntStream>)anInputStream
 {
 	self = [super initWithName:NSStringFromClass([self class]) reason:@"Runtime Exception" userInfo:nil];
 	if ( self != nil ) {
@@ -105,7 +105,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRRecognitionException" );
+    NSLog( @"called dealloc in RecognitionException" );
 #endif
 	if ( input ) [input release];
 	if ( token ) [token release];
@@ -124,7 +124,7 @@
 	}
 }
 
-- (id<ANTLRToken>)getUnexpectedToken
+- (id<Token>)getUnexpectedToken
 {
     return token;
 }
@@ -147,12 +147,12 @@
 //---------------------------------------------------------- 
 //  input 
 //---------------------------------------------------------- 
-- (id<ANTLRIntStream>) getStream
+- (id<IntStream>) getStream
 {
     return input; 
 }
 
-- (void) setStream: (id<ANTLRIntStream>) aStream
+- (void) setStream: (id<IntStream>) aStream
 {
     if ( input != aStream ) {
         if ( input ) [input release];
@@ -164,12 +164,12 @@
 //---------------------------------------------------------- 
 //  token 
 //---------------------------------------------------------- 
-- (id<ANTLRToken>) getToken
+- (id<Token>) getToken
 {
     return token; 
 }
 
-- (void) setToken: (id<ANTLRToken>) aToken
+- (void) setToken: (id<Token>) aToken
 {
     if (token != aToken) {
         if ( token ) [token release];
@@ -181,12 +181,12 @@
 //---------------------------------------------------------- 
 //  node 
 //---------------------------------------------------------- 
-- (id<ANTLRBaseTree>) getNode
+- (id<BaseTree>) getNode
 {
     return node; 
 }
 
-- (void) setNode: (id<ANTLRBaseTree>) aNode
+- (void) setNode: (id<BaseTree>) aNode
 {
     if (node != aNode) {
         if ( node ) [node release];
@@ -197,7 +197,7 @@
 
 - (NSString *)getMessage
 {
-    return @"Fix getMessage in ANTLRRecognitionException";
+    return @"Fix getMessage in RecognitionException";
 }
 
 - (NSUInteger)charPositionInLine

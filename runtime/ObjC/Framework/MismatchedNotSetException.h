@@ -1,5 +1,5 @@
 //
-//  ANTLRMismatchedNotSetException.h
+//  MismatchedNotSetException.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/13/10.
@@ -30,21 +30,21 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
+#import "RecognitionException.h"
 #import "ANTLRBitSet.h"
 
-@interface ANTLRMismatchedNotSetException : ANTLRRecognitionException
+@interface MismatchedNotSetException : RecognitionException
 {
     NSString *expecting;
 }
 @property (retain, getter=getExpecting, setter=setExpecting:) NSString *expecting;
 
-- (ANTLRMismatchedNotSetException *)newException;
-- (ANTLRMismatchedNotSetException *)newException:(id<ANTLRIntStream>)anInput
+- (MismatchedNotSetException *)newException;
+- (MismatchedNotSetException *)newException:(id<IntStream>)anInput
                                                                Follow:(NSString *)expecting;
 
 - (id) init;
-- (id) initWithStream:(id<ANTLRIntStream>)anInput Follow:(NSString *)expecting;
+- (id) initWithStream:(id<IntStream>)anInput Follow:(NSString *)expecting;
 
 - (NSString *)toString;
 

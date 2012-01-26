@@ -1,5 +1,5 @@
 //
-//  ANTLRIntArray.h
+//  IntArray.h
 //  ANTLR
 //
 // Copyright (c) 2010 Ian Michell 2010 Alan Condit
@@ -31,7 +31,7 @@
 
 #define ANTLR_INT_ARRAY_INITIAL_SIZE 10
 
-@interface ANTLRIntArray : NSObject 
+@interface IntArray : NSObject 
 {
     NSUInteger BuffSize;
     NSUInteger count;
@@ -41,8 +41,8 @@
     BOOL SPARSE;
 }
 
-+ (ANTLRIntArray *)newArray;
-+ (ANTLRIntArray *)newArrayWithLen:(NSUInteger)aLen;
++ (IntArray *)newArray;
++ (IntArray *)newArrayWithLen:(NSUInteger)aLen;
 
 - (id) init;
 - (id) initWithLen:(NSUInteger)aLen;

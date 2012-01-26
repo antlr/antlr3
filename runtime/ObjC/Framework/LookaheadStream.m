@@ -1,5 +1,5 @@
 //
-//  ANTLRLookaheadStream.m
+//  LookaheadStream.m
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -29,13 +29,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRLookaheadStream.h"
+#import "LookaheadStream.h"
 #import "ANTLRError.h"
-#import "ANTLRRecognitionException.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRRuntimeException.h"
+#import "RecognitionException.h"
+#import "CommonToken.h"
+#import "RuntimeException.h"
 
-@implementation ANTLRLookaheadStream
+@implementation LookaheadStream
 
 @synthesize eof;
 @synthesize index;
@@ -48,7 +48,7 @@
 {
 	self = [super init];
 	if ( self != nil ) {
-        eof = [[ANTLRCommonToken eofToken] retain];
+        eof = [[CommonToken eofToken] retain];
 		eofElementIndex = UNITIALIZED_EOF_ELEMENT_INDEX;
 		markDepth = 0;
         index = 0;
@@ -125,7 +125,7 @@
 
 -(NSUInteger) count
 {
-	@throw [NSException exceptionWithName:@"ANTLRUnsupportedOperationException" reason:@"Streams have no defined size" userInfo:nil];
+	@throw [NSException exceptionWithName:@"UnsupportedOperationException" reason:@"Streams have no defined size" userInfo:nil];
 }
 
 -(id) LT:(NSInteger) k
@@ -148,7 +148,7 @@
 	if (k == 1) {
 		return prevElement;
 	}
-	@throw [ANTLRNoSuchElementException newException:@"can't look backwards more than one token in this stream"];
+	@throw [NoSuchElementException newException:@"can't look backwards more than one token in this stream"];
 }
 
 -(id) getCurrentSymbol

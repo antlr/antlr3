@@ -25,16 +25,16 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRecognitionException.h"
-#import "ANTLRIntStream.h"
+#import "RecognitionException.h"
+#import "IntStream.h"
 
-@interface ANTLRNoViableAltException : ANTLRRecognitionException {
+@interface NoViableAltException : RecognitionException {
 	int decisionNumber;
 	int stateNumber;
 }
 
-+ (ANTLRNoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream;
-- (ANTLRNoViableAltException *) initWithDecision:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<ANTLRIntStream>)theStream;
++ (NoViableAltException *) newException:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<IntStream>)theStream;
+- (NoViableAltException *) initWithDecision:(NSInteger)theDecisionNumber state:(NSInteger)theStateNumber stream:(id<IntStream>)theStream;
 
 - (void)setDecisionNumber:(NSInteger)decisionNumber;
 - (void)setStateNumber:(NSInteger)stateNumber;

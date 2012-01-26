@@ -1,5 +1,5 @@
 //
-//  ANTLRMapElement.m
+//  MapElement.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -30,37 +30,37 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRMapElement.h"
+#import "MapElement.h"
 
 
-@implementation ANTLRMapElement
+@implementation MapElement
 
 @synthesize name;
 @synthesize node;
 
-+ (id) newANTLRMapElement
++ (id) newMapElement
 {
-    return [[ANTLRMapElement alloc] init];
+    return [[MapElement alloc] init];
 }
 
-+ (id) newANTLRMapElementWithName:(NSString *)aName Type:(NSInteger)aTType
++ (id) newMapElementWithName:(NSString *)aName Type:(NSInteger)aTType
 {
-    return [[ANTLRMapElement alloc] initWithName:aName Type:aTType];
+    return [[MapElement alloc] initWithName:aName Type:aTType];
 }
 
-+ (id) newANTLRMapElementWithNode:(NSInteger)aTType Node:(id)aNode
++ (id) newMapElementWithNode:(NSInteger)aTType Node:(id)aNode
 {
-    return [[ANTLRMapElement alloc] initWithNode:aTType Node:aNode];
+    return [[MapElement alloc] initWithNode:aTType Node:aNode];
 }
 
-+ (id) newANTLRMapElementWithName:(NSString *)aName Node:(id)aNode
++ (id) newMapElementWithName:(NSString *)aName Node:(id)aNode
 {
-    return [[ANTLRMapElement alloc] initWithName:aName Node:aNode];
+    return [[MapElement alloc] initWithName:aName Node:aNode];
 }
 
-+ (id) newANTLRMapElementWithObj1:(id)anObj1 Obj2:(id)anObj2
++ (id) newMapElementWithObj1:(id)anObj1 Obj2:(id)anObj2
 {
-    return [[ANTLRMapElement alloc] initWithObj1:anObj1 Obj2:anObj2];
+    return [[MapElement alloc] initWithObj1:anObj1 Obj2:anObj2];
 }
 
 - (id) init
@@ -117,7 +117,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRMapElement" );
+    NSLog( @"called dealloc in MapElement" );
 #endif
     if ( name ) [name release];
     if ( node ) [node release];
@@ -126,7 +126,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRMapElement *copy;
+    MapElement *copy;
 
     copy = [super copyWithZone:aZone];
     if (name) copy.name = name;
@@ -180,27 +180,27 @@
 
 - (void)putNode:(id)aNode
 {
-    index = ((ANTLRMapElement *)aNode).index;
-    if (((ANTLRMapElement *)aNode).name) {
-        name = [((ANTLRMapElement *)aNode).name retain];
+    index = ((MapElement *)aNode).index;
+    if (((MapElement *)aNode).name) {
+        name = [((MapElement *)aNode).name retain];
         node = nil;
     }
-    if (((ANTLRMapElement *)aNode).node) {
+    if (((MapElement *)aNode).node) {
         name = nil;
-        node = [((ANTLRMapElement *)aNode).node retain];
+        node = [((MapElement *)aNode).node retain];
     }
 }
 
 - (void)putNode:(id)aNode With:(NSInteger)uniqueID
 {
-    index = ((ANTLRMapElement *)aNode).index;
-    if (((ANTLRMapElement *)aNode).name) {
-        name = [((ANTLRMapElement *)aNode).name retain];
+    index = ((MapElement *)aNode).index;
+    if (((MapElement *)aNode).name) {
+        name = [((MapElement *)aNode).name retain];
         node = nil;
     }
-    if (((ANTLRMapElement *)aNode).node) {
+    if (((MapElement *)aNode).node) {
         name = nil;
-        node = [((ANTLRMapElement *)aNode).node retain];
+        node = [((MapElement *)aNode).node retain];
     }
 }
 

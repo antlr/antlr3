@@ -1,5 +1,5 @@
 //
-//  ANTLRCommonErrorNode.h
+//  CommonErrorNode.h
 //  ANTLR
 //
 // [The "BSD licence"]
@@ -29,29 +29,29 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCommonTree.h"
-#import "ANTLRTokenStream.h"
-//#import "ANTLRIntStream.h"
-//#import "ANTLRToken.h"
-#import "ANTLRUnWantedTokenException.h"
+#import "CommonTree.h"
+#import "TokenStream.h"
+//#import "IntStream.h"
+//#import "Token.h"
+#import "UnWantedTokenException.h"
 
-@interface ANTLRCommonErrorNode : ANTLRCommonTree
+@interface CommonErrorNode : CommonTree
 {
-id<ANTLRIntStream> input;
-id<ANTLRToken> startToken;
-id<ANTLRToken> stopToken;
-ANTLRRecognitionException *trappedException;
+id<IntStream> input;
+id<Token> startToken;
+id<Token> stopToken;
+RecognitionException *trappedException;
 }
 
-+ (id) newANTLRCommonErrorNode:(id<ANTLRTokenStream>)anInput
-                  From:(id<ANTLRToken>)startToken
-                    To:(id<ANTLRToken>)stopToken
-                     Exception:(ANTLRRecognitionException *) e;
++ (id) newCommonErrorNode:(id<TokenStream>)anInput
+                  From:(id<Token>)startToken
+                    To:(id<Token>)stopToken
+                     Exception:(RecognitionException *) e;
 
-- (id) initWithInput:(id<ANTLRTokenStream>)anInput
-                From:(id<ANTLRToken>)startToken
-                  To:(id<ANTLRToken>)stopToken
-           Exception:(ANTLRRecognitionException *) e;
+- (id) initWithInput:(id<TokenStream>)anInput
+                From:(id<Token>)startToken
+                  To:(id<Token>)stopToken
+           Exception:(RecognitionException *) e;
 
 - (void)dealloc;
 - (BOOL) isNil;
@@ -60,8 +60,8 @@ ANTLRRecognitionException *trappedException;
 - (NSString *)text;
 - (NSString *)toString;
 
-@property (retain) id<ANTLRIntStream> input;
-@property (retain) id<ANTLRToken> startToken;
-@property (retain) id<ANTLRToken> stopToken;
-@property (retain) ANTLRRecognitionException *trappedException;
+@property (retain) id<IntStream> input;
+@property (retain) id<Token> startToken;
+@property (retain) id<Token> stopToken;
+@property (retain) RecognitionException *trappedException;
 @end

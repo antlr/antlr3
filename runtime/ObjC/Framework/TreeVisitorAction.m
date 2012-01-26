@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeVisitorAction.m
+//  TreeVisitorAction.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -29,14 +29,14 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeVisitorAction.h"
+#import "TreeVisitorAction.h"
 
 
-@implementation ANTLRTreeVisitorAction
+@implementation TreeVisitorAction
 
-+ (ANTLRTreeVisitorAction *)newANTLRTreeVisitorAction
++ (TreeVisitorAction *)newTreeVisitorAction
 {
-    return [[ANTLRTreeVisitorAction alloc] init];
+    return [[TreeVisitorAction alloc] init];
 }
 
 - (id) init
@@ -51,7 +51,7 @@
  *  with the return value.  Children of returned value will be
  *  visited if using TreeVisitor.visit().
  */
-- (ANTLRTreeVisitorAction *)pre:(ANTLRTreeVisitorAction *) t
+- (TreeVisitorAction *)pre:(TreeVisitorAction *) t
 {
     return nil;
 }
@@ -60,7 +60,7 @@
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.
  */
-- (ANTLRTreeVisitorAction *)post:(ANTLRTreeVisitorAction *) t
+- (TreeVisitorAction *)post:(TreeVisitorAction *) t
 {
     return nil;
 }

@@ -24,18 +24,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDFA.h"
-#import <ANTLRToken.h>
-#import <ANTLRNoViableAltException.h>
+#import "DFA.h"
+#import <Token.h>
+#import <NoViableAltException.h>
 
 NSInteger debug = 0;
 
-@implementation ANTLRDFA
+@implementation DFA
 @synthesize recognizer;
 @synthesize decisionNumber;
 @synthesize len;
 
-- (id) initWithRecognizer:(ANTLRBaseRecognizer *) theRecognizer
+- (id) initWithRecognizer:(BaseRecognizer *) theRecognizer
 {
 	if ((self = [super init]) != nil) {
 		recognizer = theRecognizer;
@@ -47,7 +47,7 @@ NSInteger debug = 0;
 
 // using the tables ANTLR generates for the DFA based prediction this method simulates the DFA
 // and returns the prediction of the alternative to be used.
-- (NSInteger) predict:(id<ANTLRIntStream>)input
+- (NSInteger) predict:(id<IntStream>)input
 {
     if ( debug > 2 ) {
         NSLog(@"Enter DFA.predict for decision %d", decisionNumber);
@@ -115,7 +115,7 @@ NSInteger debug = 0;
 				[input consume];
 				continue;
 			}
-			if ( c == ANTLRTokenTypeEOF && eof[s] >= 0) {  // we are at EOF and may even accept the input.
+			if ( c == TokenTypeEOF && eof[s] >= 0) {  // we are at EOF and may even accept the input.
 				if ( debug > 2 ) NSLog(@"accept via EOF; predict %d from %d", accept[eof[s]], eof[s]);
 				return accept[eof[s]];
 			}
@@ -140,24 +140,24 @@ NSInteger debug = 0;
 	return 0; // silence warning
 }
 
-- (void) noViableAlt:(NSInteger)state Stream:(id<ANTLRIntStream>)anInput
+- (void) noViableAlt:(NSInteger)state Stream:(id<IntStream>)anInput
 {
 	if ([recognizer.state isBacktracking]) {
 		[recognizer.state setFailed:YES];
 		return;
 	}
-	ANTLRNoViableAltException *nvae = [ANTLRNoViableAltException newException:decisionNumber state:state stream:anInput];
+	NoViableAltException *nvae = [NoViableAltException newException:decisionNumber state:state stream:anInput];
 	[self error:nvae];
 	@throw nvae;
 }
 
-- (NSInteger) specialStateTransition:(NSInteger)state Stream:(id<ANTLRIntStream>)anInput
+- (NSInteger) specialStateTransition:(NSInteger)state Stream:(id<IntStream>)anInput
 {
-    @throw [ANTLRNoViableAltException newException:-1 state:state stream:anInput];
+    @throw [NoViableAltException newException:-1 state:state stream:anInput];
 	return -1;
 }
 
-- (void) error:(ANTLRNoViableAltException *)nvae
+- (void) error:(NoViableAltException *)nvae
 {
 	// empty, hook for debugger support
 }
@@ -233,12 +233,12 @@ NSInteger debug = 0;
     decisionNumber = aDecison;
 }
 
-- (ANTLRBaseRecognizer *)getRecognizer
+- (BaseRecognizer *)getRecognizer
 {
     return recognizer;
 }
 
-- (void)setRecognizer:(ANTLRBaseRecognizer *)aRecognizer
+- (void)setRecognizer:(BaseRecognizer *)aRecognizer
 {
     if ( recognizer != aRecognizer ) {
         if ( recognizer ) [recognizer release];

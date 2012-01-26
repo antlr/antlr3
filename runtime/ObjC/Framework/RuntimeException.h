@@ -1,5 +1,5 @@
 //
-//  ANTLRRuntimeException.h
+//  RuntimeException.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/5/10.
@@ -31,15 +31,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ANTLRRuntimeException : NSException {
+@interface RuntimeException : NSException {
 }
 
-+ (ANTLRRuntimeException *) newException;
-+ (ANTLRRuntimeException *) newException:(NSString *)aReason;
-+ (ANTLRRuntimeException *) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
++ (RuntimeException *) newException;
++ (RuntimeException *) newException:(NSString *)aReason;
++ (RuntimeException *) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
-+ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason;
-+ (ANTLRRuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
++ (RuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason;
++ (RuntimeException *) newException:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (id) init;
 - (id) init:(NSString *)aReason;
@@ -52,7 +52,7 @@
 
 @end
 
-@interface ANTLRIllegalArgumentException : ANTLRRuntimeException {
+@interface ANTLRIllegalArgumentException : RuntimeException {
 }
 
 + (id) newException;
@@ -65,7 +65,7 @@
 
 @end
 
-@interface ANTLRIllegalStateException : ANTLRRuntimeException {
+@interface ANTLRIllegalStateException : RuntimeException {
 }
 
 + (id) newException;
@@ -78,7 +78,7 @@
 
 @end
 
-@interface ANTLRNoSuchElementException : ANTLRRuntimeException {
+@interface NoSuchElementException : RuntimeException {
 }
 
 + (id) newException;
@@ -91,7 +91,7 @@
 
 @end
 
-@interface ANTLRRewriteEarlyExitException : ANTLRRuntimeException {
+@interface RewriteEarlyExitException : RuntimeException {
 }
 
 + (id) newException;
@@ -99,7 +99,7 @@
 
 @end
 
-@interface ANTLRUnsupportedOperationException : ANTLRRuntimeException {
+@interface UnsupportedOperationException : RuntimeException {
 }
 
 + (id) newException:(NSString *)aReason;

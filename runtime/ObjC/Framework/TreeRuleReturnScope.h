@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeRuleReturnScope.h
+//  TreeRuleReturnScope.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -30,22 +30,22 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRuleReturnScope.h"
-#import "ANTLRCommonTree.h"
+#import "RuleReturnScope.h"
+#import "CommonTree.h"
 
-@interface ANTLRTreeRuleReturnScope : ANTLRRuleReturnScope {
-    ANTLRCommonTree *start;
+@interface TreeRuleReturnScope : RuleReturnScope {
+    CommonTree *start;
 }
 
-@property (retain, getter=getStart, setter=setStart:) ANTLRCommonTree *start;
+@property (retain, getter=getStart, setter=setStart:) CommonTree *start;
 
 /** First node or root node of tree matched for this rule. */
 
 + (id) newReturnScope;
 - (id) init;
 - (void) dealloc;
-- (ANTLRCommonTree *)getStart;
-- (void)setStart:(ANTLRCommonTree *)aStart;
+- (CommonTree *)getStart;
+- (void)setStart:(CommonTree *)aStart;
 
 - (id) copyWithZone:(NSZone *)theZone;
 

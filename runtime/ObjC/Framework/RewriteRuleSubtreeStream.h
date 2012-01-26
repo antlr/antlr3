@@ -25,24 +25,24 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRewriteRuleElementStream.h"
+#import "RewriteRuleElementStream.h"
 
-@interface ANTLRRewriteRuleSubtreeStream : ANTLRRewriteRuleElementStream {
+@interface RewriteRuleSubtreeStream : RewriteRuleElementStream {
 
 }
 
-+ (ANTLRRewriteRuleSubtreeStream *) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream *) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription;
-+ (ANTLRRewriteRuleSubtreeStream *) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream *) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription
                                                              element:(id)anElement;
-+ (ANTLRRewriteRuleSubtreeStream *) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream *) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription
                                                             elements:(NSArray *)theElements;
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 
 - (id) nextNode;
 - (id) dup:(id)element;

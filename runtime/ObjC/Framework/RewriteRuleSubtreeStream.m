@@ -1,5 +1,5 @@
 //
-//  ANTLRRewriteRuleSubtreeStream.m
+//  RewriteRuleSubtreeStream.m
 //  ANTLR
 //
 //  Created by Kay Röpke on 7/16/07.
@@ -29,37 +29,37 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRewriteRuleSubtreeStream.h"
+#import "RewriteRuleSubtreeStream.h"
 
 
-@implementation ANTLRRewriteRuleSubtreeStream
+@implementation RewriteRuleSubtreeStream
 
-+ (ANTLRRewriteRuleSubtreeStream*) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream*) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription;
 {
-    return [[ANTLRRewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription];
 }
 
-+ (ANTLRRewriteRuleSubtreeStream*) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream*) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription
                                                             element:(id)anElement;
 {
-    return [[ANTLRRewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription
                                                               element:anElement];
 }
 
-+ (ANTLRRewriteRuleSubtreeStream*) newANTLRRewriteRuleSubtreeStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleSubtreeStream*) newRewriteRuleSubtreeStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription
                                                            elements:(NSArray *)theElements;
 {
-    return [[ANTLRRewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleSubtreeStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription
                                                              elements:theElements];
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
 {
     if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription]) != nil) {
         dirty = NO;
@@ -68,7 +68,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
 {
     if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription element:anElement]) != nil) {
         dirty = NO;
@@ -76,7 +76,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
 {
     if ((self = [super initWithTreeAdaptor:aTreeAdaptor description:anElementDescription elements:theElements]) != nil) {
         dirty = NO;

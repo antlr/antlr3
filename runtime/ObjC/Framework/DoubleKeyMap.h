@@ -1,7 +1,7 @@
 
 #import "AMutableArray.h"
 #import "AMutableDictionary.h"
-#import "ANTLRLinkBase.h"
+#import "LinkBase.h"
 /**
  * Sometimes we need to map a key to a value but key is two pieces of data.
  * This nested hash table saves creating a single key each time we access
@@ -10,7 +10,7 @@
 
 @class AMutableArray;
 
-@interface ANTLRDoubleKeyMap : ANTLRLinkBase {
+@interface DoubleKeyMap : LinkBase {
     AMutableDictionary *data;
 }
 

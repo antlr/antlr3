@@ -1,5 +1,5 @@
 //
-//  ANTLRUniqueIDMap.h
+//  UniqueIDMap.h
 //  ANTLR
 //
 //  Created by Alan Condit on 7/7/10.
@@ -30,22 +30,22 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRPtrBuffer.h"
-#import "ANTLRNodeMapElement.h"
+#import "PtrBuffer.h"
+#import "NodeMapElement.h"
 
 #define SUCCESS             0
 #define FAILURE             -1
 #define HASHSIZE            101
 #define HBUFSIZE            0x2000
 
-@interface ANTLRUniqueIDMap : ANTLRPtrBuffer {
+@interface UniqueIDMap : PtrBuffer {
     NSInteger lastHash;
 }
 
 @property (getter=getLastHash, setter=setLastHash:) NSInteger lastHash;
 
-+ (id)newANTLRUniqueIDMap;
-+ (id)newANTLRUniqueIDMapWithLen:(NSInteger)aHashSize;
++ (id)newUniqueIDMap;
++ (id)newUniqueIDMapWithLen:(NSInteger)aHashSize;
 
 - (id)init;
 - (id)initWithLen:(NSInteger)cnt;
@@ -56,9 +56,9 @@
 /* clear -- reinitialize the maplist array */
 - (void) clear;
 
-- (void)deleteANTLRUniqueIDMap:(ANTLRNodeMapElement *)np;
-- (void)delete_chain:(ANTLRNodeMapElement *)np;
-- (id)getNode:(id<ANTLRBaseTree>)aNode;
-- (void)putID:(id)anID Node:(id<ANTLRBaseTree>)aNode;
+- (void)deleteUniqueIDMap:(NodeMapElement *)np;
+- (void)delete_chain:(NodeMapElement *)np;
+- (id)getNode:(id<BaseTree>)aNode;
+- (void)putID:(id)anID Node:(id<BaseTree>)aNode;
 
 @end

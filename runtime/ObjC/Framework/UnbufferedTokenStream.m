@@ -1,5 +1,5 @@
 //
-//  ANTLRUnbufferedTokenStream.m
+//  UnbufferedTokenStream.m
 //  ANTLR
 //
 //  Created by Alan Condit on 7/12/10.
@@ -29,17 +29,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRUnbufferedTokenStream.h"
+#import "UnbufferedTokenStream.h"
 
-@implementation ANTLRUnbufferedTokenStream
+@implementation UnbufferedTokenStream
 
 @synthesize tokenSource;
 @synthesize tokenIndex;
 @synthesize channel;
 
-+ (ANTLRUnbufferedTokenStream *)newANTLRUnbufferedTokenStream:(id<ANTLRTokenSource>)aTokenSource
++ (UnbufferedTokenStream *)newUnbufferedTokenStream:(id<TokenSource>)aTokenSource
 {
-    return [[ANTLRUnbufferedTokenStream alloc] initWithTokenSource:aTokenSource];
+    return [[UnbufferedTokenStream alloc] initWithTokenSource:aTokenSource];
 }
 
 - (id) init
@@ -47,18 +47,18 @@
     if ((self = [super init]) != nil) {
         tokenSource = nil;
         tokenIndex = 0;
-        channel = ANTLRTokenChannelDefault;
+        channel = TokenChannelDefault;
     }
     return self;
 }
 
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)aTokenSource
+- (id) initWithTokenSource:(id<TokenSource>)aTokenSource
 {
     if ((self = [super init]) != nil) {
         tokenSource = aTokenSource;
         if ( tokenSource ) [tokenSource retain];
         tokenIndex = 0;
-        channel = ANTLRTokenChannelDefault;
+        channel = TokenChannelDefault;
     }
     return self;
 }
@@ -66,25 +66,25 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRUnbufferedTokenStream" );
+    NSLog( @"called dealloc in UnbufferedTokenStream" );
 #endif
     if ( tokenSource ) [tokenSource release];
     [super dealloc];
 }
 
-- (id<ANTLRToken>)nextElement
+- (id<Token>)nextElement
 {
-    id<ANTLRToken> t = [tokenSource nextToken];
+    id<Token> t = [tokenSource nextToken];
     [t setTokenIndex:tokenIndex++];
     return t;
 }
 
-- (BOOL)isEOF:(id<ANTLRToken>)aToken
+- (BOOL)isEOF:(id<Token>)aToken
 {
-    return (aToken.type == ANTLRTokenTypeEOF);
+    return (aToken.type == TokenTypeEOF);
 }    
 
-- (id<ANTLRTokenSource>)getTokenSource
+- (id<TokenSource>)getTokenSource
 {
     return tokenSource;
 }
@@ -94,7 +94,7 @@
     return @"n/a";
 }
 
-- (NSString *)toStringFromToken:(id<ANTLRToken>)aStart ToEnd:(id<ANTLRToken>)aStop
+- (NSString *)toStringFromToken:(id<Token>)aStart ToEnd:(id<Token>)aStop
 {
     return @"n/a";
 }
@@ -104,9 +104,9 @@
     return [[self LT:anIdx] type];
 }
 
-- (id<ANTLRToken>)objectAtIndex:(NSInteger)anIdx
+- (id<Token>)objectAtIndex:(NSInteger)anIdx
 {
-    @throw [ANTLRRuntimeException newException:@"Absolute token indexes are meaningless in an unbuffered stream"];
+    @throw [RuntimeException newException:@"Absolute token indexes are meaningless in an unbuffered stream"];
 }
 
 - (NSString *)getSourceName

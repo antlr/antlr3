@@ -1,5 +1,5 @@
 //
-//  ANTLRMissingTokenException.m
+//  MissingTokenException.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -29,21 +29,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRMissingTokenException.h"
+#import "MissingTokenException.h"
 
 
-@implementation ANTLRMissingTokenException
+@implementation MissingTokenException
 /** Used for remote debugger deserialization */
 + (id) newException
 {
-    return [[ANTLRMissingTokenException alloc] init];
+    return [[MissingTokenException alloc] init];
 }
 
 + (id) newException:(NSInteger)expected
-             Stream:(id<ANTLRIntStream>)anInput
-               With:(id<ANTLRToken>)insertedToken
+             Stream:(id<IntStream>)anInput
+               With:(id<Token>)insertedToken
 {
-    return [[ANTLRMissingTokenException alloc] init:expected Stream:anInput With:insertedToken];
+    return [[MissingTokenException alloc] init:expected Stream:anInput With:insertedToken];
 }
 
 - (id) init
@@ -53,7 +53,7 @@
     return self;
 }
 
-- (id) init:(NSInteger)expected Stream:(id<ANTLRIntStream>)anInput With:(id<ANTLRToken>)insertedToken
+- (id) init:(NSInteger)expected Stream:(id<IntStream>)anInput With:(id<Token>)insertedToken
 {
     if ((self = [super initWithStream:anInput]) != nil) {
         expecting = expected;

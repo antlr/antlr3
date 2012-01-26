@@ -1,5 +1,5 @@
 //
-//  ANTLRTreePatternLexer.m
+//  TreePatternLexer.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/18/10.
@@ -29,9 +29,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreePatternLexer.h"
+#import "TreePatternLexer.h"
 
-@implementation ANTLRTreePatternLexer
+@implementation TreePatternLexer
 
 @synthesize pattern;
 @synthesize p;
@@ -41,9 +41,9 @@
 @synthesize data;
 @synthesize error;
 
-+ (ANTLRTreePatternLexer *)newANTLRTreePatternLexer:(NSString *)aPattern
++ (TreePatternLexer *)newTreePatternLexer:(NSString *)aPattern
 {
-    return [[ANTLRTreePatternLexer alloc] initWithPattern:aPattern];
+    return [[TreePatternLexer alloc] initWithPattern:aPattern];
 }
 
 - (id) init
@@ -80,7 +80,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreePatternLexer" );
+    NSLog( @"called dealloc in TreePatternLexer" );
 #endif
 	if ( pattern ) [pattern release];
 	if ( sval ) [sval release];
@@ -90,7 +90,7 @@
 - (NSInteger) nextToken
 {
     n = 0; // reset, but reuse buffer
-    while ( c != ANTLRLexerTokenTypeEOF ) {
+    while ( c != LexerTokenTypeEOF ) {
         if ( c==' ' || c=='\n' || c=='\r' || c=='\t' ) {
             [self consume];
             continue;
@@ -104,27 +104,27 @@
                 data[n++] = (char)c;
                 [self consume];
             }
-            return ANTLRLexerTokenTypeID;
+            return LexerTokenTypeID;
         }
         if ( c == '(' ) {
             [self consume];
-            return ANTLRLexerTokenTypeBEGIN;
+            return LexerTokenTypeBEGIN;
         }
         if ( c==')' ) {
             [self consume];
-            return ANTLRLexerTokenTypeEND;
+            return LexerTokenTypeEND;
         }
         if ( c=='%' ) {
             [self consume];
-            return ANTLRLexerTokenTypePERCENT;
+            return LexerTokenTypePERCENT;
         }
         if ( c==':' ) {
             [self consume];
-            return ANTLRLexerTokenTypeCOLON;
+            return LexerTokenTypeCOLON;
         }
         if ( c=='.' ) {
             [self consume];
-            return ANTLRLexerTokenTypeDOT;
+            return LexerTokenTypeDOT;
         }
         if ( c=='[' ) { // grab [x] as a string, returning x
             [self consume];
@@ -142,20 +142,20 @@
                 [self consume];
             }
             [self consume];
-            return ANTLRLexerTokenTypeARG;
+            return LexerTokenTypeARG;
         }
         [self consume];
         error = true;
-        return ANTLRLexerTokenTypeEOF;
+        return LexerTokenTypeEOF;
     }
-    return ANTLRLexerTokenTypeEOF;
+    return LexerTokenTypeEOF;
 }
 
 - (void) consume
 {
     p++;
     if ( p >= n ) {
-        c = ANTLRLexerTokenTypeEOF;
+        c = LexerTokenTypeEOF;
     }
     else {
         c = [pattern characterAtIndex:p];

@@ -26,47 +26,47 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRuntimeException.h"
-#import "ANTLRToken.h"
-#import "ANTLRIntStream.h"
-#import "ANTLRBaseTree.h"
+#import "RuntimeException.h"
+#import "Token.h"
+#import "IntStream.h"
+#import "BaseTree.h"
 
-@interface ANTLRRecognitionException : ANTLRRuntimeException {
-	id<ANTLRIntStream> input;
+@interface RecognitionException : RuntimeException {
+	id<IntStream> input;
 	NSInteger index;
-	id<ANTLRToken> token;
-	id<ANTLRBaseTree> node;
+	id<Token> token;
+	id<BaseTree> node;
 	unichar c;
 	NSUInteger line;
 	NSUInteger charPositionInLine;
 }
 
-@property (retain, getter=getStream, setter=setStream:) id<ANTLRIntStream> input;
+@property (retain, getter=getStream, setter=setStream:) id<IntStream> input;
 @property (assign) NSInteger index;
-@property (retain, getter=getToken, setter=setToken:) id<ANTLRToken>token;
-@property (retain, getter=getNode, setter=setNode:) id<ANTLRBaseTree>node;
+@property (retain, getter=getToken, setter=setToken:) id<Token>token;
+@property (retain, getter=getNode, setter=setNode:) id<BaseTree>node;
 @property (assign) unichar c;
 @property (assign) NSUInteger line;
 @property (assign) NSUInteger charPositionInLine;
 
 + (id) newException;
-+ (id) newException:(id<ANTLRIntStream>) anInputStream; 
++ (id) newException:(id<IntStream>) anInputStream; 
 - (id) init;
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream;
-- (id) initWithStream:(id<ANTLRIntStream>)anInputStream reason:(NSString *)aReason;
+- (id) initWithStream:(id<IntStream>)anInputStream;
+- (id) initWithStream:(id<IntStream>)anInputStream reason:(NSString *)aReason;
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (NSInteger) unexpectedType;
-- (id<ANTLRToken>)getUnexpectedToken;
+- (id<Token>)getUnexpectedToken;
 
-- (id<ANTLRIntStream>) getStream;
-- (void) setStream: (id<ANTLRIntStream>) aStream;
+- (id<IntStream>) getStream;
+- (void) setStream: (id<IntStream>) aStream;
 
-- (id<ANTLRToken>) getToken;
-- (void) setToken: (id<ANTLRToken>) aToken;
+- (id<Token>) getToken;
+- (void) setToken: (id<Token>) aToken;
 
-- (id<ANTLRBaseTree>) getNode;
-- (void) setNode: (id<ANTLRBaseTree>) aNode;
+- (id<BaseTree>) getNode;
+- (void) setNode: (id<BaseTree>) aNode;
 
 - (NSString *)getMessage;
 

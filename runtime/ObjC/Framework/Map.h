@@ -1,5 +1,5 @@
 //
-//  ANTLRMap.h
+//  Map.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -30,26 +30,26 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRPtrBuffer.h"
-#import "ANTLRMapElement.h"
+#import "PtrBuffer.h"
+#import "MapElement.h"
 
 //#define GLOBAL_SCOPE      0
 //#define LOCAL_SCOPE       1
 #define HASHSIZE            101
 #define HBUFSIZE            0x2000
 
-@interface ANTLRMap : ANTLRPtrBuffer {
-	//ANTLRMap *fNext; // found in superclass
+@interface Map : PtrBuffer {
+	//Map *fNext; // found in superclass
     // TStringPool *fPool;
     NSInteger lastHash;
 }
 
-//@property (copy) ANTLRMap *fNext;
+//@property (copy) Map *fNext;
 @property (getter=getLastHash, setter=setLastHash:) NSInteger lastHash;
 
 // Contruction/Destruction
-+ (id)newANTLRMap;
-+ (id)newANTLRMapWithLen:(NSInteger)aHashSize;
++ (id)newMap;
++ (id)newMapWithLen:(NSInteger)aHashSize;
 
 - (id)init;
 - (id)initWithLen:(NSInteger)cnt;
@@ -65,16 +65,16 @@
 /*   look for s in ptrBuffer  */
 -(id)lookup:(NSString *)s;
 /* look for s in ptrBuffer  */
--(id)install:(ANTLRMapElement *)sym;
+-(id)install:(MapElement *)sym;
 /*
  * delete entry from list
  */
-- (void)deleteANTLRMap:(ANTLRMapElement *)np;
+- (void)deleteMap:(MapElement *)np;
 - (NSInteger)RemoveSym:(NSString *)s;
-- (void)delete_chain:(ANTLRMapElement *)np;
-- (ANTLRMapElement *)getTType:(NSString *)name;
-- (ANTLRMapElement *)getName:(NSInteger)ttype;
-- (NSInteger)getNode:(ANTLRMapElement *)aNode;
+- (void)delete_chain:(MapElement *)np;
+- (MapElement *)getTType:(NSString *)name;
+- (MapElement *)getName:(NSInteger)ttype;
+- (NSInteger)getNode:(MapElement *)aNode;
 - (void)putNode:(NSInteger)aTType Node:(id)aNode;
 - (void)putName:(NSString *)name TType:(NSInteger)ttype;
 - (void)putName:(NSString *)name Node:(id)aNode;

@@ -1,5 +1,5 @@
 //
-//  ANTLRPtrStack.h
+//  PtrStack.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -7,25 +7,25 @@
 //ptrBuffer
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseStack.h"
-#import "ANTLRRuleMemo.h"
+#import "BaseStack.h"
+#import "RuleMemo.h"
 
 //#define GLOBAL_SCOPE       0
 //#define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRPtrStack : ANTLRBaseStack {
-	//ANTLRPtrStack *fNext;
+@interface PtrStack : BaseStack {
+	//PtrStack *fNext;
     // TStringPool *fPool;
 }
 
-//@property (copy) ANTLRPtrStack *fNext;
+//@property (copy) PtrStack *fNext;
 //@property (copy) TStringPool *fPool;
 
 // Contruction/Destruction
-+ (ANTLRPtrStack *)newANTLRPtrStack;
-+ (ANTLRPtrStack *)newANTLRPtrStack:(NSInteger)cnt;
++ (PtrStack *)newPtrStack;
++ (PtrStack *)newPtrStack:(NSInteger)cnt;
 - (id)init;
 - (id)initWithLen:(NSInteger)aLen;
 - (void)dealloc;

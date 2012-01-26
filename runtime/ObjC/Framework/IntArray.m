@@ -1,5 +1,5 @@
 //
-//  ANTLRIntArray.m
+//  IntArray.m
 //  ANTLR
 //
 //  Created by Ian Michell on 27/04/2010.
@@ -28,10 +28,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRIntArray.h"
-#import "ANTLRRuntimeException.h"
+#import "IntArray.h"
+#import "RuntimeException.h"
 
-@implementation ANTLRIntArray
+@implementation IntArray
 
 @synthesize BuffSize;
 @synthesize count;
@@ -40,14 +40,14 @@
 @synthesize intBuffer;
 @synthesize SPARSE;
 
-+ (ANTLRIntArray *)newArray
++ (IntArray *)newArray
 {
-    return [[ANTLRIntArray alloc] init];
+    return [[IntArray alloc] init];
 }
 
-+ (ANTLRIntArray *)newArrayWithLen:(NSUInteger)aLen
++ (IntArray *)newArrayWithLen:(NSUInteger)aLen
 {
-    return [[ANTLRIntArray alloc] initWithLen:aLen];
+    return [[IntArray alloc] initWithLen:aLen];
 }
 
 - (id)init
@@ -81,7 +81,7 @@
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRIntArray" );
+    NSLog( @"called dealloc in IntArray" );
 #endif
     if ( buffer ) [buffer release];
     [super dealloc];
@@ -89,7 +89,7 @@
 
 - (id)copyWithZone:(NSZone *)aZone
 {
-    ANTLRIntArray *copy;
+    IntArray *copy;
     
     copy = [[[self class] alloc] initWithLen:BuffSize];
     copy.idx = self.idx;

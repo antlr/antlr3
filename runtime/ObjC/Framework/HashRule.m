@@ -1,5 +1,5 @@
 //
-//  ANTLRHashRule.m
+//  HashRule.m
 //  ANTLR
 //
 // Copyright (c) 2010 Alan Condit
@@ -31,23 +31,23 @@
 #define FAILURE (-1)
 #define ANTLR_MEMO_RULE_UNKNOWN -1
 
-#import "ANTLRHashRule.h"
+#import "HashRule.h"
 
 /*
- * Start of ANTLRHashRule
+ * Start of HashRule
  */
-@implementation ANTLRHashRule
+@implementation HashRule
 
 @synthesize LastHash;
 
-+(id)newANTLRHashRule
++(id)newHashRule
 {
-    return [[ANTLRHashRule alloc] init];
+    return [[HashRule alloc] init];
 }
 
-+(id)newANTLRHashRuleWithLen:(NSInteger)aBuffSize
++(id)newHashRuleWithLen:(NSInteger)aBuffSize
 {
-    return [[ANTLRHashRule alloc] initWithLen:aBuffSize];
+    return [[HashRule alloc] initWithLen:aBuffSize];
 }
 
 -(id)init
@@ -70,9 +70,9 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRHashRule" );
+    NSLog( @"called dealloc in HashRule" );
 #endif
-    ANTLRRuleMemo *tmp, *rtmp;
+    RuleMemo *tmp, *rtmp;
     int Index;
     
     if ( self.fNext != nil ) {
@@ -80,8 +80,8 @@
             tmp = ptrBuffer[Index];
             while ( tmp && tmp != ptrBuffer[Index] ) {
                 rtmp = tmp;
-                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
-                    tmp = (ANTLRRuleMemo *)tmp.fNext;
+                if ([tmp isKindOfClass:[LinkBase class]])
+                    tmp = (RuleMemo *)tmp.fNext;
                 else
                     tmp = nil;
                 [rtmp dealloc];
@@ -121,9 +121,9 @@
 }
                                   
                                   
--(void)deleteANTLRHashRule:(ANTLRRuleMemo *)np
+-(void)deleteHashRule:(RuleMemo *)np
 {
-    ANTLRRuleMemo *tmp, *rtmp;
+    RuleMemo *tmp, *rtmp;
     int Index;
     
     if ( self.fNext != nil ) {
@@ -131,8 +131,8 @@
             tmp = ptrBuffer[Index];
             while ( tmp && tmp != ptrBuffer[Index ] ) {
                 rtmp = tmp;
-                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
-                    tmp = (ANTLRRuleMemo *)tmp.fNext;
+                if ([tmp isKindOfClass:[LinkBase class]])
+                    tmp = (RuleMemo *)tmp.fNext;
                 else
                     tmp = nil;
                 [rtmp release];
@@ -141,26 +141,26 @@
     }
 }
 
--(void)delete_chain:(ANTLRRuleMemo *)np
+-(void)delete_chain:(RuleMemo *)np
 {
     if ( np.fNext != nil )
         [self delete_chain:np.fNext];
     [np dealloc];
 }
 
--(ANTLRRuleMemo **)getPtrBuffer
+-(RuleMemo **)getPtrBuffer
 {
     return( ptrBuffer );
 }
 
--(void)setPtrBuffer:(ANTLRRuleMemo **)np
+-(void)setPtrBuffer:(RuleMemo **)np
 {
     ptrBuffer = np;
 }
 
 - (NSNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex
 {
-    ANTLRRuleMemo *aRule;
+    RuleMemo *aRule;
     NSNumber *stopIndex;
     NSInteger anIndex;
     
@@ -172,7 +172,7 @@
     return stopIndex;
 }
 
-- (void)putRuleMemo:(ANTLRRuleMemo *)aRule AtStartIndex:(NSInteger)aStartIndex
+- (void)putRuleMemo:(RuleMemo *)aRule AtStartIndex:(NSInteger)aStartIndex
 {
     NSInteger anIndex;
     
@@ -194,14 +194,14 @@
 
 - (void)putRuleMemoAtStartIndex:(NSInteger)aStartIndex StopIndex:(NSInteger)aStopIndex
 {
-    ANTLRRuleMemo *aRule, *newRule;
+    RuleMemo *aRule, *newRule;
     NSInteger anIndex;
     NSInteger aMatchIndex;
 
     anIndex = (aStartIndex >= BuffSize) ? aStartIndex % BuffSize : aStartIndex;
     aRule = ptrBuffer[anIndex];
     if ( aRule == nil ) {
-        aRule = [ANTLRRuleMemo newANTLRRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
+        aRule = [RuleMemo newRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
                                                     StopIndex:[NSNumber numberWithInteger:aStopIndex]];
         [aRule retain];
         ptrBuffer[anIndex] = aRule;
@@ -217,9 +217,9 @@
             return;
         }
         while (aRule.fNext != nil) {
-            aMatchIndex = [((ANTLRRuleMemo *)aRule.fNext).startIndex integerValue];
+            aMatchIndex = [((RuleMemo *)aRule.fNext).startIndex integerValue];
             if ( aStartIndex > aMatchIndex ) {
-                newRule = [ANTLRRuleMemo newANTLRRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
+                newRule = [RuleMemo newRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
                                                               StopIndex:[NSNumber numberWithInteger:aStopIndex]];
                 [newRule retain];
                 newRule.fNext = aRule.fNext;
@@ -255,7 +255,7 @@
     mode = aMode;
 }
 
-- (void) insertObject:(ANTLRRuleMemo *)aRule atIndex:(NSInteger)anIndex
+- (void) insertObject:(RuleMemo *)aRule atIndex:(NSInteger)anIndex
 {
     NSInteger Index;
     
@@ -267,7 +267,7 @@
     ptrBuffer[Index] = aRule;
 }
 
-- (ANTLRRuleMemo *)objectAtIndex:(NSInteger)anIndex
+- (RuleMemo *)objectAtIndex:(NSInteger)anIndex
 {
     NSInteger anIdx;
 

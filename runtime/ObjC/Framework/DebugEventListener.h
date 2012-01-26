@@ -25,12 +25,12 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
-#import "ANTLRRecognitionException.h"
+#import "Token.h"
+#import "RecognitionException.h"
 
-@protocol ANTLRDebugEventListener 
+@protocol DebugEventListener 
 
-#define ANTLRDebugProtocolVersion 1
+#define DebugProtocolVersion 1
 
 /** The parser has just entered a rule.  No decision has been made about
 *  which alt is predicted.  This is fired AFTER init actions have been
@@ -68,13 +68,13 @@
 /** An input token was consumed; matched by any kind of element.
 *  Trigger after the token was matched by things like match(), matchAny().
 */
-- (void) consumeToken:(id<ANTLRToken>)t;
+- (void) consumeToken:(id<Token>)t;
 
 /** An off-channel input token was consumed.
 *  Trigger after the token was matched by things like match(), matchAny().
 *  (unless of course the hidden token is first stuff in the input stream).
 */
-- (void) consumeHiddenToken:(id<ANTLRToken>)t;
+- (void) consumeHiddenToken:(id<Token>)t;
 
 /** Somebody (anybody) looked ahead.  Note that this actually gets
 *  triggered by both LA and LT calls.  The debugger will want to know
@@ -83,7 +83,7 @@
 *  ahead into a file it doesn't have so LT events must pass the token
 *  even if the info is redundant.
 */
-- (void) LT:(NSInteger)i foundToken:(id<ANTLRToken>)t;
+- (void) LT:(NSInteger)i foundToken:(id<Token>)t;
 
 /** The parser is going to look arbitrarily ahead; mark this location,
 *  the token stream's marker is sent in case you need it.
@@ -175,7 +175,7 @@
 *		exitRule b
 *		terminate
 */
-- (void) recognitionException:(ANTLRRecognitionException *)e;
+- (void) recognitionException:(RecognitionException *)e;
 
 /** Indicates the recognizer is about to consume tokens to resynchronize
 *  the parser.  Any consume events from here until the recovered event

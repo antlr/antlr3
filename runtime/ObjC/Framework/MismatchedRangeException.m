@@ -25,19 +25,19 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRMismatchedRangeException.h"
+#import "MismatchedRangeException.h"
 
 
-@implementation ANTLRMismatchedRangeException
+@implementation MismatchedRangeException
 
 @synthesize range;
 
-+ (id) newException:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput
++ (id) newException:(NSRange) aRange stream:(id<IntStream>) theInput
 {
-	return [[ANTLRMismatchedRangeException alloc] initWithRange:aRange stream:theInput];
+	return [[MismatchedRangeException alloc] initWithRange:aRange stream:theInput];
 }
 
-- (id) initWithRange:(NSRange) aRange stream:(id<ANTLRIntStream>) theInput
+- (id) initWithRange:(NSRange) aRange stream:(id<IntStream>) theInput
 {
 	if ((self = [super initWithStream:theInput]) != nil) {
 		range = aRange;

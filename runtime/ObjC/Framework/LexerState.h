@@ -25,16 +25,16 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
-#import "ANTLRRecognizerSharedState.h"
+#import "Token.h"
+#import "RecognizerSharedState.h"
 
-@interface ANTLRLexerState : ANTLRRecognizerSharedState {
+@interface LexerState : RecognizerSharedState {
 }
 
 - (void) reset;
 
-- (id<ANTLRToken>) getToken;
-- (void) setToken:(id<ANTLRToken>) theToken;
+- (id<Token>) getToken;
+- (void) setToken:(id<Token>) theToken;
 
 - (NSUInteger) getTokenType;
 - (void) setTokenType:(unsigned int) theTokenType;

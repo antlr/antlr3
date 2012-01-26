@@ -25,33 +25,33 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRParser.h"
-#import "ANTLRDebugEventProxy.h"
-#import "ANTLRDebugTokenStream.h"
+#import "Parser.h"
+#import "DebugEventSocketProxy.h"
+#import "DebugTokenStream.h"
 
-@interface ANTLRDebugParser : ANTLRParser {
-	id<ANTLRDebugEventListener> debugListener;
+@interface DebugParser : Parser {
+	id<DebugEventListener> debugListener;
 }
 
-+ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
-        debugListener:(id<ANTLRDebugEventListener>)debugListener;
++ (id) newDebugParser:(id<TokenStream>)theStream
+        debugListener:(id<DebugEventListener>)debugListener;
 
-+ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
-                state:(ANTLRRecognizerSharedState *)state;
++ (id) newDebugParser:(id<TokenStream>)theStream
+                state:(RecognizerSharedState *)state;
 
-+ (id) newDebugParser:(id<ANTLRTokenStream>)theStream
-        debugListener:(id<ANTLRDebugEventListener>)debugListener
-                state:(ANTLRRecognizerSharedState *)state;
++ (id) newDebugParser:(id<TokenStream>)theStream
+        debugListener:(id<DebugEventListener>)debugListener
+                state:(RecognizerSharedState *)state;
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream;
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
+- (id) initWithTokenStream:(id<TokenStream>)theStream;
+- (id) initWithTokenStream:(id<TokenStream>)theStream
 			  debuggerPort:(NSInteger)portNumber;
 // designated initializer
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream
-			 debugListener:(id<ANTLRDebugEventListener>)theDebugListener
+- (id) initWithTokenStream:(id<TokenStream>)theStream
+			 debugListener:(id<DebugEventListener>)theDebugListener
 			  debuggerPort:(NSInteger)portNumber;
 
-- (id<ANTLRDebugEventListener>) debugListener;
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
+- (id<DebugEventListener>) debugListener;
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener;
 
 @end

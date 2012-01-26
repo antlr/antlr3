@@ -24,17 +24,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRToken.h"
-#import "ANTLRBaseTree.h"
-#import "ANTLRTokenStream.h"
+#import "Token.h"
+#import "BaseTree.h"
+#import "TokenStream.h"
 
 #pragma warning tree/node diction is broken.
 
-@protocol ANTLRTreeAdaptor <NSObject, NSCopying>
+@protocol TreeAdaptor <NSObject, NSCopying>
 
 #pragma mark Construction
 
-#pragma mark ANTLRTreeAdaptor implementation
+#pragma mark TreeAdaptor implementation
 - (id)dupNode:(id)aNode;	// copies just the node
 - (id)dupTree:(id)aTree;	// copies the entire subtree, recursively
 
@@ -58,9 +58,9 @@
  *  Tree parsing should happen only when parsing and tree construction
  *  succeed.
  */
-- (id) errorNode:(id<ANTLRTokenStream>)anInput
-            From:(id<ANTLRToken>)aStartToken
-              To:(id<ANTLRToken>)aStopToken
+- (id) errorNode:(id<TokenStream>)anInput
+            From:(id<Token>)aStartToken
+              To:(id<Token>)aStopToken
        Exception:(NSException *) e;
 
 /** Is tree considered a nil node used to make lists of child nodes? */
@@ -103,9 +103,9 @@
                            
 - (NSUInteger) getUniqueID:(id)aNode;
 
-- (id) create:(id<ANTLRToken>)payload;
-- (id) createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken;
-- (id) createTree:(NSInteger)tokenType FromToken:(id<ANTLRToken>)fromToken Text:(NSString *)text;
+- (id) create:(id<Token>)payload;
+- (id) createTree:(NSInteger)tokenType FromToken:(id<Token>)fromToken;
+- (id) createTree:(NSInteger)tokenType FromToken:(id<Token>)fromToken Text:(NSString *)text;
 - (id) createTree:(NSInteger)tokenType Text:(NSString *)text;
 
 #pragma mark Content
@@ -119,9 +119,9 @@
 - (NSString *) getText:(id)aNode;
 - (void) setText:(id)aNode Text:(NSString *)tokenText;
 
-//- (id<ANTLRToken>) getToken:(id)t;
+//- (id<Token>) getToken:(id)t;
 
-- (void) setTokenBoundaries:(id)aTree From:(id<ANTLRToken>)startToken To:(id<ANTLRToken>)stopToken;
+- (void) setTokenBoundaries:(id)aTree From:(id<Token>)startToken To:(id<Token>)stopToken;
 - (NSInteger) getTokenStartIndex:(id)aTree;
 - (NSInteger) getTokenStopIndex:(id)aTree;
 

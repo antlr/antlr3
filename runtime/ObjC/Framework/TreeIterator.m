@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeIterator.m
+//  TreeIterator.m
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -29,20 +29,20 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRTreeIterator.h"
-#import "ANTLRCommonTreeAdaptor.h"
+#import "TreeIterator.h"
+#import "CommonTreeAdaptor.h"
 
-@implementation ANTLRTreeIterator
+@implementation TreeIterator
 
-+ (ANTLRTreeIterator *) newANTRLTreeIterator
++ (TreeIterator *) newANTRLTreeIterator
 {
-    return [[ANTLRTreeIterator alloc] init];
+    return [[TreeIterator alloc] init];
 }
 
-+ (ANTLRTreeIterator *) newANTRLTreeIteratorWithAdaptor:(ANTLRCommonTreeAdaptor *)adaptor
-                                                andTree:(id<ANTLRBaseTree>)tree
++ (TreeIterator *) newANTRLTreeIteratorWithAdaptor:(CommonTreeAdaptor *)adaptor
+                                                andTree:(id<BaseTree>)tree
 {
-    return [[ANTLRTreeIterator alloc] initWithTreeAdaptor:adaptor andTree:tree];
+    return [[TreeIterator alloc] initWithTreeAdaptor:adaptor andTree:tree];
 }
 
 - (id) init
@@ -50,33 +50,33 @@
     self = [super init];
     if ( self != nil ) {
         firstTime = YES;
-        nodes = [[ANTLRFastQueue newANTLRFastQueue] retain];
-        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
-        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
-        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
+        nodes = [[FastQueue newFastQueue] retain];
+        down = [[adaptor createTree:TokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:TokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:TokenTypeEOF Text:@"EOF"] retain];
         tree = eof;
         root = eof;
     }
     return self;
 }
 
--(id) initWithTree:(id<ANTLRBaseTree>) t
+-(id) initWithTree:(id<BaseTree>) t
 {
     self = [super init];
     if ( self != nil ) {
         firstTime = YES;
-        adaptor = [[ANTLRCommonTreeAdaptor newTreeAdaptor] retain];
+        adaptor = [[CommonTreeAdaptor newTreeAdaptor] retain];
         tree = [t retain];
         root = t;
-        nodes = [[ANTLRFastQueue newANTLRFastQueue] retain];
-        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
-        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
-        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
+        nodes = [[FastQueue newFastQueue] retain];
+        down = [[adaptor createTree:TokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:TokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:TokenTypeEOF Text:@"EOF"] retain];
     }
     return self;
 }
 
--(id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)a andTree:(id<ANTLRBaseTree>)t
+-(id) initWithTreeAdaptor:(id<TreeAdaptor>)a andTree:(id<BaseTree>)t
 {
     self = [super init];
     if ( self != nil ) {
@@ -84,10 +84,10 @@
         adaptor = [a retain];
         tree = [t retain];
         root = t;
-        nodes = [[ANTLRFastQueue newANTLRFastQueue] retain];
-        down = [[adaptor createTree:ANTLRTokenTypeDOWN Text:@"DOWN"] retain];
-        up = [[adaptor createTree:ANTLRTokenTypeUP Text:@"UP"] retain];
-        eof = [[adaptor createTree:ANTLRTokenTypeEOF Text:@"EOF"] retain];
+        nodes = [[FastQueue newFastQueue] retain];
+        down = [[adaptor createTree:TokenTypeDOWN Text:@"DOWN"] retain];
+        up = [[adaptor createTree:TokenTypeUP Text:@"UP"] retain];
+        eof = [[adaptor createTree:TokenTypeEOF Text:@"EOF"] retain];
     }
     return self;
 }
@@ -95,7 +95,7 @@
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeIterator" );
+    NSLog( @"called dealloc in TreeIterator" );
 #endif
     if ( adaptor ) [adaptor release];
     if ( nodes ) [nodes release];
@@ -156,7 +156,7 @@
         return self.down;
     }
     // if no children, look for next sibling of ancestor
-    id<ANTLRBaseTree> parent = [adaptor getParent:tree];
+    id<BaseTree> parent = [adaptor getParent:tree];
     while (parent != nil && ([adaptor getChildIndex:tree] + 1) >= [adaptor getChildCount:parent]) {
         [nodes addObject:up];
         tree = parent;
@@ -186,7 +186,7 @@
 
 - (void)remove
 {
-    @throw [ANTLRRuntimeException newException:@"ANTLRUnsupportedOperationException"];
+    @throw [RuntimeException newException:@"UnsupportedOperationException"];
 }
 
 @synthesize firstTime;

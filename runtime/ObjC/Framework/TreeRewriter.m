@@ -1,5 +1,5 @@
 //
-//  ANTLRTreeRewriter.m
+//  TreeRewriter.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/17/10.
@@ -29,11 +29,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeRewriter.h"
-#import "ANTLRCommonTreeNodeStream.h"
-#import "ANTLRTreeRuleReturnScope.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRTreeVisitor.h"
+#import "TreeRewriter.h"
+#import "CommonTreeNodeStream.h"
+#import "TreeRuleReturnScope.h"
+#import "CommonTreeAdaptor.h"
+#import "TreeVisitor.h"
 
 @implementation ANTLRfptr
 
@@ -56,7 +56,7 @@
 	if ( [actor respondsToSelector:ruleSEL] )
 		return [actor performSelector:ruleSEL];
     else
-        @throw [ANTLRRuntimeException newException:@"Unknown Rewrite exception"];
+        @throw [RuntimeException newException:@"Unknown Rewrite exception"];
     return nil;
 }
 
@@ -64,25 +64,25 @@
 @synthesize ruleSEL;
 @end
 
-@implementation ANTLRTreeRewriter
+@implementation TreeRewriter
 
-+ (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput
++ (TreeRewriter *) newTreeRewriter:(id<TreeNodeStream>)anInput
 {
-    return [[ANTLRTreeRewriter alloc] initWithStream:anInput State:[ANTLRRecognizerSharedState newANTLRRecognizerSharedState]];
+    return [[TreeRewriter alloc] initWithStream:anInput State:[RecognizerSharedState newRecognizerSharedState]];
 }
 
-+ (ANTLRTreeRewriter *) newANTLRTreeRewriter:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState
++ (TreeRewriter *) newTreeRewriter:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)aState
 {
-    return [[ANTLRTreeRewriter alloc] initWithStream:anInput State:aState];
+    return [[TreeRewriter alloc] initWithStream:anInput State:aState];
 }
 
-- (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput
+- (id)initWithStream:(id<TreeNodeStream>)anInput
 {
     SEL aRuleSel;
 
     if ((self = [super initWithStream:anInput]) != nil) {
         showTransformations = NO;
-        state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedState] retain];
+        state = [[RecognizerSharedState newRecognizerSharedState] retain];
         originalAdaptor = [input getTreeAdaptor];
         if ( originalAdaptor ) [originalAdaptor retain];
         originalTokenStream = [input getTokenStream];        
@@ -95,7 +95,7 @@
     return self;
 }
 
-- (id)initWithStream:(id<ANTLRTreeNodeStream>)anInput State:(ANTLRRecognizerSharedState *)aState
+- (id)initWithStream:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)aState
 {
     SEL aRuleSel;
     
@@ -118,7 +118,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRTreeRewriter" );
+    NSLog( @"called dealloc in TreeRewriter" );
 #endif
 	if ( state ) [state release];
 	if ( originalAdaptor ) [originalAdaptor release];
@@ -126,16 +126,16 @@
 	[super dealloc];
 }
 
-- (id) applyOnce:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule
+- (id) applyOnce:(CommonTree *)t Rule:(ANTLRfptr *)whichRule
 {
     if ( t == nil ) return nil;
     @try {
         // share TreeParser object but not parsing-related state
-        state = [ANTLRRecognizerSharedState newANTLRRecognizerSharedState];
-        input = [ANTLRCommonTreeNodeStream newANTLRCommonTreeNodeStream:(ANTLRCommonTreeAdaptor *)originalAdaptor Tree:t];
-        [(ANTLRCommonTreeNodeStream *)input setTokenStream:originalTokenStream];
+        state = [RecognizerSharedState newRecognizerSharedState];
+        input = [CommonTreeNodeStream newCommonTreeNodeStream:(CommonTreeAdaptor *)originalAdaptor Tree:t];
+        [(CommonTreeNodeStream *)input setTokenStream:originalTokenStream];
         [self setBacktrackingLevel:1];
-        ANTLRTreeRuleReturnScope *r = [(ANTLRfptr *)whichRule rule];
+        TreeRuleReturnScope *r = [(ANTLRfptr *)whichRule rule];
         [self setBacktrackingLevel:0];
         if ( [self getFailed] )
             return t;
@@ -148,34 +148,34 @@
         else
             return t;
     }
-    @catch (ANTLRRecognitionException *e) {
+    @catch (RecognitionException *e) {
         return t;
     }
     return t;
 }
 
-- (id) applyRepeatedly:(ANTLRCommonTree *)t Rule:(ANTLRfptr *)whichRule
+- (id) applyRepeatedly:(CommonTree *)t Rule:(ANTLRfptr *)whichRule
 {
     BOOL treeChanged = true;
     while ( treeChanged ) {
-        ANTLRTreeRewriter *u = [self applyOnce:t Rule:whichRule];
+        TreeRewriter *u = [self applyOnce:t Rule:whichRule];
         treeChanged = !(t == u);
         t = u;
     }
     return t;
 }
 
-- (id) downup:(ANTLRCommonTree *)t
+- (id) downup:(CommonTree *)t
 {
     return [self downup:t XForm:NO];
 }
 
-- (id) pre:(ANTLRCommonTree *)t
+- (id) pre:(CommonTree *)t
 {
     return [self applyOnce:t Rule:topdown_fptr];
 }
 
-- (id)post:(ANTLRCommonTree *)t
+- (id)post:(CommonTree *)t
 {
     return [self applyRepeatedly:t Rule:bottomup_ftpr];
 }
@@ -193,11 +193,11 @@ public Object downup(Object t, boolean showTransformations) {
 }
 #endif
 
-- (id) downup:(ANTLRCommonTree *)t XForm:(BOOL)aShowTransformations
+- (id) downup:(CommonTree *)t XForm:(BOOL)aShowTransformations
 {
     showTransformations = aShowTransformations;
-    ANTLRTreeVisitor *v = [ANTLRTreeVisitor newANTLRTreeVisitor:[[originalAdaptor class] newTreeAdaptor]];
-    ANTLRTreeVisitorAction *actions = [ANTLRTreeVisitorAction newANTLRTreeVisitorAction];
+    TreeVisitor *v = [TreeVisitor newTreeVisitor:[[originalAdaptor class] newTreeAdaptor]];
+    TreeVisitorAction *actions = [TreeVisitorAction newTreeVisitorAction];
     {
         //public Object pre(Object t)  { return applyOnce(t, topdown_fptr); }
         [self pre:t];
@@ -211,7 +211,7 @@ public Object downup(Object t, boolean showTransformations) {
 /** Override this if you need transformation tracing to go somewhere
  *  other than stdout or if you're not using Tree-derived trees.
  */
-- (void)reportTransformation:(ANTLRCommonTree *)oldTree Tree:(ANTLRCommonTree *)newTree
+- (void)reportTransformation:(CommonTree *)oldTree Tree:(CommonTree *)newTree
 {
     //System.out.println(((Tree)oldTree).toStringTree()+" -> "+ ((Tree)newTree).toStringTree());
 }
@@ -232,14 +232,14 @@ public Object downup(Object t, boolean showTransformations) {
 - (id) topdown
 // @throws RecognitionException
 {
-    @throw [ANTLRRecognitionException newException:@"TopDown exception"];
+    @throw [RecognitionException newException:@"TopDown exception"];
     return nil;
 }
 
 - (id) bottomup
 //@throws RecognitionException
 {
-    @throw [ANTLRRecognitionException newException:@"BottomUp exception"];
+    @throw [RecognitionException newException:@"BottomUp exception"];
     return nil;
 }
 

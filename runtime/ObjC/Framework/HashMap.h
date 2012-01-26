@@ -1,5 +1,5 @@
 //
-//  ANTLRHashMap.h
+//  HashMap.h
 //  ANTLR
 //
 // Copyright (c) 2010 Alan Condit
@@ -28,15 +28,15 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRLinkBase.h"
-#import "ANTLRMapElement.h"
+#import "LinkBase.h"
+#import "MapElement.h"
 
 #define GLOBAL_SCOPE       0
 #define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRHashMap : ANTLRLinkBase {
+@interface HashMap : LinkBase {
     //    TStringPool *fPool;
     NSInteger Scope;
     NSInteger LastHash;
@@ -44,18 +44,18 @@
     NSUInteger count;
     NSUInteger ptr;
     __strong NSMutableData *buffer;
-    __strong ANTLRMapElement **ptrBuffer;
+    __strong MapElement **ptrBuffer;
     NSInteger mode;
 }
 
 // Contruction/Destruction
-+ (id)newANTLRHashMap;
-+ (id)newANTLRHashMapWithLen:(NSInteger)aBuffSize;
++ (id)newHashMap;
++ (id)newHashMapWithLen:(NSInteger)aBuffSize;
 - (id)init;
 - (id)initWithLen:(NSInteger)aBuffSize;
 - (void)dealloc;
-- (ANTLRHashMap *)PushScope:( ANTLRHashMap **)map;
-- (ANTLRHashMap *)PopScope:( ANTLRHashMap **)map;
+- (HashMap *)PushScope:( HashMap **)map;
+- (HashMap *)PopScope:( HashMap **)map;
 
 - (NSInteger)count;
 - (NSInteger)size;
@@ -64,25 +64,25 @@
 /*    form hash value for string s */
 - (NSInteger)hash:(NSString *)s;
 /*   look for s in ptrBuffer  */
-- (ANTLRHashMap *)findscope:(int)level;
+- (HashMap *)findscope:(int)level;
 /*   look for s in ptrBuffer  */
 - (id)lookup:(NSString *)s Scope:(int)scope;
 /*   look for s in ptrBuffer  */
-- (id)install:(ANTLRMapElement *)sym Scope:(int)scope;
+- (id)install:(MapElement *)sym Scope:(int)scope;
 /*   look for s in ptrBuffer  */
-- (void)deleteANTLRHashMap:(ANTLRMapElement *)np;
+- (void)deleteHashMap:(MapElement *)np;
 - (int)RemoveSym:(NSString *)s;
-- (void)delete_chain:(ANTLRMapElement *)np;
+- (void)delete_chain:(MapElement *)np;
 #ifdef DONTUSEYET
 - (int)bld_symtab:(KW_TABLE *)toknams;
 #endif
-- (ANTLRMapElement **)getptrBuffer;
-- (ANTLRMapElement *)getptrBufferEntry:(int)idx;
-- (void)setptrBuffer:(ANTLRMapElement *)np Index:(int)idx;
+- (MapElement **)getptrBuffer;
+- (MapElement *)getptrBufferEntry:(int)idx;
+- (void)setptrBuffer:(MapElement *)np Index:(int)idx;
 - (NSInteger)getScope;
 - (void)setScope:(NSInteger)i;
-- (ANTLRMapElement *)getTType:(NSString *)name;
-- (ANTLRMapElement *)getNameInList:(NSInteger)ttype;
+- (MapElement *)getTType:(NSString *)name;
+- (MapElement *)getNameInList:(NSInteger)ttype;
 - (void)putNode:(NSString *)name TokenType:(NSInteger)ttype;
 - (NSInteger)getMode;
 - (void)setMode:(NSInteger)aMode;
@@ -90,12 +90,12 @@
 - (id) objectAtIndex:(NSInteger)idx;
 - (void) setObject:(id)aRule atIndex:(NSInteger)idx;
 - (void)addObject:(id)anObject;
-- (ANTLRMapElement *) getName:(NSString *)aName;
+- (MapElement *) getName:(NSString *)aName;
 - (void) putName:(NSString *)name Node:(id)aNode;
 
 - (NSEnumerator *)objectEnumerator;
 - (BOOL) hasNext;
-- (ANTLRMapElement *)nextObject;
+- (MapElement *)nextObject;
 
 //@property (copy) TStringPool *fPool;
 @property (getter=getScope, setter=setScope:) NSInteger Scope;
@@ -106,5 +106,5 @@
 @property (getter=getCount, setter=setCount:) NSUInteger count;
 @property (assign) NSUInteger ptr;
 @property (retain, getter=getBuffer, setter=setBuffer:) NSMutableData *buffer;
-@property (assign, getter=getPtrBuffer, setter=setPtrBuffer:) ANTLRMapElement **ptrBuffer;
+@property (assign, getter=getPtrBuffer, setter=setPtrBuffer:) MapElement **ptrBuffer;
 @end

@@ -32,22 +32,22 @@
 #endif
 
 typedef enum {
-    ANTLRTokenTypeEOF = -1,
-    ANTLRTokenTypeInvalid,
-    ANTLRTokenTypeEOR,
-    ANTLRTokenTypeDOWN,
-    ANTLRTokenTypeUP,
-    ANTLRTokenTypeMIN
-} ANTLRTokenType;
+    TokenTypeEOF = -1,
+    TokenTypeInvalid,
+    TokenTypeEOR,
+    TokenTypeDOWN,
+    TokenTypeUP,
+    TokenTypeMIN
+} TokenType;
 
 typedef enum {
-    ANTLRTokenChannelDefault = 0,
-    ANTLRTokenChannelHidden = 99
-} ANTLRTokenChannel;
+    TokenChannelDefault = 0,
+    TokenChannelHidden = 99
+} TokenChannel;
 
 #define HIDDEN 99
 
-@protocol ANTLRToken < NSObject, NSCopying >
+@protocol Token < NSObject, NSCopying >
 
 @property (retain, getter = text, setter = setText:) NSString *text;
 @property (assign) NSInteger type;
@@ -55,9 +55,9 @@ typedef enum {
 @property (assign) NSUInteger charPositionInLine;
 
 // The singleton eofToken instance.
-+ (id<ANTLRToken>) eofToken;
++ (id<Token>) eofToken;
 // The default channel for this class of Tokens
-+ (ANTLRTokenChannel) defaultChannel;
++ (TokenChannel) defaultChannel;
 
 // provide hooks to explicitely set the text as opposed to use the indices into the CharStream
 - (NSString *) text;

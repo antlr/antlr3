@@ -24,9 +24,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRewriteRuleElementStream.h"
+#import "RewriteRuleElementStream.h"
 
-@implementation ANTLRRewriteRuleElementStream
+@implementation RewriteRuleElementStream
 
 @synthesize cursor;
 @synthesize dirty;
@@ -36,32 +36,32 @@
 @synthesize elementDescription;
 @synthesize treeAdaptor;
 
-+ (ANTLRRewriteRuleElementStream *) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream *) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription
 {
-    return [[ANTLRRewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription];
 }
 
-+ (ANTLRRewriteRuleElementStream *) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream *) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription
                                                              element:(id)anElement
 {
-    return [[ANTLRRewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription
                                                               element:anElement];
 }
 
-+ (ANTLRRewriteRuleElementStream *) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream *) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                          description:(NSString *)anElementDescription
                                                             elements:(NSArray *)theElements;
 {
-    return [[ANTLRRewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
+    return [[RewriteRuleElementStream alloc] initWithTreeAdaptor:aTreeAdaptor
                                                           description:anElementDescription
                                                              elements:theElements];
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription
 {
     if ((self = [super init]) != nil) {
         cursor = 0;
@@ -76,7 +76,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement
 {
     if ((self = [super init]) != nil) {
         cursor = 0;
@@ -92,7 +92,7 @@
     return self;
 }
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements
 {
     self = [super init];
     if (self) {
@@ -111,7 +111,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRRewriteRuleElementStream" );
+    NSLog( @"called dealloc in RewriteRuleElementStream" );
 #endif
     if ( singleElement && isSingleElement ) [singleElement release];
     else if ( elements && !isSingleElement ) [elements release];
@@ -126,12 +126,12 @@
     dirty = YES;
 }
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor
+- (id<TreeAdaptor>) getTreeAdaptor
 {
     return treeAdaptor;
 }
 
-- (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor
+- (void) setTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
         if ( treeAdaptor ) [treeAdaptor release];
@@ -180,7 +180,7 @@
     [elements addObject:anElement];
 }
 
-- (id<ANTLRBaseTree>) nextTree
+- (id<BaseTree>) nextTree
 {
     NSInteger n = [self size];
     if ( dirty && (cursor >= 0 && n == 1)) {
@@ -236,7 +236,7 @@
     return nil;
 }
 
-- (id<ANTLRBaseTree>) toTree:(id)element
+- (id<BaseTree>) toTree:(id)element
 {
     return element;
 }

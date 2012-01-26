@@ -1,5 +1,5 @@
 //
-//  ANTLRLookaheadStream.h
+//  LookaheadStream.h
 //  ANTLR
 //
 //  Created by Ian Michell on 26/04/2010.
@@ -30,11 +30,11 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRFastQueue.h"
+#import "FastQueue.h"
 
 #define UNITIALIZED_EOF_ELEMENT_INDEX NSIntegerMax
 
-@interface ANTLRLookaheadStream : ANTLRFastQueue
+@interface LookaheadStream : FastQueue
 {
     NSInteger index;
 	NSInteger eofElementIndex;

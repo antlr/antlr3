@@ -25,10 +25,10 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreeAdaptor.h"
+#import "TreeAdaptor.h"
 
 // TODO: this should be separated into stream and enumerator classes
-@interface ANTLRRewriteRuleElementStream : NSObject {
+@interface RewriteRuleElementStream : NSObject {
     NSInteger cursor;
     BOOL dirty;        ///< indicates whether the stream should return copies of its elements, set to true after a call to -reset
     BOOL isSingleElement;
@@ -36,7 +36,7 @@
     __strong AMutableArray *elements;
     
     __strong NSString *elementDescription;
-    __strong id<ANTLRTreeAdaptor> treeAdaptor;
+    __strong id<TreeAdaptor> treeAdaptor;
 }
 
 @property (assign) NSInteger cursor;
@@ -45,32 +45,32 @@
 @property (assign) id singleElement;
 @property (assign) AMutableArray *elements;
 @property (assign) NSString *elementDescription;
-@property (retain) id<ANTLRTreeAdaptor> treeAdaptor;
+@property (retain) id<TreeAdaptor> treeAdaptor;
 
-+ (ANTLRRewriteRuleElementStream*) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream*) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription;
-+ (ANTLRRewriteRuleElementStream*) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream*) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription
                                                             element:(id)anElement;
-+ (ANTLRRewriteRuleElementStream*) newANTLRRewriteRuleElementStream:(id<ANTLRTreeAdaptor>)aTreeAdaptor
++ (RewriteRuleElementStream*) newRewriteRuleElementStream:(id<TreeAdaptor>)aTreeAdaptor
                                                         description:(NSString *)anElementDescription
                                                            elements:(NSArray *)theElements;
 
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
-- (id) initWithTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription element:(id)anElement;
+- (id) initWithTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor description:(NSString *)anElementDescription elements:(NSArray *)theElements;
 
 - (void)reset;
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
-- (void) setTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor;
+- (id<TreeAdaptor>) getTreeAdaptor;
+- (void) setTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor;
 
 - (void) addElement:(id)anElement;
 - (NSInteger) size;
  
 - (BOOL) hasNext;
-- (id<ANTLRBaseTree>) nextTree;
-- (id<ANTLRBaseTree>) _next;       // internal: TODO: redesign if necessary. maybe delegate
+- (id<BaseTree>) nextTree;
+- (id<BaseTree>) _next;       // internal: TODO: redesign if necessary. maybe delegate
 
 - (id) copyElement:(id)element;
 - (id) toTree:(id)element;

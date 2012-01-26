@@ -25,38 +25,38 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRParser.h"
-#import "ANTLRTokenStream.h"
-#import "ANTLRTokenSource.h"
-#import "ANTLRDebugTokenStream.h"
-#import "ANTLRDebugEventListener.h"
+#import "Parser.h"
+#import "TokenStream.h"
+#import "TokenSource.h"
+#import "DebugTokenStream.h"
+#import "DebugEventListener.h"
 
-@interface ANTLRDebugTokenStream : NSObject <ANTLRTokenStream>
+@interface DebugTokenStream : NSObject <TokenStream>
 {
-	id<ANTLRDebugEventListener> debugListener;
-	id<ANTLRTokenStream> input;
+	id<DebugEventListener> debugListener;
+	id<TokenStream> input;
 	BOOL initialStreamState;
     NSInteger lastMarker;
 }
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream debugListener:(id<ANTLRDebugEventListener>)debugger;
+- (id) initWithTokenStream:(id<TokenStream>)theStream debugListener:(id<DebugEventListener>)debugger;
 
-- (id<ANTLRDebugEventListener>) debugListener;
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
+- (id<DebugEventListener>) debugListener;
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener;
 
-- (id<ANTLRTokenStream>) input;
-- (void) setInput:(id<ANTLRTokenStream>)aTokenStream;
+- (id<TokenStream>) input;
+- (void) setInput:(id<TokenStream>)aTokenStream;
 
 - (void) consume;
-- (id<ANTLRToken>) getToken:(NSInteger)index;
+- (id<Token>) getToken:(NSInteger)index;
 - (NSInteger) getIndex;
 - (void) release:(NSInteger)marker;
 - (void) seek:(NSInteger)index;
 - (NSInteger) size;
-- (id<ANTLRTokenSource>) getTokenSource;
+- (id<TokenSource>) getTokenSource;
 - (NSString *) getSourceName;
 - (NSString *) toString;
 - (NSString *) toStringFromStart:(NSInteger)aStart ToEnd:(NSInteger)aStop;
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken;
+- (NSString *) toStringFromToken:(CommonToken *)startToken ToToken:(CommonToken *)stopToken;
 
 @end

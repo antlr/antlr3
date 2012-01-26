@@ -1,5 +1,5 @@
 //
-//  ANTLRToken+DebuggerSupport.h
+//  Token+DebuggerSupport.h
 //  ANTLR
 //
 //  Created by Kay Röpke on 03.12.2006.
@@ -31,10 +31,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
-#import "ANTLRCommonToken.h"
+#import "Token.h"
+#import "CommonToken.h"
 
-@interface ANTLRCommonToken(DebuggerSupport)
+@interface CommonToken(DebuggerSupport)
 
 - (NSString *)debuggerDescription;
 

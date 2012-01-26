@@ -1,5 +1,5 @@
 //
-//  ANTLRBaseRecognizer.m
+//  BaseRecognizer.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -30,25 +30,25 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRPtrBuffer.h"
+#import "PtrBuffer.h"
 
 //#define GLOBAL_SCOPE       0
 //#define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRBaseStack : ANTLRPtrBuffer {
-	//ANTLRRuleStack *fNext;
+@interface BaseStack : PtrBuffer {
+	//RuleStack *fNext;
     // TStringPool *fPool;
     NSInteger LastHash;
 }
 
-//@property (copy) ANTLRRuleStack *fNext;
+//@property (copy) RuleStack *fNext;
 @property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 
 // Contruction/Destruction
-+ (ANTLRBaseStack *)newANTLRBaseStack;
-+ (ANTLRBaseStack *)newANTLRBaseStackWithLen:(NSInteger)cnt;
++ (BaseStack *)newBaseStack;
++ (BaseStack *)newBaseStackWithLen:(NSInteger)cnt;
 - (id)init;
 - (id)initWithLen:(NSInteger)cnt;
 - (void)dealloc;

@@ -1,5 +1,5 @@
 //
-//  ANTLRLinkBase.m
+//  LinkBase.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/14/10.
@@ -29,24 +29,24 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRLinkBase.h"
+#import "LinkBase.h"
 
-@implementation ANTLRLinkBase
+@implementation LinkBase
 
 @synthesize fPrev;
 @synthesize fNext;
 
-+(id<ANTLRLinkList>)newANTLRLinkBase
++(id<LinkList>)newLinkBase
 {
-	return [[ANTLRLinkBase alloc] init];
+	return [[LinkBase alloc] init];
 }
 
-+(id<ANTLRLinkList>)newANTLRLinkBase:(id<ANTLRLinkList>)np Prev:(id<ANTLRLinkList>)pp
++(id<LinkList>)newLinkBase:(id<LinkList>)np Prev:(id<LinkList>)pp
 {
-	return [[ANTLRLinkBase alloc] initWithPtr:np Prev:pp];
+	return [[LinkBase alloc] initWithPtr:np Prev:pp];
 }
 
--(id<ANTLRLinkList>)init
+-(id<LinkList>)init
 {
 	if ((self = [super init]) != nil) {
 		fNext = nil;
@@ -55,7 +55,7 @@
 	return(self);
 }
 
--(id<ANTLRLinkList>)initWithPtr:(id<ANTLRLinkList>)np Prev:(id<ANTLRLinkList>)pp
+-(id<LinkList>)initWithPtr:(id<LinkList>)np Prev:(id<LinkList>)pp
 {
 	if ((self = [super init]) != nil) {
 		fNext = np;
@@ -67,7 +67,7 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRLinkBase" );
+    NSLog( @"called dealloc in LinkBase" );
 #endif
 	if (fNext) [fNext dealloc];
 	if (fPrev) [fPrev dealloc];
@@ -76,7 +76,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRLinkBase *copy;
+    LinkBase *copy;
     
     copy = [[self class] allocWithZone:aZone];
     copy.fPrev = fPrev;
@@ -84,17 +84,17 @@
     return( copy );
 }
 
--(id<ANTLRLinkList>)append:(id<ANTLRLinkList>)node
+-(id<LinkList>)append:(id<LinkList>)node
 {
-	node.fPrev = (id<ANTLRLinkList>)self;
-	node.fNext = (id<ANTLRLinkList>)self.fNext;
+	node.fPrev = (id<LinkList>)self;
+	node.fNext = (id<LinkList>)self.fNext;
 	if (node.fNext != nil)
         node.fNext.fPrev = node;
     self.fNext = node;
     return( node );
 }
 
--(id<ANTLRLinkList>)insert:(id<ANTLRLinkList>)node
+-(id<LinkList>)insert:(id<LinkList>)node
 {
 	node.fNext = self;
 	node.fPrev = self.fPrev;
@@ -104,22 +104,22 @@
 	return( node );
 }
 
--(id<ANTLRLinkList>)getfNext
+-(id<LinkList>)getfNext
 {
 	return(fNext);
 }
 
--(void)setfNext:(id<ANTLRLinkList>)np
+-(void)setfNext:(id<LinkList>)np
 {
 	fNext = np;
 }
 
--(id<ANTLRLinkList>)getfPrev
+-(id<LinkList>)getfPrev
 {
 	return(fPrev);
 }
 
--(void)setfPrev:(id<ANTLRLinkList>)pp
+-(void)setfPrev:(id<LinkList>)pp
 {
 	fPrev = pp;
 }

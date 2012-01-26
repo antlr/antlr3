@@ -26,31 +26,31 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseRecognizer.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRTokenStream.h"
+#import "BaseRecognizer.h"
+#import "CommonToken.h"
+#import "TokenStream.h"
 
-@interface ANTLRParser : ANTLRBaseRecognizer {
-	id<ANTLRTokenStream> input;
+@interface Parser : BaseRecognizer {
+	id<TokenStream> input;
 }
-+ (ANTLRParser *)newANTLRParser:(id<ANTLRTokenStream>)anInput;
-+ (ANTLRParser *)newANTLRParser:(id<ANTLRTokenStream>)anInput State:(ANTLRRecognizerSharedState *)aState;
++ (Parser *)newParser:(id<TokenStream>)anInput;
++ (Parser *)newParser:(id<TokenStream>)anInput State:(RecognizerSharedState *)aState;
 
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream;
-- (id) initWithTokenStream:(id<ANTLRTokenStream>)theStream State:(ANTLRRecognizerSharedState *)aState;
+- (id) initWithTokenStream:(id<TokenStream>)theStream;
+- (id) initWithTokenStream:(id<TokenStream>)theStream State:(RecognizerSharedState *)aState;
 
-- (id<ANTLRTokenStream>) input;
-- (void) setInput: (id<ANTLRTokenStream>) anInput;
+- (id<TokenStream>) input;
+- (void) setInput: (id<TokenStream>) anInput;
 
 - (void) reset;
 
-- (id) getCurrentInputSymbol:(id<ANTLRTokenStream>)anInput;
-- (ANTLRCommonToken *)getMissingSymbol:(id<ANTLRTokenStream>)input
-                             Exception:(ANTLRRecognitionException *)e
+- (id) getCurrentInputSymbol:(id<TokenStream>)anInput;
+- (CommonToken *)getMissingSymbol:(id<TokenStream>)input
+                             Exception:(RecognitionException *)e
                                  TType:(NSInteger)expectedTokenType
                                 BitSet:(ANTLRBitSet *)follow;
-- (void) setTokenStream:(id<ANTLRTokenStream>)anInput;
-- (id<ANTLRTokenStream>)getTokenStream;
+- (void) setTokenStream:(id<TokenStream>)anInput;
+- (id<TokenStream>)getTokenStream;
 - (NSString *)getSourceName;
 
 - (void) traceIn:(NSString *)ruleName Index:(int)ruleIndex;

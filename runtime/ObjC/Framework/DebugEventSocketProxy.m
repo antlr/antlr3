@@ -24,14 +24,14 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRDebugEventProxy.h"
-#import "ANTLRToken+DebuggerSupport.h"
+#import "DebugEventSocketProxy.h"
+#import "Token+DebuggerSupport.h"
 #include <string.h>
 
 static NSData *newlineData = nil;
 static unsigned lengthOfUTF8Ack = 0;
 
-@implementation ANTLRDebugEventProxy
+@implementation DebugEventSocketProxy
 
 + (void) initialize
 {
@@ -66,6 +66,59 @@ static unsigned lengthOfUTF8Ack = 0;
     [super dealloc];
 }
 
+/* Java stuff
+public void handshake() throws IOException {
+    if ( serverSocket==nil ) {
+        serverSocket = new ServerSocket(port);
+        socket = serverSocket.accept();
+        socket.setTcpNoDelay(true);
+        OutputStream os = socket.getOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF8");
+        out = new PrintWriter(new BufferedWriter(osw));
+        InputStream is = socket.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is, "UTF8");
+        in = new BufferedReader(isr);
+        out.println("ANTLR "+ DebugEventListener.PROTOCOL_VERSION);
+        out.println("grammar \""+ grammarFileName);
+        out.flush();
+        ack();
+    }
+}
+
+- (void) commence
+{
+    // don't bother sending event; listener will trigger upon connection
+}
+
+- (void) terminate
+{
+    [self transmit:@"terminate";
+    [out close];
+    try {
+        [socket close];
+    }
+    catch (IOException *ioe) {
+        ioe.printStackTrace(System.err);
+    }
+}
+
+- (void) ack
+{
+    try {
+        in.readLine();
+    }
+    catch (IOException ioe) {
+        ioe.printStackTrace(System.err);
+    }
+}
+
+protected void transmit(String event) {
+    out.println(event);
+    out.flush();
+    ack();
+}
+*/
+
 - (void) waitForDebuggerConnection
 {
 	if (serverSocket == -1) {
@@ -91,7 +144,7 @@ static unsigned lengthOfUTF8Ack = 0;
 		NSAssert1( debuggerSocket != -1, @"accept(2) failed. %s", strerror(errno));
 		
 		debuggerFH = [[NSFileHandle alloc] initWithFileDescriptor:debuggerSocket];
-		[self sendToDebugger:[NSString stringWithFormat:@"ANTLR %d", ANTLRDebugProtocolVersion] waitForResponse:NO];
+		[self sendToDebugger:[NSString stringWithFormat:@"ANTLR %d", DebugProtocolVersion] waitForResponse:NO];
 		[self sendToDebugger:[NSString stringWithFormat:@"grammar \"%@", [self grammarName]] waitForResponse:NO];
 	}
 }
@@ -102,7 +155,7 @@ static unsigned lengthOfUTF8Ack = 0;
 	@try {
 		NSData *newLine = [debuggerFH readDataOfLength:lengthOfUTF8Ack];
 		response = [[NSString alloc] initWithData:newLine encoding:NSUTF8StringEncoding];
-		if (![response isEqualToString:@"ack\n"]) @throw [NSException exceptionWithName:@"ANTLRDebugEventProxy" reason:@"illegal response from debugger" userInfo:nil];
+		if (![response isEqualToString:@"ack\n"]) @throw [NSException exceptionWithName:@"DebugEventSocketProxy" reason:@"illegal response from debugger" userInfo:nil];
 	}
 	@catch (NSException *e) {
 		NSLog(@"socket died or debugger misbehaved: %@ read <%@>", e, response);
@@ -222,17 +275,17 @@ static unsigned lengthOfUTF8Ack = 0;
 	[self sendToDebugger:[NSString stringWithFormat:@"exitDecision %d", decisionNumber]];
 }
 
-- (void) consumeToken:(id<ANTLRToken>)t
+- (void) consumeToken:(id<Token>)t
 {
 	[self sendToDebugger:[NSString stringWithFormat:@"consumeToken %@", [self escapeNewlines:[t description]]]];
 }
 
-- (void) consumeHiddenToken:(id<ANTLRToken>)t
+- (void) consumeHiddenToken:(id<Token>)t
 {
 	[self sendToDebugger:[NSString stringWithFormat:@"consumeHiddenToken %@", [self escapeNewlines:[t description]]]];
 }
 
-- (void) LT:(NSInteger)i foundToken:(id<ANTLRToken>)t
+- (void) LT:(NSInteger)i foundToken:(id<Token>)t
 {
 	[self sendToDebugger:[NSString stringWithFormat:@"LT %d %@", i, [self escapeNewlines:[t description]]]];
 }
@@ -266,7 +319,7 @@ static unsigned lengthOfUTF8Ack = 0;
 	[self sendToDebugger:[NSString stringWithFormat:@"location %d %d", line, pos]];
 }
 
-- (void) recognitionException:(ANTLRRecognitionException *)e
+- (void) recognitionException:(RecognitionException *)e
 {
 #warning TODO: recognition exceptions
 	// these must use the names of the corresponding Java exception classes, because ANTLRWorks recreates the exception

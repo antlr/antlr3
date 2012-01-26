@@ -1,5 +1,5 @@
 //
-//  ANTLRBaseRecognizer.m
+//  BaseRecognizer.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/16/10.
@@ -29,15 +29,15 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRBaseRecognizer.h"
-#import "ANTLRHashRule.h"
-#import "ANTLRRuleMemo.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRMap.h"
+#import "BaseRecognizer.h"
+#import "HashRule.h"
+#import "RuleMemo.h"
+#import "CommonToken.h"
+#import "Map.h"
 
 extern NSInteger debug;
 
-@implementation ANTLRBaseRecognizer
+@implementation BaseRecognizer
 
 static AMutableArray *_tokenNames;
 static NSString *_grammarFileName;
@@ -56,19 +56,19 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     [NEXT_TOKEN_RULE_NAME retain];
 }
 
-+ (ANTLRBaseRecognizer *) newANTLRBaseRecognizer
++ (BaseRecognizer *) newBaseRecognizer
 {
-    return [[ANTLRBaseRecognizer alloc] init];
+    return [[BaseRecognizer alloc] init];
 }
 
-+ (ANTLRBaseRecognizer *) newANTLRBaseRecognizerWithRuleLen:(NSInteger)aLen
++ (BaseRecognizer *) newBaseRecognizerWithRuleLen:(NSInteger)aLen
 {
-    return [[ANTLRBaseRecognizer alloc] initWithLen:aLen];
+    return [[BaseRecognizer alloc] initWithLen:aLen];
 }
 
-+ (ANTLRBaseRecognizer *) newANTLRBaseRecognizer:(ANTLRRecognizerSharedState *)aState
++ (BaseRecognizer *) newBaseRecognizer:(RecognizerSharedState *)aState
 {
-	return [[ANTLRBaseRecognizer alloc] initWithState:aState];
+	return [[BaseRecognizer alloc] initWithState:aState];
 }
 
 + (AMutableArray *)getTokenNames
@@ -98,7 +98,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
 	if ((self = [super init]) != nil) {
         if (state == nil) {
-            state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedState] retain];
+            state = [[RecognizerSharedState newRecognizerSharedState] retain];
         }
         tokenNames = _tokenNames;
         if ( tokenNames ) [tokenNames retain];
@@ -119,7 +119,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 {
 	if ((self = [super init]) != nil) {
         if (state == nil) {
-            state = [[ANTLRRecognizerSharedState newANTLRRecognizerSharedStateWithRuleLen:aLen] retain];
+            state = [[RecognizerSharedState newRecognizerSharedStateWithRuleLen:aLen] retain];
         }
         tokenNames = _tokenNames;
         if ( tokenNames ) [tokenNames retain];
@@ -136,12 +136,12 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	return self;
 }
 
-- (id) initWithState:(ANTLRRecognizerSharedState *)aState
+- (id) initWithState:(RecognizerSharedState *)aState
 {
 	if ((self = [super init]) != nil) {
 		state = aState;
         if (state == nil) {
-            state = [ANTLRRecognizerSharedState newANTLRRecognizerSharedState];
+            state = [RecognizerSharedState newRecognizerSharedState];
         }
         [state retain];
         tokenNames = _tokenNames;
@@ -162,7 +162,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRBaseRecognizer" );
+    NSLog( @"called dealloc in BaseRecognizer" );
 #endif
 	if ( grammarFileName ) [grammarFileName release];
 	if ( tokenNames ) [tokenNames release];
@@ -203,12 +203,12 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	[state setFailed:flag];
 }
 
-- (ANTLRRecognizerSharedState *) getState
+- (RecognizerSharedState *) getState
 {
 	return state;
 }
 
-- (void) setState:(ANTLRRecognizerSharedState *) theState
+- (void) setState:(RecognizerSharedState *) theState
 {
 	if (state != theState) {
 		if ( state ) [state release];
@@ -227,7 +227,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     return;
 }
 
--(id) match:(id<ANTLRIntStream>)anInput TokenType:(NSInteger)ttype Follow:(ANTLRBitSet *)follow
+-(id) match:(id<IntStream>)anInput TokenType:(NSInteger)ttype Follow:(ANTLRBitSet *)follow
 {
 	id matchedSymbol = [self getCurrentInputSymbol:anInput];
 	if ([anInput LA:1] == ttype) {
@@ -244,19 +244,19 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 	return matchedSymbol;
 }
 
--(void) matchAny:(id<ANTLRIntStream>)anInput
+-(void) matchAny:(id<IntStream>)anInput
 {
     state.errorRecovery = NO;
     state.failed = NO;
     [anInput consume];
 }
 
--(BOOL) mismatchIsUnwantedToken:(id<ANTLRIntStream>)anInput TokenType:(NSInteger)ttype
+-(BOOL) mismatchIsUnwantedToken:(id<IntStream>)anInput TokenType:(NSInteger)ttype
 {
     return [anInput LA:2] == ttype;
 }
 
--(BOOL) mismatchIsMissingToken:(id<ANTLRIntStream>)anInput Follow:(ANTLRBitSet *) follow
+-(BOOL) mismatchIsMissingToken:(id<IntStream>)anInput Follow:(ANTLRBitSet *) follow
 {
     if ( follow == nil ) {
         // we have no information about the follow; we can only consume
@@ -264,11 +264,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         return NO;
     }
     // compute what can follow this grammar element reference
-    if ( [follow member:ANTLRTokenTypeEOR] ) {
+    if ( [follow member:TokenTypeEOR] ) {
         ANTLRBitSet *viableTokensFollowingThisRule = [self computeContextSensitiveRuleFOLLOW];
         follow = [follow or:viableTokensFollowingThisRule];
         if ( state._fsp >= 0 ) { // remove EOR if we're not the start symbol
-            [follow remove:(ANTLRTokenTypeEOR)];
+            [follow remove:(TokenTypeEOR)];
         }
     }
     // if current token is consistent with what could come after set
@@ -281,7 +281,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     // BitSet cannot handle negative numbers like -1 (EOF) so I leave EOR
     // in follow set to indicate that the fall of the start symbol is
     // in the set (EOF can follow).
-    if ( [follow member:[anInput LA:1]] || [follow member:ANTLRTokenTypeEOR] ) {
+    if ( [follow member:[anInput LA:1]] || [follow member:TokenTypeEOR] ) {
         //System.out.println("LT(1)=="+((TokenStream)input).LT(1)+" is consistent with what follows; inserting...");
         return YES;
     }
@@ -303,7 +303,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *
  *  If you override, make sure to update syntaxErrors if you care about that.
  */
--(void) reportError:(ANTLRRecognitionException *) e
+-(void) reportError:(RecognitionException *) e
 {
     // if we've already reported an error and have not matched a token
     // yet successfully, don't report any errors.
@@ -317,7 +317,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     [self displayRecognitionError:[self getTokenNames] Exception:e];
 }
 
--(void) displayRecognitionError:(AMutableArray *)theTokNams Exception:(ANTLRRecognitionException *)e
+-(void) displayRecognitionError:(AMutableArray *)theTokNams Exception:(RecognitionException *)e
 {
     NSString *hdr = [self getErrorHeader:e];
     NSString *msg = [self getErrorMessage:e TokenNames:theTokNams];
@@ -346,14 +346,14 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  Override this to change the message generated for one or more
  *  exception types.
  */
-- (NSString *)getErrorMessage:(ANTLRRecognitionException *)e TokenNames:(AMutableArray *)theTokNams
+- (NSString *)getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *)theTokNams
 {
     // NSString *msg = [e getMessage];
     NSString *msg;
-    if ( [e isKindOfClass:[ANTLRUnwantedTokenException class]] ) {
-        ANTLRUnwantedTokenException *ute = (ANTLRUnwantedTokenException *)e;
+    if ( [e isKindOfClass:[UnwantedTokenException class]] ) {
+        UnwantedTokenException *ute = (UnwantedTokenException *)e;
         NSString *tokenName=@"<unknown>";
-        if ( ute.expecting == ANTLRTokenTypeEOF ) {
+        if ( ute.expecting == TokenTypeEOF ) {
             tokenName = @"EOF";
         }
         else {
@@ -362,10 +362,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         msg = [NSString stringWithFormat:@"extraneous input %@ expecting %@", [self getTokenErrorDisplay:[ute getUnexpectedToken]],
                tokenName];
     }
-    else if ( [e isKindOfClass:[ANTLRMissingTokenException class] ] ) {
-        ANTLRMissingTokenException *mte = (ANTLRMissingTokenException *)e;
+    else if ( [e isKindOfClass:[MissingTokenException class] ] ) {
+        MissingTokenException *mte = (MissingTokenException *)e;
         NSString *tokenName=@"<unknown>";
-        if ( mte.expecting== ANTLRTokenTypeEOF ) {
+        if ( mte.expecting== TokenTypeEOF ) {
             tokenName = @"EOF";
         }
         else {
@@ -373,10 +373,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         }
         msg = [NSString stringWithFormat:@"missing %@ at %@", tokenName, [self getTokenErrorDisplay:(e.token)] ];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedTokenException class]] ) {
-        ANTLRMismatchedTokenException *mte = (ANTLRMismatchedTokenException *)e;
+    else if ( [e isKindOfClass:[MismatchedTokenException class]] ) {
+        MismatchedTokenException *mte = (MismatchedTokenException *)e;
         NSString *tokenName=@"<unknown>";
-        if ( mte.expecting== ANTLRTokenTypeEOF ) {
+        if ( mte.expecting== TokenTypeEOF ) {
             tokenName = @"EOF";
         }
         else {
@@ -384,10 +384,10 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         }
         msg = [NSString stringWithFormat:@"mismatched input %@ expecting %@",[self getTokenErrorDisplay:(e.token)], tokenName];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedTreeNodeException class]] ) {
-        ANTLRMismatchedTreeNodeException *mtne = (ANTLRMismatchedTreeNodeException *)e;
+    else if ( [e isKindOfClass:[MismatchedTreeNodeException class]] ) {
+        MismatchedTreeNodeException *mtne = (MismatchedTreeNodeException *)e;
         NSString *tokenName=@"<unknown>";
-        if ( mtne.expecting==ANTLRTokenTypeEOF ) {
+        if ( mtne.expecting==TokenTypeEOF ) {
             tokenName = @"EOF";
         }
         else {
@@ -395,33 +395,33 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         }
         msg = [NSString stringWithFormat:@"mismatched tree node: %@ expecting %@", mtne.node, tokenName];
     }
-    else if ( [e isKindOfClass:[ANTLRNoViableAltException class]] ) {
+    else if ( [e isKindOfClass:[NoViableAltException class]] ) {
         //NoViableAltException *nvae = (NoViableAltException *)e;
         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
         // and "(decision="+nvae.decisionNumber+") and
         // "state "+nvae.stateNumber
         msg = [NSString stringWithFormat:@"no viable alternative at input %@", [self getTokenErrorDisplay:e.token]];
     }
-    else if ( [e isKindOfClass:[ANTLREarlyExitException class]] ) {
-        //ANTLREarlyExitException *eee = (ANTLREarlyExitException *)e;
+    else if ( [e isKindOfClass:[EarlyExitException class]] ) {
+        //EarlyExitException *eee = (EarlyExitException *)e;
         // for development, can add "(decision="+eee.decisionNumber+")"
         msg =[NSString stringWithFormat: @"required (...)+ loop did not match anything at input ", [self getTokenErrorDisplay:e.token]];
     }
-    else if ( [e isKindOfClass:[ANTLRMismatchedSetException class]] ) {
-        ANTLRMismatchedSetException *mse = (ANTLRMismatchedSetException *)e;
+    else if ( [e isKindOfClass:[MismatchedSetException class]] ) {
+        MismatchedSetException *mse = (MismatchedSetException *)e;
         msg = [NSString stringWithFormat:@"mismatched input %@ expecting set %@",
                [self getTokenErrorDisplay:(e.token)],
                mse.expecting];
     }
 #pragma warning NotSet not yet implemented.
-    else if ( [e isKindOfClass:[ANTLRMismatchedNotSetException class] ] ) {
-        ANTLRMismatchedNotSetException *mse = (ANTLRMismatchedNotSetException *)e;
+    else if ( [e isKindOfClass:[MismatchedNotSetException class] ] ) {
+        MismatchedNotSetException *mse = (MismatchedNotSetException *)e;
         msg = [NSString stringWithFormat:@"mismatched input %@ expecting set %@",
                [self getTokenErrorDisplay:(e.token)],
                mse.expecting];
     }
-    else if ( [e isKindOfClass:[ANTLRFailedPredicateException class]] ) {
-        ANTLRFailedPredicateException *fpe = (ANTLRFailedPredicateException *)e;
+    else if ( [e isKindOfClass:[FailedPredicateException class]] ) {
+        FailedPredicateException *fpe = (FailedPredicateException *)e;
         msg = [NSString stringWithFormat:@"rule %@ failed predicate: { %@ }?", fpe.ruleName, fpe.predicate];
     }
     else {
@@ -443,7 +443,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 }
 
 /** What is the error header, normally line/character position information? */
-- (NSString *)getErrorHeader:(ANTLRRecognitionException *)e
+- (NSString *)getErrorHeader:(RecognitionException *)e
 {
     return [NSString stringWithFormat:@"line %d:%d", e.line, e.charPositionInLine];
 }
@@ -456,11 +456,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  your token objects because you don't have to go modify your lexer
  *  so that it creates a new Java type.
  */
-- (NSString *)getTokenErrorDisplay:(id<ANTLRToken>)t
+- (NSString *)getTokenErrorDisplay:(id<Token>)t
 {
     NSString *s = t.text;
     if ( s == nil ) {
-        if ( t.type == ANTLRTokenTypeEOF ) {
+        if ( t.type == TokenTypeEOF ) {
             s = @"<EOF>";
         }
         else {
@@ -486,7 +486,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  handle mismatched symbol exceptions but there could be a mismatched
  *  token that the match() routine could not recover from.
  */
-- (void)recover:(id<ANTLRIntStream>)anInput Exception:(ANTLRRecognitionException *)re
+- (void)recover:(id<IntStream>)anInput Exception:(RecognitionException *)re
 {
     if ( state.lastErrorIndex == anInput.index ) {
         // uh oh, another error at same token index; must be a case
@@ -672,7 +672,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (ANTLRBitSet *)combineFollows:(BOOL) exact
 {
     NSInteger top = state._fsp;
-    ANTLRBitSet *followSet = [[ANTLRBitSet newANTLRBitSet] retain];
+    ANTLRBitSet *followSet = [[ANTLRBitSet newBitSet] retain];
     for (int i = top; i >= 0; i--) {
         ANTLRBitSet *localFollowSet = (ANTLRBitSet *)[state.following objectAtIndex:i];
         /*
@@ -682,11 +682,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         [followSet orInPlace:localFollowSet];
         if ( exact ) {
             // can we see end of rule?
-            if ( [localFollowSet member:ANTLRTokenTypeEOR] ) {
+            if ( [localFollowSet member:TokenTypeEOR] ) {
                 // Only leave EOR in set if at top (start rule); this lets
                 // us know if have to include follow(start rule); i.e., EOF
                 if ( i > 0 ) {
-                    [followSet remove:ANTLRTokenTypeEOR];
+                    [followSet remove:TokenTypeEOR];
                 }
             }
             else { // can't see end of rule, quit
@@ -726,14 +726,14 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  is in the set of tokens that can follow the ')' token
  *  reference in rule atom.  It can assume that you forgot the ')'.
  */
-- (id<ANTLRToken>)recoverFromMismatchedToken:(id<ANTLRIntStream>)anInput
+- (id<Token>)recoverFromMismatchedToken:(id<IntStream>)anInput
                        TokenType:(NSInteger)ttype
                           Follow:(ANTLRBitSet *)follow
 {
-    ANTLRRecognitionException *e = nil;
+    RecognitionException *e = nil;
     // if next token is what we are looking for then "delete" this token
     if ( [self mismatchIsUnwantedToken:anInput TokenType:ttype] ) {
-        e = [ANTLRUnwantedTokenException newException:ttype Stream:anInput];
+        e = [UnwantedTokenException newException:ttype Stream:anInput];
         /*
          System.err.println("recoverFromMismatchedToken deleting "+
          ((TokenStream)input).LT(1)+
@@ -750,26 +750,26 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     }
     // can't recover with single token deletion, try insertion
     if ( [self mismatchIsMissingToken:anInput Follow:follow] ) {
-        id<ANTLRToken> inserted = [self getMissingSymbol:anInput Exception:e TokenType:ttype Follow:follow];
-        e = [ANTLRMissingTokenException newException:ttype Stream:anInput With:inserted];
+        id<Token> inserted = [self getMissingSymbol:anInput Exception:e TokenType:ttype Follow:follow];
+        e = [MissingTokenException newException:ttype Stream:anInput With:inserted];
         [self reportError:e];  // report after inserting so AW sees the token in the exception
         return inserted;
     }
     // even that didn't work; must throw the exception
-    e = [ANTLRMismatchedTokenException newException:ttype Stream:anInput];
+    e = [MismatchedTokenException newException:ttype Stream:anInput];
     @throw e;
 }
 
 /** Not currently used */
--(id) recoverFromMismatchedSet:(id<ANTLRIntStream>)anInput
-                     Exception:(ANTLRRecognitionException *)e
+-(id) recoverFromMismatchedSet:(id<IntStream>)anInput
+                     Exception:(RecognitionException *)e
                         Follow:(ANTLRBitSet *) follow
 {
     if ( [self mismatchIsMissingToken:anInput Follow:follow] ) {
         // System.out.println("missing token");
         [self reportError:e];
         // we don't know how to conjure up a token for sets yet
-        return [self getMissingSymbol:anInput Exception:e TokenType:ANTLRTokenTypeInvalid Follow:follow];
+        return [self getMissingSymbol:anInput Exception:e TokenType:TokenTypeInvalid Follow:follow];
     }
     // TODO do single token deletion like above for Token mismatch
     @throw e;
@@ -784,7 +784,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  * 
  *  This is ignored for lexers.
  */
-- (id) getCurrentInputSymbol:(id<ANTLRIntStream>)anInput
+- (id) getCurrentInputSymbol:(id<IntStream>)anInput
 {
     return nil;
 }
@@ -808,8 +808,8 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  If you change what tokens must be created by the lexer,
  *  override this method to create the appropriate tokens.
  */
-- (id)getMissingSymbol:(id<ANTLRIntStream>)anInput
-             Exception:(ANTLRRecognitionException *)e
+- (id)getMissingSymbol:(id<IntStream>)anInput
+             Exception:(RecognitionException *)e
              TokenType:(NSInteger)expectedTokenType
                 Follow:(ANTLRBitSet *)follow
 {
@@ -817,22 +817,22 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 }
 
 
--(void) consumeUntilTType:(id<ANTLRIntStream>)anInput TokenType:(NSInteger)tokenType
+-(void) consumeUntilTType:(id<IntStream>)anInput TokenType:(NSInteger)tokenType
 {
     //System.out.println("consumeUntil "+tokenType);
     int ttype = [anInput LA:1];
-    while (ttype != ANTLRTokenTypeEOF && ttype != tokenType) {
+    while (ttype != TokenTypeEOF && ttype != tokenType) {
         [anInput consume];
         ttype = [anInput LA:1];
     }
 }
 
 /** Consume tokens until one matches the given token set */
--(void) consumeUntilFollow:(id<ANTLRIntStream>)anInput Follow:(ANTLRBitSet *)set
+-(void) consumeUntilFollow:(id<IntStream>)anInput Follow:(ANTLRBitSet *)set
 {
     //System.out.println("consumeUntil("+set.toString(getTokenNames())+")");
     int ttype = [anInput LA:1];
-    while (ttype != ANTLRTokenTypeEOF && ![set member:ttype] ) {
+    while (ttype != TokenTypeEOF && ![set member:ttype] ) {
         //System.out.println("consume during recover LA(1)="+getTokenNames()[input.LA(1)]);
         [anInput consume];
         ttype = [anInput LA:1];
@@ -881,7 +881,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (AMutableArray *)getRuleInvocationStack
 {
     NSString *parserClassName = [[self className] retain];
-    return [self getRuleInvocationStack:[ANTLRRecognitionException newException] Recognizer:parserClassName];
+    return [self getRuleInvocationStack:[RecognitionException newException] Recognizer:parserClassName];
 }
 
 /** A more general version of getRuleInvocationStack where you can
@@ -891,7 +891,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *
  *  TODO: move to a utility class or something; weird having lexer call this
  */
-- (AMutableArray *)getRuleInvocationStack:(ANTLRRecognitionException *)e
+- (AMutableArray *)getRuleInvocationStack:(RecognitionException *)e
                                 Recognizer:(NSString *)recognizerClassName
 {
     // char *name;
@@ -999,9 +999,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 - (NSInteger)getRuleMemoization:(NSInteger)ruleIndex StartIndex:(NSInteger)ruleStartIndex
 {
     NSNumber *stopIndexI;
-    ANTLRHashRule *aHashRule;
+    HashRule *aHashRule;
     if ( (aHashRule = [state.ruleMemo objectAtIndex:ruleIndex]) == nil ) {
-        aHashRule = [ANTLRHashRule newANTLRHashRuleWithLen:17];
+        aHashRule = [HashRule newHashRuleWithLen:17];
         [state.ruleMemo insertObject:aHashRule atIndex:ruleIndex];
     }
     stopIndexI = [aHashRule getRuleMemoStopIndex:ruleStartIndex];
@@ -1020,7 +1020,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  *  this rule and successfully parsed before, then seek ahead to
  *  1 past the stop token matched for this rule last time.
  */
-- (BOOL)alreadyParsedRule:(id<ANTLRIntStream>)anInput RuleIndex:(NSInteger)ruleIndex
+- (BOOL)alreadyParsedRule:(id<IntStream>)anInput RuleIndex:(NSInteger)ruleIndex
 {
     NSInteger aStopIndex = [self getRuleMemoization:ruleIndex StartIndex:anInput.index];
     if ( aStopIndex == ANTLR_MEMO_RULE_UNKNOWN ) {
@@ -1041,11 +1041,11 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 /** Record whether or not this rule parsed the input at this position
  *  successfully.  Use a standard java hashtable for now.
  */
-- (void)memoize:(id<ANTLRIntStream>)anInput
+- (void)memoize:(id<IntStream>)anInput
       RuleIndex:(NSInteger)ruleIndex
      StartIndex:(NSInteger)ruleStartIndex
 {
-    ANTLRRuleStack *aRuleStack;
+    RuleStack *aRuleStack;
     NSInteger stopTokenIndex;
 
     aRuleStack = state.ruleMemo;
@@ -1069,8 +1069,8 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (NSInteger)getRuleMemoizationCacheSize
 {
-    ANTLRRuleStack *aRuleStack;
-    ANTLRHashRule *aHashRule;
+    RuleStack *aRuleStack;
+    HashRule *aHashRule;
 
     int aCnt = 0;
     aRuleStack = state.ruleMemo;
@@ -1104,9 +1104,9 @@ static NSString *NEXT_TOKEN_RULE_NAME;
 
 
 // call a syntactic predicate methods using its selector. this way we can support arbitrary synpreds.
-- (BOOL) evaluateSyntacticPredicate:(SEL)synpredFragment // stream:(id<ANTLRIntStream>)input
+- (BOOL) evaluateSyntacticPredicate:(SEL)synpredFragment // stream:(id<IntStream>)input
 {
-    id<ANTLRIntStream> input;
+    id<IntStream> input;
 
     state.backtracking++;
     // input = state.token.input;
@@ -1115,7 +1115,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
     @try {
         [self performSelector:synpredFragment];
     }
-    @catch (ANTLRRecognitionException *re) {
+    @catch (RecognitionException *re) {
         NSLog(@"impossible synpred: %@", re.name);
     }
     BOOL success = (state.failed == NO);

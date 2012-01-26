@@ -1,5 +1,5 @@
 //
-//  ANTLRMapElement.h
+//  MapElement.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/8/10.
@@ -30,20 +30,20 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseMapElement.h"
+#import "BaseMapElement.h"
 
-@interface ANTLRMapElement : ANTLRBaseMapElement {
+@interface MapElement : BaseMapElement {
     NSString *name;
     id        node;
 }
 @property (retain, getter=getName, setter=setName:) NSString *name;
 @property (retain, getter=getNode, setter=setNode:) id node;
 
-+ (id) newANTLRMapElement;
-+ (id) newANTLRMapElementWithName:(NSString *)aName Type:(NSInteger)aTType;
-+ (id) newANTLRMapElementWithNode:(NSInteger)aTType Node:(id)aNode;
-+ (id) newANTLRMapElementWithName:(NSString *)aName Node:(id)aNode;
-+ (id) newANTLRMapElementWithObj1:(id)anObj1 Obj2:(id)anObj2;
++ (id) newMapElement;
++ (id) newMapElementWithName:(NSString *)aName Type:(NSInteger)aTType;
++ (id) newMapElementWithNode:(NSInteger)aTType Node:(id)aNode;
++ (id) newMapElementWithName:(NSString *)aName Node:(id)aNode;
++ (id) newMapElementWithObj1:(id)anObj1 Obj2:(id)anObj2;
 - (id) init;
 - (id) initWithName:(NSString *)aName Type:(NSInteger)aTType;
 - (id) initWithNode:(NSInteger)aTType Node:(id)aNode;

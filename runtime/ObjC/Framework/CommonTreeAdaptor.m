@@ -24,18 +24,18 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRCommonTreeAdaptor.h"
+#import "CommonTreeAdaptor.h"
 
-@implementation ANTLRCommonTreeAdaptor
+@implementation CommonTreeAdaptor
 
-+ (ANTLRCommonTree *) newEmptyTree;
++ (CommonTree *) newEmptyTree;
 {
-    return [ANTLRCommonTree newTree];
+    return [CommonTree newTree];
 }
 
-+ (ANTLRCommonTreeAdaptor *)newTreeAdaptor
++ (CommonTreeAdaptor *)newTreeAdaptor
 {
-    return[[ANTLRCommonTreeAdaptor alloc] init];
+    return[[CommonTreeAdaptor alloc] init];
 }
 
 - (id) init
@@ -52,11 +52,11 @@
  *  I could use reflection to prevent having to override this
  *  but reflection is slow.
  */
-- (id) dupNode:(id<ANTLRBaseTree>)t
+- (id) dupNode:(id<BaseTree>)t
 {
     if ( t==nil )
         return nil;
-    return [ANTLRCommonTree newTree:t];
+    return [CommonTree newTree:t];
 }
 
 /** Tell me how to create a token for use with imaginary token nodes.
@@ -73,9 +73,9 @@
  *  If you care what the token payload objects' type is, you should
  *  override this method and any other createToken variant.
  */
-- (ANTLRCommonTree *) create:(ANTLRCommonToken *)aToken
+- (CommonTree *) create:(CommonToken *)aToken
 {
-    return [ANTLRCommonTree newTreeWithToken:aToken];
+    return [CommonTree newTreeWithToken:aToken];
 }
 
 /** Tell me how to create a token for use with imaginary token nodes.
@@ -86,20 +86,20 @@
  *  If you care what the token payload objects' type is, you should
  *  override this method and any other createToken variant.
  */
-- (ANTLRCommonTree *)createTree:(NSInteger)tokenType Text:(NSString *)text
+- (CommonTree *)createTree:(NSInteger)tokenType Text:(NSString *)text
 {
-    return [ANTLRCommonTree newTreeWithTokenType:tokenType Text:text];
+    return [CommonTree newTreeWithTokenType:tokenType Text:text];
 }
 
-- (id<ANTLRToken>)createToken:(NSInteger)tokenType Text:(NSString *)text
+- (id<Token>)createToken:(NSInteger)tokenType Text:(NSString *)text
 {
-    id<ANTLRToken> fromToken = [ANTLRCommonToken newToken:tokenType Text:text];
+    id<Token> fromToken = [CommonToken newToken:tokenType Text:text];
     return fromToken;
 }
 
-- (id<ANTLRToken>)createToken:(id<ANTLRToken>)fromToken
+- (id<Token>)createToken:(id<Token>)fromToken
 {
-    return [ANTLRCommonToken newTokenWithToken:(ANTLRCommonToken *)fromToken];
+    return [CommonToken newTokenWithToken:(CommonToken *)fromToken];
 }
 
 /** Track start/stop token for subtree root created for a rule.
@@ -107,7 +107,7 @@
  *  seems like this will yield start=i and stop=i-1 in a nil node.
  *  Might be useful info so I'll not force to be i..i.
  */
-- (void) setTokenBoundaries:(id<ANTLRBaseTree>)aTree From:(id<ANTLRToken>)startToken To:(id<ANTLRToken>)stopToken
+- (void) setTokenBoundaries:(id<BaseTree>)aTree From:(id<Token>)startToken To:(id<Token>)stopToken
 {
     if ( aTree == nil )
         return;
@@ -117,118 +117,118 @@
         startTokIdx = [startToken getTokenIndex];
     if ( stopToken != nil )
         stopTokIdx = [stopToken getTokenIndex];
-    [(id<ANTLRBaseTree>)aTree setTokenStartIndex:startTokIdx];
-    [(id<ANTLRBaseTree>)aTree setTokenStopIndex:stopTokIdx];
+    [(id<BaseTree>)aTree setTokenStartIndex:startTokIdx];
+    [(id<BaseTree>)aTree setTokenStopIndex:stopTokIdx];
 }
 
-- (NSInteger)getTokenStartIndex:(id<ANTLRBaseTree>) t
+- (NSInteger)getTokenStartIndex:(id<BaseTree>) t
 {
     if ( t == nil )
         return -1;
-    return [(id<ANTLRBaseTree>)t getTokenStartIndex];
+    return [(id<BaseTree>)t getTokenStartIndex];
 }
 
-- (NSInteger)getTokenStopIndex:(id<ANTLRBaseTree>) t
+- (NSInteger)getTokenStopIndex:(id<BaseTree>) t
 {
     if ( t == nil )
         return -1;
-    return [(id<ANTLRBaseTree>)t getTokenStopIndex];
+    return [(id<BaseTree>)t getTokenStopIndex];
 }
 
-- (NSString *)getText:(ANTLRCommonTree *)t
+- (NSString *)getText:(CommonTree *)t
 {
     if ( t == nil )
         return nil;
     return t.token.text;
 }
 
-- (void)setText:(id<ANTLRBaseTree>)t Text:(NSString *)text
+- (void)setText:(id<BaseTree>)t Text:(NSString *)text
 {
     if ( t == nil )
         return;
 }
 
-- (NSInteger)getType:(ANTLRCommonTree *)t
+- (NSInteger)getType:(CommonTree *)t
 {
     if ( t==nil )
-        return ANTLRTokenTypeInvalid;
+        return TokenTypeInvalid;
     return t.token.type;
 }
 
-- (void) setType:(id<ANTLRBaseTree>)t Type:(NSInteger)tokenType
+- (void) setType:(id<BaseTree>)t Type:(NSInteger)tokenType
 {
     if ( t==nil )
         return;
 }
 
 /** What is the Token associated with this node?  If
- *  you are not using ANTLRCommonTree, then you must
+ *  you are not using CommonTree, then you must
  *  override this in your own adaptor.
  */
-- (id<ANTLRToken>) getToken:(ANTLRCommonTree *) t
+- (id<Token>) getToken:(CommonTree *) t
 {
-    if ( [t isKindOfClass:[ANTLRCommonTree class]] ) {
+    if ( [t isKindOfClass:[CommonTree class]] ) {
         return t.token;
     }
     return nil; // no idea what to do
 }
 
-- (id<ANTLRBaseTree>) getChild:(id<ANTLRBaseTree>)t At:(NSInteger)i
+- (id<BaseTree>) getChild:(id<BaseTree>)t At:(NSInteger)i
 {
     if ( t == nil )
         return nil;
-    return [(id<ANTLRBaseTree>)t getChild:i];
+    return [(id<BaseTree>)t getChild:i];
 }
 
-- (void) setChild:(id<ANTLRBaseTree>)t At:(NSInteger)i Child:(id<ANTLRBaseTree>)child
+- (void) setChild:(id<BaseTree>)t At:(NSInteger)i Child:(id<BaseTree>)child
 {
     if ( t == nil )
         return;
-    [(id<ANTLRBaseTree>)t setChild:i With:child];
+    [(id<BaseTree>)t setChild:i With:child];
 }
 
-- (id) deleteChild:(id<ANTLRBaseTree>)t Index:(NSInteger)anIndex
+- (id) deleteChild:(id<BaseTree>)t Index:(NSInteger)anIndex
 {
     return [t deleteChild:anIndex];
 }
 
-- (NSInteger) getChildCount:(id<ANTLRBaseTree>) t
+- (NSInteger) getChildCount:(id<BaseTree>) t
 {
     if ( t == nil )
         return 0;
-    return [(id<ANTLRBaseTree>) t getChildCount];
+    return [(id<BaseTree>) t getChildCount];
 }
 
-- (id<ANTLRBaseTree>) getParent:(id<ANTLRBaseTree>) t
+- (id<BaseTree>) getParent:(id<BaseTree>) t
 {
     if ( t == nil )
         return nil;
-    return (id<ANTLRBaseTree>)[t getParent];
+    return (id<BaseTree>)[t getParent];
 }
 
-- (void) setParent:(id<ANTLRBaseTree>)t With:(id<ANTLRBaseTree>) parent
+- (void) setParent:(id<BaseTree>)t With:(id<BaseTree>) parent
 {
     if ( t != nil )
-        [(id<ANTLRBaseTree>) t setParent:(id<ANTLRBaseTree>)parent];
+        [(id<BaseTree>) t setParent:(id<BaseTree>)parent];
 }
 
-- (NSInteger) getChildIndex:(id<ANTLRBaseTree>) t
+- (NSInteger) getChildIndex:(id<BaseTree>) t
 {
     if ( t == nil )
         return 0;
-    return [(id<ANTLRBaseTree>) t getChildIndex];
+    return [(id<BaseTree>) t getChildIndex];
 }
 
-- (void) setChildIndex:(id<ANTLRBaseTree>)t With:(NSInteger)anIndex
+- (void) setChildIndex:(id<BaseTree>)t With:(NSInteger)anIndex
 {
     if ( t!=nil )
-        [(id<ANTLRBaseTree>)t setChildIndex:anIndex];
+        [(id<BaseTree>)t setChildIndex:anIndex];
 }
 
-- (void) replaceChildren:(id<ANTLRBaseTree>)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id<ANTLRBaseTree>)t
+- (void) replaceChildren:(id<BaseTree>)parent From:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id<BaseTree>)t
 {
     if ( parent != nil ) {
-        [(id<ANTLRBaseTree>)parent replaceChildrenFrom:startChildIndex To:stopChildIndex With:t];
+        [(id<BaseTree>)parent replaceChildrenFrom:startChildIndex To:stopChildIndex With:t];
     }
 }
 

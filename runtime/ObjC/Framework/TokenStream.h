@@ -25,10 +25,10 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRIntStream.h"
-#import "ANTLRToken.h"
+#import "IntStream.h"
+#import "Token.h"
 
-@protocol ANTLRTokenStream < ANTLRIntStream >
+@protocol TokenStream < IntStream >
 
 // Get Token at current input pointer + i ahead where i=1 is next Token.
 // i<0 indicates tokens in the past.  So -1 is previous token and -2 is
@@ -36,9 +36,9 @@
 // Return null for LT:0 and any index that results in an absolute address
 // that is negative.
 
-- (id<ANTLRToken>) LT:(NSInteger) i;
+- (id<Token>) LT:(NSInteger) i;
 
-- (id<ANTLRToken>) getToken:(NSUInteger) i;
+- (id<Token>) getToken:(NSUInteger) i;
 
 - (id) getTokenSource;
 
@@ -56,7 +56,7 @@
  *  to the other toString(int,int).  This is also parallel with
  *  the TreeNodeStream.toString(Object,Object).
  */
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startToken ToToken:(id<ANTLRToken>)stopToken;
+- (NSString *) toStringFromToken:(id<Token>)startToken ToToken:(id<Token>)stopToken;
 
 
 @end

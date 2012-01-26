@@ -25,15 +25,15 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTokenStream.h"
-#import "ANTLRTokenSource.h"
+#import "TokenStream.h"
+#import "TokenSource.h"
 #import "ANTLRBitSet.h"
-#import "ANTLRCommonToken.h"
+#import "CommonToken.h"
 #import "AMutableArray.h"
 
-@interface ANTLRBufferedTokenStream : NSObject <ANTLRTokenStream> 
+@interface BufferedTokenStream : NSObject <TokenStream> 
 {
-__strong id<ANTLRTokenSource> tokenSource;
+__strong id<TokenSource> tokenSource;
     
     /** Record every single token pulled from the source so we can reproduce
      *  chunks of it later.  The buffer in LookaheadStream overlaps sometimes
@@ -55,15 +55,15 @@ NSInteger index;
 NSInteger range; // how deep have we gone?
     
 }
-@property (retain, getter=getTokenSource,setter=setTokenSource:) id<ANTLRTokenSource> tokenSource;
+@property (retain, getter=getTokenSource,setter=setTokenSource:) id<TokenSource> tokenSource;
 @property (retain, getter=getTokens,setter=setTokens:) AMutableArray *tokens;
 @property (assign, getter=getLastMarker,setter=setLastMarker:) NSInteger lastMarker;
 @property (assign) NSInteger index;
 @property (assign, getter=getRange,setter=setRange:) NSInteger range;
 
-+ (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStream;
-+ (ANTLRBufferedTokenStream *) newANTLRBufferedTokenStreamWith:(id<ANTLRTokenSource>)aSource;
-- (id) initWithTokenSource:(id<ANTLRTokenSource>)aSource;
++ (BufferedTokenStream *) newBufferedTokenStream;
++ (BufferedTokenStream *) newBufferedTokenStreamWith:(id<TokenSource>)aSource;
+- (id) initWithTokenSource:(id<TokenSource>)aSource;
 - (void)dealloc;
 - (id) copyWithZone:(NSZone *)aZone;
 - (NSUInteger)charPositionInLine;
@@ -80,14 +80,14 @@ NSInteger range; // how deep have we gone?
 - (void) consume;
 - (void) sync:(NSInteger) i;
 - (void) fetch:(NSInteger) n;
-- (id<ANTLRToken>) getToken:(NSInteger) i;
+- (id<Token>) getToken:(NSInteger) i;
 - (AMutableArray *)getFrom:(NSInteger)startIndex To:(NSInteger) stopIndex;
 - (NSInteger) LA:(NSInteger)i;
-- (id<ANTLRToken>) LB:(NSInteger) k;
-- (id<ANTLRToken>) LT:(NSInteger) k;
+- (id<Token>) LB:(NSInteger) k;
+- (id<Token>) LT:(NSInteger) k;
 - (void) setup;
-- (id<ANTLRTokenSource>) getTokenSource;
-- (void) setTokenSource:(id<ANTLRTokenSource>) aTokenSource;
+- (id<TokenSource>) getTokenSource;
+- (void) setTokenSource:(id<TokenSource>) aTokenSource;
 - (AMutableArray *)getTokens;
 - (NSString *) getSourceName;
 - (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex;
@@ -96,7 +96,7 @@ NSInteger range; // how deep have we gone?
 - (AMutableArray *)getTokensFrom:(NSInteger)startIndex To:(NSInteger)stopIndex WithType:(NSInteger)ttype;
 - (NSString *) toString;
 - (NSString *) toStringFromStart:(NSInteger)startIndex ToEnd:(NSInteger)stopIndex;
-- (NSString *) toStringFromToken:(id<ANTLRToken>)startIndex ToToken:(id<ANTLRToken>)stopIndex;
+- (NSString *) toStringFromToken:(id<Token>)startIndex ToToken:(id<Token>)stopIndex;
 - (void) fill;
 
 @end

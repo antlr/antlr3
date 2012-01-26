@@ -1,5 +1,5 @@
 //
-//  ANTLRHashRule.h
+//  HashRule.h
 //  ANTLR
 //
 // Copyright (c) 2010 Alan Condit
@@ -28,23 +28,23 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRRuleMemo.h"
-#import "ANTLRPtrBuffer.h"
+#import "RuleMemo.h"
+#import "PtrBuffer.h"
 
 #define GLOBAL_SCOPE       0
 #define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRHashRule : ANTLRPtrBuffer {
+@interface HashRule : PtrBuffer {
     //    TStringPool *fPool;
     NSInteger LastHash;
     NSInteger mode;
 }
 
 // Contruction/Destruction
-+ (id)newANTLRHashRule;
-+ (id)newANTLRHashRuleWithLen:(NSInteger)aBuffSize;
++ (id)newHashRule;
++ (id)newHashRuleWithLen:(NSInteger)aBuffSize;
 - (id)init;
 - (id)initWithLen:(NSInteger)aBuffSize;
 - (void)dealloc;
@@ -54,16 +54,16 @@
 - (NSInteger)size;
 
 // Instance Methods
-- (void)deleteANTLRHashRule:(ANTLRRuleMemo *)np;
-- (void)delete_chain:(ANTLRRuleMemo *)np;
-- (ANTLRRuleMemo **)getPtrBuffer;
-- (void)setPtrBuffer:(ANTLRRuleMemo **)np;
+- (void)deleteHashRule:(RuleMemo *)np;
+- (void)delete_chain:(RuleMemo *)np;
+- (RuleMemo **)getPtrBuffer;
+- (void)setPtrBuffer:(RuleMemo **)np;
 - (NSNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex;
 - (void)putRuleMemoAtStartIndex:(NSInteger)aStartIndex StopIndex:(NSInteger)aStopIndex;
 - (NSInteger)getMode;
 - (void)setMode:(NSInteger)aMode;
-- (void) insertObject:(ANTLRRuleMemo *)aRule atIndex:(NSInteger)Index;
-- (ANTLRRuleMemo *) objectAtIndex:(NSInteger)Index;
+- (void) insertObject:(RuleMemo *)aRule atIndex:(NSInteger)Index;
+- (RuleMemo *) objectAtIndex:(NSInteger)Index;
 
 @property (getter=getLastHash, setter=setLastHash:) NSInteger LastHash;
 @property (getter=getMode,setter=setMode:) NSInteger mode;

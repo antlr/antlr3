@@ -25,21 +25,21 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRToken.h"
-#import "ANTLRRuleReturnScope.h"
+#import "Token.h"
+#import "RuleReturnScope.h"
 
-@interface ANTLRParserRuleReturnScope : ANTLRRuleReturnScope {
-	id<ANTLRToken> start;
-	id<ANTLRToken> stopToken;
+@interface ParserRuleReturnScope : RuleReturnScope {
+	id<Token> start;
+	id<Token> stopToken;
 }
-@property (retain, getter=getStart, setter=setStart:) id<ANTLRToken> start;
-@property (retain, getter=getStop, setter=setStop:)   id<ANTLRToken> stopToken;
+@property (retain, getter=getStart, setter=setStart:) id<Token> start;
+@property (retain, getter=getStop, setter=setStop:)   id<Token> stopToken;
 
-- (id<ANTLRToken>) getStart;
-- (void) setStart: (id<ANTLRToken>) aStart;
+- (id<Token>) getStart;
+- (void) setStart: (id<Token>) aStart;
 
-- (id<ANTLRToken>) getStop;
-- (void) setStop: (id<ANTLRToken>) aStop;
+- (id<Token>) getStop;
+- (void) setStop: (id<Token>) aStop;
 
 - (id) copyWithZone:(NSZone *)theZone;
 

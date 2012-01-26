@@ -24,34 +24,34 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTree.h"
-#import "ANTLRCommonToken.h"
+#import "Tree.h"
+#import "CommonToken.h"
 #import "AMutableArray.h"
 
-@protocol ANTLRBaseTree <ANTLRTree>
+@protocol BaseTree <Tree>
 
-+ (id<ANTLRBaseTree>) INVALID_NODE;
++ (id<BaseTree>) INVALID_NODE;
 
-+ (id<ANTLRBaseTree>) newTree;
-+ (id<ANTLRBaseTree>) newTree:(id<ANTLRBaseTree>)node;
++ (id<BaseTree>) newTree;
++ (id<BaseTree>) newTree:(id<BaseTree>)node;
 
-- (id<ANTLRBaseTree>) init;
-- (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
+- (id<BaseTree>) init;
+- (id<BaseTree>) initWith:(id<BaseTree>)node;
 
-- (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
+- (id<BaseTree>) getChild:(NSUInteger)i;
 - (AMutableArray *)children;
 - (void) setChildren:(AMutableArray *)anArray;
-- (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
+- (id<BaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;
 
 // Add t as a child to this node.  If t is null, do nothing.  If t
 //  is nil, add all children of t to this' children.
 
-- (void) addChild:(id<ANTLRBaseTree>) tree;
+- (void) addChild:(id<BaseTree>) tree;
 - (void) addChildren:(NSArray *) theChildren;
 //- (void) removeAllChildren;
 
-- (void) setChild:(NSInteger) i With:(id<ANTLRBaseTree>)t;
+- (void) setChild:(NSInteger) i With:(id<BaseTree>)t;
 - (id) deleteChild:(NSInteger) i;
 - (AMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
@@ -67,12 +67,12 @@
 - (void) freshenParentAndChildIndexes;
 - (void) freshenParentAndChildIndexes:(NSInteger) offset;
 - (void) sanityCheckParentAndChildIndexes;
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>) parent At:(NSInteger) i;
+- (void) sanityCheckParentAndChildIndexes:(id<BaseTree>) parent At:(NSInteger) i;
 
 - (NSInteger) getChildIndex;
 - (void) setChildIndex:(NSInteger)i;
 
-- (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
+- (id<BaseTree>)getAncestor:(NSInteger)ttype;
 - (AMutableArray *)getAncestors;
 
 #pragma mark Copying
@@ -100,23 +100,23 @@
 
 @end
 
-@interface ANTLRBaseTree : NSObject <ANTLRTree>
+@interface BaseTree : NSObject <Tree>
 {
 	__strong AMutableArray *children;
     __strong NSException *anException;
 }
 
-+ (id<ANTLRBaseTree>) INVALID_NODE;
-+ (id<ANTLRBaseTree>) newTree;
-+ (id<ANTLRBaseTree>) newTree:(id<ANTLRBaseTree>)node;
++ (id<BaseTree>) INVALID_NODE;
++ (id<BaseTree>) newTree;
++ (id<BaseTree>) newTree:(id<BaseTree>)node;
          
-- (id<ANTLRBaseTree>) init;
-- (id<ANTLRBaseTree>) initWith:(id<ANTLRBaseTree>)node;
+- (id<BaseTree>) init;
+- (id<BaseTree>) initWith:(id<BaseTree>)node;
 
-- (id<ANTLRBaseTree>) getChild:(NSUInteger)i;
+- (id<BaseTree>) getChild:(NSUInteger)i;
 - (AMutableArray *)children;
 - (void) setChildren:(AMutableArray *)anArray;
-- (id<ANTLRBaseTree>)getFirstChildWithType:(NSInteger)type;
+- (id<BaseTree>)getFirstChildWithType:(NSInteger)type;
 - (NSUInteger) getChildCount;
 
 //- (void) removeAllChildren;
@@ -124,10 +124,10 @@
 // Add t as a child to this node.  If t is null, do nothing.  If t
 //  is nil, add all children of t to this' children.
 
-- (void) addChild:(id<ANTLRBaseTree>) tree;
+- (void) addChild:(id<BaseTree>) tree;
 - (void) addChildren:(NSArray *) theChildren;
 
-- (void) setChild:(NSUInteger) i With:(id<ANTLRBaseTree>)t;
+- (void) setChild:(NSUInteger) i With:(id<BaseTree>)t;
 - (id) deleteChild:(NSUInteger) idx;
 - (AMutableArray *) createChildrenList;
 - (void) replaceChildrenFrom:(NSInteger)startChildIndex To:(NSInteger)stopChildIndex With:(id) t;
@@ -143,13 +143,13 @@
 - (void) freshenParentAndChildIndexes;
 - (void) freshenParentAndChildIndexes:(NSInteger) offset;
 - (void) sanityCheckParentAndChildIndexes;
-- (void) sanityCheckParentAndChildIndexes:(id<ANTLRBaseTree>)parent At:(NSInteger) i;
+- (void) sanityCheckParentAndChildIndexes:(id<BaseTree>)parent At:(NSInteger) i;
 
 - (NSInteger) getChildIndex;
 - (void) setChildIndex:(NSInteger)i;
 
 - (BOOL) hasAncestor:(NSInteger) ttype;
-- (id<ANTLRBaseTree>)getAncestor:(NSInteger)ttype;
+- (id<BaseTree>)getAncestor:(NSInteger)ttype;
 - (AMutableArray *)getAncestors;
 
 - (id) copyWithZone:(NSZone *)aZone;
@@ -175,36 +175,36 @@
 
 @end
 
-@interface ANTLRTreeNavigationNode : ANTLRBaseTree {
+@interface TreeNavigationNode : BaseTree {
 }
 - (id) init;
 - (id) copyWithZone:(NSZone *)aZone;
 @end
 
-@interface ANTLRTreeNavigationNodeDown : ANTLRTreeNavigationNode {
+@interface TreeNavigationNodeDown : TreeNavigationNode {
 }
-+ (ANTLRTreeNavigationNodeDown *) getNavigationNodeDown;
++ (TreeNavigationNodeDown *) getNavigationNodeDown;
 - (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end
 
-@interface ANTLRTreeNavigationNodeUp : ANTLRTreeNavigationNode {
+@interface TreeNavigationNodeUp : TreeNavigationNode {
 }
-+ (ANTLRTreeNavigationNodeUp *) getNavigationNodeUp;
++ (TreeNavigationNodeUp *) getNavigationNodeUp;
 - (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end
 
-@interface ANTLRTreeNavigationNodeEOF : ANTLRTreeNavigationNode {
+@interface TreeNavigationNodeEOF : TreeNavigationNode {
 }
-+ (ANTLRTreeNavigationNodeEOF *) getNavigationNodeEOF;
++ (TreeNavigationNodeEOF *) getNavigationNodeEOF;
 - (id) init;
 - (NSInteger) tokenType;
 - (NSString *) description;
 @end
 
-extern ANTLRTreeNavigationNodeDown *navigationNodeDown;
-extern ANTLRTreeNavigationNodeUp *navigationNodeUp;
-extern ANTLRTreeNavigationNodeEOF *navigationNodeEOF;
+extern TreeNavigationNodeDown *navigationNodeDown;
+extern TreeNavigationNodeUp *navigationNodeUp;
+extern TreeNavigationNodeEOF *navigationNodeEOF;

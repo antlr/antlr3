@@ -24,19 +24,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRMismatchedSetException.h"
+#import "MismatchedSetException.h"
 
 
-@implementation ANTLRMismatchedSetException
+@implementation MismatchedSetException
 
 @synthesize expecting;
 
-+ (id) newException:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
++ (id) newException:(NSString *) theExpectedSet stream:(id<IntStream>) theStream
 {
-	return [[ANTLRMismatchedSetException alloc] initWithSet:theExpectedSet stream:theStream];
+	return [[MismatchedSetException alloc] initWithSet:theExpectedSet stream:theStream];
 }
 
-- (id) initWithSet:(NSString *) theExpectedSet stream:(id<ANTLRIntStream>) theStream
+- (id) initWithSet:(NSString *) theExpectedSet stream:(id<IntStream>) theStream
 {
 	if ((self = [super initWithStream:theStream]) != nil) {
 		[self setExpecting:theExpectedSet];

@@ -25,35 +25,35 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRDebugEventListener.h"
-#import "ANTLRTreeAdaptor.h"
-#import "ANTLRTreeNodeStream.h"
+#import "DebugEventListener.h"
+#import "TreeAdaptor.h"
+#import "TreeNodeStream.h"
 
-@interface ANTLRDebugTreeNodeStream : NSObject <ANTLRTreeNodeStream> {
-	id<ANTLRDebugEventListener> debugListener;
-	id<ANTLRTreeAdaptor> treeAdaptor;
-	id<ANTLRTreeNodeStream> input;
+@interface DebugTreeNodeStream : NSObject <TreeNodeStream> {
+	id<DebugEventListener> debugListener;
+	id<TreeAdaptor> treeAdaptor;
+	id<TreeNodeStream> input;
 	BOOL initialStreamState;
 }
 
-- (id) initWithTreeNodeStream:(id<ANTLRTreeNodeStream>)theStream debugListener:(id<ANTLRDebugEventListener>)debugger;
+- (id) initWithTreeNodeStream:(id<TreeNodeStream>)theStream debugListener:(id<DebugEventListener>)debugger;
 
-- (id<ANTLRDebugEventListener>) debugListener;
-- (void) setDebugListener: (id<ANTLRDebugEventListener>) aDebugListener;
+- (id<DebugEventListener>) debugListener;
+- (void) setDebugListener: (id<DebugEventListener>) aDebugListener;
 
-- (id<ANTLRTreeNodeStream>) input;
-- (void) setInput: (id<ANTLRTreeNodeStream>) aTreeNodeStream;
+- (id<TreeNodeStream>) input;
+- (void) setInput: (id<TreeNodeStream>) aTreeNodeStream;
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
-- (void) setTreeAdaptor: (id<ANTLRTreeAdaptor>) aTreeAdaptor;
+- (id<TreeAdaptor>) getTreeAdaptor;
+- (void) setTreeAdaptor: (id<TreeAdaptor>) aTreeAdaptor;
 
-#pragma mark ANTLRTreeNodeStream conformance
+#pragma mark TreeNodeStream conformance
 
 - (id) LT:(NSInteger)k;
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
+- (id<TreeAdaptor>) getTreeAdaptor;
 - (void) setUniqueNavigationNodes:(BOOL)flag;
 
-#pragma mark ANTLRIntStream conformance
+#pragma mark IntStream conformance
 - (void) consume;
 - (NSInteger) LA:(NSUInteger) i;
 - (NSUInteger) mark;

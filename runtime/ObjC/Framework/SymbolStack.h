@@ -1,5 +1,5 @@
 //
-//  ANTLRSymbolStack.h
+//  SymbolStack.h
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -30,31 +30,31 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRBaseStack.h"
-// #import "ANTLRSymbolScope.h"
+#import "BaseStack.h"
+// #import "SymbolScope.h"
 
 //#define GLOBAL_SCOPE       0
 //#define LOCAL_SCOPE        1
 #define HASHSIZE         101
 #define HBUFSIZE      0x2000
 
-@interface ANTLRSymbolsScope : NSObject
+@interface SymbolsScope : NSObject
 {
     
 }
 
-+ (ANTLRSymbolsScope *)newANTLRSymbolsScope;
++ (SymbolsScope *)newSymbolsScope;
 
 - (id)init;
 @end
 
 
-@interface ANTLRSymbolStack : ANTLRBaseStack {
+@interface SymbolStack : BaseStack {
 }
 
 // Contruction/Destruction
-+(ANTLRSymbolStack *)newANTLRSymbolStack;
-+(ANTLRSymbolStack *)newANTLRSymbolStackWithLen:(NSInteger)cnt;
++(SymbolStack *)newSymbolStack;
++(SymbolStack *)newSymbolStackWithLen:(NSInteger)cnt;
 -(id)init;
 -(id)initWithLen:(NSInteger)cnt;
 -(void)dealloc;
@@ -63,13 +63,13 @@
 - (id) copyWithZone:(NSZone *)aZone;
 /* clear -- reinitialize the maplist array */
 
--(ANTLRSymbolsScope *)getHashMapEntry:(NSInteger)idx;
+-(SymbolsScope *)getHashMapEntry:(NSInteger)idx;
 
--(ANTLRSymbolsScope **)getHashMap;
+-(SymbolsScope **)getHashMap;
 
--(ANTLRSymbolsScope *) pop;
+-(SymbolsScope *) pop;
 
-- (void) insertObject:(ANTLRSymbolsScope *)aScope atIndex:(NSInteger)idx;
-- (ANTLRSymbolsScope *)objectAtIndex:(NSInteger)idx;
+- (void) insertObject:(SymbolsScope *)aScope atIndex:(NSInteger)idx;
+- (SymbolsScope *)objectAtIndex:(NSInteger)idx;
 
 @end

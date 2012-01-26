@@ -1,5 +1,5 @@
 //
-//  ANTLRPtrBuffer.m
+//  PtrBuffer.m
 //  ANTLR
 //
 //  Created by Alan Condit on 6/9/10.
@@ -32,13 +32,13 @@
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#import "ANTLRPtrBuffer.h"
-#import "ANTLRTree.h"
+#import "PtrBuffer.h"
+#import "Tree.h"
 
 /*
- * Start of ANTLRPtrBuffer
+ * Start of PtrBuffer
  */
-@implementation ANTLRPtrBuffer
+@implementation PtrBuffer
 
 @synthesize BuffSize;
 @synthesize buffer;
@@ -46,14 +46,14 @@
 @synthesize count;
 @synthesize ptr;
 
-+(ANTLRPtrBuffer *)newANTLRPtrBuffer
++(PtrBuffer *)newPtrBuffer
 {
-    return [[ANTLRPtrBuffer alloc] init];
+    return [[PtrBuffer alloc] init];
 }
 
-+(ANTLRPtrBuffer *)newANTLRPtrBufferWithLen:(NSInteger)cnt
++(PtrBuffer *)newPtrBufferWithLen:(NSInteger)cnt
 {
-    return [[ANTLRPtrBuffer alloc] initWithLen:cnt];
+    return [[PtrBuffer alloc] initWithLen:cnt];
 }
 
 -(id)init
@@ -95,9 +95,9 @@
 -(void)dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRPtrBuffer" );
+    NSLog( @"called dealloc in PtrBuffer" );
 #endif
-    ANTLRLinkBase *tmp, *rtmp;
+    LinkBase *tmp, *rtmp;
     NSInteger idx;
     
     if ( self.fNext != nil ) {
@@ -105,7 +105,7 @@
             tmp = ptrBuffer[idx];
             while ( tmp ) {
                 rtmp = tmp;
-                if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+                if ([tmp isKindOfClass:[LinkBase class]])
                     tmp = (id)tmp.fNext;
                 else
                     tmp = nil;
@@ -119,7 +119,7 @@
 
 - (id) copyWithZone:(NSZone *)aZone
 {
-    ANTLRPtrBuffer *copy;
+    PtrBuffer *copy;
     
     copy = [[[self class] allocWithZone:aZone] init];
     if ( buffer )
@@ -131,14 +131,14 @@
 
 - (void)clear
 {
-    ANTLRLinkBase *tmp, *rtmp;
+    LinkBase *tmp, *rtmp;
     NSInteger idx;
 
     for( idx = 0; idx < BuffSize; idx++ ) {
         tmp = ptrBuffer[idx];
         while ( tmp ) {
             rtmp = tmp;
-            if ([tmp isKindOfClass:[ANTLRLinkBase class]])
+            if ([tmp isKindOfClass:[LinkBase class]])
                 tmp = (id)tmp.fNext;
             else
                 tmp = nil;
@@ -280,7 +280,7 @@
     return nil;
 }
 
-- (void)addObjectsFromArray:(ANTLRPtrBuffer *)anArray
+- (void)addObjectsFromArray:(PtrBuffer *)anArray
 {
     NSInteger cnt, i;
     cnt = [anArray count];

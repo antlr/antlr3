@@ -27,7 +27,7 @@
  */
 #import "AMutableArray.h"
 #import "ArrayIterator.h"
-#import "ANTLRRuntimeException.h"
+#import "RuntimeException.h"
 
 @class AMutableArray;
 
@@ -167,7 +167,7 @@
 
 - (void) removeObjectAtIndex:(NSInteger)idx
 {
-    @throw [ANTLRUnsupportedOperationException newException:@"Cant remove object from ArrayIterator"];
+    @throw [UnsupportedOperationException newException:@"Cant remove object from ArrayIterator"];
 }
 
 - (NSInteger) count

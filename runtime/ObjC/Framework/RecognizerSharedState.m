@@ -24,13 +24,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRRecognizerSharedState.h"
-#import "ANTLRCharStream.h"
-#import "ANTLRCommonToken.h"
-#import "ANTLRMismatchedTokenException.h"
-#import "ANTLRMismatchedRangeException.h"
+#import "RecognizerSharedState.h"
+#import "CharStream.h"
+#import "CommonToken.h"
+#import "MismatchedTokenException.h"
+#import "MismatchedRangeException.h"
 
-@implementation ANTLRRecognizerSharedState
+@implementation RecognizerSharedState
 
 @synthesize following;
 @synthesize _fsp;
@@ -48,24 +48,24 @@
 @synthesize tokenStartCharIndex;
 @synthesize text;
 
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState
++ (RecognizerSharedState *) newRecognizerSharedState
 {
-    return [[[ANTLRRecognizerSharedState alloc] init] retain];
+    return [[[RecognizerSharedState alloc] init] retain];
 }
 
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedStateWithRuleLen:(NSInteger)aLen
++ (RecognizerSharedState *) newRecognizerSharedStateWithRuleLen:(NSInteger)aLen
 {
-    return [[[ANTLRRecognizerSharedState alloc] initWithRuleLen:aLen] retain];
+    return [[[RecognizerSharedState alloc] initWithRuleLen:aLen] retain];
 }
 
-+ (ANTLRRecognizerSharedState *) newANTLRRecognizerSharedState:(ANTLRRecognizerSharedState *)aState
++ (RecognizerSharedState *) newRecognizerSharedState:(RecognizerSharedState *)aState
 {
-    return [[[ANTLRRecognizerSharedState alloc] initWithState:aState] retain];
+    return [[[RecognizerSharedState alloc] initWithState:aState] retain];
 }
 
 - (id) init
 {
-    ANTLRHashRule *aHashRule;
+    HashRule *aHashRule;
 	if ((self = [super init]) != nil ) {
         following = [[AMutableArray arrayWithCapacity:10] retain];
         _fsp = -1;
@@ -77,9 +77,9 @@
         tokenStartCharIndex = -1;
         tokenStartLine = 0;
         int cnt = 200;
-		ruleMemo = [[ANTLRRuleStack newANTLRRuleStack:cnt] retain];
+		ruleMemo = [[RuleStack newRuleStack:cnt] retain];
         for (int i = 0; i < cnt; i++ ) {
-            aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
+            aHashRule = [[HashRule newHashRuleWithLen:17] retain];
             [ruleMemo addObject:aHashRule];
         }
 #ifdef DONTUSEYET
@@ -96,7 +96,7 @@
 
 - (id) initWithRuleLen:(NSInteger)aLen
 {
-    ANTLRHashRule *aHashRule;
+    HashRule *aHashRule;
 	if ((self = [super init]) != nil ) {
         following = [[AMutableArray arrayWithCapacity:10] retain];
         _fsp = -1;
@@ -107,9 +107,9 @@
         backtracking = 0;			// the level of backtracking
         tokenStartCharIndex = -1;
         tokenStartLine = 0;
-		ruleMemo = [[ANTLRRuleStack newANTLRRuleStack:aLen] retain];
+		ruleMemo = [[RuleStack newRuleStack:aLen] retain];
         for (int i = 0; i < aLen; i++ ) {
-            aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
+            aHashRule = [[HashRule newHashRuleWithLen:17] retain];
             [ruleMemo addObject:aHashRule];
         }
 #ifdef DONTUSEYET
@@ -124,9 +124,9 @@
 	return self;
 }
 
-- (id) initWithState:(ANTLRRecognizerSharedState *)aState
+- (id) initWithState:(RecognizerSharedState *)aState
 {
-    ANTLRHashRule *aHashRule;
+    HashRule *aHashRule;
     if ( [following count] < [aState.following count] ) {
         //        following = new BitSet[state.following.size];
     }
@@ -139,9 +139,9 @@
     backtracking = aState.backtracking;
     if ( aState.ruleMemo == nil ) {
         int cnt = 200;
-        ruleMemo = [[ANTLRRuleStack newANTLRRuleStack:cnt] retain];
+        ruleMemo = [[RuleStack newRuleStack:cnt] retain];
         for (int i = 0; i < cnt; i++ ) {
-            aHashRule = [[ANTLRHashRule newANTLRHashRuleWithLen:17] retain];
+            aHashRule = [[HashRule newHashRuleWithLen:17] retain];
             [ruleMemo addObject:aHashRule];
         }
     }
@@ -150,7 +150,7 @@
         if ( [ruleMemo count] == 0 ) {
             int cnt = [ruleMemo length];
             for (int i = 0; i < cnt; i++ ) {
-                [ruleMemo addObject:[[ANTLRHashRule newANTLRHashRuleWithLen:17] retain]];
+                [ruleMemo addObject:[[HashRule newHashRuleWithLen:17] retain]];
             }
         }
         else {
@@ -170,7 +170,7 @@
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ANTLRRecognizerSharedState" );
+    NSLog( @"called dealloc in RecognizerSharedState" );
 #endif
     if ( token ) [token release];
 	if ( following ) [following release];
@@ -181,12 +181,12 @@
 // token stuff
 #pragma mark Tokens
 
-- (id<ANTLRToken>)getToken
+- (id<Token>)getToken
 {
     return token; 
 }
 
-- (void) setToken: (id<ANTLRToken>) aToken
+- (void) setToken: (id<Token>) aToken
 {
     if (token != aToken) {
         [aToken retain];
@@ -236,7 +236,7 @@
 }
 
 // error handling
-- (void) reportError:(ANTLRRecognitionException *)e
+- (void) reportError:(RecognitionException *)e
 {
 	NSLog(@"%@", e.name);
 }
@@ -255,12 +255,12 @@
     following = aFollow;
 }
 
-- (ANTLRRuleStack *) getRuleMemo
+- (RuleStack *) getRuleMemo
 {
 	return ruleMemo;
 }
 
-- (void)setRuleMemo:(ANTLRRuleStack *)aRuleMemo
+- (void)setRuleMemo:(RuleStack *)aRuleMemo
 {
     if ( ruleMemo != aRuleMemo ) {
         if ( ruleMemo ) [ruleMemo release];

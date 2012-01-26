@@ -26,7 +26,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ANTLRLexerRuleReturnScope : NSObject {
+@interface LexerRuleReturnScope : NSObject {
 	NSInteger start;
 	NSInteger stopToken;
 }

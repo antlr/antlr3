@@ -24,19 +24,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRMismatchedTreeNodeException.h"
+#import "MismatchedTreeNodeException.h"
 
 
-@implementation ANTLRMismatchedTreeNodeException
+@implementation MismatchedTreeNodeException
 
 @synthesize expecting;
 
-+ (id) newException:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
++ (id) newException:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput
 {
-	return [[ANTLRMismatchedTreeNodeException alloc] initWithTokenType:expectedTokenType Stream:anInput];
+	return [[MismatchedTreeNodeException alloc] initWithTokenType:expectedTokenType Stream:anInput];
 }
 
--(id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<ANTLRIntStream>)anInput
+-(id) initWithTokenType:(NSInteger)expectedTokenType Stream:(id<IntStream>)anInput
 {
 	if ((self = [super initWithStream:anInput]) != nil) {
 		expecting = expectedTokenType;
