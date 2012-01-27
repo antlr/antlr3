@@ -2733,7 +2733,7 @@ void
     // next too far so we don't want to keep freeing and allocating them
     //
     ctx-><scopeStack(sname=scope.name,...)>_limit--;
-    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-><scopeStack(sname=scope.name,...)>->get(ctx-><bscopeStack(sname=scope.name,...)>, ctx-><scopeStack(sname=scope.name,...)>_limit - 1));
+    SCOPE_TOP(<scope.name>) = (<scopeType(sname=scope.name)>)(ctx-><scopeStack(sname=scope.name,...)>->get(ctx-><scopeStack(sname=scope.name,...)>, ctx-><scopeStack(sname=scope.name,...)>_limit - 1));
 }
 <endif>
 >>
