@@ -37,7 +37,6 @@
  *  Each combination has its own template except that label/no label
  *  is combined into tokenRef, ruleRef, ...
  */
-group ASTTreeParser;
 
 /** Add a variable to track last element matched */
 ruleDeclarations() ::= <<
@@ -104,7 +103,7 @@ _last = _save_last_<treeLevel>;
 /** ID! and output=AST (same as plain tokenRef) 'cept add
  *  setting of _last
  */
-tokenRefBang(token,label,elementIndex) ::= <<
+tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
 _last = <ASTLabelType>(input.LT(1));
 <super.tokenRef(...)>
 >>
@@ -129,7 +128,7 @@ if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>;
 >>
 
 /** label+=TOKEN auto construct */
-tokenRefAndListLabel(token,label,elementIndex) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 <tokenRef(...)>
 <listLabel(elem=label,...)>
 >>
@@ -175,7 +174,7 @@ if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>;
 
 matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = <ASTLabelType>(input.LT(1));
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -184,24 +183,24 @@ _last = <ASTLabelType>(input.LT(1));
 <label>_tree = <ASTLabelType>(adaptor.dupNode(<label>));
 <endif><\n>
 adaptor.addChild(root_<treeLevel>, <label>_tree);
-<if(backtracking)>}<endif>
+<if(backtracking)>\}<endif>
 <endif>
-}
+}, ...
 )>
 >>
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 <matchSet(...)>
-<noRewrite()> <! set return tree !>
+<noRewrite(...)> <! set return tree !>
 >>
 
-matchSetBang(s,label,elementIndex,postmatchCode) ::= <<
+matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
 _last = <ASTLabelType>(input.LT(1));
 <super.matchSet(...)>
 >>
 
 matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
-<super.matchSet(..., postmatchCode={
+<super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(terminalOptions.node)>
@@ -212,7 +211,7 @@ matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 root_<treeLevel> = <ASTLabelType>(adaptor.becomeRoot(<label>_tree, root_<treeLevel>));
 <if(backtracking)>}<endif>
 <endif>
-}
+}, ...
 )>
 >>
 
@@ -233,7 +232,7 @@ if ( _first_<treeLevel>==null ) _first_<treeLevel> = <label>.tree;
 /** x+=rule auto construct */
 ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRef(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** ^(rule ...) auto construct */
@@ -248,7 +247,7 @@ _last = <ASTLabelType>(input.LT(1));
 /** ^(x+=rule ...) auto construct */
 ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefRuleRoot(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** rule when output=AST and tracking for rewrite */

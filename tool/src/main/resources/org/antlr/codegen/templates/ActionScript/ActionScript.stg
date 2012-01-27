@@ -1,6 +1,6 @@
 /*
  [The "BSD license"]
- Copyright (c) 2005-2006 Terence Parr
+ Copyright (c) 2010 Terence Parr
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,6 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-group ActionScript;
 
 asTypeInitMap ::= [
 	"int":"0",
@@ -61,11 +60,11 @@ import org.antlr.runtime.*;
 }
 >>
 
-lexer(grammar, name, tokens, scopes, rules, numRules, labelType="Token",
-      filterMode, superClass="Lexer") ::= <<
+lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="Token",
+      superClass="Lexer") ::= <<
 public class <grammar.recognizerName> extends <if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else><@superClassName><superClass><@end><endif> {
-    <tokens:{public static const <it.name>:int=<it.type>;}; separator="\n">
-    <scopes:{<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
+    <tokens:{it |public static const <it.name>:int=<it.type>;}; separator="\n">
+    <scopes:{it |<if(it.isDynamicGlobalScope)><globalAttributeScope(it)><endif>}>
     <actions.lexer.members>
 
     // delegates
@@ -168,25 +167,25 @@ filteringActionGate() ::= "this.state.backtracking==1"
 
 /** How to generate a parser */
 genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
-              bitsets, inputStreamType, superClass, filterMode,
-              ASTLabelType="Object", labelType, members, rewriteElementType) ::= <<
+              bitsets, inputStreamType, superClass,
+              labelType, members, rewriteElementType,
+              filterMode, ASTLabelType="Object") ::= <<
 public class <grammar.recognizerName> extends <if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else><@superClassName><superClass><@end><endif> {
 <if(grammar.grammarIsRoot)>
     public static const tokenNames:Array = [
         "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
     ];<\n>
 <endif>
-    <tokens:{public static const <it.name>:int=<it.type>;}; separator="\n">
+    <tokens:{it |public static const <it.name>:int=<it.type>;}; separator="\n">
 
     // delegates
-    <grammar.delegates:
-         {g|public var <g:delegateName()>:<g.recognizerName>;}; separator="\n">
+    <grammar.delegates: {g|public var <g:delegateName()>:<g.recognizerName>;}; separator="\n">
     // delegators
     <grammar.delegators:
          {g|public var <g:delegateName()>:<g.recognizerName>;}; separator="\n">
     <last(grammar.delegators):{g|public var gParent:<g.recognizerName>;}>
 
-    <scopes:{<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
+    <scopes:{it |<if(it.isDynamicGlobalScope)><globalAttributeScope(it)><endif>}>
     <@members>
    <! WARNING. bug in ST: this is cut-n-paste into Dbg.stg !>
     public function <grammar.recognizerName>(<grammar.delegators:{g|<g:delegateName()>:<g.recognizerName>, }>input:<inputStreamType>, state:RecognizerSharedState = null) {
@@ -211,14 +210,14 @@ public class <grammar.recognizerName> extends <if(actions.(actionScope).superCla
        appear to be defined in this recognizer. !>
        // Delegated rules
     <grammar.delegatedRules:{ruleDescriptor|
-        public function <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope(scope=it)>):<returnType()> \{ <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
+        public function <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>):<returnType()> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
 
     <synpreds:{p | <synpred(p)>}>
 
     <cyclicDFAs:cyclicDFA()> <! dump tables for all DFA !>
 
-    <bitsets:bitset(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
-                    words64=it.bits)>
+    <bitsets:{it | <bitset(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
+                            words64=it.bits)>}>
 }
 >>
 
@@ -233,14 +232,22 @@ this.state.ruleMemo = new Array(<length(grammar.allImportedRules)>+1);<\n> <! in
 >>
 
 parser(grammar, name, scopes, tokens, tokenNames, rules, numRules, bitsets, ASTLabelType="Object", superClass="Parser", labelType="Token", members={<actions.parser.members>}) ::= <<
-<genericParser(inputStreamType="TokenStream", rewriteElementType="Token", ...)>
+<genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
+              bitsets, "TokenStream", superClass,
+              labelType, members, "Token",
+              false, ASTLabelType)>
 >>
 
 /** How to generate a tree parser; same as parser except the input
  *  stream is a different type.
  */
-treeParser(grammar, name, scopes, tokens, tokenNames, globalAction, rules, numRules, bitsets, labelType={<ASTLabelType>}, ASTLabelType="Object", superClass="TreeParser", members={<actions.treeparser.members>}, filterMode) ::= <<
-<genericParser(inputStreamType="TreeNodeStream", rewriteElementType="Node", ...)>
+treeParser(grammar, name, scopes, tokens, tokenNames, globalAction, rules,
+           numRules, bitsets, filterMode, labelType={<ASTLabelType>}, ASTLabelType="Object",
+           superClass="TreeParser", members={<actions.treeparser.members>}) ::= <<
+<genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
+              bitsets, "TreeNodeStream", superClass,
+              labelType, members, "Node",
+              filterMode, ASTLabelType)>
 >>
 
 /** A simpler version of a rule template that is specific to the imaginary
@@ -253,7 +260,7 @@ treeParser(grammar, name, scopes, tokens, tokenNames, globalAction, rules, numRu
 synpredRule(ruleName, ruleDescriptor, block, description, nakedBlock) ::=
 <<
 // $ANTLR start <ruleName>
-public final function <ruleName>_fragment(<ruleDescriptor.parameterScope:parameterScope(scope=it)>):void {
+public final function <ruleName>_fragment(<ruleDescriptor.parameterScope:parameterScope()>):void {
     <ruleLabelDefs()>
 <if(trace)>
     traceIn("<ruleName>_fragment", <ruleDescriptor.index>);
@@ -316,7 +323,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
 <ruleAttributeScope(scope=ruleDescriptor.ruleScope)>
 // $ANTLR start <ruleName>
 // <fileName>:<description>
-public final function <ruleName>(<ruleDescriptor.parameterScope:parameterScope(scope=it)>):<returnType()> {
+public final function <ruleName>(<ruleDescriptor.parameterScope:parameterScope()>):<returnType()> {
     <if(trace)>traceIn("<ruleName>", <ruleDescriptor.index>);<endif>
     <ruleScopeSetUp()>
     <ruleDeclarations()>
@@ -377,24 +384,24 @@ var <ruleDescriptor.name>_StartIndex:int = input.index;
 >>
 
 ruleScopeSetUp() ::= <<
-<ruleDescriptor.useScopes:{<it>_stack.push(new Object());}; separator="\n">
-<ruleDescriptor.ruleScope:{<it.name>_stack.push(new Object());}; separator="\n">
+<ruleDescriptor.useScopes:{it |<it>_stack.push(new Object());}; separator="\n">
+<ruleDescriptor.ruleScope:{it |<it.name>_stack.push(new Object());}; separator="\n">
 >>
 
 ruleScopeCleanUp() ::= <<
-<ruleDescriptor.useScopes:{<it>_stack.pop();}; separator="\n">
-<ruleDescriptor.ruleScope:{<it.name>_stack.pop();}; separator="\n">
+<ruleDescriptor.useScopes:{it |<it>_stack.pop();}; separator="\n">
+<ruleDescriptor.ruleScope:{it |<it.name>_stack.pop();}; separator="\n">
 >>
 
 ruleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels,
   ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{var <it.label.text>:<labelType>=null;}; separator="\n"
+    :{it |var <it.label.text>:<labelType>=null;}; separator="\n"
 >
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{var list_<it.label.text>:Array=null;}; separator="\n"
+    :{it |var list_<it.label.text>:Array=null;}; separator="\n"
 >
-<ruleDescriptor.ruleLabels:ruleLabelDef(label=it); separator="\n">
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 <ruleDescriptor.ruleListLabels:{ll|var <ll.label.text>:RuleReturnScope = null;}; separator="\n">
 >>
 
@@ -402,16 +409,16 @@ lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{var <it.label.text>:<labelType>=null;}; separator="\n"
+    :{it |var <it.label.text>:<labelType>=null;}; separator="\n"
 >
-<ruleDescriptor.charLabels:{var <it.label.text>:int;}; separator="\n">
+<ruleDescriptor.charLabels:{it |var <it.label.text>:int;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleListLabels]
-    :{var list_<it.label.text>:Array=null;}; separator="\n"
+    :{it |var list_<it.label.text>:Array=null;}; separator="\n"
 >
 >>
 
-ruleReturnValue() ::= <<
+ruleReturnValue() ::= <%
 <if(!ruleDescriptor.isSynPred)>
 <if(ruleDescriptor.hasReturnValue)>
 <if(ruleDescriptor.hasSingleReturnValue)>
@@ -421,7 +428,7 @@ retval
 <endif>
 <endif>
 <endif>
->>
+%>
 
 ruleCleanUp() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
@@ -444,7 +451,7 @@ if ( this.state.backtracking>0 ) { memoize(input, <ruleDescriptor.index>, <ruleD
  */
 lexerRule(ruleName,nakedBlock,ruleDescriptor,block,memoize) ::= <<
 // $ANTLR start <ruleName>
-public final function m<ruleName>(<ruleDescriptor.parameterScope:parameterScope(scope=it)>):void {
+public final function m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>):void {
     <if(trace)>traceIn("<ruleName>", <ruleDescriptor.index>);<endif>
     <ruleScopeSetUp()>
     <ruleDeclarations()>
@@ -497,7 +504,7 @@ var alt<decisionNumber>:int=<maxAlt>;
 <@postdecision()>
 <@prebranch()>
 switch (alt<decisionNumber>) {
-    <alts:altSwitchCase()>
+    <alts:{a | <altSwitchCase(i, a)>}>
 }
 <@postbranch()>
 >>
@@ -511,7 +518,7 @@ var alt<decisionNumber>:int=<maxAlt>;
 <decision>
 <@postdecision()>
 switch (alt<decisionNumber>) {
-    <alts:altSwitchCase()>
+    <alts:{a | <altSwitchCase(i, a)>}>
 }
 >>
 
@@ -545,7 +552,7 @@ do {
     <decision>
     <@postdecision()>
     switch (alt<decisionNumber>) {
-	<alts:altSwitchCase()>
+	<alts:{a | <altSwitchCase(i, a)>}>
 	default :
 	    if ( cnt<decisionNumber> >= 1 ) break loop<decisionNumber>;
 	    <ruleBacktrackFailure()>
@@ -571,7 +578,7 @@ do {
     <decision>
     <@postdecision()>
     switch (alt<decisionNumber>) {
-	<alts:altSwitchCase()>
+	<alts:{a | <altSwitchCase(i, a)>}>
 	default :
 	    break loop<decisionNumber>;
     }
@@ -592,10 +599,10 @@ optionalBlockSingleAlt ::= block
  *  number.  A DFA predicts the alternative and then a simple switch
  *  does the jump to the code that actually matches that alternative.
  */
-altSwitchCase() ::= <<
-case <i> :
+altSwitchCase(altNum, alt) ::= <<
+case <altNum> :
     <@prealt()>
-    <it>
+    <alt>
     break;<\n>
 >>
 
@@ -618,9 +625,9 @@ noRewrite(rewriteBlockLevel, treeLevel) ::= ""
 // E L E M E N T S
 
 /** Dump the elements one per line */
-element() ::= <<
+element(e) ::= <<
 <@prematch()>
-<it.el><\n>
+<e.el><\n>
 >>
 
 /** match a token optionally with a label in front */
@@ -630,8 +637,8 @@ tokenRef(token,label,elementIndex,terminalOptions) ::= <<
 
 /** ids+=ID */
 tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
-<tokenRef(...)>
-<listLabel(elem=label,...)>
+<tokenRef(token,label,elementIndex,terminalOptions)>
+<listLabel(label, label)>
 >>
 
 listLabel(label,elem) ::= <<
@@ -656,7 +663,7 @@ matchRange(<a>,<b>); <checkRuleBacktrackFailure()>
 >>
 
 /** For now, sets are interval tests and must be tested inline */
-matchSet(s,label,elementIndex,postmatchCode="") ::= <<
+matchSet(s,label,elementIndex,terminalOptions,postmatchCode="") ::= <<
 <if(label)>
 <if(LEXER)>
 <label>= input.LA(1);<\n>
@@ -690,30 +697,34 @@ matchRuleBlockSet ::= matchSet
 
 matchSetAndListLabel(s,label,elementIndex,postmatchCode) ::= <<
 <matchSet(...)>
-<listLabel(elem=label,...)>
+<listLabel(label, label)>
 >>
 
 /** Match a string literal */
-lexerStringRef(string,label,elementIndex) ::= <<
+lexerStringRef(string,label,elementIndex="0") ::= <<
 <if(label)>
 var <label>Start:int = charIndex;
 matchString(<string>); <checkRuleBacktrackFailure()>
+var <label>StartLine<elementIndex>:int = line;
+var <label>StartCharPos<elementIndex>:int = charPositionInLine;
 <label> = CommonToken.createFromStream(input, TokenConstants.INVALID_TOKEN_TYPE, TokenConstants.DEFAULT_CHANNEL, <label>Start, charIndex-1);
+<label>.line = <label>StartLine<elementIndex>;
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>;
 <else>
 matchString(<string>); <checkRuleBacktrackFailure()><\n>
 <endif>
 >>
 
-wildcard(label,elementIndex) ::= <<
+wildcard(token,label,elementIndex,terminalOptions) ::= <<
 <if(label)>
 <label>=<labelType>(input.LT(1));<\n>
 <endif>
 matchAny(input); <checkRuleBacktrackFailure()>
 >>
 
-wildcardAndListLabel(label,elementIndex) ::= <<
+wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 <wildcard(...)>
-<listLabel(elem=label,...)>
+<listLabel(label, label)>
 >>
 
 /** Match . wildcard in lexer */
@@ -725,8 +736,8 @@ matchAny(); <checkRuleBacktrackFailure()>
 >>
 
 wildcardCharListLabel(label, elementIndex) ::= <<
-<wildcardChar(...)>
-<listLabel(elem=label,...)>
+<wildcardChar(label, elementIndex)>
+<listLabel(label, label)>
 >>
 
 /** Match a rule reference by invoking it possibly with arguments
@@ -748,8 +759,8 @@ state._fsp = state._fsp - 1;
 
 /** ids+=r */
 ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
-<ruleRef(...)>
-<listLabel(elem=label,...)>
+<ruleRef(rule,label,elementIndex,args,scope)>
+<listLabel(label, label)>
 >>
 
 /** A lexer rule reference.
@@ -761,8 +772,12 @@ ruleRefAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
 <if(label)>
 var <label>Start<elementIndex>:int = charIndex;
+var <label>StartLine<elementIndex>:int = line;
+var <label>StartCharPos<elementIndex>:int = charPositionInLine;
 <if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">); <checkRuleBacktrackFailure()>
 <label> = CommonToken.createFromStream(input, TokenConstants.INVALID_TOKEN_TYPE, TokenConstants.DEFAULT_CHANNEL, <label>Start<elementIndex>, charIndex-1);
+<label>.line = <label>StartLine<elementIndex>;
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>;
 <else>
 <if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">); <checkRuleBacktrackFailure()>
 <endif>
@@ -770,20 +785,31 @@ var <label>Start<elementIndex>:int = charIndex;
 
 /** i+=INT in lexer */
 lexerRuleRefAndListLabel(rule,label,args,elementIndex,scope) ::= <<
-<lexerRuleRef(...)>
-<listLabel(elem=label,...)>
+<lexerRuleRef(rule,label,args,elementIndex,scope)>
+<listLabel(label, label)>
 >>
 
 /** EOF in the lexer */
 lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 var <label>Start<elementIndex>:int = charIndex;
+var <label>StartLine<elementIndex>:int = line;
+var <label>StartCharPos<elementIndex>:int = charPositionInLine;
 match(EOF); <checkRuleBacktrackFailure()>
 var <label>:<labelType> = CommonToken.createFromStream(input, EOF, TokenConstants.DEFAULT_CHANNEL, <label>Start<elementIndex>, charIndex-1);
+<label>.line = <label>StartLine<elementIndex>;
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>;
 <else>
 match(EOF); <checkRuleBacktrackFailure()>
 <endif>
 >>
+
+// used for left-recursive rules
+recRuleDefArg()                       ::= "var <recRuleArg()>:int"
+recRuleArg()                          ::= "_p"
+recRuleAltPredicate(ruleName,opPrec)  ::= "<recRuleArg()> \<= <opPrec>"
+recRuleSetResultAction()              ::= "root_0=$<ruleName>_primary.tree;"
+recRuleSetReturnAction(src,name)      ::= "$<name>=$<src>.<name>;"
 
 /** match ^(root children) in tree parser */
 tree(root, actionsAfterRoot, children, nullableChildList,
@@ -807,7 +833,7 @@ matchStream(input, TokenConstants.UP, null); <checkRuleBacktrackFailure()>
  *  also hoisted into a prediction expression).
  */
 validateSemanticPredicate(pred,description) ::= <<
-if ( !(<evalPredicate(...)>) ) {
+if ( !(<evalPredicate(pred,description)>) ) {
     <ruleBacktrackFailure()>
     throw new FailedPredicateException(input, "<ruleName>", "<description>");
 }
@@ -909,7 +935,7 @@ default:
 >>
 
 dfaEdgeSwitch(labels, targetState) ::= <<
-<labels:{case <it>:}; separator="\n">
+<labels:{it |case <it>:}; separator="\n">
     {
     <targetState>
     }
@@ -1027,7 +1053,7 @@ andPredicates(left,right) ::= "(<left>&&<right>)"
 
 orPredicates(operands) ::= "(<first(operands)><rest(operands):{o | ||<o>}>)"
 
-notPredicate(pred) ::= "!(<evalPredicate(...)>)"
+notPredicate(pred) ::= "!(<evalPredicate(pred,{})>)"
 
 evalPredicate(pred,description) ::= "(<pred>)"
 
@@ -1040,13 +1066,15 @@ lookaheadTest(atom,k,atomAsInt) ::= "LA<decisionNumber>_<stateNumber>==<atomAsIn
  */
 isolatedLookaheadTest(atom,k,atomAsInt) ::= "input.LA(<k>)==<atomAsInt>"
 
-lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <<
-(LA<decisionNumber>_<stateNumber>\>=<lowerAsInt> && LA<decisionNumber>_<stateNumber>\<=<upperAsInt>)
+lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
+(LA<decisionNumber>_<stateNumber> >= <lowerAsInt> && LA<decisionNumber>_<stateNumber> \<= <upperAsInt>)
+%>
+
+isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(input.LA(<k>) >= <lowerAsInt> && input.LA(<k>) \<= <upperAsInt>)"
+
+setTest(ranges) ::= <<
+<ranges; separator="||">
 >>
-
-isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(input.LA(<k>)\>=<lowerAsInt> && input.LA(<k>)\<=<upperAsInt>)"
-
-setTest(ranges) ::= "<ranges; separator=\"||\">"
 
 // A T T R I B U T E S
 
@@ -1091,8 +1119,8 @@ void
 <endif>
 >>
 
-delegateName() ::= <<
-<if(it.label)><it.label><else>g<it.name><endif>
+delegateName(d) ::= <<
+<if(d.label)><d.label><else>g<d.name><endif>
 >>
 
 /** Using a type to init value map, try to init a type; if not in table
@@ -1114,14 +1142,14 @@ var <label.label.text>:<ruleLabelType(referencedRule=label.referencedRule)> = <i
 returnScope(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 public static class <returnType()> extends <if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope {
-    <scope.attributes:{public <it.decl>;}; separator="\n">
+    <scope.attributes:{it |public <it.decl>;}; separator="\n">
     <@ruleReturnMembers()>
 };
 <endif>
 >>
 
 parameterScope(scope) ::= <<
-<scope.attributes:{<it.name>:<it.type>}; separator=", ">
+<scope.attributes:{it |<it.name>:<it.type>}; separator=", ">
 >>
 
 parameterAttributeRef(attr) ::= "<attr.name>"
@@ -1280,10 +1308,10 @@ execForcedAction(action) ::= "<action>"
 // M I S C (properties, etc...)
 
 bitset(name, words64) ::= <<
-public static const <name>:BitSet = new BitSet([<words64:{<it>};separator=", ">]);<\n>
+public static const <name>:BitSet = new BitSet([<words64:{it |<it>};separator=", ">]);<\n>
 >>
 
 codeFileExtension() ::= ".as"
 
-true() ::= "true"
-false() ::= "false"
+true_value() ::= "true"
+false_value() ::= "false"

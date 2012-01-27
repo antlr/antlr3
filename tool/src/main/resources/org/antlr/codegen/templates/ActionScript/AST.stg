@@ -25,7 +25,6 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-group AST;
 
 @outputFile.imports() ::= <<
 <@super.imports()>
@@ -65,12 +64,12 @@ var root_0:<ASTLabelType> = null;<\n>
 ruleLabelDefs() ::= <<
 <super.ruleLabelDefs()>
 <[ruleDescriptor.tokenLabels,ruleDescriptor.wildcardTreeLabels,
-  ruleDescriptor.wildcardTreeListLabels]:{var <it.label.text>_tree:<ASTLabelType>=null;}; separator="\n">
-<ruleDescriptor.tokenListLabels:{var <it.label.text>_tree:<ASTLabelType>=null;}; separator="\n">
+  ruleDescriptor.wildcardTreeListLabels]:{it |var <it.label.text>_tree:<ASTLabelType>=null;}; separator="\n">
+<ruleDescriptor.tokenListLabels:{it |var <it.label.text>_tree:<ASTLabelType>=null;}; separator="\n">
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
+    :{it |var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
+    :{it |var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
 >>
 
 /** When doing auto AST construction, we must define some variables;
@@ -125,7 +124,7 @@ ruleRefTrack(rule,label,elementIndex,args,scope) ::= <<
 /** x+=rule when output=AST and tracking for rewrite */
 ruleRefTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefTrack(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 /** ^(rule ...) rewrite */
@@ -137,7 +136,7 @@ ruleRefRuleRootTrack(rule,label,elementIndex,args,scope) ::= <<
 /** ^(x+=rule ...) rewrite */
 ruleRefRuleRootTrackAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 <ruleRefRuleRootTrack(...)>
-<listLabel(elem=label+".tree",...)>
+<listLabel(label, {<label>.tree})>
 >>
 
 // R e w r i t e
@@ -160,6 +159,7 @@ rewriteCode(
 // rule labels: <referencedRuleLabels; separator=", ">
 // token list labels: <referencedTokenListLabels; separator=", ">
 // rule list labels: <referencedRuleListLabels; separator=", ">
+// wildcard labels: <[referencedWildcardLabels,referencedWildcardListLabels]; separator=", ">
 <if(backtracking)>
 if ( <actions.(actionScope).synpredgate> ) {<\n>
 <endif>
@@ -192,27 +192,27 @@ input.replaceChildren(adaptor.getParent(retval.start),
 
 rewriteCodeLabels() ::= <<
 <referencedTokenLabels
-    :{var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>",<it>);};
+    :{it |var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>",<it>);};
     separator="\n"
 >
 <referencedTokenListLabels
-    :{var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>", list_<it>);};
+    :{it |var stream_<it>:RewriteRule<rewriteElementType>Stream=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>", list_<it>);};
     separator="\n"
 >
 <referencedWildcardLabels
-    :{var  stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",<it>);};
+    :{it |var  stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",<it>);};
     separator="\n"
 >
 <referencedWildcardListLabels
-    :{var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",list_<it>);};
+    :{it |var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",list_<it>);};
     separator="\n"
 >
 <referencedRuleLabels
-    :{var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.tree:null);};
+    :{it |var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.tree:null);};
     separator="\n"
 >
 <referencedRuleListLabels
-    :{var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"rule <it>",list_<it>);};
+    :{it |var stream_<it>:RewriteRuleSubtreeStream=new RewriteRuleSubtreeStream(adaptor,"token <it>",list_<it>);};
     separator="\n"
 >
 >>
@@ -323,11 +323,11 @@ root_<treeLevel> = <ASTLabelType>(adaptor.becomeRoot(<createRewriteNodeFromEleme
 >>
 
 rewriteImaginaryTokenRef(args,token,terminalOptions,elementIndex) ::= <<
-adaptor.addChild(root_<treeLevel>, <createImaginaryNode(tokenType=token, ...)>);<\n>
+adaptor.addChild(root_<treeLevel>, <createImaginaryNode(token,terminalOptions,args)>);<\n>
 >>
 
 rewriteImaginaryTokenRefRoot(args,token,terminalOptions,elementIndex) ::= <<
-root_<treeLevel> = <ASTLabelType>(adaptor.becomeRoot(<createImaginaryNode(tokenType=token, ...)>, root_<treeLevel>));<\n>
+root_<treeLevel> = <ASTLabelType>(adaptor.becomeRoot(<createImaginaryNode(token,terminalOptions,args)>, root_<treeLevel>));<\n>
 >>
 
 /** plain -> {foo} action */
@@ -381,6 +381,7 @@ root_<treeLevel> = <ASTLabelType>(adaptor.becomeRoot(stream_<label>.nextNode(), 
 rewriteWildcardLabelRef(label) ::= <<
 adaptor.addChild(root_<treeLevel>, stream_<label>.nextTree());<\n>
 >>
+
 
 createImaginaryNode(tokenType,terminalOptions,args) ::= <<
 <if(terminalOptions.node)>
