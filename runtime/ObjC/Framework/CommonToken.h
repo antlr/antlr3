@@ -83,6 +83,18 @@
 - (void) setText:(NSString *)aText;
 
 //---------------------------------------------------------- 
+//  charPositionInLine 
+//---------------------------------------------------------- 
+- (NSUInteger) getCharPositionInLine;
+- (void) setCharPositionInLine:(NSUInteger)aCharPositionInLine;
+
+//---------------------------------------------------------- 
+//  line 
+//---------------------------------------------------------- 
+- (NSUInteger) getLine;
+- (void) setLine:(NSUInteger)aLine;
+
+//---------------------------------------------------------- 
 //  type 
 //---------------------------------------------------------- 
 - (NSInteger)type;

@@ -140,7 +140,7 @@
 
 #pragma mark Channels & Skipping
 
-- (NSInteger) skipOffChannelTokens:(NSInteger) idx
+- (NSInteger) skipOffTokenChannels:(NSInteger) idx
 {
     [self sync:idx];
 	while ( ((CommonToken *)[tokens objectAtIndex:idx]).channel != channel ) {
@@ -150,12 +150,18 @@
 	return idx;
 }
 
-- (NSInteger) skipOffChannelTokensReverse:(NSInteger) i
+- (NSInteger) skipOffTokenChannelsReverse:(NSInteger) i
 {
 	while ( i >= 0 && ((CommonToken *)[tokens objectAtIndex:i]).channel != channel ) {
 		i--;
 	}
 	return i;
+}
+
+- (void) reset
+{
+    [super reset];
+    index = [self skipOffTokenChannels:0];
 }
 
 - (void) setup

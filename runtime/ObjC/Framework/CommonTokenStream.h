@@ -55,10 +55,11 @@
 - (id<Token>) LB:(NSInteger)k;
 - (id<Token>) LT:(NSInteger)k;
 
-- (NSInteger) skipOffChannelTokens:(NSInteger) i;
-- (NSInteger) skipOffChannelTokensReverse:(NSInteger) i;
+- (NSInteger) skipOffTokenChannels:(NSInteger) i;
+- (NSInteger) skipOffTokenChannelsReverse:(NSInteger) i;
 
 - (void)setup;
+- (void)reset;
 
 - (NSInteger) getNumberOfOnChannelTokens;
 

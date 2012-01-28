@@ -113,6 +113,7 @@
     t.line = current.line;
     t.charPositionInLine = current.charPositionInLine;
     t.channel = TokenChannelDefault;
+    t.input = current.input;
     return t;
 }
 

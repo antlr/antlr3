@@ -35,26 +35,26 @@
 
 - (id) initWithCharStream:(id<CharStream>)anInput
 {
-	self = [super initWithState:[[RecognizerSharedState alloc] init]];
-	if ( self != nil ) {
+    self = [super initWithState:[[RecognizerSharedState alloc] init]];
+    if ( self != nil ) {
         input = [anInput retain];
         if (state.token != nil)
             [((CommonToken *)state.token) setInput:anInput];
-		ruleNestingLevel = 0;
-	}
-	return self;
+        ruleNestingLevel = 0;
+    }
+    return self;
 }
 
 - (id) initWithCharStream:(id<CharStream>)anInput State:(RecognizerSharedState *)aState
 {
-	self = [super initWithState:aState];
-	if ( self != nil ) {
+    self = [super initWithState:aState];
+    if ( self != nil ) {
         input = [anInput retain];
         if (state.token != nil)
             [((CommonToken *)state.token) setInput:anInput];
-		ruleNestingLevel = 0;
-	}
-	return self;
+        ruleNestingLevel = 0;
+    }
+    return self;
 }
 
 - (void) dealloc
@@ -66,7 +66,7 @@
 - (id) copyWithZone:(NSZone *)aZone
 {
     Lexer *copy;
-	
+    
     copy = [[[self class] allocWithZone:aZone] init];
     //    copy = [super copyWithZone:aZone]; // allocation occurs here
     if ( input != nil )
@@ -114,7 +114,7 @@
 // this method may be overridden in the generated lexer if we generate a filtering lexer.
 - (id<Token>) nextToken
 {
-	while (YES) {
+    while (YES) {
         [self setToken:nil];
         state.channel = CommonToken.DEFAULT_CHANNEL;
         state.tokenStartCharIndex = input.index;
@@ -123,7 +123,7 @@
         state.text = nil;
         
         // [self setText:[self text]];
-		if ([input LA:1] == CharStreamEOF) {
+        if ([input LA:1] == CharStreamEOF) {
             CommonToken *eof = [CommonToken newToken:input
                                                           Type:TokenTypeEOF
                                                        Channel:CommonToken.DEFAULT_CHANNEL
@@ -131,10 +131,10 @@
                                                           Stop:input.index];
             [eof setLine:input.getLine];
             [eof setCharPositionInLine:input.getCharPositionInLine];
-			return eof;
-		}
-		@try {
-			[self mTokens];
+            return eof;
+        }
+        @try {
+            [self mTokens];
             // SEL aMethod = @selector(mTokens);
             // [[self class] instancesRespondToSelector:aMethod];
             if ( state.token == nil)
@@ -142,16 +142,21 @@
             else if ( state.token == [CommonToken skipToken] ) {
                 continue;
             }
-			return state.token;
-		}
-		@catch (NoViableAltException *nva) {
-			[self reportError:nva];
-			[self recover:nva];
-		}
-		@catch (RecognitionException *e) {
-			[self reportError:e];
-		}
-	}
+            return state.token;
+        }
+        @catch (MismatchedRangeException *re) {
+            [self reportError:re];
+            // [self recover:re];
+        }
+        @catch (MismatchedTokenException *re) {
+            [self reportError:re];
+            // [self recover:re];
+        }
+        @catch (RecognitionException *re) {
+            [self reportError:re];
+            [self recover:re];
+        }
+    }
 }
 
 - (void) mTokens
@@ -187,7 +192,7 @@
  */
 - (void) emit:(id<Token>)aToken
 {
-	state.token = aToken;
+    state.token = aToken;
 }
 
 /** The standard method called to automatically emit a token at the
@@ -201,17 +206,17 @@
  */
 - (void) emit
 {
-	id<Token> aToken = [CommonToken newToken:input
+    id<Token> aToken = [CommonToken newToken:input
                                                   Type:state.type
                                                Channel:state.channel
                                                  Start:state.tokenStartCharIndex
                                                   Stop:input.index-1];
-	[aToken setLine:state.tokenStartLine];
+    [aToken setLine:state.tokenStartLine];
     aToken.text = [self text];
-	[aToken setCharPositionInLine:state.tokenStartCharPositionInLine];
+    [aToken setCharPositionInLine:state.tokenStartCharPositionInLine];
     [aToken retain];
-	[self emit:aToken];
-	// [aToken release];
+    [self emit:aToken];
+    // [aToken release];
 }
 
 // matching
@@ -219,81 +224,81 @@
 - (void) matchString:(NSString *)aString
 {
     unichar c;
-	unsigned int i = 0;
-	unsigned int stringLength = [aString length];
-	while ( i < stringLength ) {
-		c = [input LA:1];
+    unsigned int i = 0;
+    unsigned int stringLength = [aString length];
+    while ( i < stringLength ) {
+        c = [input LA:1];
         if ( c != [aString characterAtIndex:i] ) {
-			if ([state getBacktracking] > 0) {
-				state.failed = YES;
-				return;
-			}
-			MismatchedTokenException *mte = [MismatchedTokenException newExceptionChar:[aString characterAtIndex:i] Stream:input];
+            if ([state getBacktracking] > 0) {
+                state.failed = YES;
+                return;
+            }
+            MismatchedTokenException *mte = [MismatchedTokenException newExceptionChar:[aString characterAtIndex:i] Stream:input];
             mte.c = c;
-			[self recover:mte];
-			@throw mte;
-		}
-		i++;
-		[input consume];
-		state.failed = NO;
-	}
+            [self recover:mte];
+            @throw mte;
+        }
+        i++;
+        [input consume];
+        state.failed = NO;
+    }
 }
 
 - (void) matchAny
 {
-	[input consume];
+    [input consume];
 }
 
 - (void) matchChar:(unichar) aChar
 {
-	// TODO: -LA: is returning an int because it sometimes is used in the generated parser to compare lookahead with a tokentype.
-	//		 try to change all those occurrences to -LT: if possible (i.e. if ANTLR can be made to generate LA only for lexer code)
+    // TODO: -LA: is returning an int because it sometimes is used in the generated parser to compare lookahead with a tokentype.
+    //       try to change all those occurrences to -LT: if possible (i.e. if ANTLR can be made to generate LA only for lexer code)
     unichar charLA;
-	charLA = [input LA:1];
-	if ( charLA != aChar) {
-		if ([state getBacktracking] > 0) {
-			state.failed = YES;
-			return;
-		}
-		MismatchedTokenException  *mte = [MismatchedTokenException newExceptionChar:aChar Stream:input];
+    charLA = [input LA:1];
+    if ( charLA != aChar) {
+        if ([state getBacktracking] > 0) {
+            state.failed = YES;
+            return;
+        }
+        MismatchedTokenException  *mte = [MismatchedTokenException newExceptionChar:aChar Stream:input];
         mte.c = charLA;
-		[self recover:mte];
-		@throw mte;
-	}
-	[input consume];
-	state.failed = NO;
+        [self recover:mte];
+        @throw mte;
+    }
+    [input consume];
+    state.failed = NO;
 }
 
 - (void) matchRangeFromChar:(unichar)fromChar to:(unichar)toChar
 {
-	unichar charLA = (unichar)[input LA:1];
-	if ( charLA < fromChar || charLA > toChar ) {
-		if ([state getBacktracking] > 0) {
-			state.failed = YES;
-			return;
-		}
-		MismatchedRangeException  *mre = [MismatchedRangeException
-					newException:NSMakeRange((NSUInteger)fromChar,(NSUInteger)toChar)
-							   stream:input];
+    unichar charLA = (unichar)[input LA:1];
+    if ( charLA < fromChar || charLA > toChar ) {
+        if ([state getBacktracking] > 0) {
+            state.failed = YES;
+            return;
+        }
+        MismatchedRangeException  *mre = [MismatchedRangeException
+                    newException:NSMakeRange((NSUInteger)fromChar,(NSUInteger)toChar)
+                               stream:input];
         mre.c = charLA;
-		[self recover:mre];
-		@throw mre;
-	}		
-	[input consume];
-	state.failed = NO;
+        [self recover:mre];
+        @throw mre;
+    }       
+    [input consume];
+    state.failed = NO;
 }
 
-	// info
+    // info
 #pragma mark Informational
 
 - (NSUInteger) line
 {
-	return input.getLine;
+    return input.getLine;
 }
 
 - (NSUInteger) charPositionInLine
 {
-	return input.getCharPositionInLine;
+    return input.getCharPositionInLine;
 }
 
 - (NSInteger) index
@@ -306,7 +311,7 @@
     if (state.text != nil) {
         return state.text;
     }
-	return [input substringWithRange:NSMakeRange(state.tokenStartCharIndex, input.index-state.tokenStartCharIndex)];
+    return [input substringWithRange:NSMakeRange(state.tokenStartCharIndex, input.index-state.tokenStartCharIndex)];
 }
 
 - (void) setText:(NSString *) theText
@@ -314,7 +319,7 @@
     state.text = theText;
 }
 
-	// error handling
+    // error handling
 - (void) reportError:(RecognitionException *)e
 {
     /** TODO: not thought about recovery in lexer yet.

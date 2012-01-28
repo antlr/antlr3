@@ -144,10 +144,10 @@ static CommonToken *INVALID_TOKEN;
 
 // designated initializer
 - (id) initWithInput:(id<CharStream>)anInput
-                           Type:(NSInteger)aTType
-                             Channel:(NSInteger)aChannel
-                               Start:(NSInteger)aStart
-                                Stop:(NSInteger)aStop
+                Type:(NSInteger)aTType
+             Channel:(NSInteger)aChannel
+               Start:(NSInteger)aStart
+                Stop:(NSInteger)aStop
 {
     if ((self = [super init]) != nil) {
         input = anInput;
@@ -236,7 +236,7 @@ static CommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  charPositionInLine 
 //---------------------------------------------------------- 
-- (NSUInteger) charPositionInLine
+- (NSUInteger) getCharPositionInLine
 {
     return charPositionInLine;
 }
@@ -249,7 +249,7 @@ static CommonToken *INVALID_TOKEN;
 //---------------------------------------------------------- 
 //  line 
 //---------------------------------------------------------- 
-- (NSUInteger) line
+- (NSUInteger) getLine
 {
     return line;
 }
@@ -270,7 +270,13 @@ static CommonToken *INVALID_TOKEN;
     if (input == nil) {
         return nil;
     }
-    return [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
+    int n = [input count];
+    if ( startIndex < n && stopIndex < n) {
+        return [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
+    }
+    else {
+        return @"<EOF>";
+    }
 }
 
 - (void) setText:(NSString *)aText
