@@ -111,7 +111,7 @@
 	int n = 1;
     // find k good tokens looking backwards
 	while ( n <= k ) {
-		i = [self skipOffChannelTokensReverse:i-1];
+		i = [self skipOffTokenChannelsReverse:i-1];
 		n++;
 	}
 	if ( i < 0 ) {
@@ -128,7 +128,7 @@
 	int i = index;
 	int n = 1;
 	while ( n < k ) {
-		i = [self skipOffChannelTokens:i+1];
+		i = [self skipOffTokenChannels:i+1];
 		n++;
 	}
 //	if ( i >= (NSInteger)[tokens count] ) {
