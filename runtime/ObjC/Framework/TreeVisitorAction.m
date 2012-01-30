@@ -42,6 +42,8 @@
 - (id) init
 {
     if ((self = [super init]) != nil ) {
+        preAction = nil;
+        postAction = nil;
     }
     return self;
 }
@@ -51,7 +53,7 @@
  *  with the return value.  Children of returned value will be
  *  visited if using TreeVisitor.visit().
  */
-- (TreeVisitorAction *)pre:(TreeVisitorAction *) t
+- (id<BaseTree>)pre:(id<BaseTree>) t
 {
     return nil;
 }
@@ -60,10 +62,12 @@
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.
  */
-- (TreeVisitorAction *)post:(TreeVisitorAction *) t
+- (id<BaseTree>)post:(id<BaseTree>) t
 {
     return nil;
 }
 
+@synthesize preAction;
+@synthesize postAction;
 
 @end

@@ -30,12 +30,17 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-
+#import "BaseTree.h"
 
 @interface TreeVisitorAction : NSObject
 {
+    SEL preAction;
+    SEL postAction;
 
 }
+
+@property (assign) SEL preAction;
+@property (assign) SEL postAction;
 
 + (TreeVisitorAction *)newTreeVisitorAction;
 - (id) init;
@@ -45,12 +50,12 @@
  *  with the return value.  Children of returned value will be
  *  visited if using TreeVisitor.visit().
  */
-- (TreeVisitorAction *)pre:(TreeVisitorAction *) t;
+- (id<Tree>)pre:(id<BaseTree>) t;
 
 /** Execute an action after visiting children of t.  Return t or
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.
  */
-- (TreeVisitorAction *)post:(TreeVisitorAction *) t;
+- (id<Tree>)post:(id<BaseTree>) t;
 
 @end

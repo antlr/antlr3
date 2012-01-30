@@ -41,7 +41,7 @@
 - (id)init;
 - (id)initWithAdaptor:(id<TreeAdaptor>)anAdaptor;
 - (void) dealloc;
-- (TreeVisitor *)visit:(id<BaseTree>)t Action:(TreeVisitorAction *)action;
+- (id<BaseTree>)visit:(id<BaseTree>)t Action:(TreeVisitorAction *)action;
 
 @property (retain) id<TreeAdaptor> adaptor;
 @end

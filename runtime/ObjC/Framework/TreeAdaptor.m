@@ -24,21 +24,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTreeAdaptor.h"
-#import "ANTLRTreeException.h"
-#import "ANTLRBaseTree.h"
+#import "TreeAdaptor.h"
+#import "TreeException.h"
+#import "BaseTree.h"
 
-@implementation ANTLRTreeAdaptor
+@implementation TreeAdaptor
 
 
 + (id) newEmptyTree
 {
-	return [ANTLRTreeAdaptor newTreeWithToken:nil];
+	return [TreeAdaptor newTreeWithToken:nil];
 }
 
 + (id) newAdaptor
 {
-    return [[ANTLRTreeAdaptor alloc] init];
+    return [[TreeAdaptor alloc] init];
 }
 
 - (id) init
@@ -47,7 +47,7 @@
     return self;
 }
 
-- (id) initWithPayload:(id<ANTLRToken>)payload
+- (id) initWithPayload:(id<Token>)payload
 {
     self = [super init];
     return self;
@@ -61,7 +61,7 @@
  *
  *  Override if you want another kind of node to be built.
  */
-- (id) create:(id<ANTLRToken>) payload
+- (id) create:(id<Token>) payload
 {
     return nil;
 }
@@ -72,9 +72,9 @@
  *
  *  This should invoke createToken(Token).
  */
-- (id) createTree:(NSInteger)tokenType fromToken:(id<ANTLRToken>)fromToken
+- (id) createTree:(NSInteger)tokenType fromToken:(id<Token>)fromToken
 {
-	id<ANTLRToken> newToken = [self createToken:fromToken];
+	id<Token> newToken = [self createToken:fromToken];
 	[newToken setType:tokenType];
     
 	id newTree = [self create:newToken];
@@ -88,9 +88,9 @@
  *
  *  This should invoke createToken(Token).
  */
-- (id) createTree:(NSInteger)tokenType fromToken:(id<ANTLRToken>)fromToken text:(NSString *)tokenText
+- (id) createTree:(NSInteger)tokenType fromToken:(id<Token>)fromToken text:(NSString *)tokenText
 {
-	id<ANTLRToken> newToken = [self createToken:fromToken];
+	id<Token> newToken = [self createToken:fromToken];
 	[newToken setText:tokenText];
 	
 	id newTree = [self create:newToken];
@@ -106,7 +106,7 @@
  */
 - (id) createTree:(NSInteger)tokenType text:(NSString *)tokenText
 {
-	id<ANTLRToken> newToken = [self createToken:tokenType text:tokenText];
+	id<Token> newToken = [self createToken:tokenType text:tokenText];
 	
 	id newTree = [self create:newToken];
 	[newToken release];
@@ -139,7 +139,7 @@
 	if ([newRootNode isNil]) {
 		if ([newRootNode getChildCount] > 1) {
 #warning TODO: Find a way to the current input stream here!
-			@throw [ANTLRTreeException exceptionWithOldRoot:oldRoot newRoot:newRootNode stream:nil];
+			@throw [TreeException exceptionWithOldRoot:oldRoot newRoot:newRootNode stream:nil];
 		}
 #warning TODO: double check memory management with respect to code generation
 		// remove the empty node, placing its sole child in its role.
@@ -217,7 +217,7 @@
 
 #pragma mark Subclass Responsibilties
 
-- (void) setBoundariesForTree:(id)aTree fromToken:(id<ANTLRToken>)startToken toToken:(id<ANTLRToken>)stopToken
+- (void) setBoundariesForTree:(id)aTree fromToken:(id<Token>)startToken toToken:(id<Token>)stopToken
 {
 	// subclass responsibility
 }

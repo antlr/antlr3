@@ -80,22 +80,22 @@
  *
  *  Return result of applying post action to this node.
  */
-- (TreeVisitor *)visit:(CommonTree *)t Action:(TreeVisitorAction *)action
+- (id<BaseTree>)visit:(id<BaseTree>)t Action:(TreeVisitorAction *)action
 {
     // System.out.println("visit "+((Tree)t).toStringTree());
     BOOL isNil = [adaptor isNil:t];
     if ( action != nil && !isNil ) {
-        t = [action pre:(TreeVisitorAction *)t]; // if rewritten, walk children of new t
+        t = [action pre:(id<BaseTree>)t]; // if rewritten, walk children of new t
     }
     for (int i=0; i < [adaptor getChildCount:t]; i++) {
-        CommonTree *child = [adaptor getChild:t At:i];
-        CommonTree *visitResult = [self visit:child Action:action];
-        CommonTree *childAfterVisit = [adaptor getChild:t At:i];
+        id<BaseTree> child = [adaptor getChild:t At:i];
+        id<BaseTree> visitResult = [self visit:child Action:action];
+        id<BaseTree> childAfterVisit = [adaptor getChild:t At:i];
         if ( visitResult !=  childAfterVisit ) { // result & child differ?
             [adaptor setChild:t At:i Child:visitResult];
         }
     }
-    if ( action != nil && !isNil ) t = [action post:(TreeVisitorAction *)t];
+    if ( action != nil && !isNil ) t = [action post:(id<BaseTree>)t];
     return t;
 }
 

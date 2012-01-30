@@ -169,10 +169,10 @@
 {
     if ( [self isKindOfClass:[TreeParser class]] ) {
         CommonTreeAdaptor *adaptor = (CommonTreeAdaptor *)[((id<TreeNodeStream>)e.input) getTreeAdaptor];
-        e.token = [adaptor getToken:((id<BaseTree>)e.node)];
+        e.token = [adaptor getToken:((CommonTree *)e.node)];
         if ( e.token == nil ) { // could be an UP/DOWN node
-            e.token = [CommonToken newToken:[adaptor getType:e.node]
-                                                        Text:[adaptor getText:e.node]];
+            e.token = [CommonToken newToken:[adaptor getType:(CommonTree *)e.node]
+                                                        Text:[adaptor getText:(CommonTree *)e.node]];
         }
     }
     return [super getErrorMessage:e TokenNames:theTokNams];

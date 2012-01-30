@@ -24,30 +24,30 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRTree.h"
-#import "ANTLRToken.h"
+#import "Tree.h"
+#import "Token.h"
 // TODO: this shouldn't be here...but needed for invalidNode
-#import "ANTLRCommonTree.h"
+#import "CommonTree.h"
 
-@implementation ANTLRTree
+@implementation Tree
 
 @synthesize isEmpty;
 @synthesize isEmptyNode;
 @synthesize invalidNode;
 @synthesize children;
 
-#pragma mark ANTLRTree protocol conformance
+#pragma mark Tree protocol conformance
 
-+ (id<ANTLRTree>) invalidNode
++ (id<Tree>) invalidNode
 {
-	static id<ANTLRTree> invalidNode = nil;
+	static id<Tree> invalidNode = nil;
 	if (!invalidNode) {
-		invalidNode = [[ANTLRCommonTree alloc] initWithTokenType:ANTLRTokenTypeInvalid];
+		invalidNode = [[CommonTree alloc] initWithTokenType:TokenTypeInvalid];
 	}
 	return invalidNode;
 }
 
-- (id<ANTLRTree>) init
+- (id<Tree>) init
 {
 	self = [super init];
 	if ( self != nil ) {
@@ -61,7 +61,7 @@
 	[super dealloc];
 }
 
-- (id<ANTLRTree>) getChild:(NSUInteger) index
+- (id<Tree>) getChild:(NSUInteger) index
 {
 	return nil;
 }
@@ -79,7 +79,7 @@
 	// Add tree as a child to this node.  If tree is nil, do nothing.  If tree
 	// is an empty node, add all children of tree to our children.
 
-- (void) addChild:(id<ANTLRTree>) tree
+- (void) addChild:(id<Tree>) tree
 {
 }
 
@@ -104,7 +104,7 @@
 	isEmptyNode = emptyFlag;
 }
 
-#pragma mark ANTLRTree abstract base class
+#pragma mark Tree abstract base class
 
 	// Return a token type; needed for tree parsing
 - (NSInteger) getType
