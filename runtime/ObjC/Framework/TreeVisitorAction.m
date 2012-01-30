@@ -48,6 +48,16 @@
     return self;
 }
 
+- (void)setPreAction:(SEL)anAction
+{
+    preAction = anAction;
+}
+
+- (void)setPostAction:(SEL)anAction
+{
+    postAction = anAction;
+}
+
 /** Execute an action before visiting children of t.  Return t or
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.  Children of returned value will be
@@ -55,7 +65,10 @@
  */
 - (id<BaseTree>)pre:(id<BaseTree>) t
 {
-    return nil;
+    if ( (preAction != nil ) && ( [self respondsToSelector:preAction] )) {
+        [self performSelector:preAction];
+    }
+    return t;
 }
 
 /** Execute an action after visiting children of t.  Return t or
@@ -64,7 +77,10 @@
  */
 - (id<BaseTree>)post:(id<BaseTree>) t
 {
-    return nil;
+    if ( (postAction != nil ) && ( [self respondsToSelector:postAction] )) {
+        [self performSelector:postAction];
+    }
+    return t;
 }
 
 @synthesize preAction;

@@ -157,9 +157,7 @@ public class TreeFilter extends TreeParser {
 @property (assign) SEL whichRule;
 @property (assign) TreeFilter *treeFilter;
 
-+ (fptr *) newfptr;
 + (fptr *) newfptr:(TreeFilter *)aTreeFilter Rule:(SEL) aRule;
-
 
 - (fptr *) init:(TreeFilter *)aTreeFilter Rule:(SEL)aRule;
 

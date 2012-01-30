@@ -39,23 +39,26 @@
 
 }
 
-@property (assign) SEL preAction;
-@property (assign) SEL postAction;
+@property (assign, setter=setPreAction:) SEL preAction;
+@property (assign, setter=setPostAction:) SEL postAction;
 
 + (TreeVisitorAction *)newTreeVisitorAction;
 - (id) init;
+
+- (void)setPreAction:(SEL)anAction;
+- (void)setPostAction:(SEL)anAction;
 
 /** Execute an action before visiting children of t.  Return t or
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.  Children of returned value will be
  *  visited if using TreeVisitor.visit().
  */
-- (id<Tree>)pre:(id<BaseTree>) t;
+- (id<BaseTree>)pre:(id<BaseTree>) t;
 
 /** Execute an action after visiting children of t.  Return t or
  *  a rewritten t.  It is up to the visitor to decide what to do
  *  with the return value.
  */
-- (id<Tree>)post:(id<BaseTree>) t;
+- (id<BaseTree>)post:(id<BaseTree>) t;
 
 @end

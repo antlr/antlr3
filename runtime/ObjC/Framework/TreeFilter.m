@@ -148,14 +148,6 @@ public class TreeFilter extends TreeParser {
 
 @implementation fptr
 
-- (void) rule
-{
-    if ( [treeFilter respondsToSelector:whichRule] ) {
-        [treeFilter performSelector:whichRule];
-    }
-    return;
-}
-
 + (fptr *) newfptr:(TreeFilter *)aTreeFilter Rule:(SEL) aRule
 {
     return [[fptr alloc] init];
@@ -168,6 +160,14 @@ public class TreeFilter extends TreeParser {
         treeFilter = aTreeFilter;
     }
     return self;
+}
+
+- (void) rule
+{
+    if ( [treeFilter respondsToSelector:whichRule] ) {
+        [treeFilter performSelector:whichRule];
+    }
+    return;
 }
 
 @synthesize whichRule;
@@ -185,7 +185,7 @@ public class TreeFilter extends TreeParser {
 
 + (TreeFilter *) newTreeFilter:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *) aState
 {
-    return [[TreeFilter alloc] init:anInput State:aState];
+    return [[TreeFilter alloc] initWithStream:anInput State:aState];
 }
 
 - (id) initWithStream:(id<TreeNodeStream>)anInput State:(RecognizerSharedState *)aState
