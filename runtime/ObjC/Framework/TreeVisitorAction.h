@@ -62,3 +62,33 @@
 - (id<BaseTree>)post:(id<BaseTree>) t;
 
 @end
+
+@class TreeFilter;
+@class fptr;
+
+@interface TreeVisitorActionFiltered : TreeVisitorAction
+{
+    TreeFilter *aTFilter;
+    fptr *TDRule;
+    fptr *BURule;
+}
+
+@property (assign, setter=setATFilter:) TreeFilter *aTFilter;
+
++ (TreeVisitorAction *)newTreeVisitorActionFiltered:(TreeFilter *)aFilter RuleD:(fptr *)aTDRule RuleU:(fptr *)aBURule;
+- (id) initWithFilter:(TreeFilter *)aFilter RuleD:(fptr *)aTDRule RuleU:(fptr *)aBURule;
+
+/** Execute an action before visiting children of t.  Return t or
+ *  a rewritten t.  It is up to the visitor to decide what to do
+ *  with the return value.  Children of returned value will be
+ *  visited if using TreeVisitor.visit().
+ */
+- (id<BaseTree>)pre:(id<BaseTree>) t;
+
+/** Execute an action after visiting children of t.  Return t or
+ *  a rewritten t.  It is up to the visitor to decide what to do
+ *  with the return value.
+ */
+- (id<BaseTree>)post:(id<BaseTree>) t;
+
+@end

@@ -207,9 +207,9 @@ public class TreeFilter extends TreeParser {
             state = [RecognizerSharedState newRecognizerSharedState];
             input = [CommonTreeNodeStream newCommonTreeNodeStream:originalAdaptor Tree:(CommonTree *)t];
             [(CommonTreeNodeStream *)input setTokenStream:originalTokenStream];
-            [state setBacktrackingLevel:1];
+            [self setBacktrackingLevel:1];
             [whichRule rule];
-            [state setBacktrackingLevel:0];
+            [self setBacktrackingLevel:0];
         }
         @catch (RecognitionException *e) { ; }
     }
@@ -217,14 +217,10 @@ public class TreeFilter extends TreeParser {
 - (void) downup:(id<BaseTree>) t
 {
     TreeVisitor *v = [TreeVisitor newTreeVisitor:[CommonTreeAdaptor newTreeAdaptor]];
-    TreeVisitorAction *actions = [TreeVisitorAction newTreeVisitorAction];
-    {
-        /* java stuff
-        - ((id<BaseTree>)) pre:(id<BaseTree>) t { [self applyOnce:t rule:(fptr *)topdown_fptr]; return t; }
-        - ((id<BaseTree>)) post:(id<BaseTree>) t { [self applyOnce:t rule:(fptr *)bottomup_fptr]; return t; }
-         */
-    }
-    [v visit:t actions:actions];
+    TreeVisitorAction *actions = [TreeVisitorActionFiltered newTreeVisitorActionFiltered:self 
+                                                                                   RuleD:topdown_fptr
+                                                                                   RuleU:bottomup_fptr];
+    [v visit:t Action:actions];
 }
     
 - (void) settopdown_fptr

@@ -67,8 +67,9 @@
 {
     if ( (preAction != nil ) && ( [self respondsToSelector:preAction] )) {
         [self performSelector:preAction];
+        return t;
     }
-    return t;
+    return nil;
 }
 
 /** Execute an action after visiting children of t.  Return t or
@@ -79,11 +80,61 @@
 {
     if ( (postAction != nil ) && ( [self respondsToSelector:postAction] )) {
         [self performSelector:postAction];
+        return t;
     }
-    return t;
+    return nil;
 }
 
 @synthesize preAction;
 @synthesize postAction;
 
 @end
+
+@implementation TreeVisitorActionFiltered
+
++ (TreeVisitorAction *)newTreeVisitorActionFiltered:(TreeFilter *)aFilter
+                                              RuleD:(fptr *)aTDRule
+                                              RuleU:(fptr *)aBURule
+{
+    return [TreeVisitorActionFiltered newTreeVisitorActionFiltered:aFilter];
+}
+
+- (id) initWithFilter:(TreeFilter *)aFilter
+                RuleD:(fptr *)aTDRule
+                RuleU:(fptr *)aBURule
+{
+    if (( self = [super init] ) != nil ) {
+        aTFilter = aFilter;
+        TDRule = aTDRule;
+        BURule = aBURule;
+    }
+    return self;
+}
+
+/** Execute an action before visiting children of t.  Return t or
+ *  a rewritten t.  It is up to the visitor to decide what to do
+ *  with the return value.  Children of returned value will be
+ *  visited if using TreeVisitor.visit().
+ */
+- (id<BaseTree>)pre:(id<BaseTree>) t
+{
+    [aTFilter applyOnce:t rule:(fptr *)TDRule];
+    return t;
+}
+
+/** Execute an action after visiting children of t.  Return t or
+ *  a rewritten t.  It is up to the visitor to decide what to do
+ *  with the return value.
+ */
+- (id<BaseTree>)post:(id<BaseTree>) t
+{
+    [aTFilter applyOnce:t rule:(fptr *)BURule];
+    return t;
+}
+
+
+
+@synthesize aTFilter;
+
+@end
+

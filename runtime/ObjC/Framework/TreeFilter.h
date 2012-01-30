@@ -146,6 +146,7 @@ public class TreeFilter extends TreeParser {
 #import "TreeNodeStream.h"
 #import "TreeParser.h"
 #import "TreeVisitor.h"
+#import "TreeVisitorAction.h"
 
 @class TreeFilter;
 
