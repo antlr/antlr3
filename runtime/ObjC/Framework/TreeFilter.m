@@ -205,7 +205,7 @@ public class TreeFilter extends TreeParser {
         @try {
             // share TreeParser object but not parsing-related state
             state = [RecognizerSharedState newRecognizerSharedState];
-            input = [CommonTreeNodeStream newCommonTreeNodeStream:originalAdaptor Tree:t];
+            input = [CommonTreeNodeStream newCommonTreeNodeStream:originalAdaptor Tree:(CommonTree *)t];
             [(CommonTreeNodeStream *)input setTokenStream:originalTokenStream];
             [state setBacktrackingLevel:1];
             [whichRule rule];
