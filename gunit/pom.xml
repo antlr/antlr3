@@ -86,7 +86,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.5</version>
             <scope>compile</scope>
         </dependency>
 
@@ -131,6 +130,7 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>jsr14</target>

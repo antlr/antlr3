@@ -338,6 +338,7 @@ Jim Idle - March 2009
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
