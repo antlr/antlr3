@@ -49,6 +49,17 @@ objcTypeInitMap ::= [
     default         : "nil"             // anything other than an atomic type
 ]
 
+// System.Boolean.ToString() returns "True" and "False", but the proper C# literals are "true" and "false"
+// The Java version of Boolean returns "true" and "false", so they map to themselves here.
+booleanLiteral ::= [
+	"True":"true",
+	"False":"false",
+	"true":"YES",
+	"false":"NO",
+	default:"NO"
+]
+
+
 className() ::= "<name><!<if(LEXER)>Lexer<else><if(TREE_PARSER)>Tree<endif>Parser<endif>!>"
 leadIn(type) ::=
 <<
@@ -184,9 +195,9 @@ headerFile( LEXER,
 <@imports>
 <actions.(actionScope).preincludes>
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import \<Foundation/Foundation.h>
+#import \<Cocoa/Cocoa.h>
 #import \<ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -680,7 +691,9 @@ genericParser(  grammar,
 
 #pragma mark Dynamic Rule Scopes ruleAttributeScope
 <rules:{rule | <rule.ruleDescriptor.ruleScope:ruleAttributeScope()>}>
+/* ObjC end of ruleAttributeScope */
 #pragma mark global Attribute Scopes globalAttributeScope
+/* ObjC start globalAttributeScope */
 <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScope()><endif>}>
 /* ObjC start actions.(actionScope).synthesize */
 <actions.(actionScope).synthesize>
@@ -1629,7 +1642,7 @@ andPredicates(left,right) ::= "(<left>&&<right>)"
 
 orPredicates(operands) ::= "(<first(operands)><rest(operands):{o | ||<o>}>)"
 
-notPredicate(pred) ::= "!(<evalPredicate(pred, \"\")>)"
+notPredicate(pred) ::= "!(<evalPredicate(pred, {})>)"
 
 evalPredicate(pred,description) ::= "(<pred>)"
 
@@ -1657,21 +1670,23 @@ lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
 
 isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(([input LA:<k>] >= <lower>) && ([input LA:<k>] \<= <upper>))"
 
-setTest(ranges) ::= "<ranges; separator=\"||\">"
+setTest(ranges) ::= <%
+<ranges; separator="||">
+%>
 
 // A T T R I B U T E S
 
-memVars(scope) ::= << <scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n"> >>
+memVars(scope) ::= <% <scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n"> %>
 
-properties(scope) ::= <<
+properties(scope) ::= <%
 <scope.attributes:{a|@property (assign, getter=get<a.name>, setter=set<a.name>:) <a.type> <a.name>;<\n>}; separator="\n">
->>
+%>
 
-methodsDecl(scope) ::= <<
+methodsDecl(scope) ::= <%
 <scope.attributes:{a|- (<a.type>)get<a.name>;<\n>- (void)set<a.name>:(<a.type>)aVal;<\n>}; separator="\n">
->>
+%>
 
-synthesize(scope) ::= << <scope.attributes:{a|@synthesize <a.name>;}; separator="\n"> >>
+synthesize(scope) ::= <% <scope.attributes:{a|@synthesize <a.name>;}; separator="\n"> %>
 
 methods(scope) ::= <%
 <scope.attributes:{a|
@@ -1850,7 +1865,9 @@ delegateName(d) ::= << <if(d.label)><d.label><else>g<d.name><endif> >>
 initValue(typeName) ::= <% <objcTypeInitMap.(typeName)> %>
 
 /** Define a rule label including default value */
-ruleLabelDef(label) ::= << <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n> >>
+ruleLabelDef(label) ::= <%
+<ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n>
+%>
 
 /** Define a return struct for a rule if the code needs to access its
  *  start/stop tokens, tree stuff, attributes, ...  Leave a hole for
