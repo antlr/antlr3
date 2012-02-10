@@ -784,8 +784,8 @@ class CommonTokenStream(TokenStream):
         if self.p == -1:
             self.fillBuffer()
 
-        if stop is None or stop >= len(self.tokens):
-            stop = len(self.tokens) - 1
+        if stop is None or stop > len(self.tokens):
+            stop = len(self.tokens)
 
         if start is None or stop < 0:
             start = 0
