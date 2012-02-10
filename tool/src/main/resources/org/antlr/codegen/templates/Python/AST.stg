@@ -60,7 +60,7 @@ def getTreeAdaptor(self):
 
 def setTreeAdaptor(self, adaptor):
     self._adaptor = adaptor
-    <grammar.directDelegates:{g|<g:delegateName()>.adaptor = adaptor}; separator="\n">
+    <grammar.directDelegates:{g|self.<g:delegateName()>.adaptor = adaptor}; separator="\n">
 
 adaptor = property(getTreeAdaptor, setTreeAdaptor)
 >>
