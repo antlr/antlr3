@@ -128,6 +128,8 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
 
         <grammar.directDelegates:
          {g|self.<g:delegateName()> = <g.recognizerName>(<trunc(g.delegators):{p|<p:delegateName()>, }>self, input, state)}; separator="\n">
+        <grammar.directDelegates:
+         {g|<g.delegates:{h|self.<h:delegateName()> = self.<g:delegateName()>.<h:delegateName()>}; separator="\n">}; separator="\n">
         <grammar.delegators:
          {g|self.<g:delegateName()> = <g:delegateName()>}; separator="\n">
         <last(grammar.delegators):
@@ -266,8 +268,8 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
          {g|self.<g:delegateName()> = <g:delegateName()>}; separator="\n">
         <grammar.directDelegates:
          {g|self.<g:delegateName()> = <g.recognizerName>(<trunc(g.delegators):{p|<p:delegateName()>, }>self, input, state)}; separator="\n">
-        <grammar.indirectDelegates:
-         {g|<g:delegateName()> = <g.delegator:delegateName()>.<g:delegateName()>}; separator="\n">
+        <grammar.directDelegates:
+         {g|<g.delegates:{h|self.<h:delegateName()> = self.<g:delegateName()>.<h:delegateName()>}; separator="\n">}; separator="\n">
         <last(grammar.delegators):
     	 {g|self.gParent = self.<g:delegateName()>}; separator="\n">
         self.delegates = [<grammar.delegates: {g|self.<g:delegateName()>}; separator = ", ">]
@@ -1143,8 +1145,7 @@ class DFA<dfa.decisionNumber>(DFA):
 
         _s = s
 
-        <dfa.specialStateSTs:{state |
-if s == <i0>: <! compressed special state numbers 0..n-1 !>
+        <dfa.specialStateSTs:{state | if s == <i0>: <! compressed special state numbers 0..n-1 !>
     <state>}; separator="\nel">
 
 <if(backtracking)>
