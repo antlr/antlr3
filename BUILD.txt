@@ -93,10 +93,13 @@ Building
 --------
 
 Building ANTLR is trivial, assuming that you have loaded Maven version
-2.0.9 or better on to your build system and installed it as explained
+3.0.3 or better on to your build system and installed it as explained
 here:
 
 http://maven.apache.org/download.html
+
+Note that the ANTLR toolset will ONLY build with version 3.0.3 of Maven
+as of release 3.4.
 
 If you are unfamiliar with Maven (and even if you are), the best
 resource for learning about it is The Definitive Guide:
@@ -166,14 +169,14 @@ everything packaged up so it can build the uber-jar assembly.
 Somewhere in the build output (towards the end), you will find a line
 like this:
 
-[INFO] Building jar: /home/jimi/antlrsrc/code/antlr/main/target/antlr-master-3.1.3-SNAPSHOT-completejar.jar
+[INFO] Building jar: /home/jimi/antlrsrc/code/antlr/main/target/antlr-master-3.4-SNAPSHOT-completejar.jar
 
 This is the executable jar that you need and you can either copy it
 somewhere or, like me, you can create this script (assuming UNIX)
 somewhere in your PATH:
 
 #! /bin/bash
-java -jar ~/antlrsrc/code/antlr/main/target/antlr-master-3.1.3-SNAPSHOT-completejar.jar $*
+java -jar ~/antlrsrc/code/antlr/main/target/antlr-master-3.4-SNAPSHOT-completejar.jar $*
 
 Version Numbering
 -------------------
@@ -236,18 +239,8 @@ Deploying
 
 Deploying the tools at the current version is relatively easy, but to
 deploy to the ANTLR repositories (snapshot or release) you must have
-been granted access to the antlr.org server and supplied an ssh
-key. Few people will have this access of course.
-
-Assuming that you have ssh access to antlr.org, then you will need to
-do the following before deployment will authorize and work correctly
-(UNIX assumed here):
-
-$ eval `ssh-agent`
-Agent PID nnnnn
-$ ssh-add
-Enter passphrase for /home/you/.ssh/id_rsa:
-Identity added....
+been granted access to the Sonatype OSS repositories' ANTLR login. 
+Few people will have this access of course.
 
 Next, because we do not publish access information for antlr.org, you
 will need to configure the repository server names locally. You do
@@ -258,43 +251,36 @@ this by creating (or adding to) the file:
 Which should look like this:
 
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    User-specific configuration for maven. Includes things that should not
-    be distributed with the pom.xml file, such as developer identity, along with
-    local settings, like proxy information. The default location for the
-    settings file is ~/.m2/settings.xml
--->
-<settings xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <servers>
-        <server>
-            <id>antlr-snapshot</id>
-            <username>mavensync</username>
-            <passphrase>passphrase for your private key</passphrase>
-            <privateKey>/home/youruserlogin/.ssh/id_rsa</privateKey>
-        </server>
-        <server>
-            <id>antlr-repo</id>
-            <username>mavensync</username>
-            <passphrase>passphrase for your private key</passphrase>
-            <privateKey>/home/youruserlogin/.ssh/id_rsa</privateKey>
-        </server>
-    </servers>
+<settings>
+  <servers>
+    <server>
+      <id>sonatype-nexus-snapshots</id>
+      <username>xxxxxxx</username>
+      <password>xxxxxxx</password>
+    </server>
+    <server>
+      <id>sonatype-nexus-staging</id>
+      <username>xxxxxxx</username>
+      <password>xxxxxxx</password>
+    </server>
+  </servers>
 </settings>
 
 When this configuration is in place, you will be able to deploy the components,
 either individually or from the master directory:
 
-mvn -Dmaven.test.skip=true deploy
+mvn -Dmaven.test.skip=true -Ddeplot deploy
 
 You will then see lots of information about checking existing version
-information and so on, and the components will be deployed.
+information and so on, and the components will be deployed once you
+supply the ANTLR public key passphrase to sign the jars.
 
 Note that so long as the artifacts are versioned with a.b.c-SNAPSHOT
 then deployment will always be to the development snapshot
 directory. When the artifacts are versioned with a release version
-then deployment will be to the antlr.org release repository, which
-will then be mirrored around the world. It is important not to deploy
-a release until you have built and tested it to your satisfaction.
+then deployment will be to the release stahinh repository, which
+will then be mirrored around the world if closed and release.
+The sonatype documentation should be consulted.
 
 Release Checklist
 ------------------
