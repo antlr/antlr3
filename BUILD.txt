@@ -467,7 +467,7 @@ because ANTLR builds itself using itself and the maven plugin
 references the ANTLR Tool as well. Hence the maven tool is not a child
 project of the master pom.xml file, even though it is built by it.
 
-An observant person will not that when the assembly:assembly phase is
+An observant person will note that when the assembly:assembly phase is
 run, that it invokes the build of the ANTLR tool using the version of
 the Maven plugin that it has just built, and this results in the
 plugin using the version of ANTLR tool that it has just built. This is

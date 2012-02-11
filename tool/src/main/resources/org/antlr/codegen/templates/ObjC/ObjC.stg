@@ -689,12 +689,14 @@ genericParser(  grammar,
 
 @implementation <grammar.recognizerName>  // line 637
 
+/* ObjC start of ruleAttributeScope */
 #pragma mark Dynamic Rule Scopes ruleAttributeScope
 <rules:{rule | <rule.ruleDescriptor.ruleScope:ruleAttributeScope()>}>
 /* ObjC end of ruleAttributeScope */
 #pragma mark global Attribute Scopes globalAttributeScope
 /* ObjC start globalAttributeScope */
 <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScope()><endif>}>
+/* ObjC end globalAttributeScope */
 /* ObjC start actions.(actionScope).synthesize */
 <actions.(actionScope).synthesize>
 /* ObjC start synthesize() */
@@ -721,7 +723,7 @@ genericParser(  grammar,
 <if(PARSER)>
 - (id) initWithTokenStream:(<inputStreamType>)aStream
 {
-    self = [super initWithTokenStream:aStream State:[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1]];
+    self = [super initWithTokenStream:aStream State:[[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
     if ( self != nil ) {
 <else><! TREE_PARSER !>
 - (id) initWithStream:(<inputStreamType>)aStream
@@ -929,26 +931,33 @@ ruleScopeCleanUp() ::= <<
 <ruleDescriptor.ruleScope:{it | [<it.name>_stack pop];}; separator="\n">
 >>
 
-ruleLabelDefs() ::= <<
+ruleLabelDefs() ::= <%
+/* ruleLabelDefs entry */<"\n">
+/* ruleDescriptor tokenLabels */<"\n">
 <[ruleDescriptor.tokenLabels, ruleDescriptor.tokenListLabels,
   ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it | <labelType> *<it.label.text> = nil;}; separator="\n">
+    :{it |<labelType> *<it.label.text> = nil;}; separator="\n">
+/* ruleDescriptor tokenListLabels */<"\n">
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
     :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"
 >
+/* ruleDescriptor ruleLabels */<"\n">
+<! <ruleDescriptor.ruleLabels:ruleLabelDef(label=it); separator="\n"> !>
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
-<ruleDescriptor.ruleListLabels:{ll|ParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n">
->>
+/* ruleDescriptor ruleListLabels */<"\n">
+<ruleDescriptor.ruleListLabels:{ll|RuleReturnScope *<ll.label.text> = nil;}; separator="\n">
+/* ruleLabelDefs exit */<"\n">
+%>
 
 lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it | <labelType> *<it.label.text>=nil;}; separator="\n"
+    :{it |<labelType> *<it.label.text>=nil;}; separator="\n"
 >
-<ruleDescriptor.charLabels:{it | NSInteger <it.label.text>;}; separator="\n">
+<ruleDescriptor.charLabels:{it |NSInteger <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
-  ruleDescriptor.ruleListLabels]:{it | AMutableArray *list_<it.label.text>=nil; }; separator="\n">
+  ruleDescriptor.ruleListLabels]:{it |AMutableArray *list_<it.label.text>=nil; }; separator="\n">
 >>
 
 ruleReturnValue() ::= <%
@@ -965,7 +974,7 @@ retval
 
 ruleCleanUp() ::= <<
 /* token+rule list labels */
-<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]:{it | [list_<it.label.text> release];}; separator="\n">
+<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]:{it |[list_<it.label.text> release];}; separator="\n">
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!TREE_PARSER)>
 [retval setStop:[input LT:-1]];<\n>
@@ -1755,9 +1764,9 @@ globalAttributeScopeInit(scope) ::= <<
 <scope.name>_stack = [SymbolStack newSymbolStackWithLen:30];<\n>
 >>
 
-globalAttributeScopeDealloc(scope) ::= << [<scope.name>_stack release];<\n> >>
+globalAttributeScopeDealloc(scope) ::= <% [<scope.name>_stack release];<\n> %>
 
-globalAttributeScope(scope) ::= << static <scope.name>_stack;<\n> >>
+globalAttributeScope(scope) ::= <% static <scope.name>_stack;<\n> %>
 
 ruleAttributeScopeMemVar(scope) ::= <%
 /* ObjC ruleAttributeScopeMemVar */<\n>
@@ -1857,7 +1866,7 @@ void<endif>
 <endif>
 %>
 
-delegateName(d) ::= << <if(d.label)><d.label><else>g<d.name><endif> >>
+delegateName(d) ::= <% <if(d.label)><d.label><else>g<d.name><endif> %>
 
 /** Using a type to init value map, try to init a type; if not in table
  *  must be an object, default value is "null".
