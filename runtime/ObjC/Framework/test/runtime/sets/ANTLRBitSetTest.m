@@ -16,7 +16,7 @@
 -(void) testWithBitData
 {
 	static const unsigned long long bitData[] = {3LL, 1LL};
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSetWithBits:bitData Count:2];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSetWithBits:bitData Count:2];
     CFIndex actual = (CFIndex)[bitSet numBits];
     CFIndex expected = 3;
 	
@@ -39,7 +39,7 @@
 	STAssertTrue([[bits objectAtIndex:3] boolValue], @"Value at index 3 was not true");
 	STAssertFalse([[bits objectAtIndex:4] boolValue], @"Value at index 4 was not false");
 	STAssertTrue([[bits objectAtIndex:5] boolValue], @"Value at index 5 was not true");
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSetWithArray:bits];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSetWithArray:bits];
 	CFIndex actual = (CFIndex)[bitSet numBits];
 	CFIndex expected = 4;
 	STAssertEquals(actual, expected, @"There should be four bits set in bitvector. But I have %d", actual);
@@ -49,7 +49,7 @@
 -(void) testAdd
 {
 
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSet];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];
 	[bitSet add:1];
 	[bitSet add:2];
 	[bitSet add:3];
@@ -61,7 +61,7 @@
 
 -(void) testRemove
 {
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSet];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];
 	[bitSet add:1];
 	CFIndex actual = (CFIndex)[bitSet numBits];
 	CFIndex expected = 1;
@@ -77,7 +77,7 @@
 -(void) testCopyBitSet
 {
 	static const unsigned long long bitData[] = {3LL, 1LL};
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSetWithBits:bitData Count:2];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSetWithBits:bitData Count:2];
 	ANTLRBitSet *copy = [bitSet mutableCopyWithZone:nil];
 	CFIndex actual = (CFIndex)[copy numBits];
 	STAssertEquals(actual, (CFIndex)[bitSet numBits], @"There should be three bits set in bitvector. But I have %d", [copy numBits]);
@@ -87,10 +87,10 @@
 -(void) testOr
 {
 	static const unsigned long long bitData[] = {3LL, 1LL};
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSetWithBits:bitData Count:2];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSetWithBits:bitData Count:2];
 	
 	static const unsigned long long otherData[] = {5LL, 3LL, 1LL};
-	ANTLRBitSet *otherBitSet = [ANTLRBitSet newANTLRBitSetWithBits:otherData Count:3];
+	ANTLRBitSet *otherBitSet = [ANTLRBitSet newBitSetWithBits:otherData Count:3];
 	
 	ANTLRBitSet *c = [bitSet or:otherBitSet];
 	STAssertTrue([c size] == [otherBitSet size], @"c should be the same as otherBitSet");
@@ -98,7 +98,7 @@
 
 -(void) testDescription
 {
-	ANTLRBitSet *bitSet = [ANTLRBitSet newANTLRBitSet];
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];
 	[bitSet add:1];
 	[bitSet add:2];
 	NSMutableString *aDescription = (NSMutableString *)[bitSet description];

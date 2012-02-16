@@ -129,7 +129,7 @@ static NSInteger RECNUM = 0;
     else if ( [dkey isKindOfClass:[ACBKey class]] )
         dkp = (ACBKey *)dkey;
     else
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Don't understand this key:\"%@\"", dkey]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Don't understand this key:\"%@\"", dkey]];
     sNode = [self search:dkp.key];
     if ( sNode == nil || [sNode searchnode:dkp.key match:YES] == FAILURE ) {
         if ( mustRelease ) [dkp release];

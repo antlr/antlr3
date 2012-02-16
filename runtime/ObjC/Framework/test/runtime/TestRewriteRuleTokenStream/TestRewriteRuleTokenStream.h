@@ -25,18 +25,18 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRRewriteRuleTokenStream.h"
-#import "ANTLRCommonToken.h"
+#import "CommonTreeAdaptor.h"
+#import "RewriteRuleTokenStream.h"
+#import "CommonToken.h"
 
 @interface TestRewriteRuleTokenStream : SenTestCase {
-    ANTLRCommonTreeAdaptor *treeAdaptor;
-    ANTLRRewriteRuleTokenStream *stream;
+    CommonTreeAdaptor *treeAdaptor;
+    RewriteRuleTokenStream *stream;
     
-    ANTLRCommonToken *token1;
-    ANTLRCommonToken *token2;
-    ANTLRCommonToken *token3;
-    ANTLRCommonToken *token4;
+    CommonToken *token1;
+    CommonToken *token2;
+    CommonToken *token3;
+    CommonToken *token4;
 }
 
 - (void) setUp;
