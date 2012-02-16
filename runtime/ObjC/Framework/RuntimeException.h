@@ -52,7 +52,7 @@
 
 @end
 
-@interface ANTLRIllegalArgumentException : RuntimeException {
+@interface IllegalArgumentException : RuntimeException {
 }
 
 + (id) newException;
@@ -65,7 +65,7 @@
 
 @end
 
-@interface ANTLRIllegalStateException : RuntimeException {
+@interface IllegalStateException : RuntimeException {
 }
 
 + (id) newException;

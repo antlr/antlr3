@@ -100,9 +100,14 @@ static id<BaseTree> invalidNode = nil;
 - (void) dealloc
 {
 #ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in BaseTree" );
+    NSLog( @"called dealloc in BaseTree %x", self );
 #endif
-	if ( children ) [children release];
+	if ( children ) {
+#ifdef DEBUG_DEALLOC
+        NSLog( @"called dealloc children in BaseTree" );
+#endif
+        [children release];
+    }
 	[super dealloc];
 }
 
@@ -164,7 +169,7 @@ static id<BaseTree> invalidNode = nil;
         return; // do nothing upon addChild(nil)
     }
     if ( self == (BaseTree *)t )
-        @throw [ANTLRIllegalArgumentException newException:@"BaseTree Can't add self to self as child"];        
+        @throw [IllegalArgumentException newException:@"BaseTree Can't add self to self as child"];        
     id<BaseTree> childTree = (id<BaseTree>) t;
     if ( [childTree isNil] ) { // t is an empty node possibly with children
         if ( children != nil && children == childTree.children ) {
@@ -216,7 +221,7 @@ static id<BaseTree> invalidNode = nil;
         return;
     }
     if ( [t isNil] ) {
-        @throw [ANTLRIllegalArgumentException newException:@"BaseTree Can't set single child to a list"];        
+        @throw [IllegalArgumentException newException:@"BaseTree Can't set single child to a list"];        
     }
     if ( children == nil ) {
         children = [[AMutableArray arrayWithCapacity:5] retain];
@@ -256,7 +261,7 @@ static id<BaseTree> invalidNode = nil;
      System.out.println("in="+toStringTree());
      */
     if ( children == nil ) {
-        @throw [ANTLRIllegalArgumentException newException:@"BaseTree Invalid Indexes; no children in list"];        
+        @throw [IllegalArgumentException newException:@"BaseTree Invalid Indexes; no children in list"];        
     }
     int replacingHowMany = stopChildIndex - startChildIndex + 1;
     int replacingWithHowMany;
@@ -345,10 +350,10 @@ static id<BaseTree> invalidNode = nil;
 - (void) sanityCheckParentAndChildIndexes:(id<BaseTree>)aParent At:(NSInteger) i
 {
     if ( aParent != [self getParent] ) {
-        @throw [ANTLRIllegalStateException newException:[NSString stringWithFormat:@"parents don't match; expected %s found %s", aParent, [self getParent]]];
+        @throw [IllegalStateException newException:[NSString stringWithFormat:@"parents don't match; expected %s found %s", aParent, [self getParent]]];
     }
     if ( i != [self getChildIndex] ) {
-        @throw [ANTLRIllegalStateException newException:[NSString stringWithFormat:@"child indexes don't match; expected %d found %d", i, [self getChildIndex]]];
+        @throw [IllegalStateException newException:[NSString stringWithFormat:@"child indexes don't match; expected %d found %d", i, [self getChildIndex]]];
     }
     int n = [self getChildCount];
     for (int c = 0; c < n; c++) {
