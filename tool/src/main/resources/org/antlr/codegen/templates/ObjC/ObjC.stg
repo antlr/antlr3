@@ -933,20 +933,13 @@ ruleScopeCleanUp() ::= <<
 
 ruleLabelDefs() ::= <%
 /* ruleLabelDefs entry */<"\n">
-/* ruleDescriptor tokenLabels */<"\n">
 <[ruleDescriptor.tokenLabels, ruleDescriptor.tokenListLabels,
   ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it |<labelType> *<it.label.text> = nil;}; separator="\n">
-/* ruleDescriptor tokenListLabels */<"\n">
+    :{it |<labelType> *<it.label.text> = nil;}; separator="\n"><"\n">
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"
->
-/* ruleDescriptor ruleLabels */<"\n">
-<! <ruleDescriptor.ruleLabels:ruleLabelDef(label=it); separator="\n"> !>
-<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
-/* ruleDescriptor ruleListLabels */<"\n">
-<ruleDescriptor.ruleListLabels:{ll|RuleReturnScope *<ll.label.text> = nil;}; separator="\n">
-/* ruleLabelDefs exit */<"\n">
+    :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"><"\n">
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n"><"\n">
+<ruleDescriptor.ruleListLabels:{ll|ParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n"><"\n">
 %>
 
 lexerRuleLabelDefs() ::= <<
@@ -1503,7 +1496,7 @@ cyclicDFAInterface(dfa) ::= <<
 #pragma mark Cyclic DFA interface start DFA<dfa.decisionNumber>
 @interface DFA<dfa.decisionNumber> : DFA {
 }
-+ newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)theRecognizer;
++ (DFA<dfa.decisionNumber> *) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)theRecognizer;
 - initWithRecognizer:(BaseRecognizer *)recognizer;
 @end /* end of DFA<dfa.decisionNumber> interface  */<\n>
 #pragma mark Cyclic DFA interface end DFA<dfa.decisionNumber><\n>
@@ -1520,25 +1513,37 @@ cyclicDFAInterface(dfa) ::= <<
  */
 cyclicDFA(dfa) ::= <<
 #pragma mark Cyclic DFA implementation start DFA<dfa.decisionNumber>
+
 @implementation DFA<dfa.decisionNumber>
 const static NSInteger dfa<dfa.decisionNumber>_eot[<dfa.numberOfStates>] =
     {<dfa.eot; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_eof[<dfa.numberOfStates>] =
     {<dfa.eof; wrap="\n     ", separator=",", null="-1">};
 const static unichar dfa<dfa.decisionNumber>_min[<dfa.numberOfStates>] =
-    {<dfa.min; wrap="\n     ", separator=",", null="0">};
+    {<dfa.min; wrap="\n     ", separator=",", null="-1">};
 const static unichar dfa<dfa.decisionNumber>_max[<dfa.numberOfStates>] =
-    {<dfa.max; wrap="\n     ", separator=",", null="0">};
+    {<dfa.max; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_accept[<dfa.numberOfStates>] =
     {<dfa.accept; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_special[<dfa.numberOfStates>] =
     {<dfa.special; wrap="\n     ", separator=",", null="-1">};
-const static NSInteger dfa<dfa.decisionNumber>_transition[] = {};
+
+/** Used when there is no transition table entry for a particular state */
+#define dfa<dfa.decisionNumber>_T_empty	    nil
+
 <dfa.edgeTransitionClassMap.keys:{ table |
-const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separator=", ", wrap="\n ", null="-1">\};
+const static NSInteger dfa<dfa.decisionNumber>_T<i0>[] =
+{
+     <table; separator=", ", wrap="\n ", null="-1">
+\};
 }; null="">
 
-+ (id) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)aRecognizer
+const static NSInteger *dfa<dfa.decisionNumber>_transition[] =
+{
+    <dfa.transitionEdgeTables:{whichTable|dfa<dfa.decisionNumber>_T<whichTable>}; separator=", ", wrap="\n", null="nil">
+};
+
++ (DFA<dfa.decisionNumber> *) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)aRecognizer
 {
     return [[[DFA<dfa.decisionNumber> alloc] initWithRecognizer:aRecognizer] retain];
 }
@@ -1554,12 +1559,15 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
         max = dfa<dfa.decisionNumber>_max;
         accept = dfa<dfa.decisionNumber>_accept;
         special = dfa<dfa.decisionNumber>_special;
+        transition = dfa<dfa.decisionNumber>_transition;
+/*
         if (!(transition = calloc(<dfa.numberOfStates>, sizeof(void*)))) {
             [self release];
             return nil;
         }
         len = <dfa.numberOfStates>;
         <dfa.transitionEdgeTables:{whichTable|transition[<i0>] = dfa<dfa.decisionNumber>_transition<whichTable>;}; separator="\n", null="">
+ */
     }
     return self;
 }
