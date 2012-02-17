@@ -7,7 +7,7 @@
 //
 
 #import "ANTLRStringStreamTest.h"
-#import "ANTLRCharStream.h"
+#import "CharStream.h"
 #import "ANTLRStringStream.h"
 #import "ANTLRError.h"
 
@@ -52,7 +52,7 @@
 	BOOL eofFound = NO;
 	for (i = 1; i <= [stream size]+1; i++) {
 		NSInteger r = [stream LA:i];
-		if (r == (NSInteger)ANTLRCharStreamEOF) {
+		if (r == (NSInteger)CharStreamEOF) {
 			eofFound = YES;
             break;
 		}
@@ -68,7 +68,7 @@
 	BOOL eofFound = NO;
 	for ( i = 1; i <= [stream size]+1; i++) {
 		NSInteger r = [stream LT:i];
-		if (r == (NSInteger)ANTLRCharStreamEOF) {
+		if (r == (NSInteger)CharStreamEOF) {
 			eofFound = YES;
             break;
 		}

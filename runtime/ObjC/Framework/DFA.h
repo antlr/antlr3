@@ -61,6 +61,8 @@
 
 + (void) setIsEmittingDebugInfo:(BOOL) shouldEmitDebugInfo;
 
+- (NSInteger *) unpackEncodedString:(NSString *)encodedString;
+- (short *) unpackEncodedStringToUnsignedChars:(NSString *)encodedString;
 - (NSInteger)getDecision;
 - (void)setDecision:(NSInteger)aDecison;
 

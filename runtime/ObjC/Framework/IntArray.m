@@ -123,7 +123,7 @@
 - (NSInteger)pop
 {
     if ( idx < 0 ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Nothing to pop, count = %d", count]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Nothing to pop, count = %d", count]];
     }
     NSInteger value = (NSInteger) intBuffer[idx--];
     count--;
@@ -138,10 +138,10 @@
 - (NSInteger)integerAtIndex:(NSUInteger) anIndex
 {
     if ( SPARSE==NO  && anIndex > idx ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
     }
     else if ( SPARSE == YES && anIndex >= BuffSize ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
     }
     return intBuffer[anIndex];
 }
@@ -155,10 +155,10 @@
 - (NSInteger)removeIntegerAtIndex:(NSUInteger) anIndex
 {
     if ( SPARSE==NO && anIndex > idx ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
         return (NSInteger)-1;
     } else if ( SPARSE==YES && anIndex >= BuffSize ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
     }
     count--;
     return intBuffer[anIndex];
@@ -167,10 +167,10 @@
 - (void)replaceInteger:(NSInteger)aValue AtIndex:(NSUInteger)anIndex
 {
     if ( SPARSE == NO && anIndex > idx ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than count %d", anIndex, count]];
     }
     else if ( SPARSE == YES && anIndex >= BuffSize ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"Index %d must be less than BuffSize %d", anIndex, BuffSize]];
     }
     intBuffer[anIndex] = aValue;
 }

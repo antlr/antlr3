@@ -182,14 +182,14 @@ NSInteger debug = 0;
  *  static short[] which generates so much init code that the class won't
  *  compile. :(
  */
-- (short *) unpackEncodedString:(NSString *)encodedString
+- (NSInteger *) unpackEncodedString:(NSString *)encodedString
 {
     // walk first to find how big it is.
     int size = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    __strong short *data = (short *)calloc(size, sizeof(short));
+    __strong NSInteger *data = (short *)calloc(size, sizeof(NSInteger));
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];
@@ -203,7 +203,7 @@ NSInteger debug = 0;
 }
 
 /** Hideous duplication of code, but I need different typed arrays out :( */
-- (char *) unpackEncodedStringToUnsignedChars:(NSString *)encodedString
+- (short *) unpackEncodedStringToUnsignedChars:(NSString *)encodedString
 {
     // walk first to find how big it is.
     int size = 0;
@@ -220,7 +220,7 @@ NSInteger debug = 0;
             data[di++] = v;
         }
     }
-    return (char *)data;
+    return (short *)data;
 }
 
 - (NSInteger)getDecision

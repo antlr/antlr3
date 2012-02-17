@@ -13,7 +13,7 @@
 
 -(void) testAdd
 {
-	IntArray *intArray = [IntArray newIntArrayWithLen:10];
+	IntArray *intArray = [IntArray newArrayWithLen:10];
 	[intArray addInteger:1];
 	STAssertTrue([intArray count] == 1, @"Int array should be of size 1");
 	STAssertTrue([intArray integerAtIndex:0] == 1, @"First item in int array should be 1");
@@ -22,7 +22,7 @@
 
 -(void) testPushPop
 {
-	IntArray *intArray = [IntArray newIntArrayWithLen:10];
+	IntArray *intArray = [IntArray newArrayWithLen:10];
 	for (NSInteger i = 0; i < 10; i++)
 	{
 		[intArray push:i + 1];
@@ -35,7 +35,7 @@
 
 -(void) testClearAndAdd
 {
-	IntArray *intArray = [IntArray newIntArrayWithLen:10];
+	IntArray *intArray = [IntArray newArrayWithLen:10];
 	[intArray addInteger:1];
 	STAssertTrue([intArray count] == 1, @"Int array should be of size 1");
 	STAssertTrue([intArray integerAtIndex:0] == 1, @"First item in int array should be 1");

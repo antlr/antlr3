@@ -49,6 +49,17 @@ objcTypeInitMap ::= [
     default         : "nil"             // anything other than an atomic type
 ]
 
+// System.Boolean.ToString() returns "True" and "False", but the proper C# literals are "true" and "false"
+// The Java version of Boolean returns "true" and "false", so they map to themselves here.
+booleanLiteral ::= [
+	"True":"true",
+	"False":"false",
+	"true":"YES",
+	"false":"NO",
+	default:"NO"
+]
+
+
 className() ::= "<name><!<if(LEXER)>Lexer<else><if(TREE_PARSER)>Tree<endif>Parser<endif>!>"
 leadIn(type) ::=
 <<
@@ -184,9 +195,9 @@ headerFile( LEXER,
 <@imports>
 <actions.(actionScope).preincludes>
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import \<Foundation/Foundation.h>
+#import \<Cocoa/Cocoa.h>
 #import \<ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -678,10 +689,14 @@ genericParser(  grammar,
 
 @implementation <grammar.recognizerName>  // line 637
 
+/* ObjC start of ruleAttributeScope */
 #pragma mark Dynamic Rule Scopes ruleAttributeScope
 <rules:{rule | <rule.ruleDescriptor.ruleScope:ruleAttributeScope()>}>
+/* ObjC end of ruleAttributeScope */
 #pragma mark global Attribute Scopes globalAttributeScope
+/* ObjC start globalAttributeScope */
 <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScope()><endif>}>
+/* ObjC end globalAttributeScope */
 /* ObjC start actions.(actionScope).synthesize */
 <actions.(actionScope).synthesize>
 /* ObjC start synthesize() */
@@ -708,7 +723,7 @@ genericParser(  grammar,
 <if(PARSER)>
 - (id) initWithTokenStream:(<inputStreamType>)aStream
 {
-    self = [super initWithTokenStream:aStream State:[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1]];
+    self = [super initWithTokenStream:aStream State:[[RecognizerSharedState newRecognizerSharedStateWithRuleLen:<numRules>+1] retain]];
     if ( self != nil ) {
 <else><! TREE_PARSER !>
 - (id) initWithStream:(<inputStreamType>)aStream
@@ -916,26 +931,26 @@ ruleScopeCleanUp() ::= <<
 <ruleDescriptor.ruleScope:{it | [<it.name>_stack pop];}; separator="\n">
 >>
 
-ruleLabelDefs() ::= <<
+ruleLabelDefs() ::= <%
+/* ruleLabelDefs entry */<"\n">
 <[ruleDescriptor.tokenLabels, ruleDescriptor.tokenListLabels,
   ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it | <labelType> *<it.label.text> = nil;}; separator="\n">
+    :{it |<labelType> *<it.label.text> = nil;}; separator="\n"><"\n">
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"
->
-<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
-<ruleDescriptor.ruleListLabels:{ll|ParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n">
->>
+    :{it | AMutableArray *list_<it.label.text> = nil;}; separator="\n"><"\n">
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n"><"\n">
+<ruleDescriptor.ruleListLabels:{ll|ParserRuleReturnScope *<ll.label.text> = nil;}; separator="\n"><"\n">
+%>
 
 lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it | <labelType> *<it.label.text>=nil;}; separator="\n"
+    :{it |<labelType> *<it.label.text>=nil;}; separator="\n"
 >
-<ruleDescriptor.charLabels:{it | NSInteger <it.label.text>;}; separator="\n">
+<ruleDescriptor.charLabels:{it |NSInteger <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
-  ruleDescriptor.ruleListLabels]:{it | AMutableArray *list_<it.label.text>=nil; }; separator="\n">
+  ruleDescriptor.ruleListLabels]:{it |AMutableArray *list_<it.label.text>=nil; }; separator="\n">
 >>
 
 ruleReturnValue() ::= <%
@@ -952,7 +967,7 @@ retval
 
 ruleCleanUp() ::= <<
 /* token+rule list labels */
-<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]:{it | [list_<it.label.text> release];}; separator="\n">
+<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]:{it |[list_<it.label.text> release];}; separator="\n">
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!TREE_PARSER)>
 [retval setStop:[input LT:-1]];<\n>
@@ -1481,7 +1496,7 @@ cyclicDFAInterface(dfa) ::= <<
 #pragma mark Cyclic DFA interface start DFA<dfa.decisionNumber>
 @interface DFA<dfa.decisionNumber> : DFA {
 }
-+ newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)theRecognizer;
++ (DFA<dfa.decisionNumber> *) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)theRecognizer;
 - initWithRecognizer:(BaseRecognizer *)recognizer;
 @end /* end of DFA<dfa.decisionNumber> interface  */<\n>
 #pragma mark Cyclic DFA interface end DFA<dfa.decisionNumber><\n>
@@ -1498,25 +1513,37 @@ cyclicDFAInterface(dfa) ::= <<
  */
 cyclicDFA(dfa) ::= <<
 #pragma mark Cyclic DFA implementation start DFA<dfa.decisionNumber>
+
 @implementation DFA<dfa.decisionNumber>
 const static NSInteger dfa<dfa.decisionNumber>_eot[<dfa.numberOfStates>] =
     {<dfa.eot; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_eof[<dfa.numberOfStates>] =
     {<dfa.eof; wrap="\n     ", separator=",", null="-1">};
 const static unichar dfa<dfa.decisionNumber>_min[<dfa.numberOfStates>] =
-    {<dfa.min; wrap="\n     ", separator=",", null="0">};
+    {<dfa.min; wrap="\n     ", separator=",", null="-1">};
 const static unichar dfa<dfa.decisionNumber>_max[<dfa.numberOfStates>] =
-    {<dfa.max; wrap="\n     ", separator=",", null="0">};
+    {<dfa.max; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_accept[<dfa.numberOfStates>] =
     {<dfa.accept; wrap="\n     ", separator=",", null="-1">};
 const static NSInteger dfa<dfa.decisionNumber>_special[<dfa.numberOfStates>] =
     {<dfa.special; wrap="\n     ", separator=",", null="-1">};
-const static NSInteger dfa<dfa.decisionNumber>_transition[] = {};
+
+/** Used when there is no transition table entry for a particular state */
+#define dfa<dfa.decisionNumber>_T_empty	    nil
+
 <dfa.edgeTransitionClassMap.keys:{ table |
-const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separator=", ", wrap="\n ", null="-1">\};
+const static NSInteger dfa<dfa.decisionNumber>_T<i0>[] =
+{
+     <table; separator=", ", wrap="\n ", null="-1">
+\};
 }; null="">
 
-+ (id) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)aRecognizer
+const static NSInteger *dfa<dfa.decisionNumber>_transition[] =
+{
+    <dfa.transitionEdgeTables:{whichTable|dfa<dfa.decisionNumber>_T<whichTable>}; separator=", ", wrap="\n", null="nil">
+};
+
++ (DFA<dfa.decisionNumber> *) newDFA<dfa.decisionNumber>WithRecognizer:(BaseRecognizer *)aRecognizer
 {
     return [[[DFA<dfa.decisionNumber> alloc] initWithRecognizer:aRecognizer] retain];
 }
@@ -1532,12 +1559,15 @@ const static NSInteger dfa<dfa.decisionNumber>_transition<i0>[] = {<table; separ
         max = dfa<dfa.decisionNumber>_max;
         accept = dfa<dfa.decisionNumber>_accept;
         special = dfa<dfa.decisionNumber>_special;
+        transition = dfa<dfa.decisionNumber>_transition;
+/*
         if (!(transition = calloc(<dfa.numberOfStates>, sizeof(void*)))) {
             [self release];
             return nil;
         }
         len = <dfa.numberOfStates>;
         <dfa.transitionEdgeTables:{whichTable|transition[<i0>] = dfa<dfa.decisionNumber>_transition<whichTable>;}; separator="\n", null="">
+ */
     }
     return self;
 }
@@ -1629,7 +1659,7 @@ andPredicates(left,right) ::= "(<left>&&<right>)"
 
 orPredicates(operands) ::= "(<first(operands)><rest(operands):{o | ||<o>}>)"
 
-notPredicate(pred) ::= "!(<evalPredicate(pred, \"\")>)"
+notPredicate(pred) ::= "!(<evalPredicate(pred, {})>)"
 
 evalPredicate(pred,description) ::= "(<pred>)"
 
@@ -1657,21 +1687,23 @@ lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
 
 isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(([input LA:<k>] >= <lower>) && ([input LA:<k>] \<= <upper>))"
 
-setTest(ranges) ::= "<ranges; separator=\"||\">"
+setTest(ranges) ::= <%
+<ranges; separator="||">
+%>
 
 // A T T R I B U T E S
 
-memVars(scope) ::= << <scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n"> >>
+memVars(scope) ::= <% <scope.attributes:{a|<a.type> <a.name>;<\n>}; separator="\n"> %>
 
-properties(scope) ::= <<
+properties(scope) ::= <%
 <scope.attributes:{a|@property (assign, getter=get<a.name>, setter=set<a.name>:) <a.type> <a.name>;<\n>}; separator="\n">
->>
+%>
 
-methodsDecl(scope) ::= <<
+methodsDecl(scope) ::= <%
 <scope.attributes:{a|- (<a.type>)get<a.name>;<\n>- (void)set<a.name>:(<a.type>)aVal;<\n>}; separator="\n">
->>
+%>
 
-synthesize(scope) ::= << <scope.attributes:{a|@synthesize <a.name>;}; separator="\n"> >>
+synthesize(scope) ::= <% <scope.attributes:{a|@synthesize <a.name>;}; separator="\n"> %>
 
 methods(scope) ::= <%
 <scope.attributes:{a|
@@ -1740,9 +1772,9 @@ globalAttributeScopeInit(scope) ::= <<
 <scope.name>_stack = [SymbolStack newSymbolStackWithLen:30];<\n>
 >>
 
-globalAttributeScopeDealloc(scope) ::= << [<scope.name>_stack release];<\n> >>
+globalAttributeScopeDealloc(scope) ::= <% [<scope.name>_stack release];<\n> %>
 
-globalAttributeScope(scope) ::= << static <scope.name>_stack;<\n> >>
+globalAttributeScope(scope) ::= <% static <scope.name>_stack;<\n> %>
 
 ruleAttributeScopeMemVar(scope) ::= <%
 /* ObjC ruleAttributeScopeMemVar */<\n>
@@ -1842,7 +1874,7 @@ void<endif>
 <endif>
 %>
 
-delegateName(d) ::= << <if(d.label)><d.label><else>g<d.name><endif> >>
+delegateName(d) ::= <% <if(d.label)><d.label><else>g<d.name><endif> %>
 
 /** Using a type to init value map, try to init a type; if not in table
  *  must be an object, default value is "null".
@@ -1850,7 +1882,9 @@ delegateName(d) ::= << <if(d.label)><d.label><else>g<d.name><endif> >>
 initValue(typeName) ::= <% <objcTypeInitMap.(typeName)> %>
 
 /** Define a rule label including default value */
-ruleLabelDef(label) ::= << <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n> >>
+ruleLabelDef(label) ::= <%
+<ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> = <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n>
+%>
 
 /** Define a return struct for a rule if the code needs to access its
  *  start/stop tokens, tree stuff, attributes, ...  Leave a hole for
