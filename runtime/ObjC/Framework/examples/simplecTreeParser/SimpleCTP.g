@@ -7,7 +7,7 @@ options {
 
 scope Symbols
 {
-ANTLRCommonTree *tree;
+CommonTree *tree;
 }
 
 program

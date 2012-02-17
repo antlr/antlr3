@@ -2,7 +2,7 @@ grammar Lang;
 options {
 	output=AST;
 	language = ObjC;
-	ASTLabelType=ANTLRCommonTree;
+	ASTLabelType=CommonTree;
 }
 
 tokens {DECL;} // an imaginary node
