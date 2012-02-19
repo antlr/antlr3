@@ -294,7 +294,7 @@ public class CTarget extends Target {
         // the default size. If it is then whack it all the way up to the maximum that
         // we can sensibly get away with.
         //
-        if (CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE == CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE ) {
+        if (CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE == CodeGenerator.MADSI_DEFAULT ) {
 
             CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE = 65535;
         }
