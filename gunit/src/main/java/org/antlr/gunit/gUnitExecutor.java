@@ -188,7 +188,7 @@ public class gUnitExecutor implements ITestSuite {
 					//System.out.println("; Expecting " + test.getExpected() + "; Success?: " + test.getExpected().equals(test.getResult(result)));
 				} catch ( InvalidInputException e) {
 					numOfInvalidInput++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual(input.input);
 					invalids.add(test);
 					continue;
@@ -200,7 +200,7 @@ public class gUnitExecutor implements ITestSuite {
 
 				if (actual == null) {
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual("null");
 					failures.add(test);
 					onFail(test);
@@ -213,14 +213,14 @@ public class gUnitExecutor implements ITestSuite {
 				// TODO: something with ACTIONS - at least create action test type and throw exception.
 				else if ( ts.testSuites.get(input).getType()==gUnitParser.ACTION ) {	// expected Token: ACTION
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual("\t"+"{ACTION} is not supported in the grammarInfo yet...");
 					failures.add(test);
 					onFail(test);
 				}
 				else {
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					failures.add(test);
 					onFail(test);
 				}
