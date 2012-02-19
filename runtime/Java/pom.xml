@@ -16,7 +16,7 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr-master</artifactId>
       <version>3.4.1-SNAPSHOT</version>
-
+      <relativePath>../../pom.xml</relativePath>
   </parent>
   
   <name>Antlr Runtime 3.4.1-SNAPSHOT</name>
