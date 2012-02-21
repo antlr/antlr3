@@ -352,8 +352,8 @@
         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
         // and "(decision="+nvae.decisionNumber+") and
         // "state "+nvae.stateNumber
-        msg = [NSString stringWithFormat:@"no viable alternative at character \"%@\"",
-               [self getCharErrorDisplay:(nvae.c)]];
+        msg = [NSString stringWithFormat:@"no viable alternative decision:%d state:%d at character \"%@\"",
+               nvae.decisionNumber, nvae.stateNumber, [self getCharErrorDisplay:(nvae.c)]];
     }
     else if ( [e isKindOfClass:[EarlyExitException class]] ) {
         EarlyExitException *eee = (EarlyExitException *)e;
