@@ -263,10 +263,13 @@ lexerHeaderFile( LEXER,
 <rule.ruleDescriptor:{ruleDescriptor | <returnScopeInterface(scope=ruleDescriptor.returnScope)>}>}>
 #pragma mark Rule return scopes Interface end
 #pragma mark Tokens
+#ifndef TOKENLISTAlreadyDefined
+#define TOKENLISTAlreadyDefined 1
 #ifdef EOF
 #undef EOF
 #endif
 <tokens:{it | #define <it.name> <it.type>}; separator="\n">
+#endif
 /* interface lexer class */
 @interface <className()> <@superClassName>: <superClass><@end> { // line 283
 <cyclicDFAs:{dfa | DFA<dfa.decisionNumber> *dfa<dfa.decisionNumber>;}; separator="\n">
@@ -565,10 +568,13 @@ typedef enum {
 
 <cyclicDFAs:cyclicDFAInterface()>
 #pragma mark Tokens
+#ifndef TOKENLISTAlreadyDefined
+#define TOKENLISTAlreadyDefined 1
 #ifdef EOF
 #undef EOF
 #endif
 <tokens:{it | #define <it.name> <it.type>}; separator="\n">
+#endif
 #pragma mark Dynamic Global Scopes globalAttributeScopeInterface
 <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeInterface(scope=it)><endif>}>
 #pragma mark Dynamic Rule Scopes ruleAttributeScopeInterface
@@ -602,7 +608,7 @@ typedef enum {
 /* ObjC end of properties */
 
 + (void) initialize;
-+ (id) new<className()>:(<inputStreamType>)aStream;
++ (<className()> *) new<className()>:(<inputStreamType>)aStream;
 /* ObjC start of actions.(actionScope).methodsDecl */
 <actions.(actionScope).methodsDecl>
 /* ObjC end of actions.(actionScope).methodsDecl */
@@ -1560,14 +1566,6 @@ const static NSInteger *dfa<dfa.decisionNumber>_transition[] =
         accept = dfa<dfa.decisionNumber>_accept;
         special = dfa<dfa.decisionNumber>_special;
         transition = dfa<dfa.decisionNumber>_transition;
-/*
-        if (!(transition = calloc(<dfa.numberOfStates>, sizeof(void*)))) {
-            [self release];
-            return nil;
-        }
-        len = <dfa.numberOfStates>;
-        <dfa.transitionEdgeTables:{whichTable|transition[<i0>] = dfa<dfa.decisionNumber>_transition<whichTable>;}; separator="\n", null="">
- */
     }
     return self;
 }
@@ -1774,7 +1772,11 @@ globalAttributeScopeInit(scope) ::= <<
 
 globalAttributeScopeDealloc(scope) ::= <% [<scope.name>_stack release];<\n> %>
 
-globalAttributeScope(scope) ::= <% static <scope.name>_stack;<\n> %>
+globalAttributeScope(scope) ::= <%
+<if(scope.name)>
+static <scope.name>_stack;<\n>
+<endif>
+%>
 
 ruleAttributeScopeMemVar(scope) ::= <%
 /* ObjC ruleAttributeScopeMemVar */<\n>
