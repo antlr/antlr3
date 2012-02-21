@@ -317,6 +317,7 @@ public class GrammarReport {
 	 *  return a human-readable version.  Return null if there is a
 	 *  problem with the data.
 	 */
+	@Override
 	public String toString() {
 		return toString(toNotifyString());
 	}

@@ -61,6 +61,7 @@ public class CommonTokenStream extends BufferedTokenStream {
     }
 
     /** Always leave p on an on-channel token. */
+	@Override
     public void consume() {
         if ( p == -1 ) setup();
         p++;
@@ -71,6 +72,7 @@ public class CommonTokenStream extends BufferedTokenStream {
         }
     }
 
+	@Override
     protected Token LB(int k) {
         if ( k==0 || (p-k)<0 ) return null;
 
@@ -86,6 +88,7 @@ public class CommonTokenStream extends BufferedTokenStream {
         return tokens.get(i);
     }
 
+	@Override
     public Token LT(int k) {
         //System.out.println("enter LT("+k+")");
         if ( p == -1 ) setup();
@@ -122,11 +125,13 @@ public class CommonTokenStream extends BufferedTokenStream {
         return i;
     }
 
+	@Override
 	public void reset() {
 		super.reset();
 		p = skipOffTokenChannels(0);
 	}
 
+	@Override
 	protected void setup() {
         p = 0;
         sync(0);
@@ -151,6 +156,7 @@ public class CommonTokenStream extends BufferedTokenStream {
 	}
 
     /** Reset this token stream by setting its token source. */
+	@Override
     public void setTokenSource(TokenSource tokenSource) {
         super.setTokenSource(tokenSource);
         channel = Token.DEFAULT_CHANNEL;

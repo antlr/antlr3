@@ -50,6 +50,7 @@ public class GrammarInsufficientPredicatesMessage extends Message {
 		this.altToLocations = altToLocations;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

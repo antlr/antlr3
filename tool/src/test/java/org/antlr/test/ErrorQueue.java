@@ -39,18 +39,22 @@ public class ErrorQueue implements ANTLRErrorListener {
 	List errors = new LinkedList();
 	List warnings = new LinkedList();
 
+	@Override
 	public void info(String msg) {
 		infos.add(msg);
 	}
 
+	@Override
 	public void error(Message msg) {
 		errors.add(msg);
 	}
 
+	@Override
 	public void warning(Message msg) {
 		warnings.add(msg);
 	}
 
+	@Override
 	public void error(ToolMessage msg) {
 		errors.add(msg);
 	}
@@ -59,6 +63,7 @@ public class ErrorQueue implements ANTLRErrorListener {
 		return infos.size() + errors.size() + warnings.size();
 	}
 
+	@Override
 	public String toString() {
 		return "infos: "+infos+
 			"errors: "+errors+

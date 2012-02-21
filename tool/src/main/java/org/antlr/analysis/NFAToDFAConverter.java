@@ -1669,6 +1669,7 @@ public class NFAToDFAConverter {
 		// Sort ascending according to alt; alt i has higher precedence than i+1
 		Collections.sort(configsWithPreds,
 			 new Comparator() {
+			@Override
 				 public int compare(Object a, Object b) {
 					 NFAConfiguration ca = (NFAConfiguration)a;
 					 NFAConfiguration cb = (NFAConfiguration)b;

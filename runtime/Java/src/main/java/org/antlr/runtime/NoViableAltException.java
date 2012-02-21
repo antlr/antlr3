@@ -46,6 +46,7 @@ public class NoViableAltException extends RecognitionException {
 		this.stateNumber = stateNumber;
 	}
 
+	@Override
 	public String toString() {
 		if ( input instanceof CharStream ) {
 			return "NoViableAltException('"+(char)getUnexpectedType()+"'@["+grammarDecisionDescription+"])";

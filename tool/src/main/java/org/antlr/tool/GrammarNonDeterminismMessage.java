@@ -56,6 +56,7 @@ public class GrammarNonDeterminismMessage extends Message {
 		}
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

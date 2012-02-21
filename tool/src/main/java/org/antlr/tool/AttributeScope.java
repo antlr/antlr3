@@ -191,6 +191,7 @@ public class AttributeScope {
 		return attributes==null?0:attributes.size();
 	}
 
+	@Override
 	public String toString() {
 		return (isDynamicGlobalScope?"global ":"")+getName()+":"+attributes;
 	}

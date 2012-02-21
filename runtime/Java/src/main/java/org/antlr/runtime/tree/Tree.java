@@ -123,5 +123,6 @@ public interface Tree {
 
 	String toStringTree();
 
+	@Override
 	String toString();
 }

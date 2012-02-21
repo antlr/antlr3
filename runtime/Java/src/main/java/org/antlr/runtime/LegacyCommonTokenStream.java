@@ -132,6 +132,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 *
 	 *  Walk past any token not on the channel the parser is listening to.
 	 */
+	@Override
 	public void consume() {
 		if ( p<tokens.size() ) {
             p++;
@@ -235,6 +236,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	/** Get the ith token from the current position 1..n where k=1 is the
 	 *  first symbol of lookahead.
 	 */
+	@Override
 	public Token LT(int k) {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -296,6 +298,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	/** Return absolute token i; ignore which channel the tokens are on;
 	 *  that is, count all tokens not just on-channel tokens.
 	 */
+	@Override
 	public Token get(int i) {
 		return (Token)tokens.get(i);
 	}
@@ -307,10 +310,12 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return tokens.subList(start, stop);
 	}
 
+	@Override
 	public int LA(int i) {
         return LT(i).getType();
     }
 
+	@Override
     public int mark() {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -319,26 +324,32 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return lastMarker;
 	}
 
+	@Override
 	public void release(int marker) {
 		// no resources to release
 	}
 
+	@Override
 	public int size() {
 		return tokens.size();
 	}
 
+	@Override
     public int index() {
         return p;
     }
 
+	@Override
 	public int range() {
 		return range;
 	}
 
+	@Override
 	public void rewind(int marker) {
 		seek(marker);
 	}
 
+	@Override
 	public void rewind() {
 		seek(lastMarker);
 	}
@@ -348,18 +359,22 @@ public class LegacyCommonTokenStream implements TokenStream {
 		lastMarker = 0;
 	}
 	
+	@Override
 	public void seek(int index) {
 		p = index;
 	}
 
+	@Override
 	public TokenSource getTokenSource() {
 		return tokenSource;
 	}
 
+	@Override
 	public String getSourceName() {
 		return getTokenSource().getSourceName();
 	}
 
+	@Override
 	public String toString() {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -367,6 +382,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return toString(0, tokens.size()-1);
 	}
 
+	@Override
 	public String toString(int start, int stop) {
 		if ( start<0 || stop<0 ) {
 			return null;
@@ -385,6 +401,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return buf.toString();
 	}
 
+	@Override
 	public String toString(Token start, Token stop) {
 		if ( start!=null && stop!=null ) {
 			return toString(start.getTokenIndex(), stop.getTokenIndex());

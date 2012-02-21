@@ -44,32 +44,40 @@ public class ParseTree extends BaseTree {
 		this.payload = label;
 	}
 
+	@Override
 	public Tree dupNode() {
 		return null;
 	}
 
+	@Override
 	public int getType() {
 		return 0;
 	}
 
+	@Override
 	public String getText() {
 		return toString();
 	}
 
+	@Override
 	public int getTokenStartIndex() {
 		return 0;
 	}
 
+	@Override
 	public void setTokenStartIndex(int index) {
 	}
 
+	@Override
 	public int getTokenStopIndex() {
 		return 0;
 	}
 
+	@Override
 	public void setTokenStopIndex(int index) {
 	}
 
+	@Override
 	public String toString() {
 		if ( payload instanceof Token ) {
 			Token t = (Token)payload;

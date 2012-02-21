@@ -36,6 +36,7 @@ import org.antlr.tool.Grammar;
 import java.io.IOException;
 
 public class ObjCTarget extends Target {
+	@Override
 	protected void genRecognizerHeaderFile(Tool tool,
 										   CodeGenerator generator,
 										   Grammar grammar,
@@ -46,6 +47,7 @@ public class ObjCTarget extends Target {
 		generator.write(headerFileST, grammar.name + Grammar.grammarTypeToFileNameSuffix[grammar.type] + extName);
 	}
 
+	@Override
 	public String getTargetCharLiteralFromANTLRCharLiteral(CodeGenerator generator,
 														   String literal)
 	{
@@ -67,6 +69,7 @@ public class ObjCTarget extends Target {
 	*  around the incoming literal.  Just flip the quotes and replace
 	*  double quotes with \"
 	*/
+	@Override
 	public String getTargetStringLiteralFromANTLRStringLiteral(CodeGenerator generator,
 															   String literal)
 	{
@@ -79,6 +82,7 @@ public class ObjCTarget extends Target {
 	}
 
 	/** If we have a label, prefix it with the recognizer's name */
+	@Override
 	public String getTokenTypeAsTargetLabel(CodeGenerator generator, int ttype) {
 		String name = generator.grammar.getTokenDisplayName(ttype);
 		// If name is a literal, return the token type instead

@@ -75,11 +75,13 @@ public class Strip {
         // ACTIONS STUFF
         wiz.visit(t, ANTLRv3Parser.ACTION,
            new TreeWizard.Visitor() {
+			@Override
                public void visit(Object t) { ACTION(tokens, (CommonTree)t); }
            });
 
         wiz.visit(t, ANTLRv3Parser.AT,  // ^('@' id ACTION) rule actions
             new TreeWizard.Visitor() {
+			@Override
               public void visit(Object t) {
                   CommonTree a = (CommonTree)t;
                   CommonTree action = null;
@@ -94,6 +96,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.ARG, // wipe rule arguments
                   new TreeWizard.Visitor() {
+			@Override
               public void visit(Object t) {
                   CommonTree a = (CommonTree)t;
                   a = (CommonTree)a.getChild(0);
@@ -103,6 +106,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.RET, // wipe rule return declarations
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     CommonTree ret = (CommonTree)a.getChild(0);
@@ -112,6 +116,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.SEMPRED, // comment out semantic predicates
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     tokens.replace(a.token.getTokenIndex(), "/*"+a.getText()+"*/");
@@ -119,6 +124,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.GATED_SEMPRED, // comment out semantic predicates
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     String text = tokens.toString(a.getTokenStartIndex(),
@@ -130,6 +136,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.SCOPE, // comment scope specs
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     tokens.delete(a.getTokenStartIndex(),
@@ -139,6 +146,7 @@ public class Strip {
             });        
         wiz.visit(t, ANTLRv3Parser.ARG_ACTION, // args r[x,y] -> ^(r [x,y])
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     if ( a.getParent().getType()==ANTLRv3Parser.RULE_REF ) {
@@ -149,6 +157,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.LABEL_ASSIGN, // ^('=' id ^(RULE_REF [arg])), ...
             new TreeWizard.Visitor() {
+			@Override
                 public void visit(Object t) {
                     CommonTree a = (CommonTree)t;
                     if ( !a.hasAncestor(ANTLRv3Parser.OPTIONS) ) { // avoid options
@@ -160,6 +169,7 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.LIST_LABEL_ASSIGN, // ^('+=' id ^(RULE_REF [arg])), ...
             new TreeWizard.Visitor() {
+			@Override
               public void visit(Object t) {
                   CommonTree a = (CommonTree)t;
                   CommonTree child = (CommonTree)a.getChild(0);
@@ -172,6 +182,7 @@ public class Strip {
         // AST STUFF
         wiz.visit(t, ANTLRv3Parser.REWRITE,
             new TreeWizard.Visitor() {
+			@Override
               public void visit(Object t) {
                   CommonTree a = (CommonTree)t;
                   CommonTree child = (CommonTree)a.getChild(0);
@@ -186,12 +197,14 @@ public class Strip {
             });
         wiz.visit(t, ANTLRv3Parser.ROOT,
            new TreeWizard.Visitor() {
+			@Override
                public void visit(Object t) {
                    tokens.delete(((CommonTree)t).token.getTokenIndex());
                }
            });
         wiz.visit(t, ANTLRv3Parser.BANG,
            new TreeWizard.Visitor() {
+			@Override
                public void visit(Object t) {
                    tokens.delete(((CommonTree)t).token.getTokenIndex());
                }

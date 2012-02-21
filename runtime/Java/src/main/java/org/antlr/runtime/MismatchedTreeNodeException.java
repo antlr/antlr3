@@ -43,6 +43,7 @@ public class MismatchedTreeNodeException extends RecognitionException {
 		this.expecting = expecting;
 	}
 
+	@Override
 	public String toString() {
 		return "MismatchedTreeNodeException("+getUnexpectedType()+"!="+expecting+")";
 	}

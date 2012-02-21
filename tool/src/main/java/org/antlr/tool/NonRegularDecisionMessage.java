@@ -46,6 +46,7 @@ public class NonRegularDecisionMessage extends Message {
 		this.altsWithRecursion = altsWithRecursion;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

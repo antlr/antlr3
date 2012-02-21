@@ -46,6 +46,7 @@ public class NFAConversionThread implements Runnable {
 		this.i = i;
 		this.j = j;
 	}
+	@Override
 	public void run() {
 		for (int decision=i; decision<=j; decision++) {
 			NFAState decisionStartState = grammar.getDecisionNFAStartState(decision);

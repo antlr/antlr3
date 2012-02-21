@@ -82,6 +82,7 @@ public class BitSet implements IntSet, Cloneable {
     }
 
     /** or this element into this set (grow as necessary to accommodate) */
+	@Override
     public void add(int el) {
         //System.out.println("add("+el+")");
         int n = wordNumber(el);
@@ -93,6 +94,7 @@ public class BitSet implements IntSet, Cloneable {
         bits[n] |= bitMask(el);
     }
 
+	@Override
     public void addAll(IntSet set) {
         if ( set instanceof BitSet ) {
             this.orInPlace((BitSet)set);
@@ -148,6 +150,7 @@ public class BitSet implements IntSet, Cloneable {
 		 */
 	}
 
+	@Override
     public IntSet and(IntSet a) {
         BitSet s = (BitSet)this.clone();
         s.andInPlace((BitSet)a);
@@ -184,6 +187,7 @@ public class BitSet implements IntSet, Cloneable {
         bits[n] &= ~bitMask(el);
     }
 
+	@Override
     public Object clone() {
         BitSet s;
         try {
@@ -197,6 +201,7 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
+	@Override
     public int size() {
         int deg = 0;
         for (int i = bits.length - 1; i >= 0; i--) {
@@ -212,6 +217,7 @@ public class BitSet implements IntSet, Cloneable {
         return deg;
     }
 
+	@Override
     public boolean equals(Object other) {
         if ( other == null || !(other instanceof BitSet) ) {
             return false;
@@ -259,6 +265,7 @@ public class BitSet implements IntSet, Cloneable {
         bits = newbits;
     }
 
+	@Override
     public boolean member(int el) {
         int n = wordNumber(el);
         if (n >= bits.length) return false;
@@ -268,6 +275,7 @@ public class BitSet implements IntSet, Cloneable {
     /** Get the first element you find and return it.  Return Label.INVALID
      *  otherwise.
      */
+	@Override
     public int getSingleElement() {
         for (int i = 0; i < (bits.length << LOG_BITS); i++) {
             if (member(i)) {
@@ -277,6 +285,7 @@ public class BitSet implements IntSet, Cloneable {
         return Label.INVALID;
     }
 
+	@Override
     public boolean isNil() {
         for (int i = bits.length - 1; i >= 0; i--) {
             if (bits[i] != 0) return false;
@@ -290,6 +299,7 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
+	@Override
     public IntSet complement(IntSet set) {
 		if ( set==null ) {
 			return this.complement();
@@ -368,6 +378,7 @@ public class BitSet implements IntSet, Cloneable {
 	}
 
     /** return this | a in a new set */
+	@Override
     public IntSet or(IntSet a) {
 		if ( a==null ) {
 			return this;
@@ -392,6 +403,7 @@ public class BitSet implements IntSet, Cloneable {
     }
 
     // remove this element from this set
+	@Override
     public void remove(int el) {
         int n = wordNumber(el);
         if (n >= bits.length) {
@@ -439,6 +451,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
+	@Override
     public IntSet subtract(IntSet a) {
         if (a == null || !(a instanceof BitSet)) return null;
 
@@ -447,6 +460,7 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
+	@Override
 	public List toList() {
 		throw new NoSuchMethodError("BitSet.toList() unimplemented");
 	}
@@ -466,6 +480,7 @@ public class BitSet implements IntSet, Cloneable {
         return bits;
     }
 
+	@Override
     public String toString() {
         return toString(null);
     }
@@ -474,6 +489,7 @@ public class BitSet implements IntSet, Cloneable {
      * separator The string to put in between elements
      * @return A commma-separated list of values
      */
+	@Override
     public String toString(Grammar g) {
         StringBuffer buf = new StringBuffer();
         String separator = ",";

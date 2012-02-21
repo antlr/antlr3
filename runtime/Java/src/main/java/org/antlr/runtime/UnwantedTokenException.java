@@ -40,6 +40,7 @@ public class UnwantedTokenException extends MismatchedTokenException {
 		return token;
 	}
 
+	@Override
 	public String toString() {
 		String exp = ", expected "+expecting;
 		if ( expecting==Token.INVALID_TOKEN_TYPE ) {

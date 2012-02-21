@@ -173,14 +173,17 @@ public class DFAState extends State {
 		reachableLabels = null;
 	}
 
+	@Override
 	public Transition transition(int i) {
         return (Transition)transitions.get(i);
     }
 
+	@Override
     public int getNumberOfTransitions() {
         return transitions.size();
     }
 
+	@Override
     public void addTransition(Transition t) {
         transitions.add(t);
     }
@@ -389,6 +392,7 @@ public class DFAState extends State {
      *  This is used when we add DFAState objects to the DFA.states Map and
      *  when we compare DFA states.  Computed in addNFAConfiguration()
      */
+	@Override
     public int hashCode() {
 		if ( cachedHashCode==0 ) {
 			// LL(1) algorithm doesn't use NFA configurations, which
@@ -409,6 +413,7 @@ public class DFAState extends State {
 	 *  to know if any other state exists that has this exact set of NFA
 	 *  configurations.  The DFAState state number is irrelevant.
      */
+	@Override
     public boolean equals(Object o) {
 		// compare set of NFA configurations in this set with other
         DFAState other = (DFAState)o;
@@ -748,6 +753,7 @@ public class DFAState extends State {
     }
 
     /** Print all NFA states plus what alts they predict */
+	@Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append(stateNumber+":{");

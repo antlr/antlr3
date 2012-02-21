@@ -135,6 +135,7 @@ public class NFAContext {
 	 *  The hashCode is now cheap as it's computed once upon each context
 	 *  push on the stack.  Use it to make equals() more efficient.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		NFAContext other = ((NFAContext)o);
 		if ( this.cachedHashCode != other.cachedHashCode ) {
@@ -259,6 +260,7 @@ public class NFAContext {
 		return n;
 	}
 
+	@Override
     public int hashCode() {
         return cachedHashCode;
         /*
@@ -279,6 +281,7 @@ public class NFAContext {
 		return parent==null;
 	}
 
+	@Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         NFAContext sp = this;

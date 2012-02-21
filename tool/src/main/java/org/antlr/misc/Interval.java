@@ -61,6 +61,7 @@ public class Interval {
 		return cache[a];
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
@@ -136,6 +137,7 @@ public class Interval {
 		return diff;
 	}
 
+	@Override
 	public String toString() {
 		return a+".."+b;
 	}

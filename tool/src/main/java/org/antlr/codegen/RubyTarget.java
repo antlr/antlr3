@@ -90,6 +90,7 @@ public class RubyTarget extends Target
     		rubyCharValueEscape['"'] = "\\\"";
     	}
 
+		@Override
         public String toString( Object o, String formatName, Locale locale ) {
 			if ( formatName==null ) {
 				return o.toString();
@@ -300,6 +301,7 @@ public class RubyTarget extends Target
         }
     }
 
+	@Override
     protected void genRecognizerFile(
     		Tool tool,
     		CodeGenerator generator,
@@ -364,6 +366,7 @@ public class RubyTarget extends Target
         generator.write( outputFileST, fileName );
     }
 
+	@Override
     public String getTargetCharLiteralFromANTLRCharLiteral(
         CodeGenerator generator,
         String literal
@@ -410,12 +413,14 @@ public class RubyTarget extends Target
         return ( "0x" + Integer.toHexString( code_point ) );
     }
 
+	@Override
     public int getMaxCharValue( CodeGenerator generator )
     {
         // Versions before 1.9 do not support unicode
         return 0xFF;
     }
 
+	@Override
     public String getTokenTypeAsTargetLabel( CodeGenerator generator, int ttype )
     {
         String name = generator.grammar.getTokenDisplayName( ttype );
@@ -426,6 +431,7 @@ public class RubyTarget extends Target
         return name;
     }
 
+	@Override
     public boolean isValidActionScope( int grammarType, String scope ) {
         if ( scope.equals( "all" ) )       {
             return true;
@@ -468,6 +474,7 @@ public class RubyTarget extends Target
         return false;
     }
 
+	@Override
     public String encodeIntAsCharEscape( final int v ) {
         final int intValue;
 

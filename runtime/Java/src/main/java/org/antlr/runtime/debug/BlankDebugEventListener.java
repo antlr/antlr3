@@ -35,43 +35,43 @@ import org.antlr.runtime.Token;
  *  sensitive to updates to debug interface.
  */
 public class BlankDebugEventListener implements DebugEventListener {
-	public void enterRule(String grammarFileName, String ruleName) {}
-	public void exitRule(String grammarFileName, String ruleName) {}
-	public void enterAlt(int alt) {}
-	public void enterSubRule(int decisionNumber) {}
-	public void exitSubRule(int decisionNumber) {}
-	public void enterDecision(int decisionNumber, boolean couldBacktrack) {}
-	public void exitDecision(int decisionNumber) {}
-	public void location(int line, int pos) {}
-	public void consumeToken(Token token) {}
-	public void consumeHiddenToken(Token token) {}
-	public void LT(int i, Token t) {}
-	public void mark(int i) {}
-	public void rewind(int i) {}
-	public void rewind() {}
-	public void beginBacktrack(int level) {}
-	public void endBacktrack(int level, boolean successful) {}
-	public void recognitionException(RecognitionException e) {}
-	public void beginResync() {}
-	public void endResync() {}
-	public void semanticPredicate(boolean result, String predicate) {}
-	public void commence() {}
-	public void terminate() {}
+	@Override public void enterRule(String grammarFileName, String ruleName) {}
+	@Override public void exitRule(String grammarFileName, String ruleName) {}
+	@Override public void enterAlt(int alt) {}
+	@Override public void enterSubRule(int decisionNumber) {}
+	@Override public void exitSubRule(int decisionNumber) {}
+	@Override public void enterDecision(int decisionNumber, boolean couldBacktrack) {}
+	@Override public void exitDecision(int decisionNumber) {}
+	@Override public void location(int line, int pos) {}
+	@Override public void consumeToken(Token token) {}
+	@Override public void consumeHiddenToken(Token token) {}
+	@Override public void LT(int i, Token t) {}
+	@Override public void mark(int i) {}
+	@Override public void rewind(int i) {}
+	@Override public void rewind() {}
+	@Override public void beginBacktrack(int level) {}
+	@Override public void endBacktrack(int level, boolean successful) {}
+	@Override public void recognitionException(RecognitionException e) {}
+	@Override public void beginResync() {}
+	@Override public void endResync() {}
+	@Override public void semanticPredicate(boolean result, String predicate) {}
+	@Override public void commence() {}
+	@Override public void terminate() {}
 
 	// Tree parsing stuff
 
-	public void consumeNode(Object t) {}
-	public void LT(int i, Object t) {}
+	@Override public void consumeNode(Object t) {}
+	@Override public void LT(int i, Object t) {}
 
 	// AST Stuff
 
-	public void nilNode(Object t) {}
-	public void errorNode(Object t) {}
-	public void createNode(Object t) {}
-	public void createNode(Object node, Token token) {}
-	public void becomeRoot(Object newRoot, Object oldRoot) {}
-	public void addChild(Object root, Object child) {}
-	public void setTokenBoundaries(Object t, int tokenStartIndex, int tokenStopIndex) {}
+	@Override public void nilNode(Object t) {}
+	@Override public void errorNode(Object t) {}
+	@Override public void createNode(Object t) {}
+	@Override public void createNode(Object node, Token token) {}
+	@Override public void becomeRoot(Object newRoot, Object oldRoot) {}
+	@Override public void addChild(Object root, Object child) {}
+	@Override public void setTokenBoundaries(Object t, int tokenStartIndex, int tokenStopIndex) {}
 }
 
 

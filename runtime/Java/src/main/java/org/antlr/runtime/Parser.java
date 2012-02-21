@@ -45,6 +45,7 @@ public class Parser extends BaseRecognizer {
 		this.input = input;
     }
 
+	@Override
 	public void reset() {
 		super.reset(); // reset all recognizer state variables
 		if ( input!=null ) {
@@ -52,10 +53,12 @@ public class Parser extends BaseRecognizer {
 		}
 	}
 
+	@Override
 	protected Object getCurrentInputSymbol(IntStream input) {
 		return ((TokenStream)input).LT(1);
 	}
 
+	@Override
 	protected Object getMissingSymbol(IntStream input,
 									  RecognitionException e,
 									  int expectedTokenType,
@@ -87,6 +90,7 @@ public class Parser extends BaseRecognizer {
 		return input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}

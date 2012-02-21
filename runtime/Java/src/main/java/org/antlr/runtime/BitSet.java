@@ -163,6 +163,7 @@ public class BitSet implements Cloneable {
         return 1L << bitPosition;
     }
 
+	@Override
     public Object clone() {
         BitSet s;
         try {
@@ -191,6 +192,7 @@ public class BitSet implements Cloneable {
         return deg;
     }
 
+	@Override
     public boolean equals(Object other) {
         if ( other == null || !(other instanceof BitSet) ) {
             return false;
@@ -293,6 +295,7 @@ public class BitSet implements Cloneable {
 		return bit >> LOG_BITS; // bit / BITS
 	}
 
+	@Override
 	public String toString() {
 		return toString(null);
 	}

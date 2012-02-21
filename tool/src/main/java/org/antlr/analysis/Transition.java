@@ -63,21 +63,25 @@ public class Transition implements Comparable {
         return label.isSemanticPredicate();
     }
 
+	@Override
     public int hashCode() {
         return label.hashCode() + target.stateNumber;
     }
 
+	@Override
     public boolean equals(Object o) {
         Transition other = (Transition)o;
         return this.label.equals(other.label) &&
                this.target.equals(other.target);
     }
 
+	@Override
     public int compareTo(Object o) {
         Transition other = (Transition)o;
         return this.label.compareTo(other.label);
     }
 
+	@Override
     public String toString() {
         return label+"->"+target.stateNumber;
     }

@@ -51,6 +51,7 @@ public class DebugTokenStream implements TokenStream {
 		this.dbg = dbg;
 	}
 
+	@Override
 	public void consume() {
 		if ( initialStreamState ) {
 			consumeInitialHiddenTokens();
@@ -77,6 +78,7 @@ public class DebugTokenStream implements TokenStream {
 		initialStreamState = false;
 	}
 
+	@Override
 	public Token LT(int i) {
 		if ( initialStreamState ) {
 			consumeInitialHiddenTokens();
@@ -85,6 +87,7 @@ public class DebugTokenStream implements TokenStream {
 		return input.LT(i);
 	}
 
+	@Override
 	public int LA(int i) {
 		if ( initialStreamState ) {
 			consumeInitialHiddenTokens();
@@ -93,63 +96,77 @@ public class DebugTokenStream implements TokenStream {
 		return input.LA(i);
 	}
 
+	@Override
 	public Token get(int i) {
 		return input.get(i);
 	}
 
+	@Override
 	public int mark() {
 		lastMarker = input.mark();
 		dbg.mark(lastMarker);
 		return lastMarker;
 	}
 
+	@Override
 	public int index() {
 		return input.index();
 	}
 
+	@Override
 	public int range() {
 		return input.range();
 	}
 
+	@Override
 	public void rewind(int marker) {
 		dbg.rewind(marker);
 		input.rewind(marker);
 	}
 
+	@Override
 	public void rewind() {
 		dbg.rewind();
 		input.rewind(lastMarker);
 	}
 
+	@Override
 	public void release(int marker) {
 	}
 
+	@Override
 	public void seek(int index) {
 		// TODO: implement seek in dbg interface
 		// db.seek(index);
 		input.seek(index);
 	}
 
+	@Override
 	public int size() {
 		return input.size();
 	}
 
+	@Override
 	public TokenSource getTokenSource() {
 		return input.getTokenSource();
 	}
 
+	@Override
 	public String getSourceName() {
 		return getTokenSource().getSourceName();
 	}
 
+	@Override
 	public String toString() {
 		return input.toString();
 	}
 
+	@Override
 	public String toString(int start, int stop) {
 		return input.toString(start,stop);
 	}
 
+	@Override
 	public String toString(Token start, Token stop) {
 		return input.toString(start,stop);
 	}

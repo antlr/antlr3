@@ -81,6 +81,7 @@ public class IntervalSet implements IntSet {
     /** Add a single element to the set.  An isolated element is stored
      *  as a range el..el.
      */
+	@Override
     public void add(int el) {
         add(el,el);
     }
@@ -184,6 +185,7 @@ public class IntervalSet implements IntSet {
     }
 */
 
+	@Override
 	public void addAll(IntSet set) {
 		if ( set==null ) {
 			return;
@@ -212,6 +214,7 @@ public class IntervalSet implements IntSet {
      *
      *  'this' is assumed to be either a subset or equal to vocabulary.
      */
+	@Override
     public IntSet complement(IntSet vocabulary) {
         if ( vocabulary==null ) {
             return null; // nothing in common with null set
@@ -257,6 +260,7 @@ public class IntervalSet implements IntSet {
 	 *  other is assumed to be a subset of this;
      *  anything that is in other but not in this will be ignored.
 	 */
+	@Override
 	public IntSet subtract(IntSet other) {
 		// assume the whole unicode range here for the complement
 		// because it doesn't matter.  Anything beyond the max of this' set
@@ -387,6 +391,7 @@ public class IntervalSet implements IntSet {
 	 */
 
     /** TODO: implement this! */
+	@Override
 	public IntSet or(IntSet a) {
 		IntervalSet o = new IntervalSet();
 		o.addAll(this);
@@ -400,6 +405,7 @@ public class IntervalSet implements IntSet {
      *  just walk them together.  This is roughly O(min(n,m)) for interval
      *  list lengths n and m.
      */
+	@Override
 	public IntSet and(IntSet other) {
 		if ( other==null ) { //|| !(other instanceof IntervalSet) ) {
 			return null; // nothing in common with null set
@@ -469,6 +475,7 @@ public class IntervalSet implements IntSet {
 	}
 
     /** Is el in any range of this set? */
+	@Override
     public boolean member(int el) {
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
@@ -498,11 +505,13 @@ public class IntervalSet implements IntSet {
     }
 
     /** return true if this set has no members */
+	@Override
     public boolean isNil() {
         return intervals==null || intervals.size()==0;
     }
 
     /** If this set is a single integer, return it otherwise Label.INVALID */
+	@Override
     public int getSingleElement() {
         if ( intervals!=null && intervals.size()==1 ) {
             Interval I = (Interval)intervals.get(0);
@@ -548,6 +557,7 @@ public class IntervalSet implements IntSet {
      *  to make sure they are the same.  Interval.equals() is used
      *  by the List.equals() method to check the ranges.
      */
+	@Override
     public boolean equals(Object obj) {
         if ( obj==null || !(obj instanceof IntervalSet) ) {
             return false;
@@ -556,10 +566,12 @@ public class IntervalSet implements IntSet {
         return this.intervals.equals(other.intervals);
     }
 
+	@Override
     public String toString() {
         return toString(null);
     }
 
+	@Override
     public String toString(Grammar g) {
         StringBuffer buf = new StringBuffer();
 		if ( this.intervals==null || this.intervals.size()==0 ) {
@@ -599,6 +611,7 @@ public class IntervalSet implements IntSet {
         return buf.toString();
     }
 
+	@Override
     public int size() {
 		int n = 0;
 		int numIntervals = intervals.size();
@@ -613,6 +626,7 @@ public class IntervalSet implements IntSet {
 		return n;
     }
 
+	@Override
     public List toList() {
 		List values = new ArrayList();
 		int n = intervals.size();
@@ -679,6 +693,7 @@ public class IntervalSet implements IntSet {
 		return s;
 	}
 
+	@Override
 	public void remove(int el) {
         throw new NoSuchMethodError("IntervalSet.remove() unimplemented");
     }

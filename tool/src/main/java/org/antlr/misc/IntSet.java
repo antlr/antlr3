@@ -67,6 +67,7 @@ public interface IntSet {
 
     boolean isNil();
 
+	@Override
     boolean equals(Object obj);
 
     int getSingleElement();
@@ -78,6 +79,7 @@ public interface IntSet {
 
     List toList();
 
+	@Override
     String toString();
 
     String toString(Grammar g);

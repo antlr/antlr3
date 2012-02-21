@@ -176,6 +176,7 @@ public class Grammar {
 		public Rule getReferencedRule() {
 			return getRule(referencedRuleName);
 		}
+		@Override
 		public String toString() {
 			return elementRef.toString();
 		}
@@ -3136,6 +3137,7 @@ outer:
 		return AUTO_GENERATED_TOKEN_NAME_PREFIX +tokenType;
 	}
 
+	@Override
 	public String toString() {
 	//	return "FFFFFFFFFFFFFF";
 		return grammarTreeToString(grammarTree);

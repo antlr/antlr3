@@ -58,6 +58,7 @@ public class RecursionOverflowMessage extends Message {
 		this.callSiteStates = callSiteStates;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

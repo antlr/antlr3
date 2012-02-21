@@ -508,6 +508,7 @@ public abstract class BaseTest {
 			sucker = new Thread(this);
 			sucker.start();
 		}
+		@Override
 		public void run() {
 			try {
 				String line = in.readLine();
@@ -527,6 +528,7 @@ public abstract class BaseTest {
 		public void join() throws InterruptedException {
 			sucker.join();
 		}
+		@Override
 		public String toString() {
 			return buf.toString();
 		}
@@ -535,6 +537,7 @@ public abstract class BaseTest {
     public static class FilteringTokenStream extends CommonTokenStream {
         public FilteringTokenStream(TokenSource src) { super(src); }
         Set<Integer> hide = new HashSet<Integer>();
+		@Override
         protected void sync(int i) {
             super.sync(i);
             if ( hide.contains(get(i).getType()) ) get(i).setChannel(Token.HIDDEN_CHANNEL);

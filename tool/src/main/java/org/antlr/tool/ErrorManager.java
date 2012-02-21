@@ -292,6 +292,7 @@ public class ErrorManager {
 	private static String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
 
 	static ANTLRErrorListener theDefaultErrorListener = new ANTLRErrorListener() {
+		@Override
 		public void info(String msg) {
 			if (formatWantsSingleLineMessage()) {
 				msg = msg.replaceAll("\n", " ");
@@ -299,6 +300,7 @@ public class ErrorManager {
 			System.err.println(msg);
 		}
 
+		@Override
 		public void error(Message msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -307,6 +309,7 @@ public class ErrorManager {
 			System.err.println(outputMsg);
 		}
 
+		@Override
 		public void warning(Message msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -315,6 +318,7 @@ public class ErrorManager {
 			System.err.println(outputMsg);
 		}
 
+		@Override
 		public void error(ToolMessage msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -329,18 +333,22 @@ public class ErrorManager {
 	 */
 	static STErrorListener initSTListener =
 		new STErrorListener() {
+		@Override
 			public void compileTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+		@Override
 			public void runTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+		@Override
 			public void IOError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+		@Override
 			public void internalError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
@@ -353,28 +361,32 @@ public class ErrorManager {
 	 */
 	static STErrorListener blankSTListener =
 		new STErrorListener() {
-			public void compileTimeError(STMessage msg) {			}
-			public void runTimeError(STMessage msg) {			}
-			public void IOError(STMessage msg) {			}
-			public void internalError(STMessage msg) {			}
+			@Override public void compileTimeError(STMessage msg) {			}
+			@Override public void runTimeError(STMessage msg) {			}
+			@Override public void IOError(STMessage msg) {			}
+			@Override public void internalError(STMessage msg) {			}
 		};
 
 	/** Errors during initialization related to ST must all go to System.err.
 	 */
 	static STErrorListener theDefaultSTListener =
 		new STErrorListener() {
+			@Override
 			public void compileTimeError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void runTimeError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void IOError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void internalError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}

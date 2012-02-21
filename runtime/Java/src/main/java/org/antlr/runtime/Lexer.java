@@ -48,6 +48,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		this.input = input;
 	}
 
+	@Override
 	public void reset() {
 		super.reset(); // reset all recognizer state variables
 		// wack Lexer state variables
@@ -69,6 +70,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 	/** Return a token from this source; i.e., match a token on the char
 	 *  stream.
 	 */
+	@Override
 	public Token nextToken() {
 		while (true) {
 			state.token = null;
@@ -134,6 +136,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		return this.input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}
@@ -250,6 +253,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		state.text = text;
 	}
 
+	@Override
 	public void reportError(RecognitionException e) {
 		/** TODO: not thought about recovery in lexer yet.
 		 *
@@ -265,6 +269,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		displayRecognitionError(this.getTokenNames(), e);
 	}
 
+	@Override
 	public String getErrorMessage(RecognitionException e, String[] tokenNames) {
 		String msg = null;
 		if ( e instanceof MismatchedTokenException ) {

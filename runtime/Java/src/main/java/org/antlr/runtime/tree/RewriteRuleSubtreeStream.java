@@ -82,6 +82,7 @@ public class RewriteRuleSubtreeStream extends RewriteRuleElementStream {
 		return el;
 	}
 
+	@Override
 	protected Object dup(Object el) {
 		return adaptor.dupTree(el);
 	}

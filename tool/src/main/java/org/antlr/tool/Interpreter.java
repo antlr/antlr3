@@ -62,6 +62,7 @@ public class Interpreter implements TokenSource {
 			this.g = g;
 		}
 
+		@Override
 		public void exitRule(String grammarFileName, String ruleName) {
 			if ( !ruleName.equals(Grammar.ARTIFICIAL_TOKENS_RULENAME) ){
 				int type = g.getTokenType(ruleName);
@@ -76,6 +77,7 @@ public class Interpreter implements TokenSource {
 		this.input = input;
 	}
 
+	@Override
 	public Token nextToken() {
 		if ( grammar.type!=Grammar.LEXER ) {
 			return null;
@@ -446,6 +448,7 @@ public class Interpreter implements TokenSource {
 			cs.getLine()+":"+cs.getCharPositionInLine()+" "+re);
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}

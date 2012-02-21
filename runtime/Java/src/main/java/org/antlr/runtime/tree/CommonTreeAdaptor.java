@@ -47,11 +47,13 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 	 *  I could use reflection to prevent having to override this
 	 *  but reflection is slow.
 	 */
+	@Override
 	public Object dupNode(Object t) {
 		if ( t==null ) return null;
 		return ((Tree)t).dupNode();
 	}
 
+	@Override
 	public Object create(Token payload) {
 		return new CommonTree(payload);
 	}
@@ -64,6 +66,7 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 	 *  If you care what the token payload objects' type is, you should
 	 *  override this method and any other createToken variant.
 	 */
+	@Override
 	public Token createToken(int tokenType, String text) {
 		return new CommonToken(tokenType, text);
 	}
@@ -82,6 +85,7 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 	 *  If you care what the token payload objects' type is, you should
 	 *  override this method and any other createToken variant.
 	 */
+	@Override
 	public Token createToken(Token fromToken) {
 		return new CommonToken(fromToken);
 	}
@@ -91,6 +95,7 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 	 *  seems like this will yield start=i and stop=i-1 in a nil node.
 	 *  Might be useful info so I'll not force to be i..i.
 	 */
+	@Override
 	public void setTokenBoundaries(Object t, Token startToken, Token stopToken) {
 		if ( t==null ) return;
 		int start = 0;
@@ -101,21 +106,25 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 		((Tree)t).setTokenStopIndex(stop);
 	}
 
+	@Override
 	public int getTokenStartIndex(Object t) {
 		if ( t==null ) return -1;
 		return ((Tree)t).getTokenStartIndex();
 	}
 
+	@Override
 	public int getTokenStopIndex(Object t) {
 		if ( t==null ) return -1;
 		return ((Tree)t).getTokenStopIndex();
 	}
 
+	@Override
 	public String getText(Object t) {
 		if ( t==null ) return null;
 		return ((Tree)t).getText();
 	}
 
+	@Override
     public int getType(Object t) {
 		if ( t==null ) return Token.INVALID_TOKEN_TYPE;
 		return ((Tree)t).getType();
@@ -125,6 +134,7 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 	 *  you are not using CommonTree, then you must
 	 *  override this in your own adaptor.
 	 */
+	@Override
 	public Token getToken(Object t) {
 		if ( t instanceof CommonTree ) {
 			return ((CommonTree)t).getToken();
@@ -132,34 +142,41 @@ public class CommonTreeAdaptor extends BaseTreeAdaptor {
 		return null; // no idea what to do
 	}
 
+	@Override
 	public Object getChild(Object t, int i) {
 		if ( t==null ) return null;
         return ((Tree)t).getChild(i);
     }
 
+	@Override
     public int getChildCount(Object t) {
 		if ( t==null ) return 0;
         return ((Tree)t).getChildCount();
     }
 
+	@Override
 	public Object getParent(Object t) {
 		if ( t==null ) return null;
         return ((Tree)t).getParent();
 	}
 
+	@Override
 	public void setParent(Object t, Object parent) {
         if ( t!=null ) ((Tree)t).setParent((Tree)parent);
 	}
 
+	@Override
 	public int getChildIndex(Object t) {
         if ( t==null ) return 0;
 		return ((Tree)t).getChildIndex();
 	}
 
+	@Override
 	public void setChildIndex(Object t, int index) {
         if ( t!=null ) ((Tree)t).setChildIndex(index);
 	}
 
+	@Override
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t) {
 		if ( parent!=null ) {
 			((Tree)parent).replaceChildren(startChildIndex, stopChildIndex, t);

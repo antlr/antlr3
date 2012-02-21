@@ -51,6 +51,7 @@ public class Interp {
     public static class FilteringTokenStream extends CommonTokenStream {
         public FilteringTokenStream(TokenSource src) { super(src); }
         Set<Integer> hide = new HashSet<Integer>();
+		@Override
         protected void sync(int i) {
             super.sync(i);
             if ( hide.contains(get(i).getType()) ) get(i).setChannel(Token.HIDDEN_CHANNEL);

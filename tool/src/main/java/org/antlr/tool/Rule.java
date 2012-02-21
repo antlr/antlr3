@@ -576,6 +576,7 @@ public class Rule {
 	}
 	 * */
 
+	@Override
 	public String toString() { // used for testing
 		return "["+grammar.name+"."+name+",index="+index+",line="+tree.getToken().getLine()+"]";
 	}

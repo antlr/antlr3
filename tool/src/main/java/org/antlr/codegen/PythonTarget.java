@@ -43,6 +43,7 @@ import java.util.List;
 
 public class PythonTarget extends Target {
     /** Target must be able to override the labels used for token types */
+	@Override
     public String getTokenTypeAsTargetLabel(CodeGenerator generator,
 					    int ttype) {
 	// use ints for predefined types;
@@ -61,6 +62,7 @@ public class PythonTarget extends Target {
 	return name;
     }
 
+	@Override
     public String getTargetCharLiteralFromANTLRCharLiteral(
             CodeGenerator generator,
             String literal) {
@@ -87,6 +89,7 @@ public class PythonTarget extends Target {
 		return l;
     }
 
+	@Override
     public List postProcessAction(List chunks, Token actionToken) {
 		/* TODO
 		   - check for and report TAB usage

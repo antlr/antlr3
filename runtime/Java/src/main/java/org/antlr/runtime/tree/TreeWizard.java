@@ -60,6 +60,7 @@ public class TreeWizard {
 	}
 
 	public static abstract class Visitor implements ContextVisitor {
+		@Override
 		public void visit(Object t, Object parent, int childIndex, Map labels) {
 			visit(t);
 		}
@@ -75,6 +76,7 @@ public class TreeWizard {
 		public TreePattern(Token payload) {
 			super(payload);
 		}
+		@Override
 		public String toString() {
 			if ( label!=null ) {
 				return "%"+label+":"+super.toString();
@@ -93,6 +95,7 @@ public class TreeWizard {
 
 	/** This adaptor creates TreePattern objects for use during scan() */
 	public static class TreePatternTreeAdaptor extends CommonTreeAdaptor {
+		@Override
 		public Object create(Token payload) {
 			return new TreePattern(payload);
 		}
@@ -200,6 +203,7 @@ public class TreeWizard {
 	public List find(Object t, int ttype) {
 		final List nodes = new ArrayList();
 		visit(t, ttype, new TreeWizard.Visitor() {
+			@Override
 			public void visit(Object t) {
 				nodes.add(t);
 			}
@@ -224,6 +228,7 @@ public class TreeWizard {
 		}
 		int rootTokenType = tpattern.getType();
 		visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
+			@Override
 			public void visit(Object t, Object parent, int childIndex, Map labels) {
 				if ( _parse(t, tpattern, null) ) {
 					subtrees.add(t);
@@ -286,6 +291,7 @@ public class TreeWizard {
 		final Map labels = new HashMap(); // reused for each _parse
 		int rootTokenType = tpattern.getType();
 		visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
+			@Override
 			public void visit(Object t, Object parent, int childIndex, Map unusedlabels) {
 				// the unusedlabels arg is null as visit on token type doesn't set.
 				labels.clear();

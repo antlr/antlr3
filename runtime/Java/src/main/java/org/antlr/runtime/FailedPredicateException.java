@@ -48,6 +48,7 @@ public class FailedPredicateException extends RecognitionException {
 		this.predicateText = predicateText;
 	}
 
+	@Override
 	public String toString() {
 		return "FailedPredicateException("+ruleName+",{"+predicateText+"}?)";
 	}

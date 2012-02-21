@@ -66,10 +66,12 @@ public class RewriteRuleTokenStream extends RewriteRuleElementStream {
 	/** Don't convert to a tree unless they explicitly call nextTree.
 	 *  This way we can do hetero tree nodes in rewrite.
 	 */
+	@Override
 	protected Object toTree(Object el) {
 		return el;
 	}
 
+	@Override
 	protected Object dup(Object el) {
 		throw new UnsupportedOperationException("dup can't be called for a token stream.");
 	}

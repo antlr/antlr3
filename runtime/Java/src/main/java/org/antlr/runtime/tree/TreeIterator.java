@@ -74,6 +74,7 @@ public class TreeIterator implements Iterator {
         nodes.clear();
     }
 
+	@Override
     public boolean hasNext() {
         if ( firstTime ) return root!=null;
         if ( nodes!=null && nodes.size()>0 ) return true;
@@ -82,6 +83,7 @@ public class TreeIterator implements Iterator {
         return adaptor.getParent(tree)!=null; // back at root?
     }
 
+	@Override
     public Object next() {
         if ( firstTime ) { // initial condition
             firstTime = false;
@@ -128,5 +130,6 @@ public class TreeIterator implements Iterator {
         return nodes.remove();
     }
 
+	@Override
     public void remove() { throw new UnsupportedOperationException(); }
 }

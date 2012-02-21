@@ -39,6 +39,7 @@ public class MismatchedTokenException extends RecognitionException {
 		this.expecting = expecting;
 	}
 
+	@Override
 	public String toString() {
 		return "MismatchedTokenException("+getUnexpectedType()+"!="+expecting+")";
 	}

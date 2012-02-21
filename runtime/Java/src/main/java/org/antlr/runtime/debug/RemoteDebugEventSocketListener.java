@@ -74,47 +74,77 @@ public class RemoteDebugEventSocketListener implements Runnable {
 			this.charPos = charPos;
 			this.text = text;
 		}
+
+		@Override
 		public String getText() {
 			return text;
 		}
+
+		@Override
 		public void setText(String text) {
 			this.text = text;
 		}
+
+		@Override
 		public int getType() {
 			return type;
 		}
+
+		@Override
 		public void setType(int ttype) {
 			this.type = ttype;
 		}
+
+		@Override
 		public int getLine() {
 			return line;
 		}
+
+		@Override
 		public void setLine(int line) {
 			this.line = line;
 		}
+
+		@Override
 		public int getCharPositionInLine() {
 			return charPos;
 		}
+
+		@Override
 		public void setCharPositionInLine(int pos) {
 			this.charPos = pos;
 		}
+
+		@Override
 		public int getChannel() {
 			return channel;
 		}
+
+		@Override
 		public void setChannel(int channel) {
 			this.channel = channel;
 		}
+
+		@Override
 		public int getTokenIndex() {
 			return index;
 		}
+
+		@Override
 		public void setTokenIndex(int index) {
 			this.index = index;
 		}
+
+		@Override
 		public CharStream getInputStream() {
 			return null;
 		}
+
+		@Override
 		public void setInputStream(CharStream input) {
 		}
+
+		@Override
 		public String toString() {
 			String channelStr = "";
 			if ( channel!=Token.DEFAULT_CHANNEL ) {
@@ -143,14 +173,14 @@ public class RemoteDebugEventSocketListener implements Runnable {
 
 		public ProxyTree(int ID) { this.ID = ID; }
 
-		public int getTokenStartIndex() { return tokenIndex; }
-		public void setTokenStartIndex(int index) {	}
-		public int getTokenStopIndex() { return 0; }
-		public void setTokenStopIndex(int index) { }
-		public Tree dupNode() {	return null; }
-		public int getType() { return type; }
-		public String getText() { return text; }
-		public String toString() {
+		@Override public int getTokenStartIndex() { return tokenIndex; }
+		@Override public void setTokenStartIndex(int index) {	}
+		@Override public int getTokenStopIndex() { return 0; }
+		@Override public void setTokenStopIndex(int index) { }
+		@Override public Tree dupNode() {	return null; }
+		@Override public int getType() { return type; }
+		@Override public String getText() { return text; }
+		@Override public String toString() {
 			return "fix this";
 		}
 	}
@@ -468,6 +498,7 @@ public class RemoteDebugEventSocketListener implements Runnable {
 		t.start();
 	}
 
+	@Override
 	public void run() {
 		eventHandler();
 	}

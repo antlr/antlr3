@@ -120,6 +120,7 @@ public class CSharp3Target extends Target {
             _target = target;
         }
 
+		@Override
         public String toString(Object obj, String formatName, Locale locale)
         {
             String value = (String)obj;

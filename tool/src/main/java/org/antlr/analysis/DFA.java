@@ -1102,6 +1102,7 @@ public class DFA {
 		altToAcceptState = new DFAState[nAlts+1];
     }
 
+	@Override
 	public String toString() {
 		FASerializer serializer = new FASerializer(nfa.grammar);
 		if ( startState==null ) {

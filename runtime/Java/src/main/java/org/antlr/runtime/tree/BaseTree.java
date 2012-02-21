@@ -49,6 +49,7 @@ public abstract class BaseTree implements Tree {
 	public BaseTree(Tree node) {
 	}
 
+	@Override
 	public Tree getChild(int i) {
 		if ( children==null || i>=children.size() ) {
 			return null;
@@ -73,6 +74,7 @@ public abstract class BaseTree implements Tree {
 		return null;
 	}
 
+	@Override
 	public int getChildCount() {
 		if ( children==null ) {
 			return 0;
@@ -86,6 +88,7 @@ public abstract class BaseTree implements Tree {
 	 *  and child isNil then this routine moves children to t via
 	 *  t.children = child.children; i.e., without copying the array.
 	 */
+	@Override
 	public void addChild(Tree t) {
 		//System.out.println("add child "+t.toStringTree()+" "+this.toStringTree());
 		//System.out.println("existing children: "+children);
@@ -136,6 +139,7 @@ public abstract class BaseTree implements Tree {
 		}
 	}
 
+	@Override
 	public void setChild(int i, Tree t) {
 		if ( t==null ) {
 			return;
@@ -166,6 +170,7 @@ public abstract class BaseTree implements Tree {
 		this.freshenParentAndChildIndexes(i);
 	}
 
+	@Override
 	public Object deleteChild(int i) {
 		if ( children==null ) {
 			return null;
@@ -181,6 +186,7 @@ public abstract class BaseTree implements Tree {
 	 *  For huge child lists, inserting children can force walking rest of
 	 *  children to set their childindex; could be slow.
 	 */
+	@Override
 	public void replaceChildren(int startChildIndex, int stopChildIndex, Object t) {
 		/*
 		System.out.println("replaceChildren "+startChildIndex+", "+stopChildIndex+
@@ -247,11 +253,13 @@ public abstract class BaseTree implements Tree {
 		return new ArrayList();
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
 	/** Set the parent and child index values for all child of t */
+	@Override
 	public void freshenParentAndChildIndexes() {
 		freshenParentAndChildIndexes(0);
 	}
@@ -298,24 +306,30 @@ public abstract class BaseTree implements Tree {
 	}
 
 	/** BaseTree doesn't track child indexes. */
+	@Override
 	public int getChildIndex() {
 		return 0;
 	}
+	@Override
 	public void setChildIndex(int index) {
 	}
 
 	/** BaseTree doesn't track parent pointers. */
+	@Override
 	public Tree getParent() {
 		return null;
 	}
 
+	@Override
     public void setParent(Tree t) {
 	}
 
     /** Walk upwards looking for ancestor with this token type. */
+	@Override
     public boolean hasAncestor(int ttype) { return getAncestor(ttype)!=null; }
 
     /** Walk upwards and get first ancestor with this token type. */
+	@Override
     public Tree getAncestor(int ttype) {
         Tree t = this;
         t = t.getParent();
@@ -329,6 +343,7 @@ public abstract class BaseTree implements Tree {
     /** Return a list of all ancestors of this node.  The first node of
      *  list is the root and the last is the parent of this node.
      */
+	@Override
     public List getAncestors() {
         if ( getParent()==null ) return null;
         List ancestors = new ArrayList();
@@ -342,6 +357,7 @@ public abstract class BaseTree implements Tree {
     }
 
     /** Print out a whole tree not just a node */
+	@Override
     public String toStringTree() {
 		if ( children==null || children.size()==0 ) {
 			return this.toString();
@@ -365,14 +381,17 @@ public abstract class BaseTree implements Tree {
 		return buf.toString();
 	}
 
+	@Override
     public int getLine() {
 		return 0;
 	}
 
+	@Override
 	public int getCharPositionInLine() {
 		return 0;
 	}
 
 	/** Override to say how a node (not a tree) should look as text */
+	@Override
 	public abstract String toString();
 }

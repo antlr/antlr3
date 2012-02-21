@@ -77,10 +77,12 @@ public class DebugTreeParser extends TreeParser {
 		e.printStackTrace(System.err);
 	}
 
+	@Override
 	public void reportError(RecognitionException e) {
 		dbg.recognitionException(e);
 	}
 
+	@Override
 	protected Object getMissingSymbol(IntStream input,
 									  RecognitionException e,
 									  int expectedTokenType,
@@ -91,10 +93,12 @@ public class DebugTreeParser extends TreeParser {
 		return o;
 	}
 
+	@Override
 	public void beginResync() {
 		dbg.beginResync();
 	}
 
+	@Override
 	public void endResync() {
 		dbg.endResync();
 	}

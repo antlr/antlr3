@@ -44,6 +44,7 @@ public class MissingTokenException extends MismatchedTokenException {
 		return expecting;
 	}
 
+	@Override
 	public String toString() {
 		if ( inserted!=null && token!=null ) {
 			return "MissingTokenException(inserted "+inserted+" at "+token.getText()+")";

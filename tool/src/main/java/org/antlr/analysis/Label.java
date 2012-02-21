@@ -142,6 +142,7 @@ public class Label implements Comparable, Cloneable {
         this.labelSet = labelSet;
     }
 
+	@Override
 	public Object clone() {
 		Label l;
 		try {
@@ -263,6 +264,7 @@ public class Label implements Comparable, Cloneable {
 		return false;
 	}
 
+	@Override
     public int hashCode() {
         if (label==SET) {
             return labelSet.hashCode();
@@ -273,6 +275,7 @@ public class Label implements Comparable, Cloneable {
 	}
 
 	// TODO: do we care about comparing set {A} with atom A? Doesn't now.
+	@Override
 	public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
@@ -290,6 +293,7 @@ public class Label implements Comparable, Cloneable {
 		return true;  // label values are same, so true
     }
 
+	@Override
     public int compareTo(Object o) {
         return this.label-((Label)o).label;
     }
@@ -322,6 +326,7 @@ public class Label implements Comparable, Cloneable {
     }
       */
 
+	@Override
     public String toString() {
         switch (label) {
             case SET :

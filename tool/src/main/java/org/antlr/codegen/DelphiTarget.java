@@ -55,6 +55,7 @@ public class DelphiTarget extends Target
     return recognizerST;
   }
 
+	@Override
   public String encodeIntAsCharEscape(int v)
   {
     if (v <= 127)
@@ -66,6 +67,7 @@ public class DelphiTarget extends Target
     return "'#$" + hex + "'";
   }
   
+	@Override
   public String getTargetCharLiteralFromANTLRCharLiteral(
     CodeGenerator generator,
     String literal)
@@ -81,6 +83,7 @@ public class DelphiTarget extends Target
     return buf.toString();
   } 
 
+	@Override
   public String getTargetStringLiteralFromString(String s, boolean quoted) {
     if ( s==null ) {
       return null;
@@ -113,6 +116,7 @@ public class DelphiTarget extends Target
     return buf.toString();
   }
 
+	@Override
   public String getTargetStringLiteralFromANTLRStringLiteral(
     CodeGenerator generator,
     String literal)
@@ -127,6 +131,7 @@ public class DelphiTarget extends Target
     return buf.toString();
   }
    
+	@Override
   public String getTarget64BitStringFromValue(long word) {
     int numHexDigits = 8*2;
     StringBuffer buf = new StringBuffer(numHexDigits+2);

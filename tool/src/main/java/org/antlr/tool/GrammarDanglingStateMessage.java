@@ -50,6 +50,7 @@ public class GrammarDanglingStateMessage extends Message {
 		this.problemState = problemState;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

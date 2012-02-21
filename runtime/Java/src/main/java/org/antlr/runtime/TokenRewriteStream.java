@@ -108,6 +108,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 		public int execute(StringBuffer buf) {
 			return index;
 		}
+		@Override
 		public String toString() {
 			String opName = getClass().getName();
 			int $index = opName.indexOf('$');
@@ -121,6 +122,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 		public InsertBeforeOp(int index, Object text) {
 			super(index,text);
 		}
+		@Override
 		public int execute(StringBuffer buf) {
 			buf.append(text);
 			if ( tokens.get(index).getType()!=Token.EOF ) {
@@ -139,12 +141,14 @@ public class TokenRewriteStream extends CommonTokenStream {
 			super(from,text);
 			lastIndex = to;
 		}
+		@Override
 		public int execute(StringBuffer buf) {
 			if ( text!=null ) {
 				buf.append(text);
 			}
 			return lastIndex+1;
 		}
+		@Override
 		public String toString() {
 			if ( text==null ) {
 				return "<DeleteOp@"+tokens.get(index)+
@@ -344,6 +348,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 		return buf.toString();
 	}
 
+	@Override
 	public String toString() {
         fill();
 		return toString(MIN_TOKEN_INDEX, size()-1);
@@ -354,6 +359,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 		return toString(programName, MIN_TOKEN_INDEX, size()-1);
 	}
 
+	@Override
 	public String toString(int start, int end) {
 		return toString(DEFAULT_PROGRAM_NAME, start, end);
 	}

@@ -52,6 +52,7 @@ public class GrammarUnreachableAltsMessage extends Message {
 		}
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

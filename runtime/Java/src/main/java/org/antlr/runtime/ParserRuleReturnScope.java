@@ -49,9 +49,12 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public class ParserRuleReturnScope extends RuleReturnScope {
 	public Token start, stop;
+	@Override
 	public Object getStart() { return start; }
+	@Override
 	public Object getStop() { return stop; }
 
 	public Object tree; // only used when output=AST
+	@Override
 	public Object getTree() { return tree; }
 }

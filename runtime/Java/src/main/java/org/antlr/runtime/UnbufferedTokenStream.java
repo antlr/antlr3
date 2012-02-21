@@ -58,25 +58,33 @@ public class UnbufferedTokenStream extends LookaheadStream<Token> implements Tok
 		this.tokenSource = tokenSource;
 	}
 
+	@Override
 	public Token nextElement() {
 		Token t = tokenSource.nextToken();
         t.setTokenIndex(tokenIndex++);
 		return t;
 	}
 
+	@Override
     public boolean isEOF(Token o) { return o.getType() == Token.EOF; }    
 
+	@Override
 	public TokenSource getTokenSource() { return tokenSource; }
 
+	@Override
 	public String toString(int start, int stop) { return "n/a"; }
 
+	@Override
 	public String toString(Token start, Token stop) { return "n/a"; }
 
+	@Override
     public int LA(int i) { return LT(i).getType(); }
 
+	@Override
     public Token get(int i) {
         throw new UnsupportedOperationException("Absolute token indexes are meaningless in an unbuffered stream");
     }
 
+	@Override
 	public String getSourceName() {	return tokenSource.getSourceName();	}
 }

@@ -43,6 +43,7 @@ public class GrammarReport2 {
 		this.root = rootGrammar;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
 		stats(root, buf);

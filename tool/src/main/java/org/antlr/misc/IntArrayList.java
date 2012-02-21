@@ -95,6 +95,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
 		}
 	}
 
+	@Override
 	public Object get(int i) {
 		return Utils.integer(element(i));
 	}
@@ -109,6 +110,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
 		return a;
 	}
 
+	@Override
 	public int size() {
 		return n;
 	}
@@ -117,6 +119,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
         return elements.length;
     }
 
+	@Override
 	public boolean equals(Object o) {
         if ( o==null ) {
             return false;
@@ -133,6 +136,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
 		return true;
 	}
 
+	@Override
     public Object clone() throws CloneNotSupportedException {
 		IntArrayList a = (IntArrayList)super.clone();
         a.n = this.n;
@@ -140,6 +144,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
         return a;
     }
 
+	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < n; i++) {

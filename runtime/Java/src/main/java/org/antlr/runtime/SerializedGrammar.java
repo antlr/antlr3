@@ -51,6 +51,7 @@ public class SerializedGrammar {
             this.name = name;
             this.block = block;
         }
+		@Override
         public String toString() {
             return name+":"+block;
         }
@@ -61,6 +62,7 @@ public class SerializedGrammar {
         public Block(List[] alts) {
             this.alts = alts;
         }
+		@Override
         public String toString() {
             StringBuffer buf = new StringBuffer();
             buf.append("(");
@@ -77,12 +79,14 @@ public class SerializedGrammar {
     class TokenRef {
         int ttype;
         public TokenRef(int ttype) { this.ttype = ttype; }
+		@Override
         public String toString() { return String.valueOf(ttype); }
     }
 
     class RuleRef {
         int ruleIndex;
         public RuleRef(int ruleIndex) { this.ruleIndex = ruleIndex; }
+		@Override
         public String toString() { return String.valueOf(ruleIndex); }
     }
 
@@ -189,6 +193,7 @@ public class SerializedGrammar {
         return buf.toString();
     }
 
+	@Override
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append(type+" grammar "+name);

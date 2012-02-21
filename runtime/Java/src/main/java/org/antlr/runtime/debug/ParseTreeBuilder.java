@@ -66,9 +66,12 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	}
 
 	/** Backtracking or cyclic DFA, don't want to add nodes to tree */
+	@Override
 	public void enterDecision(int d, boolean couldBacktrack) { backtracking++; }
+	@Override
 	public void exitDecision(int i) { backtracking--; }
 
+	@Override
 	public void enterRule(String filename, String ruleName) {
 		if ( backtracking>0 ) return;
 		ParseTree parentRuleNode = (ParseTree)callStack.peek();
@@ -77,6 +80,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 		callStack.push(ruleNode);
 	}
 
+	@Override
 	public void exitRule(String filename, String ruleName) {
 		if ( backtracking>0 ) return;
 		ParseTree ruleNode = (ParseTree)callStack.peek();
@@ -86,6 +90,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 		callStack.pop();		
 	}
 
+	@Override
 	public void consumeToken(Token token) {
 		if ( backtracking>0 ) return;
 		ParseTree ruleNode = (ParseTree)callStack.peek();
@@ -95,11 +100,13 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 		ruleNode.addChild(elementNode);
 	}
 
+	@Override
 	public void consumeHiddenToken(Token token) {
 		if ( backtracking>0 ) return;
 		hiddenTokens.add(token);
 	}
 
+	@Override
 	public void recognitionException(RecognitionException e) {
 		if ( backtracking>0 ) return;
 		ParseTree ruleNode = (ParseTree)callStack.peek();

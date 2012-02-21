@@ -41,6 +41,7 @@ public class Perl5Target extends Target {
         RuleLabelScope.predefinedLexerRulePropertiesScope.addAttribute("self", null);
     }
 
+	@Override
     public String getTargetCharLiteralFromANTLRCharLiteral(final CodeGenerator generator,
                                                            final String literal) {
         final StringBuffer buf = new StringBuffer(10);
@@ -79,6 +80,7 @@ public class Perl5Target extends Target {
         return buf.toString();
     }
 
+	@Override
     public String encodeIntAsCharEscape(final int v) {
         final int intValue;
         if ((v & 0x8000) == 0) {

@@ -139,6 +139,7 @@ public abstract class SemanticContext {
 		 *  Or, if they have the same constant value, return equal.
 		 *  As of July 2006 I'm not sure these are needed.
 		 */
+		@Override
 		public boolean equals(Object o) {
 			if ( !(o instanceof Predicate) ) {
 				return false;
@@ -156,6 +157,7 @@ public abstract class SemanticContext {
 			return predicateAST.getText().equals(other.predicateAST.getText());
 		}
 
+		@Override
 		public int hashCode() {
 			if (constantValue != INVALID_PRED_VALUE){
 				return constantValue;
@@ -168,6 +170,7 @@ public abstract class SemanticContext {
 			return predicateAST.getText().hashCode();
 		}
 
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
