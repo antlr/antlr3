@@ -80,6 +80,7 @@ public abstract class RewriteRuleElementStream {
 	}
 
 	/** Create a stream with one element */
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public RewriteRuleElementStream(TreeAdaptor adaptor,
 									String elementDescription,
 									Object oneElement)

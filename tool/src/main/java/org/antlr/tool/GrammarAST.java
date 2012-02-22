@@ -144,10 +144,12 @@ public class GrammarAST extends CommonTree {
 
 	public GrammarAST() {}
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public GrammarAST(int t, String txt) {
 		initialize(t,txt);
 	}
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public GrammarAST(Token token) {
 		initialize(token);
 	}

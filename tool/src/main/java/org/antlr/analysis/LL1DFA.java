@@ -48,6 +48,7 @@ public class LL1DFA extends DFA {
 	 *  |
 	 *  ...
 	 */
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public LL1DFA(int decisionNumber, NFAState decisionStartState, LookaheadSet[] altLook) {
 		DFAState s0 = newState();
 		startState = s0;
@@ -71,6 +72,7 @@ public class LL1DFA extends DFA {
 	/** From a set of edgeset->list-of-alts mappings, create a DFA
 	 *  that uses syn preds for all |list-of-alts|>1.
 	 */
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public LL1DFA(int decisionNumber,
 				  NFAState decisionStartState,
 				  MultiMap<IntervalSet, Integer> edgeMap)

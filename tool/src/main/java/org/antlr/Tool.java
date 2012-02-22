@@ -129,6 +129,7 @@ public class Tool {
         loadResources();
     }
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
     public Tool(String[] args) {
         loadResources();
 

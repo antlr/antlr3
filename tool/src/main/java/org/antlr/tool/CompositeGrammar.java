@@ -140,10 +140,12 @@ public class CompositeGrammar {
 		tokenIDToTypeMap.put("UP", Utils.integer(Label.UP));
 	}
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public CompositeGrammar() {
 		initTokenSymbolTables();
 	}
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public CompositeGrammar(Grammar g) {
 		this();
 		setDelegationRoot(g);
