@@ -843,7 +843,7 @@ public class ErrorManager {
 			}
 			String templateName =
 				fieldName.substring("MSG_".length(),fieldName.length());
-			int msgID = 0;
+			int msgID;
 			try {
 				// get the constant value from this class object
 				msgID = f.getInt(ErrorManager.class);

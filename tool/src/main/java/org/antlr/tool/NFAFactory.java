@@ -386,7 +386,7 @@ public class NFAFactory {
      */
     public StateCluster build_AlternativeBlock(List alternativeStateClusters)
     {
-        StateCluster result = null;
+        StateCluster result;
         if ( alternativeStateClusters==null || alternativeStateClusters.size()==0 ) {
             return null;
         }
@@ -451,7 +451,7 @@ public class NFAFactory {
      *  or, if A is a block, just add an empty alt to the end of the block
      */
     public StateCluster build_Aoptional(StateCluster A) {
-        StateCluster g = null;
+        StateCluster g;
         int n = nfa.grammar.getNumberOfAltsForDecisionNFA(A.left);
         if ( n==1 ) {
             // no decision, just wrap in an optional path
@@ -460,7 +460,7 @@ public class NFAFactory {
 			decisionState.setDescription("only alt of ()? block");
 			NFAState emptyAlt = newState();
             emptyAlt.setDescription("epsilon path of ()? block");
-            NFAState blockEndNFAState = null;
+            NFAState blockEndNFAState;
 			blockEndNFAState = newState();
 			transitionBetweenStates(A.right, blockEndNFAState, Label.EPSILON);
 			blockEndNFAState.setDescription("end ()? block");

@@ -64,7 +64,7 @@ public class Parser extends BaseRecognizer {
 									  int expectedTokenType,
 									  BitSet follow)
 	{
-		String tokenText = null;
+		String tokenText;
 		if ( expectedTokenType==Token.EOF ) tokenText = "<missing EOF>";
 		else tokenText = "<missing "+getTokenNames()[expectedTokenType]+">";
 		CommonToken t = new CommonToken(expectedTokenType, tokenText);

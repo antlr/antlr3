@@ -159,7 +159,7 @@ public class ANTLRStringStream implements CharStream {
             markers.add(null); // depth 0 means no backtracking, leave blank
         }
         markDepth++;
-		CharStreamState state = null;
+		CharStreamState state;
 		if ( markDepth>=markers.size() ) {
 			state = new CharStreamState();
 			markers.add(state);

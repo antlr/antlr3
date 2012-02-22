@@ -68,7 +68,7 @@ public class CommonErrorNode extends CommonTree {
 
 	@Override
 	public String getText() {
-		String badText = null;
+		String badText;
 		if ( start instanceof Token ) {
 			int i = ((Token)start).getTokenIndex();
 			int j = ((Token)stop).getTokenIndex();

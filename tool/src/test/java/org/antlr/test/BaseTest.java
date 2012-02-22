@@ -377,7 +377,7 @@ public abstract class BaseTest {
 			process.waitFor();
 			stdoutVacuum.join();
 			stderrVacuum.join();
-			String output = null;
+			String output;
 			output = stdoutVacuum.toString();
 			if ( stderrVacuum.toString().length()>0 ) {
 				this.stderrDuringParse = stderrVacuum.toString();

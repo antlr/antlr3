@@ -175,7 +175,7 @@ public abstract class SemanticContext {
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				if ( synpred ) {
 					eST = templates.getInstanceOf("evalSynPredicate");
@@ -458,7 +458,7 @@ public abstract class SemanticContext {
 				if (result == null)
 					result = operand.genExpr(generator, templates, dfa);
 
-				ST eST = null;
+				ST eST;
 				if ( templates!=null ) {
 					eST = templates.getInstanceOf("andPredicates");
 				}
@@ -508,7 +508,7 @@ public abstract class SemanticContext {
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("orPredicates");
 			}
@@ -553,7 +553,7 @@ public abstract class SemanticContext {
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("notPredicate");
 			}

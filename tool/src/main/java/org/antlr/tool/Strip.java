@@ -56,7 +56,7 @@ public class Strip {
 
     public void parseAndRewrite() throws Exception {
         processArgs(args);
-        CharStream input = null;
+        CharStream input;
         if ( filename!=null ) input = new ANTLRFileStream(filename);
         else input = new ANTLRInputStream(System.in);
         // BUILD AST

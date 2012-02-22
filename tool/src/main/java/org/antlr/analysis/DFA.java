@@ -416,7 +416,7 @@ public class DFA {
 		transitionEdgeTables.setSize(this.getNumberOfStates());
 
 		// for each state in the DFA, fill relevant tables.
-		Iterator it = null;
+		Iterator it;
 		if ( getUserMaxLookahead()>0 ) {
 			it = states.iterator();
 		}

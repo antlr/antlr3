@@ -506,7 +506,7 @@ public class DecisionProbe {
 		GrammarAST blockAST =
 			dfa.nfa.grammar.getDecisionBlockAST(dfa.decisionNumber);
 		//System.out.println("block with error = "+blockAST.toStringTree());
-		GrammarAST lastAltAST = null;
+		GrammarAST lastAltAST;
 		if ( blockAST.getChild(0).getType()==ANTLRParser.OPTIONS ) {
 			// if options, skip first child: ( options { ( = greedy false ) )
 			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt.intValue());

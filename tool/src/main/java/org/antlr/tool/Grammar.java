@@ -583,7 +583,7 @@ public class Grammar {
 		String onlyFileName = saneFile.substring(lastSlash+1, fileName.length());
 		if ( !builtFromString ) {
 			int lastDot = onlyFileName.lastIndexOf('.');
-			String onlyFileNameNoSuffix = null;
+			String onlyFileNameNoSuffix;
 			if ( lastDot < 0 ) {
 				ErrorManager.error(ErrorManager.MSG_FILENAME_EXTENSION_ERROR, fileName);
 				onlyFileNameNoSuffix = onlyFileName+GRAMMAR_FILE_EXTENSION;
@@ -610,7 +610,7 @@ public class Grammar {
 	public void parseAndBuildAST()
 		throws IOException
 	{
-		FileReader fr = null;
+		FileReader fr;
 		BufferedReader br = null;
 		try {
 			fr = new FileReader(fileName);
@@ -852,7 +852,7 @@ public class Grammar {
 												   List<String> ruleNames,
 												   List<String> delegateNames,
 												   boolean filterMode) {
-		ST matchTokenRuleST = null;
+		ST matchTokenRuleST;
 		if ( filterMode ) {
 			matchTokenRuleST = new ST(
 					ARTIFICIAL_TOKENS_RULENAME+
@@ -1304,7 +1304,7 @@ outer:
 
 		//System.out.println("createLookaheadDFA(): "+enclosingRule+" dec "+decision+"; synprednames prev used "+synPredNamesUsedInDFA);
 		NFAState decisionStartState = getDecisionNFAStartState(decision);
-		long startDFA=0,stopDFA=0;
+		long startDFA=0,stopDFA;
 		if ( composite.watchNFAConversion ) {
 			System.out.println("--------------------\nbuilding lookahead DFA (d="
 							   +decisionStartState.getDecisionNumber()+") for "+
@@ -2076,7 +2076,7 @@ outer:
 	}
 
 	public int getTokenType(String tokenName) {
-		Integer I = null;
+		Integer I;
 		if ( tokenName.charAt(0)=='\'') {
 			I = (Integer)composite.stringLiteralToTypeMap.get(tokenName);
 		}
@@ -2242,7 +2242,7 @@ outer:
 			String fullName = tool.getLibraryFile(gname);
 			FileReader fr = new FileReader(fullName);
 			br = new BufferedReader(fr);
-			Grammar delegateGrammar = null;
+			Grammar delegateGrammar;
 			delegateGrammar = new Grammar(tool, gname, composite);
 			delegateGrammar.label = label;
 
@@ -2411,8 +2411,8 @@ outer:
 	 *  char vocabulary, compute an ANTLR-valid (possibly escaped) char literal.
 	 */
 	public String getTokenDisplayName(int ttype) {
-		String tokenName = null;
-		int index=0;
+		String tokenName;
+		int index;
 		// inside any target's char range and is lexer grammar?
 		if ( this.type==LEXER &&
 			 ttype >= Label.MIN_CHAR_VALUE && ttype <= Label.MAX_CHAR_VALUE )
@@ -2996,7 +2996,7 @@ outer:
 	 *  are both valid sets themselves, else we must tree like a BLOCK
 	 */
 	public boolean isValidSet(TreeToNFAConverter nfabuilder, GrammarAST t) {
-		boolean valid = true;
+		boolean valid;
 		try {
 			//System.out.println("parse BLOCK as set tree: "+t.toStringTree());
 			int alts = nfabuilder.testBlockAsSet(t);
@@ -3026,7 +3026,7 @@ outer:
 		if ( r==null ) {
 			return null;
 		}
-		IntSet elements = null;
+		IntSet elements;
 		//System.out.println("parsed tree: "+r.tree.toStringTree());
 		elements = nfabuilder.setRule(r.tree);
 		//System.out.println("elements="+elements);
@@ -3148,7 +3148,7 @@ outer:
 	}
 
 	public String grammarTreeToString(GrammarAST t, boolean showActions) {
-		String s = null;
+		String s;
 		try {
 			s = t.getLine()+":"+(t.getCharPositionInLine()+1)+": ";
 			s += new ANTLRTreePrinter(new CommonTreeNodeStream(t)).toString(this, showActions);

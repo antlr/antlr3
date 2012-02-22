@@ -138,7 +138,7 @@ public class LL1DFA extends DFA {
 	}
 
 	protected Label getLabelForSet(IntervalSet edgeSet) {
-		Label e = null;
+		Label e;
 		int atom = edgeSet.getSingleElement();
 		if ( atom != Label.INVALID ) {
 			e = new Label(atom);

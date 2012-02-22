@@ -202,7 +202,7 @@ public class CodeGenerator {
 				baseTemplates = dbgTemplates;
 				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(dbgTemplates);
-				STGroup astParserTemplates = astTemplates;
+				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
 					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
@@ -221,7 +221,7 @@ public class CodeGenerator {
 			else {
 				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(coreTemplates);
-				STGroup astParserTemplates = astTemplates;
+				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
 					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
@@ -582,8 +582,8 @@ public class CodeGenerator {
 		}
 		//System.out.println(" "+follow);
 
-        List tokenTypeList = null;
-        long[] words = null;
+        List tokenTypeList;
+        long[] words;
 		if ( follow.tokenTypeSet==null ) {
 			words = new long[1];
             tokenTypeList = new ArrayList();

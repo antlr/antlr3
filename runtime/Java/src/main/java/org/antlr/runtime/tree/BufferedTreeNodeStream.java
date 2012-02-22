@@ -190,7 +190,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	 *  so instantiate new ones when uniqueNavigationNodes is true.
 	 */
 	protected void addNavigationNode(final int ttype) {
-		Object navNode = null;
+		Object navNode;
 		if ( ttype==Token.DOWN ) {
 			if ( hasUniqueNavigationNodes() ) {
 				navNode = adaptor.create(Token.DOWN, "DOWN");
@@ -469,7 +469,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			return tokens.toString(beginTokenIndex, endTokenIndex);
 		}
 		// walk nodes looking for start
-		Object t = null;
+		Object t;
 		int i = 0;
 		for (; i < nodes.size(); i++) {
 			t = nodes.get(i);

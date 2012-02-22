@@ -355,7 +355,7 @@ public class RemoteDebugEventSocketListener implements Runnable {
 			String indexS = elements[2];
 			String lineS = elements[3];
 			String posS = elements[4];
-			Class excClass = null;
+			Class excClass;
 			try {
 				excClass = Class.forName(excName);
 				RecognitionException e =

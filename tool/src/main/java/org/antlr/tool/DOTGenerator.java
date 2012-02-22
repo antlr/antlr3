@@ -69,7 +69,7 @@ public class DOTGenerator {
 			return null;
 		}
 		// The output DOT graph for visualization
-		ST dot = null;
+		ST dot;
 		markedStates = new HashSet();
         if ( startState instanceof DFAState ) {
             dot = stlib.getInstanceOf("dfa");
@@ -203,7 +203,7 @@ public class DOTGenerator {
 		}
 
         // make a DOT edge for each transition
-		ST edgeST = null;
+		ST edgeST;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
             Transition edge = (Transition) s.transition(i);
             if ( edge instanceof RuleClosureTransition ) {
@@ -296,7 +296,7 @@ public class DOTGenerator {
 			SemanticContext preds =
 				((DFAState)target).getGatedPredicatesInNFAConfigurations();
 			if ( preds!=null ) {
-				String predsStr = "";
+				String predsStr;
 				predsStr = "&&{"+
 					preds.genExpr(grammar.generator,
 								  grammar.generator.getTemplates(), null).toString()

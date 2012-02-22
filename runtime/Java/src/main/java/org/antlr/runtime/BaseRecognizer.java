@@ -220,7 +220,7 @@ public abstract class BaseRecognizer {
 		String msg = e.getMessage();
 		if ( e instanceof UnwantedTokenException ) {
 			UnwantedTokenException ute = (UnwantedTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( ute.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -232,7 +232,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MissingTokenException ) {
 			MissingTokenException mte = (MissingTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mte.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -243,7 +243,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MismatchedTokenException ) {
 			MismatchedTokenException mte = (MismatchedTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mte.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -255,7 +255,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MismatchedTreeNodeException ) {
 			MismatchedTreeNodeException mtne = (MismatchedTreeNodeException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mtne.expecting==Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -727,7 +727,7 @@ public abstract class BaseRecognizer {
 	{
 		List rules = new ArrayList();
 		StackTraceElement[] stack = e.getStackTrace();
-		int i = 0;
+		int i;
 		for (i=stack.length-1; i>=0; i--) {
 			StackTraceElement t = stack[i];
 			if ( t.getClassName().startsWith("org.antlr.runtime.") ) {

@@ -104,7 +104,7 @@ public class Tool {
      * variables that must be initialized from it, such as the version of ANTLR.
      */
     private void loadResources() {
-        InputStream in = null;
+        InputStream in;
         in = this.getClass().getResourceAsStream("antlr.properties");
 
         // If we found the resource, then load it, otherwise revert to the
@@ -407,7 +407,7 @@ public class Tool {
 
     public void process() {
         boolean exceptionWhenWritingLexerFile = false;
-        String lexerGrammarFileName = null;		// necessary at this scope to have access in the catch below
+        String lexerGrammarFileName;		// necessary at this scope to have access in the catch below
 
         // Have to be tricky here when Maven or build tools call in and must new Tool()
         // before setting options. The banner won't display that way!
@@ -599,8 +599,8 @@ public class Tool {
         CompositeGrammar composite = new CompositeGrammar();
         Grammar grammar = new Grammar(this, grammarFileName, composite);
         composite.setDelegationRoot(grammar);
-        FileReader fr = null;
-        File f = null;
+        FileReader fr;
+        File f;
 
         if (haveInputDir) {
             f = new File(inputDirectory, grammarFileName);
@@ -883,7 +883,7 @@ public class Tool {
      */
     public File getOutputDirectory(String fileNameWithPath) {
 
-        File outputDir = new File(getOutputDirectory());
+        File outputDir;
         String fileDirectory;
 
         // Some files are given to us without a PATH but should should

@@ -1234,7 +1234,7 @@ public class NFAToDFAConverter {
 	}
 
 	protected int resolveByChoosingFirstAlt(DFAState d, Set nondeterministicAlts) {
-		int winningAlt = 0;
+		int winningAlt;
 		if ( dfa.isGreedy() ) {
 			winningAlt = resolveByPickingMinAlt(d,nondeterministicAlts);
 		}
@@ -1271,7 +1271,7 @@ public class NFAToDFAConverter {
 	 *  Return the min alt found.
 	 */
 	protected int resolveByPickingMinAlt(DFAState d, Set nondeterministicAlts) {
-		int min = Integer.MAX_VALUE;
+		int min;
 		if ( nondeterministicAlts!=null ) {
 			min = getMinAlt(nondeterministicAlts);
 		}
@@ -1384,7 +1384,7 @@ public class NFAToDFAConverter {
 			org.antlr.misc.BitSet ndSet = org.antlr.misc.BitSet.of(nondeterministicAlts);
 			org.antlr.misc.BitSet predSet = org.antlr.misc.BitSet.of(altToPredMap);
 			int nakedAlt = ndSet.subtract(predSet).getSingleElement();
-			SemanticContext nakedAltPred = null;
+			SemanticContext nakedAltPred;
 			if ( nakedAlt == max(nondeterministicAlts) ) {
 				// the naked alt is the last nondet alt and will be the default clause
 				nakedAltPred = new SemanticContext.TruePredicate();

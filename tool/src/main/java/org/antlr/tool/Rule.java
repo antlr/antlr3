@@ -420,7 +420,7 @@ public class Rule {
 			// no code?  must not have gen'd yet; forward ref
 			return null;
 		}
-		String labelName = null;
+		String labelName;
 		String existingLabelName =
 			(String)uniqueRefAST.code.getAttribute("label");
 		// reuse any label or list label if it exists

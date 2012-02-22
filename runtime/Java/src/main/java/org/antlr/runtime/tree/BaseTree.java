@@ -199,7 +199,7 @@ public abstract class BaseTree implements Tree {
 		int replacingHowMany = stopChildIndex - startChildIndex + 1;
 		int replacingWithHowMany;
 		BaseTree newTree = (BaseTree)t;
-		List newChildren = null;
+		List newChildren;
 		// normalize to a list of children to add: newChildren
 		if ( newTree.isNil() ) {
 			newChildren = newTree.children;

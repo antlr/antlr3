@@ -271,7 +271,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 
 	@Override
 	public String getErrorMessage(RecognitionException e, String[] tokenNames) {
-		String msg = null;
+		String msg;
 		if ( e instanceof MismatchedTokenException ) {
 			MismatchedTokenException mte = (MismatchedTokenException)e;
 			msg = "mismatched character "+getCharErrorDisplay(e.c)+" expecting "+getCharErrorDisplay(mte.expecting);

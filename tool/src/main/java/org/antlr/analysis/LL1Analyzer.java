@@ -420,7 +420,7 @@ public class LL1Analyzer {
 		}
 
 		SemanticContext p = null;
-		SemanticContext p0 = null;
+		SemanticContext p0;
 		SemanticContext p1 = null;
 		if ( transition0.label.isSemanticPredicate() ) {
 			//System.out.println("pred "+transition0.label);
