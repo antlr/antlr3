@@ -531,7 +531,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 		// first make sure nondeterministic alts are as expected
 		if ( expectingUnreachableAlts==null ) {
-			if ( nonDetAlts!=null && nonDetAlts.size()!=0 ) {
+			if ( nonDetAlts!=null && !nonDetAlts.isEmpty() ) {
 				System.err.println("nondeterministic alts (should be empty): "+nonDetAlts);
 			}
 			assertEquals("unreachable alts mismatch", 0, nonDetAlts!=null?nonDetAlts.size():0);

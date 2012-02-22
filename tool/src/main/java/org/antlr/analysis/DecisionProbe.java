@@ -190,9 +190,9 @@ public class DecisionProbe {
 	 *  no nondeterminisms unresolved by syn preds, all is ok with decision.
 	 */
 	public boolean isDeterministic() {
-		if ( danglingStates.size()==0 &&
-			 statesWithSyntacticallyAmbiguousAltsSet.size()==0 &&
-			 dfa.getUnreachableAlts().size()==0 )
+		if ( danglingStates.isEmpty() &&
+			 statesWithSyntacticallyAmbiguousAltsSet.isEmpty() &&
+			 dfa.getUnreachableAlts().isEmpty() )
 		{
 			return true;
 		}

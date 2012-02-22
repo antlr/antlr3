@@ -760,7 +760,7 @@ public class CodeGenerator {
 			throw new IllegalArgumentException("unable to generate expressions for non IntervalSet objects");
 		}
 		IntervalSet iset = (IntervalSet)set;
-		if ( iset.getIntervals()==null || iset.getIntervals().size()==0 ) {
+		if ( iset.getIntervals()==null || iset.getIntervals().isEmpty() ) {
 			ST emptyST = new ST(templates, "");
 			emptyST.impl.name = "empty-set-expr";
 			return emptyST;
@@ -925,7 +925,7 @@ public class CodeGenerator {
 				translatedArgs.add(catST);
 			}
 		}
-		if ( translatedArgs.size()==0 ) {
+		if ( translatedArgs.isEmpty() ) {
 			return null;
 		}
 		return translatedArgs;

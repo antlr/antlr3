@@ -637,7 +637,7 @@ public class DFAState extends State {
 			}
 		}
 
-		if ( nondeterministicAlts.size()==0 ) {
+		if ( nondeterministicAlts.isEmpty() ) {
 			return null;
 		}
         return nondeterministicAlts;
@@ -653,7 +653,7 @@ public class DFAState extends State {
 			NFAConfiguration configuration = (NFAConfiguration) nfaConfigurations.get(i);
 			alts.add(Utils.integer(configuration.alt));
 		}
-		if ( alts.size()==0 ) {
+		if ( alts.isEmpty() ) {
 			return null;
 		}
 		return alts;
@@ -673,7 +673,7 @@ public class DFAState extends State {
 				synpreds.add(configuration.semanticContext);
 			}
 		}
-		if ( synpreds.size()==0 ) {
+		if ( synpreds.isEmpty() ) {
 			return null;
 		}
 		return synpreds;

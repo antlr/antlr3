@@ -387,7 +387,7 @@ public class NFAFactory {
     public StateCluster build_AlternativeBlock(List alternativeStateClusters)
     {
         StateCluster result;
-        if ( alternativeStateClusters==null || alternativeStateClusters.size()==0 ) {
+        if ( alternativeStateClusters==null || alternativeStateClusters.isEmpty() ) {
             return null;
         }
 

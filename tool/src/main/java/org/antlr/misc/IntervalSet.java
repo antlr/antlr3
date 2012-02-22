@@ -507,7 +507,7 @@ public class IntervalSet implements IntSet {
     /** return true if this set has no members */
 	@Override
     public boolean isNil() {
-        return intervals==null || intervals.size()==0;
+        return intervals==null || intervals.isEmpty();
     }
 
     /** If this set is a single integer, return it otherwise Label.INVALID */
@@ -574,7 +574,7 @@ public class IntervalSet implements IntSet {
 	@Override
     public String toString(Grammar g) {
         StringBuffer buf = new StringBuffer();
-		if ( this.intervals==null || this.intervals.size()==0 ) {
+		if ( this.intervals==null || this.intervals.isEmpty() ) {
 			return "{}";
 		}
         if ( this.intervals.size()>1 ) {

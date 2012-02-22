@@ -327,7 +327,7 @@ public class DFA {
 	public List getJavaCompressedMax() { return getRunLengthEncoding(max); }
 	public List getJavaCompressedSpecial() { return getRunLengthEncoding(special); }
 	public List getJavaCompressedTransition() {
-		if ( transition==null || transition.size()==0 ) {
+		if ( transition==null || transition.isEmpty() ) {
 			return null;
 		}
 		List encoded = new ArrayList(transition.size());
@@ -350,7 +350,7 @@ public class DFA {
 	 *  only target bad enough to need it.
 	 */
 	public List getRunLengthEncoding(List data) {
-		if ( data==null || data.size()==0 ) {
+		if ( data==null || data.isEmpty() ) {
 			// for states with no transitions we want an empty string ""
 			// to hold its place in the transitions array.
 			List empty = new ArrayList();

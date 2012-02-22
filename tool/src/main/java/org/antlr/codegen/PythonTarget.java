@@ -111,7 +111,7 @@ public class PythonTarget extends Target {
 
 			if ( chunk instanceof String ) {
 				String text = (String)chunks.get(i);
-				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
+				if ( nChunks.isEmpty() && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// prepend to this chunk
 
@@ -129,7 +129,7 @@ public class PythonTarget extends Target {
 				}
 			}
 			else {
-				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
+				if ( nChunks.isEmpty() && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// add as a chunk of its own
 

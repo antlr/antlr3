@@ -181,7 +181,7 @@ public class AttributeScope {
 				inter.add(key);
 			}
 		}
-		if ( inter.size()==0 ) {
+		if ( inter.isEmpty() ) {
 			return null;
 		}
 		return inter;

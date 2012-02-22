@@ -369,6 +369,6 @@ public class TestTemplates extends BaseTest {
 
 	// S U P P O R T
 	private void assertNoErrors(ErrorQueue equeue) {
-		assertTrue("unexpected errors: "+equeue, equeue.errors.size()==0);
+		assertTrue("unexpected errors: "+equeue, equeue.errors.isEmpty());
 	}
 }

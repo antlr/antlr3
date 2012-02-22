@@ -135,7 +135,7 @@ public class GrammarSpelunker {
             consume();
         }
         match(";");
-        if ( importedGrammars.size()==0 ) importedGrammars = null;
+        if ( importedGrammars.isEmpty() ) importedGrammars = null;
     }
 
     public String getGrammarModifier() { return grammarModifier; }

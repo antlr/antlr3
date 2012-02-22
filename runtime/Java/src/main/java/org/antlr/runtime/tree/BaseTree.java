@@ -359,7 +359,7 @@ public abstract class BaseTree implements Tree {
     /** Print out a whole tree not just a node */
 	@Override
     public String toStringTree() {
-		if ( children==null || children.size()==0 ) {
+		if ( children==null || children.isEmpty() ) {
 			return this.toString();
 		}
 		StringBuffer buf = new StringBuffer();

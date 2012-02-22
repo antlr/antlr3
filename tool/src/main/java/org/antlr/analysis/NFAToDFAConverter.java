@@ -1355,7 +1355,7 @@ public class NFAToDFAConverter {
 		Map<Integer, SemanticContext> altToPredMap =
 				getPredicatesPerNonDeterministicAlt(d, nondeterministicAlts);
 
-		if ( altToPredMap.size()==0 ) {
+		if ( altToPredMap.isEmpty() ) {
 			return false;
 		}
 

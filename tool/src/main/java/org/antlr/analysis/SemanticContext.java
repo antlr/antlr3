@@ -731,11 +731,11 @@ public abstract class SemanticContext {
 
 		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
-		if (result.size() == 0)
+		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
 
 		opsA.removeAll(result);
-		if (opsA.size() == 0)
+		if (opsA.isEmpty())
 			a = new TruePredicate();
 		else if (opsA.size() == 1)
 			a = opsA.iterator().next();
@@ -743,7 +743,7 @@ public abstract class SemanticContext {
 			a = new AND(opsA);
 
 		opsB.removeAll(result);
-		if (opsB.size() == 0)
+		if (opsB.isEmpty())
 			b = new TruePredicate();
 		else if (opsB.size() == 1)
 			b = opsB.iterator().next();
@@ -764,11 +764,11 @@ public abstract class SemanticContext {
 
 		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
-		if (result.size() == 0)
+		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
 
 		opsA.removeAll(result);
-		if (opsA.size() == 0)
+		if (opsA.isEmpty())
 			a = new FalsePredicate();
 		else if (opsA.size() == 1)
 			a = opsA.iterator().next();
@@ -776,7 +776,7 @@ public abstract class SemanticContext {
 			a = new OR(opsA);
 
 		opsB.removeAll(result);
-		if (opsB.size() == 0)
+		if (opsB.isEmpty())
 			b = new FalsePredicate();
 		else if (opsB.size() == 1)
 			b = opsB.iterator().next();

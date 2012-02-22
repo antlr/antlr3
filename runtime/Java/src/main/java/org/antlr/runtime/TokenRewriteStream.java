@@ -371,7 +371,7 @@ public class TokenRewriteStream extends CommonTokenStream {
         if ( end>tokens.size()-1 ) end = tokens.size()-1;
         if ( start<0 ) start = 0;
 
-        if ( rewrites==null || rewrites.size()==0 ) {
+        if ( rewrites==null || rewrites.isEmpty() ) {
 			return toOriginalString(start,end); // no instructions to execute
 		}
 		StringBuffer buf = new StringBuffer();

@@ -997,7 +997,7 @@ public class Grammar {
 			return;
 		}
 		//System.out.println("### build "+getGrammarTypeString()+" grammar "+name+" NFAs");
-		if ( getRules().size()==0 ) {
+		if ( getRules().isEmpty() ) {
 			return;
 		}
 
