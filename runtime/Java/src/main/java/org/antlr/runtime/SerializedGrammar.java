@@ -44,7 +44,7 @@ public class SerializedGrammar {
     public char type; // in {l, p, t, c}
     public List<? extends Rule> rules;
 
-    class Rule {
+    protected class Rule {
         String name;
         Block block;
         public Rule(String name, Block block) {
@@ -57,7 +57,12 @@ public class SerializedGrammar {
         }
     }
 
-    class Block {
+	protected abstract class Node {
+		@Override
+		public abstract String toString();
+	}
+
+    protected class Block extends Node {
         List[] alts;
         public Block(List[] alts) {
             this.alts = alts;
@@ -67,7 +72,7 @@ public class SerializedGrammar {
             StringBuffer buf = new StringBuffer();
             buf.append("(");
             for (int i = 0; i < alts.length; i++) {
-                List alt = alts[i];
+                List<?> alt = alts[i];
                 if ( i>0 ) buf.append("|");
                 buf.append(alt.toString());
             }
@@ -76,14 +81,14 @@ public class SerializedGrammar {
         }
     }
 
-    class TokenRef {
+    protected class TokenRef extends Node {
         int ttype;
         public TokenRef(int ttype) { this.ttype = ttype; }
 		@Override
         public String toString() { return String.valueOf(ttype); }
     }
 
-    class RuleRef {
+    protected class RuleRef extends Node {
         int ruleIndex;
         public RuleRef(int ruleIndex) { this.ruleIndex = ruleIndex; }
 		@Override
@@ -136,18 +141,19 @@ public class SerializedGrammar {
 
     protected Block readBlock(DataInputStream in) throws IOException {
         int nalts = in.readShort();
-        List[] alts = new List[nalts];
+		@SuppressWarnings("unchecked")
+        List<Node>[] alts = (List<Node>[])new List<?>[nalts];
         //System.out.println("enter block n="+nalts);
         for (int i=0; i<nalts; i++) {
-            List alt = readAlt(in);
+            List<Node> alt = readAlt(in);
             alts[i] = alt;
         }
         //System.out.println("exit block");
         return new Block(alts);
     }
 
-    protected List readAlt(DataInputStream in) throws IOException {
-        List alt = new ArrayList();
+    protected List<Node> readAlt(DataInputStream in) throws IOException {
+        List<Node> alt = new ArrayList<Node>();
         byte A = in.readByte();
         if ( A!='A' ) throw new IOException("missing A on start of alt");
         byte cmd = in.readByte();
