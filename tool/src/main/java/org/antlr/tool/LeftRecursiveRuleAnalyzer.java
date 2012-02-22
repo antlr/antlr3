@@ -222,8 +222,9 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		opPrecRuleAlts.putAll(binaryAlts);
 		opPrecRuleAlts.putAll(ternaryAlts);
 		opPrecRuleAlts.putAll(suffixAlts);
-		for (int alt : opPrecRuleAlts.keySet()) {
-			String altText = opPrecRuleAlts.get(alt);
+		for (Map.Entry<Integer, String> entry : opPrecRuleAlts.entrySet()) {
+			int alt = entry.getKey();
+			String altText = entry.getValue();
 			ST altST = recRuleTemplates.getInstanceOf("recRuleAlt");
 			ST predST =
 				generator.getTemplates().getInstanceOf("recRuleAltPredicate");

@@ -47,6 +47,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class gUnitExecutor implements ITestSuite {
 	public GrammarInfo grammarInfo;
@@ -173,11 +174,12 @@ public class gUnitExecutor implements ITestSuite {
 			String rule = ts.getRuleName();
 			String lexicalRule = ts.getLexicalRuleName();
 			String treeRule = ts.getTreeRuleName();
-			for ( gUnitTestInput input: ts.testSuites.keySet() ) {	// each rule may contain multiple tests
+			for ( Map.Entry<gUnitTestInput, AbstractTest> entry : ts.testSuites.entrySet() ) {	// each rule may contain multiple tests
+				gUnitTestInput input = entry.getKey();
 				numOfTest++;
 				// Run parser, and get the return value or stdout or stderr if there is
 				gUnitTestResult result = null;
-				AbstractTest test = ts.testSuites.get(input);
+				AbstractTest test = entry.getValue();
 				try {
 					// TODO: create a -debug option to turn on logging, which shows progress of running tests
 					//System.out.print(numOfTest + ". Running rule: " + rule + "; input: '" + input.testInput + "'");

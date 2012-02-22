@@ -487,11 +487,11 @@ public class CodeGenerator {
 	 *  target likes the scopes in action table.
 	 */
 	protected void verifyActionScopesOkForTarget(Map<String, Map<String, Object>> actions) {
-		Set<String> actionScopeKeySet = actions.keySet();
-		for (String scope : actionScopeKeySet) {
+		for (Map.Entry<String, Map<String, Object>> entry : actions.entrySet()) {
+			String scope = entry.getKey();
 			if ( !target.isValidActionScope(grammar.type, scope) ) {
 				// get any action from the scope to get error location
-				Map<String, Object> scopeActions = actions.get(scope);
+				Map<String, Object> scopeActions = entry.getValue();
 				GrammarAST actionAST =
 					(GrammarAST)scopeActions.values().iterator().next();
 				ErrorManager.grammarError(
@@ -506,9 +506,8 @@ public class CodeGenerator {
 	 *  each action and replace that action in the Map.
 	 */
 	protected void translateActionAttributeReferences(Map<String, Map<String, Object>> actions) {
-		Set<String> actionScopeKeySet = actions.keySet();
-		for (String scope : actionScopeKeySet) {
-			Map<String, Object> scopeActions = actions.get(scope);
+		for (Map.Entry<String, Map<String, Object>> entry : actions.entrySet()) {
+			Map<String, Object> scopeActions = entry.getValue();
 			translateActionAttributeReferencesForSingleScope(null,scopeActions);
 		}
 	}
@@ -522,9 +521,9 @@ public class CodeGenerator {
 		if ( r!=null ) {
 			ruleName = r.name;
 		}
-		Set<String> actionNameSet = scopeActions.keySet();
-		for (String name : actionNameSet) {
-			GrammarAST actionAST = (GrammarAST)scopeActions.get(name);
+		for (Map.Entry<String, Object> entry : scopeActions.entrySet()) {
+			String name = entry.getKey();
+			GrammarAST actionAST = (GrammarAST)entry.getValue();
 			List<?> chunks = translateAction(ruleName,actionAST);
 			scopeActions.put(name, chunks); // replace with translation
 		}

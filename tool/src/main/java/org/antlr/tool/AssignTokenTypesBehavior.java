@@ -246,9 +246,9 @@ protected void defineStringLiteralsFromDelegates() {
     @Override
 	protected void assignStringTypes(Grammar root) {
 		// walk string literals assigning types to unassigned ones
-		Set<String> s = stringLiterals.keySet();
-		for (String lit : s) {
-			Integer oldTypeI = stringLiterals.get(lit);
+		for (Map.Entry<String, Integer> entry : stringLiterals.entrySet()) {
+			String lit = entry.getKey();
+			Integer oldTypeI = entry.getValue();
 			int oldType = oldTypeI;
 			if ( oldType<Label.MIN_TOKEN_TYPE ) {
 				Integer typeI = Utils.integer(root.getNewTokenType());
@@ -267,9 +267,9 @@ protected void defineStringLiteralsFromDelegates() {
 		}
 		// walk aliases if any and assign types to aliased literals if literal
 		// was referenced
-		Set<String> s = aliases.keySet();
-		for (String tokenID : s) {
-			String literal = aliases.get(tokenID);
+		for (Map.Entry<String, String> entry : aliases.entrySet()) {
+			String tokenID = entry.getKey();
+			String literal = entry.getValue();
 			if ( literal.charAt(0)=='\'' && stringLiterals.get(literal)!=null ) {
 				stringLiterals.put(literal, tokens.get(tokenID));
 				// an alias still means you need a lexer rule for it
@@ -284,9 +284,9 @@ protected void defineStringLiteralsFromDelegates() {
     @Override
 	protected void assignTokenIDTypes(Grammar root) {
 		// walk token names, assigning values if unassigned
-		Set<String> s = tokens.keySet();
-		for (String tokenID : s) {
-			if ( tokens.get(tokenID)==UNASSIGNED ) {
+		for (Map.Entry<String, Integer> entry : tokens.entrySet()) {
+			String tokenID = entry.getKey();
+			if ( entry.getValue()==UNASSIGNED ) {
 				tokens.put(tokenID, Utils.integer(root.getNewTokenType()));
 			}
 		}
@@ -294,14 +294,13 @@ protected void defineStringLiteralsFromDelegates() {
 
     @Override
 	protected void defineTokenNamesAndLiteralsInGrammar(Grammar root) {
-		Set<String> s = tokens.keySet();
-		for (String tokenID : s) {
-			int ttype = tokens.get(tokenID);
-			root.defineToken(tokenID, ttype);
+		for (Map.Entry<String, Integer> entry : tokens.entrySet()) {
+			int ttype = entry.getValue();
+			root.defineToken(entry.getKey(), ttype);
 		}
-		s = stringLiterals.keySet();
-		for (String lit : s) {
-			int ttype = stringLiterals.get(lit);
+		for (Map.Entry<String, Integer> entry : stringLiterals.entrySet()) {
+			String lit = entry.getKey();
+			int ttype = entry.getValue();
 			root.defineToken(lit, ttype);
 		}
 	}

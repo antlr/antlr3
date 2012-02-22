@@ -920,8 +920,9 @@ public class Grammar {
 			return rules;
 		}
 		boolean isLexer = grammarTree.getType()==ANTLRParser.LEXER_GRAMMAR;
-		for (String synpredName : nameToSynpredASTMap.keySet()) {
-			GrammarAST fragmentAST = nameToSynpredASTMap.get(synpredName);
+		for (Map.Entry<String, GrammarAST> entry : nameToSynpredASTMap.entrySet()) {
+			String synpredName = entry.getKey();
+			GrammarAST fragmentAST = entry.getValue();
 			GrammarAST ruleAST =
 				ANTLRParser.createSimpleRuleAST(synpredName,
 												fragmentAST,

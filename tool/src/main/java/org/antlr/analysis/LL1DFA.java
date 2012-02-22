@@ -34,6 +34,7 @@ import org.antlr.misc.MultiMap;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /** A special DFA that is exactly LL(1) or LL(1) with backtracking mode
  *  predicates to resolve edge set collisions.
@@ -85,8 +86,9 @@ public class LL1DFA extends DFA {
 		this.decisionNFAStartState = decisionStartState;
 		initAltRelatedInfo();
 		unreachableAlts = null;
-		for (IntervalSet edge : edgeMap.keySet()) {
-			List<Integer> alts = edgeMap.get(edge);
+		for (Map.Entry<IntervalSet, List<Integer>> entry : edgeMap.entrySet()) {
+			IntervalSet edge = entry.getKey();
+			List<Integer> alts = entry.getValue();
 			Collections.sort(alts); // make sure alts are attempted in order
 			//System.out.println(edge+" -> "+alts);
 			DFAState s = newState();
