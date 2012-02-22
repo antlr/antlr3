@@ -194,10 +194,10 @@ public class DOTTreeGenerator {
 	protected int getNodeNumber(Object t) {
 		Integer nI = nodeToNumberMap.get(t);
 		if ( nI!=null ) {
-			return nI.intValue();
+			return nI;
 		}
 		else {
-			nodeToNumberMap.put(t, new Integer(nodeNumber));
+			nodeToNumberMap.put(t, nodeNumber);
 			nodeNumber++;
 			return nodeNumber-1;
 		}

@@ -545,8 +545,8 @@ public class DFA {
 		System.out.println("createTransitionTableEntryForState s"+s.stateNumber+
 			" dec "+s.dfa.decisionNumber+" cyclic="+s.dfa.isCyclic());
 			*/
-		int smax = max.get(s.stateNumber).intValue();
-		int smin = min.get(s.stateNumber).intValue();
+		int smax = max.get(s.stateNumber);
+		int smin = min.get(s.stateNumber);
 
 		Vector<Integer> stateTransitions = new Vector<Integer>(smax-smin+1);
 		stateTransitions.setSize(smax-smin+1);
@@ -637,8 +637,8 @@ public class DFA {
 			}
 		}
 		// if has pred or too big for table, make it special
-		int smax = max.get(s.stateNumber).intValue();
-		int smin = min.get(s.stateNumber).intValue();
+		int smax = max.get(s.stateNumber);
+		int smin = min.get(s.stateNumber);
 		if ( hasSemPred || smax-smin>MAX_STATE_TRANSITIONS_FOR_TABLE ) {
 			special.set(s.stateNumber,
 						Utils.integer(uniqueCompressedSpecialStateNum));

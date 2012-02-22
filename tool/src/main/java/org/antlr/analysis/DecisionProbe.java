@@ -512,7 +512,7 @@ public class DecisionProbe {
 			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt.intValue());
 		}
 		else {
-			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt.intValue()-1);
+			lastAltAST = (GrammarAST)blockAST.getChild(lastAlt -1);
 		}
 		//System.out.println("last alt is "+lastAltAST.toStringTree());
 		// if last alt looks like ( ALT . <end-of-alt> ) then wildcard
@@ -557,7 +557,7 @@ public class DecisionProbe {
 			DFAState sampleBadState = altToDFAState.get(altI);
 			ErrorManager.recursionOverflow(this,
 										   sampleBadState,
-										   altI.intValue(),
+										   altI,
 										   targetRules,
 										   callSiteStates);
 		}
@@ -594,7 +594,7 @@ public class DecisionProbe {
 				callSites.add(ruleInvocationState);
 				// track one problem DFA state per alt
 				if ( altToDFAState.get(altI)==null ) {
-					DFAState sampleBadState = dfa.getState(stateI.intValue());
+					DFAState sampleBadState = dfa.getState(stateI);
 					altToDFAState.put(altI, sampleBadState);
 				}
 			}
@@ -605,7 +605,7 @@ public class DecisionProbe {
 		Set<Integer> dfaStatesUnaliased = new HashSet<Integer>();
 		for (Iterator<Integer> it = dfaStatesWithRecursionProblems.iterator(); it.hasNext();) {
 			Integer stateI = it.next();
-			DFAState d = dfa.getState(stateI.intValue());
+			DFAState d = dfa.getState(stateI);
 			dfaStatesUnaliased.add(Utils.integer(d.stateNumber));
 		}
 		return dfaStatesUnaliased;

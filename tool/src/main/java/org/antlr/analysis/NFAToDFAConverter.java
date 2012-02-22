@@ -1313,7 +1313,7 @@ public class NFAToDFAConverter {
 	protected static int getMinAlt(Set<Integer> nondeterministicAlts) {
 		int min = Integer.MAX_VALUE;
 		for (Integer altI : nondeterministicAlts) {
-			int alt = altI.intValue();
+			int alt = altI;
 			if ( alt < min ) {
 				min = alt;
 			}
@@ -1725,11 +1725,11 @@ public class NFAToDFAConverter {
 			i++;
 			Integer I = it.next();
 			if ( i==1 ) { // init m with first value
-				m = I.intValue();
+				m = I;
 				continue;
 			}
-			if ( I.intValue()>m ) {
-				m = I.intValue();
+			if ( I>m ) {
+				m = I;
 			}
 		}
 		return m;

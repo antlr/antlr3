@@ -58,7 +58,7 @@ public class Tracer extends BlankDebugEventListener {
 		if ( input instanceof TokenStream ) {
 			return ((TokenStream)input).LT(k);
 		}
-		return new Character((char)input.LA(k));
+		return (char) input.LA(k);
 	}
 }
 

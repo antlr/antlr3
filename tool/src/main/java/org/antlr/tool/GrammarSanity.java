@@ -272,7 +272,7 @@ public class GrammarSanity {
 				ErrorManager.grammarWarning(ErrorManager.MSG_REWRITE_FOR_MULTI_ELEMENT_ALT,
 											grammar,
 											next.token,
-											new Integer(outerAltNum));
+											outerAltNum);
 			}
 			return;
 		}
@@ -296,7 +296,7 @@ public class GrammarSanity {
 		ErrorManager.grammarWarning(ErrorManager.MSG_REWRITE_FOR_MULTI_ELEMENT_ALT,
 									grammar,
 									elementAST.token,
-									new Integer(outerAltNum));
+									outerAltNum);
 	}
 
 	protected boolean isValidSimpleElementNode(Tree t) {

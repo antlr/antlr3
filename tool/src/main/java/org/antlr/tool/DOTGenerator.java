@@ -76,7 +76,7 @@ public class DOTGenerator {
 			dot.add("startState",
 					Utils.integer(startState.stateNumber));
 			dot.add("useBox",
-					Boolean.valueOf(Tool.internalOption_ShowNFAConfigsInDFA));
+					Tool.internalOption_ShowNFAConfigsInDFA);
 			walkCreatingDFADOT(dot, (DFAState)startState);
         }
         else {
@@ -333,7 +333,7 @@ public class DOTGenerator {
 					Set<NFAConfiguration> configurations = ((DFAState) s).nfaConfigurations;
 					for (int altIndex = 0; altIndex < altList.size(); altIndex++) {
 						Integer altI = altList.get(altIndex);
-						int alt = altI.intValue();
+						int alt = altI;
 						if ( altIndex>0 ) {
 							buf.append("\\n");
 						}

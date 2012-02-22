@@ -715,7 +715,7 @@ public class Profiler extends BlankDebugEventListener {
 		int[] x = new int[a.size()];
 		for (int i = 0; i < a.size(); i++) {
 			Integer I = a.get(i);
-			x[i] = I.intValue();
+			x[i] = I;
 		}
 		return x;
 	}

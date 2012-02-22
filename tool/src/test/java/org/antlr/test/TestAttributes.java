@@ -3112,7 +3112,7 @@ public class TestAttributes extends BaseTest {
 				messageExpected.add(i, Boolean.FALSE);
 		}
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			assertTrue("unexpected error:" + equeue.errors.get(i), messageExpected.get(i).booleanValue());
+			assertTrue("unexpected error:" + equeue.errors.get(i), messageExpected.get(i));
 		}
 	}
 }

@@ -142,7 +142,7 @@ public class FASerializer {
 		int normalizedStateNumber = s.stateNumber;
 		if ( stateNumberTranslator!=null ) {
 	        Integer normalizedStateNumberI = stateNumberTranslator.get(s);
-			normalizedStateNumber = normalizedStateNumberI.intValue();
+			normalizedStateNumber = normalizedStateNumberI;
 		}
 
 		String stateStr = getStateString(normalizedStateNumber, s);
@@ -181,7 +181,7 @@ public class FASerializer {
 			if ( stateNumberTranslator!=null ) {
 				Integer normalizedTargetStateNumberI =
 					stateNumberTranslator.get(edge.target);
-				normalizedTargetStateNumber = normalizedTargetStateNumberI.intValue();
+				normalizedTargetStateNumber = normalizedTargetStateNumberI;
 			}
 			buf.append(getStateString(normalizedTargetStateNumber, edge.target));
             buf.append("\n");

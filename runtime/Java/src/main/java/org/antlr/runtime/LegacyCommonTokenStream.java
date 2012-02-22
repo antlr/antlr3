@@ -101,7 +101,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 			if ( channelOverrideMap!=null ) {
 				Integer channelI = channelOverrideMap.get(t.getType());
 				if ( channelI!=null ) {
-					t.setChannel(channelI.intValue());
+					t.setChannel(channelI);
 				}
 			}
 			if ( discardSet!=null &&
@@ -167,14 +167,14 @@ public class LegacyCommonTokenStream implements TokenStream {
 		if ( channelOverrideMap==null ) {
 			channelOverrideMap = new HashMap<Integer, Integer>();
 		}
-        channelOverrideMap.put(new Integer(ttype), new Integer(channel));
+        channelOverrideMap.put(ttype, channel);
 	}
 
 	public void discardTokenType(int ttype) {
 		if ( discardSet==null ) {
 			discardSet = new HashSet<Integer>();
 		}
-        discardSet.add(new Integer(ttype));
+        discardSet.add(ttype);
 	}
 
 	public void discardOffChannelTokens(boolean discardOffChannelTokens) {

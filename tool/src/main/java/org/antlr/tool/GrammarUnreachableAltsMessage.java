@@ -69,7 +69,7 @@ public class GrammarUnreachableAltsMessage extends Message {
 			for (int i = 0; i < alts.size(); i++) {
 				Integer altI = alts.get(i);
 				String tokenName =
-					probe.getTokenNameForTokensRuleAlt(altI.intValue());
+					probe.getTokenNameForTokensRuleAlt(altI);
 				// reset the line/col to the token definition
 				NFAState ruleStart =
 					probe.dfa.nfa.grammar.getRuleStartState(tokenName);

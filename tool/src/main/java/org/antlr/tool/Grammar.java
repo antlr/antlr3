@@ -2083,7 +2083,7 @@ outer:
 		else { // must be a label like ID
 			I = composite.tokenIDToTypeMap.get(tokenName);
 		}
-		int i = (I!=null)?I.intValue():Label.INVALID;
+		int i = (I!=null)? I :Label.INVALID;
 		//System.out.println("grammar type "+type+" "+tokenName+"->"+i);
 		return i;
 	}
@@ -2463,7 +2463,7 @@ outer:
 		}
 		else if (k instanceof Integer) {
 			Integer kI = (Integer)k;
-			global_k = kI.intValue();
+			global_k = kI;
 		}
 		else {
 			// must be String "*"
@@ -2563,7 +2563,7 @@ outer:
 		}
 		if (k instanceof Integer) {
 			Integer kI = (Integer)k;
-			user_k = kI.intValue();
+			user_k = kI;
 		}
 		else {
 			// must be String "*"

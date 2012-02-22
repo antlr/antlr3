@@ -199,7 +199,7 @@ public class RandomPhrase {
 			System.out.println("token types="+tokenTypes);
 			for (int i = 0; i < tokenTypes.size(); i++) {
 				Integer ttypeI = tokenTypes.get(i);
-				int ttype = ttypeI.intValue();
+				int ttype = ttypeI;
 				String ttypeDisplayName = parser.getTokenDisplayName(ttype);
 				if ( Character.isUpperCase(ttypeDisplayName.charAt(0)) ) {
 					List<Integer> charsInToken = new ArrayList<Integer>(10);

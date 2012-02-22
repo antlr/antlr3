@@ -250,13 +250,13 @@ protected void defineStringLiteralsFromDelegates() {
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String lit = it.next();
 			Integer oldTypeI = stringLiterals.get(lit);
-			int oldType = oldTypeI.intValue();
+			int oldType = oldTypeI;
 			if ( oldType<Label.MIN_TOKEN_TYPE ) {
 				Integer typeI = Utils.integer(root.getNewTokenType());
 				stringLiterals.put(lit, typeI);
 				// if string referenced in combined grammar parser rule,
 				// automatically define in the generated lexer
-				root.defineLexerRuleForStringLiteral(lit, typeI.intValue());
+				root.defineLexerRuleForStringLiteral(lit, typeI);
 			}
 		}
 	}
@@ -277,7 +277,7 @@ protected void defineStringLiteralsFromDelegates() {
 				// an alias still means you need a lexer rule for it
 				Integer typeI = tokens.get(tokenID);
 				if ( !tokenRuleDefs.contains(tokenID) ) {
-					root.defineLexerRuleForAliasedStringLiteral(tokenID, literal, typeI.intValue());
+					root.defineLexerRuleForAliasedStringLiteral(tokenID, literal, typeI);
 				}
 			}
 		}
@@ -300,13 +300,13 @@ protected void defineStringLiteralsFromDelegates() {
 		Set<String> s = tokens.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String tokenID = it.next();
-			int ttype = tokens.get(tokenID).intValue();
+			int ttype = tokens.get(tokenID);
 			root.defineToken(tokenID, ttype);
 		}
 		s = stringLiterals.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String lit = it.next();
-			int ttype = stringLiterals.get(lit).intValue();
+			int ttype = stringLiterals.get(lit);
 			root.defineToken(lit, ttype);
 		}
 	}

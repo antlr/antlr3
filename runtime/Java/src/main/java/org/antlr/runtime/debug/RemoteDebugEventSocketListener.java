@@ -390,7 +390,7 @@ public class RemoteDebugEventSocketListener implements Runnable {
 			Boolean result = Boolean.valueOf(elements[1]);
 			String predicateText = elements[2];
 			predicateText = unEscapeNewlines(predicateText);
-			listener.semanticPredicate(result.booleanValue(),
+			listener.semanticPredicate(result,
 									   predicateText);
 		}
 		else if ( elements[0].equals("consumeNode") ) {

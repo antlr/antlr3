@@ -260,10 +260,10 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		}
 		Integer prevID = treeToUniqueIDMap.get(node);
 		if ( prevID!=null ) {
-			return prevID.intValue();
+			return prevID;
 		}
 		int ID = uniqueNodeID;
-		treeToUniqueIDMap.put(node, new Integer(ID));
+		treeToUniqueIDMap.put(node, ID);
 		uniqueNodeID++;
 		return ID;
 		// GC makes these nonunique:

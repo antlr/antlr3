@@ -795,11 +795,11 @@ public abstract class BaseRecognizer {
 			state.ruleMemo[ruleIndex] = new HashMap<Integer, Integer>();
 		}
 		Integer stopIndexI =
-			state.ruleMemo[ruleIndex].get(new Integer(ruleStartIndex));
+			state.ruleMemo[ruleIndex].get(ruleStartIndex);
 		if ( stopIndexI==null ) {
 			return MEMO_RULE_UNKNOWN;
 		}
-		return stopIndexI.intValue();
+		return stopIndexI;
 	}
 
 	/** Has this rule already parsed input at the current index in the
@@ -842,9 +842,7 @@ public abstract class BaseRecognizer {
 			System.err.println("!!!!!!!!! memo size is "+state.ruleMemo.length+", but rule index is "+ruleIndex);
 		}
 		if ( state.ruleMemo[ruleIndex]!=null ) {
-			state.ruleMemo[ruleIndex].put(
-				new Integer(ruleStartIndex), new Integer(stopTokenIndex)
-			);
+			state.ruleMemo[ruleIndex].put(ruleStartIndex, stopTokenIndex);
 		}
 	}
 

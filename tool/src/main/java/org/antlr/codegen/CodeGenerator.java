@@ -349,52 +349,52 @@ public class CodeGenerator {
 		headerFileST.add("buildAST", grammar.buildAST());
 		outputFileST.add("buildAST", grammar.buildAST());
 
-		outputFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
-		headerFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
+		outputFileST.add("rewriteMode", grammar.rewriteMode());
+		headerFileST.add("rewriteMode", grammar.rewriteMode());
 
-		outputFileST.add("backtracking", Boolean.valueOf(canBacktrack));
-		headerFileST.add("backtracking", Boolean.valueOf(canBacktrack));
+		outputFileST.add("backtracking", canBacktrack);
+		headerFileST.add("backtracking", canBacktrack);
 		// turn on memoize attribute at grammar level so we can create ruleMemo.
 		// each rule has memoize attr that hides this one, indicating whether
 		// it needs to save results
 		String memoize = (String)grammar.getOption("memoize");
 		outputFileST.add("memoize",
 						 (grammar.atLeastOneRuleMemoizes ||
-						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  memoize != null && memoize.equals("true") &&
 						  canBacktrack));
 		headerFileST.add("memoize",
 						 (grammar.atLeastOneRuleMemoizes ||
-						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  memoize != null && memoize.equals("true") &&
 						  canBacktrack));
 
 
-		outputFileST.add("trace", Boolean.valueOf(trace));
-		headerFileST.add("trace", Boolean.valueOf(trace));
+		outputFileST.add("trace", trace);
+		headerFileST.add("trace", trace);
 
-		outputFileST.add("profile", Boolean.valueOf(profile));
-		headerFileST.add("profile", Boolean.valueOf(profile));
+		outputFileST.add("profile", profile);
+		headerFileST.add("profile", profile);
 
 		// RECOGNIZER
 		if ( grammar.type==Grammar.LEXER ) {
 			recognizerST = templates.getInstanceOf("lexer");
-			outputFileST.add("LEXER", Boolean.valueOf(true));
-			headerFileST.add("LEXER", Boolean.valueOf(true));
+			outputFileST.add("LEXER", true);
+			headerFileST.add("LEXER", true);
 			recognizerST.add("filterMode",
-							 Boolean.valueOf(filterMode));
+							 filterMode);
 		}
 		else if ( grammar.type==Grammar.PARSER ||
 			grammar.type==Grammar.COMBINED )
 		{
 			recognizerST = templates.getInstanceOf("parser");
-			outputFileST.add("PARSER", Boolean.valueOf(true));
-			headerFileST.add("PARSER", Boolean.valueOf(true));
+			outputFileST.add("PARSER", true);
+			headerFileST.add("PARSER", true);
 		}
 		else {
 			recognizerST = templates.getInstanceOf("treeParser");
-			outputFileST.add("TREE_PARSER", Boolean.valueOf(true));
-			headerFileST.add("TREE_PARSER", Boolean.valueOf(true));
+			outputFileST.add("TREE_PARSER", true);
+			headerFileST.add("TREE_PARSER", true);
             recognizerST.add("filterMode",
-							 Boolean.valueOf(filterMode));
+							 filterMode);
 		}
 		outputFileST.add("recognizer", recognizerST);
 		headerFileST.add("recognizer", recognizerST);
@@ -666,9 +666,9 @@ public class CodeGenerator {
 	public ST generateSpecialState(DFAState s) {
 		ST stateST;
 		stateST = templates.getInstanceOf("cyclicDFAState");
-		stateST.add("needErrorClause", Boolean.valueOf(true));
+		stateST.add("needErrorClause", true);
 		stateST.add("semPredState",
-					Boolean.valueOf(s.isResolvedWithPredicates()));
+					s.isResolvedWithPredicates());
 		stateST.add("stateNumber", s.stateNumber);
 		stateST.add("decisionNumber", s.dfa.decisionNumber);
 

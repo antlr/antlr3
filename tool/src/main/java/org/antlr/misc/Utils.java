@@ -38,10 +38,10 @@ public class Utils {
 	 */
 	public static Integer integer(int x) {
 		if ( x<0 || x>INTEGER_POOL_MAX_VALUE ) {
-			return new Integer(x);
+			return x;
 		}
 		if ( ints[x]==null ) {
-			ints[x] = new Integer(x);
+			ints[x] = x;
 		}
 		return ints[x];
 	}

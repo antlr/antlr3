@@ -214,13 +214,13 @@ public class TestIntervalSet extends BaseTest {
     @Test public void testSimpleEquals() throws Exception {
         IntervalSet s = IntervalSet.of(10,20);
         IntervalSet s2 = IntervalSet.of(10,20);
-        Boolean expecting = new Boolean(true);
-        Boolean result = new Boolean(s.equals(s2));
+        Boolean expecting = true;
+        Boolean result = s.equals(s2);
         assertEquals(result, expecting);
 
         IntervalSet s3 = IntervalSet.of(15,55);
-        expecting = new Boolean(false);
-        result = new Boolean(s.equals(s3));
+        expecting = false;
+        result = s.equals(s3);
         assertEquals(result, expecting);
     }
 
@@ -231,14 +231,14 @@ public class TestIntervalSet extends BaseTest {
         IntervalSet s2 = IntervalSet.of(10,20);
         s2.add(2);
         s2.add(499,501);
-        Boolean expecting = new Boolean(true);
-        Boolean result = new Boolean(s.equals(s2));
+        Boolean expecting = true;
+        Boolean result = s.equals(s2);
         assertEquals(result, expecting);
 
         IntervalSet s3 = IntervalSet.of(10,20);
         s3.add(2);
-        expecting = new Boolean(false);
-        result = new Boolean(s.equals(s3));
+        expecting = false;
+        result = s.equals(s3);
         assertEquals(result, expecting);
     }
 

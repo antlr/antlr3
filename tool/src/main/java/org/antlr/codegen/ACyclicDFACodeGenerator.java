@@ -83,8 +83,7 @@ public class ACyclicDFACodeGenerator {
 		}
 		dfaST.add("k", Utils.integer(k));
 		dfaST.add("stateNumber", Utils.integer(s.stateNumber));
-		dfaST.add("semPredState",
-						   Boolean.valueOf(s.isResolvedWithPredicates()));
+		dfaST.add("semPredState", s.isResolvedWithPredicates());
 		/*
 		String description = dfa.getNFADecisionStartState().getDescription();
 		description = parentGenerator.target.getTargetStringLiteralFromString(description);
@@ -119,7 +118,7 @@ public class ACyclicDFACodeGenerator {
 				for (int j = 0; j < labels.size(); j++) {
 					Integer vI = labels.get(j);
 					String label =
-						parentGenerator.getTokenTypeAsTargetLabel(vI.intValue());
+						parentGenerator.getTokenTypeAsTargetLabel(vI);
 					targetLabels.add(label); // rewrite List element to be name
 				}
 				edgeST.add("labels", targetLabels);
