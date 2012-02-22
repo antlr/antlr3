@@ -31,7 +31,6 @@ import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
 import org.antlr.analysis.Label;
 import org.antlr.analysis.NFAState;
-import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
 
 import java.util.Iterator;

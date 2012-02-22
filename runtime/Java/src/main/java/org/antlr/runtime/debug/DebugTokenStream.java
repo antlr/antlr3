@@ -29,8 +29,6 @@ package org.antlr.runtime.debug;
 
 import org.antlr.runtime.*;
 
-import java.util.List;
-
 public class DebugTokenStream implements TokenStream {
 	protected DebugEventListener dbg;
 	public TokenStream input;

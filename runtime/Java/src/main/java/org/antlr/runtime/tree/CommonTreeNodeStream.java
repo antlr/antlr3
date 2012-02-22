@@ -32,8 +32,6 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.misc.LookaheadStream;
 import org.antlr.runtime.misc.IntArray;
 
-import java.util.*;
-
 public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;

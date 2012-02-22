@@ -29,9 +29,6 @@ package org.antlr.runtime;
 
 import org.antlr.runtime.misc.LookaheadStream;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 /** A token stream that pulls tokens from the code source on-demand and
  *  without tracking a complete buffer of the tokens. This stream buffers
  *  the minimum number of tokens possible.  It's the same as

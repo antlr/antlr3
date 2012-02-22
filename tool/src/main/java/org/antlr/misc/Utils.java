@@ -27,9 +27,6 @@
  */
 package org.antlr.misc;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Utils {
 	public static final int INTEGER_POOL_MAX_VALUE = 1000;
 	static Integer[] ints = new Integer[INTEGER_POOL_MAX_VALUE+1];

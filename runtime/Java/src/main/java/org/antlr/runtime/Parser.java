@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime;
 
-import org.antlr.runtime.debug.DebugTokenStream;
-
 /** A parser for TokenStreams.  "parser grammars" result in a subclass
  *  of this.
  */

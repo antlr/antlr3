@@ -30,7 +30,6 @@ package org.antlr.tool;
 import org.antlr.analysis.Label;
 import org.antlr.grammar.v3.AssignTokenTypesWalker;
 import org.antlr.misc.Utils;
-import org.antlr.runtime.tree.TreeNodeStream;
 
 import java.util.*;
 

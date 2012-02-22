@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime.misc;
 
-import org.antlr.runtime.Token;
-
 import java.util.NoSuchElementException;
 
 /** A lookahead queue that knows how to mark/release locations

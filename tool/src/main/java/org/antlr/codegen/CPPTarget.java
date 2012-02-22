@@ -29,7 +29,6 @@ package org.antlr.codegen;
 
 import org.antlr.Tool;
 import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;

@@ -28,7 +28,6 @@
 package org.antlr.runtime;
 
 import org.antlr.runtime.tree.TreeNodeStream;
-import org.antlr.runtime.tree.Tree;
 
 /**
  */

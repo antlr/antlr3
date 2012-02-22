@@ -31,15 +31,11 @@ import org.antlr.analysis.DFA;
 import org.antlr.analysis.NFAState;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.IntSet;
-import org.antlr.misc.Interval;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.TreeAdaptor;
 import org.stringtemplate.v4.ST;
-import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 
 import java.util.*;
 

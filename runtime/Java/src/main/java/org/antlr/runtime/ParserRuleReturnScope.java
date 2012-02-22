@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime;
 
-import org.antlr.runtime.tree.CommonTree;
-
 /** Rules that return more than a single value must return an object
  *  containing all the values.  Besides the properties defined in
  *  RuleLabelScope.predefinedRulePropertiesScope there may be user-defined
