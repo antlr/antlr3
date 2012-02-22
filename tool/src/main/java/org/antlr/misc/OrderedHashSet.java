@@ -100,7 +100,7 @@ public class OrderedHashSet<T> extends LinkedHashSet<T> {
 	public Object[] toArray() {
 		return elements.toArray();
 	}
-	
+
 	@Override
     public int size() {
 		/*

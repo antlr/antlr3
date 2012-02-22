@@ -334,22 +334,22 @@ public class ErrorManager {
 	 */
 	static STErrorListener initSTListener =
 		new STErrorListener() {
-		@Override
+			@Override
 			public void compileTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
-		@Override
+			@Override
 			public void runTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
-		@Override
+			@Override
 			public void IOError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
-		@Override
+			@Override
 			public void internalError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}

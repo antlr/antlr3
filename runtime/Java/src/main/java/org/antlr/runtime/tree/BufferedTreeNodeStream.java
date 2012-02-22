@@ -478,7 +478,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			}
 		}
 		// now walk until we see stop, filling string buffer with text
-		 StringBuilder buf = new StringBuilder();
+		StringBuilder buf = new StringBuilder();
 		t = nodes.get(i);
 		while ( t!=stop ) {
 			String text = adaptor.getText(t);

@@ -146,7 +146,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("C"),
 					   new TreeWizard.Visitor() {
-			@Override
+							@Override
 							public void visit(Object t) {
 								elements.add(t);
 							}
@@ -162,7 +162,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("B"),
 					   new TreeWizard.Visitor() {
-			@Override
+							@Override
 							public void visit(Object t) {
 								elements.add(t);
 							}
@@ -178,7 +178,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("A"),
 					   new TreeWizard.Visitor() {
-			@Override
+							@Override
 							public void visit(Object t) {
 								elements.add(t);
 							}
@@ -194,7 +194,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, wiz.getTokenType("B"),
 		   new TreeWizard.ContextVisitor() {
-			@Override
+			   @Override
 			   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 				   elements.add(adaptor.getText(t)+"@"+
 								(parent!=null?adaptor.getText(parent):"nil")+
@@ -212,7 +212,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, wiz.getTokenType("A"),
 		   new TreeWizard.ContextVisitor() {
-			@Override
+			   @Override
 			   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 				   elements.add(adaptor.getText(t)+"@"+
 								(parent!=null?adaptor.getText(parent):"nil")+
@@ -230,7 +230,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, "(A B)",
 					   new TreeWizard.Visitor() {
-			@Override
+							@Override
 							public void visit(Object t) {
 								elements.add(t);
 							}
@@ -246,7 +246,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, "(A B)",
 					   new TreeWizard.ContextVisitor() {
-			@Override
+						   @Override
 						   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 							   elements.add(adaptor.getText(t)+"@"+
 											(parent!=null?adaptor.getText(parent):"nil")+
@@ -264,7 +264,7 @@ public class TestTreeWizard extends BaseTest {
 		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, "(%a:A %b:B)",
 					   new TreeWizard.ContextVisitor() {
-			@Override
+						   @Override
 						   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 							   elements.add(adaptor.getText(t)+"@"+
 											(parent!=null?adaptor.getText(parent):"nil")+
