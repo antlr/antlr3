@@ -184,9 +184,9 @@
                     <target>1.6</target>
                     <sourceDirectory>src</sourceDirectory>
                     <showWarnings>true</showWarnings>
+                    <compilerArgument>-Xlint:-serial</compilerArgument>
                     <compilerArguments>
                         <Xlint/>
-                        <Xlint:-serial/>
                     </compilerArguments>
                 </configuration>
             </plugin>
