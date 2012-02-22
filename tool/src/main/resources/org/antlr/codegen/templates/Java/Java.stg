@@ -77,7 +77,7 @@ import java.util.HashMap;
 <@end>
 
 <docComment>
-@SuppressWarnings({"all", "warnings", "unchecked"})
+@SuppressWarnings({"all", "warnings", "unchecked", "cast"})
 <recognizer>
 >>
 
