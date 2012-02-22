@@ -91,6 +91,8 @@ NSInteger level;
     
 - (void) setTreeAdaptor:(CommonTreeAdaptor *) adaptor;
     
+- (CommonTree *)get:(NSInteger) i;
+
 - (NSInteger) LA:(NSInteger) i;
     
     /** Make stream jump to a new location, saving old location.

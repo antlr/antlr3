@@ -17,6 +17,7 @@
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
         <version>3.4.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <url>http://www.antlr.org/wiki/display/ANTLR3/gUnit+-+Grammar+Unit+Testing</url>

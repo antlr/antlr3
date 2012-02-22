@@ -24,3 +24,6 @@ antlr-3.2/tool/src/main/java/org/antlr/codegen/ObjCTarget/Java>.
 
 If you are using Antlr3.3 the code from here is included with the Antlr tarball. You just need
 to copy the ANTLR.framework to /Library/Frameworks.
+
+Feb. 16, 2012 -- I just uploaded (to dev) a new binary(zipped) copy of the ANTLR.framework that has all of the
+renaming changes that I did to match the Java source names and fixes to the DFA transitions. This is antlr-3.4.1.

@@ -270,7 +270,7 @@ static CommonToken *INVALID_TOKEN;
     if (input == nil) {
         return nil;
     }
-    int n = [input count];
+    int n = [input size];
     if ( startIndex < n && stopIndex < n) {
         return [input substringWithRange:NSMakeRange(startIndex, (stopIndex-startIndex)+1)];
     }

@@ -25,21 +25,21 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "TestRewriteRuleTokenStream.h"
-#import "ANTLRRewriteRuleTokenStream.h"
-#import "ANTLRCommonTreeAdaptor.h"
-#import "ANTLRCommonToken.h"
+#import "RewriteRuleTokenStream.h"
+#import "CommonTreeAdaptor.h"
+#import "CommonToken.h"
 
 @implementation TestRewriteRuleTokenStream
 
 - (void) setUp
 {
-    treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
-    stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
+    treeAdaptor = [CommonTreeAdaptor newTreeAdaptor];
+    stream = [RewriteRuleTokenStream newRewriteRuleTokenStream:treeAdaptor
                                                           description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newToken:5];
-    token2 = [ANTLRCommonToken newToken:6];
-    token3 = [ANTLRCommonToken newToken:7];
-    token4 = [ANTLRCommonToken newToken:8];
+    token1 = [CommonToken newToken:5];
+    token2 = [CommonToken newToken:6];
+    token3 = [CommonToken newToken:7];
+    token4 = [CommonToken newToken:8];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     [token3 setText:@"token 3"];
@@ -59,8 +59,8 @@
 
 - (void) test01EmptyRewriteStream
 {
-    treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
-    stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
+    treeAdaptor = [CommonTreeAdaptor newTreeAdaptor];
+    stream = [RewriteRuleTokenStream newRewriteRuleTokenStream:treeAdaptor
                                                              description:@"rewrite rule token stream"];
     STAssertFalse([stream hasNext], @"-(BOOL)hasNext should be NO, but isn't");
     STAssertThrows([stream nextToken], @"-next on empty stream should throw exception, but doesn't");
@@ -68,11 +68,11 @@
 
 - (void) test02RewriteStreamCount
 {
-    treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
-    stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
+    treeAdaptor = [CommonTreeAdaptor newTreeAdaptor];
+    stream = [RewriteRuleTokenStream newRewriteRuleTokenStream:treeAdaptor
                                                              description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newToken:5];
-    token2 = [ANTLRCommonToken newToken:6];
+    token1 = [CommonToken newToken:5];
+    token2 = [CommonToken newToken:6];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     STAssertTrue([stream size] == 0,
@@ -88,27 +88,27 @@
 
 - (void) test03SingleElement
 {
-    treeAdaptor = [ANTLRCommonTreeAdaptor newTreeAdaptor];
-    stream = [ANTLRRewriteRuleTokenStream newANTLRRewriteRuleTokenStream:treeAdaptor
+    treeAdaptor = [CommonTreeAdaptor newTreeAdaptor];
+    stream = [RewriteRuleTokenStream newRewriteRuleTokenStream:treeAdaptor
                                                              description:@"rewrite rule token stream"];
-    token1 = [ANTLRCommonToken newToken:5];
-    token2 = [ANTLRCommonToken newToken:6];
-    token3 = [ANTLRCommonToken newToken:7];
-    token4 = [ANTLRCommonToken newToken:8];
+    token1 = [CommonToken newToken:5];
+    token2 = [CommonToken newToken:6];
+    token3 = [CommonToken newToken:7];
+    token4 = [CommonToken newToken:8];
     [token1 setText:@"token 1"];
     [token2 setText:@"token 2"];
     [token3 setText:@"token 3"];
     [token4 setText:@"token 4"];
     [stream addElement:token1];
     STAssertTrue([stream hasNext], @"-hasNext should be YES, but isn't");
-    ANTLRCommonTree *tree = [stream nextNode];
+    CommonTree *tree = [stream nextNode];
     STAssertEqualObjects([tree getToken], token1, @"return token from stream should be token1, but isn't");
 }
 
 - (void) test04SingleElementDup
 {
     [stream addElement:token1];
-    ANTLRCommonTree *tree1, *tree2;
+    CommonTree *tree1, *tree2;
     STAssertNoThrow(tree1 = [stream nextNode],
                     @"stream iteration should not throw exception"
                     );
@@ -126,7 +126,7 @@
     [stream addElement:token1];
     [stream addElement:token2];
     [stream addElement:token3];
-    ANTLRCommonTree *tree1, *tree2, *tree3, *tree4;
+    CommonTree *tree1, *tree2, *tree3, *tree4;
     STAssertNoThrow(tree1 = [stream nextNode],
                     @"stream iteration should not throw exception"
                     );
@@ -155,7 +155,7 @@
     [stream addElement:token1];
     [stream addElement:token2];
     [stream addElement:token3];
-    ANTLRCommonTree *tree1, *tree2, *tree3;
+    CommonTree *tree1, *tree2, *tree3;
     
     // consume the stream completely
     STAssertNoThrow(tree1 = [stream nextNode],
@@ -176,7 +176,7 @@
     
     [stream reset]; // after resetting the stream it should dup
     
-    ANTLRCommonTree *tree1Dup, *tree2Dup, *tree3Dup;
+    CommonTree *tree1Dup, *tree2Dup, *tree3Dup;
 
     STAssertNoThrow(tree1Dup = [stream nextNode],
                     @"stream iteration should not throw exception"

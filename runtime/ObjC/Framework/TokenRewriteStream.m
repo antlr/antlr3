@@ -348,7 +348,7 @@ extern NSInteger debug;
 - (void) replaceProgNam:(NSString *)programName FromIndex:(NSInteger)from ToIndex:(NSInteger)to Text:(NSString *)theText
 {
     if ( from > to || from < 0 || to < 0 || to >= [tokens count] ) {
-        @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"replace: range invalid: %d..%d size=%d\n", from, to, [tokens count]]];
+        @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"replace: range invalid: %d..%d size=%d\n", from, to, [tokens count]]];
     }
     RewriteOperation *op = [ANTLRReplaceOp newANTLRReplaceOp:from ToIndex:to Text:theText];
     HashMap *rewrites = (HashMap *)[lastRewriteTokenIndexes getName:programName];
@@ -433,7 +433,7 @@ extern NSInteger debug;
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:100];
     for (int i = start; i >= MIN_TOKEN_INDEX && i <= end && i< [tokens count]; i++) {
-        if ( [[lastRewriteTokenIndexes objectAtIndex:i] type] != TokenTypeEOF )
+        if ( [((CommonToken *)[lastRewriteTokenIndexes objectAtIndex:i]) type] != TokenTypeEOF )
             [buf appendString:[[tokens objectAtIndex:i] text]];
     }
     return [NSString stringWithString:buf];
@@ -588,7 +588,7 @@ extern NSInteger debug;
             BOOL disjoint = prevRop.lastIndex<rop.rwIndex || prevRop.rwIndex > rop.lastIndex;
             BOOL same = prevRop.rwIndex==rop.rwIndex && prevRop.lastIndex==rop.lastIndex;
             if ( !disjoint && !same ) {
-                @throw [ANTLRIllegalArgumentException newException:
+                @throw [IllegalArgumentException newException:
                         [NSString stringWithFormat:@"replace op boundaries of %@, overlap with previous %@\n", rop, prevRop]];
             }
         }
@@ -624,7 +624,7 @@ extern NSInteger debug;
                 continue;
             }
             if ( iop.rwIndex >= rop.rwIndex && iop.rwIndex <= rop.lastIndex ) {
-                @throw [ANTLRIllegalArgumentException newException:[NSString stringWithFormat:@"insert op %d within boundaries of previous %d", iop, rop]];
+                @throw [IllegalArgumentException newException:[NSString stringWithFormat:@"insert op %d within boundaries of previous %d", iop, rop]];
             }
         }
     }
