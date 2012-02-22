@@ -168,7 +168,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
-    private final static long bitMask(int bitNumber) {
+    private static long bitMask(int bitNumber) {
         int bitPosition = bitNumber & MOD_MASK; // bitNumber mod BITS
         return 1L << bitPosition;
     }
@@ -328,7 +328,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
-    private final int numWordsToHold(int el) {
+    private int numWordsToHold(int el) {
         return (el >> LOG_BITS) + 1;
     }
 
@@ -584,7 +584,7 @@ public class BitSet implements IntSet, Cloneable {
         return toString();
     }
 
-    private final static int wordNumber(int bit) {
+    private static int wordNumber(int bit) {
         return bit >> LOG_BITS; // bit / BITS
     }
 }
