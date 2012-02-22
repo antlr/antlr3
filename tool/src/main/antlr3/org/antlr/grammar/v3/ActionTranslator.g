@@ -94,7 +94,7 @@ public List<Object> translateToChunks() {
 public String translate() {
 	List<Object> theChunks = translateToChunks();
 	//System.out.println("chunks="+a.chunks);
-	StringBuffer buf = new StringBuffer();
+	StringBuilder buf = new StringBuilder();
 	for (int i = 0; i < theChunks.size(); i++) {
 		Object o = theChunks.get(i);
 		if ( o instanceof ST ) buf.append(((ST)o).render());
