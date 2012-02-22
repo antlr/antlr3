@@ -258,7 +258,7 @@ public class ErrorManager {
 	 */
 	private static Map<Thread, ANTLRErrorListener> threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
 
-	static class ErrorState {
+	public static class ErrorState {
 		public int errors;
 		public int warnings;
 		public int infos;

@@ -87,7 +87,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 
 	// Define the rewrite operation hierarchy
 
-	class RewriteOperation {
+	public class RewriteOperation {
         /** What index into rewrites List are we? */
         protected int instructionIndex;
         /** Token buffer index. */
