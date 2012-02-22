@@ -85,8 +85,8 @@ public class Graph<T> {
         while ( visited.size() < nodes.size() ) {
             // pick any unvisited node, n
             Node<T> n = null;
-            for (Iterator<Node<T>> it = nodes.values().iterator(); it.hasNext();) {
-                n = it.next();
+            for (Node<T> tNode : nodes.values()) {
+                n = tNode;
                 if ( !visited.contains(n) ) break;
             }
             DFS(n, visited, sorted);
@@ -98,8 +98,7 @@ public class Graph<T> {
         if ( visited.contains(n) ) return;
         visited.add(n);
         if ( n.edges!=null ) {
-            for (Iterator<Node<T>> it = n.edges.iterator(); it.hasNext();) {
-                Node<T> target = it.next();
+            for (Node<T> target : n.edges) {
                 DFS(target, visited, sorted);
             }
         }

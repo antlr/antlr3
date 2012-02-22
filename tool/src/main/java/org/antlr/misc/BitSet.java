@@ -102,8 +102,7 @@ public class BitSet implements IntSet, Cloneable {
 		else if ( set instanceof IntervalSet ) {
 			IntervalSet other = (IntervalSet)set;
 			// walk set and add each interval
-			for (Iterator<Interval> iter = other.intervals.iterator(); iter.hasNext();) {
-				Interval I = iter.next();
+			for (Interval I : other.intervals) {
 				this.orInPlace(BitSet.range(I.a,I.b));
 			}
 		}

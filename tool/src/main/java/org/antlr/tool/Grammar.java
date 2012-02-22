@@ -973,8 +973,7 @@ public class Grammar {
 		factory = new NFAFactory(nfa);
 
 		Collection<Rule> rules = getRules();
-		for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
-			Rule r = itr.next();
+		for (Rule r : rules) {
 			String ruleName = r.name;
 			NFAState ruleBeginState = factory.newState();
 			ruleBeginState.setDescription("rule "+ruleName+" start");
@@ -1885,8 +1884,7 @@ outer:
 	 */
 	protected void examineAllExecutableActions() {
 		Collection<Rule> rules = getRules();
-		for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
-			Rule r = it.next();
+		for (Rule r : rules) {
 			// walk all actions within the rule elements, args, and exceptions
 			List<GrammarAST> actions = r.getInlineActions();
 			for (int i = 0; i < actions.size(); i++) {
@@ -1897,8 +1895,8 @@ outer:
 			}
 			// walk any named actions like @init, @after
 			Collection<? extends Object> namedActions = r.getActions().values();
-			for (Iterator<? extends Object> it2 = namedActions.iterator(); it2.hasNext();) {
-				GrammarAST actionAST = (GrammarAST)it2.next();
+			for (Object namedAction : namedActions) {
+				GrammarAST actionAST = (GrammarAST)namedAction;
 				ActionAnalysis sniffer =
 					new ActionAnalysis(this, r.name, actionAST);
 				sniffer.analyze();
@@ -1914,8 +1912,7 @@ outer:
 			return;
 		}
 		Set<String> rules = nameToRuleMap.keySet();
-		for (Iterator<String> it = rules.iterator(); it.hasNext();) {
-			String ruleName = it.next();
+		for (String ruleName : rules) {
 			Rule r = getRule(ruleName);
 			removeUselessLabels(r.getRuleLabels());
 			removeUselessLabels(r.getRuleListLabels());
@@ -1931,8 +1928,7 @@ outer:
 		}
 		Collection<LabelElementPair> labels = ruleToElementLabelPairMap.values();
 		List<String> kill = new ArrayList<String>();
-		for (Iterator<LabelElementPair> labelit = labels.iterator(); labelit.hasNext();) {
-			LabelElementPair pair = labelit.next();
+		for (LabelElementPair pair : labels) {
 			Rule refdRule = getRule(pair.elementRef.getText());
 			if ( refdRule!=null && !refdRule.getHasReturnValue() && !pair.actionReferencesLabel ) {
 				//System.out.println(pair.label.getText()+" is useless");
@@ -2215,8 +2211,7 @@ outer:
 	 */
 	public int importTokenVocabulary(Grammar importFromGr) {
 		Set<String> importedTokenIDs = importFromGr.getTokenIDs();
-		for (Iterator<String> it = importedTokenIDs.iterator(); it.hasNext();) {
-			String tokenID = it.next();
+		for (String tokenID : importedTokenIDs) {
 			int tokenType = importFromGr.getTokenType(tokenID);
 			composite.maxTokenType = Math.max(composite.maxTokenType,tokenType);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
@@ -2814,9 +2809,7 @@ outer:
 	public List<Integer> getLookaheadDFAColumnsForLineInFile(int line) {
 		String prefix = line+":";
 		List<Integer> columns = new ArrayList<Integer>();
-		for(Iterator<String> iter = lineColumnToLookaheadDFAMap.keySet().iterator();
-			iter.hasNext(); ) {
-			String key = iter.next();
+		for (String key : lineColumnToLookaheadDFAMap.keySet()) {
 			if(key.startsWith(prefix)) {
 				columns.add(Integer.valueOf(key.substring(prefix.length())));
 			}

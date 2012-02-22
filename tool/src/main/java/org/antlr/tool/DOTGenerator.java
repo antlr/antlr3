@@ -343,8 +343,7 @@ public class DOTGenerator {
 						// get a list of configs for just this alt
 						// it will help us print better later
 						List<NFAConfiguration> configsInAlt = new ArrayList<NFAConfiguration>();
-						for (Iterator<NFAConfiguration> it = configurations.iterator(); it.hasNext();) {
-							NFAConfiguration c = it.next();
+						for (NFAConfiguration c : configurations) {
 							if ( c.alt!=alt ) continue;
 							configsInAlt.add(c);
 						}

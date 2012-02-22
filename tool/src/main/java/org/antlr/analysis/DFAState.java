@@ -553,8 +553,7 @@ public class DFAState extends State {
 		// potential conflicts are states with > 1 configuration and diff alts
 		Set<Integer> states = stateToConfigListMap.keySet();
 		int numPotentialConflicts = 0;
-		for (Iterator<Integer> it = states.iterator(); it.hasNext();) {
-			Integer stateI = it.next();
+		for (Integer stateI : states) {
 			boolean thisStateHasPotentialProblem = false;
 			List<NFAConfiguration> configsForState = stateToConfigListMap.get(stateI);
 			int alt=0;
@@ -613,8 +612,7 @@ public class DFAState extends State {
 		// Indeed a conflict exists as same state 3, same context [$], predicts
 		// alts 1 and 2.
 		// walk each state with potential conflicting configurations
-		for (Iterator<Integer> it = states.iterator(); it.hasNext();) {
-			Integer stateI = it.next();
+		for (Integer stateI : states) {
 			List<NFAConfiguration> configsForState = stateToConfigListMap.get(stateI);
 			// compare each configuration pair s, t to ensure:
 			// s.ctx different than t.ctx if s.alt != t.alt

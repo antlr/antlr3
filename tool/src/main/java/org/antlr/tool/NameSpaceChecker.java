@@ -80,8 +80,7 @@ public class NameSpaceChecker {
 		if ( r.returnScope!=null ) {
 			Set<String> conflictingKeys = r.returnScope.intersection(r.parameterScope);
 			if (conflictingKeys!=null) {
-				for (Iterator<String> it = conflictingKeys.iterator(); it.hasNext();) {
-					String key = it.next();
+				for (String key : conflictingKeys) {
 					ErrorManager.grammarError(
 						ErrorManager.MSG_ARG_RETVAL_CONFLICT,
 						grammar,
@@ -125,8 +124,7 @@ public class NameSpaceChecker {
 	 */
 	protected void lookForReferencesToUndefinedSymbols() {
 		// for each rule ref, ask if there is a rule definition
-		for (Iterator<GrammarAST> iter = grammar.ruleRefs.iterator(); iter.hasNext();) {
-			GrammarAST refAST = iter.next();
+		for (GrammarAST refAST : grammar.ruleRefs) {
 			Token tok = refAST.token;
 			String ruleName = tok.getText();
 			Rule localRule = grammar.getLocallyDefinedRule(ruleName);
@@ -145,8 +143,7 @@ public class NameSpaceChecker {
 		if ( grammar.type==Grammar.COMBINED ) {
 			// if we're a combined grammar, we know which token IDs have no
 			// associated lexer rule.
-			for (Iterator<Token> iter = grammar.tokenIDRefs.iterator(); iter.hasNext();) {
-				Token tok = iter.next();
+			for (Token tok : grammar.tokenIDRefs) {
 				String tokenID = tok.getText();
 				if ( !grammar.composite.lexerRules.contains(tokenID) &&
 					 grammar.getTokenType(tokenID)!=Label.EOF )
@@ -159,8 +156,7 @@ public class NameSpaceChecker {
 			}
 		}
 		// check scopes and scoped rule refs
-		for (Iterator<GrammarAST> it = grammar.scopedRuleRefs.iterator(); it.hasNext();) {
-			GrammarAST scopeAST = it.next(); // ^(DOT ID atom)
+		for (GrammarAST scopeAST : grammar.scopedRuleRefs) { // ^(DOT ID atom)
 			Grammar scopeG = grammar.composite.getGrammar(scopeAST.getText());
 			GrammarAST refAST = (GrammarAST)scopeAST.getChild(1);
 			String ruleName = refAST.getText();

@@ -1491,8 +1491,7 @@ public class NFAToDFAConverter {
 		// init the alt to predicate set map
 		Map<Integer, OrderedHashSet<SemanticContext>> altToSetOfContextsMap =
 			new HashMap<Integer, OrderedHashSet<SemanticContext>>();
-		for (Iterator<Integer> it = nondeterministicAlts.iterator(); it.hasNext();) {
-			Integer altI = it.next();
+		for (Integer altI : nondeterministicAlts) {
 			altToSetOfContextsMap.put(altI, new OrderedHashSet<SemanticContext>());
 		}
 
@@ -1557,8 +1556,7 @@ public class NFAToDFAConverter {
 		// with at least 1 predicate and at least one configuration w/o a
 		// predicate. We want this in order to report to the decision probe.
 		List<Integer> incompletelyCoveredAlts = new ArrayList<Integer>();
-		for (Iterator<Integer> it = nondeterministicAlts.iterator(); it.hasNext();) {
-			Integer altI = it.next();
+		for (Integer altI : nondeterministicAlts) {
 			Set<SemanticContext> contextsForThisAlt = altToSetOfContextsMap.get(altI);
 			if ( nondetAltsWithUncoveredConfiguration.contains(altI) ) { // >= 1 config has no ctx
 				if ( contextsForThisAlt.size()>0 ) {    // && at least one pred
@@ -1567,8 +1565,7 @@ public class NFAToDFAConverter {
 				continue; // don't include at least 1 config has no ctx
 			}
 			SemanticContext combinedContext = null;
-			for (Iterator<SemanticContext> itrSet = contextsForThisAlt.iterator(); itrSet.hasNext();) {
-				SemanticContext ctx = itrSet.next();
+			for (SemanticContext ctx : contextsForThisAlt) {
 				combinedContext =
 						SemanticContext.or(combinedContext,ctx);
 			}
@@ -1721,9 +1718,9 @@ public class NFAToDFAConverter {
 		}
 		int i = 0;
 		int m = 0;
-		for (Iterator<Integer> it = s.iterator(); it.hasNext();) {
+		for (Integer value : s) {
 			i++;
-			Integer I = it.next();
+			Integer I = value;
 			if ( i==1 ) { // init m with first value
 				m = I;
 				continue;

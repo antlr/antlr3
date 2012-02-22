@@ -247,8 +247,7 @@ protected void defineStringLiteralsFromDelegates() {
 	protected void assignStringTypes(Grammar root) {
 		// walk string literals assigning types to unassigned ones
 		Set<String> s = stringLiterals.keySet();
-		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String lit = it.next();
+		for (String lit : s) {
 			Integer oldTypeI = stringLiterals.get(lit);
 			int oldType = oldTypeI;
 			if ( oldType<Label.MIN_TOKEN_TYPE ) {
@@ -269,8 +268,7 @@ protected void defineStringLiteralsFromDelegates() {
 		// walk aliases if any and assign types to aliased literals if literal
 		// was referenced
 		Set<String> s = aliases.keySet();
-		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = it.next();
+		for (String tokenID : s) {
 			String literal = aliases.get(tokenID);
 			if ( literal.charAt(0)=='\'' && stringLiterals.get(literal)!=null ) {
 				stringLiterals.put(literal, tokens.get(tokenID));
@@ -287,8 +285,7 @@ protected void defineStringLiteralsFromDelegates() {
 	protected void assignTokenIDTypes(Grammar root) {
 		// walk token names, assigning values if unassigned
 		Set<String> s = tokens.keySet();
-		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = it.next();
+		for (String tokenID : s) {
 			if ( tokens.get(tokenID)==UNASSIGNED ) {
 				tokens.put(tokenID, Utils.integer(root.getNewTokenType()));
 			}
@@ -298,14 +295,12 @@ protected void defineStringLiteralsFromDelegates() {
     @Override
 	protected void defineTokenNamesAndLiteralsInGrammar(Grammar root) {
 		Set<String> s = tokens.keySet();
-		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = it.next();
+		for (String tokenID : s) {
 			int ttype = tokens.get(tokenID);
 			root.defineToken(tokenID, ttype);
 		}
 		s = stringLiterals.keySet();
-		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String lit = it.next();
+		for (String lit : s) {
 			int ttype = stringLiterals.get(lit);
 			root.defineToken(lit, ttype);
 		}

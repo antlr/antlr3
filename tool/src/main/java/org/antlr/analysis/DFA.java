@@ -988,8 +988,7 @@ public class DFA {
 				Set<? extends SemanticContext> synpreds = a.getGatedSyntacticPredicatesInNFAConfigurations();
 				if ( synpreds!=null ) {
 					// add all the predicates we find (should be just one, right?)
-					for (Iterator<? extends SemanticContext> it = synpreds.iterator(); it.hasNext();) {
-						SemanticContext semctx = (SemanticContext) it.next();
+					for (SemanticContext semctx : synpreds) {
 						// System.out.println("synpreds: "+semctx);
 						nfa.grammar.synPredUsedInDFA(this, semctx);
 					}

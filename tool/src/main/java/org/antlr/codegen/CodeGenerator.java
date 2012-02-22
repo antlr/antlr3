@@ -488,8 +488,7 @@ public class CodeGenerator {
 	 */
 	protected void verifyActionScopesOkForTarget(Map<String, Map<String, Object>> actions) {
 		Set<String> actionScopeKeySet = actions.keySet();
-		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = it.next();
+		for (String scope : actionScopeKeySet) {
 			if ( !target.isValidActionScope(grammar.type, scope) ) {
 				// get any action from the scope to get error location
 				Map<String, Object> scopeActions = actions.get(scope);
@@ -508,8 +507,7 @@ public class CodeGenerator {
 	 */
 	protected void translateActionAttributeReferences(Map<String, Map<String, Object>> actions) {
 		Set<String> actionScopeKeySet = actions.keySet();
-		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = it.next();
+		for (String scope : actionScopeKeySet) {
 			Map<String, Object> scopeActions = actions.get(scope);
 			translateActionAttributeReferencesForSingleScope(null,scopeActions);
 		}
@@ -525,8 +523,7 @@ public class CodeGenerator {
 			ruleName = r.name;
 		}
 		Set<String> actionNameSet = scopeActions.keySet();
-		for (Iterator<String> nameIT = actionNameSet.iterator(); nameIT.hasNext();) {
-			String name = nameIT.next();
+		for (String name : actionNameSet) {
 			GrammarAST actionAST = (GrammarAST)scopeActions.get(name);
 			List<?> chunks = translateAction(ruleName,actionAST);
 			scopeActions.put(name, chunks); // replace with translation

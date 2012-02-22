@@ -458,8 +458,7 @@ public class DecisionProbe {
 		Set<DFAState> danglingStates = getDanglingStates();
 		if ( danglingStates.size()>0 ) {
 			//System.err.println("no emanating edges for states: "+danglingStates);
-			for (Iterator<DFAState> it = danglingStates.iterator(); it.hasNext();) {
-				DFAState d = it.next();
+			for (DFAState d : danglingStates) {
 				ErrorManager.danglingState(this,d);
 			}
 		}
@@ -548,8 +547,7 @@ public class DecisionProbe {
 		Set<Integer> alts = altToTargetToCallSitesMap.keySet();
 		List<Integer> sortedAlts = new ArrayList<Integer>(alts);
 		Collections.sort(sortedAlts);
-		for (Iterator<Integer> altsIt = sortedAlts.iterator(); altsIt.hasNext();) {
-			Integer altI = altsIt.next();
+		for (Integer altI : sortedAlts) {
 			Map<String, Set<NFAState>> targetToCallSiteMap =
 				altToTargetToCallSitesMap.get(altI);
 			Set<String> targetRules = targetToCallSiteMap.keySet();
@@ -568,8 +566,7 @@ public class DecisionProbe {
 										 Map<Integer, Map<String, Set<NFAState>>> altToTargetToCallSitesMap,
 										 Map<Integer, DFAState> altToDFAState)
 	{
-		for (Iterator<Integer> it = dfaStatesUnaliased.iterator(); it.hasNext();) {
-			Integer stateI = it.next();
+		for (Integer stateI : dfaStatesUnaliased) {
 			// walk this DFA's config list
 			List<? extends NFAConfiguration> configs = configurationsMap.get(stateI);
 			for (int i = 0; i < configs.size(); i++) {
@@ -603,8 +600,7 @@ public class DecisionProbe {
 
 	private Set<Integer> getUnaliasedDFAStateSet(Set<Integer> dfaStatesWithRecursionProblems) {
 		Set<Integer> dfaStatesUnaliased = new HashSet<Integer>();
-		for (Iterator<Integer> it = dfaStatesWithRecursionProblems.iterator(); it.hasNext();) {
-			Integer stateI = it.next();
+		for (Integer stateI : dfaStatesWithRecursionProblems) {
 			DFAState d = dfa.getState(stateI);
 			dfaStatesUnaliased.add(Utils.integer(d.stateNumber));
 		}

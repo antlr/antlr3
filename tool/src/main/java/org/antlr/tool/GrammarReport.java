@@ -113,8 +113,7 @@ public class GrammarReport {
 		int totalNonSynPredProductions = 0;
 		int totalNonSynPredRules = 0;
 		Collection<Rule> rules = g.getRules();
-		for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
-			Rule r = it.next();
+		for (Rule r : rules) {
 			if ( !r.name.toUpperCase()
 				.startsWith(Grammar.SYNPRED_RULE_PREFIX.toUpperCase()) )
 			{

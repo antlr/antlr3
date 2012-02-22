@@ -285,8 +285,7 @@ public class CompositeGrammar {
 			Grammar delegate = grammars.get(i);
 			// for each rule in delegate, add to rules if no rule with that
 			// name as been seen.  (can't use removeAll; wrong hashcode/equals on Rule)
-			for (Iterator<Rule> it = delegate.getRules().iterator(); it.hasNext();) {
-				Rule r = it.next();
+			for (Rule r : delegate.getRules()) {
 				if ( !ruleNames.contains(r.name) ) {
 					ruleNames.add(r.name); // track that we've seen this
 					rules.add(r);

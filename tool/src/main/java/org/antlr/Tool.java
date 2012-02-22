@@ -696,8 +696,7 @@ public class Tool {
         Collection<Rule> rules = new HashSet<Rule>(g.getAllImportedRules());
         rules.addAll(g.getRules());
 
-        for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
-            Rule r = itr.next();
+        for (Rule r : rules) {
             try {
                 String dot = dotGenerator.getDOT(r.startState);
                 if (dot != null) {

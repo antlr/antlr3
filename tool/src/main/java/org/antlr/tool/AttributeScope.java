@@ -176,8 +176,7 @@ public class AttributeScope {
 		}
 		Set<String> inter = new HashSet<String>();
 		Set<String> thisKeys = attributes.keySet();
-		for (Iterator<String> it = thisKeys.iterator(); it.hasNext();) {
-			String key = it.next();
+		for (String key : thisKeys) {
 			if ( other.attributes.get(key)!=null ) {
 				inter.add(key);
 			}
