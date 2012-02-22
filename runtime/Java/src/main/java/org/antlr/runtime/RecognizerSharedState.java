@@ -120,6 +120,7 @@ public class RecognizerSharedState {
 
     public RecognizerSharedState() {}
     
+	@SuppressWarnings("unchecked")
     public RecognizerSharedState(RecognizerSharedState state) {
         if ( this.following.length < state.following.length ) {
             this.following = new BitSet[state.following.length];
@@ -132,7 +133,7 @@ public class RecognizerSharedState {
         this.syntaxErrors = state.syntaxErrors;
         this.backtracking = state.backtracking;
         if ( state.ruleMemo!=null ) {
-            this.ruleMemo = new Map[state.ruleMemo.length];
+            this.ruleMemo = (Map<Integer, Integer>[])new Map<?, ?>[state.ruleMemo.length];
             System.arraycopy(state.ruleMemo, 0, this.ruleMemo, 0, state.ruleMemo.length);
         }
         this.token = state.token;
