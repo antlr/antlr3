@@ -204,7 +204,7 @@ public class IntervalSet implements IntSet {
 		}
     }
 
-    public IntSet complement(int minElement, int maxElement) {
+    public IntervalSet complement(int minElement, int maxElement) {
         return this.complement(IntervalSet.of(minElement,maxElement));
     }
 
@@ -559,7 +559,7 @@ public class IntervalSet implements IntSet {
      */
 	@Override
     public boolean equals(Object obj) {
-        if ( obj==null || !(obj instanceof IntervalSet) ) {
+        if ( !(obj instanceof IntervalSet) ) {
             return false;
         }
         IntervalSet other = (IntervalSet)obj;
