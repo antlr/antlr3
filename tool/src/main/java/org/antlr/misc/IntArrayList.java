@@ -146,7 +146,7 @@ public class IntArrayList extends AbstractList<Integer> implements Cloneable {
 
 	@Override
 	public String toString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < n; i++) {
 			if ( i>0 ) {
 				buf.append(", ");

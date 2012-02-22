@@ -257,7 +257,7 @@ public class GrammarReport {
 	 *  send to the notify page at antlr.org
 	 */
 	public String toNotifyString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		ReportData data = getReportData(grammar);
 		Field[] fields = ReportData.class.getDeclaredFields();
 		int i = 0;
@@ -277,7 +277,7 @@ public class GrammarReport {
 	}
 
 	public String getBacktrackingReport() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("Backtracking report:");
 		buf.append(newline);
 		buf.append("Number of decisions that backtrack: ");
@@ -289,7 +289,7 @@ public class GrammarReport {
 
 	protected String getDFALocations(Set<DFA> dfas) {
 		Set<Integer> decisions = new HashSet<Integer>();
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		Iterator<DFA> it = dfas.iterator();
 		while ( it.hasNext() ) {
 			DFA dfa = (DFA) it.next();
@@ -351,7 +351,7 @@ public class GrammarReport {
 		if ( data ==null ) {
 			return null;
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("ANTLR Grammar Report; Stats Version ");
 		buf.append(data.version);
 		buf.append('\n');

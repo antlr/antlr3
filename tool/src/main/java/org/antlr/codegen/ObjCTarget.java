@@ -74,7 +74,7 @@ public class ObjCTarget extends Target {
 															   String literal)
 	{
 		literal = Utils.replace(literal,"\"","\\\"");
-		StringBuffer buf = new StringBuffer(literal);
+		StringBuilder buf = new StringBuilder(literal);
 		buf.setCharAt(0,'"');
 		buf.setCharAt(literal.length()-1,'"');
 		buf.insert(0,'@');

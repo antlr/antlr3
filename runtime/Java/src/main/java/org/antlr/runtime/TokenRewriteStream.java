@@ -341,7 +341,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 	}
 
 	public String toOriginalString(int start, int end) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i=start; i>=MIN_TOKEN_INDEX && i<=end && i<tokens.size(); i++) {
 			if ( get(i).getType()!=Token.EOF ) buf.append(get(i).getText());
 		}
@@ -587,7 +587,7 @@ public class TokenRewriteStream extends CommonTokenStream {
 	}
 
 	public String toDebugString(int start, int end) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i=start; i>=MIN_TOKEN_INDEX && i<=end && i<tokens.size(); i++) {
 			buf.append(get(i));
 		}

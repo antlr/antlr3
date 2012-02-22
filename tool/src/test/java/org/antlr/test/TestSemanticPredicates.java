@@ -920,7 +920,7 @@ public class TestSemanticPredicates extends BaseTest {
 	}
 
 	protected String str(int[] elements) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < elements.length; i++) {
 			if ( i>0 ) {
 				buf.append(", ");

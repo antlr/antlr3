@@ -69,7 +69,7 @@ public class SerializedGrammar {
         }
 		@Override
         public String toString() {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append("(");
             for (int i = 0; i < alts.length; i++) {
                 List<?> alt = alts[i];
@@ -191,7 +191,7 @@ public class SerializedGrammar {
 
     protected String readString(DataInputStream in) throws IOException {
         byte c = in.readByte();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         while ( c!=';' ) {
             buf.append((char)c);
             c = in.readByte();
@@ -201,8 +201,8 @@ public class SerializedGrammar {
 
 	@Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append(type+" grammar "+name);
+        StringBuilder buf = new StringBuilder();
+        buf.append(type).append(" grammar ").append(name);
         buf.append(rules);
         return buf.toString();
     }

@@ -817,7 +817,7 @@ public class Grammar {
 		//System.out.println("grammarsFromRootToMe="+grammarsFromRootToMe);
 		String qualifiedName = name;
 		if ( grammarsFromRootToMe!=null ) {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			for (Grammar g : grammarsFromRootToMe) {
 				buf.append(g.name);
 				buf.append('_');
@@ -1240,7 +1240,7 @@ outer:
 		GrammarAST decisionAST = nfa.grammar.getDecisionBlockAST(lookaheadDFA.decisionNumber);
 		int line = decisionAST.getLine();
 		int col = decisionAST.getCharPositionInLine();
-		lineColumnToLookaheadDFAMap.put(new StringBuffer().append(line + ":")
+		lineColumnToLookaheadDFAMap.put(new StringBuffer().append(line).append(":")
 										.append(col).toString(), lookaheadDFA);
 	}
 
@@ -1573,7 +1573,7 @@ outer:
 											   ruleAST.ruleStopTokenIndex);
 		*/
 		// first, create the text of the rule
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("// $ANTLR src \"");
 		buf.append(getFileName());
 		buf.append("\" ");
@@ -2190,7 +2190,7 @@ outer:
 				else if ( Character.isDigit(c) ) {
 					ErrorManager.error(ErrorManager.MSG_SYNTAX_ERROR,
 									   "invalid char literal: "+literal);
-					buf.append("\\"+(char)c);
+					buf.append("\\").append((char)c);
 				}
 				else {
 					buf.append((char)ANTLRLiteralEscapedCharValue[c]); // normal \x escape
@@ -2827,7 +2827,7 @@ outer:
 	/** Useful for ANTLRWorks to map position in file to the DFA for display */
 	public DFA getLookaheadDFAFromPositionInFile(int line, int col) {
 		return (DFA)lineColumnToLookaheadDFAMap.get(
-			new StringBuffer().append(line + ":").append(col).toString());
+			new StringBuffer().append(line).append(":").append(col).toString());
 	}
 
 	public Map<String, DFA> getLineColumnToLookaheadDFAMap() {

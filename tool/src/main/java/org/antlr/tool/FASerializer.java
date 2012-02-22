@@ -92,7 +92,7 @@ public class FASerializer {
 			String s0 = getStateString(0, s);
 			lines.add(s0+"\n");
 		}
-        StringBuffer buf = new StringBuffer(0);
+        StringBuilder buf = new StringBuilder(0);
         // sort lines to normalize; makes states come out ordered
         // and then ordered by edge labels then by target state number :)
         Collections.sort(lines);
@@ -150,7 +150,7 @@ public class FASerializer {
         // depth first walk each transition, printing its edge first
         for (int i = 0; i < s.getNumberOfTransitions(); i++) {
             Transition edge = (Transition) s.transition(i);
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append(stateStr);
 			if ( edge.isAction() ) {
 				buf.append("-{}->");
@@ -159,7 +159,7 @@ public class FASerializer {
 				buf.append("->");
 			}
 			else if ( edge.isSemanticPredicate() ) {
-				buf.append("-{"+edge.label.getSemanticContext()+"}?->");
+				buf.append("-{").append(edge.label.getSemanticContext()).append("}?->");
 			}
 			else {
 				String predsStr = "";
@@ -174,7 +174,7 @@ public class FASerializer {
 							+"}?";
 					}
 				}
-				buf.append("-"+edge.label.toString(grammar)+predsStr+"->");
+				buf.append("-").append(edge.label.toString(grammar)).append(predsStr).append("->");
 			}
 
 			int normalizedTargetStateNumber = edge.target.stateNumber;

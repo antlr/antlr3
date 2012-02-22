@@ -59,7 +59,7 @@ public class Utils {
 		uses regex (I only want to play with strings anyway).
 	*/
 	public static String replace(String src, String replacee, String replacer) {
-		StringBuffer result = new StringBuffer(src.length() + 50);
+		StringBuilder result = new StringBuilder(src.length() + 50);
 		int startIndex = 0;
 		int endIndex = src.indexOf(replacee);
 		while(endIndex != -1) {

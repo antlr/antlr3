@@ -362,7 +362,7 @@ public abstract class BaseTree implements Tree {
 		if ( children==null || children.isEmpty() ) {
 			return this.toString();
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if ( !isNil() ) {
 			buf.append("(");
 			buf.append(this.toString());

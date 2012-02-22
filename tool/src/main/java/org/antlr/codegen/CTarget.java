@@ -195,7 +195,7 @@ public class CTarget extends Target {
             String literal) {
         int index;
         String bytes;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         buf.append("{ ");
 

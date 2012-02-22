@@ -93,7 +93,7 @@ public class ParseTree extends BaseTree {
 	 *  hidden tokens after last real token.
 	 */
 	public String toStringWithHiddenTokens() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if ( hiddenTokens!=null ) {
 			for (int i = 0; i < hiddenTokens.size(); i++) {
 				Token hidden = (Token) hiddenTokens.get(i);

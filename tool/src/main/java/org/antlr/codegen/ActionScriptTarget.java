@@ -90,7 +90,7 @@ public class ActionScriptTarget extends Target {
             System.err.println("Warning: character literal out of range for ActionScript target " + v);
             return "";
         }
-        StringBuffer buf = new StringBuffer("\\u80");
+        StringBuilder buf = new StringBuilder("\\u80");
         buf.append(Integer.toHexString((v >> 8) | 0x100).substring(1, 3)); // high - order bits
         buf.append("\\x");
         buf.append(Integer.toHexString((v & 0xff) | 0x100).substring(1, 3)); // low -order bits

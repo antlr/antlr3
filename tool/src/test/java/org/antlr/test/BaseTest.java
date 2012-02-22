@@ -850,7 +850,7 @@ public abstract class BaseTest {
         String lines[] = s.split("\n");
         Arrays.sort(lines);
         List<String> linesL = Arrays.asList(lines);
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (String l : linesL) {
             buf.append(l);
             buf.append('\n');

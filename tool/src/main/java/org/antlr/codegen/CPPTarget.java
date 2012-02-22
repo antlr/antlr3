@@ -75,7 +75,7 @@ public class CPPTarget extends Target {
 	 */
 	public String escapeString(String s)
 	{
-		StringBuffer retval = new StringBuffer();
+		StringBuilder retval = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			retval.append(escapeChar(s.charAt(i)));
 		}

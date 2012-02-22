@@ -1759,7 +1759,7 @@ As a result, alternative(s) 2 were disabled for that input
 	}
 
 	protected String str(int[] elements) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < elements.length; i++) {
 			if ( i>0 ) {
 				buf.append(", ");

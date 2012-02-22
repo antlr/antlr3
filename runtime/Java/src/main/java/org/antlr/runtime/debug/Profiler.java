@@ -449,7 +449,7 @@ public class Profiler extends BlankDebugEventListener {
 	// R E P O R T I N G
 
 	public String toNotifyString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(Version);
 		buf.append('\t');
 		buf.append(parser.getClass().getName());
@@ -540,7 +540,7 @@ public class Profiler extends BlankDebugEventListener {
 	}
 
 	public static String toString(ProfileStats stats) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("ANTLR Runtime Report; Profile Version ");
 		buf.append(stats.Version);
 		buf.append(newline);
@@ -663,7 +663,7 @@ public class Profiler extends BlankDebugEventListener {
 	}
 
 	public String getDecisionStatsDump() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("location");
 		buf.append(DATA_SEP);
 		buf.append("n");

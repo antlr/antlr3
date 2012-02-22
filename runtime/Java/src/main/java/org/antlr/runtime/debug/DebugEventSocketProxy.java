@@ -205,7 +205,7 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 
 	@Override
 	public void recognitionException(RecognitionException e) {
-		StringBuffer buf = new StringBuffer(50);
+		StringBuilder buf = new StringBuilder(50);
 		buf.append("exception\t");
 		buf.append(e.getClass().getName());
 		// dump only the data common to all exceptions for now

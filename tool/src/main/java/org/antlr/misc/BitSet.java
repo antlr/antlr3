@@ -491,7 +491,7 @@ public class BitSet implements IntSet, Cloneable {
      */
 	@Override
     public String toString(Grammar g) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         String separator = ",";
 		boolean havePrintedAnElement = false;
 		buf.append('{');
@@ -550,7 +550,7 @@ public class BitSet implements IntSet, Cloneable {
      * This generates a comma-separated list of C++-like unsigned long constants.
      */
     public String toStringOfHalfWords() {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < bits.length; i++) {
             if (i != 0) s.append(", ");
             long tmp = bits[i];
@@ -571,7 +571,7 @@ public class BitSet implements IntSet, Cloneable {
      * This generates a comma-separated list of Java-like long int constants.
      */
     public String toStringOfWords() {
-		StringBuffer s = new StringBuffer();
+		StringBuilder s = new StringBuilder();
         for (int i = 0; i < bits.length; i++) {
             if (i != 0) s.append(", ");
             s.append(bits[i]);

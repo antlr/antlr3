@@ -393,7 +393,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		if ( stop>=tokens.size() ) {
 			stop = tokens.size()-1;
 		}
- 		StringBuffer buf = new StringBuffer();
+ 		StringBuilder buf = new StringBuilder();
 		for (int i = start; i <= stop; i++) {
 			Token t = (Token)tokens.get(i);
 			buf.append(t.getText());

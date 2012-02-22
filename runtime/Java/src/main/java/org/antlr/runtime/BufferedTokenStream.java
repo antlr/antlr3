@@ -257,7 +257,7 @@ public class BufferedTokenStream implements TokenStream {
         if ( start<0 || stop<0 ) return null;
         if ( p == -1 ) setup();
         if ( stop>=tokens.size() ) stop = tokens.size()-1;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = start; i <= stop; i++) {
             Token t = tokens.get(i);
             if ( t.getType()==Token.EOF ) break;

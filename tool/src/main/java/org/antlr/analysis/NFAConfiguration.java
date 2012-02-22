@@ -128,7 +128,7 @@ public class NFAConfiguration {
 	}
 
 	public String toString(boolean showAlt) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(state);
 		if ( showAlt ) {
 			buf.append("|");

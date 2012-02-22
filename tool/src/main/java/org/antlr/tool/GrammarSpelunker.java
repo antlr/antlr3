@@ -189,19 +189,19 @@ public class GrammarSpelunker {
 
         /** NAME : LETTER+ ; // NAME is sequence of >=1 letter */
         String ID() throws IOException {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             while ( c!=EOF && isID_LETTER() ) { buf.append((char)c); consume(); }
             return buf.toString();
         }
 
         String INT() throws IOException {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             while ( c!=EOF && isDIGIT() ) { buf.append((char)c); consume(); }
             return buf.toString();
         }
 
         String STRING() throws IOException {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             consume();
             while ( c!=EOF && c!='\'' ) {
                 if ( c=='\\' ) {

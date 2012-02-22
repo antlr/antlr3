@@ -318,7 +318,7 @@ public class DecisionProbe {
 	 */
 	public String getInputSequenceDisplay(List<? extends Label> labels) {
         Grammar g = dfa.nfa.grammar;
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (Iterator<? extends Label> it = labels.iterator(); it.hasNext();) {
 			Label label = (Label) it.next();
 			buf.append(label.toString(g));
@@ -888,7 +888,7 @@ public class DecisionProbe {
 	}
 
 	protected String getStateLabelIndexKey(int s, int i) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(s);
 		buf.append('_');
 		buf.append(i);

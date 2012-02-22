@@ -413,7 +413,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		if ( p==-1 ) {
 			fillBuffer();
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < nodes.size(); i++) {
 			Object t = (Object) nodes.get(i);
 			buf.append(" ");
@@ -427,7 +427,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		if ( p==-1 ) {
 			fillBuffer();
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = start; i < nodes.size() && i <= stop; i++) {
 			Object t = (Object) nodes.get(i);
 			buf.append(" ");
@@ -478,7 +478,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			}
 		}
 		// now walk until we see stop, filling string buffer with text
-		 StringBuffer buf = new StringBuffer();
+		 StringBuilder buf = new StringBuilder();
 		t = nodes.get(i);
 		while ( t!=stop ) {
 			String text = adaptor.getText(t);

@@ -755,8 +755,8 @@ public class DFAState extends State {
     /** Print all NFA states plus what alts they predict */
 	@Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append(stateNumber+":{");
+        StringBuilder buf = new StringBuilder();
+        buf.append(stateNumber).append(":{");
 		for (int i = 0; i < nfaConfigurations.size(); i++) {
 			NFAConfiguration configuration = (NFAConfiguration) nfaConfigurations.get(i);
 			if ( i>0 ) {

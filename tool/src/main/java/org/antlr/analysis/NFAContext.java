@@ -283,7 +283,7 @@ public class NFAContext {
 
 	@Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         NFAContext sp = this;
         buf.append("[");
         while ( sp.parent!=null ) {

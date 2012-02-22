@@ -301,7 +301,7 @@ public class BitSet implements Cloneable {
 	}
 
 	public String toString(String[] tokenNames) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		String separator = ",";
 		boolean havePrintedAnElement = false;
 		buf.append('{');

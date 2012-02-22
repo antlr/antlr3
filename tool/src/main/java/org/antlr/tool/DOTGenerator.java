@@ -313,7 +313,7 @@ public class DOTGenerator {
         }
         String stateLabel = String.valueOf(s.stateNumber);
 		if ( s instanceof DFAState ) {
-            StringBuffer buf = new StringBuffer(250);
+            StringBuilder buf = new StringBuilder(250);
 			buf.append('s');
 			buf.append(s.stateNumber);
 			if ( Tool.internalOption_ShowNFAConfigsInDFA ) {

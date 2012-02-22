@@ -573,7 +573,7 @@ public class IntervalSet implements IntSet {
 
 	@Override
     public String toString(Grammar g) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 		if ( this.intervals==null || this.intervals.isEmpty() ) {
 			return "{}";
 		}
@@ -595,10 +595,10 @@ public class IntervalSet implements IntSet {
             }
             else {
                 if ( g!=null ) {
-                    buf.append(g.getTokenDisplayName(a)+".."+g.getTokenDisplayName(b));
+                    buf.append(g.getTokenDisplayName(a)).append("..").append(g.getTokenDisplayName(b));
                 }
                 else {
-                    buf.append(a+".."+b);
+                    buf.append(a).append("..").append(b);
                 }
             }
             if ( iter.hasNext() ) {

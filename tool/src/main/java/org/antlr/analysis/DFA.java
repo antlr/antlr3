@@ -1034,7 +1034,7 @@ public class DFA {
 	}
 
 	public String getReasonForFailure() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if ( probe.isNonLLStarDecision() ) {
 			buf.append("non-LL(*)");
 			if ( predicateVisible ) {

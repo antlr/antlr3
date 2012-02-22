@@ -168,7 +168,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
     /** For debugging; destructive: moves tree iterator to end. */
     public String toTokenTypeString() {
         reset();
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
         Object o = LT(1);
         int type = adaptor.getType(o);
         while ( type!=Token.EOF ) {
