@@ -45,7 +45,8 @@ public class AttributeScope {
 	 *  of predefined attributes.  I keep this out of the runtime.Token
 	 *  object to avoid a runtime space burden.
 	 */
-	public static AttributeScope tokenScope = new AttributeScope("Token",null);
+	public static final AttributeScope tokenScope = new AttributeScope("Token",null);
+
 	static {
 		tokenScope.addAttribute("text", null);
 		tokenScope.addAttribute("type", null);
