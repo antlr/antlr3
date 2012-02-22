@@ -221,7 +221,7 @@ public class DFA {
 	/** Which generator to use if we're building state tables */
 	protected CodeGenerator generator = null;
 
-	protected DFA() {;}
+	protected DFA() {}
 
 	public DFA(int decisionNumber, NFAState decisionStartState) {
 		this.decisionNumber = decisionNumber;

@@ -49,7 +49,7 @@ public class CommonTokenStream extends BufferedTokenStream {
     /** Skip tokens on any channel but this one; this is how we skip whitespace... */
     protected int channel = Token.DEFAULT_CHANNEL;
 
-    public CommonTokenStream() { ; }
+    public CommonTokenStream() { }
 
     public CommonTokenStream(TokenSource tokenSource) {
         super(tokenSource);

@@ -117,7 +117,7 @@ public class RecognizerSharedState {
  	 */
 	public String text;
 
-    public RecognizerSharedState() {;}
+    public RecognizerSharedState() {}
     
     public RecognizerSharedState(RecognizerSharedState state) {
         if ( this.following.length < state.following.length ) {

@@ -68,7 +68,7 @@ public class BufferedTokenStream implements TokenStream {
 
 	protected int range = -1; // how deep have we gone?
 
-    public BufferedTokenStream() {;}
+    public BufferedTokenStream() {}
 
     public BufferedTokenStream(TokenSource tokenSource) {
         this.tokenSource = tokenSource;

@@ -142,7 +142,7 @@ public class GrammarAST extends CommonTree {
         this.blockOptions = blockOptions;
     }
 
-	public GrammarAST() {;}
+	public GrammarAST() {}
 
 	public GrammarAST(int t, String txt) {
 		initialize(t,txt);

@@ -2349,7 +2349,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {;}
+					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
 					token = tokenizer.nextToken();
 					continue;
 				}
@@ -2358,7 +2358,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {;}
+					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
 					token = tokenizer.nextToken();
 					continue;
 				}
@@ -2367,7 +2367,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {;}
+					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
 					token = tokenizer.nextToken();
 					continue;
 				}
@@ -2381,7 +2381,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {;}
+					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
 					token = tokenizer.nextToken();
 					continue;
 				}
