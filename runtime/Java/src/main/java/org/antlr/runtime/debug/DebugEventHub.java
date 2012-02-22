@@ -70,7 +70,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void enterRule(String grammarFileName, String ruleName) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.enterRule(grammarFileName,ruleName);
 		}
 	}
@@ -78,7 +78,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void exitRule(String grammarFileName, String ruleName) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.exitRule(grammarFileName, ruleName);
 		}
 	}
@@ -86,7 +86,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void enterAlt(int alt) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.enterAlt(alt);
 		}
 	}
@@ -94,7 +94,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void enterSubRule(int decisionNumber) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.enterSubRule(decisionNumber);
 		}
 	}
@@ -102,7 +102,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void exitSubRule(int decisionNumber) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.exitSubRule(decisionNumber);
 		}
 	}
@@ -110,7 +110,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void enterDecision(int decisionNumber, boolean couldBacktrack) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.enterDecision(decisionNumber, couldBacktrack);
 		}
 	}
@@ -118,7 +118,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void exitDecision(int decisionNumber) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.exitDecision(decisionNumber);
 		}
 	}
@@ -126,7 +126,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void location(int line, int pos) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.location(line, pos);
 		}
 	}
@@ -134,7 +134,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void consumeToken(Token token) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.consumeToken(token);
 		}
 	}
@@ -142,7 +142,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void consumeHiddenToken(Token token) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.consumeHiddenToken(token);
 		}
 	}
@@ -150,7 +150,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void LT(int index, Token t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.LT(index, t);
 		}
 	}
@@ -158,7 +158,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void mark(int index) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.mark(index);
 		}
 	}
@@ -166,7 +166,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void rewind(int index) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.rewind(index);
 		}
 	}
@@ -174,7 +174,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void rewind() {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.rewind();
 		}
 	}
@@ -182,7 +182,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void beginBacktrack(int level) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.beginBacktrack(level);
 		}
 	}
@@ -190,7 +190,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void endBacktrack(int level, boolean successful) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.endBacktrack(level, successful);
 		}
 	}
@@ -198,7 +198,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void recognitionException(RecognitionException e) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.recognitionException(e);
 		}
 	}
@@ -206,7 +206,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void beginResync() {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.beginResync();
 		}
 	}
@@ -214,7 +214,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void endResync() {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.endResync();
 		}
 	}
@@ -222,7 +222,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void semanticPredicate(boolean result, String predicate) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.semanticPredicate(result, predicate);
 		}
 	}
@@ -230,7 +230,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void commence() {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.commence();
 		}
 	}
@@ -238,7 +238,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void terminate() {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.terminate();
 		}
 	}
@@ -249,7 +249,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void consumeNode(Object t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.consumeNode(t);
 		}
 	}
@@ -257,7 +257,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void LT(int index, Object t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.LT(index, t);
 		}
 	}
@@ -268,7 +268,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void nilNode(Object t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.nilNode(t);
 		}
 	}
@@ -276,7 +276,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void errorNode(Object t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.errorNode(t);
 		}
 	}
@@ -284,7 +284,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void createNode(Object t) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.createNode(t);
 		}
 	}
@@ -292,7 +292,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void createNode(Object node, Token token) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.createNode(node, token);
 		}
 	}
@@ -300,7 +300,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void becomeRoot(Object newRoot, Object oldRoot) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.becomeRoot(newRoot, oldRoot);
 		}
 	}
@@ -308,7 +308,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void addChild(Object root, Object child) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.addChild(root, child);
 		}
 	}
@@ -316,7 +316,7 @@ public class DebugEventHub implements DebugEventListener {
 	@Override
 	public void setTokenBoundaries(Object t, int tokenStartIndex, int tokenStopIndex) {
 		for (int i = 0; i < listeners.size(); i++) {
-			DebugEventListener listener = (DebugEventListener)listeners.get(i);
+			DebugEventListener listener = listeners.get(i);
 			listener.setTokenBoundaries(t, tokenStartIndex, tokenStopIndex);
 		}
 	}

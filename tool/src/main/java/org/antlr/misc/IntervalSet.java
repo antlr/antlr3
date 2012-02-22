@@ -106,7 +106,7 @@ public class IntervalSet implements IntSet {
 		// find position in list
 		// Use iterators as we modify list in place
 		for (ListIterator<Interval> iter = intervals.listIterator(); iter.hasNext();) {
-			Interval r = (Interval) iter.next();
+			Interval r = iter.next();
 			if ( addition.equals(r) ) {
 				return;
 			}
@@ -117,7 +117,7 @@ public class IntervalSet implements IntSet {
 				// make sure we didn't just create an interval that
 				// should be merged with next interval in list
 				if ( iter.hasNext() ) {
-					Interval next = (Interval) iter.next();
+					Interval next = iter.next();
 					if ( bigger.adjacent(next)||!bigger.disjoint(next) ) {
 						// if we bump up against or overlap next, merge
 						iter.remove();   // remove this one
@@ -199,7 +199,7 @@ public class IntervalSet implements IntSet {
         // walk set and add each interval
 		int n = other.intervals.size();
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) other.intervals.get(i);
+			Interval I = other.intervals.get(i);
 			this.add(I.a,I.b);
 		}
     }
@@ -231,25 +231,25 @@ public class IntervalSet implements IntSet {
 		if ( n ==0 ) {
 			return compl;
 		}
-		Interval first = (Interval)intervals.get(0);
+		Interval first = intervals.get(0);
 		// add a range from 0 to first.a constrained to vocab
 		if ( first.a > 0 ) {
 			IntervalSet s = IntervalSet.of(0, first.a-1);
-			IntervalSet a = (IntervalSet)s.and(vocabularyIS);
+			IntervalSet a = s.and(vocabularyIS);
 			compl.addAll(a);
 		}
 		for (int i=1; i<n; i++) { // from 2nd interval .. nth
-			Interval previous = (Interval)intervals.get(i-1);
-			Interval current = (Interval)intervals.get(i);
+			Interval previous = intervals.get(i-1);
+			Interval current = intervals.get(i);
 			IntervalSet s = IntervalSet.of(previous.b+1, current.a-1);
-			IntervalSet a = (IntervalSet)s.and(vocabularyIS);
+			IntervalSet a = s.and(vocabularyIS);
 			compl.addAll(a);
 		}
-		Interval last = (Interval)intervals.get(n -1);
+		Interval last = intervals.get(n -1);
 		// add a range from last.b to maxElement constrained to vocab
 		if ( last.b < maxElement ) {
 			IntervalSet s = IntervalSet.of(last.b+1, maxElement);
-			IntervalSet a = (IntervalSet)s.and(vocabularyIS);
+			IntervalSet a = s.and(vocabularyIS);
 			compl.addAll(a);
 		}
 		return compl;
@@ -420,8 +420,8 @@ public class IntervalSet implements IntSet {
 		int j = 0;
 		// iterate down both interval lists looking for nondisjoint intervals
 		while ( i<mySize && j<theirSize ) {
-			Interval mine = (Interval)myIntervals.get(i);
-			Interval theirs = (Interval)theirIntervals.get(j);
+			Interval mine = myIntervals.get(i);
+			Interval theirs = theirIntervals.get(j);
 			//System.out.println("mine="+mine+" and theirs="+theirs);
 			if ( mine.startsBeforeDisjoint(theirs) ) {
 				// move this iterator looking for interval that might overlap
@@ -479,7 +479,7 @@ public class IntervalSet implements IntSet {
     public boolean member(int el) {
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			int a = I.a;
 			int b = I.b;
 			if ( el<a ) {
@@ -514,7 +514,7 @@ public class IntervalSet implements IntSet {
 	@Override
     public int getSingleElement() {
         if ( intervals!=null && intervals.size()==1 ) {
-            Interval I = (Interval)intervals.get(0);
+            Interval I = intervals.get(0);
             if ( I.a == I.b ) {
                 return I.a;
             }
@@ -526,7 +526,7 @@ public class IntervalSet implements IntSet {
 		if ( isNil() ) {
 			return Label.INVALID;
 		}
-		Interval last = (Interval)intervals.get(intervals.size()-1);
+		Interval last = intervals.get(intervals.size()-1);
 		return last.b;
 	}
 
@@ -537,7 +537,7 @@ public class IntervalSet implements IntSet {
 		}
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			int a = I.a;
 			int b = I.b;
 			for (int v=a; v<=b; v++) {
@@ -582,7 +582,7 @@ public class IntervalSet implements IntSet {
         }
         Iterator<Interval> iter = this.intervals.iterator();
         while (iter.hasNext()) {
-            Interval I = (Interval) iter.next();
+            Interval I = iter.next();
             int a = I.a;
             int b = I.b;
             if ( a==b ) {
@@ -620,7 +620,7 @@ public class IntervalSet implements IntSet {
 			return firstInterval.b-firstInterval.a+1;
 		}
 		for (int i = 0; i < numIntervals; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			n += (I.b-I.a+1);
 		}
 		return n;
@@ -631,7 +631,7 @@ public class IntervalSet implements IntSet {
 		List<Integer> values = new ArrayList<Integer>();
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			int a = I.a;
 			int b = I.b;
 			for (int v=a; v<=b; v++) {
@@ -649,7 +649,7 @@ public class IntervalSet implements IntSet {
 		int n = intervals.size();
 		int index = 0;
 		for (int j = 0; j < n; j++) {
-			Interval I = (Interval) intervals.get(j);
+			Interval I = intervals.get(j);
 			int a = I.a;
 			int b = I.b;
 			for (int v=a; v<=b; v++) {
@@ -667,7 +667,7 @@ public class IntervalSet implements IntSet {
 		int n = intervals.size();
 		int j = 0;
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			int a = I.a;
 			int b = I.b;
 			for (int v=a; v<=b; v++) {
@@ -683,7 +683,7 @@ public class IntervalSet implements IntSet {
 			new org.antlr.runtime.BitSet(getMaxElement()+1);
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
-			Interval I = (Interval) intervals.get(i);
+			Interval I = intervals.get(i);
 			int a = I.a;
 			int b = I.b;
 			for (int v=a; v<=b; v++) {

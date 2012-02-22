@@ -174,7 +174,7 @@ public abstract class BaseTest {
 					allIsWell = false;
 					System.err.println("antlr reports errors from "+options);
 					for (int i = 0; i < equeue.errors.size(); i++) {
-						Message msg = (Message) equeue.errors.get(i);
+						Message msg = equeue.errors.get(i);
 						System.err.println(msg);
 					}
                     System.out.println("!!!\ngrammar:");
@@ -440,7 +440,7 @@ public abstract class BaseTest {
 						   */
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			Message m = (Message)equeue.errors.get(i);
+			Message m = equeue.errors.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}
@@ -460,7 +460,7 @@ public abstract class BaseTest {
 	{
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.warnings.size(); i++) {
-			Message m = (Message)equeue.warnings.get(i);
+			Message m = equeue.warnings.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}
@@ -478,7 +478,7 @@ public abstract class BaseTest {
         //System.out.println("errors="+equeue);
         Message foundMsg = null;
         for (int i = 0; i < equeue.errors.size(); i++) {
-            Message m = (Message)equeue.errors.get(i);
+            Message m = equeue.errors.get(i);
             if (m.msgID==expectedMessage.msgID ) {
                 foundMsg = m;
             }
@@ -837,7 +837,7 @@ public abstract class BaseTest {
 		List<String> n = new ArrayList<String>();
 		Iterator<String> iterator = elements.keySet().iterator();
 		while (iterator.hasNext()) {
-			String tokenID = (String) iterator.next();
+			String tokenID = iterator.next();
 			if ( elements.get(tokenID) >= Label.MIN_TOKEN_TYPE ) {
 				n.add(tokenID+"="+elements.get(tokenID));
 			}

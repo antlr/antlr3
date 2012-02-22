@@ -219,13 +219,13 @@ public class Rule {
 	}
 
 	public Grammar.LabelElementPair getLabel(String name) {
-		return (Grammar.LabelElementPair)labelNameSpace.get(name);
+		return labelNameSpace.get(name);
 	}
 
 	public Grammar.LabelElementPair getTokenLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( tokenLabels!=null ) {
-			return (Grammar.LabelElementPair)tokenLabels.get(name);
+			return tokenLabels.get(name);
 		}
 		return pair;
 	}
@@ -241,7 +241,7 @@ public class Rule {
 	public Grammar.LabelElementPair getRuleLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( ruleLabels!=null ) {
-			return (Grammar.LabelElementPair)ruleLabels.get(name);
+			return ruleLabels.get(name);
 		}
 		return pair;
 	}
@@ -249,7 +249,7 @@ public class Rule {
 	public Grammar.LabelElementPair getTokenListLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( tokenListLabels!=null ) {
-			return (Grammar.LabelElementPair)tokenListLabels.get(name);
+			return tokenListLabels.get(name);
 		}
 		return pair;
 	}
@@ -257,7 +257,7 @@ public class Rule {
 	public Grammar.LabelElementPair getRuleListLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( ruleListLabels!=null ) {
-			return (Grammar.LabelElementPair)ruleListLabels.get(name);
+			return ruleListLabels.get(name);
 		}
 		return pair;
 	}
@@ -359,7 +359,7 @@ public class Rule {
 	public boolean hasRewrite(int i) {
 		GrammarAST blk = tree.findFirstType(ANTLRParser.BLOCK);
 		GrammarAST alt = blk.getBlockALT(i);
-		GrammarAST rew = (GrammarAST)alt.getNextSibling();
+		GrammarAST rew = alt.getNextSibling();
 		if ( rew!=null && rew.getType()==ANTLRParser.REWRITES ) return true;
 		if ( alt.findFirstType(ANTLRParser.REWRITES)!=null ) return true;
 		return false;
@@ -410,12 +410,12 @@ public class Rule {
 		{
 			// symbol is a token
 			List<GrammarAST> tokenRefs = getTokenRefsInAlt(refdSymbol, outerAltNum);
-			uniqueRefAST = (GrammarAST)tokenRefs.get(0);
+			uniqueRefAST = tokenRefs.get(0);
 		}
 		else {
 			// symbol is a rule
 			List<GrammarAST> ruleRefs = getRuleRefsInAlt(refdSymbol, outerAltNum);
-			uniqueRefAST = (GrammarAST)ruleRefs.get(0);
+			uniqueRefAST = ruleRefs.get(0);
 		}
 		if ( uniqueRefAST.code==null ) {
 			// no code?  must not have gen'd yet; forward ref
@@ -551,7 +551,7 @@ public class Rule {
 		}
 		Set<String> keys = options.keySet();
 		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
-			String optionName = (String) it.next();
+			String optionName = it.next();
 			Object optionValue = options.get(optionName);
 			String stored=setOption(optionName, optionValue, optionsStartToken);
 			if ( stored==null ) {

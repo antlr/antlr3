@@ -84,7 +84,7 @@ public class LL1DFA extends DFA {
 		initAltRelatedInfo();
 		unreachableAlts = null;
 		for (Iterator<IntervalSet> it = edgeMap.keySet().iterator(); it.hasNext();) {
-			IntervalSet edge = (IntervalSet)it.next();
+			IntervalSet edge = it.next();
 			List<Integer> alts = edgeMap.get(edge);
 			Collections.sort(alts); // make sure alts are attempted in order
 			//System.out.println(edge+" -> "+alts);

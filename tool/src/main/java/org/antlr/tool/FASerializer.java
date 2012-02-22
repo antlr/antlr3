@@ -97,7 +97,7 @@ public class FASerializer {
         // and then ordered by edge labels then by target state number :)
         Collections.sort(lines);
         for (int i = 0; i < lines.size(); i++) {
-            String line = (String) lines.get(i);
+            String line = lines.get(i);
             buf.append(line);
         }
         return buf.toString();
@@ -121,7 +121,7 @@ public class FASerializer {
 
         // visit nodes pointed to by each transition;
         for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
+            Transition edge = s.transition(i);
             walkFANormalizingStateNumbers(edge.target); // keep walkin'
             // if this transition is a rule reference, the node "following" this state
             // will not be found and appear to be not in graph.  Must explicitly jump
@@ -141,7 +141,7 @@ public class FASerializer {
 
 		int normalizedStateNumber = s.stateNumber;
 		if ( stateNumberTranslator!=null ) {
-	        Integer normalizedStateNumberI = (Integer)stateNumberTranslator.get(s);
+	        Integer normalizedStateNumberI = stateNumberTranslator.get(s);
 			normalizedStateNumber = normalizedStateNumberI.intValue();
 		}
 
@@ -149,7 +149,7 @@ public class FASerializer {
 
         // depth first walk each transition, printing its edge first
         for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
+            Transition edge = s.transition(i);
             StringBuilder buf = new StringBuilder();
             buf.append(stateStr);
 			if ( edge.isAction() ) {
@@ -180,7 +180,7 @@ public class FASerializer {
 			int normalizedTargetStateNumber = edge.target.stateNumber;
 			if ( stateNumberTranslator!=null ) {
 				Integer normalizedTargetStateNumberI =
-					(Integer)stateNumberTranslator.get(edge.target);
+					stateNumberTranslator.get(edge.target);
 				normalizedTargetStateNumber = normalizedTargetStateNumberI.intValue();
 			}
 			buf.append(getStateString(normalizedTargetStateNumber, edge.target));

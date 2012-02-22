@@ -189,7 +189,7 @@ public class DFAOptimizer {
 		visited.add(sI);
 		int nAlts = d.dfa.getNumberOfAlts();
 		for (int i = 0; i < d.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) d.transition(i);
+			Transition edge = d.transition(i);
 			DFAState edgeTarget = ((DFAState)edge.target);
 			/*
 			System.out.println(d.stateNumber+"-"+
@@ -218,7 +218,7 @@ public class DFAOptimizer {
 		}
 		visited.add(sI);
 		for (int i = 0; i < d.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) d.transition(i);
+			Transition edge = d.transition(i);
 			DFAState edgeTarget = ((DFAState)edge.target);
 			/*
 			System.out.println(d.stateNumber+"-"+

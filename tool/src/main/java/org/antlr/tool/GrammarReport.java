@@ -114,7 +114,7 @@ public class GrammarReport {
 		int totalNonSynPredRules = 0;
 		Collection<Rule> rules = g.getRules();
 		for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
-			Rule r = (Rule) it.next();
+			Rule r = it.next();
 			if ( !r.name.toUpperCase()
 				.startsWith(Grammar.SYNPRED_RULE_PREFIX.toUpperCase()) )
 			{
@@ -292,7 +292,7 @@ public class GrammarReport {
 		StringBuilder buf = new StringBuilder();
 		Iterator<DFA> it = dfas.iterator();
 		while ( it.hasNext() ) {
-			DFA dfa = (DFA) it.next();
+			DFA dfa = it.next();
 			// if we aborted a DFA and redid with k=1, the backtrackin
 			if ( decisions.contains(Utils.integer(dfa.decisionNumber)) ) {
 				continue;

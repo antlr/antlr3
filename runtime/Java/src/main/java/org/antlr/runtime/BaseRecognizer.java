@@ -533,7 +533,7 @@ public abstract class BaseRecognizer {
 		int top = state._fsp;
 		BitSet followSet = new BitSet();
 		for (int i=top; i>=0; i--) {
-			BitSet localFollowSet = (BitSet)state.following[i];
+			BitSet localFollowSet = state.following[i];
 			/*
 			System.out.println("local follow depth "+i+"="+
 							   localFollowSet.toString(getTokenNames())+")");
@@ -775,7 +775,7 @@ public abstract class BaseRecognizer {
 		if ( tokens==null ) return null;
 		List<String> strings = new ArrayList<String>(tokens.size());
 		for (int i=0; i<tokens.size(); i++) {
-			strings.add(((Token)tokens.get(i)).getText());
+			strings.add(tokens.get(i).getText());
 		}
 		return strings;
 	}
@@ -795,7 +795,7 @@ public abstract class BaseRecognizer {
 			state.ruleMemo[ruleIndex] = new HashMap<Integer, Integer>();
 		}
 		Integer stopIndexI =
-			(Integer)state.ruleMemo[ruleIndex].get(new Integer(ruleStartIndex));
+			state.ruleMemo[ruleIndex].get(new Integer(ruleStartIndex));
 		if ( stopIndexI==null ) {
 			return MEMO_RULE_UNKNOWN;
 		}

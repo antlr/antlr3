@@ -156,7 +156,7 @@ public class AttributeScope {
 	}
 
 	public Attribute getAttribute(String name) {
-		return (Attribute)attributes.get(name);
+		return attributes.get(name);
 	}
 
 	/** Used by templates to get all attributes */
@@ -176,7 +176,7 @@ public class AttributeScope {
 		Set<String> inter = new HashSet<String>();
 		Set<String> thisKeys = attributes.keySet();
 		for (Iterator<String> it = thisKeys.iterator(); it.hasNext();) {
-			String key = (String) it.next();
+			String key = it.next();
 			if ( other.attributes.get(key)!=null ) {
 				inter.add(key);
 			}

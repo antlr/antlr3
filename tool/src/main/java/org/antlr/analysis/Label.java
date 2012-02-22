@@ -295,7 +295,7 @@ public class Label implements Comparable<Label>, Cloneable {
 
 	@Override
     public int compareTo(Label o) {
-        return this.label-((Label)o).label;
+        return this.label-o.label;
     }
 
     /** Predicates are lists of AST nodes from the NFA created from the

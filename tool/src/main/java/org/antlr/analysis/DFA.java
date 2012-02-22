@@ -363,14 +363,14 @@ public class DFA {
 		int i = 0;
 		Integer emptyValue = Utils.integer(-1);
 		while ( i < data.size() ) {
-			Integer I = (Integer)data.get(i);
+			Integer I = data.get(i);
 			if ( I==null ) {
 				I = emptyValue;
 			}
 			// count how many v there are?
 			int n = 0;
 			for (int j = i; j < data.size(); j++) {
-				Integer v = (Integer)data.get(j);
+				Integer v = data.get(j);
 				if ( v==null ) {
 					v = emptyValue;
 				}
@@ -424,7 +424,7 @@ public class DFA {
 			it = getUniqueStates().values().iterator();
 		}
 		while ( it.hasNext() ) {
-			DFAState s = (DFAState)it.next();
+			DFAState s = it.next();
 			if ( s==null ) {
 				// ignore null states; some acylic DFA see this condition
 				// when inlining DFA (due to lacking of exit branch pruning?)
@@ -445,7 +445,7 @@ public class DFA {
 
 		// now that we have computed list of specialStates, gen code for 'em
 		for (int i = 0; i < specialStates.size(); i++) {
-			DFAState ss = (DFAState) specialStates.get(i);
+			DFAState ss = specialStates.get(i);
 			ST stateST =
 				generator.generateSpecialState(ss);
 			specialStateSTs.add(stateST);
@@ -501,7 +501,7 @@ public class DFA {
 		int smin = Label.MAX_CHAR_VALUE + 1;
 		int smax = Label.MIN_ATOM_VALUE - 1;
 		for (int j = 0; j < s.getNumberOfTransitions(); j++) {
-			Transition edge = (Transition) s.transition(j);
+			Transition edge = s.transition(j);
 			Label label = edge.label;
 			if ( label.isAtom() ) {
 				if ( label.getAtom()>=Label.MIN_CHAR_VALUE ) {
@@ -545,14 +545,14 @@ public class DFA {
 		System.out.println("createTransitionTableEntryForState s"+s.stateNumber+
 			" dec "+s.dfa.decisionNumber+" cyclic="+s.dfa.isCyclic());
 			*/
-		int smax = ((Integer)max.get(s.stateNumber)).intValue();
-		int smin = ((Integer)min.get(s.stateNumber)).intValue();
+		int smax = max.get(s.stateNumber).intValue();
+		int smin = min.get(s.stateNumber).intValue();
 
 		Vector<Integer> stateTransitions = new Vector<Integer>(smax-smin+1);
 		stateTransitions.setSize(smax-smin+1);
 		transition.set(s.stateNumber, stateTransitions);
 		for (int j = 0; j < s.getNumberOfTransitions(); j++) {
-			Transition edge = (Transition) s.transition(j);
+			Transition edge = s.transition(j);
 			Label label = edge.label;
 			if ( label.isAtom() && label.getAtom()>=Label.MIN_CHAR_VALUE ) {
 				int labelIndex = label.getAtom()-smin; // offset from 0
@@ -573,7 +573,7 @@ public class DFA {
 			}
 		}
 		// track unique state transition tables so we can reuse
-		Integer edgeClass = (Integer)edgeTransitionClassMap.get(stateTransitions);
+		Integer edgeClass = edgeTransitionClassMap.get(stateTransitions);
 		if ( edgeClass!=null ) {
 			//System.out.println("we've seen this array before; size="+stateTransitions.size());
 			transitionEdgeTables.set(s.stateNumber, edgeClass);
@@ -591,7 +591,7 @@ public class DFA {
 	 */
 	protected void createEOTAndEOFTables(DFAState s) {
 		for (int j = 0; j < s.getNumberOfTransitions(); j++) {
-			Transition edge = (Transition) s.transition(j);
+			Transition edge = s.transition(j);
 			Label label = edge.label;
 			if ( label.isAtom() ) {
 				if ( label.getAtom()==Label.EOT ) {
@@ -625,7 +625,7 @@ public class DFA {
 
 		// TODO this code is very similar to canGenerateSwitch.  Refactor to share
 		for (int j = 0; j < s.getNumberOfTransitions(); j++) {
-			Transition edge = (Transition) s.transition(j);
+			Transition edge = s.transition(j);
 			Label label = edge.label;
 			// can't do a switch if the edges have preds or are going to
 			// require gated predicates
@@ -637,8 +637,8 @@ public class DFA {
 			}
 		}
 		// if has pred or too big for table, make it special
-		int smax = ((Integer)max.get(s.stateNumber)).intValue();
-		int smin = ((Integer)min.get(s.stateNumber)).intValue();
+		int smax = max.get(s.stateNumber).intValue();
+		int smin = min.get(s.stateNumber).intValue();
 		if ( hasSemPred || smax-smin>MAX_STATE_TRANSITIONS_FOR_TABLE ) {
 			special.set(s.stateNumber,
 						Utils.integer(uniqueCompressedSpecialStateNum));
@@ -668,7 +668,7 @@ public class DFA {
 		}
 		// does a DFA state exist already with everything the same
 		// except its state number?
-		DFAState existing = (DFAState)uniqueStates.get(d);
+		DFAState existing = uniqueStates.get(d);
 		if ( existing != null ) {
             /*
             System.out.println("state "+d.stateNumber+" exists as state "+
@@ -685,7 +685,7 @@ public class DFA {
 	}
 
 	public void removeState(DFAState d) {
-		DFAState it = (DFAState)uniqueStates.remove(d);
+		DFAState it = uniqueStates.remove(d);
 		if ( it!=null ) {
 			numberOfStates--;
 		}
@@ -703,7 +703,7 @@ public class DFA {
 	}
 
 	public DFAState getState(int stateNumber) {
-		return (DFAState)states.get(stateNumber);
+		return states.get(stateNumber);
 	}
 
 	public void setState(int stateNumber, DFAState d) {

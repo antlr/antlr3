@@ -83,7 +83,7 @@ public class RandomPhrase {
 			}
 			// end of rule node
 			if ( state.isAcceptState() ) {
-				NFAState invokingState = (NFAState)ruleInvocationStack.pop();
+				NFAState invokingState = ruleInvocationStack.pop();
 				if ( debug ) System.out.println("pop invoking state "+invokingState);
 				//System.out.println("leave "+state.enclosingRule.name);
 				RuleClosureTransition invokingTransition =
@@ -198,7 +198,7 @@ public class RandomPhrase {
 			randomPhrase(parser, tokenTypes, startRule);
 			System.out.println("token types="+tokenTypes);
 			for (int i = 0; i < tokenTypes.size(); i++) {
-				Integer ttypeI = (Integer) tokenTypes.get(i);
+				Integer ttypeI = tokenTypes.get(i);
 				int ttype = ttypeI.intValue();
 				String ttypeDisplayName = parser.getTokenDisplayName(ttype);
 				if ( Character.isUpperCase(ttypeDisplayName.charAt(0)) ) {
@@ -206,7 +206,7 @@ public class RandomPhrase {
 					randomPhrase(lexer, charsInToken, ttypeDisplayName);
 					System.out.print(" ");
 					for (int j = 0; j < charsInToken.size(); j++) {
-						java.lang.Integer cI = (java.lang.Integer) charsInToken.get(j);
+						Integer cI = charsInToken.get(j);
 						System.out.print((char)cI.intValue());
 					}
 				}

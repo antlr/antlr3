@@ -51,7 +51,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	}
 
 	public ParseTree getTree() {
-		return (ParseTree)callStack.elementAt(0);
+		return callStack.elementAt(0);
 	}
 
 	/**  What kind of node to create.  You might want to override
@@ -74,7 +74,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	@Override
 	public void enterRule(String filename, String ruleName) {
 		if ( backtracking>0 ) return;
-		ParseTree parentRuleNode = (ParseTree)callStack.peek();
+		ParseTree parentRuleNode = callStack.peek();
 		ParseTree ruleNode = create(ruleName);
 		parentRuleNode.addChild(ruleNode);
 		callStack.push(ruleNode);
@@ -83,7 +83,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	@Override
 	public void exitRule(String filename, String ruleName) {
 		if ( backtracking>0 ) return;
-		ParseTree ruleNode = (ParseTree)callStack.peek();
+		ParseTree ruleNode = callStack.peek();
 		if ( ruleNode.getChildCount()==0 ) {
 			ruleNode.addChild(epsilonNode());
 		}
@@ -93,7 +93,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	@Override
 	public void consumeToken(Token token) {
 		if ( backtracking>0 ) return;
-		ParseTree ruleNode = (ParseTree)callStack.peek();
+		ParseTree ruleNode = callStack.peek();
 		ParseTree elementNode = create(token);
 		elementNode.hiddenTokens = this.hiddenTokens;
 		this.hiddenTokens = new ArrayList<Token>();
@@ -109,7 +109,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 	@Override
 	public void recognitionException(RecognitionException e) {
 		if ( backtracking>0 ) return;
-		ParseTree ruleNode = (ParseTree)callStack.peek();
+		ParseTree ruleNode = callStack.peek();
 		ParseTree errorNode = create(e);
 		ruleNode.addChild(errorNode);
 	}

@@ -130,7 +130,7 @@ public class DOTGenerator {
 
         // make a DOT edge for each transition
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			/*
 			System.out.println("dfa "+s.dfa.decisionNumber+
 				" edge from s"+s.stateNumber+" ["+i+"] of "+s.getNumberOfTransitions());
@@ -205,7 +205,7 @@ public class DOTGenerator {
         // make a DOT edge for each transition
 		ST edgeST;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
+            Transition edge = s.transition(i);
             if ( edge instanceof RuleClosureTransition ) {
                 RuleClosureTransition rr = ((RuleClosureTransition)edge);
                 // don't jump to other rules, but display edge to follow node
@@ -330,9 +330,9 @@ public class DOTGenerator {
 					List<Integer> altList = new ArrayList<Integer>();
 					altList.addAll(alts);
 					Collections.sort(altList);
-					Set configurations = ((DFAState) s).nfaConfigurations;
+					Set<NFAConfiguration> configurations = ((DFAState) s).nfaConfigurations;
 					for (int altIndex = 0; altIndex < altList.size(); altIndex++) {
-						Integer altI = (Integer) altList.get(altIndex);
+						Integer altI = altList.get(altIndex);
 						int alt = altI.intValue();
 						if ( altIndex>0 ) {
 							buf.append("\\n");
@@ -344,14 +344,13 @@ public class DOTGenerator {
 						// it will help us print better later
 						List<NFAConfiguration> configsInAlt = new ArrayList<NFAConfiguration>();
 						for (Iterator<NFAConfiguration> it = configurations.iterator(); it.hasNext();) {
-							NFAConfiguration c = (NFAConfiguration) it.next();
+							NFAConfiguration c = it.next();
 							if ( c.alt!=alt ) continue;
 							configsInAlt.add(c);
 						}
 						int n = 0;
 						for (int cIndex = 0; cIndex < configsInAlt.size(); cIndex++) {
-							NFAConfiguration c =
-								(NFAConfiguration)configsInAlt.get(cIndex);
+							NFAConfiguration c = configsInAlt.get(cIndex);
 							n++;
 							buf.append(c.toString(false));
 							if ( (cIndex+1)<configsInAlt.size() ) {

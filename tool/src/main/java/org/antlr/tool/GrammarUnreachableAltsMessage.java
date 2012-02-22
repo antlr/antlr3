@@ -67,7 +67,7 @@ public class GrammarUnreachableAltsMessage extends Message {
 		if ( probe.dfa.isTokensRuleDecision() ) {
 			// alts are token rules, convert to the names instead of numbers
 			for (int i = 0; i < alts.size(); i++) {
-				Integer altI = (Integer) alts.get(i);
+				Integer altI = alts.get(i);
 				String tokenName =
 					probe.getTokenNameForTokensRuleAlt(altI.intValue());
 				// reset the line/col to the token definition

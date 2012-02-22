@@ -80,7 +80,7 @@ protected final void trimGrammar() {
     GrammarAST p = root;
     // find the grammar spec
     while ( !p.getText().equals( "grammar" ) ) {
-        p = (GrammarAST)p.getNextSibling();
+        p = p.getNextSibling();
     }
     for ( int i = 0; i < p.getChildCount(); i++ ) {
         if ( p.getChild( i ).getType() != RULE )

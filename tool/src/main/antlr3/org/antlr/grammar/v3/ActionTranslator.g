@@ -96,7 +96,7 @@ public String translate() {
 	//System.out.println("chunks="+a.chunks);
 	StringBuffer buf = new StringBuffer();
 	for (int i = 0; i < theChunks.size(); i++) {
-		Object o = (Object) theChunks.get(i);
+		Object o = theChunks.get(i);
 		if ( o instanceof ST ) buf.append(((ST)o).render());
 		else buf.append(o);
 	}

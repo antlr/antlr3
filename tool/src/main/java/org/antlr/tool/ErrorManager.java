@@ -557,7 +557,7 @@ public class ErrorManager {
 
 	public static ANTLRErrorListener getErrorListener() {
 		ANTLRErrorListener el =
-			(ANTLRErrorListener)threadToListenerMap.get(Thread.currentThread());
+			threadToListenerMap.get(Thread.currentThread());
 		if ( el==null ) {
 			return theDefaultErrorListener;
 		}
@@ -566,7 +566,7 @@ public class ErrorManager {
 
 	public static ErrorState getErrorState() {
 		ErrorState ec =
-			(ErrorState)threadToErrorStateMap.get(Thread.currentThread());
+			threadToErrorStateMap.get(Thread.currentThread());
 		if ( ec==null ) {
 			ec = new ErrorState();
 			threadToErrorStateMap.put(Thread.currentThread(), ec);
@@ -925,7 +925,7 @@ public class ErrorManager {
 	 *  for GUIs etc...
 	 */
 	public static void panic() {
-		Tool tool = (Tool)threadToToolMap.get(Thread.currentThread());
+		Tool tool = threadToToolMap.get(Thread.currentThread());
 		if ( tool==null ) {
 			// no tool registered, exit
 			throw new Error("ANTLR ErrorManager panic");

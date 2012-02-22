@@ -84,7 +84,7 @@ public class LookaheadSet {
 	}
 
 	public void remove(int a) {
-		tokenTypeSet = (IntervalSet)tokenTypeSet.subtract(IntervalSet.of(a));
+		tokenTypeSet = tokenTypeSet.subtract(IntervalSet.of(a));
 	}
 
 	@Override

@@ -160,7 +160,7 @@ public class TreeWizard {
 	 	if ( tokenNameToTypeMap==null ) {
 			 return Token.INVALID_TOKEN_TYPE;
 		 }
-		Integer ttypeI = (Integer)tokenNameToTypeMap.get(tokenName);
+		Integer ttypeI = tokenNameToTypeMap.get(tokenName);
 		if ( ttypeI!=null ) {
 			return ttypeI.intValue();
 		}

@@ -294,7 +294,7 @@ public class NFAFactory {
     public int build_EOFStates(Collection<Rule> rules) {
 		int numberUnInvokedRules = 0;
         for (Iterator<Rule> iterator = rules.iterator(); iterator.hasNext();) {
-			Rule r = (Rule) iterator.next();
+			Rule r = iterator.next();
 			NFAState endNFAState = r.stopState;
             // Is this rule a start symbol?  (no follow links)
 			if ( endNFAState.transition[0] ==null ) {
@@ -394,7 +394,7 @@ public class NFAFactory {
 		// single alt case
 		if ( alternativeStateClusters.size()==1 ) {
 			// single alt, no decision, just return only alt state cluster
-			StateCluster g = (StateCluster)alternativeStateClusters.get(0);
+			StateCluster g = alternativeStateClusters.get(0);
 			NFAState startOfAlt = newState(); // must have this no matter what
 			transitionBetweenStates(startOfAlt, g.left, Label.EPSILON);
 
@@ -412,7 +412,7 @@ public class NFAFactory {
         blockEndNFAState.setDescription("end block");
         int altNum = 1;
         for (Iterator<StateCluster> iter = alternativeStateClusters.iterator(); iter.hasNext();) {
-            StateCluster g = (StateCluster) iter.next();
+            StateCluster g = iter.next();
             // add begin NFAState for this alt connected by epsilon
             NFAState left = newState();
             left.setDescription("alt "+altNum+" of ()");

@@ -249,8 +249,8 @@ protected void defineStringLiteralsFromDelegates() {
 		// walk string literals assigning types to unassigned ones
 		Set<String> s = stringLiterals.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String lit = (String) it.next();
-			Integer oldTypeI = (Integer)stringLiterals.get(lit);
+			String lit = it.next();
+			Integer oldTypeI = stringLiterals.get(lit);
 			int oldType = oldTypeI.intValue();
 			if ( oldType<Label.MIN_TOKEN_TYPE ) {
 				Integer typeI = Utils.integer(root.getNewTokenType());
@@ -271,12 +271,12 @@ protected void defineStringLiteralsFromDelegates() {
 		// was referenced
 		Set<String> s = aliases.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = (String) it.next();
-			String literal = (String)aliases.get(tokenID);
+			String tokenID = it.next();
+			String literal = aliases.get(tokenID);
 			if ( literal.charAt(0)=='\'' && stringLiterals.get(literal)!=null ) {
 				stringLiterals.put(literal, tokens.get(tokenID));
 				// an alias still means you need a lexer rule for it
-				Integer typeI = (Integer)tokens.get(tokenID);
+				Integer typeI = tokens.get(tokenID);
 				if ( !tokenRuleDefs.contains(tokenID) ) {
 					root.defineLexerRuleForAliasedStringLiteral(tokenID, literal, typeI.intValue());
 				}
@@ -289,7 +289,7 @@ protected void defineStringLiteralsFromDelegates() {
 		// walk token names, assigning values if unassigned
 		Set<String> s = tokens.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = (String) it.next();
+			String tokenID = it.next();
 			if ( tokens.get(tokenID)==UNASSIGNED ) {
 				tokens.put(tokenID, Utils.integer(root.getNewTokenType()));
 			}
@@ -300,14 +300,14 @@ protected void defineStringLiteralsFromDelegates() {
 	protected void defineTokenNamesAndLiteralsInGrammar(Grammar root) {
 		Set<String> s = tokens.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String tokenID = (String) it.next();
-			int ttype = ((Integer)tokens.get(tokenID)).intValue();
+			String tokenID = it.next();
+			int ttype = tokens.get(tokenID).intValue();
 			root.defineToken(tokenID, ttype);
 		}
 		s = stringLiterals.keySet();
 		for (Iterator<String> it = s.iterator(); it.hasNext();) {
-			String lit = (String) it.next();
-			int ttype = ((Integer)stringLiterals.get(lit)).intValue();
+			String lit = it.next();
+			int ttype = stringLiterals.get(lit).intValue();
 			root.defineToken(lit, ttype);
 		}
 	}

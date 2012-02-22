@@ -233,8 +233,8 @@ public class Strip {
 
     private static void killTrailingNewline(TokenRewriteStream tokens, int index) {
         List<? extends Token> all = tokens.getTokens();
-        Token tok = (Token)all.get(index);
-        Token after = (Token)all.get(index+1);
+        Token tok = all.get(index);
+        Token after = all.get(index+1);
         String ws = after.getText();
         if ( ws.startsWith("\n") ) {
             //System.out.println("killing WS after action");

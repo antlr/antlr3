@@ -103,7 +103,7 @@ public class BitSet implements IntSet, Cloneable {
 			IntervalSet other = (IntervalSet)set;
 			// walk set and add each interval
 			for (Iterator<Interval> iter = other.intervals.iterator(); iter.hasNext();) {
-				Interval I = (Interval) iter.next();
+				Interval I = iter.next();
 				this.orInPlace(BitSet.range(I.a,I.b));
 			}
 		}
@@ -342,7 +342,7 @@ public class BitSet implements IntSet, Cloneable {
         BitSet s = new BitSet();
         Iterator<? extends Integer> iter = elements.iterator();
         while (iter.hasNext()) {
-            Integer el = (Integer) iter.next();
+            Integer el = iter.next();
             s.add(el.intValue());
         }
         return s;
@@ -537,7 +537,7 @@ public class BitSet implements IntSet, Cloneable {
                     str += "'" + (char)i + "'";
                 }
                 else {
-                    str += (String)vocabulary.get(i);
+                    str += vocabulary.get(i);
                 }
             }
         }

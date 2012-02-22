@@ -353,7 +353,7 @@ public class TestTemplates extends BaseTest {
 		*/
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			Message m = (Message)equeue.errors.get(i);
+			Message m = equeue.errors.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}

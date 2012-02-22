@@ -790,7 +790,7 @@ public class Grammar {
 		if ( options!=null ) {
 			Iterator<String> optionNames = options.keySet().iterator();
 			while (optionNames.hasNext()) {
-				String optionName = (String) optionNames.next();
+				String optionName = optionNames.next();
 				if ( !doNotCopyOptionsToLexer.contains(optionName) ) {
 					Object value = options.get(optionName);
 					lexerGrammarST.addAggr("options.{name,value}", optionName, value);
@@ -865,11 +865,11 @@ public class Grammar {
 
 		// Now add token rule references
 		for (int i = 0; i < ruleNames.size(); i++) {
-			String rname = (String) ruleNames.get(i);
+			String rname = ruleNames.get(i);
 			matchTokenRuleST.add("rules", rname);
 		}
 		for (int i = 0; i < delegateNames.size(); i++) {
-			String dname = (String) delegateNames.get(i);
+			String dname = delegateNames.get(i);
 			matchTokenRuleST.add("rules", dname+".Tokens");
 		}
 		//System.out.println("tokens rule: "+matchTokenRuleST.toString());
@@ -974,7 +974,7 @@ public class Grammar {
 
 		Collection<Rule> rules = getRules();
 		for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
-			Rule r = (Rule) itr.next();
+			Rule r = itr.next();
 			String ruleName = r.name;
 			NFAState ruleBeginState = factory.newState();
 			ruleBeginState.setDescription("rule "+ruleName+" start");
@@ -1207,14 +1207,14 @@ outer:
 		List<IntervalSet> edges = new ArrayList<IntervalSet>();
 		for (int i = 1; i < altLook.length; i++) {
 			LookaheadSet s = altLook[i];
-			edges.add((IntervalSet)s.tokenTypeSet);
+			edges.add(s.tokenTypeSet);
 		}
 		List<IntervalSet> disjoint = makeEdgeSetsDisjoint(edges);
 		//System.out.println("disjoint="+disjoint);
 
 		MultiMap<IntervalSet, Integer> edgeMap = new MultiMap<IntervalSet, Integer>();
 		for (int i = 0; i < disjoint.size(); i++) {
-			IntervalSet ds = (IntervalSet) disjoint.get(i);
+			IntervalSet ds = disjoint.get(i);
 			for (int alt = 1; alt < altLook.length; alt++) {
 				LookaheadSet look = altLook[alt];
 				if ( !ds.and(look.tokenTypeSet).isNil() ) {
@@ -1249,7 +1249,7 @@ outer:
 		// walk each incoming edge label/set and add to disjoint set
 		int numEdges = edges.size();
 		for (int e = 0; e < numEdges; e++) {
-			IntervalSet t = (IntervalSet) edges.get(e);
+			IntervalSet t = edges.get(e);
 			if ( disjointSets.contains(t) ) { // exact set present
 				continue;
 			}
@@ -1258,7 +1258,7 @@ outer:
 			IntervalSet remainder = t; // remainder starts out as whole set to add
 			int numDisjointElements = disjointSets.size();
 			for (int i = 0; i < numDisjointElements; i++) {
-				IntervalSet s_i = (IntervalSet)disjointSets.get(i);
+				IntervalSet s_i = disjointSets.get(i);
 
 				if ( t.and(s_i).isNil() ) { // nothing in common
 					continue;
@@ -1270,7 +1270,7 @@ outer:
 
 				// Replace existing s_i with intersection since we
 				// know that will always be a non nil character class
-				IntervalSet intersection = (IntervalSet)s_i.and(t);
+				IntervalSet intersection = s_i.and(t);
 				disjointSets.set(i, intersection);
 
 				// Compute s_i-t to see what is in current set and not in incoming
@@ -1283,7 +1283,7 @@ outer:
 				}
 
 				// anything left to add to the reachableLabels?
-				remainder = (IntervalSet)t.subtract(s_i);
+				remainder = t.subtract(s_i);
 				if ( remainder.isNil() ) {
 					break; // nothing left to add to set.  done!
 				}
@@ -1399,7 +1399,7 @@ outer:
 		if ( index>=composite.typeToTokenList.size() ) {
 			composite.typeToTokenList.setSize(index+1);
 		}
-		String prevToken = (String)composite.typeToTokenList.get(index);
+		String prevToken = composite.typeToTokenList.get(index);
 		if ( prevToken==null || prevToken.charAt(0)=='\'' ) {
 			// only record if nothing there before or if thing before was a literal
 			composite.typeToTokenList.set(index, text);
@@ -1473,7 +1473,7 @@ outer:
 		if ( nameToSynpredASTMap==null ) {
 			return null;
 		}
-		return (GrammarAST)nameToSynpredASTMap.get(name);
+		return nameToSynpredASTMap.get(name);
 	}
 
 	public void synPredUsedInDFA(DFA dfa, SemanticContext semCtx) {
@@ -1746,7 +1746,7 @@ outer:
 
 	/** Get a global scope */
 	public AttributeScope getGlobalScope(String name) {
-		return (AttributeScope)scopes.get(name);
+		return scopes.get(name);
 	}
 
 	public Map<String, AttributeScope> getGlobalScopes() {
@@ -1886,11 +1886,11 @@ outer:
 	protected void examineAllExecutableActions() {
 		Collection<Rule> rules = getRules();
 		for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
-			Rule r = (Rule) it.next();
+			Rule r = it.next();
 			// walk all actions within the rule elements, args, and exceptions
 			List<GrammarAST> actions = r.getInlineActions();
 			for (int i = 0; i < actions.size(); i++) {
-				GrammarAST actionAST = (GrammarAST) actions.get(i);
+				GrammarAST actionAST = actions.get(i);
 				ActionAnalysis sniffer =
 					new ActionAnalysis(this, r.name, actionAST);
 				sniffer.analyze();
@@ -1898,7 +1898,7 @@ outer:
 			// walk any named actions like @init, @after
 			Collection<? extends Object> namedActions = r.getActions().values();
 			for (Iterator<? extends Object> it2 = namedActions.iterator(); it2.hasNext();) {
-				GrammarAST actionAST = (GrammarAST) it2.next();
+				GrammarAST actionAST = (GrammarAST)it2.next();
 				ActionAnalysis sniffer =
 					new ActionAnalysis(this, r.name, actionAST);
 				sniffer.analyze();
@@ -1915,7 +1915,7 @@ outer:
 		}
 		Set<String> rules = nameToRuleMap.keySet();
 		for (Iterator<String> it = rules.iterator(); it.hasNext();) {
-			String ruleName = (String) it.next();
+			String ruleName = it.next();
 			Rule r = getRule(ruleName);
 			removeUselessLabels(r.getRuleLabels());
 			removeUselessLabels(r.getRuleListLabels());
@@ -1932,7 +1932,7 @@ outer:
 		Collection<LabelElementPair> labels = ruleToElementLabelPairMap.values();
 		List<String> kill = new ArrayList<String>();
 		for (Iterator<LabelElementPair> labelit = labels.iterator(); labelit.hasNext();) {
-			LabelElementPair pair = (LabelElementPair) labelit.next();
+			LabelElementPair pair = labelit.next();
 			Rule refdRule = getRule(pair.elementRef.getText());
 			if ( refdRule!=null && !refdRule.getHasReturnValue() && !pair.actionReferencesLabel ) {
 				//System.out.println(pair.label.getText()+" is useless");
@@ -1940,7 +1940,7 @@ outer:
 			}
 		}
 		for (int i = 0; i < kill.size(); i++) {
-			String labelToKill = (String) kill.get(i);
+			String labelToKill = kill.get(i);
 			// System.out.println("kill "+labelToKill);
 			ruleToElementLabelPairMap.remove(labelToKill);
 		}
@@ -2078,10 +2078,10 @@ outer:
 	public int getTokenType(String tokenName) {
 		Integer I;
 		if ( tokenName.charAt(0)=='\'') {
-			I = (Integer)composite.stringLiteralToTypeMap.get(tokenName);
+			I = composite.stringLiteralToTypeMap.get(tokenName);
 		}
 		else { // must be a label like ID
-			I = (Integer)composite.tokenIDToTypeMap.get(tokenName);
+			I = composite.tokenIDToTypeMap.get(tokenName);
 		}
 		int i = (I!=null)?I.intValue():Label.INVALID;
 		//System.out.println("grammar type "+type+" "+tokenName+"->"+i);
@@ -2190,7 +2190,7 @@ outer:
 				else if ( Character.isDigit(c) ) {
 					ErrorManager.error(ErrorManager.MSG_SYNTAX_ERROR,
 									   "invalid char literal: "+literal);
-					buf.append("\\").append((char)c);
+					buf.append("\\").append(c);
 				}
 				else {
 					buf.append((char)ANTLRLiteralEscapedCharValue[c]); // normal \x escape
@@ -2216,7 +2216,7 @@ outer:
 	public int importTokenVocabulary(Grammar importFromGr) {
 		Set<String> importedTokenIDs = importFromGr.getTokenIDs();
 		for (Iterator<String> it = importedTokenIDs.iterator(); it.hasNext();) {
-			String tokenID = (String) it.next();
+			String tokenID = it.next();
 			int tokenType = importFromGr.getTokenType(tokenID);
 			composite.maxTokenType = Math.max(composite.maxTokenType,tokenType);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
@@ -2421,7 +2421,7 @@ outer:
 		}
 		// faux label?
 		else if ( ttype<0 ) {
-			tokenName = (String)composite.typeToTokenList.get(Label.NUM_FAUX_LABELS+ttype);
+			tokenName = composite.typeToTokenList.get(Label.NUM_FAUX_LABELS+ttype);
 		}
 		else {
 			// compute index in typeToTokenList for ttype
@@ -2429,7 +2429,7 @@ outer:
 			index += Label.NUM_FAUX_LABELS;     // jump over faux tokens
 
 			if ( index<composite.typeToTokenList.size() ) {
-				tokenName = (String)composite.typeToTokenList.get(index);
+				tokenName = composite.typeToTokenList.get(index);
 				if ( tokenName!=null &&
 					 tokenName.startsWith(AUTO_GENERATED_TOKEN_NAME_PREFIX) )
 				{
@@ -2518,7 +2518,7 @@ outer:
 		}
 		Set<String> keys = options.keySet();
 		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
-			String optionName = (String) it.next();
+			String optionName = it.next();
 			Object optionValue = options.get(optionName);
 			String stored=setOption(optionName, optionValue, optionsStartToken);
 			if ( stored==null ) {
@@ -2772,7 +2772,7 @@ outer:
 	public List<NFAState> getDecisionNFAStartStateList() {
 		List<NFAState> states = new ArrayList<NFAState>(100);
 		for (int d = 0; d < indexToDecision.size(); d++) {
-			Decision dec = (Decision) indexToDecision.get(d);
+			Decision dec = indexToDecision.get(d);
 			states.add(dec.startState);
 		}
 		return states;
@@ -2816,7 +2816,7 @@ outer:
 		List<Integer> columns = new ArrayList<Integer>();
 		for(Iterator<String> iter = lineColumnToLookaheadDFAMap.keySet().iterator();
 			iter.hasNext(); ) {
-			String key = (String)iter.next();
+			String key = iter.next();
 			if(key.startsWith(prefix)) {
 				columns.add(Integer.valueOf(key.substring(prefix.length())));
 			}
@@ -2826,7 +2826,7 @@ outer:
 
 	/** Useful for ANTLRWorks to map position in file to the DFA for display */
 	public DFA getLookaheadDFAFromPositionInFile(int line, int col) {
-		return (DFA)lineColumnToLookaheadDFAMap.get(
+		return lineColumnToLookaheadDFAMap.get(
 			new StringBuffer().append(line).append(":").append(col).toString());
 	}
 

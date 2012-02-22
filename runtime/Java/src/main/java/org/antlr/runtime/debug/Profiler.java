@@ -222,16 +222,16 @@ public class Profiler extends BlankDebugEventListener {
 						   " backtrack depth " + backtrackDepth +
 						   " @ " + input.get(input.index()) +
 						   " rule " +locationDescription());
-		String g = (String) currentGrammarFileName.peek();
+		String g = currentGrammarFileName.peek();
 		DecisionDescriptor descriptor = decisions.get(g, decisionNumber);
 		if ( descriptor == null ) {
 			descriptor = new DecisionDescriptor();
 			decisions.put(g, decisionNumber, descriptor);
 			descriptor.decision = decisionNumber;
-			descriptor.fileName = (String)currentGrammarFileName.peek();
-			descriptor.ruleName = (String)currentRuleName.peek();
-			descriptor.line = (Integer)currentLine.peek();
-			descriptor.pos = (Integer)currentPos.peek();
+			descriptor.fileName = currentGrammarFileName.peek();
+			descriptor.ruleName = currentRuleName.peek();
+			descriptor.line = currentLine.peek();
+			descriptor.pos = currentPos.peek();
 			descriptor.couldBacktrack = couldBacktrack;
 		}
 		descriptor.n++;
@@ -714,7 +714,7 @@ public class Profiler extends BlankDebugEventListener {
 	protected int[] toArray(List<Integer> a) {
 		int[] x = new int[a.size()];
 		for (int i = 0; i < a.size(); i++) {
-			Integer I = (Integer) a.get(i);
+			Integer I = a.get(i);
 			x[i] = I.intValue();
 		}
 		return x;

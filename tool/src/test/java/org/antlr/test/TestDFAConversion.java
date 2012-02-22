@@ -556,7 +556,7 @@ public class TestDFAConversion extends BaseTest {
 		assertEquals(expectedRules, ruleNames(leftRecursive));
 
 		assertEquals(1, equeue.errors.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("expecting left recursion cycles; found "+msg.getClass().getName(),
 				    msg instanceof LeftRecursionCyclesMessage);
 		LeftRecursionCyclesMessage cyclesMsg = (LeftRecursionCyclesMessage)msg;
@@ -585,7 +585,7 @@ public class TestDFAConversion extends BaseTest {
 		assertEquals(expectedRules, ruleNames(leftRecursive));
 
 		assertEquals(1, equeue.errors.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("expecting left recursion cycles; found "+msg.getClass().getName(),
 				    msg instanceof LeftRecursionCyclesMessage);
 		LeftRecursionCyclesMessage cyclesMsg = (LeftRecursionCyclesMessage)msg;
@@ -616,7 +616,7 @@ public class TestDFAConversion extends BaseTest {
 		assertEquals(expectedRules, ruleNames(leftRecursive));
 
 		assertEquals(1, equeue.errors.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("expecting left recursion cycles; found "+msg.getClass().getName(),
 				    msg instanceof LeftRecursionCyclesMessage);
 		LeftRecursionCyclesMessage cyclesMsg = (LeftRecursionCyclesMessage)msg;
@@ -759,7 +759,7 @@ public class TestDFAConversion extends BaseTest {
 		g.setCodeGenerator(generator);
 		generator.genRecognizer();
 
-		Message msg = (Message)equeue.warnings.get(0);
+		Message msg = equeue.warnings.get(0);
 		assertTrue("expecting no start rules; found "+msg.getClass().getName(),
 				   msg instanceof GrammarSemanticsMessage);
 	}
@@ -1661,7 +1661,7 @@ As a result, alternative(s) 2 were disabled for that input
 		// check conflicting input
 		if ( expectingAmbigInput!=null ) {
 			// first, find nondet message
-			Message msg = (Message)equeue.warnings.get(0);
+			Message msg = equeue.warnings.get(0);
 			assertTrue("expecting nondeterminism; found "+msg.getClass().getName(),
 					    msg instanceof GrammarNonDeterminismMessage);
 			GrammarNonDeterminismMessage nondetMsg =
@@ -1710,7 +1710,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	protected GrammarNonDeterminismMessage getNonDeterminismMessage(List<Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarNonDeterminismMessage ) {
 				return (GrammarNonDeterminismMessage)m;
 			}
@@ -1720,7 +1720,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	protected NonRegularDecisionMessage getNonRegularDecisionMessage(List<Message> errors) {
 		for (int i = 0; i < errors.size(); i++) {
-			Message m = (Message) errors.get(i);
+			Message m = errors.get(i);
 			if ( m instanceof NonRegularDecisionMessage ) {
 				return (NonRegularDecisionMessage)m;
 			}
@@ -1730,7 +1730,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	protected RecursionOverflowMessage getRecursionOverflowMessage(List<Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof RecursionOverflowMessage ) {
 				return (RecursionOverflowMessage)m;
 			}
@@ -1740,7 +1740,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	protected LeftRecursionCyclesMessage getLeftRecursionCyclesMessage(List<Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof LeftRecursionCyclesMessage ) {
 				return (LeftRecursionCyclesMessage)m;
 			}
@@ -1750,7 +1750,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	protected GrammarDanglingStateMessage getDanglingStateMessage(List<Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarDanglingStateMessage ) {
 				return (GrammarDanglingStateMessage)m;
 			}

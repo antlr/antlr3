@@ -267,7 +267,7 @@ public class GrammarSanity {
 											int outerAltNum)
 	{
 		if ( isValidSimpleElementNode(elementAST) ) {
-			GrammarAST next = (GrammarAST)elementAST.getNextSibling();
+			GrammarAST next = elementAST.getNextSibling();
 			if ( !isNextNonActionElementEOA(next)) {
 				ErrorManager.grammarWarning(ErrorManager.MSG_REWRITE_FOR_MULTI_ELEMENT_ALT,
 											grammar,
@@ -289,7 +289,7 @@ public class GrammarSanity {
 			case ANTLRParser.BACKTRACK_SEMPRED :
 			case ANTLRParser.GATED_SEMPRED :
 				ensureAltIsSimpleNodeOrTree(altAST,
-											(GrammarAST)elementAST.getNextSibling(),
+											elementAST.getNextSibling(),
 											outerAltNum);
 				return;
 		}
@@ -316,7 +316,7 @@ public class GrammarSanity {
 		while ( t.getType()==ANTLRParser.ACTION ||
 				t.getType()==ANTLRParser.SEMPRED )
 		{
-			t = (GrammarAST)t.getNextSibling();
+			t = t.getNextSibling();
 		}
 		if ( t.getType()==ANTLRParser.EOA ) {
 			return true;

@@ -167,7 +167,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 		assertEquals("unexpected number of expected problems",
 				    1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be an unreachable alt",
 				    msg instanceof GrammarUnreachableAltsMessage);
 		GrammarUnreachableAltsMessage u = (GrammarUnreachableAltsMessage)msg;
@@ -347,7 +347,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 		assertEquals("unexpected number of expected problems",
 				    1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be an unreachable alt",
 				   msg instanceof GrammarUnreachableAltsMessage);
 		GrammarUnreachableAltsMessage u = (GrammarUnreachableAltsMessage)msg;

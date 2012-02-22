@@ -64,7 +64,7 @@ public class OrderedHashSet<T> extends LinkedHashSet<T> {
     public boolean add(T value) {
         boolean result = super.add(value);
 		if ( result ) {  // only track if new element not in set
-			elements.add((T)value);
+			elements.add(value);
 		}
 		return result;
     }

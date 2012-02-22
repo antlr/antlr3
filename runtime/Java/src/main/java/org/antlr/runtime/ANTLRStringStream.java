@@ -165,7 +165,7 @@ public class ANTLRStringStream implements CharStream {
 			markers.add(state);
 		}
 		else {
-			state = (CharStreamState)markers.get(markDepth);
+			state = markers.get(markDepth);
 		}
 		state.p = p;
 		state.line = line;
@@ -176,7 +176,7 @@ public class ANTLRStringStream implements CharStream {
 
 	@Override
     public void rewind(int m) {
-		CharStreamState state = (CharStreamState)markers.get(m);
+		CharStreamState state = markers.get(m);
 		// restore stream state
 		seek(state.p);
 		line = state.line;

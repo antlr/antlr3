@@ -201,7 +201,7 @@ public class DecisionProbe {
 			Iterator<DFAState> it =
 				statesWithSyntacticallyAmbiguousAltsSet.iterator();
 			while (	it.hasNext() ) {
-				DFAState d = (DFAState) it.next();
+				DFAState d = it.next();
 				if ( !statesResolvedWithSemanticPredicatesSet.contains(d) ) {
 					return false;
 				}
@@ -320,7 +320,7 @@ public class DecisionProbe {
         Grammar g = dfa.nfa.grammar;
 		StringBuilder buf = new StringBuilder();
 		for (Iterator<? extends Label> it = labels.iterator(); it.hasNext();) {
-			Label label = (Label) it.next();
+			Label label = it.next();
 			buf.append(label.toString(g));
 			if ( it.hasNext() && g.type!=Grammar.LEXER ) {
 				buf.append(' ');
@@ -392,7 +392,7 @@ public class DecisionProbe {
 		if ( altToPredMap==null ) {
 			return null;
 		}
-		return (SemanticContext)altToPredMap.get(Utils.integer(alt));
+		return altToPredMap.get(Utils.integer(alt));
 	}
 
 	/** At least one alt refs a sem or syn pred */
@@ -428,7 +428,7 @@ public class DecisionProbe {
 			Iterator<DFAState> it =
 				problemStates.iterator();
 			while (	it.hasNext() && !dfa.nfa.grammar.NFAToDFAConversionExternallyAborted() ) {
-				DFAState d = (DFAState) it.next();
+				DFAState d = it.next();
 				Map<Integer, Set<Token>> insufficientAltToLocations = getIncompletelyCoveredAlts(d);
 				if ( insufficientAltToLocations!=null && insufficientAltToLocations.size()>0 ) {
 					ErrorManager.insufficientPredicates(this,d,insufficientAltToLocations);
@@ -459,7 +459,7 @@ public class DecisionProbe {
 		if ( danglingStates.size()>0 ) {
 			//System.err.println("no emanating edges for states: "+danglingStates);
 			for (Iterator<DFAState> it = danglingStates.iterator(); it.hasNext();) {
-				DFAState d = (DFAState) it.next();
+				DFAState d = it.next();
 				ErrorManager.danglingState(this,d);
 			}
 		}
@@ -502,7 +502,7 @@ public class DecisionProbe {
 		List<Integer> sortedDisableAlts = new ArrayList<Integer>(disabledAlts);
 		Collections.sort(sortedDisableAlts);
 		Integer lastAlt =
-			(Integer)sortedDisableAlts.get(sortedDisableAlts.size()-1);
+			sortedDisableAlts.get(sortedDisableAlts.size()-1);
 		GrammarAST blockAST =
 			dfa.nfa.grammar.getDecisionBlockAST(dfa.decisionNumber);
 		//System.out.println("block with error = "+blockAST.toStringTree());
@@ -549,12 +549,12 @@ public class DecisionProbe {
 		List<Integer> sortedAlts = new ArrayList<Integer>(alts);
 		Collections.sort(sortedAlts);
 		for (Iterator<Integer> altsIt = sortedAlts.iterator(); altsIt.hasNext();) {
-			Integer altI = (Integer) altsIt.next();
+			Integer altI = altsIt.next();
 			Map<String, Set<NFAState>> targetToCallSiteMap =
 				altToTargetToCallSitesMap.get(altI);
 			Set<String> targetRules = targetToCallSiteMap.keySet();
 			Collection<Set<NFAState>> callSiteStates = targetToCallSiteMap.values();
-			DFAState sampleBadState = (DFAState)altToDFAState.get(altI);
+			DFAState sampleBadState = altToDFAState.get(altI);
 			ErrorManager.recursionOverflow(this,
 										   sampleBadState,
 										   altI.intValue(),
@@ -569,11 +569,11 @@ public class DecisionProbe {
 										 Map<Integer, DFAState> altToDFAState)
 	{
 		for (Iterator<Integer> it = dfaStatesUnaliased.iterator(); it.hasNext();) {
-			Integer stateI = (Integer) it.next();
+			Integer stateI = it.next();
 			// walk this DFA's config list
 			List<? extends NFAConfiguration> configs = configurationsMap.get(stateI);
 			for (int i = 0; i < configs.size(); i++) {
-				NFAConfiguration c = (NFAConfiguration) configs.get(i);
+				NFAConfiguration c = configs.get(i);
 				NFAState ruleInvocationState = dfa.nfa.getState(c.state);
 				Transition transition0 = ruleInvocationState.transition[0];
 				RuleClosureTransition ref = (RuleClosureTransition)transition0;
@@ -604,7 +604,7 @@ public class DecisionProbe {
 	private Set<Integer> getUnaliasedDFAStateSet(Set<Integer> dfaStatesWithRecursionProblems) {
 		Set<Integer> dfaStatesUnaliased = new HashSet<Integer>();
 		for (Iterator<Integer> it = dfaStatesWithRecursionProblems.iterator(); it.hasNext();) {
-			Integer stateI = (Integer) it.next();
+			Integer stateI = it.next();
 			DFAState d = dfa.getState(stateI.intValue());
 			dfaStatesUnaliased.add(Utils.integer(d.stateNumber));
 		}

@@ -76,7 +76,7 @@ public class GrammarNonDeterminismMessage extends Message {
 		if ( probe.dfa.isTokensRuleDecision() ) {
 			Set<Integer> disabledAlts = probe.getDisabledAlternatives(problemState);
 			for (Iterator<Integer> it = disabledAlts.iterator(); it.hasNext();) {
-				Integer altI = (Integer) it.next();
+				Integer altI = it.next();
 				String tokenName =
 					probe.getTokenNameForTokensRuleAlt(altI.intValue());
 				// reset the line/col to the token definition (pick last one)
@@ -97,7 +97,7 @@ public class GrammarNonDeterminismMessage extends Message {
 		int firstAlt = 0;
 		if ( nondetAlts!=null ) {
 			for (Iterator<Integer> iter = nondetAlts.iterator(); iter.hasNext();) {
-				Integer displayAltI = (Integer) iter.next();
+				Integer displayAltI = iter.next();
 				if ( DecisionProbe.verbose ) {
 					int tracePathAlt =
 						nfaStart.translateDisplayAltToWalkAlt(displayAltI.intValue());

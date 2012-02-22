@@ -97,7 +97,7 @@ public class ACyclicDFACodeGenerator {
 		DFAState EOTTarget = null;
 		//System.out.println("DFA state "+s.stateNumber);
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			//System.out.println("edge "+s.stateNumber+"-"+edge.label.toString()+"->"+edge.target.stateNumber);
 			if ( edge.label.getAtom()==Label.EOT ) {
 				// don't generate a real edge for EOT; track alt EOT predicts
@@ -117,7 +117,7 @@ public class ACyclicDFACodeGenerator {
 				List<Integer> labels = edge.label.getSet().toList();
 				List<String> targetLabels = new ArrayList<String>(labels.size());
 				for (int j = 0; j < labels.size(); j++) {
-					Integer vI = (Integer) labels.get(j);
+					Integer vI = labels.get(j);
 					String label =
 						parentGenerator.getTokenTypeAsTargetLabel(vI.intValue());
 					targetLabels.add(label); // rewrite List element to be name
@@ -171,7 +171,7 @@ public class ACyclicDFACodeGenerator {
 			// state number.  Predicates emanating from EOT targets are
 			// hoisted up to the state that has the EOT edge.
 			for (int i = 0; i < EOTTarget.getNumberOfTransitions(); i++) {
-				Transition predEdge = (Transition)EOTTarget.transition(i);
+				Transition predEdge = EOTTarget.transition(i);
 				ST edgeST = templates.getInstanceOf(dfaEdgeName);
 				edgeST.add("labelExpr",
 									parentGenerator.genSemanticPredicateExpr(templates,predEdge));

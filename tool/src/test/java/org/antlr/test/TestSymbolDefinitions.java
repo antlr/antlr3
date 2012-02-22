@@ -890,7 +890,7 @@ public class TestSymbolDefinitions extends BaseTest {
 		}
 		// make sure there are not any others (other than <EOF> etc...)
 		for (Iterator<String> iter = tokens.iterator(); iter.hasNext();) {
-			String tokenName = (String) iter.next();
+			String tokenName = iter.next();
 			assertTrue("unexpected token name "+tokenName,
 					   g.getTokenType(tokenName)<Label.MIN_TOKEN_TYPE);
 		}

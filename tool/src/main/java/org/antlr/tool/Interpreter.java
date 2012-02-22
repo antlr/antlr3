@@ -290,7 +290,7 @@ public class Interpreter implements TokenSource {
 					break;
 				}
 				// pop invoking state off the stack to know where to return to
-				NFAState invokingState = (NFAState)ruleInvocationStack.pop();
+				NFAState invokingState = ruleInvocationStack.pop();
 				RuleClosureTransition invokingTransition =
 						(RuleClosureTransition)invokingState.transition[0];
 				// move to node after state that invoked this rule

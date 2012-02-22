@@ -70,9 +70,9 @@ public class CommonErrorNode extends CommonTree {
 	public String getText() {
 		String badText;
 		if ( start instanceof Token ) {
-			int i = ((Token)start).getTokenIndex();
-			int j = ((Token)stop).getTokenIndex();
-			if ( ((Token)stop).getType() == Token.EOF ) {
+			int i = start.getTokenIndex();
+			int j = stop.getTokenIndex();
+			if ( stop.getType() == Token.EOF ) {
 				j = ((TokenStream)input).size();
 			}
 			badText = ((TokenStream)input).toString(i, j);

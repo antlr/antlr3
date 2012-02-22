@@ -96,7 +96,7 @@ public class ParseTree extends BaseTree {
 		StringBuilder buf = new StringBuilder();
 		if ( hiddenTokens!=null ) {
 			for (int i = 0; i < hiddenTokens.size(); i++) {
-				Token hidden = (Token) hiddenTokens.get(i);
+				Token hidden = hiddenTokens.get(i);
 				buf.append(hidden.getText());
 			}
 		}

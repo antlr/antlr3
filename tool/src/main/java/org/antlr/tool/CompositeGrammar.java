@@ -211,7 +211,7 @@ public class CompositeGrammar {
 		}
 		List<Grammar> grammars = new ArrayList<Grammar>();
 		for (int i = 0; children!=null && i < children.size(); i++) {
-			CompositeGrammarTree child = (CompositeGrammarTree) children.get(i);
+			CompositeGrammarTree child = children.get(i);
 			grammars.add(child.grammar);
 		}
 		return grammars;
@@ -258,7 +258,7 @@ public class CompositeGrammar {
 		}
 		Set<? extends Rule> rules = getAllImportedRules(g);
 		for (Iterator<? extends Rule> it = rules.iterator(); it.hasNext();) {
-			Rule r = (Rule) it.next();
+			Rule r = it.next();
 			Rule localRule = g.getLocallyDefinedRule(r.name);
 			// if locally defined or it's not local but synpred, don't make
 			// a delegation method
@@ -280,11 +280,11 @@ public class CompositeGrammar {
 		List<Grammar> grammars = subtreeRoot.getPreOrderedGrammarList();
 		// walk all grammars preorder, priority given to grammar listed first.
 		for (int i = 0; i < grammars.size(); i++) {
-			Grammar delegate = (org.antlr.tool.Grammar) grammars.get(i);
+			Grammar delegate = grammars.get(i);
 			// for each rule in delegate, add to rules if no rule with that
 			// name as been seen.  (can't use removeAll; wrong hashcode/equals on Rule)
 			for (Iterator<Rule> it = delegate.getRules().iterator(); it.hasNext();) {
-				Rule r = (Rule)it.next();
+				Rule r = it.next();
 				if ( !ruleNames.contains(r.name) ) {
 					ruleNames.add(r.name); // track that we've seen this
 					rules.add(r);
@@ -321,7 +321,7 @@ public class CompositeGrammar {
 	}
 
 	public NFAState getState(int s) {
-		return (NFAState)numberToStateList.get(s);
+		return numberToStateList.get(s);
 	}
 
 	public void assignTokenTypes() throws RecognitionException {
@@ -330,7 +330,7 @@ public class CompositeGrammar {
 		AssignTokenTypesWalker ttypesWalker = new AssignTokenTypesBehavior();
 		List<Grammar> grammars = delegateGrammarTreeRoot.getPostOrderedGrammarList();
 		for (int i = 0; grammars!=null && i < grammars.size(); i++) {
-			Grammar g = (Grammar)grammars.get(i);
+			Grammar g = grammars.get(i);
 			ttypesWalker.setTreeNodeStream(new CommonTreeNodeStream(g.getGrammarTree()));
 			try {
 				//System.out.println("    walking "+g.name);
@@ -382,11 +382,11 @@ public class CompositeGrammar {
 		List<Grammar> grammars = delegateGrammarTreeRoot.getPostOrderedGrammarList();
 		//System.out.println("### createNFAs for composite; grammars: "+names);
 		for (int i = 0; grammars!=null && i < grammars.size(); i++) {
-			Grammar g = (Grammar)grammars.get(i);
+			Grammar g = grammars.get(i);
 			g.createRuleStartAndStopNFAStates();
 		}
 		for (int i = 0; grammars!=null && i < grammars.size(); i++) {
-			Grammar g = (Grammar)grammars.get(i);
+			Grammar g = grammars.get(i);
 			g.buildNFA();
 		}
 	}

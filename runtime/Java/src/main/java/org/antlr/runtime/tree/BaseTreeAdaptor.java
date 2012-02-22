@@ -150,7 +150,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		// handle ^(nil real-node)
 		if ( newRootTree.isNil() ) {
             int nc = newRootTree.getChildCount();
-            if ( nc==1 ) newRootTree = (Tree)newRootTree.getChild(0);
+            if ( nc==1 ) newRootTree = newRootTree.getChild(0);
             else if ( nc >1 ) {
 				// TODO: make tree run time exceptions hierarchy
 				throw new RuntimeException("more than one node as root (TODO: make exception hierarchy)");
@@ -173,7 +173,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 				r = null;
 			}
 			else if ( r.getChildCount()==1 ) {
-				r = (Tree)r.getChild(0);
+				r = r.getChild(0);
 				// whoever invokes rule will set parent and child index
 				r.setParent(null);
 				r.setChildIndex(-1);
@@ -258,7 +258,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		if ( treeToUniqueIDMap==null ) {
 			 treeToUniqueIDMap = new HashMap<Object, Integer>();
 		}
-		Integer prevID = (Integer)treeToUniqueIDMap.get(node);
+		Integer prevID = treeToUniqueIDMap.get(node);
 		if ( prevID!=null ) {
 			return prevID.intValue();
 		}

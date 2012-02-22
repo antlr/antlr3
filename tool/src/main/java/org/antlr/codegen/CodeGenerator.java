@@ -344,10 +344,10 @@ public class CodeGenerator {
         headerFileST.add("actions", actions);
 		outputFileST.add("actions", actions);
 
-		headerFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
-		outputFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
-		headerFileST.add("buildAST", new Boolean(grammar.buildAST()));
-		outputFileST.add("buildAST", new Boolean(grammar.buildAST()));
+		headerFileST.add("buildTemplate", grammar.buildTemplate());
+		outputFileST.add("buildTemplate", grammar.buildTemplate());
+		headerFileST.add("buildAST", grammar.buildAST());
+		outputFileST.add("buildAST", grammar.buildAST());
 
 		outputFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
 		headerFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
@@ -489,7 +489,7 @@ public class CodeGenerator {
 	protected void verifyActionScopesOkForTarget(Map<String, Map<String, Object>> actions) {
 		Set<String> actionScopeKeySet = actions.keySet();
 		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = (String)it.next();
+			String scope = it.next();
 			if ( !target.isValidActionScope(grammar.type, scope) ) {
 				// get any action from the scope to get error location
 				Map<String, Object> scopeActions = actions.get(scope);
@@ -509,7 +509,7 @@ public class CodeGenerator {
 	protected void translateActionAttributeReferences(Map<String, Map<String, Object>> actions) {
 		Set<String> actionScopeKeySet = actions.keySet();
 		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = (String)it.next();
+			String scope = it.next();
 			Map<String, Object> scopeActions = actions.get(scope);
 			translateActionAttributeReferencesForSingleScope(null,scopeActions);
 		}
@@ -526,7 +526,7 @@ public class CodeGenerator {
 		}
 		Set<String> actionNameSet = scopeActions.keySet();
 		for (Iterator<String> nameIT = actionNameSet.iterator(); nameIT.hasNext();) {
-			String name = (String) nameIT.next();
+			String name = nameIT.next();
 			GrammarAST actionAST = (GrammarAST)scopeActions.get(name);
 			List<?> chunks = translateAction(ruleName,actionAST);
 			scopeActions.put(name, chunks); // replace with translation
@@ -675,7 +675,7 @@ public class CodeGenerator {
 		boolean foundGatedPred = false;
 		ST eotST = null;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			ST edgeST;
 			if ( edge.label.getAtom()==Label.EOT ) {
 				// this is the default clause; has to held until last
@@ -711,7 +711,7 @@ public class CodeGenerator {
 		if ( foundGatedPred ) {
 			// state has >= 1 edge with a gated pred (syn or sem)
 			// must rewind input first, set flag.
-			stateST.add("semPredState", new Boolean(foundGatedPred));
+			stateST.add("semPredState", foundGatedPred);
 		}
 		if ( eotST!=null ) {
 			stateST.add("edges", eotST);
@@ -775,7 +775,7 @@ public class CodeGenerator {
 		Iterator<Interval> iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;
 		while (iter.hasNext()) {
-			Interval I = (Interval) iter.next();
+			Interval I = iter.next();
 			int a = I.a;
 			int b = I.b;
 			ST eST;
@@ -810,7 +810,7 @@ public class CodeGenerator {
 		// make constants for the token types
 		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
-			String tokenID = (String) tokenIDs.next();
+			String tokenID = tokenIDs.next();
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType==Label.EOF ||
 				 tokenType>=Label.MIN_TOKEN_TYPE )
@@ -867,7 +867,7 @@ public class CodeGenerator {
 		// make constants for the token names
 		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
-			String tokenID = (String) tokenIDs.next();
+			String tokenID = tokenIDs.next();
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", tokenID, Utils.integer(tokenType));
@@ -877,7 +877,7 @@ public class CodeGenerator {
 		// now dump the strings
 		Iterator<String> literals = grammar.getStringLiterals().iterator();
 		while (literals.hasNext()) {
-			String literal = (String) literals.next();
+			String literal = literals.next();
 			int tokenType = grammar.getTokenType(literal);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", literal, Utils.integer(tokenType));
@@ -1281,7 +1281,7 @@ public class CodeGenerator {
 		}
 		int size = 0;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			if ( edge.label.isSemanticPredicate() ) {
 				return false;
 			}

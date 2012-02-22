@@ -246,7 +246,7 @@ public class GrammarAST extends CommonTree {
 			this.blockOptions = null;
 			return;
 		}
-		String[] keys = (String[])options.keySet().toArray(new String[options.size()]);
+		String[] keys = options.keySet().toArray(new String[options.size()]);
 		for (String optionName : keys) {
 			String stored= setBlockOption(grammar, optionName, options.get(optionName));
 			if ( stored==null ) {
@@ -346,7 +346,7 @@ public class GrammarAST extends CommonTree {
 
 
     public GrammarAST[] getChildrenAsArray() {
-        return (GrammarAST[])getChildren().toArray(new GrammarAST[getChildCount()]);
+        return getChildren().toArray(new GrammarAST[getChildCount()]);
     }
 
     private static final GrammarAST DescendantDownNode = new GrammarAST(Token.DOWN, "DOWN");

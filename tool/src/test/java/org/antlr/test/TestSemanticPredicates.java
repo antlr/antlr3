@@ -269,7 +269,7 @@ public class TestSemanticPredicates extends BaseTest {
 		*/
 
 		assertEquals("unexpected number of expected problems", 1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be a left recursion msg",
 				    msg instanceof LeftRecursionCyclesMessage);
 	}
@@ -901,7 +901,7 @@ public class TestSemanticPredicates extends BaseTest {
 
 	protected GrammarNonDeterminismMessage getNonDeterminismMessage(List<? extends Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarNonDeterminismMessage ) {
 				return (GrammarNonDeterminismMessage)m;
 			}
@@ -911,7 +911,7 @@ public class TestSemanticPredicates extends BaseTest {
 
 	protected GrammarInsufficientPredicatesMessage getGrammarInsufficientPredicatesMessage(List<? extends Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarInsufficientPredicatesMessage ) {
 				return (GrammarInsufficientPredicatesMessage)m;
 			}

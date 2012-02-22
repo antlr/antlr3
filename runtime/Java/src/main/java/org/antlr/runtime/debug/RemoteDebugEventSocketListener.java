@@ -358,8 +358,7 @@ public class RemoteDebugEventSocketListener implements Runnable {
 			Class<? extends RecognitionException> excClass;
 			try {
 				excClass = Class.forName(excName).asSubclass(RecognitionException.class);
-				RecognitionException e =
-					(RecognitionException)excClass.newInstance();
+				RecognitionException e = excClass.newInstance();
 				e.index = Integer.parseInt(indexS);
 				e.line = Integer.parseInt(lineS);
 				e.charPositionInLine = Integer.parseInt(posS);

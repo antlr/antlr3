@@ -580,7 +580,7 @@ public class Tool {
         //System.out.println("sorted="+sorted);
         grammarFileNames.clear(); // wipe so we can give new ordered list
         for (int i = 0; i < sorted.size(); i++) {
-            String f = (String)sorted.get(i);
+            String f = sorted.get(i);
             if ( missingFiles.contains(f) ) continue;
             if ( !(f.endsWith(".g") || f.endsWith(".g3")) ) continue;
             grammarFileNames.add(f);
@@ -660,7 +660,7 @@ public class Tool {
 
             List<Grammar> delegates = grammar.getDirectDelegates();
             for (int i = 0; delegates != null && i < delegates.size(); i++) {
-                Grammar delegate = (Grammar) delegates.get(i);
+                Grammar delegate = delegates.get(i);
                 if (delegate != grammar) { // already processing this one
                     generateRecognizer(delegate);
                 }
@@ -696,7 +696,7 @@ public class Tool {
         rules.addAll(g.getRules());
 
         for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
-            Rule r = (Rule) itr.next();
+            Rule r = itr.next();
             try {
                 String dot = dotGenerator.getDOT(r.startState);
                 if (dot != null) {

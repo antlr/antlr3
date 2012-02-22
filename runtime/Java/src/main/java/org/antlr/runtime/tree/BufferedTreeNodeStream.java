@@ -177,7 +177,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			fillBuffer();
 		}
 		for (int i = 0; i < nodes.size(); i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			if ( t==node ) {
 				return i;
 			}
@@ -415,7 +415,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		}
 		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < nodes.size(); i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			buf.append(" ");
 			buf.append(adaptor.getType(t));
 		}
@@ -429,7 +429,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		}
 		StringBuilder buf = new StringBuilder();
 		for (int i = start; i < nodes.size() && i <= stop; i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			buf.append(" ");
 			buf.append(adaptor.getToken(t));
 		}

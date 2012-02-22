@@ -134,7 +134,7 @@ public abstract class BaseTree implements Tree {
 	/** Add all elements of kids list as children of this node */
 	public void addChildren(List<? extends Tree> kids) {
 		for (int i = 0; i < kids.size(); i++) {
-			Tree t = (Tree) kids.get(i);
+			Tree t = kids.get(i);
 			addChild(t);
 		}
 	}
@@ -267,7 +267,7 @@ public abstract class BaseTree implements Tree {
 	public void freshenParentAndChildIndexes(int offset) {
 		int n = getChildCount();
 		for (int c = offset; c < n; c++) {
-			Tree child = (Tree)getChild(c);
+			Tree child = getChild(c);
 			child.setChildIndex(c);
 			child.setParent(this);
 		}
