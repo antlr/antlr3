@@ -1543,8 +1543,7 @@ As a result, alternative(s) 2 were disabled for that input
 		}
 		NonRegularDecisionMessage msg = getNonRegularDecisionMessage(equeue.errors);
 		assertTrue("expected fatal non-LL(*) msg", msg!=null);
-		List<Integer> alts = new ArrayList<Integer>();
-		alts.addAll(msg.altsWithRecursion);
+		List<Integer> alts = new ArrayList<Integer>(msg.altsWithRecursion);
 		Collections.sort(alts);
 		assertEquals(expectedBadAlts,alts);
 	}
