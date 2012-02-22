@@ -37,7 +37,7 @@ import org.antlr.tool.Grammar;
  *  (which assumes an epsilon transition) or a tree of predicates (in a DFA).
  *  Special label types have to be < 0 to avoid conflict with char.
  */
-public class Label implements Comparable, Cloneable {
+public class Label implements Comparable<Label>, Cloneable {
     public static final int INVALID = -7;
 
 	public static final int ACTION = -6;
@@ -294,7 +294,7 @@ public class Label implements Comparable, Cloneable {
     }
 
 	@Override
-    public int compareTo(Object o) {
+    public int compareTo(Label o) {
         return this.label-((Label)o).label;
     }
 

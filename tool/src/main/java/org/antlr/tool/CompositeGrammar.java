@@ -81,7 +81,7 @@ public class CompositeGrammar {
 	protected int maxTokenType = Label.MIN_TOKEN_TYPE-1;
 
 	/** Map token like ID (but not literals like "while") to its token type */
-	public Map tokenIDToTypeMap = new LinkedHashMap();
+	public Map<String, Integer> tokenIDToTypeMap = new LinkedHashMap<String, Integer>();
 
 	/** Map token literals like "while" to its token type.  It may be that
 	 *  WHILE="while"=35, in which case both tokenIDToTypeMap and this
@@ -209,7 +209,7 @@ public class CompositeGrammar {
 		if ( children==null ) {
 			return null;
 		}
-		List<Grammar> grammars = new ArrayList();
+		List<Grammar> grammars = new ArrayList<Grammar>();
 		for (int i = 0; children!=null && i < children.size(); i++) {
 			CompositeGrammarTree child = (CompositeGrammarTree) children.get(i);
 			grammars.add(child.grammar);
@@ -232,7 +232,7 @@ public class CompositeGrammar {
 		if ( g==delegateGrammarTreeRoot.grammar ) {
 			return null;
 		}
-		List<Grammar> grammars = new ArrayList();
+		List<Grammar> grammars = new ArrayList<Grammar>();
 		CompositeGrammarTree t = delegateGrammarTreeRoot.findNode(g);
 		// walk backwards to root, collecting grammars
 		CompositeGrammarTree p = t.parent;
@@ -252,12 +252,12 @@ public class CompositeGrammar {
 	 *  should not be instantiated directly for use as parsers (you can create
 	 *  them to pass to the root parser's ctor as arguments).
 	 */
-	public Set<Rule> getDelegatedRules(Grammar g) {
+	public Set<? extends Rule> getDelegatedRules(Grammar g) {
 		if ( g!=delegateGrammarTreeRoot.grammar ) {
 			return null;
 		}
-		Set<Rule> rules = getAllImportedRules(g);
-		for (Iterator it = rules.iterator(); it.hasNext();) {
+		Set<? extends Rule> rules = getAllImportedRules(g);
+		for (Iterator<? extends Rule> it = rules.iterator(); it.hasNext();) {
 			Rule r = (Rule) it.next();
 			Rule localRule = g.getLocallyDefinedRule(r.name);
 			// if locally defined or it's not local but synpred, don't make
@@ -272,9 +272,9 @@ public class CompositeGrammar {
 	/** Get all rule definitions from all direct/indirect delegate grammars
 	 *  of g.
 	 */
-	public Set<Rule> getAllImportedRules(Grammar g) {
-		Set<String> ruleNames = new HashSet();
-		Set<Rule> rules = new HashSet();
+	public Set<? extends Rule> getAllImportedRules(Grammar g) {
+		Set<String> ruleNames = new HashSet<String>();
+		Set<Rule> rules = new HashSet<Rule>();
 		CompositeGrammarTree subtreeRoot = delegateGrammarTreeRoot.findNode(g);
 
 		List<Grammar> grammars = subtreeRoot.getPreOrderedGrammarList();
@@ -283,7 +283,7 @@ public class CompositeGrammar {
 			Grammar delegate = (org.antlr.tool.Grammar) grammars.get(i);
 			// for each rule in delegate, add to rules if no rule with that
 			// name as been seen.  (can't use removeAll; wrong hashcode/equals on Rule)
-			for (Iterator it = delegate.getRules().iterator(); it.hasNext();) {
+			for (Iterator<Rule> it = delegate.getRules().iterator(); it.hasNext();) {
 				Rule r = (Rule)it.next();
 				if ( !ruleNames.contains(r.name) ) {
 					ruleNames.add(r.name); // track that we've seen this

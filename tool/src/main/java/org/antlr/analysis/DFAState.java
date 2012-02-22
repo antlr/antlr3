@@ -380,7 +380,7 @@ public class DFAState extends State {
 				*/
     }
 
-    public OrderedHashSet getReachableLabels() {
+    public OrderedHashSet<Label> getReachableLabels() {
         return reachableLabels;
     }
 
@@ -483,8 +483,8 @@ public class DFAState extends State {
 	 *  DFA state, that alt is disabled.  There may be other accept states
 	 *  for that alt.
 	 */
-	public Set getDisabledAlternatives() {
-		Set disabled = new LinkedHashSet();
+	public Set<Integer> getDisabledAlternatives() {
+		Set<Integer> disabled = new LinkedHashSet<Integer>();
 		int numConfigs = nfaConfigurations.size();
 		for (int i = 0; i < numConfigs; i++) {
 			NFAConfiguration configuration = (NFAConfiguration) nfaConfigurations.get(i);
@@ -495,7 +495,7 @@ public class DFAState extends State {
 		return disabled;
 	}
 
-	protected Set getNonDeterministicAlts() {
+	protected Set<Integer> getNonDeterministicAlts() {
 		int user_k = dfa.getUserMaxLookahead();
 		if ( user_k>0 && user_k==k ) {
 			// if fixed lookahead, then more than 1 alt is a nondeterminism
@@ -551,12 +551,12 @@ public class DFAState extends State {
 			stateToConfigListMap.map(stateI, configuration);
 		}
 		// potential conflicts are states with > 1 configuration and diff alts
-		Set states = stateToConfigListMap.keySet();
+		Set<Integer> states = stateToConfigListMap.keySet();
 		int numPotentialConflicts = 0;
-		for (Iterator it = states.iterator(); it.hasNext();) {
+		for (Iterator<Integer> it = states.iterator(); it.hasNext();) {
 			Integer stateI = (Integer) it.next();
 			boolean thisStateHasPotentialProblem = false;
-			List configsForState = (List)stateToConfigListMap.get(stateI);
+			List<NFAConfiguration> configsForState = stateToConfigListMap.get(stateI);
 			int alt=0;
 			int numConfigsForState = configsForState.size();
 			for (int i = 0; i < numConfigsForState && numConfigsForState>1 ; i++) {
@@ -613,9 +613,9 @@ public class DFAState extends State {
 		// Indeed a conflict exists as same state 3, same context [$], predicts
 		// alts 1 and 2.
 		// walk each state with potential conflicting configurations
-		for (Iterator it = states.iterator(); it.hasNext();) {
+		for (Iterator<Integer> it = states.iterator(); it.hasNext();) {
 			Integer stateI = (Integer) it.next();
-			List configsForState = (List)stateToConfigListMap.get(stateI);
+			List<NFAConfiguration> configsForState = stateToConfigListMap.get(stateI);
 			// compare each configuration pair s, t to ensure:
 			// s.ctx different than t.ctx if s.alt != t.alt
 			int numConfigsForState = 0;
@@ -646,9 +646,9 @@ public class DFAState extends State {
 	/** Get the set of all alts mentioned by all NFA configurations in this
 	 *  DFA state.
 	 */
-	public Set getAltSet() {
+	public Set<Integer> getAltSet() {
 		int numConfigs = nfaConfigurations.size();
-		Set alts = new HashSet();
+		Set<Integer> alts = new HashSet<Integer>();
 		for (int i = 0; i < numConfigs; i++) {
 			NFAConfiguration configuration = (NFAConfiguration) nfaConfigurations.get(i);
 			alts.add(Utils.integer(configuration.alt));
@@ -659,7 +659,7 @@ public class DFAState extends State {
 		return alts;
 	}
 
-	public Set getGatedSyntacticPredicatesInNFAConfigurations() {
+	public Set<? extends SemanticContext> getGatedSyntacticPredicatesInNFAConfigurations() {
 		int numConfigs = nfaConfigurations.size();
 		Set<SemanticContext> synpreds = new HashSet<SemanticContext>();
 		for (int i = 0; i < numConfigs; i++) {

@@ -357,7 +357,7 @@ public class Target {
 	/** Give target a chance to do some postprocessing on actions.
 	 *  Python for example will have to fix the indention.
 	 */
-	public List postProcessAction(List chunks, Token actionToken) {
+	public List<Object> postProcessAction(List<Object> chunks, Token actionToken) {
 		return chunks;
 	}
 

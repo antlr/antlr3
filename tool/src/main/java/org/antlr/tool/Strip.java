@@ -232,7 +232,7 @@ public class Strip {
     }
 
     private static void killTrailingNewline(TokenRewriteStream tokens, int index) {
-        List all = tokens.getTokens();
+        List<? extends Token> all = tokens.getTokens();
         Token tok = (Token)all.get(index);
         Token after = (Token)all.get(index+1);
         String ws = after.getText();

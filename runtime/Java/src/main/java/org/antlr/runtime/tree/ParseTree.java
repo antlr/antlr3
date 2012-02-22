@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class ParseTree extends BaseTree {
 	public Object payload;
-	public List hiddenTokens;
+	public List<Token> hiddenTokens;
 
 	public ParseTree(Object label) {
 		this.payload = label;

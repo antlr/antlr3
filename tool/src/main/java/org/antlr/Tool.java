@@ -558,7 +558,7 @@ public class Tool {
 
     public void sortGrammarFiles() throws IOException {
         //System.out.println("Grammar names "+getGrammarFileNames());
-        Graph g = new Graph();
+        Graph<String> g = new Graph<String>();
         List<String> missingFiles = new ArrayList<String>();
         for (String gfile : grammarFileNames) {
             try {
@@ -576,7 +576,7 @@ public class Tool {
                 missingFiles.add(gfile);
             }
         }
-        List<Object> sorted = g.sort();
+        List<String> sorted = g.sort();
         //System.out.println("sorted="+sorted);
         grammarFileNames.clear(); // wipe so we can give new ordered list
         for (int i = 0; i < sorted.size(); i++) {
@@ -692,10 +692,10 @@ public class Tool {
 
     protected void generateNFAs(Grammar g) {
         DOTGenerator dotGenerator = new DOTGenerator(g);
-        Collection rules = g.getAllImportedRules();
+        Collection<Rule> rules = new HashSet<Rule>(g.getAllImportedRules());
         rules.addAll(g.getRules());
 
-        for (Iterator itr = rules.iterator(); itr.hasNext();) {
+        for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
             Rule r = (Rule) itr.next();
             try {
                 String dot = dotGenerator.getDOT(r.startState);

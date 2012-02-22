@@ -80,10 +80,10 @@ public class AttributeScope {
 	public boolean isPredefinedLexerRuleScope;
 
 	/** The list of Attribute objects */
-	protected LinkedHashMap<String,Attribute> attributes = new LinkedHashMap();
+	protected LinkedHashMap<String,Attribute> attributes = new LinkedHashMap<String, Attribute>();
 
 	/* Placeholder for compatibility with the CSharp3 target. */
-	public LinkedHashMap<String, GrammarAST> actions = new LinkedHashMap();
+	public LinkedHashMap<String, GrammarAST> actions = new LinkedHashMap<String, GrammarAST>();
 
 	public AttributeScope(String name, Token derivedFromToken) {
 		this(null,name,derivedFromToken);
@@ -169,13 +169,13 @@ public class AttributeScope {
 	/** Return the set of keys that collide from
 	 *  this and other.
 	 */
-	public Set intersection(AttributeScope other) {
+	public Set<String> intersection(AttributeScope other) {
 		if ( other==null || other.size()==0 || size()==0 ) {
 			return null;
 		}
-		Set inter = new HashSet();
-		Set thisKeys = attributes.keySet();
-		for (Iterator it = thisKeys.iterator(); it.hasNext();) {
+		Set<String> inter = new HashSet<String>();
+		Set<String> thisKeys = attributes.keySet();
+		for (Iterator<String> it = thisKeys.iterator(); it.hasNext();) {
 			String key = (String) it.next();
 			if ( other.attributes.get(key)!=null ) {
 				inter.add(key);

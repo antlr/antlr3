@@ -51,7 +51,7 @@ public class DOTGenerator {
      *  which states we've visited.  Make a new set every time you start
      *  walking in case you reuse this object.
      */
-    protected Set markedStates = null;
+    protected Set<Object> markedStates = null;
 
     protected Grammar grammar;
 
@@ -70,7 +70,7 @@ public class DOTGenerator {
 		}
 		// The output DOT graph for visualization
 		ST dot;
-		markedStates = new HashSet();
+		markedStates = new HashSet<Object>();
         if ( startState instanceof DFAState ) {
             dot = stlib.getInstanceOf("dfa");
 			dot.add("startState",
@@ -323,11 +323,11 @@ public class DOTGenerator {
 						buf.append("abortedDueToRecursionOverflow");
 					}
 				}
-				Set alts = ((DFAState)s).getAltSet();
+				Set<Integer> alts = ((DFAState)s).getAltSet();
 				if ( alts!=null ) {
 					buf.append("\\n");
 					// separate alts
-					List altList = new ArrayList();
+					List<Integer> altList = new ArrayList<Integer>();
 					altList.addAll(alts);
 					Collections.sort(altList);
 					Set configurations = ((DFAState) s).nfaConfigurations;
@@ -342,8 +342,8 @@ public class DOTGenerator {
 						buf.append(':');
 						// get a list of configs for just this alt
 						// it will help us print better later
-						List configsInAlt = new ArrayList();
-						for (Iterator it = configurations.iterator(); it.hasNext();) {
+						List<NFAConfiguration> configsInAlt = new ArrayList<NFAConfiguration>();
+						for (Iterator<NFAConfiguration> it = configurations.iterator(); it.hasNext();) {
 							NFAConfiguration c = (NFAConfiguration) it.next();
 							if ( c.alt!=alt ) continue;
 							configsInAlt.add(c);

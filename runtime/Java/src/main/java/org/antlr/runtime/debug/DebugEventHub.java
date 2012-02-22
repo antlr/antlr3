@@ -40,7 +40,7 @@ import java.util.ArrayList;
  *  @see also DebugEventRepeater
  */
 public class DebugEventHub implements DebugEventListener {
-	protected List listeners = new ArrayList();
+	protected List<DebugEventListener> listeners = new ArrayList<DebugEventListener>();
 
 	public DebugEventHub(DebugEventListener listener) {
 		listeners.add(listener);

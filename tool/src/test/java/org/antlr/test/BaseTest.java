@@ -150,7 +150,7 @@ public abstract class BaseTest {
 		mkdir(tmpdir);
 		writeFile(tmpdir, fileName, grammarStr);
 		try {
-			final List options = new ArrayList();
+			final List<String> options = new ArrayList<String>();
 			if ( debug ) {
 				options.add("-debug");
 			}
@@ -822,10 +822,10 @@ public abstract class BaseTest {
 		return lines[0].substring(prefix.length(),lines[0].length());
 	}
 
-	public List realElements(List elements) {
-		List n = new ArrayList();
+	public <T> List<T> realElements(List<T> elements) {
+		List<T> n = new ArrayList<T>();
 		for (int i = Label.NUM_FAUX_LABELS+Label.MIN_TOKEN_TYPE - 1; i < elements.size(); i++) {
-			Object o = (Object) elements.get(i);
+			T o = elements.get(i);
 			if ( o!=null ) {
 				n.add(o);
 			}
@@ -834,8 +834,8 @@ public abstract class BaseTest {
 	}
 
 	public List<String> realElements(Map<String, Integer> elements) {
-		List n = new ArrayList();
-		Iterator iterator = elements.keySet().iterator();
+		List<String> n = new ArrayList<String>();
+		Iterator<String> iterator = elements.keySet().iterator();
 		while (iterator.hasNext()) {
 			String tokenID = (String) iterator.next();
 			if ( elements.get(tokenID) >= Label.MIN_TOKEN_TYPE ) {
@@ -869,7 +869,7 @@ public abstract class BaseTest {
      * @param m The Map that contains keys we wish to return in sorted order
      * @return A string that represents all the keys in sorted order.
      */
-    public String sortMapToString(Map m) {
+    public <K, V> String sortMapToString(Map<K, V> m) {
 
         System.out.println("Map toString looks like: " + m.toString());
         // Pass in crap, and get nothing back
@@ -880,7 +880,7 @@ public abstract class BaseTest {
 
         // Sort the keys in the Map
         //
-        TreeMap nset = new TreeMap(m);
+        TreeMap<K, V> nset = new TreeMap<K, V>(m);
 
         System.out.println("Tree map looks like: " + nset.toString());
         return nset.toString();

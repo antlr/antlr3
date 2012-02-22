@@ -35,9 +35,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ErrorQueue implements ANTLRErrorListener {
-	List infos = new LinkedList();
-	List errors = new LinkedList();
-	List warnings = new LinkedList();
+	List<String> infos = new LinkedList<String>();
+	List<Message> errors = new LinkedList<Message>();
+	List<Message> warnings = new LinkedList<Message>();
 
 	@Override
 	public void info(String msg) {

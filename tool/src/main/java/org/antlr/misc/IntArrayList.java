@@ -33,7 +33,7 @@ import java.util.AbstractList;
  *  modifiable list as I don't do, for example, add(index,element).
  *  TODO: unused?
  */
-public class IntArrayList extends AbstractList implements Cloneable {
+public class IntArrayList extends AbstractList<Integer> implements Cloneable {
 	private static final int DEFAULT_CAPACITY = 10;
 	protected int n = 0;
 	protected int[] elements = null;
@@ -96,7 +96,7 @@ public class IntArrayList extends AbstractList implements Cloneable {
 	}
 
 	@Override
-	public Object get(int i) {
+	public Integer get(int i) {
 		return Utils.integer(element(i));
 	}
 

@@ -197,7 +197,7 @@ public class GrammarAST extends CommonTree {
 	 */
 	public String setBlockOption(Grammar grammar, String key, Object value) {
 		if ( blockOptions == null ) {
-			blockOptions = new HashMap();
+			blockOptions = new HashMap<String, Object>();
 		}
 		return setOption(blockOptions, Grammar.legalBlockOptions, grammar, key, value);
 	}
@@ -209,7 +209,7 @@ public class GrammarAST extends CommonTree {
 		return setOption(terminalOptions, Grammar.legalTokenOptions, grammar, key, value);
 	}
 
-	public String setOption(Map options, Set legalOptions, Grammar grammar, String key, Object value) {
+	public String setOption(Map<String, Object> options, Set<String> legalOptions, Grammar grammar, String key, Object value) {
 		if ( !legalOptions.contains(key) ) {
 			ErrorManager.grammarError(ErrorManager.MSG_ILLEGAL_OPTION,
 									  grammar,
@@ -241,7 +241,7 @@ public class GrammarAST extends CommonTree {
 		return value;
 	}
 
-    public void setOptions(Grammar grammar, Map options) {
+    public void setOptions(Grammar grammar, Map<String, Object> options) {
 		if ( options==null ) {
 			this.blockOptions = null;
 			return;

@@ -33,10 +33,11 @@ import org.antlr.tool.Grammar;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CTarget extends Target {
 
-    ArrayList strings = new ArrayList();
+    List<String> strings = new ArrayList<String>();
 
     @Override
     protected void genRecognizerFile(Tool tool,

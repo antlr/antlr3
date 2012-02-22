@@ -48,7 +48,7 @@ public class RewriteRuleTokenStream extends RewriteRuleElementStream {
 	/** Create a stream, but feed off an existing list */
 	public RewriteRuleTokenStream(TreeAdaptor adaptor,
 								  String elementDescription,
-								  List elements)
+								  List<Object> elements)
 	{
 		super(adaptor, elementDescription, elements);
 	}

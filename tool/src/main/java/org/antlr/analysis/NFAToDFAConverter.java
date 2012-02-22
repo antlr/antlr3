@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class NFAToDFAConverter {
 	/** A list of DFA states we still need to process during NFA conversion */
-	protected List work = new LinkedList();
+	protected List<DFAState> work = new LinkedList<DFAState>();
 
 	/** While converting NFA, we must track states that
 	 *  reference other rule's NFAs so we know what to do
@@ -200,7 +200,7 @@ public class NFAToDFAConverter {
 	 */
 	protected void findNewDFAStatesAndAddDFATransitions(DFAState d) {
 		//System.out.println("work on DFA state "+d);
-		OrderedHashSet labels = d.getReachableLabels();
+		OrderedHashSet<Label> labels = d.getReachableLabels();
 		//System.out.println("reachable labels="+labels);
 
 		/*
@@ -264,7 +264,7 @@ public class NFAToDFAConverter {
 		*/
 
 		int numberOfEdgesEmanating = 0;
-		Map targetToLabelMap = new HashMap();
+		Map<Integer, Transition> targetToLabelMap = new HashMap<Integer, Transition>();
 		// for each label that could possibly emanate from NFAStates of d
 		int numLabels = 0;
 		if ( labels!=null ) {
@@ -408,7 +408,7 @@ public class NFAToDFAConverter {
 	protected static int addTransition(DFAState d,
 									   Label label,
 									   DFAState targetState,
-									   Map targetToLabelMap)
+									   Map<Integer, Transition> targetToLabelMap)
 	{
 		//System.out.println(d.stateNumber+"-"+label.toString(dfa.nfa.grammar)+"->"+targetState.stateNumber);
 		int n = 0;
@@ -1170,7 +1170,7 @@ public class NFAToDFAConverter {
 			System.out.println("resolveNonDeterminisms "+d.toString());
 		}
 		boolean conflictingLexerRules = false;
-		Set nondeterministicAlts = d.getNonDeterministicAlts();
+		Set<Integer> nondeterministicAlts = d.getNonDeterministicAlts();
 		if ( debug && nondeterministicAlts!=null ) {
 			System.out.println("nondet alts="+nondeterministicAlts);
 		}
@@ -1187,7 +1187,7 @@ public class NFAToDFAConverter {
 		// indicate that d is nondeterministic on all alts otherwise
 		// it looks like state has no problem
 		if ( anyState.isEOTTargetState() ) {
-			Set allAlts = d.getAltSet();
+			Set<Integer> allAlts = d.getAltSet();
 			// is more than 1 alt predicted?
 			if ( allAlts!=null && allAlts.size()>1 ) {
 				nondeterministicAlts = allAlts;
@@ -1233,7 +1233,7 @@ public class NFAToDFAConverter {
 		//System.out.println("state "+d.stateNumber+" resolved to alt "+winningAlt);
 	}
 
-	protected int resolveByChoosingFirstAlt(DFAState d, Set nondeterministicAlts) {
+	protected int resolveByChoosingFirstAlt(DFAState d, Set<Integer> nondeterministicAlts) {
 		int winningAlt;
 		if ( dfa.isGreedy() ) {
 			winningAlt = resolveByPickingMinAlt(d,nondeterministicAlts);
@@ -1270,7 +1270,7 @@ public class NFAToDFAConverter {
 	 *
 	 *  Return the min alt found.
 	 */
-	protected int resolveByPickingMinAlt(DFAState d, Set nondeterministicAlts) {
+	protected int resolveByPickingMinAlt(DFAState d, Set<Integer> nondeterministicAlts) {
 		int min;
 		if ( nondeterministicAlts!=null ) {
 			min = getMinAlt(nondeterministicAlts);
@@ -1287,7 +1287,7 @@ public class NFAToDFAConverter {
 	/** Resolve state d by choosing exit alt, which is same value as the
 	 *  number of alternatives.  Return that exit alt.
 	 */
-	protected int resolveByPickingExitAlt(DFAState d, Set nondeterministicAlts) {
+	protected int resolveByPickingExitAlt(DFAState d, Set<Integer> nondeterministicAlts) {
 		int exitAlt = dfa.getNumberOfAlts();
 		turnOffOtherAlts(d, exitAlt, nondeterministicAlts);
 		return exitAlt;
@@ -1350,7 +1350,7 @@ public class NFAToDFAConverter {
 	 *  This is done down in getPredicatesPerNonDeterministicAlt().
 	 */
 	protected boolean tryToResolveWithSemanticPredicates(DFAState d,
-														 Set nondeterministicAlts)
+														 Set<Integer> nondeterministicAlts)
 	{
 		Map<Integer, SemanticContext> altToPredMap =
 				getPredicatesPerNonDeterministicAlt(d, nondeterministicAlts);
@@ -1484,7 +1484,7 @@ public class NFAToDFAConverter {
 	 *  preds, so we really want this for the error message.
 	 */
 	protected Map<Integer, SemanticContext> getPredicatesPerNonDeterministicAlt(DFAState d,
-																				Set nondeterministicAlts)
+																				Set<Integer> nondeterministicAlts)
 	{
 		// map alt to combined SemanticContext
 		Map<Integer, SemanticContext> altToPredicateContextMap =
@@ -1492,7 +1492,7 @@ public class NFAToDFAConverter {
 		// init the alt to predicate set map
 		Map<Integer, OrderedHashSet<SemanticContext>> altToSetOfContextsMap =
 			new HashMap<Integer, OrderedHashSet<SemanticContext>>();
-		for (Iterator it = nondeterministicAlts.iterator(); it.hasNext();) {
+		for (Iterator<Integer> it = nondeterministicAlts.iterator(); it.hasNext();) {
 			Integer altI = (Integer) it.next();
 			altToSetOfContextsMap.put(altI, new OrderedHashSet<SemanticContext>());
 		}
@@ -1558,7 +1558,7 @@ public class NFAToDFAConverter {
 		// with at least 1 predicate and at least one configuration w/o a
 		// predicate. We want this in order to report to the decision probe.
 		List<Integer> incompletelyCoveredAlts = new ArrayList<Integer>();
-		for (Iterator it = nondeterministicAlts.iterator(); it.hasNext();) {
+		for (Iterator<Integer> it = nondeterministicAlts.iterator(); it.hasNext();) {
 			Integer altI = (Integer) it.next();
 			Set<SemanticContext> contextsForThisAlt = altToSetOfContextsMap.get(altI);
 			if ( nondetAltsWithUncoveredConfiguration.contains(altI) ) { // >= 1 config has no ctx
@@ -1568,7 +1568,7 @@ public class NFAToDFAConverter {
 				continue; // don't include at least 1 config has no ctx
 			}
 			SemanticContext combinedContext = null;
-			for (Iterator itrSet = contextsForThisAlt.iterator(); itrSet.hasNext();) {
+			for (Iterator<SemanticContext> itrSet = contextsForThisAlt.iterator(); itrSet.hasNext();) {
 				SemanticContext ctx = (SemanticContext) itrSet.next();
 				combinedContext =
 						SemanticContext.or(combinedContext,ctx);
@@ -1630,8 +1630,8 @@ public class NFAToDFAConverter {
 	/** OR together all predicates from the alts.  Note that the predicate
 	 *  for an alt could itself be a combination of predicates.
 	 */
-	protected static SemanticContext getUnionOfPredicates(Map altToPredMap) {
-		Iterator iter;
+	protected static SemanticContext getUnionOfPredicates(Map<?, SemanticContext> altToPredMap) {
+		Iterator<SemanticContext> iter;
 		SemanticContext unionOfPredicatesFromAllAlts = null;
 		iter = altToPredMap.values().iterator();
 		while ( iter.hasNext() ) {
@@ -1657,7 +1657,7 @@ public class NFAToDFAConverter {
 	 *  over alt i+1 if both predicates are true.
 	 */
 	protected void addPredicateTransitions(DFAState d) {
-		List configsWithPreds = new ArrayList();
+		List<NFAConfiguration> configsWithPreds = new ArrayList<NFAConfiguration>();
 		// get a list of all configs with predicates
 		int numConfigs = d.nfaConfigurations.size();
 		for (int i = 0; i < numConfigs; i++) {
@@ -1668,17 +1668,15 @@ public class NFAToDFAConverter {
 		}
 		// Sort ascending according to alt; alt i has higher precedence than i+1
 		Collections.sort(configsWithPreds,
-			 new Comparator() {
+			 new Comparator<NFAConfiguration>() {
 			@Override
-				 public int compare(Object a, Object b) {
-					 NFAConfiguration ca = (NFAConfiguration)a;
-					 NFAConfiguration cb = (NFAConfiguration)b;
-					 if ( ca.alt < cb.alt ) return -1;
-					 else if ( ca.alt > cb.alt ) return 1;
+				 public int compare(NFAConfiguration a, NFAConfiguration b) {
+					 if ( a.alt < b.alt ) return -1;
+					 else if ( a.alt > b.alt ) return 1;
 					 return 0;
 				 }
 			 });
-		List predConfigsSortedByAlt = configsWithPreds;
+		List<NFAConfiguration> predConfigsSortedByAlt = configsWithPreds;
 		// Now, we can add edges emanating from d for these preds in right order
 		for (int i = 0; i < predConfigsSortedByAlt.size(); i++) {
 			NFAConfiguration c = (NFAConfiguration)predConfigsSortedByAlt.get(i);
@@ -1718,13 +1716,13 @@ public class NFAToDFAConverter {
         }
     }
 
-	public static int max(Set s) {
+	public static int max(Set<Integer> s) {
 		if ( s==null ) {
 			return Integer.MIN_VALUE;
 		}
 		int i = 0;
 		int m = 0;
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		for (Iterator<Integer> it = s.iterator(); it.hasNext();) {
 			i++;
 			Integer I = (Integer) it.next();
 			if ( i==1 ) { // init m with first value

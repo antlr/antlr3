@@ -31,7 +31,6 @@ package org.antlr.tool;
 import org.antlr.runtime.SerializedGrammar;
 
 import java.io.*;
-import java.util.Stack;
 
 /** Serialize a grammar into a highly compressed form with
  *  only the info needed to recognize sentences.
@@ -47,7 +46,6 @@ public class GrammarSerializerFoo {
     protected String filename;
     protected Grammar g;
 
-    protected Stack streams = new Stack();
     protected ByteArrayOutputStream altBuf;
     protected int numElementsInAlt = 0;
 

@@ -125,7 +125,7 @@ public class Interpreter implements TokenSource {
 	 */
 	public void scan(String startRule,
 					 DebugEventListener actions,
-					 List visitedStates)
+					 List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		if ( grammar.type!=Grammar.LEXER ) {
@@ -144,7 +144,7 @@ public class Interpreter implements TokenSource {
 		}
 
 		// do the parse
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		NFAState start = grammar.getRuleStartState(startRule);
 		NFAState stop = grammar.getRuleStopState(startRule);
 		parseEngine(startRule, start, stop, in, ruleInvocationStack,
@@ -158,7 +158,7 @@ public class Interpreter implements TokenSource {
 	}
 
 	public CommonToken scan(String startRule,
-							List visitedStates)
+							List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		LexerActionGetTokenType actions = new LexerActionGetTokenType(grammar);
@@ -168,7 +168,7 @@ public class Interpreter implements TokenSource {
 
 	public void parse(String startRule,
 					  DebugEventListener actions,
-					  List visitedStates)
+					  List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		//System.out.println("parse("+startRule+")");
@@ -181,7 +181,7 @@ public class Interpreter implements TokenSource {
 			grammar.createLookaheadDFAs();
 		}
 		// do the parse
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		NFAState start = grammar.getRuleStartState(startRule);
 		NFAState stop = grammar.getRuleStopState(startRule);
 		parseEngine(startRule, start, stop, input, ruleInvocationStack,
@@ -194,7 +194,7 @@ public class Interpreter implements TokenSource {
 		return parse(startRule, null);
 	}
 
-	public ParseTree parse(String startRule, List visitedStates)
+	public ParseTree parse(String startRule, List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		ParseTreeBuilder actions = new ParseTreeBuilder(grammar.name);
@@ -214,9 +214,9 @@ public class Interpreter implements TokenSource {
 							   NFAState start,
 							   NFAState stop,
 							   IntStream input,
-							   Stack ruleInvocationStack,
+							   Stack<NFAState> ruleInvocationStack,
 							   DebugEventListener actions,
-							   List visitedStates)
+							   List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		NFAState s = start;

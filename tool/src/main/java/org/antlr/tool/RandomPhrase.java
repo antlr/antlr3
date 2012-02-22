@@ -38,6 +38,7 @@ import org.antlr.misc.Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -70,7 +71,7 @@ public class RandomPhrase {
 		NFAState state = g.getRuleStartState(startRule);
 		NFAState stopState = g.getRuleStopState(startRule);
 
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		while ( true ) {
 			if ( state==stopState && ruleInvocationStack.size()==0 ) {
 				break;
@@ -166,7 +167,7 @@ public class RandomPhrase {
 			parser.composite.defineGrammarSymbols();
 			parser.composite.createNFAs();
 
-			List leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
+			List<? extends Collection<? extends Rule>> leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
 			if ( leftRecursiveRules.size()>0 ) {
 				return;
 			}

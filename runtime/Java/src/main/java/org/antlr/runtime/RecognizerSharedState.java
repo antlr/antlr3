@@ -77,7 +77,7 @@ public class RecognizerSharedState {
 	 *
 	 *  This is only used if rule memoization is on (which it is by default).
 	 */
-	public Map[] ruleMemo;
+	public Map<Integer, Integer>[] ruleMemo;
 
 
 	// LEXER FIELDS (must be in same state object to avoid casting

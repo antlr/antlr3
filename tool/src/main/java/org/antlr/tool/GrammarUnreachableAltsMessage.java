@@ -38,10 +38,10 @@ import java.util.List;
  */
 public class GrammarUnreachableAltsMessage extends Message {
 	public DecisionProbe probe;
-    public List alts;
+    public List<Integer> alts;
 
 	public GrammarUnreachableAltsMessage(DecisionProbe probe,
-										 List alts)
+										 List<Integer> alts)
 	{
 		super(ErrorManager.MSG_UNREACHABLE_ALTS);
 		this.probe = probe;

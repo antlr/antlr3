@@ -440,7 +440,7 @@ public class CodeGenerator {
 		}
 
 		// Now that we know what synpreds are used, we can set into template
-		Set synpredNames = null;
+		Set<String> synpredNames = null;
 		if ( grammar.synPredNamesUsedInDFA.size()>0 ) {
 			synpredNames = grammar.synPredNamesUsedInDFA;
 		}
@@ -486,13 +486,13 @@ public class CodeGenerator {
 	 *  '@headerfile:name {action}' or something.  Make sure the
 	 *  target likes the scopes in action table.
 	 */
-	protected void verifyActionScopesOkForTarget(Map actions) {
-		Set actionScopeKeySet = actions.keySet();
-		for (Iterator it = actionScopeKeySet.iterator(); it.hasNext();) {
+	protected void verifyActionScopesOkForTarget(Map<String, Map<String, Object>> actions) {
+		Set<String> actionScopeKeySet = actions.keySet();
+		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
 			String scope = (String)it.next();
 			if ( !target.isValidActionScope(grammar.type, scope) ) {
 				// get any action from the scope to get error location
-				Map scopeActions = (Map)actions.get(scope);
+				Map<String, Object> scopeActions = actions.get(scope);
 				GrammarAST actionAST =
 					(GrammarAST)scopeActions.values().iterator().next();
 				ErrorManager.grammarError(
@@ -506,11 +506,11 @@ public class CodeGenerator {
 	/** Actions may reference $x::y attributes, call translateAction on
 	 *  each action and replace that action in the Map.
 	 */
-	protected void translateActionAttributeReferences(Map actions) {
-		Set actionScopeKeySet = actions.keySet();
-		for (Iterator it = actionScopeKeySet.iterator(); it.hasNext();) {
+	protected void translateActionAttributeReferences(Map<String, Map<String, Object>> actions) {
+		Set<String> actionScopeKeySet = actions.keySet();
+		for (Iterator<String> it = actionScopeKeySet.iterator(); it.hasNext();) {
 			String scope = (String)it.next();
-			Map scopeActions = (Map)actions.get(scope);
+			Map<String, Object> scopeActions = actions.get(scope);
 			translateActionAttributeReferencesForSingleScope(null,scopeActions);
 		}
 	}
@@ -518,17 +518,17 @@ public class CodeGenerator {
 	/** Use for translating rule @init{...} actions that have no scope */
 	public void translateActionAttributeReferencesForSingleScope(
 		Rule r,
-		Map scopeActions)
+		Map<String, Object> scopeActions)
 	{
 		String ruleName=null;
 		if ( r!=null ) {
 			ruleName = r.name;
 		}
-		Set actionNameSet = scopeActions.keySet();
-		for (Iterator nameIT = actionNameSet.iterator(); nameIT.hasNext();) {
+		Set<String> actionNameSet = scopeActions.keySet();
+		for (Iterator<String> nameIT = actionNameSet.iterator(); nameIT.hasNext();) {
 			String name = (String) nameIT.next();
 			GrammarAST actionAST = (GrammarAST)scopeActions.get(name);
-			List chunks = translateAction(ruleName,actionAST);
+			List<?> chunks = translateAction(ruleName,actionAST);
 			scopeActions.put(name, chunks); // replace with translation
 		}
 	}
@@ -582,11 +582,11 @@ public class CodeGenerator {
 		}
 		//System.out.println(" "+follow);
 
-        List tokenTypeList;
+        List<Integer> tokenTypeList;
         long[] words;
 		if ( follow.tokenTypeSet==null ) {
 			words = new long[1];
-            tokenTypeList = new ArrayList();
+            tokenTypeList = new ArrayList<Integer>();
         }
 		else {
 			BitSet bits = BitSet.of(follow.tokenTypeSet);
@@ -772,7 +772,7 @@ public class CodeGenerator {
 			testRangeSTName = "isolatedLookaheadRangeTest";
 		}
 		ST setST = templates.getInstanceOf("setTest");
-		Iterator iter = iset.getIntervals().iterator();
+		Iterator<Interval> iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;
 		while (iter.hasNext()) {
 			Interval I = (Interval) iter.next();
@@ -808,7 +808,7 @@ public class CodeGenerator {
 	 */
 	protected void genTokenTypeConstants(ST code) {
 		// make constants for the token types
-		Iterator tokenIDs = grammar.getTokenIDs().iterator();
+		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
 			String tokenID = (String) tokenIDs.next();
 			int tokenType = grammar.getTokenType(tokenID);
@@ -865,7 +865,7 @@ public class CodeGenerator {
 		vocabFileST.add("tokens",(Object)null);
 		vocabFileST.impl.name = "vocab-file";
 		// make constants for the token names
-		Iterator tokenIDs = grammar.getTokenIDs().iterator();
+		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
 		while (tokenIDs.hasNext()) {
 			String tokenID = (String) tokenIDs.next();
 			int tokenType = grammar.getTokenType(tokenID);
@@ -875,7 +875,7 @@ public class CodeGenerator {
 		}
 
 		// now dump the strings
-		Iterator literals = grammar.getStringLiterals().iterator();
+		Iterator<String> literals = grammar.getStringLiterals().iterator();
 		while (literals.hasNext()) {
 			String literal = (String) literals.next();
 			int tokenType = grammar.getTokenType(literal);
@@ -887,14 +887,14 @@ public class CodeGenerator {
 		return vocabFileST;
 	}
 
-	public List translateAction(String ruleName,
+	public List<? extends Object> translateAction(String ruleName,
 								GrammarAST actionTree)
 	{
 		if ( actionTree.getType()==ANTLRParser.ARG_ACTION ) {
 			return translateArgAction(ruleName, actionTree);
 		}
 		ActionTranslator translator = new ActionTranslator(this,ruleName,actionTree);
-		List chunks = translator.translateToChunks();
+		List<Object> chunks = translator.translateToChunks();
 		chunks = target.postProcessAction(chunks, actionTree.token);
 		return chunks;
 	}
@@ -918,7 +918,7 @@ public class CodeGenerator {
 					new ActionTranslator(this,ruleName,
 											  actionToken,
 											  actionTree.outerAltNum);
-				List chunks = translator.translateToChunks();
+				List<Object> chunks = translator.translateToChunks();
 				chunks = target.postProcessAction(chunks, actionToken);
 				ST catST = new ST(templates, "<chunks>");
 				catST.add("chunks", chunks);

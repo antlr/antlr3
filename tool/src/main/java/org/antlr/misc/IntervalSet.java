@@ -105,7 +105,7 @@ public class IntervalSet implements IntSet {
 		}
 		// find position in list
 		// Use iterators as we modify list in place
-		for (ListIterator iter = intervals.listIterator(); iter.hasNext();) {
+		for (ListIterator<Interval> iter = intervals.listIterator(); iter.hasNext();) {
 			Interval r = (Interval) iter.next();
 			if ( addition.equals(r) ) {
 				return;
@@ -215,7 +215,7 @@ public class IntervalSet implements IntSet {
      *  'this' is assumed to be either a subset or equal to vocabulary.
      */
 	@Override
-    public IntSet complement(IntSet vocabulary) {
+    public IntervalSet complement(IntSet vocabulary) {
         if ( vocabulary==null ) {
             return null; // nothing in common with null set
         }
@@ -261,7 +261,7 @@ public class IntervalSet implements IntSet {
      *  anything that is in other but not in this will be ignored.
 	 */
 	@Override
-	public IntSet subtract(IntSet other) {
+	public IntervalSet subtract(IntSet other) {
 		// assume the whole unicode range here for the complement
 		// because it doesn't matter.  Anything beyond the max of this' set
 		// will be ignored since we are doing this & ~other.  The intersection
@@ -406,13 +406,13 @@ public class IntervalSet implements IntSet {
      *  list lengths n and m.
      */
 	@Override
-	public IntSet and(IntSet other) {
+	public IntervalSet and(IntSet other) {
 		if ( other==null ) { //|| !(other instanceof IntervalSet) ) {
 			return null; // nothing in common with null set
 		}
 
-		ArrayList myIntervals = (ArrayList)this.intervals;
-		ArrayList theirIntervals = (ArrayList)((IntervalSet)other).intervals;
+		List<Interval> myIntervals = this.intervals;
+		List<Interval> theirIntervals = ((IntervalSet)other).intervals;
 		IntervalSet intersection = null;
 		int mySize = myIntervals.size();
 		int theirSize = theirIntervals.size();
@@ -580,7 +580,7 @@ public class IntervalSet implements IntSet {
         if ( this.intervals.size()>1 ) {
             buf.append("{");
         }
-        Iterator iter = this.intervals.iterator();
+        Iterator<Interval> iter = this.intervals.iterator();
         while (iter.hasNext()) {
             Interval I = (Interval) iter.next();
             int a = I.a;
@@ -627,8 +627,8 @@ public class IntervalSet implements IntSet {
     }
 
 	@Override
-    public List toList() {
-		List values = new ArrayList();
+    public List<Integer> toList() {
+		List<Integer> values = new ArrayList<Integer>();
 		int n = intervals.size();
 		for (int i = 0; i < n; i++) {
 			Interval I = (Interval) intervals.get(i);

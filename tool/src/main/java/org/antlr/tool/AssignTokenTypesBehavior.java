@@ -47,7 +47,7 @@ public class AssignTokenTypesBehavior extends AssignTokenTypesWalker {
 	/** Track actual lexer rule defs so we don't get repeated token defs in
 	 *  generated lexer.
 	 */
-	protected Set<String> tokenRuleDefs = new HashSet();
+	protected Set<String> tokenRuleDefs = new HashSet<String>();
 
 	public AssignTokenTypesBehavior() {
 		super(null);
@@ -247,8 +247,8 @@ protected void defineStringLiteralsFromDelegates() {
     @Override
 	protected void assignStringTypes(Grammar root) {
 		// walk string literals assigning types to unassigned ones
-		Set s = stringLiterals.keySet();
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		Set<String> s = stringLiterals.keySet();
+		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String lit = (String) it.next();
 			Integer oldTypeI = (Integer)stringLiterals.get(lit);
 			int oldType = oldTypeI.intValue();
@@ -269,8 +269,8 @@ protected void defineStringLiteralsFromDelegates() {
 		}
 		// walk aliases if any and assign types to aliased literals if literal
 		// was referenced
-		Set s = aliases.keySet();
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		Set<String> s = aliases.keySet();
+		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String tokenID = (String) it.next();
 			String literal = (String)aliases.get(tokenID);
 			if ( literal.charAt(0)=='\'' && stringLiterals.get(literal)!=null ) {
@@ -287,8 +287,8 @@ protected void defineStringLiteralsFromDelegates() {
     @Override
 	protected void assignTokenIDTypes(Grammar root) {
 		// walk token names, assigning values if unassigned
-		Set s = tokens.keySet();
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		Set<String> s = tokens.keySet();
+		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String tokenID = (String) it.next();
 			if ( tokens.get(tokenID)==UNASSIGNED ) {
 				tokens.put(tokenID, Utils.integer(root.getNewTokenType()));
@@ -298,14 +298,14 @@ protected void defineStringLiteralsFromDelegates() {
 
     @Override
 	protected void defineTokenNamesAndLiteralsInGrammar(Grammar root) {
-		Set s = tokens.keySet();
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		Set<String> s = tokens.keySet();
+		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String tokenID = (String) it.next();
 			int ttype = ((Integer)tokens.get(tokenID)).intValue();
 			root.defineToken(tokenID, ttype);
 		}
 		s = stringLiterals.keySet();
-		for (Iterator it = s.iterator(); it.hasNext();) {
+		for (Iterator<String> it = s.iterator(); it.hasNext();) {
 			String lit = (String) it.next();
 			int ttype = ((Integer)stringLiterals.get(lit)).intValue();
 			root.defineToken(lit, ttype);

@@ -102,7 +102,7 @@ public class BitSet implements IntSet, Cloneable {
 		else if ( set instanceof IntervalSet ) {
 			IntervalSet other = (IntervalSet)set;
 			// walk set and add each interval
-			for (Iterator iter = other.intervals.iterator(); iter.hasNext();) {
+			for (Iterator<Interval> iter = other.intervals.iterator(); iter.hasNext();) {
 				Interval I = (Interval) iter.next();
 				this.orInPlace(BitSet.range(I.a,I.b));
 			}
@@ -124,11 +124,11 @@ public class BitSet implements IntSet, Cloneable {
 		}
 	}
 
-	public void addAll(Iterable elements) {
+	public void addAll(Iterable<Integer> elements) {
 		if ( elements==null ) {
 			return;
 		}
-		Iterator it = elements.iterator();
+		Iterator<Integer> it = elements.iterator();
 		while (it.hasNext()) {
 			Object o = (Object) it.next();
 			if ( !(o instanceof Integer) ) {
@@ -338,9 +338,9 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
-    public static BitSet of(Collection elements) {
+    public static BitSet of(Collection<? extends Integer> elements) {
         BitSet s = new BitSet();
-        Iterator iter = elements.iterator();
+        Iterator<? extends Integer> iter = elements.iterator();
         while (iter.hasNext()) {
             Integer el = (Integer) iter.next();
             s.add(el.intValue());
@@ -364,7 +364,7 @@ public class BitSet implements IntSet, Cloneable {
 		throw new IllegalArgumentException("can't create BitSet from "+set.getClass().getName());
 	}
 
-    public static BitSet of(Map elements) {
+    public static BitSet of(Map<? extends Integer, ?> elements) {
         return BitSet.of(elements.keySet());
     }
 
@@ -461,7 +461,7 @@ public class BitSet implements IntSet, Cloneable {
     }
 
 	@Override
-	public List toList() {
+	public List<Integer> toList() {
 		throw new NoSuchMethodError("BitSet.toList() unimplemented");
 	}
 
@@ -520,7 +520,7 @@ public class BitSet implements IntSet, Cloneable {
      * separator The string to put in between elements
      * @return A commma-separated list of character constants.
      */
-    public String toString(String separator, List vocabulary) {
+    public String toString(String separator, List<String> vocabulary) {
         if (vocabulary == null) {
             return toString(null);
         }

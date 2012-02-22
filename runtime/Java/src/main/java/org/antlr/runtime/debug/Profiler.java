@@ -127,10 +127,10 @@ public class Profiler extends BlankDebugEventListener {
 	//protected int decisionLevel = 0;
 	protected Token lastRealTokenTouchedInDecision;
 	protected Set<String> uniqueRules = new HashSet<String>();
-	protected Stack<String> currentGrammarFileName = new Stack();
-	protected Stack<String> currentRuleName = new Stack();
-	protected Stack<Integer> currentLine = new Stack();
-	protected Stack<Integer> currentPos = new Stack();
+	protected Stack<String> currentGrammarFileName = new Stack<String>();
+	protected Stack<String> currentRuleName = new Stack<String>();
+	protected Stack<Integer> currentLine = new Stack<Integer>();
+	protected Stack<Integer> currentPos = new Stack<Integer>();
 
 	// Vector<DecisionStats>
 	//protected Vector decisions = new Vector(200); // need setSize
@@ -531,11 +531,11 @@ public class Profiler extends BlankDebugEventListener {
 		return stats;
 	}
 
-	public DoubleKeyMap getDecisionStats() {
+	public DoubleKeyMap<String, Integer, DecisionDescriptor> getDecisionStats() {
 		return decisions;
 	}
 
-	public List getDecisionEvents() {
+	public List<DecisionEvent> getDecisionEvents() {
 		return decisionEvents;
 	}
 
@@ -711,7 +711,7 @@ public class Profiler extends BlankDebugEventListener {
 		return X;
 	}
 
-	protected int[] toArray(List a) {
+	protected int[] toArray(List<Integer> a) {
 		int[] x = new int[a.size()];
 		for (int i = 0; i < a.size(); i++) {
 			Integer I = (Integer) a.get(i);

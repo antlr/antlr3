@@ -101,7 +101,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testSingleNodeIndex() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("ID");
-		Map m = wiz.index(t);
+		Map<Integer, List<Object>> m = wiz.index(t);
 		String found = m.toString();
 		String expecting = "{10=[ID]}";
 		assertEquals(expecting, found);
@@ -110,7 +110,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testNoRepeatsIndex() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C D)");
-		Map m = wiz.index(t);
+		Map<Integer, List<Object>> m = wiz.index(t);
 		String found = sortMapToString(m);
         String expecting = "{5=[A], 6=[B], 7=[C], 8=[D]}";
 		assertEquals(expecting, found);
@@ -119,7 +119,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testRepeatsIndex() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		Map m = wiz.index(t);
+		Map<Integer, List<Object>> m = wiz.index(t);
 		String found =  sortMapToString(m);
         String expecting = "{5=[A, A], 6=[B, B, B], 7=[C], 8=[D, D]}";
 		assertEquals(expecting, found);
@@ -128,7 +128,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testNoRepeatsVisit() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C D)");
-		final List elements = new ArrayList();
+		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("B"), new TreeWizard.Visitor() {
 			@Override
 			public void visit(Object t) {
@@ -143,7 +143,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testNoRepeatsVisit2() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		final List elements = new ArrayList();
+		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("C"),
 					   new TreeWizard.Visitor() {
 			@Override
@@ -159,7 +159,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testRepeatsVisit() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		final List elements = new ArrayList();
+		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("B"),
 					   new TreeWizard.Visitor() {
 			@Override
@@ -175,7 +175,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testRepeatsVisit2() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		final List elements = new ArrayList();
+		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, wiz.getTokenType("A"),
 					   new TreeWizard.Visitor() {
 			@Override
@@ -191,11 +191,11 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testRepeatsVisitWithContext() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		final List elements = new ArrayList();
+		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, wiz.getTokenType("B"),
 		   new TreeWizard.ContextVisitor() {
 			@Override
-			   public void visit(Object t, Object parent, int childIndex, Map labels) {
+			   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 				   elements.add(adaptor.getText(t)+"@"+
 								(parent!=null?adaptor.getText(parent):"nil")+
 								"["+childIndex+"]");
@@ -209,11 +209,11 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testRepeatsVisitWithNullParentAndContext() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B (A C B) B D D)");
-		final List elements = new ArrayList();
+		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, wiz.getTokenType("A"),
 		   new TreeWizard.ContextVisitor() {
 			@Override
-			   public void visit(Object t, Object parent, int childIndex, Map labels) {
+			   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 				   elements.add(adaptor.getText(t)+"@"+
 								(parent!=null?adaptor.getText(parent):"nil")+
 								"["+childIndex+"]");
@@ -227,7 +227,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testVisitPattern() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C (A B) D)");
-		final List elements = new ArrayList();
+		final List<Object> elements = new ArrayList<Object>();
 		wiz.visit(t, "(A B)",
 					   new TreeWizard.Visitor() {
 			@Override
@@ -243,11 +243,11 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testVisitPatternMultiple() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C (A B) (D (A B)))");
-		final List elements = new ArrayList();
+		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, "(A B)",
 					   new TreeWizard.ContextVisitor() {
 			@Override
-						   public void visit(Object t, Object parent, int childIndex, Map labels) {
+						   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 							   elements.add(adaptor.getText(t)+"@"+
 											(parent!=null?adaptor.getText(parent):"nil")+
 											"["+childIndex+"]");
@@ -261,11 +261,11 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testVisitPatternMultipleWithLabels() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C (A[foo] B[bar]) (D (A[big] B[dog])))");
-		final List elements = new ArrayList();
+		final List<String> elements = new ArrayList<String>();
 		wiz.visit(t, "(%a:A %b:B)",
 					   new TreeWizard.ContextVisitor() {
 			@Override
-						   public void visit(Object t, Object parent, int childIndex, Map labels) {
+						   public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 							   elements.add(adaptor.getText(t)+"@"+
 											(parent!=null?adaptor.getText(parent):"nil")+
 											"["+childIndex+"]"+labels.get("a")+"&"+labels.get("b"));
@@ -332,7 +332,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testParseLabels() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C)");
-		Map labels = new HashMap();
+		Map<String, Object> labels = new HashMap<String, Object>();
 		boolean valid = wiz.parse(t, "(%a:A %b:B %c:C)", labels);
 		assertTrue(valid);
 		assertEquals("A", labels.get("a").toString());
@@ -343,7 +343,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testParseWithWildcardLabels() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C)");
-		Map labels = new HashMap();
+		Map<String, Object> labels = new HashMap<String, Object>();
 		boolean valid = wiz.parse(t, "(A %b:. %c:.)", labels);
 		assertTrue(valid);
 		assertEquals("B", labels.get("b").toString());
@@ -353,7 +353,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testParseLabelsAndTestText() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B[foo] C)");
-		Map labels = new HashMap();
+		Map<String, Object> labels = new HashMap<String, Object>();
 		boolean valid = wiz.parse(t, "(%a:A %b:B[foo] %c:C)", labels);
 		assertTrue(valid);
 		assertEquals("A", labels.get("a").toString());
@@ -364,7 +364,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testParseLabelsInNestedTree() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A (B C) (D E))");
-		Map labels = new HashMap();
+		Map<String, Object> labels = new HashMap<String, Object>();
 		boolean valid = wiz.parse(t, "(%a:A (%b:B %c:C) (%d:D %e:E) )", labels);
 		assertTrue(valid);
 		assertEquals("A", labels.get("a").toString());
@@ -401,8 +401,8 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testFindPattern() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("(A B C (A[foo] B[bar]) (D (A[big] B[dog])))");
-		final List subtrees = wiz.find(t, "(A B)");
-		List elements = subtrees;
+		final List<? extends Object> subtrees = wiz.find(t, "(A B)");
+		List<? extends Object> elements = subtrees;
 		String found = elements.toString();
 		String expecting = "[foo, big]";
 		assertEquals(expecting, found);

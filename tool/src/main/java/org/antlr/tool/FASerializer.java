@@ -41,7 +41,7 @@ public class FASerializer {
      *  walking in case you reuse this object.  Multiple threads will trash
      *  this shared variable.  Use a different FASerializer per thread.
      */
-    protected Set markedStates;
+    protected Set<State> markedStates;
 
     /** Each state we walk will get a new state number for serialization
      *  purposes.  This is the variable that tracks state numbers.
@@ -52,7 +52,7 @@ public class FASerializer {
      *  serializing machines, map old state numbers to new state numbers
      *  by a State object -> Integer new state number HashMap.
      */
-    protected Map stateNumberTranslator;
+    protected Map<State, Integer> stateNumberTranslator;
 
     protected Grammar grammar;
 
@@ -77,13 +77,13 @@ public class FASerializer {
      *  states.
      */
     public String serialize(State s, boolean renumber) {
-        markedStates = new HashSet();
+        markedStates = new HashSet<State>();
         stateCounter = 0;
 		if ( renumber ) {
-			stateNumberTranslator = new HashMap();
+			stateNumberTranslator = new HashMap<State, Integer>();
         	walkFANormalizingStateNumbers(s);
 		}
-		List lines = new ArrayList();
+		List<String> lines = new ArrayList<String>();
         if ( s.getNumberOfTransitions()>0 ) {
 			walkSerializingFA(lines, s);
 		}
@@ -132,7 +132,7 @@ public class FASerializer {
         }
     }
 
-    protected void walkSerializingFA(List lines, State s) {
+    protected void walkSerializingFA(List<String> lines, State s) {
         if ( markedStates.contains(s) ) {
             return; // already visited this node
         }

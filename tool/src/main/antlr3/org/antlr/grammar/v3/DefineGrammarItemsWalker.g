@@ -628,7 +628,7 @@ rewrite_atom
 	if ( state.backtracking == 0 )
 	{
 		Rule r = grammar.getRule(currentRuleName);
-		Set tokenRefsInAlt = r.getTokenRefsInAlt(outerAltNum);
+		Set<String> tokenRefsInAlt = r.getTokenRefsInAlt(outerAltNum);
 		boolean imaginary =
 			$start.getType()==TOKEN_REF &&
 			!tokenRefsInAlt.contains($start.getText());

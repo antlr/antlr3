@@ -58,7 +58,7 @@ public class ANTLRStringStream implements CharStream {
 	 *  move through the input stream.  Indexed from 1..markDepth.
      *  A null is kept @ index 0.  Create upon first call to mark().
 	 */
-	protected List markers;
+	protected List<CharStreamState> markers;
 
 	/** Track the last mark() call result value for use in rewind(). */
 	protected int lastMarker;
@@ -155,7 +155,7 @@ public class ANTLRStringStream implements CharStream {
 	@Override
 	public int mark() {
         if ( markers==null ) {
-            markers = new ArrayList();
+            markers = new ArrayList<CharStreamState>();
             markers.add(null); // depth 0 means no backtracking, leave blank
         }
         markDepth++;

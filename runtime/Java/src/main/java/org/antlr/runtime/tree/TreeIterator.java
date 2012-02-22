@@ -38,7 +38,7 @@ import java.util.Iterator;
  *
  *  Emit navigation nodes (DOWN, UP, and EOF) to let show tree structure.
  */
-public class TreeIterator implements Iterator {
+public class TreeIterator implements Iterator<Object> {
     protected TreeAdaptor adaptor;
     protected Object root;
     protected Object tree;
@@ -52,7 +52,7 @@ public class TreeIterator implements Iterator {
     /** If we emit UP/DOWN nodes, we need to spit out multiple nodes per
      *  next() call.
      */
-    protected FastQueue nodes;
+    protected FastQueue<Object> nodes;
 
     public TreeIterator(Object tree) {
         this(new CommonTreeAdaptor(),tree);
@@ -62,7 +62,7 @@ public class TreeIterator implements Iterator {
         this.adaptor = adaptor;
         this.tree = tree;
         this.root = tree;
-        nodes = new FastQueue();
+        nodes = new FastQueue<Object>();
         down = adaptor.create(Token.DOWN, "DOWN");
         up = adaptor.create(Token.UP, "UP");
         eof = adaptor.create(Token.EOF, "EOF");

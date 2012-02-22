@@ -526,7 +526,7 @@ public class TestCharDFAConversion extends BaseTest {
 		FASerializer serializer = new FASerializer(g);
 		String result = serializer.serialize(dfa.startState);
 		//System.out.print(result);
-		List nonDetAlts = dfa.getUnreachableAlts();
+		List<Integer> nonDetAlts = dfa.getUnreachableAlts();
 		//System.out.println("alts w/o predict state="+nonDetAlts);
 
 		// first make sure nondeterministic alts are as expected

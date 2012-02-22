@@ -1191,7 +1191,7 @@ globalAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
     <scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack <scope.name>_stack = new Stack();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
 <endif>
 >>
 
@@ -1200,7 +1200,7 @@ ruleAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
     <scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack <scope.name>_stack = new Stack();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
 <endif>
 >>
 

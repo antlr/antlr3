@@ -183,7 +183,7 @@ public class DFA {
 	 *     	  ...
 	 *      };
 	 */
-	public Map edgeTransitionClassMap = new LinkedHashMap();
+	public Map<List<Integer>, Integer> edgeTransitionClassMap = new LinkedHashMap<List<Integer>, Integer>();
 
 	/** The unique edge transition class number; every time we see a new
 	 *  set of edges emanating from a state, we number it so we can reuse
@@ -202,20 +202,20 @@ public class DFA {
 	 */
 
 	/** List of special DFAState objects */
-	public List specialStates;
+	public List<DFAState> specialStates;
 	/** List of ST for special states. */
-	public List specialStateSTs;
-	public Vector accept;
-	public Vector eot;
-	public Vector eof;
-	public Vector min;
-	public Vector max;
-	public Vector special;
-	public Vector transition;
+	public List<ST> specialStateSTs;
+	public Vector<Integer> accept;
+	public Vector<Integer> eot;
+	public Vector<Integer> eof;
+	public Vector<Integer> min;
+	public Vector<Integer> max;
+	public Vector<Integer> special;
+	public Vector<Vector<Integer>> transition;
 	/** just the Vector<Integer> indicating which unique edge table is at
 	 *  position i.
 	 */
-	public Vector transitionEdgeTables; // not used by java yet
+	public Vector<Integer> transitionEdgeTables; // not used by java yet
 	protected int uniqueCompressedSpecialStateNum = 0;
 
 	/** Which generator to use if we're building state tables */
@@ -320,20 +320,20 @@ public class DFA {
 	// or even consistently formatted strings acceptable to java that
 	// I am forced to build the individual char elements here
 
-	public List getJavaCompressedAccept() { return getRunLengthEncoding(accept); }
-	public List getJavaCompressedEOT() { return getRunLengthEncoding(eot); }
-	public List getJavaCompressedEOF() { return getRunLengthEncoding(eof); }
-	public List getJavaCompressedMin() { return getRunLengthEncoding(min); }
-	public List getJavaCompressedMax() { return getRunLengthEncoding(max); }
-	public List getJavaCompressedSpecial() { return getRunLengthEncoding(special); }
-	public List getJavaCompressedTransition() {
+	public List<? extends String> getJavaCompressedAccept() { return getRunLengthEncoding(accept); }
+	public List<? extends String> getJavaCompressedEOT() { return getRunLengthEncoding(eot); }
+	public List<? extends String> getJavaCompressedEOF() { return getRunLengthEncoding(eof); }
+	public List<? extends String> getJavaCompressedMin() { return getRunLengthEncoding(min); }
+	public List<? extends String> getJavaCompressedMax() { return getRunLengthEncoding(max); }
+	public List<? extends String> getJavaCompressedSpecial() { return getRunLengthEncoding(special); }
+	public List<List<? extends String>> getJavaCompressedTransition() {
 		if ( transition==null || transition.isEmpty() ) {
 			return null;
 		}
-		List encoded = new ArrayList(transition.size());
+		List<List<? extends String>> encoded = new ArrayList<List<? extends String>>(transition.size());
 		// walk Vector<Vector<FormattedInteger>> which is the transition[][] table
 		for (int i = 0; i < transition.size(); i++) {
-			Vector transitionsForState = (Vector) transition.elementAt(i);
+			Vector<Integer> transitionsForState = transition.elementAt(i);
 			encoded.add(getRunLengthEncoding(transitionsForState));
 		}
 		return encoded;
@@ -349,16 +349,16 @@ public class DFA {
 	 *  and \uFFFF for 16bit.  Hideous and specific to Java, but it is the
 	 *  only target bad enough to need it.
 	 */
-	public List getRunLengthEncoding(List data) {
+	public List<? extends String> getRunLengthEncoding(List<Integer> data) {
 		if ( data==null || data.isEmpty() ) {
 			// for states with no transitions we want an empty string ""
 			// to hold its place in the transitions array.
-			List empty = new ArrayList();
+			List<String> empty = new ArrayList<String>();
 			empty.add("");
 			return empty;
 		}
 		int size = Math.max(2,data.size()/2);
-		List encoded = new ArrayList(size); // guess at size
+		List<String> encoded = new ArrayList<String>(size); // guess at size
 		// scan values looking for runs
 		int i = 0;
 		Integer emptyValue = Utils.integer(-1);
@@ -396,27 +396,27 @@ public class DFA {
 			generator.target.getTargetStringLiteralFromString(description);
 
 		// create all the tables
-		special = new Vector(this.getNumberOfStates()); // Vector<short>
+		special = new Vector<Integer>(this.getNumberOfStates()); // Vector<short>
 		special.setSize(this.getNumberOfStates());
-		specialStates = new ArrayList();				// List<DFAState>
-		specialStateSTs = new ArrayList();				// List<ST>
-		accept = new Vector(this.getNumberOfStates()); // Vector<int>
+		specialStates = new ArrayList<DFAState>();				// List<DFAState>
+		specialStateSTs = new ArrayList<ST>();				// List<ST>
+		accept = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		accept.setSize(this.getNumberOfStates());
-		eot = new Vector(this.getNumberOfStates()); // Vector<int>
+		eot = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		eot.setSize(this.getNumberOfStates());
-		eof = new Vector(this.getNumberOfStates()); // Vector<int>
+		eof = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		eof.setSize(this.getNumberOfStates());
-		min = new Vector(this.getNumberOfStates()); // Vector<int>
+		min = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		min.setSize(this.getNumberOfStates());
-		max = new Vector(this.getNumberOfStates()); // Vector<int>
+		max = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		max.setSize(this.getNumberOfStates());
-		transition = new Vector(this.getNumberOfStates()); // Vector<Vector<int>>
+		transition = new Vector<Vector<Integer>>(this.getNumberOfStates()); // Vector<Vector<int>>
 		transition.setSize(this.getNumberOfStates());
-		transitionEdgeTables = new Vector(this.getNumberOfStates()); // Vector<Vector<int>>
+		transitionEdgeTables = new Vector<Integer>(this.getNumberOfStates()); // Vector<int>
 		transitionEdgeTables.setSize(this.getNumberOfStates());
 
 		// for each state in the DFA, fill relevant tables.
-		Iterator it;
+		Iterator<DFAState> it;
 		if ( getUserMaxLookahead()>0 ) {
 			it = states.iterator();
 		}
@@ -548,7 +548,7 @@ public class DFA {
 		int smax = ((Integer)max.get(s.stateNumber)).intValue();
 		int smin = ((Integer)min.get(s.stateNumber)).intValue();
 
-		Vector stateTransitions = new Vector(smax-smin+1);
+		Vector<Integer> stateTransitions = new Vector<Integer>(smax-smin+1);
 		stateTransitions.setSize(smax-smin+1);
 		transition.set(s.stateNumber, stateTransitions);
 		for (int j = 0; j < s.getNumberOfTransitions(); j++) {
@@ -985,10 +985,10 @@ public class DFA {
 			DFAState a = getAcceptState(i);
 			//System.out.println("alt "+i+": "+a);
 			if ( a!=null ) {
-				Set synpreds = a.getGatedSyntacticPredicatesInNFAConfigurations();
+				Set<? extends SemanticContext> synpreds = a.getGatedSyntacticPredicatesInNFAConfigurations();
 				if ( synpreds!=null ) {
 					// add all the predicates we find (should be just one, right?)
-					for (Iterator it = synpreds.iterator(); it.hasNext();) {
+					for (Iterator<? extends SemanticContext> it = synpreds.iterator(); it.hasNext();) {
 						SemanticContext semctx = (SemanticContext) it.next();
 						// System.out.println("synpreds: "+semctx);
 						nfa.grammar.synPredUsedInDFA(this, semctx);
@@ -1095,7 +1095,7 @@ public class DFA {
 //	}
 
     protected void initAltRelatedInfo() {
-        unreachableAlts = new LinkedList();
+        unreachableAlts = new LinkedList<Integer>();
         for (int i = 1; i <= nAlts; i++) {
             unreachableAlts.add(Utils.integer(i));
         }

@@ -42,7 +42,7 @@ public class SerializedGrammar {
 
     public String name;
     public char type; // in {l, p, t, c}
-    public List rules;
+    public List<? extends Rule> rules;
 
     class Rule {
         String name;
@@ -113,8 +113,8 @@ public class SerializedGrammar {
         rules = readRules(in, numRules);
     }
 
-    protected List readRules(DataInputStream in, int numRules) throws IOException {
-        List rules = new ArrayList();
+    protected List<? extends Rule> readRules(DataInputStream in, int numRules) throws IOException {
+        List<Rule> rules = new ArrayList<Rule>();
         for (int i=0; i<numRules; i++) {
             Rule r = readRule(in);
             rules.add(r);

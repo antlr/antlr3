@@ -70,8 +70,8 @@ public class PythonTarget extends Target {
 	return String.valueOf(c);
     }
 
-    private List splitLines(String text) {
-		ArrayList l = new ArrayList();
+    private List<String> splitLines(String text) {
+		ArrayList<String> l = new ArrayList<String>();
 		int idx = 0;
 
 		while ( true ) {
@@ -90,7 +90,7 @@ public class PythonTarget extends Target {
     }
 
 	@Override
-    public List postProcessAction(List chunks, Token actionToken) {
+    public List<Object> postProcessAction(List<Object> chunks, Token actionToken) {
 		/* TODO
 		   - check for and report TAB usage
 		 */
@@ -105,7 +105,7 @@ public class PythonTarget extends Target {
 		   - where every LF is at the end of a string chunk
 		*/
 
-		List nChunks = new ArrayList();
+		List<Object> nChunks = new ArrayList<Object>();
 		for (int i = 0; i < chunks.size(); i++) {
 			Object chunk = chunks.get(i);
 
@@ -122,11 +122,7 @@ public class PythonTarget extends Target {
 					text = ws + text;
 				}
 
-				List parts = splitLines(text);
-				for ( int j = 0 ; j < parts.size() ; j++ ) {
-					chunk = parts.get(j);
-					nChunks.add(chunk);
-				}
+				nChunks.addAll(splitLines(text));
 			}
 			else {
 				if ( nChunks.isEmpty() && actionToken.getCharPositionInLine() >= 0 ) {

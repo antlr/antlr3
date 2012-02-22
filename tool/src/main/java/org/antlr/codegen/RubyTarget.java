@@ -42,8 +42,8 @@ public class RubyTarget extends Target
     /** A set of ruby keywords which are used to escape labels and method names
      *  which will cause parse errors in the ruby source
      */
-    public static final Set rubyKeywords =
-    new HashSet() {
+    public static final Set<String> rubyKeywords =
+    new HashSet<String>() {
         {
         	add( "alias" );     add( "END" );     add( "retry" );
         	add( "and" );       add( "ensure" );  add( "return" );

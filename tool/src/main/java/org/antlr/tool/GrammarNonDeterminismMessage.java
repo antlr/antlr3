@@ -29,6 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.Label;
 import org.antlr.analysis.NFAState;
 import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
@@ -68,13 +69,13 @@ public class GrammarNonDeterminismMessage extends Message {
 
 		ST st = getMessageTemplate();
 		// Now fill template with information about problemState
-		List labels = probe.getSampleNonDeterministicInputSequence(problemState);
+		List<Label> labels = probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = probe.getInputSequenceDisplay(labels);
 		st.add("input", input);
 
 		if ( probe.dfa.isTokensRuleDecision() ) {
-			Set disabledAlts = probe.getDisabledAlternatives(problemState);
-			for (Iterator it = disabledAlts.iterator(); it.hasNext();) {
+			Set<Integer> disabledAlts = probe.getDisabledAlternatives(problemState);
+			for (Iterator<Integer> it = disabledAlts.iterator(); it.hasNext();) {
 				Integer altI = (Integer) it.next();
 				String tokenName =
 					probe.getTokenNameForTokensRuleAlt(altI.intValue());
@@ -90,12 +91,12 @@ public class GrammarNonDeterminismMessage extends Message {
 			st.add("disabled", probe.getDisabledAlternatives(problemState));
 		}
 
-		List nondetAlts = probe.getNonDeterministicAltsForState(problemState);
+		List<Integer> nondetAlts = probe.getNonDeterministicAltsForState(problemState);
 		NFAState nfaStart = probe.dfa.getNFADecisionStartState();
 		// all state paths have to begin with same NFA state
 		int firstAlt = 0;
 		if ( nondetAlts!=null ) {
-			for (Iterator iter = nondetAlts.iterator(); iter.hasNext();) {
+			for (Iterator<Integer> iter = nondetAlts.iterator(); iter.hasNext();) {
 				Integer displayAltI = (Integer) iter.next();
 				if ( DecisionProbe.verbose ) {
 					int tracePathAlt =
@@ -103,7 +104,7 @@ public class GrammarNonDeterminismMessage extends Message {
 					if ( firstAlt == 0 ) {
 						firstAlt = tracePathAlt;
 					}
-					List path =
+					List<? extends NFAState> path =
 						probe.getNFAPathStatesForAlt(firstAlt,
 													 tracePathAlt,
 													 labels);

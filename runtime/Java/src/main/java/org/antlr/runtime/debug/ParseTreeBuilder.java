@@ -41,8 +41,8 @@ import java.util.List;
 public class ParseTreeBuilder extends BlankDebugEventListener {
 	public static final String EPSILON_PAYLOAD = "<epsilon>";
 	
-	Stack callStack = new Stack();
-	List hiddenTokens = new ArrayList();
+	Stack<ParseTree> callStack = new Stack<ParseTree>();
+	List<Token> hiddenTokens = new ArrayList<Token>();
 	int backtracking = 0;
 
 	public ParseTreeBuilder(String grammarName) {
@@ -96,7 +96,7 @@ public class ParseTreeBuilder extends BlankDebugEventListener {
 		ParseTree ruleNode = (ParseTree)callStack.peek();
 		ParseTree elementNode = create(token);
 		elementNode.hiddenTokens = this.hiddenTokens;
-		this.hiddenTokens = new ArrayList();
+		this.hiddenTokens = new ArrayList<Token>();
 		ruleNode.addChild(elementNode);
 	}
 

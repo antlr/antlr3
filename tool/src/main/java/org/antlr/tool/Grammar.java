@@ -194,10 +194,10 @@ public class Grammar {
 	 *  interpretation of the key/value pairs...they are simply available for
 	 *  who wants them.
 	 */
-	protected Map options;
+	protected Map<String, Object> options;
 
-	public static final Set legalLexerOptions =
-			new HashSet() {
+	public static final Set<String> legalLexerOptions =
+			new HashSet<String>() {
 				{
 				add("language"); add("tokenVocab");
 				add("TokenLabelType");
@@ -209,8 +209,8 @@ public class Grammar {
 				}
 			};
 
-	public static final Set legalParserOptions =
-			new HashSet() {
+	public static final Set<String> legalParserOptions =
+			new HashSet<String>() {
 				{
 				add("language"); add("tokenVocab");
 				add("output"); add("rewrite"); add("ASTLabelType");
@@ -222,8 +222,8 @@ public class Grammar {
 				}
 			};
 
-    public static final Set legalTreeParserOptions =
-        new HashSet() {
+    public static final Set<String> legalTreeParserOptions =
+        new HashSet<String>() {
             {
                 add("language"); add("tokenVocab");
                 add("output"); add("rewrite"); add("ASTLabelType");
@@ -236,36 +236,36 @@ public class Grammar {
             }
         };
 
-	public static final Set doNotCopyOptionsToLexer =
-		new HashSet() {
+	public static final Set<String> doNotCopyOptionsToLexer =
+		new HashSet<String>() {
 			{
 				add("output"); add("ASTLabelType"); add("superClass");
 				add("k"); add("backtrack"); add("memoize"); add("rewrite");
 			}
 		};
 
-	public static final Map defaultOptions =
-			new HashMap() {
+	public static final Map<String, String> defaultOptions =
+			new HashMap<String, String>() {
 				{
 					put("language","Java");
 				}
 			};
 
-	public static final Set legalBlockOptions =
-			new HashSet() {{add("k"); add("greedy"); add("backtrack"); add("memoize");}};
+	public static final Set<String> legalBlockOptions =
+			new HashSet<String>() {{add("k"); add("greedy"); add("backtrack"); add("memoize");}};
 
 	/** What are the default options for a subrule? */
-	public static final Map defaultBlockOptions =
-			new HashMap() {{put("greedy","true");}};
+	public static final Map<String, String> defaultBlockOptions =
+			new HashMap<String, String>() {{put("greedy","true");}};
 
-	public static final Map defaultLexerBlockOptions =
-			new HashMap() {{put("greedy","true");}};
+	public static final Map<String, String> defaultLexerBlockOptions =
+			new HashMap<String, String>() {{put("greedy","true");}};
 
 	// Token options are here to avoid contaminating Token object in runtime
 
 	/** Legal options for terminal refs like ID<node=MyVarNode> */
-	public static final Set legalTokenOptions =
-		new HashSet() {
+	public static final Set<String> legalTokenOptions =
+		new HashSet<String>() {
 			{
 				add(defaultTokenOption);
 				add("type");
@@ -319,7 +319,7 @@ public class Grammar {
 	/** For ANTLRWorks, we want to be able to map a line:col to a specific
 	 *  decision DFA so it can display DFA.
 	 */
-	Map lineColumnToLookaheadDFAMap = new HashMap();
+	Map<String, DFA> lineColumnToLookaheadDFAMap = new HashMap<String, DFA>();
 
 	public Tool tool;
 
@@ -328,7 +328,7 @@ public class Grammar {
 	 */
 	protected Set<GrammarAST> ruleRefs = new HashSet<GrammarAST>();
 
-	protected Set<GrammarAST> scopedRuleRefs = new HashSet();
+	protected Set<GrammarAST> scopedRuleRefs = new HashSet<GrammarAST>();
 
 	/** The unique set of all token ID references in any rule */
 	protected Set<Token> tokenIDRefs = new HashSet<Token>();
@@ -395,7 +395,7 @@ public class Grammar {
 	 *  this but I'm leaving in case other targets need it.
 	 *  see NameSpaceChecker.lookForReferencesToUndefinedSymbols()
 	 */
-	protected Set<Rule> delegatedRuleReferences = new HashSet();
+	protected Set<Rule> delegatedRuleReferences = new HashSet<Rule>();
 
 	/** The ANTLRParser tracks lexer rules when reading combined grammars
 	 *  so we can build the Tokens rule.
@@ -405,7 +405,7 @@ public class Grammar {
 	/** Track the scopes defined outside of rules and the scopes associated
 	 *  with all rules (even if empty).
 	 */
-	protected Map scopes = new HashMap();
+	protected Map<String, AttributeScope> scopes = new HashMap<String, AttributeScope>();
 
 	/** An AST that records entire input grammar with all rules.  A simple
 	 *  grammar with one rule, "grammar t; a : A | B ;", looks like:
@@ -474,7 +474,7 @@ public class Grammar {
 	/** Track decisions with syn preds specified for reporting.
 	 *  This is the a set of BLOCK type AST nodes.
 	 */
-	public Set<GrammarAST> blocksWithSynPreds = new HashSet();
+	public Set<GrammarAST> blocksWithSynPreds = new HashSet<GrammarAST>();
 
 	/** Track decisions that actually use the syn preds in the DFA.
 	 *  Computed during NFA to DFA conversion.
@@ -487,15 +487,15 @@ public class Grammar {
 	 *  incident edges can have synpreds.  Same is try for
 	 *  decisionsWhoseDFAsUsesSynPreds.
 	 */
-	public Set<String> synPredNamesUsedInDFA = new HashSet();
+	public Set<String> synPredNamesUsedInDFA = new HashSet<String>();
 
 	/** Track decisions with syn preds specified for reporting.
 	 *  This is the a set of BLOCK type AST nodes.
 	 */
-	public Set<GrammarAST> blocksWithSemPreds = new HashSet();
+	public Set<GrammarAST> blocksWithSemPreds = new HashSet<GrammarAST>();
 
 	/** Track decisions that actually use the syn preds in the DFA. */
-	public Set<DFA> decisionsWhoseDFAsUsesSemPreds = new HashSet();
+	public Set<DFA> decisionsWhoseDFAsUsesSemPreds = new HashSet<DFA>();
 
 	protected boolean allDecisionDFACreated = false;
 
@@ -788,7 +788,7 @@ public class Grammar {
 		}
 		// make sure generated grammar has the same options
 		if ( options!=null ) {
-			Iterator optionNames = options.keySet().iterator();
+			Iterator<String> optionNames = options.keySet().iterator();
 			while (optionNames.hasNext()) {
 				String optionName = (String) optionNames.next();
 				if ( !doNotCopyOptionsToLexer.contains(optionName) ) {
@@ -913,7 +913,7 @@ public class Grammar {
 	/** for any syntactic predicates, we need to define rules for them; they will get
 	 *  defined automatically like any other rule. :)
 	 */
-	protected List getArtificialRulesForSyntacticPredicates(LinkedHashMap<String,GrammarAST> nameToSynpredASTMap)
+	protected List<? extends GrammarAST> getArtificialRulesForSyntacticPredicates(LinkedHashMap<String,GrammarAST> nameToSynpredASTMap)
 	{
 		List<GrammarAST> rules = new ArrayList<GrammarAST>();
 		if ( nameToSynpredASTMap==null ) {
@@ -933,7 +933,7 @@ public class Grammar {
 
 	public void addRulesForSyntacticPredicates() {
 		// Get syn pred rules and add to existing tree
-		List synpredRules =
+		List<? extends GrammarAST> synpredRules =
 			getArtificialRulesForSyntacticPredicates(nameToSynpredASTMap);
 		for (int i = 0; i < synpredRules.size(); i++) {
 			GrammarAST rAST = (GrammarAST) synpredRules.get(i);
@@ -972,8 +972,8 @@ public class Grammar {
 		nfa = new NFA(this);
 		factory = new NFAFactory(nfa);
 
-		Collection rules = getRules();
-		for (Iterator itr = rules.iterator(); itr.hasNext();) {
+		Collection<Rule> rules = getRules();
+		for (Iterator<Rule> itr = rules.iterator(); itr.hasNext();) {
 			Rule r = (Rule) itr.next();
 			String ruleName = r.name;
 			NFAState ruleBeginState = factory.newState();
@@ -1274,7 +1274,7 @@ outer:
 				disjointSets.set(i, intersection);
 
 				// Compute s_i-t to see what is in current set and not in incoming
-				IntSet existingMinusNewElements = s_i.subtract(t);
+				IntervalSet existingMinusNewElements = s_i.subtract(t);
 				//System.out.println(s_i+"-"+t+"="+existingMinusNewElements);
 				if ( !existingMinusNewElements.isNil() ) {
 					// found a new character class, add to the end (doesn't affect
@@ -1411,7 +1411,7 @@ outer:
 	 */
 	public void defineRule(Token ruleToken,
 						   String modifier,
-						   Map options,
+						   Map<String, Object> options,
 						   GrammarAST tree,
 						   GrammarAST argActionAST,
 						   int numAlts)
@@ -1456,7 +1456,7 @@ outer:
 										   String currentRuleName)
 	{
 		if ( nameToSynpredASTMap==null ) {
-			nameToSynpredASTMap = new LinkedHashMap();
+			nameToSynpredASTMap = new LinkedHashMap<String, GrammarAST>();
 		}
 		String predName =
 			SYNPRED_RULE_PREFIX+(nameToSynpredASTMap.size() + 1)+"_"+name;
@@ -1465,7 +1465,7 @@ outer:
 		return predName;
 	}
 
-	public LinkedHashMap getSyntacticPredicates() {
+	public LinkedHashMap<String, GrammarAST> getSyntacticPredicates() {
 		return nameToSynpredASTMap;
 	}
 
@@ -1749,7 +1749,7 @@ outer:
 		return (AttributeScope)scopes.get(name);
 	}
 
-	public Map getGlobalScopes() {
+	public Map<String, AttributeScope> getGlobalScopes() {
 		return scopes;
 	}
 
@@ -1884,8 +1884,8 @@ outer:
 	 *  rule labels for example.
 	 */
 	protected void examineAllExecutableActions() {
-		Collection rules = getRules();
-		for (Iterator it = rules.iterator(); it.hasNext();) {
+		Collection<Rule> rules = getRules();
+		for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
 			Rule r = (Rule) it.next();
 			// walk all actions within the rule elements, args, and exceptions
 			List<GrammarAST> actions = r.getInlineActions();
@@ -1896,8 +1896,8 @@ outer:
 				sniffer.analyze();
 			}
 			// walk any named actions like @init, @after
-			Collection<GrammarAST> namedActions = r.getActions().values();
-			for (Iterator it2 = namedActions.iterator(); it2.hasNext();) {
+			Collection<? extends Object> namedActions = r.getActions().values();
+			for (Iterator<? extends Object> it2 = namedActions.iterator(); it2.hasNext();) {
 				GrammarAST actionAST = (GrammarAST) it2.next();
 				ActionAnalysis sniffer =
 					new ActionAnalysis(this, r.name, actionAST);
@@ -1913,8 +1913,8 @@ outer:
 		if ( type==LEXER ) {
 			return;
 		}
-		Set rules = nameToRuleMap.keySet();
-		for (Iterator it = rules.iterator(); it.hasNext();) {
+		Set<String> rules = nameToRuleMap.keySet();
+		for (Iterator<String> it = rules.iterator(); it.hasNext();) {
 			String ruleName = (String) it.next();
 			Rule r = getRule(ruleName);
 			removeUselessLabels(r.getRuleLabels());
@@ -1925,13 +1925,13 @@ outer:
 	/** A label on a rule is useless if the rule has no return value, no
 	 *  tree or template output, and it is not referenced in an action.
 	 */
-	protected void removeUselessLabels(Map ruleToElementLabelPairMap) {
+	protected void removeUselessLabels(Map<String, LabelElementPair> ruleToElementLabelPairMap) {
 		if ( ruleToElementLabelPairMap==null ) {
 			return;
 		}
-		Collection labels = ruleToElementLabelPairMap.values();
-		List kill = new ArrayList();
-		for (Iterator labelit = labels.iterator(); labelit.hasNext();) {
+		Collection<LabelElementPair> labels = ruleToElementLabelPairMap.values();
+		List<String> kill = new ArrayList<String>();
+		for (Iterator<LabelElementPair> labelit = labels.iterator(); labelit.hasNext();) {
 			LabelElementPair pair = (LabelElementPair) labelit.next();
 			Rule refdRule = getRule(pair.elementRef.getText());
 			if ( refdRule!=null && !refdRule.getHasReturnValue() && !pair.actionReferencesLabel ) {
@@ -2011,7 +2011,7 @@ outer:
 		}
 	}
 
-	public List checkAllRulesForLeftRecursion() {
+	public List<? extends Collection<? extends Rule>> checkAllRulesForLeftRecursion() {
 		return sanity.checkAllRulesForLeftRecursion();
 	}
 
@@ -2089,7 +2089,7 @@ outer:
 	}
 
 	/** Get the list of tokens that are IDs like BLOCK and LPAREN */
-	public Set getTokenIDs() {
+	public Set<String> getTokenIDs() {
 		return composite.tokenIDToTypeMap.keySet();
 	}
 
@@ -2097,8 +2097,8 @@ outer:
 	 *  corresponding token ID like INT or KEYWORD_BEGIN; for stuff
 	 *  like 'begin'.
 	 */
-	public Collection getTokenTypesWithoutID() {
-		List types = new ArrayList();
+	public Collection<Integer> getTokenTypesWithoutID() {
+		List<Integer> types = new ArrayList<Integer>();
 		for (int t =Label.MIN_TOKEN_TYPE; t<=getMaxTokenType(); t++) {
 			String name = getTokenDisplayName(t);
 			if ( name.charAt(0)=='\'' ) {
@@ -2214,8 +2214,8 @@ outer:
 	 *  Returns the max token type found.
 	 */
 	public int importTokenVocabulary(Grammar importFromGr) {
-		Set importedTokenIDs = importFromGr.getTokenIDs();
-		for (Iterator it = importedTokenIDs.iterator(); it.hasNext();) {
+		Set<String> importedTokenIDs = importFromGr.getTokenIDs();
+		for (Iterator<String> it = importedTokenIDs.iterator(); it.hasNext();) {
 			String tokenID = (String) it.next();
 			int tokenType = importFromGr.getTokenType(tokenID);
 			composite.maxTokenType = Math.max(composite.maxTokenType,tokenType);
@@ -2492,7 +2492,7 @@ outer:
             composite.getRootGrammar().atLeastOneBacktrackOption = true;
         }
         if ( options==null ) {
-			options = new HashMap();
+			options = new HashMap<String, Object>();
 		}
 		options.put(key, value);
 		return key;
@@ -2511,13 +2511,13 @@ outer:
 		}
 	}
 
-	public void setOptions(Map options, Token optionsStartToken) {
+	public void setOptions(Map<String, Object> options, Token optionsStartToken) {
 		if ( options==null ) {
 			this.options = null;
 			return;
 		}
-		Set keys = options.keySet();
-		for (Iterator it = keys.iterator(); it.hasNext();) {
+		Set<String> keys = options.keySet();
+		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
 			String optionName = (String) it.next();
 			Object optionValue = options.get(optionName);
 			String stored=setOption(optionName, optionValue, optionsStartToken);
@@ -2636,14 +2636,14 @@ outer:
 	 *
 	 *  delegatedRules = imported - overridden
 	 */
-	public Set<Rule> getDelegatedRules() {
+	public Set<? extends Rule> getDelegatedRules() {
 		return composite.getDelegatedRules(this);
 	}
 
 	/** Get set of all rules imported from all delegate grammars even if
 	 *  indirectly delegated.
 	 */
-	public Set<Rule> getAllImportedRules() {
+	public Set<? extends Rule> getAllImportedRules() {
 		return composite.getAllImportedRules(this);
 	}
 
@@ -2769,8 +2769,8 @@ outer:
 		return d;
 	}
 
-	public List getDecisionNFAStartStateList() {
-		List states = new ArrayList(100);
+	public List<NFAState> getDecisionNFAStartStateList() {
+		List<NFAState> states = new ArrayList<NFAState>(100);
 		for (int d = 0; d < indexToDecision.size(); d++) {
 			Decision dec = (Decision) indexToDecision.get(d);
 			states.add(dec.startState);
@@ -2811,10 +2811,10 @@ outer:
 	 *  This is not particularly fast as it walks entire line:col->DFA map
 	 *  looking for a prefix of "line:".
 	 */
-	public List getLookaheadDFAColumnsForLineInFile(int line) {
+	public List<Integer> getLookaheadDFAColumnsForLineInFile(int line) {
 		String prefix = line+":";
-		List columns = new ArrayList();
-		for(Iterator iter = lineColumnToLookaheadDFAMap.keySet().iterator();
+		List<Integer> columns = new ArrayList<Integer>();
+		for(Iterator<String> iter = lineColumnToLookaheadDFAMap.keySet().iterator();
 			iter.hasNext(); ) {
 			String key = (String)iter.next();
 			if(key.startsWith(prefix)) {
@@ -2830,7 +2830,7 @@ outer:
 			new StringBuffer().append(line + ":").append(col).toString());
 	}
 
-	public Map getLineColumnToLookaheadDFAMap() {
+	public Map<String, DFA> getLineColumnToLookaheadDFAMap() {
 		return lineColumnToLookaheadDFAMap;
 	}
 

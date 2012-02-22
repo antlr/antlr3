@@ -291,9 +291,9 @@ public class NFAFactory {
 	 *  not invoked by another rule (they can only be invoked from outside).
 	 *  These are the start rules.
      */
-    public int build_EOFStates(Collection rules) {
+    public int build_EOFStates(Collection<Rule> rules) {
 		int numberUnInvokedRules = 0;
-        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
+        for (Iterator<Rule> iterator = rules.iterator(); iterator.hasNext();) {
 			Rule r = (Rule) iterator.next();
 			NFAState endNFAState = r.stopState;
             // Is this rule a start symbol?  (no follow links)
@@ -384,7 +384,7 @@ public class NFAFactory {
      *
      *  Set alt number (1..n) in the left-Transition NFAState.
      */
-    public StateCluster build_AlternativeBlock(List alternativeStateClusters)
+    public StateCluster build_AlternativeBlock(List<StateCluster> alternativeStateClusters)
     {
         StateCluster result;
         if ( alternativeStateClusters==null || alternativeStateClusters.isEmpty() ) {
@@ -411,7 +411,7 @@ public class NFAFactory {
         NFAState blockEndNFAState = newState();
         blockEndNFAState.setDescription("end block");
         int altNum = 1;
-        for (Iterator iter = alternativeStateClusters.iterator(); iter.hasNext();) {
+        for (Iterator<StateCluster> iter = alternativeStateClusters.iterator(); iter.hasNext();) {
             StateCluster g = (StateCluster) iter.next();
             // add begin NFAState for this alt connected by epsilon
             NFAState left = newState();
@@ -700,7 +700,7 @@ public class NFAFactory {
         // make optional . alt
         StateCluster optionalNodeAlt = build_Wildcard(associatedAST);
 
-        List alts = new ArrayList();
+        List<StateCluster> alts = new ArrayList<StateCluster>();
         alts.add(wildRoot);
         alts.add(optionalNodeAlt);
         StateCluster blk = build_AlternativeBlock(alts);

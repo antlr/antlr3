@@ -49,7 +49,7 @@ public class RewriteRuleNodeStream extends RewriteRuleElementStream {
 	/** Create a stream, but feed off an existing list */
 	public RewriteRuleNodeStream(TreeAdaptor adaptor,
 								 String elementDescription,
-								 List elements)
+								 List<Object> elements)
 	{
 		super(adaptor, elementDescription, elements);
 	}

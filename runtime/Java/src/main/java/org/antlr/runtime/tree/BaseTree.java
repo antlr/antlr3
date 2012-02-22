@@ -37,7 +37,7 @@ import java.util.List;
  *  non-null node is called "nil".
  */
 public abstract class BaseTree implements Tree {
-	protected List children;
+	protected List<Object> children;
 
 	public BaseTree() {
 	}
@@ -60,7 +60,7 @@ public abstract class BaseTree implements Tree {
 	/** Get the children internal List; note that if you directly mess with
 	 *  the list, do so at your own risk.
 	 */
-	public List getChildren() {
+	public List<? extends Object> getChildren() {
 		return children;
 	}
 
@@ -132,7 +132,7 @@ public abstract class BaseTree implements Tree {
 	}
 
 	/** Add all elements of kids list as children of this node */
-	public void addChildren(List kids) {
+	public void addChildren(List<? extends Tree> kids) {
 		for (int i = 0; i < kids.size(); i++) {
 			Tree t = (Tree) kids.get(i);
 			addChild(t);
@@ -199,13 +199,13 @@ public abstract class BaseTree implements Tree {
 		int replacingHowMany = stopChildIndex - startChildIndex + 1;
 		int replacingWithHowMany;
 		BaseTree newTree = (BaseTree)t;
-		List newChildren;
+		List<Object> newChildren;
 		// normalize to a list of children to add: newChildren
 		if ( newTree.isNil() ) {
 			newChildren = newTree.children;
 		}
 		else {
-			newChildren = new ArrayList(1);
+			newChildren = new ArrayList<Object>(1);
 			newChildren.add(newTree);
 		}
 		replacingWithHowMany = newChildren.size();
@@ -249,8 +249,8 @@ public abstract class BaseTree implements Tree {
 	}
 
 	/** Override in a subclass to change the impl of children list */
-	protected List createChildrenList() {
-		return new ArrayList();
+	protected List<Object> createChildrenList() {
+		return new ArrayList<Object>();
 	}
 
 	@Override
@@ -344,9 +344,9 @@ public abstract class BaseTree implements Tree {
      *  list is the root and the last is the parent of this node.
      */
 	@Override
-    public List getAncestors() {
+    public List<? extends Tree> getAncestors() {
         if ( getParent()==null ) return null;
-        List ancestors = new ArrayList();
+        List<Tree> ancestors = new ArrayList<Tree>();
         Tree t = this;
         t = t.getParent();
         while ( t!=null ) {

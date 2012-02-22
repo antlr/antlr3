@@ -710,7 +710,7 @@ public abstract class BaseRecognizer {
 	 *  This is very useful for error messages and for context-sensitive
 	 *  error recovery.
 	 */
-	public List getRuleInvocationStack() {
+	public List<String> getRuleInvocationStack() {
 		String parserClassName = getClass().getName();
 		return getRuleInvocationStack(new Throwable(), parserClassName);
 	}
@@ -722,10 +722,10 @@ public abstract class BaseRecognizer {
 	 *
 	 *  TODO: move to a utility class or something; weird having lexer call this
 	 */
-	public static List getRuleInvocationStack(Throwable e,
+	public static List<String> getRuleInvocationStack(Throwable e,
 											  String recognizerClassName)
 	{
-		List rules = new ArrayList();
+		List<String> rules = new ArrayList<String>();
 		StackTraceElement[] stack = e.getStackTrace();
 		int i;
 		for (i=stack.length-1; i>=0; i--) {
@@ -771,9 +771,9 @@ public abstract class BaseRecognizer {
 	/** A convenience method for use most often with template rewrites.
 	 *  Convert a List<Token> to List<String>
 	 */
-	public List toStrings(List tokens) {
+	public List<String> toStrings(List<? extends Token> tokens) {
 		if ( tokens==null ) return null;
-		List strings = new ArrayList(tokens.size());
+		List<String> strings = new ArrayList<String>(tokens.size());
 		for (int i=0; i<tokens.size(); i++) {
 			strings.add(((Token)tokens.get(i)).getText());
 		}
@@ -792,7 +792,7 @@ public abstract class BaseRecognizer {
 	 */
 	public int getRuleMemoization(int ruleIndex, int ruleStartIndex) {
 		if ( state.ruleMemo[ruleIndex]==null ) {
-			state.ruleMemo[ruleIndex] = new HashMap();
+			state.ruleMemo[ruleIndex] = new HashMap<Integer, Integer>();
 		}
 		Integer stopIndexI =
 			(Integer)state.ruleMemo[ruleIndex].get(new Integer(ruleStartIndex));
@@ -854,7 +854,7 @@ public abstract class BaseRecognizer {
 	public int getRuleMemoizationCacheSize() {
 		int n = 0;
 		for (int i = 0; state.ruleMemo!=null && i < state.ruleMemo.length; i++) {
-			Map ruleMap = state.ruleMemo[i];
+			Map<Integer, Integer> ruleMap = state.ruleMemo[i];
 			if ( ruleMap!=null ) {
 				n += ruleMap.size(); // how many input indexes are recorded?
 			}

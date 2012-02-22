@@ -125,7 +125,7 @@ public class DFAOptimizer {
 	 *  This is a side-effect of calling optimize; can't clear after use
 	 *  because code gen needs it.
 	 */
-	protected Set visited = new HashSet();
+	protected Set<Integer> visited = new HashSet<Integer>();
 
     protected Grammar grammar;
 

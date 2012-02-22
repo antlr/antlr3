@@ -30,6 +30,7 @@ package org.antlr.tool;
 import org.antlr.Tool;
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.NFAState;
 import org.antlr.misc.BitSet;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
@@ -242,9 +243,9 @@ public class ErrorManager {
 	 *  Map<String,Set> where the key is a method name like danglingState.
 	 *  The set is whatever that method accepts or derives like a DFA.
 	 */
-	public static final Map emitSingleError = new HashMap() {
+	public static final Map<String, Set<String>> emitSingleError = new HashMap<String, Set<String>>() {
 		{
-			put("danglingState", new HashSet());
+			put("danglingState", new HashSet<String>());
 		}
 	};
 
@@ -255,7 +256,7 @@ public class ErrorManager {
 	/** Each thread might need it's own error listener; e.g., a GUI with
 	 *  multiple window frames holding multiple grammars.
 	 */
-	private static Map threadToListenerMap = new HashMap();
+	private static Map<Thread, ANTLRErrorListener> threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
 
 	static class ErrorState {
 		public int errors;
@@ -273,13 +274,13 @@ public class ErrorManager {
 	/** Track the number of errors regardless of the listener but track
 	 *  per thread.
 	 */
-	private static Map threadToErrorStateMap = new HashMap();
+	private static Map<Thread, ErrorState> threadToErrorStateMap = new HashMap<Thread, ErrorState>();
 
 	/** Each thread has its own ptr to a Tool object, which knows how
 	 *  to panic, for example.  In a GUI, the thread might just throw an Error
 	 *  to exit rather than the suicide System.exit.
 	 */
-	private static Map threadToToolMap = new HashMap();
+	private static Map<Thread, Tool> threadToToolMap = new HashMap<Thread, Tool>();
 
 	/** The group of templates that represent all possible ANTLR errors. */
 	private static STGroup messages;
@@ -578,7 +579,7 @@ public class ErrorManager {
 	}
 
 	public static void resetErrorState() {
-        threadToListenerMap = new HashMap();
+        threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
         ErrorState ec = new ErrorState();
 		threadToErrorStateMap.put(Thread.currentThread(), ec);
 	}
@@ -639,7 +640,7 @@ public class ErrorManager {
 		getErrorState().errors++;
 		Message msg = new GrammarDanglingStateMessage(probe,d);
 		getErrorState().errorMsgIDs.add(msg.msgID);
-		Set seen = (Set)emitSingleError.get("danglingState");
+		Set<String> seen = emitSingleError.get("danglingState");
 		if ( !seen.contains(d.dfa.decisionNumber+"|"+d.getAltSet()) ) {
 			getErrorListener().error(msg);
 			// we've seen this decision and this alt set; never again
@@ -656,7 +657,7 @@ public class ErrorManager {
 	}
 
 	public static void unreachableAlts(DecisionProbe probe,
-									   List alts)
+									   List<Integer> alts)
 	{
 		getErrorState().errors++;
 		Message msg = new GrammarUnreachableAltsMessage(probe,alts);
@@ -684,8 +685,8 @@ public class ErrorManager {
 	public static void recursionOverflow(DecisionProbe probe,
 										 DFAState sampleBadState,
 										 int alt,
-										 Collection targetRules,
-										 Collection callSiteStates)
+										 Collection<String> targetRules,
+										 Collection<? extends Collection<? extends NFAState>> callSiteStates)
 	{
 		getErrorState().errors++;
 		Message msg = new RecursionOverflowMessage(probe,sampleBadState, alt,
@@ -708,7 +709,7 @@ public class ErrorManager {
 	}
 	*/
 
-	public static void leftRecursionCycles(Collection cycles) {
+	public static void leftRecursionCycles(Collection<? extends Set<? extends Rule>> cycles) {
 		getErrorState().errors++;
 		Message msg = new LeftRecursionCyclesMessage(cycles);
 		getErrorState().errorMsgIDs.add(msg.msgID);

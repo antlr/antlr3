@@ -55,7 +55,7 @@ public class JavaTarget extends Target {
 		for (Rule rule : grammar.getRules()) {
 			rule.throwsSpec.add("RecognitionException");
 		}
-		Set<Rule> delegatedRules = grammar.getDelegatedRules();
+		Set<? extends Rule> delegatedRules = grammar.getDelegatedRules();
 		if ( delegatedRules!=null ) {
 			for (Rule rule : delegatedRules) {
 				rule.throwsSpec.add("RecognitionException");

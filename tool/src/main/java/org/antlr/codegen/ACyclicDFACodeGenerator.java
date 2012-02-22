@@ -27,6 +27,7 @@
  */
 package org.antlr.codegen;
 
+import java.util.ArrayList;
 import org.antlr.analysis.*;
 import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
@@ -113,14 +114,15 @@ public class ACyclicDFACodeGenerator {
 			ST edgeST = templates.getInstanceOf(dfaEdgeName);
 			// If the template wants all the label values delineated, do that
 			if ( edgeST.impl.formalArguments.get("labels")!=null ) {
-				List labels = edge.label.getSet().toList();
+				List<Integer> labels = edge.label.getSet().toList();
+				List<String> targetLabels = new ArrayList<String>(labels.size());
 				for (int j = 0; j < labels.size(); j++) {
 					Integer vI = (Integer) labels.get(j);
 					String label =
 						parentGenerator.getTokenTypeAsTargetLabel(vI.intValue());
-					labels.set(j, label); // rewrite List element to be name
+					targetLabels.add(label); // rewrite List element to be name
 				}
-				edgeST.add("labels", labels);
+				edgeST.add("labels", targetLabels);
 			}
 			else { // else create an expression to evaluate (the general case)
 				edgeST.add("labelExpr",

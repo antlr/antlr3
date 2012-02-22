@@ -42,13 +42,13 @@ public class LegacyCommonTokenStream implements TokenStream {
 	/** Record every single token pulled from the source so we can reproduce
 	 *  chunks of it later.
 	 */
-	protected List tokens;
+	protected List<Token> tokens;
 
 	/** Map<tokentype, channel> to override some Tokens' channel numbers */
-	protected Map channelOverrideMap;
+	protected Map<Integer, Integer> channelOverrideMap;
 
 	/** Set<tokentype>; discard any tokens with this type */
-	protected Set discardSet;
+	protected Set<Integer> discardSet;
 
 	/** Skip tokens on any channel but this one; this is how we skip whitespace... */
 	protected int channel = Token.DEFAULT_CHANNEL;
@@ -67,7 +67,7 @@ public class LegacyCommonTokenStream implements TokenStream {
     protected int p = -1;
 
 	public LegacyCommonTokenStream() {
-		tokens = new ArrayList(500);
+		tokens = new ArrayList<Token>(500);
 	}
 
 	public LegacyCommonTokenStream(TokenSource tokenSource) {
@@ -166,14 +166,14 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 */
 	public void setTokenTypeChannel(int ttype, int channel) {
 		if ( channelOverrideMap==null ) {
-			channelOverrideMap = new HashMap();
+			channelOverrideMap = new HashMap<Integer, Integer>();
 		}
         channelOverrideMap.put(new Integer(ttype), new Integer(channel));
 	}
 
 	public void discardTokenType(int ttype) {
 		if ( discardSet==null ) {
-			discardSet = new HashSet();
+			discardSet = new HashSet<Integer>();
 		}
         discardSet.add(new Integer(ttype));
 	}
@@ -182,14 +182,14 @@ public class LegacyCommonTokenStream implements TokenStream {
 		this.discardOffChannelTokens = discardOffChannelTokens;
 	}
 
-	public List getTokens() {
+	public List<? extends Token> getTokens() {
 		if ( p == -1 ) {
 			fillBuffer();
 		}
 		return tokens;
 	}
 
-	public List getTokens(int start, int stop) {
+	public List<? extends Token> getTokens(int start, int stop) {
 		return getTokens(start, stop, (BitSet)null);
 	}
 
@@ -197,7 +197,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 *  the token type BitSet.  Return null if no tokens were found.  This
 	 *  method looks at both on and off channel tokens.
 	 */
-	public List getTokens(int start, int stop, BitSet types) {
+	public List<? extends Token> getTokens(int start, int stop, BitSet types) {
 		if ( p == -1 ) {
 			fillBuffer();
 		}
@@ -212,7 +212,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		}
 
 		// list = tokens[start:stop]:{Token t, t.getType() in types}
-		List filteredTokens = new ArrayList();
+		List<Token> filteredTokens = new ArrayList<Token>();
 		for (int i=start; i<=stop; i++) {
 			Token t = (Token)tokens.get(i);
 			if ( types==null || types.member(t.getType()) ) {
@@ -225,11 +225,11 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return filteredTokens;
 	}
 
-	public List getTokens(int start, int stop, List types) {
+	public List<? extends Token> getTokens(int start, int stop, List<Integer> types) {
 		return getTokens(start,stop,new BitSet(types));
 	}
 
-	public List getTokens(int start, int stop, int ttype) {
+	public List<? extends Token> getTokens(int start, int stop, int ttype) {
 		return getTokens(start,stop,BitSet.of(ttype));
 	}
 
@@ -304,7 +304,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	}
 
 	/** Get all tokens from start..stop inclusively */
-	public List get(int start, int stop) {
+	public List<? extends Token> get(int start, int stop) {
 		if ( p == -1 ) fillBuffer();
 		if ( start<0 || stop<0 ) return null;
 		return tokens.subList(start, stop);

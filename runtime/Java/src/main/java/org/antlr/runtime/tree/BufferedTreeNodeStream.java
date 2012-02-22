@@ -58,7 +58,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;
 
-    protected class StreamIterator implements Iterator {
+    protected class StreamIterator implements Iterator<Object> {
 		int i = 0;
 		@Override
 		public boolean hasNext() {
@@ -97,7 +97,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	 *  of interest for reverseIndexing.  Slows us down a wee bit to
 	 *  do all of the if p==-1 testing everywhere though.
 	 */
-	protected List nodes;
+	protected List<Object> nodes;
 
 	/** Pull nodes from which tree? */
 	protected Object root;
@@ -133,7 +133,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	public BufferedTreeNodeStream(TreeAdaptor adaptor, Object tree, int initialBufferSize) {
 		this.root = tree;
 		this.adaptor = adaptor;
-		nodes = new ArrayList(initialBufferSize);
+		nodes = new ArrayList<Object>(initialBufferSize);
 		down = adaptor.create(Token.DOWN, "DOWN");
 		up = adaptor.create(Token.UP, "UP");
 		eof = adaptor.create(Token.EOF, "EOF");
@@ -392,7 +392,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return nodes.size();
 	}
 
-	public Iterator iterator() {
+	public Iterator<Object> iterator() {
 		if ( p==-1 ) {
 			fillBuffer();
 		}

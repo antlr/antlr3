@@ -37,7 +37,7 @@ import java.util.List;
  *  I need the replace/set-element-i functionality so I'm subclassing
  *  OrderedHashSet.
  */
-public class OrderedHashSet<T> extends LinkedHashSet {
+public class OrderedHashSet<T> extends LinkedHashSet<T> {
     /** Track the elements as they are added to the set */
     protected List<T> elements = new ArrayList<T>();
 
@@ -61,7 +61,7 @@ public class OrderedHashSet<T> extends LinkedHashSet {
      *  a list of strings.
      */
 	@Override
-    public boolean add(Object value) {
+    public boolean add(T value) {
         boolean result = super.add(value);
 		if ( result ) {  // only track if new element not in set
 			elements.add((T)value);
