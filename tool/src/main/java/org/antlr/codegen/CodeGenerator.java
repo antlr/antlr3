@@ -161,7 +161,7 @@ public class CodeGenerator {
 		Target target = null;
 		String targetName = "org.antlr.codegen."+language+"Target";
 		try {
-			Class c = Class.forName(targetName);
+			Class<? extends Target> c = Class.forName(targetName).asSubclass(Target.class);
 			target = (Target)c.newInstance();
 		}
 		catch (ClassNotFoundException cnfe) {
