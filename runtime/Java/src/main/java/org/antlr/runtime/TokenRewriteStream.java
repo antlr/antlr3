@@ -401,9 +401,7 @@ public class TokenRewriteStream extends CommonTokenStream {
         if ( end==tokens.size()-1 ) {
             // Scan any remaining operations after last token
             // should be included (they will be inserts).
-            Iterator<? extends RewriteOperation> it = indexToOp.values().iterator();
-            while (it.hasNext()) {
-                RewriteOperation op = it.next();
+            for (RewriteOperation op : indexToOp.values()) {
                 if ( op.index >= tokens.size()-1 ) buf.append(op.text);
             }
         }

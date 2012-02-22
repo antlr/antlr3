@@ -788,9 +788,7 @@ public class Grammar {
 		}
 		// make sure generated grammar has the same options
 		if ( options!=null ) {
-			Iterator<String> optionNames = options.keySet().iterator();
-			while (optionNames.hasNext()) {
-				String optionName = optionNames.next();
+			for (String optionName : options.keySet()) {
 				if ( !doNotCopyOptionsToLexer.contains(optionName) ) {
 					Object value = options.get(optionName);
 					lexerGrammarST.addAggr("options.{name,value}", optionName, value);

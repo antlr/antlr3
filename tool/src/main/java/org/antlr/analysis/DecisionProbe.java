@@ -198,10 +198,7 @@ public class DecisionProbe {
 		}
 
 		if ( statesWithSyntacticallyAmbiguousAltsSet.size()>0 ) {
-			Iterator<DFAState> it =
-				statesWithSyntacticallyAmbiguousAltsSet.iterator();
-			while (	it.hasNext() ) {
-				DFAState d = it.next();
+			for (DFAState d : statesWithSyntacticallyAmbiguousAltsSet) {
 				if ( !statesResolvedWithSemanticPredicatesSet.contains(d) ) {
 					return false;
 				}

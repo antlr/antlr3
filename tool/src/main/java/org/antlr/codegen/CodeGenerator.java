@@ -804,9 +804,7 @@ public class CodeGenerator {
 	 */
 	protected void genTokenTypeConstants(ST code) {
 		// make constants for the token types
-		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
-		while (tokenIDs.hasNext()) {
-			String tokenID = tokenIDs.next();
+		for (String tokenID : grammar.getTokenIDs()) {
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType==Label.EOF ||
 				 tokenType>=Label.MIN_TOKEN_TYPE )
@@ -861,9 +859,7 @@ public class CodeGenerator {
 		vocabFileST.add("tokens",(Object)null);
 		vocabFileST.impl.name = "vocab-file";
 		// make constants for the token names
-		Iterator<String> tokenIDs = grammar.getTokenIDs().iterator();
-		while (tokenIDs.hasNext()) {
-			String tokenID = tokenIDs.next();
+		for (String tokenID : grammar.getTokenIDs()) {
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", tokenID, Utils.integer(tokenType));
@@ -871,9 +867,7 @@ public class CodeGenerator {
 		}
 
 		// now dump the strings
-		Iterator<String> literals = grammar.getStringLiterals().iterator();
-		while (literals.hasNext()) {
-			String literal = literals.next();
+		for (String literal : grammar.getStringLiterals()) {
 			int tokenType = grammar.getTokenType(literal);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", literal, Utils.integer(tokenType));

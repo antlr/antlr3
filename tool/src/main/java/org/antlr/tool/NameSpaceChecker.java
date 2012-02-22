@@ -49,9 +49,7 @@ public class NameSpaceChecker {
 			}
 			// walk all labels for Rule r
 			if ( r.labelNameSpace!=null ) {
-				Iterator<Grammar.LabelElementPair> it = r.labelNameSpace.values().iterator();
-				while ( it.hasNext() ) {
-					Grammar.LabelElementPair pair = it.next();
+				for (Grammar.LabelElementPair pair : r.labelNameSpace.values()) {
 					checkForLabelConflict(r, pair.label);
 				}
 			}
@@ -67,9 +65,7 @@ public class NameSpaceChecker {
 			checkForRuleArgumentAndReturnValueConflicts(r);
 		}
 		// check all global scopes against tokens
-		Iterator<AttributeScope> it = grammar.getGlobalScopes().values().iterator();
-		while (it.hasNext()) {
-			AttributeScope scope = it.next();
+		for (AttributeScope scope : grammar.getGlobalScopes().values()) {
 			checkForGlobalScopeTokenConflict(scope);
 		}
 		// check for missing rule, tokens

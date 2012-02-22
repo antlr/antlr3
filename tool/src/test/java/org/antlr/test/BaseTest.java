@@ -835,11 +835,10 @@ public abstract class BaseTest {
 
 	public List<String> realElements(Map<String, Integer> elements) {
 		List<String> n = new ArrayList<String>();
-		Iterator<String> iterator = elements.keySet().iterator();
-		while (iterator.hasNext()) {
-			String tokenID = iterator.next();
-			if ( elements.get(tokenID) >= Label.MIN_TOKEN_TYPE ) {
-				n.add(tokenID+"="+elements.get(tokenID));
+		for (Map.Entry<String, Integer> entry : elements.entrySet()) {
+			String tokenID = entry.getKey();
+			if ( entry.getValue() >= Label.MIN_TOKEN_TYPE ) {
+				n.add(tokenID+"="+entry.getValue());
 			}
 		}
 		Collections.sort(n);

@@ -127,14 +127,8 @@ public class BitSet implements IntSet, Cloneable {
 		if ( elements==null ) {
 			return;
 		}
-		Iterator<Integer> it = elements.iterator();
-		while (it.hasNext()) {
-			Object o = (Object) it.next();
-			if ( !(o instanceof Integer) ) {
-				throw new IllegalArgumentException();
-			}
-			Integer eI = (Integer)o;
-			add(eI.intValue());
+		for (Integer element : elements) {
+			add(element);
 		}
 		/*
 		int n = elements.size();
@@ -339,10 +333,8 @@ public class BitSet implements IntSet, Cloneable {
 
     public static BitSet of(Collection<? extends Integer> elements) {
         BitSet s = new BitSet();
-        Iterator<? extends Integer> iter = elements.iterator();
-        while (iter.hasNext()) {
-            Integer el = iter.next();
-            s.add(el.intValue());
+        for (Integer el : elements) {
+            s.add(el);
         }
         return s;
     }

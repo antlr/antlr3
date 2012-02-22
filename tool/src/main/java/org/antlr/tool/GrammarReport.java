@@ -289,9 +289,7 @@ public class GrammarReport {
 	protected String getDFALocations(Set<DFA> dfas) {
 		Set<Integer> decisions = new HashSet<Integer>();
 		StringBuilder buf = new StringBuilder();
-		Iterator<DFA> it = dfas.iterator();
-		while ( it.hasNext() ) {
-			DFA dfa = it.next();
+		for (DFA dfa : dfas) {
 			// if we aborted a DFA and redid with k=1, the backtrackin
 			if ( decisions.contains(Utils.integer(dfa.decisionNumber)) ) {
 				continue;
