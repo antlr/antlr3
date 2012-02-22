@@ -73,7 +73,7 @@ public class RandomPhrase {
 
 		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		while ( true ) {
-			if ( state==stopState && ruleInvocationStack.size()==0 ) {
+			if ( state==stopState && ruleInvocationStack.isEmpty() ) {
 				break;
 			}
 			if ( debug ) System.out.println("state "+state);
