@@ -272,7 +272,7 @@ public class DFA {
 	 *  will result in states[i] == states[j].  We don't want to waste a state
 	 *  number on this.  Useful mostly for code generation in tables.
 	 *
-	 *  At the start of this routine, states[i].stateNumber <= i by definition.
+	 *  At the start of this routine, states[i].stateNumber &lt;= i by definition.
 	 *  If states[50].stateNumber is 50 then a cycle during conversion may
 	 *  try to add state 103, but we find that an identical DFA state, named
 	 *  50, already exists, hence, states[103]==states[50] and both have

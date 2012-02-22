@@ -356,14 +356,14 @@ public class NFAToDFAConverter {
 	 *
 	 *  The normal decision to predict alts 1, 2, 3 is:
 	 *
-	 *  if ( (input.LA(1)>='1' && input.LA(1)<='9') ) {
+	 *  if ( (input.LA(1)>='1' && input.LA(1)&lt;='9') ) {
      *       alt7=1;
      *  }
      *  else if ( input.LA(1)=='0' ) {
      *      if ( input.LA(2)=='X'||input.LA(2)=='x' ) {
      *          alt7=2;
      *      }
-     *      else if ( (input.LA(2)>='0' && input.LA(2)<='7') ) {
+     *      else if ( (input.LA(2)>='0' && input.LA(2)&lt;='7') ) {
      *           alt7=3;
      *      }
      *      else if ( input.LA(2)=='L'||input.LA(2)=='l' ) {
@@ -381,7 +381,7 @@ public class NFAToDFAConverter {
 	 *
 	 *  A better decision is as follows:
      *
-	 *  if ( (input.LA(1)>='1' && input.LA(1)<='9') ) {
+	 *  if ( (input.LA(1)>='1' && input.LA(1)&lt;='9') ) {
 	 *      alt7=1;
 	 *  }
 	 *  else if ( input.LA(1)=='0' ) {
