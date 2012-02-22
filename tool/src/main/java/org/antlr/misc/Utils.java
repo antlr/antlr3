@@ -27,9 +27,6 @@
  */
 package org.antlr.misc;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Utils {
 	public static final int INTEGER_POOL_MAX_VALUE = 1000;
 	static Integer[] ints = new Integer[INTEGER_POOL_MAX_VALUE+1];
@@ -41,10 +38,10 @@ public class Utils {
 	 */
 	public static Integer integer(int x) {
 		if ( x<0 || x>INTEGER_POOL_MAX_VALUE ) {
-			return new Integer(x);
+			return x;
 		}
 		if ( ints[x]==null ) {
-			ints[x] = new Integer(x);
+			ints[x] = x;
 		}
 		return ints[x];
 	}
@@ -59,7 +56,7 @@ public class Utils {
 		uses regex (I only want to play with strings anyway).
 	*/
 	public static String replace(String src, String replacee, String replacer) {
-		StringBuffer result = new StringBuffer(src.length() + 50);
+		StringBuilder result = new StringBuilder(src.length() + 50);
 		int startIndex = 0;
 		int endIndex = src.indexOf(replacee);
 		while(endIndex != -1) {

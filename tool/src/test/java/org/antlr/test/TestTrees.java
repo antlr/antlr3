@@ -44,6 +44,7 @@ public class TestTrees extends BaseTest {
 		public V(Token t) { this.token = t;}
 		public V(int ttype, int x) { this.x=x; token=new CommonToken(ttype); }
 		public V(int ttype, Token t, int x) { token=t; this.x=x;}
+		@Override
 		public String toString() { return (token!=null?token.getText():"")+"<V>";}
 	}
 

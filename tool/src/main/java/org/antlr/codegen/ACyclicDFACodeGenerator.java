@@ -27,6 +27,7 @@
  */
 package org.antlr.codegen;
 
+import java.util.ArrayList;
 import org.antlr.analysis.*;
 import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
@@ -82,8 +83,7 @@ public class ACyclicDFACodeGenerator {
 		}
 		dfaST.add("k", Utils.integer(k));
 		dfaST.add("stateNumber", Utils.integer(s.stateNumber));
-		dfaST.add("semPredState",
-						   Boolean.valueOf(s.isResolvedWithPredicates()));
+		dfaST.add("semPredState", s.isResolvedWithPredicates());
 		/*
 		String description = dfa.getNFADecisionStartState().getDescription();
 		description = parentGenerator.target.getTargetStringLiteralFromString(description);
@@ -96,7 +96,7 @@ public class ACyclicDFACodeGenerator {
 		DFAState EOTTarget = null;
 		//System.out.println("DFA state "+s.stateNumber);
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			//System.out.println("edge "+s.stateNumber+"-"+edge.label.toString()+"->"+edge.target.stateNumber);
 			if ( edge.label.getAtom()==Label.EOT ) {
 				// don't generate a real edge for EOT; track alt EOT predicts
@@ -113,14 +113,15 @@ public class ACyclicDFACodeGenerator {
 			ST edgeST = templates.getInstanceOf(dfaEdgeName);
 			// If the template wants all the label values delineated, do that
 			if ( edgeST.impl.formalArguments.get("labels")!=null ) {
-				List labels = edge.label.getSet().toList();
+				List<Integer> labels = edge.label.getSet().toList();
+				List<String> targetLabels = new ArrayList<String>(labels.size());
 				for (int j = 0; j < labels.size(); j++) {
-					Integer vI = (Integer) labels.get(j);
+					Integer vI = labels.get(j);
 					String label =
-						parentGenerator.getTokenTypeAsTargetLabel(vI.intValue());
-					labels.set(j, label); // rewrite List element to be name
+						parentGenerator.getTokenTypeAsTargetLabel(vI);
+					targetLabels.add(label); // rewrite List element to be name
 				}
-				edgeST.add("labels", labels);
+				edgeST.add("labels", targetLabels);
 			}
 			else { // else create an expression to evaluate (the general case)
 				edgeST.add("labelExpr",
@@ -169,7 +170,7 @@ public class ACyclicDFACodeGenerator {
 			// state number.  Predicates emanating from EOT targets are
 			// hoisted up to the state that has the EOT edge.
 			for (int i = 0; i < EOTTarget.getNumberOfTransitions(); i++) {
-				Transition predEdge = (Transition)EOTTarget.transition(i);
+				Transition predEdge = EOTTarget.transition(i);
 				ST edgeST = templates.getInstanceOf(dfaEdgeName);
 				edgeST.add("labelExpr",
 									parentGenerator.genSemanticPredicateExpr(templates,predEdge));

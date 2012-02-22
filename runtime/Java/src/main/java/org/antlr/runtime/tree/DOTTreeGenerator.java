@@ -71,7 +71,7 @@ public class DOTTreeGenerator {
 			new StringTemplate("$parent$ -> $child$ // \"$parentText$\" -> \"$childText$\"\n");
 
 	/** Track node to number mapping so we can get proper node name back */
-	HashMap nodeToNumberMap = new HashMap();
+	HashMap<Object, Integer> nodeToNumberMap = new HashMap<Object, Integer>();
 
 	/** Track node number so we can get unique node names */
 	int nodeNumber = 0;
@@ -192,12 +192,12 @@ public class DOTTreeGenerator {
 	}
 
 	protected int getNodeNumber(Object t) {
-		Integer nI = (Integer)nodeToNumberMap.get(t);
+		Integer nI = nodeToNumberMap.get(t);
 		if ( nI!=null ) {
-			return nI.intValue();
+			return nI;
 		}
 		else {
-			nodeToNumberMap.put(t, new Integer(nodeNumber));
+			nodeToNumberMap.put(t, nodeNumber);
 			nodeNumber++;
 			return nodeNumber-1;
 		}

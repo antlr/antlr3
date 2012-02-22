@@ -53,7 +53,7 @@ public abstract class RewriteRuleElementStream {
 	protected Object singleElement;
 
 	/** The list of tokens or subtrees we are tracking */
-	protected List elements;
+	protected List<Object> elements;
 
 	/** Once a node / subtree has been used in a stream, it must be dup'd
 	 *  from then on.  Streams are reset after subrules so that the streams
@@ -80,6 +80,7 @@ public abstract class RewriteRuleElementStream {
 	}
 
 	/** Create a stream with one element */
+	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public RewriteRuleElementStream(TreeAdaptor adaptor,
 									String elementDescription,
 									Object oneElement)
@@ -91,7 +92,7 @@ public abstract class RewriteRuleElementStream {
 	/** Create a stream, but feed off an existing list */
 	public RewriteRuleElementStream(TreeAdaptor adaptor,
 									String elementDescription,
-									List elements)
+									List<Object> elements)
 	{
 		this(adaptor, elementDescription);
 		this.singleElement = null;
@@ -122,7 +123,7 @@ public abstract class RewriteRuleElementStream {
 			return;
 		}
 		// adding 2nd element, move to list
-		elements = new ArrayList(5);
+		elements = new ArrayList<Object>(5);
 		elements.add(singleElement);
 		singleElement = null;
 		elements.add(el);

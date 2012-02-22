@@ -45,7 +45,8 @@ public class AttributeScope {
 	 *  of predefined attributes.  I keep this out of the runtime.Token
 	 *  object to avoid a runtime space burden.
 	 */
-	public static AttributeScope tokenScope = new AttributeScope("Token",null);
+	public static final AttributeScope tokenScope = new AttributeScope("Token",null);
+
 	static {
 		tokenScope.addAttribute("text", null);
 		tokenScope.addAttribute("type", null);
@@ -80,10 +81,10 @@ public class AttributeScope {
 	public boolean isPredefinedLexerRuleScope;
 
 	/** The list of Attribute objects */
-	protected LinkedHashMap<String,Attribute> attributes = new LinkedHashMap();
+	protected LinkedHashMap<String,Attribute> attributes = new LinkedHashMap<String, Attribute>();
 
 	/* Placeholder for compatibility with the CSharp3 target. */
-	public LinkedHashMap<String, GrammarAST> actions = new LinkedHashMap();
+	public LinkedHashMap<String, GrammarAST> actions = new LinkedHashMap<String, GrammarAST>();
 
 	public AttributeScope(String name, Token derivedFromToken) {
 		this(null,name,derivedFromToken);
@@ -156,7 +157,7 @@ public class AttributeScope {
 	}
 
 	public Attribute getAttribute(String name) {
-		return (Attribute)attributes.get(name);
+		return attributes.get(name);
 	}
 
 	/** Used by templates to get all attributes */
@@ -169,19 +170,18 @@ public class AttributeScope {
 	/** Return the set of keys that collide from
 	 *  this and other.
 	 */
-	public Set intersection(AttributeScope other) {
+	public Set<String> intersection(AttributeScope other) {
 		if ( other==null || other.size()==0 || size()==0 ) {
 			return null;
 		}
-		Set inter = new HashSet();
-		Set thisKeys = attributes.keySet();
-		for (Iterator it = thisKeys.iterator(); it.hasNext();) {
-			String key = (String) it.next();
+		Set<String> inter = new HashSet<String>();
+		Set<String> thisKeys = attributes.keySet();
+		for (String key : thisKeys) {
 			if ( other.attributes.get(key)!=null ) {
 				inter.add(key);
 			}
 		}
-		if ( inter.size()==0 ) {
+		if ( inter.isEmpty() ) {
 			return null;
 		}
 		return inter;
@@ -191,6 +191,7 @@ public class AttributeScope {
 		return attributes==null?0:attributes.size();
 	}
 
+	@Override
 	public String toString() {
 		return (isDynamicGlobalScope?"global ":"")+getName()+":"+attributes;
 	}

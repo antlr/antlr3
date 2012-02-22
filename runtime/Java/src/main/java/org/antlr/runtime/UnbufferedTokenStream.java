@@ -29,9 +29,6 @@ package org.antlr.runtime;
 
 import org.antlr.runtime.misc.LookaheadStream;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 /** A token stream that pulls tokens from the code source on-demand and
  *  without tracking a complete buffer of the tokens. This stream buffers
  *  the minimum number of tokens possible.  It's the same as
@@ -58,25 +55,33 @@ public class UnbufferedTokenStream extends LookaheadStream<Token> implements Tok
 		this.tokenSource = tokenSource;
 	}
 
+	@Override
 	public Token nextElement() {
 		Token t = tokenSource.nextToken();
         t.setTokenIndex(tokenIndex++);
 		return t;
 	}
 
+	@Override
     public boolean isEOF(Token o) { return o.getType() == Token.EOF; }    
 
+	@Override
 	public TokenSource getTokenSource() { return tokenSource; }
 
+	@Override
 	public String toString(int start, int stop) { return "n/a"; }
 
+	@Override
 	public String toString(Token start, Token stop) { return "n/a"; }
 
+	@Override
     public int LA(int i) { return LT(i).getType(); }
 
+	@Override
     public Token get(int i) {
         throw new UnsupportedOperationException("Absolute token indexes are meaningless in an unbuffered stream");
     }
 
+	@Override
 	public String getSourceName() {	return tokenSource.getSourceName();	}
 }

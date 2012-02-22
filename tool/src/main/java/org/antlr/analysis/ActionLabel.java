@@ -38,18 +38,22 @@ public class ActionLabel extends Label {
 		this.actionAST = actionAST;
 	}
 
+	@Override
 	public boolean isEpsilon() {
 		return true; // we are to be ignored by analysis 'cept for predicates
 	}
 
+	@Override
 	public boolean isAction() {
 		return true;
 	}
 
+	@Override
 	public String toString() {
 		return "{"+actionAST+"}";
 	}
 
+	@Override
 	public String toString(Grammar g) {
 		return toString();
 	}

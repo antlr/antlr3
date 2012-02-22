@@ -150,7 +150,7 @@ public abstract class BaseTest {
 		mkdir(tmpdir);
 		writeFile(tmpdir, fileName, grammarStr);
 		try {
-			final List options = new ArrayList();
+			final List<String> options = new ArrayList<String>();
 			if ( debug ) {
 				options.add("-debug");
 			}
@@ -174,7 +174,7 @@ public abstract class BaseTest {
 					allIsWell = false;
 					System.err.println("antlr reports errors from "+options);
 					for (int i = 0; i < equeue.errors.size(); i++) {
-						Message msg = (Message) equeue.errors.get(i);
+						Message msg = equeue.errors.get(i);
 						System.err.println(msg);
 					}
                     System.out.println("!!!\ngrammar:");
@@ -377,7 +377,7 @@ public abstract class BaseTest {
 			process.waitFor();
 			stdoutVacuum.join();
 			stderrVacuum.join();
-			String output = null;
+			String output;
 			output = stdoutVacuum.toString();
 			if ( stderrVacuum.toString().length()>0 ) {
 				this.stderrDuringParse = stderrVacuum.toString();
@@ -440,7 +440,7 @@ public abstract class BaseTest {
 						   */
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			Message m = (Message)equeue.errors.get(i);
+			Message m = equeue.errors.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}
@@ -460,7 +460,7 @@ public abstract class BaseTest {
 	{
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.warnings.size(); i++) {
-			Message m = (Message)equeue.warnings.get(i);
+			Message m = equeue.warnings.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}
@@ -478,7 +478,7 @@ public abstract class BaseTest {
         //System.out.println("errors="+equeue);
         Message foundMsg = null;
         for (int i = 0; i < equeue.errors.size(); i++) {
-            Message m = (Message)equeue.errors.get(i);
+            Message m = equeue.errors.get(i);
             if (m.msgID==expectedMessage.msgID ) {
                 foundMsg = m;
             }
@@ -508,6 +508,7 @@ public abstract class BaseTest {
 			sucker = new Thread(this);
 			sucker.start();
 		}
+		@Override
 		public void run() {
 			try {
 				String line = in.readLine();
@@ -527,6 +528,7 @@ public abstract class BaseTest {
 		public void join() throws InterruptedException {
 			sucker.join();
 		}
+		@Override
 		public String toString() {
 			return buf.toString();
 		}
@@ -535,6 +537,7 @@ public abstract class BaseTest {
     public static class FilteringTokenStream extends CommonTokenStream {
         public FilteringTokenStream(TokenSource src) { super(src); }
         Set<Integer> hide = new HashSet<Integer>();
+		@Override
         protected void sync(int i) {
             super.sync(i);
             if ( hide.contains(get(i).getType()) ) get(i).setChannel(Token.HIDDEN_CHANNEL);
@@ -819,10 +822,10 @@ public abstract class BaseTest {
 		return lines[0].substring(prefix.length(),lines[0].length());
 	}
 
-	public List realElements(List elements) {
-		List n = new ArrayList();
+	public <T> List<T> realElements(List<T> elements) {
+		List<T> n = new ArrayList<T>();
 		for (int i = Label.NUM_FAUX_LABELS+Label.MIN_TOKEN_TYPE - 1; i < elements.size(); i++) {
-			Object o = (Object) elements.get(i);
+			T o = elements.get(i);
 			if ( o!=null ) {
 				n.add(o);
 			}
@@ -831,12 +834,11 @@ public abstract class BaseTest {
 	}
 
 	public List<String> realElements(Map<String, Integer> elements) {
-		List n = new ArrayList();
-		Iterator iterator = elements.keySet().iterator();
-		while (iterator.hasNext()) {
-			String tokenID = (String) iterator.next();
-			if ( elements.get(tokenID) >= Label.MIN_TOKEN_TYPE ) {
-				n.add(tokenID+"="+elements.get(tokenID));
+		List<String> n = new ArrayList<String>();
+		for (Map.Entry<String, Integer> entry : elements.entrySet()) {
+			String tokenID = entry.getKey();
+			if ( entry.getValue() >= Label.MIN_TOKEN_TYPE ) {
+				n.add(tokenID+"="+entry.getValue());
 			}
 		}
 		Collections.sort(n);
@@ -847,7 +849,7 @@ public abstract class BaseTest {
         String lines[] = s.split("\n");
         Arrays.sort(lines);
         List<String> linesL = Arrays.asList(lines);
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (String l : linesL) {
             buf.append(l);
             buf.append('\n');
@@ -866,7 +868,7 @@ public abstract class BaseTest {
      * @param m The Map that contains keys we wish to return in sorted order
      * @return A string that represents all the keys in sorted order.
      */
-    public String sortMapToString(Map m) {
+    public <K, V> String sortMapToString(Map<K, V> m) {
 
         System.out.println("Map toString looks like: " + m.toString());
         // Pass in crap, and get nothing back
@@ -877,7 +879,7 @@ public abstract class BaseTest {
 
         // Sort the keys in the Map
         //
-        TreeMap nset = new TreeMap(m);
+        TreeMap<K, V> nset = new TreeMap<K, V>(m);
 
         System.out.println("Tree map looks like: " + nset.toString());
         return nset.toString();

@@ -220,7 +220,7 @@ public abstract class BaseRecognizer {
 		String msg = e.getMessage();
 		if ( e instanceof UnwantedTokenException ) {
 			UnwantedTokenException ute = (UnwantedTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( ute.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -232,7 +232,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MissingTokenException ) {
 			MissingTokenException mte = (MissingTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mte.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -243,7 +243,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MismatchedTokenException ) {
 			MismatchedTokenException mte = (MismatchedTokenException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mte.expecting== Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -255,7 +255,7 @@ public abstract class BaseRecognizer {
 		}
 		else if ( e instanceof MismatchedTreeNodeException ) {
 			MismatchedTreeNodeException mtne = (MismatchedTreeNodeException)e;
-			String tokenName="<unknown>";
+			String tokenName;
 			if ( mtne.expecting==Token.EOF ) {
 				tokenName = "EOF";
 			}
@@ -533,7 +533,7 @@ public abstract class BaseRecognizer {
 		int top = state._fsp;
 		BitSet followSet = new BitSet();
 		for (int i=top; i>=0; i--) {
-			BitSet localFollowSet = (BitSet)state.following[i];
+			BitSet localFollowSet = state.following[i];
 			/*
 			System.out.println("local follow depth "+i+"="+
 							   localFollowSet.toString(getTokenNames())+")");
@@ -710,7 +710,7 @@ public abstract class BaseRecognizer {
 	 *  This is very useful for error messages and for context-sensitive
 	 *  error recovery.
 	 */
-	public List getRuleInvocationStack() {
+	public List<String> getRuleInvocationStack() {
 		String parserClassName = getClass().getName();
 		return getRuleInvocationStack(new Throwable(), parserClassName);
 	}
@@ -722,12 +722,12 @@ public abstract class BaseRecognizer {
 	 *
 	 *  TODO: move to a utility class or something; weird having lexer call this
 	 */
-	public static List getRuleInvocationStack(Throwable e,
+	public static List<String> getRuleInvocationStack(Throwable e,
 											  String recognizerClassName)
 	{
-		List rules = new ArrayList();
+		List<String> rules = new ArrayList<String>();
 		StackTraceElement[] stack = e.getStackTrace();
-		int i = 0;
+		int i;
 		for (i=stack.length-1; i>=0; i--) {
 			StackTraceElement t = stack[i];
 			if ( t.getClassName().startsWith("org.antlr.runtime.") ) {
@@ -771,11 +771,11 @@ public abstract class BaseRecognizer {
 	/** A convenience method for use most often with template rewrites.
 	 *  Convert a List<Token> to List<String>
 	 */
-	public List toStrings(List tokens) {
+	public List<String> toStrings(List<? extends Token> tokens) {
 		if ( tokens==null ) return null;
-		List strings = new ArrayList(tokens.size());
+		List<String> strings = new ArrayList<String>(tokens.size());
 		for (int i=0; i<tokens.size(); i++) {
-			strings.add(((Token)tokens.get(i)).getText());
+			strings.add(tokens.get(i).getText());
 		}
 		return strings;
 	}
@@ -792,14 +792,14 @@ public abstract class BaseRecognizer {
 	 */
 	public int getRuleMemoization(int ruleIndex, int ruleStartIndex) {
 		if ( state.ruleMemo[ruleIndex]==null ) {
-			state.ruleMemo[ruleIndex] = new HashMap();
+			state.ruleMemo[ruleIndex] = new HashMap<Integer, Integer>();
 		}
 		Integer stopIndexI =
-			(Integer)state.ruleMemo[ruleIndex].get(new Integer(ruleStartIndex));
+			state.ruleMemo[ruleIndex].get(ruleStartIndex);
 		if ( stopIndexI==null ) {
 			return MEMO_RULE_UNKNOWN;
 		}
-		return stopIndexI.intValue();
+		return stopIndexI;
 	}
 
 	/** Has this rule already parsed input at the current index in the
@@ -842,9 +842,7 @@ public abstract class BaseRecognizer {
 			System.err.println("!!!!!!!!! memo size is "+state.ruleMemo.length+", but rule index is "+ruleIndex);
 		}
 		if ( state.ruleMemo[ruleIndex]!=null ) {
-			state.ruleMemo[ruleIndex].put(
-				new Integer(ruleStartIndex), new Integer(stopTokenIndex)
-			);
+			state.ruleMemo[ruleIndex].put(ruleStartIndex, stopTokenIndex);
 		}
 	}
 
@@ -854,7 +852,7 @@ public abstract class BaseRecognizer {
 	public int getRuleMemoizationCacheSize() {
 		int n = 0;
 		for (int i = 0; state.ruleMemo!=null && i < state.ruleMemo.length; i++) {
-			Map ruleMap = state.ruleMemo[i];
+			Map<Integer, Integer> ruleMap = state.ruleMemo[i];
 			if ( ruleMap!=null ) {
 				n += ruleMap.size(); // how many input indexes are recorded?
 			}

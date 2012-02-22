@@ -37,7 +37,7 @@ import java.util.List;
  *  I need the replace/set-element-i functionality so I'm subclassing
  *  OrderedHashSet.
  */
-public class OrderedHashSet<T> extends LinkedHashSet {
+public class OrderedHashSet<T> extends LinkedHashSet<T> {
     /** Track the elements as they are added to the set */
     protected List<T> elements = new ArrayList<T>();
 
@@ -60,14 +60,16 @@ public class OrderedHashSet<T> extends LinkedHashSet {
      *  Key is object itself.  Good for say asking if a certain string is in
      *  a list of strings.
      */
-    public boolean add(Object value) {
+	@Override
+    public boolean add(T value) {
         boolean result = super.add(value);
 		if ( result ) {  // only track if new element not in set
-			elements.add((T)value);
+			elements.add(value);
 		}
 		return result;
     }
 
+	@Override
     public boolean remove(Object o) {
 		throw new UnsupportedOperationException();
 		/*
@@ -76,6 +78,7 @@ public class OrderedHashSet<T> extends LinkedHashSet {
         */
     }
 
+	@Override
     public void clear() {
         elements.clear();
         super.clear();
@@ -88,14 +91,17 @@ public class OrderedHashSet<T> extends LinkedHashSet {
         return elements;
     }
 
+	@Override
 	public Iterator<T> iterator() {
 		return elements.iterator();
 	}
 
+	@Override
 	public Object[] toArray() {
 		return elements.toArray();
 	}
-	
+
+	@Override
     public int size() {
 		/*
 		if ( elements.size()!=super.size() ) {
@@ -106,6 +112,7 @@ public class OrderedHashSet<T> extends LinkedHashSet {
         return elements.size();
     }
 
+	@Override
     public String toString() {
         return elements.toString();
     }

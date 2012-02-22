@@ -52,15 +52,16 @@ import java.util.Map;
  */
 public class TreeWizard {
 	protected TreeAdaptor adaptor;
-	protected Map tokenNameToTypeMap;
+	protected Map<String, Integer> tokenNameToTypeMap;
 
 	public interface ContextVisitor {
 		// TODO: should this be called visit or something else?
-		public void visit(Object t, Object parent, int childIndex, Map labels);
+		public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels);
 	}
 
 	public static abstract class Visitor implements ContextVisitor {
-		public void visit(Object t, Object parent, int childIndex, Map labels) {
+		@Override
+		public void visit(Object t, Object parent, int childIndex, Map<String, Object> labels) {
 			visit(t);
 		}
 		public abstract void visit(Object t);
@@ -75,6 +76,7 @@ public class TreeWizard {
 		public TreePattern(Token payload) {
 			super(payload);
 		}
+		@Override
 		public String toString() {
 			if ( label!=null ) {
 				return "%"+label+":"+super.toString();
@@ -93,6 +95,7 @@ public class TreeWizard {
 
 	/** This adaptor creates TreePattern objects for use during scan() */
 	public static class TreePatternTreeAdaptor extends CommonTreeAdaptor {
+		@Override
 		public Object create(Token payload) {
 			return new TreePattern(payload);
 		}
@@ -123,7 +126,7 @@ public class TreeWizard {
 		this.adaptor = adaptor;
 	}
 
-	public TreeWizard(TreeAdaptor adaptor, Map tokenNameToTypeMap) {
+	public TreeWizard(TreeAdaptor adaptor, Map<String, Integer> tokenNameToTypeMap) {
 		this.adaptor = adaptor;
 		this.tokenNameToTypeMap = tokenNameToTypeMap;
 	}
@@ -140,14 +143,14 @@ public class TreeWizard {
 	/** Compute a Map<String, Integer> that is an inverted index of
 	 *  tokenNames (which maps int token types to names).
 	 */
-	public Map computeTokenTypes(String[] tokenNames) {
-		Map m = new HashMap();
+	public Map<String, Integer> computeTokenTypes(String[] tokenNames) {
+		Map<String, Integer> m = new HashMap<String, Integer>();
 		if ( tokenNames==null ) {
 			return m;
 		}
 		for (int ttype = Token.MIN_TOKEN_TYPE; ttype < tokenNames.length; ttype++) {
 			String name = tokenNames[ttype];
-			m.put(name, new Integer(ttype));
+			m.put(name, ttype);
 		}
 		return m;
 	}
@@ -157,9 +160,9 @@ public class TreeWizard {
 	 	if ( tokenNameToTypeMap==null ) {
 			 return Token.INVALID_TOKEN_TYPE;
 		 }
-		Integer ttypeI = (Integer)tokenNameToTypeMap.get(tokenName);
+		Integer ttypeI = tokenNameToTypeMap.get(tokenName);
 		if ( ttypeI!=null ) {
-			return ttypeI.intValue();
+			return ttypeI;
 		}
 		return Token.INVALID_TOKEN_TYPE;
 	}
@@ -171,22 +174,22 @@ public class TreeWizard {
 	 *
 	 *  TODO: save this index so that find and visit are faster
 	 */
-	public Map index(Object t) {
-		Map m = new HashMap();
+	public Map<Integer, List<Object>> index(Object t) {
+		Map<Integer, List<Object>> m = new HashMap<Integer, List<Object>>();
 		_index(t, m);
 		return m;
 	}
 
 	/** Do the work for index */
-	protected void _index(Object t, Map m) {
+	protected void _index(Object t, Map<Integer, List<Object>> m) {
 		if ( t==null ) {
 			return;
 		}
 		int ttype = adaptor.getType(t);
-		List elements = (List)m.get(new Integer(ttype));
+		List<Object> elements = m.get(ttype);
 		if ( elements==null ) {
-			elements = new ArrayList();
-			m.put(new Integer(ttype), elements);
+			elements = new ArrayList<Object>();
+			m.put(ttype, elements);
 		}
 		elements.add(t);
 		int n = adaptor.getChildCount(t);
@@ -197,9 +200,10 @@ public class TreeWizard {
 	}
 
 	/** Return a List of tree nodes with token type ttype */
-	public List find(Object t, int ttype) {
-		final List nodes = new ArrayList();
+	public List<? extends Object> find(Object t, int ttype) {
+		final List<Object> nodes = new ArrayList<Object>();
 		visit(t, ttype, new TreeWizard.Visitor() {
+			@Override
 			public void visit(Object t) {
 				nodes.add(t);
 			}
@@ -208,8 +212,8 @@ public class TreeWizard {
 	}
 
 	/** Return a List of subtrees matching pattern. */
-	public List find(Object t, String pattern) {
-		final List subtrees = new ArrayList();
+	public List<? extends Object> find(Object t, String pattern) {
+		final List<Object> subtrees = new ArrayList<Object>();
 		// Create a TreePattern from the pattern
 		TreePatternLexer tokenizer = new TreePatternLexer(pattern);
 		TreePatternParser parser =
@@ -224,6 +228,7 @@ public class TreeWizard {
 		}
 		int rootTokenType = tpattern.getType();
 		visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
+			@Override
 			public void visit(Object t, Object parent, int childIndex, Map labels) {
 				if ( _parse(t, tpattern, null) ) {
 					subtrees.add(t);
@@ -283,10 +288,11 @@ public class TreeWizard {
 		{
 			return;
 		}
-		final Map labels = new HashMap(); // reused for each _parse
+		final Map<String, Object> labels = new HashMap<String, Object>(); // reused for each _parse
 		int rootTokenType = tpattern.getType();
 		visit(t, rootTokenType, new TreeWizard.ContextVisitor() {
-			public void visit(Object t, Object parent, int childIndex, Map unusedlabels) {
+			@Override
+			public void visit(Object t, Object parent, int childIndex, Map<String, Object> unusedlabels) {
 				// the unusedlabels arg is null as visit on token type doesn't set.
 				labels.clear();
 				if ( _parse(t, tpattern, labels) ) {
@@ -307,7 +313,7 @@ public class TreeWizard {
 	 *
 	 *  TODO: what's a better way to indicate bad pattern? Exceptions are a hassle 
 	 */
-	public boolean parse(Object t, String pattern, Map labels) {
+	public boolean parse(Object t, String pattern, Map<String, Object> labels) {
 		TreePatternLexer tokenizer = new TreePatternLexer(pattern);
 		TreePatternParser parser =
 			new TreePatternParser(tokenizer, this, new TreePatternTreeAdaptor());
@@ -329,7 +335,7 @@ public class TreeWizard {
 	 *  text arguments on nodes.  Fill labels map with pointers to nodes
 	 *  in tree matched against nodes in pattern with labels.
 	 */
-	protected boolean _parse(Object t1, TreePattern tpattern, Map labels) {
+	protected boolean _parse(Object t1, TreePattern tpattern, Map<String, Object> labels) {
 		// make sure both are non-null
 		if ( t1==null || tpattern==null ) {
 			return false;

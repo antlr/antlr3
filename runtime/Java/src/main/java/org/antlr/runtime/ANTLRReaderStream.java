@@ -70,7 +70,7 @@ public class ANTLRReaderStream extends ANTLRStringStream {
 			// alloc initial buffer size.
 			data = new char[size];
 			// read all the data in chunks of readChunkSize
-			int numRead=0;
+			int numRead;
 			int p = 0;
 			do {
 				if ( p+readChunkSize > data.length ) { // overflow?

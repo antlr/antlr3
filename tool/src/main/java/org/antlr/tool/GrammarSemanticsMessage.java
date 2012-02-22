@@ -66,6 +66,7 @@ public class GrammarSemanticsMessage extends Message {
 		this.offendingToken = offendingToken;
 	}
 
+	@Override
 	public String toString() {
 		line = 0;
 		column = 0;

@@ -189,13 +189,14 @@ public class JUnitCodeGen {
     private void genParserMethods(StringTemplateGroup group, StringBuffer buf) {
         for ( gUnitTestSuite ts: grammarInfo.getRuleTestSuites() ) {
             int i = 0;
-            for ( gUnitTestInput input: ts.testSuites.keySet() ) {	// each rule may contain multiple tests
+            for ( Map.Entry<gUnitTestInput, AbstractTest> entry : ts.testSuites.entrySet() ) {	// each rule may contain multiple tests
+                gUnitTestInput input = entry.getKey();
                 i++;
                 StringTemplate testRuleMethodST;
                 /** If rule has multiple return values or ast*/
-                if ( ts.testSuites.get(input).getType()== gUnitParser.ACTION && ruleWithReturn.containsKey(ts.getRuleName()) ) {
+                if ( entry.getValue().getType()== gUnitParser.ACTION && ruleWithReturn.containsKey(ts.getRuleName()) ) {
                     testRuleMethodST = group.getInstanceOf("testRuleMethod2");
-                    String outputString = ts.testSuites.get(input).getText();
+                    String outputString = entry.getValue().getText();
                     testRuleMethodST.setAttribute("methodName", "test"+changeFirstCapital(ts.getRuleName())+i);
                     testRuleMethodST.setAttribute("testRuleName", '"'+ts.getRuleName()+'"');
                     testRuleMethodST.setAttribute("test", input);
@@ -208,21 +209,21 @@ public class JUnitCodeGen {
                     if ( ts.isLexicalRule() ) testRuleName = ts.getLexicalRuleName();
                     else testRuleName = ts.getRuleName();
                     testRuleMethodST = group.getInstanceOf("testRuleMethod");
-                    String outputString = ts.testSuites.get(input).getText();
+                    String outputString = entry.getValue().getText();
                     testRuleMethodST.setAttribute("isLexicalRule", ts.isLexicalRule());
                     testRuleMethodST.setAttribute("methodName", "test"+changeFirstCapital(testRuleName)+i);
                     testRuleMethodST.setAttribute("testRuleName", '"'+testRuleName+'"');
                     testRuleMethodST.setAttribute("test", input);
-                    testRuleMethodST.setAttribute("tokenType", getTypeString(ts.testSuites.get(input).getType()));
+                    testRuleMethodST.setAttribute("tokenType", getTypeString(entry.getValue().getType()));
 
                     // normalize whitespace
                     outputString = normalizeTreeSpec(outputString);
 
-                    if ( ts.testSuites.get(input).getType()==gUnitParser.ACTION ) {	// trim ';' at the end of ACTION if there is...
+                    if ( entry.getValue().getType()==gUnitParser.ACTION ) {	// trim ';' at the end of ACTION if there is...
                         //testRuleMethodST.setAttribute("expecting", outputString.substring(0, outputString.length()-1));
                         testRuleMethodST.setAttribute("expecting", outputString);
                     }
-                    else if ( ts.testSuites.get(input).getType()==gUnitParser.RETVAL ) {	// Expected: RETVAL
+                    else if ( entry.getValue().getType()==gUnitParser.RETVAL ) {	// Expected: RETVAL
                         testRuleMethodST.setAttribute("expecting", outputString);
                     }
                     else {	// Attach "" to expected STRING or AST
@@ -239,13 +240,14 @@ public class JUnitCodeGen {
     private void genTreeMethods(StringTemplateGroup group, StringBuffer buf) {
         for ( gUnitTestSuite ts: grammarInfo.getRuleTestSuites() ) {
             int i = 0;
-            for ( gUnitTestInput input: ts.testSuites.keySet() ) {	// each rule may contain multiple tests
+            for ( Map.Entry<gUnitTestInput, AbstractTest> entry : ts.testSuites.entrySet() ) {	// each rule may contain multiple tests
+                gUnitTestInput input = entry.getKey();
                 i++;
                 StringTemplate testRuleMethodST;
                 /** If rule has multiple return values or ast*/
-                if ( ts.testSuites.get(input).getType()== gUnitParser.ACTION && ruleWithReturn.containsKey(ts.getTreeRuleName()) ) {
+                if ( entry.getValue().getType()== gUnitParser.ACTION && ruleWithReturn.containsKey(ts.getTreeRuleName()) ) {
                     testRuleMethodST = group.getInstanceOf("testTreeRuleMethod2");
-                    String outputString = ts.testSuites.get(input).getText();
+                    String outputString = entry.getValue().getText();
                     testRuleMethodST.setAttribute("methodName", "test"+changeFirstCapital(ts.getTreeRuleName())+"_walks_"+
                                                                 changeFirstCapital(ts.getRuleName())+i);
                     testRuleMethodST.setAttribute("testTreeRuleName", '"'+ts.getTreeRuleName()+'"');
@@ -256,19 +258,19 @@ public class JUnitCodeGen {
                 }
                 else {
                     testRuleMethodST = group.getInstanceOf("testTreeRuleMethod");
-                    String outputString = ts.testSuites.get(input).getText();
+                    String outputString = entry.getValue().getText();
                     testRuleMethodST.setAttribute("methodName", "test"+changeFirstCapital(ts.getTreeRuleName())+"_walks_"+
                                                                 changeFirstCapital(ts.getRuleName())+i);
                     testRuleMethodST.setAttribute("testTreeRuleName", '"'+ts.getTreeRuleName()+'"');
                     testRuleMethodST.setAttribute("testRuleName", '"'+ts.getRuleName()+'"');
                     testRuleMethodST.setAttribute("test", input);
-                    testRuleMethodST.setAttribute("tokenType", getTypeString(ts.testSuites.get(input).getType()));
+                    testRuleMethodST.setAttribute("tokenType", getTypeString(entry.getValue().getType()));
 
-                    if ( ts.testSuites.get(input).getType()==gUnitParser.ACTION ) {	// trim ';' at the end of ACTION if there is...
+                    if ( entry.getValue().getType()==gUnitParser.ACTION ) {	// trim ';' at the end of ACTION if there is...
                         //testRuleMethodST.setAttribute("expecting", outputString.substring(0, outputString.length()-1));
                         testRuleMethodST.setAttribute("expecting", outputString);
                     }
-                    else if ( ts.testSuites.get(input).getType()==gUnitParser.RETVAL ) {	// Expected: RETVAL
+                    else if ( entry.getValue().getType()==gUnitParser.RETVAL ) {	// Expected: RETVAL
                         testRuleMethodST.setAttribute("expecting", outputString);
                     }
                     else {	// Attach "" to expected STRING or AST

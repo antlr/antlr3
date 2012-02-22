@@ -33,7 +33,6 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSyntaxMessage;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /** Tree rewrites in tree parsers are basically identical to rewrites

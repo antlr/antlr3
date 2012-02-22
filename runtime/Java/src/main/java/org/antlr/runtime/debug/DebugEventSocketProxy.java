@@ -88,10 +88,12 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		}
 	}
 
+	@Override
 	public void commence() {
 		// don't bother sending event; listener will trigger upon connection
 	}
 
+	@Override
 	public void terminate() {
 		transmit("terminate");
 		out.close();
@@ -118,75 +120,92 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		ack();
 	}
 
+	@Override
 	public void enterRule(String grammarFileName, String ruleName) {
 		transmit("enterRule\t"+grammarFileName+"\t"+ruleName);
 	}
 
+	@Override
 	public void enterAlt(int alt) {
 		transmit("enterAlt\t"+alt);
 	}
 
+	@Override
 	public void exitRule(String grammarFileName, String ruleName) {
 		transmit("exitRule\t"+grammarFileName+"\t"+ruleName);
 	}
 
+	@Override
 	public void enterSubRule(int decisionNumber) {
 		transmit("enterSubRule\t"+decisionNumber);
 	}
 
+	@Override
 	public void exitSubRule(int decisionNumber) {
 		transmit("exitSubRule\t"+decisionNumber);
 	}
 
+	@Override
 	public void enterDecision(int decisionNumber, boolean couldBacktrack) {
 		transmit("enterDecision\t"+decisionNumber+"\t"+couldBacktrack);
 	}
 
+	@Override
 	public void exitDecision(int decisionNumber) {
 		transmit("exitDecision\t"+decisionNumber);
 	}
 
+	@Override
 	public void consumeToken(Token t) {
 		String buf = serializeToken(t);
 		transmit("consumeToken\t"+buf);
 	}
 
+	@Override
 	public void consumeHiddenToken(Token t) {
 		String buf = serializeToken(t);
 		transmit("consumeHiddenToken\t"+buf);
 	}
 
+	@Override
 	public void LT(int i, Token t) {
         if(t != null)
             transmit("LT\t"+i+"\t"+serializeToken(t));
 	}
 
+	@Override
 	public void mark(int i) {
 		transmit("mark\t"+i);
 	}
 
+	@Override
 	public void rewind(int i) {
 		transmit("rewind\t"+i);
 	}
 
+	@Override
 	public void rewind() {
 		transmit("rewind");
 	}
 
+	@Override
 	public void beginBacktrack(int level) {
 		transmit("beginBacktrack\t"+level);
 	}
 
+	@Override
 	public void endBacktrack(int level, boolean successful) {
 		transmit("endBacktrack\t"+level+"\t"+(successful?TRUE:FALSE));
 	}
 
+	@Override
 	public void location(int line, int pos) {
 		transmit("location\t"+line+"\t"+pos);
 	}
 
+	@Override
 	public void recognitionException(RecognitionException e) {
-		StringBuffer buf = new StringBuffer(50);
+		StringBuilder buf = new StringBuilder(50);
 		buf.append("exception\t");
 		buf.append(e.getClass().getName());
 		// dump only the data common to all exceptions for now
@@ -199,14 +218,17 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		transmit(buf.toString());
 	}
 
+	@Override
 	public void beginResync() {
 		transmit("beginResync");
 	}
 
+	@Override
 	public void endResync() {
 		transmit("endResync");
 	}
 
+	@Override
 	public void semanticPredicate(boolean result, String predicate) {
 		StringBuffer buf = new StringBuffer(50);
 		buf.append("semanticPredicate\t");
@@ -217,6 +239,7 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 
 	// A S T  P a r s i n g  E v e n t s
 
+	@Override
 	public void consumeNode(Object t) {
 		StringBuffer buf = new StringBuffer(50);
 		buf.append("consumeNode");
@@ -224,6 +247,7 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		transmit(buf.toString());
 	}
 
+	@Override
 	public void LT(int i, Object t) {
 		int ID = adaptor.getUniqueID(t);
 		String text = adaptor.getText(t);
@@ -263,11 +287,13 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 
 	// A S T  E v e n t s
 
+	@Override
 	public void nilNode(Object t) {
 		int ID = adaptor.getUniqueID(t);
 		transmit("nilNode\t"+ID);
 	}
 
+	@Override
 	public void errorNode(Object t) {
 		int ID = adaptor.getUniqueID(t);
 		String text = t.toString();
@@ -280,6 +306,7 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		transmit(buf.toString());
 	}
 
+	@Override
 	public void createNode(Object t) {
 		int ID = adaptor.getUniqueID(t);
 		String text = adaptor.getText(t);
@@ -293,24 +320,28 @@ public class DebugEventSocketProxy extends BlankDebugEventListener {
 		transmit(buf.toString());
 	}
 
+	@Override
 	public void createNode(Object node, Token token) {
 		int ID = adaptor.getUniqueID(node);
 		int tokenIndex = token.getTokenIndex();
 		transmit("createNode\t"+ID+"\t"+tokenIndex);
 	}
 
+	@Override
 	public void becomeRoot(Object newRoot, Object oldRoot) {
 		int newRootID = adaptor.getUniqueID(newRoot);
 		int oldRootID = adaptor.getUniqueID(oldRoot);
 		transmit("becomeRoot\t"+newRootID+"\t"+oldRootID);
 	}
 
+	@Override
 	public void addChild(Object root, Object child) {
 		int rootID = adaptor.getUniqueID(root);
 		int childID = adaptor.getUniqueID(child);
 		transmit("addChild\t"+rootID+"\t"+childID);
 	}
 
+	@Override
 	public void setTokenBoundaries(Object t, int tokenStartIndex, int tokenStopIndex) {
 		int ID = adaptor.getUniqueID(t);
 		transmit("setTokenBoundaries\t"+ID+"\t"+tokenStartIndex+"\t"+tokenStopIndex);

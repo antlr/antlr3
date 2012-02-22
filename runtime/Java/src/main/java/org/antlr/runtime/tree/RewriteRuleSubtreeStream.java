@@ -46,7 +46,7 @@ public class RewriteRuleSubtreeStream extends RewriteRuleElementStream {
 	/** Create a stream, but feed off an existing list */
 	public RewriteRuleSubtreeStream(TreeAdaptor adaptor,
 									String elementDescription,
-									List elements)
+									List<Object> elements)
 	{
 		super(adaptor, elementDescription, elements);
 	}
@@ -82,6 +82,7 @@ public class RewriteRuleSubtreeStream extends RewriteRuleElementStream {
 		return el;
 	}
 
+	@Override
 	protected Object dup(Object el) {
 		return adaptor.dupTree(el);
 	}

@@ -148,7 +148,7 @@ public class BuildDependencyGenerator {
             files.add(new File(fname));
         }
 
-        if (files.size() == 0) {
+        if (files.isEmpty()) {
             return null;
         }
         return files;
@@ -172,7 +172,7 @@ public class BuildDependencyGenerator {
             files.add(new File(fileName));
         }
 
-        if (files.size() == 0) {
+        if (files.isEmpty()) {
             return null;
         }
         return files;

@@ -29,8 +29,8 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.Label;
 import org.antlr.analysis.NFAState;
-import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
 
 import java.util.Iterator;
@@ -56,6 +56,7 @@ public class GrammarNonDeterminismMessage extends Message {
 		}
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
@@ -67,16 +68,15 @@ public class GrammarNonDeterminismMessage extends Message {
 
 		ST st = getMessageTemplate();
 		// Now fill template with information about problemState
-		List labels = probe.getSampleNonDeterministicInputSequence(problemState);
+		List<Label> labels = probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = probe.getInputSequenceDisplay(labels);
 		st.add("input", input);
 
 		if ( probe.dfa.isTokensRuleDecision() ) {
-			Set disabledAlts = probe.getDisabledAlternatives(problemState);
-			for (Iterator it = disabledAlts.iterator(); it.hasNext();) {
-				Integer altI = (Integer) it.next();
+			Set<Integer> disabledAlts = probe.getDisabledAlternatives(problemState);
+			for (Integer altI : disabledAlts) {
 				String tokenName =
-					probe.getTokenNameForTokensRuleAlt(altI.intValue());
+					probe.getTokenNameForTokensRuleAlt(altI);
 				// reset the line/col to the token definition (pick last one)
 				NFAState ruleStart =
 					probe.dfa.nfa.grammar.getRuleStartState(tokenName);
@@ -89,20 +89,19 @@ public class GrammarNonDeterminismMessage extends Message {
 			st.add("disabled", probe.getDisabledAlternatives(problemState));
 		}
 
-		List nondetAlts = probe.getNonDeterministicAltsForState(problemState);
+		List<Integer> nondetAlts = probe.getNonDeterministicAltsForState(problemState);
 		NFAState nfaStart = probe.dfa.getNFADecisionStartState();
 		// all state paths have to begin with same NFA state
 		int firstAlt = 0;
 		if ( nondetAlts!=null ) {
-			for (Iterator iter = nondetAlts.iterator(); iter.hasNext();) {
-				Integer displayAltI = (Integer) iter.next();
+			for (Integer displayAltI : nondetAlts) {
 				if ( DecisionProbe.verbose ) {
 					int tracePathAlt =
-						nfaStart.translateDisplayAltToWalkAlt(displayAltI.intValue());
+						nfaStart.translateDisplayAltToWalkAlt(displayAltI);
 					if ( firstAlt == 0 ) {
 						firstAlt = tracePathAlt;
 					}
-					List path =
+					List<? extends NFAState> path =
 						probe.getNFAPathStatesForAlt(firstAlt,
 													 tracePathAlt,
 													 labels);
@@ -112,7 +111,7 @@ public class GrammarNonDeterminismMessage extends Message {
 					if ( probe.dfa.isTokensRuleDecision() ) {
 						// alts are token rules, convert to the names instead of numbers
 						String tokenName =
-							probe.getTokenNameForTokensRuleAlt(displayAltI.intValue());
+							probe.getTokenNameForTokensRuleAlt(displayAltI);
 						st.add("conflictingTokens", tokenName);
 					}
 					else {

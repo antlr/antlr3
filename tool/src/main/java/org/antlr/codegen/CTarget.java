@@ -33,10 +33,11 @@ import org.antlr.tool.Grammar;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CTarget extends Target {
 
-    ArrayList strings = new ArrayList();
+    List<String> strings = new ArrayList<String>();
 
     @Override
     protected void genRecognizerFile(Tool tool,
@@ -194,7 +195,7 @@ public class CTarget extends Target {
             String literal) {
         int index;
         String bytes;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         buf.append("{ ");
 

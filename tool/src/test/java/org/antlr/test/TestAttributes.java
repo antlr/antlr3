@@ -2196,7 +2196,7 @@ public class TestAttributes extends BaseTest {
 
 		Rule r = g.getRule("r");
 		AttributeScope retScope = r.returnScope;
-		List parameters = retScope.getAttributes();
+		List<Attribute> parameters = retScope.getAttributes();
 		assertNotNull("missing return action", parameters);
 		assertEquals(1, parameters.size());
 		String found = parameters.get(0).toString();
@@ -2215,7 +2215,7 @@ public class TestAttributes extends BaseTest {
 
 		Rule r = g.getRule("r");
 		AttributeScope retScope = r.returnScope;
-		List parameters = retScope.getAttributes();
+		List<Attribute> parameters = retScope.getAttributes();
 		assertNotNull("missing return action", parameters);
 		assertEquals(3, parameters.size());
 		assertEquals("int x=0", parameters.get(0).toString());
@@ -2234,7 +2234,7 @@ public class TestAttributes extends BaseTest {
 
 		Rule r = g.getRule("r");
 		AttributeScope retScope = r.returnScope;
-		List parameters = retScope.getAttributes();
+		List<Attribute> parameters = retScope.getAttributes();
 		assertNotNull("missing return action", parameters);
 		assertEquals(1, parameters.size());
 		String found = parameters.get(0).toString();
@@ -2801,7 +2801,7 @@ public class TestAttributes extends BaseTest {
 			translator.translate();
 
 		int expectedMsgID = ErrorManager.MSG_WRITE_TO_READONLY_ATTR;
-		ArrayList expectedErrors = new ArrayList(3);
+		ArrayList<Message> expectedErrors = new ArrayList<Message>(3);
 		GrammarSemanticsMessage expectedMessage =
 			new GrammarSemanticsMessage(expectedMsgID, g, null, "start", "");
 		expectedErrors.add(expectedMessage);
@@ -3078,7 +3078,7 @@ public class TestAttributes extends BaseTest {
 		*/
 		Message foundMsg = null;
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			Message m = (Message)equeue.errors.get(i);
+			Message m = equeue.errors.get(i);
 			if (m.msgID==expectedMessage.msgID ) {
 				foundMsg = m;
 			}
@@ -3093,15 +3093,15 @@ public class TestAttributes extends BaseTest {
 
 	/** Allow checking for multiple errors in one test */
 	protected void checkErrors(ErrorQueue equeue,
-							   ArrayList expectedMessages)
+							   ArrayList<Message> expectedMessages)
 		throws Exception
 	{
-		ArrayList messageExpected = new ArrayList(equeue.errors.size());
+		ArrayList<Boolean> messageExpected = new ArrayList<Boolean>(equeue.errors.size());
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			Message m = (Message)equeue.errors.get(i);
+			Message m = equeue.errors.get(i);
 			boolean foundMsg = false;
 			for (int j = 0; j < expectedMessages.size(); j++) {
-				Message em = (Message)expectedMessages.get(j);
+				Message em = expectedMessages.get(j);
 				if (m.msgID==em.msgID && m.arg.equals(em.arg) && m.arg2.equals(em.arg2)) {
 					foundMsg = true;
 				}
@@ -3112,7 +3112,7 @@ public class TestAttributes extends BaseTest {
 				messageExpected.add(i, Boolean.FALSE);
 		}
 		for (int i = 0; i < equeue.errors.size(); i++) {
-			assertTrue("unexpected error:" + equeue.errors.get(i), ((Boolean)messageExpected.get(i)).booleanValue());
+			assertTrue("unexpected error:" + equeue.errors.get(i), messageExpected.get(i));
 		}
 	}
 }

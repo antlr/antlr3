@@ -75,10 +75,12 @@ public class DebugParser extends Parser {
 		e.printStackTrace(System.err);
 	}
 
+	@Override
 	public void beginResync() {
 		dbg.beginResync();
 	}
 
+	@Override
 	public void endResync() {
 		dbg.endResync();
 	}
@@ -91,6 +93,7 @@ public class DebugParser extends Parser {
 		dbg.endBacktrack(level,successful);		
 	}
 
+	@Override
 	public void reportError(RecognitionException e) {
 		super.reportError(e);
 		dbg.recognitionException(e);

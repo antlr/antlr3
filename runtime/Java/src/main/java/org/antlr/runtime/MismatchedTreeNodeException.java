@@ -28,7 +28,6 @@
 package org.antlr.runtime;
 
 import org.antlr.runtime.tree.TreeNodeStream;
-import org.antlr.runtime.tree.Tree;
 
 /**
  */
@@ -43,6 +42,7 @@ public class MismatchedTreeNodeException extends RecognitionException {
 		this.expecting = expecting;
 	}
 
+	@Override
 	public String toString() {
 		return "MismatchedTreeNodeException("+getUnexpectedType()+"!="+expecting+")";
 	}

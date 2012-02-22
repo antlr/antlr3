@@ -62,6 +62,7 @@ public class Interpreter implements TokenSource {
 			this.g = g;
 		}
 
+		@Override
 		public void exitRule(String grammarFileName, String ruleName) {
 			if ( !ruleName.equals(Grammar.ARTIFICIAL_TOKENS_RULENAME) ){
 				int type = g.getTokenType(ruleName);
@@ -76,6 +77,7 @@ public class Interpreter implements TokenSource {
 		this.input = input;
 	}
 
+	@Override
 	public Token nextToken() {
 		if ( grammar.type!=Grammar.LEXER ) {
 			return null;
@@ -123,13 +125,13 @@ public class Interpreter implements TokenSource {
 	 */
 	public void scan(String startRule,
 					 DebugEventListener actions,
-					 List visitedStates)
+					 List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		if ( grammar.type!=Grammar.LEXER ) {
 			return;
 		}
-		CharStream in = (CharStream)this.input;
+
 		//System.out.println("scan("+startRule+",'"+in.substring(in.index(),in.size()-1)+"')");
 		// Build NFAs/DFAs from the grammar AST if NFAs haven't been built yet
 		if ( grammar.getRuleStartState(startRule)==null ) {
@@ -142,10 +144,10 @@ public class Interpreter implements TokenSource {
 		}
 
 		// do the parse
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		NFAState start = grammar.getRuleStartState(startRule);
 		NFAState stop = grammar.getRuleStopState(startRule);
-		parseEngine(startRule, start, stop, in, ruleInvocationStack,
+		parseEngine(startRule, start, stop, input, ruleInvocationStack,
 					actions, visitedStates);
 	}
 
@@ -156,7 +158,7 @@ public class Interpreter implements TokenSource {
 	}
 
 	public CommonToken scan(String startRule,
-							List visitedStates)
+							List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		LexerActionGetTokenType actions = new LexerActionGetTokenType(grammar);
@@ -166,7 +168,7 @@ public class Interpreter implements TokenSource {
 
 	public void parse(String startRule,
 					  DebugEventListener actions,
-					  List visitedStates)
+					  List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		//System.out.println("parse("+startRule+")");
@@ -179,7 +181,7 @@ public class Interpreter implements TokenSource {
 			grammar.createLookaheadDFAs();
 		}
 		// do the parse
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		NFAState start = grammar.getRuleStartState(startRule);
 		NFAState stop = grammar.getRuleStopState(startRule);
 		parseEngine(startRule, start, stop, input, ruleInvocationStack,
@@ -192,7 +194,7 @@ public class Interpreter implements TokenSource {
 		return parse(startRule, null);
 	}
 
-	public ParseTree parse(String startRule, List visitedStates)
+	public ParseTree parse(String startRule, List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		ParseTreeBuilder actions = new ParseTreeBuilder(grammar.name);
@@ -212,9 +214,9 @@ public class Interpreter implements TokenSource {
 							   NFAState start,
 							   NFAState stop,
 							   IntStream input,
-							   Stack ruleInvocationStack,
+							   Stack<NFAState> ruleInvocationStack,
 							   DebugEventListener actions,
-							   List visitedStates)
+							   List<NFAState> visitedStates)
 		throws RecognitionException
 	{
 		NFAState s = start;
@@ -288,7 +290,7 @@ public class Interpreter implements TokenSource {
 					break;
 				}
 				// pop invoking state off the stack to know where to return to
-				NFAState invokingState = (NFAState)ruleInvocationStack.pop();
+				NFAState invokingState = ruleInvocationStack.pop();
 				RuleClosureTransition invokingTransition =
 						(RuleClosureTransition)invokingState.transition[0];
 				// move to node after state that invoked this rule
@@ -446,6 +448,7 @@ public class Interpreter implements TokenSource {
 			cs.getLine()+":"+cs.getCharPositionInLine()+" "+re);
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}

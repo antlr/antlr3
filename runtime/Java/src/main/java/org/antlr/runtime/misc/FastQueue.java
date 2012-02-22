@@ -88,8 +88,9 @@ public class FastQueue<T> {
     }
 
     /** Return string of current buffer contents; non-destructive */
+	@Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int n = size();
         for (int i=0; i<n; i++) {
             buf.append(elementAt(i));

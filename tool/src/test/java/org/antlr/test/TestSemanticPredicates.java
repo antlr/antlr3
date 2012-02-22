@@ -29,6 +29,7 @@ package org.antlr.test;
 
 import org.antlr.analysis.DFA;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.Label;
 import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.BitSet;
 import org.antlr.runtime.Token;
@@ -268,7 +269,7 @@ public class TestSemanticPredicates extends BaseTest {
 		*/
 
 		assertEquals("unexpected number of expected problems", 1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be a left recursion msg",
 				    msg instanceof LeftRecursionCyclesMessage);
 	}
@@ -816,7 +817,7 @@ public class TestSemanticPredicates extends BaseTest {
 		FASerializer serializer = new FASerializer(g);
 		String result = serializer.serialize(dfa.startState);
 		//System.out.print(result);
-		List unreachableAlts = dfa.getUnreachableAlts();
+		List<Integer> unreachableAlts = dfa.getUnreachableAlts();
 
 		// make sure unreachable alts are as expected
 		if ( expectingUnreachableAlts!=null ) {
@@ -840,7 +841,7 @@ public class TestSemanticPredicates extends BaseTest {
 			msg instanceof GrammarNonDeterminismMessage);
 			GrammarNonDeterminismMessage nondetMsg =
 				getNonDeterminismMessage(equeue.warnings);
-			List labels =
+			List<Label> labels =
 				nondetMsg.probe.getSampleNonDeterministicInputSequence(nondetMsg.problemState);
 			String input = nondetMsg.probe.getInputSequenceDisplay(labels);
 			assertEquals(expectingAmbigInput, input);
@@ -852,7 +853,7 @@ public class TestSemanticPredicates extends BaseTest {
 				getNonDeterminismMessage(equeue.warnings);
 			assertNotNull("found no nondet alts; expecting: "+
 										str(expectingNonDetAlts), nondetMsg);
-			List nonDetAlts =
+			List<Integer> nonDetAlts =
 				nondetMsg.probe.getNonDeterministicAltsForState(nondetMsg.problemState);
 			// compare nonDetAlts with expectingNonDetAlts
 			BitSet s = new BitSet();
@@ -876,7 +877,7 @@ public class TestSemanticPredicates extends BaseTest {
 			assertNotNull("found no GrammarInsufficientPredicatesMessage alts; expecting: "+
 										str(expectingNonDetAlts), insuffPredMsg);
 			Map<Integer, Set<Token>> locations = insuffPredMsg.altToLocations;
-			Set actualAlts = locations.keySet();
+			Set<Integer> actualAlts = locations.keySet();
 			BitSet s = new BitSet();
 			s.addAll(expectingInsufficientPredAlts);
 			BitSet s2 = new BitSet();
@@ -898,9 +899,9 @@ public class TestSemanticPredicates extends BaseTest {
 		assertEquals(expecting, result);
 	}
 
-	protected GrammarNonDeterminismMessage getNonDeterminismMessage(List warnings) {
+	protected GrammarNonDeterminismMessage getNonDeterminismMessage(List<? extends Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarNonDeterminismMessage ) {
 				return (GrammarNonDeterminismMessage)m;
 			}
@@ -908,9 +909,9 @@ public class TestSemanticPredicates extends BaseTest {
 		return null;
 	}
 
-	protected GrammarInsufficientPredicatesMessage getGrammarInsufficientPredicatesMessage(List warnings) {
+	protected GrammarInsufficientPredicatesMessage getGrammarInsufficientPredicatesMessage(List<? extends Message> warnings) {
 		for (int i = 0; i < warnings.size(); i++) {
-			Message m = (Message) warnings.get(i);
+			Message m = warnings.get(i);
 			if ( m instanceof GrammarInsufficientPredicatesMessage ) {
 				return (GrammarInsufficientPredicatesMessage)m;
 			}
@@ -919,7 +920,7 @@ public class TestSemanticPredicates extends BaseTest {
 	}
 
 	protected String str(int[] elements) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < elements.length; i++) {
 			if ( i>0 ) {
 				buf.append(", ");

@@ -82,6 +82,7 @@ public class BitSet implements IntSet, Cloneable {
     }
 
     /** or this element into this set (grow as necessary to accommodate) */
+	@Override
     public void add(int el) {
         //System.out.println("add("+el+")");
         int n = wordNumber(el);
@@ -93,6 +94,7 @@ public class BitSet implements IntSet, Cloneable {
         bits[n] |= bitMask(el);
     }
 
+	@Override
     public void addAll(IntSet set) {
         if ( set instanceof BitSet ) {
             this.orInPlace((BitSet)set);
@@ -100,8 +102,7 @@ public class BitSet implements IntSet, Cloneable {
 		else if ( set instanceof IntervalSet ) {
 			IntervalSet other = (IntervalSet)set;
 			// walk set and add each interval
-			for (Iterator iter = other.intervals.iterator(); iter.hasNext();) {
-				Interval I = (Interval) iter.next();
+			for (Interval I : other.intervals) {
 				this.orInPlace(BitSet.range(I.a,I.b));
 			}
 		}
@@ -122,18 +123,12 @@ public class BitSet implements IntSet, Cloneable {
 		}
 	}
 
-	public void addAll(Iterable elements) {
+	public void addAll(Iterable<Integer> elements) {
 		if ( elements==null ) {
 			return;
 		}
-		Iterator it = elements.iterator();
-		while (it.hasNext()) {
-			Object o = (Object) it.next();
-			if ( !(o instanceof Integer) ) {
-				throw new IllegalArgumentException();
-			}
-			Integer eI = (Integer)o;
-			add(eI.intValue());
+		for (Integer element : elements) {
+			add(element);
 		}
 		/*
 		int n = elements.size();
@@ -148,6 +143,7 @@ public class BitSet implements IntSet, Cloneable {
 		 */
 	}
 
+	@Override
     public IntSet and(IntSet a) {
         BitSet s = (BitSet)this.clone();
         s.andInPlace((BitSet)a);
@@ -165,7 +161,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
-    private final static long bitMask(int bitNumber) {
+    private static long bitMask(int bitNumber) {
         int bitPosition = bitNumber & MOD_MASK; // bitNumber mod BITS
         return 1L << bitPosition;
     }
@@ -184,6 +180,7 @@ public class BitSet implements IntSet, Cloneable {
         bits[n] &= ~bitMask(el);
     }
 
+	@Override
     public Object clone() {
         BitSet s;
         try {
@@ -197,6 +194,7 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
+	@Override
     public int size() {
         int deg = 0;
         for (int i = bits.length - 1; i >= 0; i--) {
@@ -212,6 +210,7 @@ public class BitSet implements IntSet, Cloneable {
         return deg;
     }
 
+	@Override
     public boolean equals(Object other) {
         if ( other == null || !(other instanceof BitSet) ) {
             return false;
@@ -259,6 +258,7 @@ public class BitSet implements IntSet, Cloneable {
         bits = newbits;
     }
 
+	@Override
     public boolean member(int el) {
         int n = wordNumber(el);
         if (n >= bits.length) return false;
@@ -268,6 +268,7 @@ public class BitSet implements IntSet, Cloneable {
     /** Get the first element you find and return it.  Return Label.INVALID
      *  otherwise.
      */
+	@Override
     public int getSingleElement() {
         for (int i = 0; i < (bits.length << LOG_BITS); i++) {
             if (member(i)) {
@@ -277,6 +278,7 @@ public class BitSet implements IntSet, Cloneable {
         return Label.INVALID;
     }
 
+	@Override
     public boolean isNil() {
         for (int i = bits.length - 1; i >= 0; i--) {
             if (bits[i] != 0) return false;
@@ -290,6 +292,7 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
+	@Override
     public IntSet complement(IntSet set) {
 		if ( set==null ) {
 			return this.complement();
@@ -318,7 +321,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
-    private final int numWordsToHold(int el) {
+    private int numWordsToHold(int el) {
         return (el >> LOG_BITS) + 1;
     }
 
@@ -328,12 +331,10 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
-    public static BitSet of(Collection elements) {
+    public static BitSet of(Collection<? extends Integer> elements) {
         BitSet s = new BitSet();
-        Iterator iter = elements.iterator();
-        while (iter.hasNext()) {
-            Integer el = (Integer) iter.next();
-            s.add(el.intValue());
+        for (Integer el : elements) {
+            s.add(el);
         }
         return s;
     }
@@ -354,7 +355,7 @@ public class BitSet implements IntSet, Cloneable {
 		throw new IllegalArgumentException("can't create BitSet from "+set.getClass().getName());
 	}
 
-    public static BitSet of(Map elements) {
+    public static BitSet of(Map<? extends Integer, ?> elements) {
         return BitSet.of(elements.keySet());
     }
 
@@ -368,6 +369,7 @@ public class BitSet implements IntSet, Cloneable {
 	}
 
     /** return this | a in a new set */
+	@Override
     public IntSet or(IntSet a) {
 		if ( a==null ) {
 			return this;
@@ -392,6 +394,7 @@ public class BitSet implements IntSet, Cloneable {
     }
 
     // remove this element from this set
+	@Override
     public void remove(int el) {
         int n = wordNumber(el);
         if (n >= bits.length) {
@@ -439,6 +442,7 @@ public class BitSet implements IntSet, Cloneable {
         }
     }
 
+	@Override
     public IntSet subtract(IntSet a) {
         if (a == null || !(a instanceof BitSet)) return null;
 
@@ -447,7 +451,8 @@ public class BitSet implements IntSet, Cloneable {
         return s;
     }
 
-	public List toList() {
+	@Override
+	public List<Integer> toList() {
 		throw new NoSuchMethodError("BitSet.toList() unimplemented");
 	}
 
@@ -466,6 +471,7 @@ public class BitSet implements IntSet, Cloneable {
         return bits;
     }
 
+	@Override
     public String toString() {
         return toString(null);
     }
@@ -474,8 +480,9 @@ public class BitSet implements IntSet, Cloneable {
      * separator The string to put in between elements
      * @return A commma-separated list of values
      */
+	@Override
     public String toString(Grammar g) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         String separator = ",";
 		boolean havePrintedAnElement = false;
 		buf.append('{');
@@ -504,7 +511,7 @@ public class BitSet implements IntSet, Cloneable {
      * separator The string to put in between elements
      * @return A commma-separated list of character constants.
      */
-    public String toString(String separator, List vocabulary) {
+    public String toString(String separator, List<String> vocabulary) {
         if (vocabulary == null) {
             return toString(null);
         }
@@ -521,7 +528,7 @@ public class BitSet implements IntSet, Cloneable {
                     str += "'" + (char)i + "'";
                 }
                 else {
-                    str += (String)vocabulary.get(i);
+                    str += vocabulary.get(i);
                 }
             }
         }
@@ -534,7 +541,7 @@ public class BitSet implements IntSet, Cloneable {
      * This generates a comma-separated list of C++-like unsigned long constants.
      */
     public String toStringOfHalfWords() {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < bits.length; i++) {
             if (i != 0) s.append(", ");
             long tmp = bits[i];
@@ -555,7 +562,7 @@ public class BitSet implements IntSet, Cloneable {
      * This generates a comma-separated list of Java-like long int constants.
      */
     public String toStringOfWords() {
-		StringBuffer s = new StringBuffer();
+		StringBuilder s = new StringBuilder();
         for (int i = 0; i < bits.length; i++) {
             if (i != 0) s.append(", ");
             s.append(bits[i]);
@@ -568,7 +575,7 @@ public class BitSet implements IntSet, Cloneable {
         return toString();
     }
 
-    private final static int wordNumber(int bit) {
+    private static int wordNumber(int bit) {
         return bit >> LOG_BITS; // bit / BITS
     }
 }

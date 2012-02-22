@@ -161,7 +161,7 @@ public class CodeGenerator {
 		Target target = null;
 		String targetName = "org.antlr.codegen."+language+"Target";
 		try {
-			Class c = Class.forName(targetName);
+			Class<? extends Target> c = Class.forName(targetName).asSubclass(Target.class);
 			target = (Target)c.newInstance();
 		}
 		catch (ClassNotFoundException cnfe) {
@@ -202,7 +202,7 @@ public class CodeGenerator {
 				baseTemplates = dbgTemplates;
 				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(dbgTemplates);
-				STGroup astParserTemplates = astTemplates;
+				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
 					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
@@ -221,7 +221,7 @@ public class CodeGenerator {
 			else {
 				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(coreTemplates);
-				STGroup astParserTemplates = astTemplates;
+				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
 					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
@@ -344,57 +344,57 @@ public class CodeGenerator {
         headerFileST.add("actions", actions);
 		outputFileST.add("actions", actions);
 
-		headerFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
-		outputFileST.add("buildTemplate", new Boolean(grammar.buildTemplate()));
-		headerFileST.add("buildAST", new Boolean(grammar.buildAST()));
-		outputFileST.add("buildAST", new Boolean(grammar.buildAST()));
+		headerFileST.add("buildTemplate", grammar.buildTemplate());
+		outputFileST.add("buildTemplate", grammar.buildTemplate());
+		headerFileST.add("buildAST", grammar.buildAST());
+		outputFileST.add("buildAST", grammar.buildAST());
 
-		outputFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
-		headerFileST.add("rewriteMode", Boolean.valueOf(grammar.rewriteMode()));
+		outputFileST.add("rewriteMode", grammar.rewriteMode());
+		headerFileST.add("rewriteMode", grammar.rewriteMode());
 
-		outputFileST.add("backtracking", Boolean.valueOf(canBacktrack));
-		headerFileST.add("backtracking", Boolean.valueOf(canBacktrack));
+		outputFileST.add("backtracking", canBacktrack);
+		headerFileST.add("backtracking", canBacktrack);
 		// turn on memoize attribute at grammar level so we can create ruleMemo.
 		// each rule has memoize attr that hides this one, indicating whether
 		// it needs to save results
 		String memoize = (String)grammar.getOption("memoize");
 		outputFileST.add("memoize",
 						 (grammar.atLeastOneRuleMemoizes ||
-						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  memoize != null && memoize.equals("true") &&
 						  canBacktrack));
 		headerFileST.add("memoize",
 						 (grammar.atLeastOneRuleMemoizes ||
-						  Boolean.valueOf(memoize != null && memoize.equals("true")) &&
+						  memoize != null && memoize.equals("true") &&
 						  canBacktrack));
 
 
-		outputFileST.add("trace", Boolean.valueOf(trace));
-		headerFileST.add("trace", Boolean.valueOf(trace));
+		outputFileST.add("trace", trace);
+		headerFileST.add("trace", trace);
 
-		outputFileST.add("profile", Boolean.valueOf(profile));
-		headerFileST.add("profile", Boolean.valueOf(profile));
+		outputFileST.add("profile", profile);
+		headerFileST.add("profile", profile);
 
 		// RECOGNIZER
 		if ( grammar.type==Grammar.LEXER ) {
 			recognizerST = templates.getInstanceOf("lexer");
-			outputFileST.add("LEXER", Boolean.valueOf(true));
-			headerFileST.add("LEXER", Boolean.valueOf(true));
+			outputFileST.add("LEXER", true);
+			headerFileST.add("LEXER", true);
 			recognizerST.add("filterMode",
-							 Boolean.valueOf(filterMode));
+							 filterMode);
 		}
 		else if ( grammar.type==Grammar.PARSER ||
 			grammar.type==Grammar.COMBINED )
 		{
 			recognizerST = templates.getInstanceOf("parser");
-			outputFileST.add("PARSER", Boolean.valueOf(true));
-			headerFileST.add("PARSER", Boolean.valueOf(true));
+			outputFileST.add("PARSER", true);
+			headerFileST.add("PARSER", true);
 		}
 		else {
 			recognizerST = templates.getInstanceOf("treeParser");
-			outputFileST.add("TREE_PARSER", Boolean.valueOf(true));
-			headerFileST.add("TREE_PARSER", Boolean.valueOf(true));
+			outputFileST.add("TREE_PARSER", true);
+			headerFileST.add("TREE_PARSER", true);
             recognizerST.add("filterMode",
-							 Boolean.valueOf(filterMode));
+							 filterMode);
 		}
 		outputFileST.add("recognizer", recognizerST);
 		headerFileST.add("recognizer", recognizerST);
@@ -440,7 +440,7 @@ public class CodeGenerator {
 		}
 
 		// Now that we know what synpreds are used, we can set into template
-		Set synpredNames = null;
+		Set<String> synpredNames = null;
 		if ( grammar.synPredNamesUsedInDFA.size()>0 ) {
 			synpredNames = grammar.synPredNamesUsedInDFA;
 		}
@@ -486,13 +486,12 @@ public class CodeGenerator {
 	 *  '@headerfile:name {action}' or something.  Make sure the
 	 *  target likes the scopes in action table.
 	 */
-	protected void verifyActionScopesOkForTarget(Map actions) {
-		Set actionScopeKeySet = actions.keySet();
-		for (Iterator it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = (String)it.next();
+	protected void verifyActionScopesOkForTarget(Map<String, Map<String, Object>> actions) {
+		for (Map.Entry<String, Map<String, Object>> entry : actions.entrySet()) {
+			String scope = entry.getKey();
 			if ( !target.isValidActionScope(grammar.type, scope) ) {
 				// get any action from the scope to get error location
-				Map scopeActions = (Map)actions.get(scope);
+				Map<String, Object> scopeActions = entry.getValue();
 				GrammarAST actionAST =
 					(GrammarAST)scopeActions.values().iterator().next();
 				ErrorManager.grammarError(
@@ -506,11 +505,9 @@ public class CodeGenerator {
 	/** Actions may reference $x::y attributes, call translateAction on
 	 *  each action and replace that action in the Map.
 	 */
-	protected void translateActionAttributeReferences(Map actions) {
-		Set actionScopeKeySet = actions.keySet();
-		for (Iterator it = actionScopeKeySet.iterator(); it.hasNext();) {
-			String scope = (String)it.next();
-			Map scopeActions = (Map)actions.get(scope);
+	protected void translateActionAttributeReferences(Map<String, Map<String, Object>> actions) {
+		for (Map.Entry<String, Map<String, Object>> entry : actions.entrySet()) {
+			Map<String, Object> scopeActions = entry.getValue();
 			translateActionAttributeReferencesForSingleScope(null,scopeActions);
 		}
 	}
@@ -518,17 +515,16 @@ public class CodeGenerator {
 	/** Use for translating rule @init{...} actions that have no scope */
 	public void translateActionAttributeReferencesForSingleScope(
 		Rule r,
-		Map scopeActions)
+		Map<String, Object> scopeActions)
 	{
 		String ruleName=null;
 		if ( r!=null ) {
 			ruleName = r.name;
 		}
-		Set actionNameSet = scopeActions.keySet();
-		for (Iterator nameIT = actionNameSet.iterator(); nameIT.hasNext();) {
-			String name = (String) nameIT.next();
-			GrammarAST actionAST = (GrammarAST)scopeActions.get(name);
-			List chunks = translateAction(ruleName,actionAST);
+		for (Map.Entry<String, Object> entry : scopeActions.entrySet()) {
+			String name = entry.getKey();
+			GrammarAST actionAST = (GrammarAST)entry.getValue();
+			List<?> chunks = translateAction(ruleName,actionAST);
 			scopeActions.put(name, chunks); // replace with translation
 		}
 	}
@@ -582,11 +578,11 @@ public class CodeGenerator {
 		}
 		//System.out.println(" "+follow);
 
-        List tokenTypeList = null;
-        long[] words = null;
+        List<Integer> tokenTypeList;
+        long[] words;
 		if ( follow.tokenTypeSet==null ) {
 			words = new long[1];
-            tokenTypeList = new ArrayList();
+            tokenTypeList = new ArrayList<Integer>();
         }
 		else {
 			BitSet bits = BitSet.of(follow.tokenTypeSet);
@@ -666,16 +662,16 @@ public class CodeGenerator {
 	public ST generateSpecialState(DFAState s) {
 		ST stateST;
 		stateST = templates.getInstanceOf("cyclicDFAState");
-		stateST.add("needErrorClause", Boolean.valueOf(true));
+		stateST.add("needErrorClause", true);
 		stateST.add("semPredState",
-					Boolean.valueOf(s.isResolvedWithPredicates()));
+					s.isResolvedWithPredicates());
 		stateST.add("stateNumber", s.stateNumber);
 		stateST.add("decisionNumber", s.dfa.decisionNumber);
 
 		boolean foundGatedPred = false;
 		ST eotST = null;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			ST edgeST;
 			if ( edge.label.getAtom()==Label.EOT ) {
 				// this is the default clause; has to held until last
@@ -711,7 +707,7 @@ public class CodeGenerator {
 		if ( foundGatedPred ) {
 			// state has >= 1 edge with a gated pred (syn or sem)
 			// must rewind input first, set flag.
-			stateST.add("semPredState", new Boolean(foundGatedPred));
+			stateST.add("semPredState", foundGatedPred);
 		}
 		if ( eotST!=null ) {
 			stateST.add("edges", eotST);
@@ -760,7 +756,7 @@ public class CodeGenerator {
 			throw new IllegalArgumentException("unable to generate expressions for non IntervalSet objects");
 		}
 		IntervalSet iset = (IntervalSet)set;
-		if ( iset.getIntervals()==null || iset.getIntervals().size()==0 ) {
+		if ( iset.getIntervals()==null || iset.getIntervals().isEmpty() ) {
 			ST emptyST = new ST(templates, "");
 			emptyST.impl.name = "empty-set-expr";
 			return emptyST;
@@ -772,10 +768,10 @@ public class CodeGenerator {
 			testRangeSTName = "isolatedLookaheadRangeTest";
 		}
 		ST setST = templates.getInstanceOf("setTest");
-		Iterator iter = iset.getIntervals().iterator();
+		Iterator<Interval> iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;
 		while (iter.hasNext()) {
-			Interval I = (Interval) iter.next();
+			Interval I = iter.next();
 			int a = I.a;
 			int b = I.b;
 			ST eST;
@@ -808,9 +804,7 @@ public class CodeGenerator {
 	 */
 	protected void genTokenTypeConstants(ST code) {
 		// make constants for the token types
-		Iterator tokenIDs = grammar.getTokenIDs().iterator();
-		while (tokenIDs.hasNext()) {
-			String tokenID = (String) tokenIDs.next();
+		for (String tokenID : grammar.getTokenIDs()) {
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType==Label.EOF ||
 				 tokenType>=Label.MIN_TOKEN_TYPE )
@@ -865,9 +859,7 @@ public class CodeGenerator {
 		vocabFileST.add("tokens",(Object)null);
 		vocabFileST.impl.name = "vocab-file";
 		// make constants for the token names
-		Iterator tokenIDs = grammar.getTokenIDs().iterator();
-		while (tokenIDs.hasNext()) {
-			String tokenID = (String) tokenIDs.next();
+		for (String tokenID : grammar.getTokenIDs()) {
 			int tokenType = grammar.getTokenType(tokenID);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", tokenID, Utils.integer(tokenType));
@@ -875,9 +867,7 @@ public class CodeGenerator {
 		}
 
 		// now dump the strings
-		Iterator literals = grammar.getStringLiterals().iterator();
-		while (literals.hasNext()) {
-			String literal = (String) literals.next();
+		for (String literal : grammar.getStringLiterals()) {
 			int tokenType = grammar.getTokenType(literal);
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", literal, Utils.integer(tokenType));
@@ -887,14 +877,14 @@ public class CodeGenerator {
 		return vocabFileST;
 	}
 
-	public List translateAction(String ruleName,
+	public List<? extends Object> translateAction(String ruleName,
 								GrammarAST actionTree)
 	{
 		if ( actionTree.getType()==ANTLRParser.ARG_ACTION ) {
 			return translateArgAction(ruleName, actionTree);
 		}
 		ActionTranslator translator = new ActionTranslator(this,ruleName,actionTree);
-		List chunks = translator.translateToChunks();
+		List<Object> chunks = translator.translateToChunks();
 		chunks = target.postProcessAction(chunks, actionTree.token);
 		return chunks;
 	}
@@ -918,14 +908,14 @@ public class CodeGenerator {
 					new ActionTranslator(this,ruleName,
 											  actionToken,
 											  actionTree.outerAltNum);
-				List chunks = translator.translateToChunks();
+				List<Object> chunks = translator.translateToChunks();
 				chunks = target.postProcessAction(chunks, actionToken);
 				ST catST = new ST(templates, "<chunks>");
 				catST.add("chunks", chunks);
 				translatedArgs.add(catST);
 			}
 		}
-		if ( translatedArgs.size()==0 ) {
+		if ( translatedArgs.isEmpty() ) {
 			return null;
 		}
 		return translatedArgs;
@@ -1281,7 +1271,7 @@ public class CodeGenerator {
 		}
 		int size = 0;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			if ( edge.label.isSemanticPredicate() ) {
 				return false;
 			}

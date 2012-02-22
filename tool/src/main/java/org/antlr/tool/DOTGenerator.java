@@ -51,7 +51,7 @@ public class DOTGenerator {
      *  which states we've visited.  Make a new set every time you start
      *  walking in case you reuse this object.
      */
-    protected Set markedStates = null;
+    protected Set<Object> markedStates = null;
 
     protected Grammar grammar;
 
@@ -69,14 +69,14 @@ public class DOTGenerator {
 			return null;
 		}
 		// The output DOT graph for visualization
-		ST dot = null;
-		markedStates = new HashSet();
+		ST dot;
+		markedStates = new HashSet<Object>();
         if ( startState instanceof DFAState ) {
             dot = stlib.getInstanceOf("dfa");
 			dot.add("startState",
 					Utils.integer(startState.stateNumber));
 			dot.add("useBox",
-					Boolean.valueOf(Tool.internalOption_ShowNFAConfigsInDFA));
+					Tool.internalOption_ShowNFAConfigsInDFA);
 			walkCreatingDFADOT(dot, (DFAState)startState);
         }
         else {
@@ -130,7 +130,7 @@ public class DOTGenerator {
 
         // make a DOT edge for each transition
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-			Transition edge = (Transition) s.transition(i);
+			Transition edge = s.transition(i);
 			/*
 			System.out.println("dfa "+s.dfa.decisionNumber+
 				" edge from s"+s.stateNumber+" ["+i+"] of "+s.getNumberOfTransitions());
@@ -203,9 +203,9 @@ public class DOTGenerator {
 		}
 
         // make a DOT edge for each transition
-		ST edgeST = null;
+		ST edgeST;
 		for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
+            Transition edge = s.transition(i);
             if ( edge instanceof RuleClosureTransition ) {
                 RuleClosureTransition rr = ((RuleClosureTransition)edge);
                 // don't jump to other rules, but display edge to follow node
@@ -296,7 +296,7 @@ public class DOTGenerator {
 			SemanticContext preds =
 				((DFAState)target).getGatedPredicatesInNFAConfigurations();
 			if ( preds!=null ) {
-				String predsStr = "";
+				String predsStr;
 				predsStr = "&&{"+
 					preds.genExpr(grammar.generator,
 								  grammar.generator.getTemplates(), null).toString()
@@ -313,7 +313,7 @@ public class DOTGenerator {
         }
         String stateLabel = String.valueOf(s.stateNumber);
 		if ( s instanceof DFAState ) {
-            StringBuffer buf = new StringBuffer(250);
+            StringBuilder buf = new StringBuilder(250);
 			buf.append('s');
 			buf.append(s.stateNumber);
 			if ( Tool.internalOption_ShowNFAConfigsInDFA ) {
@@ -323,17 +323,17 @@ public class DOTGenerator {
 						buf.append("abortedDueToRecursionOverflow");
 					}
 				}
-				Set alts = ((DFAState)s).getAltSet();
+				Set<Integer> alts = ((DFAState)s).getAltSet();
 				if ( alts!=null ) {
 					buf.append("\\n");
 					// separate alts
-					List altList = new ArrayList();
+					List<Integer> altList = new ArrayList<Integer>();
 					altList.addAll(alts);
 					Collections.sort(altList);
-					Set configurations = ((DFAState) s).nfaConfigurations;
+					Set<NFAConfiguration> configurations = ((DFAState) s).nfaConfigurations;
 					for (int altIndex = 0; altIndex < altList.size(); altIndex++) {
-						Integer altI = (Integer) altList.get(altIndex);
-						int alt = altI.intValue();
+						Integer altI = altList.get(altIndex);
+						int alt = altI;
 						if ( altIndex>0 ) {
 							buf.append("\\n");
 						}
@@ -342,16 +342,14 @@ public class DOTGenerator {
 						buf.append(':');
 						// get a list of configs for just this alt
 						// it will help us print better later
-						List configsInAlt = new ArrayList();
-						for (Iterator it = configurations.iterator(); it.hasNext();) {
-							NFAConfiguration c = (NFAConfiguration) it.next();
+						List<NFAConfiguration> configsInAlt = new ArrayList<NFAConfiguration>();
+						for (NFAConfiguration c : configurations) {
 							if ( c.alt!=alt ) continue;
 							configsInAlt.add(c);
 						}
 						int n = 0;
 						for (int cIndex = 0; cIndex < configsInAlt.size(); cIndex++) {
-							NFAConfiguration c =
-								(NFAConfiguration)configsInAlt.get(cIndex);
+							NFAConfiguration c = configsInAlt.get(cIndex);
 							n++;
 							buf.append(c.toString(false));
 							if ( (cIndex+1)<configsInAlt.size() ) {

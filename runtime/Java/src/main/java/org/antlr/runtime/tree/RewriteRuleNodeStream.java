@@ -49,7 +49,7 @@ public class RewriteRuleNodeStream extends RewriteRuleElementStream {
 	/** Create a stream, but feed off an existing list */
 	public RewriteRuleNodeStream(TreeAdaptor adaptor,
 								 String elementDescription,
-								 List elements)
+								 List<Object> elements)
 	{
 		super(adaptor, elementDescription, elements);
 	}
@@ -58,10 +58,12 @@ public class RewriteRuleNodeStream extends RewriteRuleElementStream {
 		return _next();
 	}
 
+	@Override
 	protected Object toTree(Object el) {
 		return adaptor.dupNode(el);
 	}
 
+	@Override
 	protected Object dup(Object el) {
 		// we dup every node, so don't have to worry about calling dup; short-
 		// circuited next() so it doesn't call.

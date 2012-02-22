@@ -67,6 +67,7 @@ public interface IntSet {
 
     boolean isNil();
 
+	@Override
     boolean equals(Object obj);
 
     int getSingleElement();
@@ -76,8 +77,9 @@ public interface IntSet {
     /** remove this element from this set */
     void remove(int el);
 
-    List toList();
+    List<Integer> toList();
 
+	@Override
     String toString();
 
     String toString(Grammar g);

@@ -89,7 +89,9 @@ public class TreeRewriter extends TreeParser {
         this.showTransformations = showTransformations;
         TreeVisitor v = new TreeVisitor(new CommonTreeAdaptor());
         TreeVisitorAction actions = new TreeVisitorAction() {
+			@Override
             public Object pre(Object t)  { return applyOnce(t, topdown_fptr); }
+			@Override
             public Object post(Object t) { return applyRepeatedly(t, bottomup_ftpr); }
         };
         t = v.visit(t, actions);
@@ -105,10 +107,12 @@ public class TreeRewriter extends TreeParser {
     }
 
     fptr topdown_fptr = new fptr() {
+		@Override
         public Object rule() throws RecognitionException { return topdown(); }
     };
     
     fptr bottomup_ftpr = new fptr() {
+		@Override
         public Object rule() throws RecognitionException { return bottomup(); }
     };
 

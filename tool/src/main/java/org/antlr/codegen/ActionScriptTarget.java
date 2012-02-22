@@ -33,6 +33,7 @@ import org.antlr.tool.Grammar;
 
 public class ActionScriptTarget extends Target {
 
+	@Override
     public String getTargetCharLiteralFromANTLRCharLiteral(
             CodeGenerator generator,
             String literal) {
@@ -41,6 +42,7 @@ public class ActionScriptTarget extends Target {
         return String.valueOf(c);
     }
 
+	@Override
     public String getTokenTypeAsTargetLabel(CodeGenerator generator,
                                             int ttype) {
         // use ints for predefined types;
@@ -74,6 +76,7 @@ public class ActionScriptTarget extends Target {
      * @param v
      * @return
      */
+	@Override
     public String encodeIntAsCharEscape(int v) {
         // encode as hex
         if ( v<=255 ) {
@@ -87,7 +90,7 @@ public class ActionScriptTarget extends Target {
             System.err.println("Warning: character literal out of range for ActionScript target " + v);
             return "";
         }
-        StringBuffer buf = new StringBuffer("\\u80");
+        StringBuilder buf = new StringBuilder("\\u80");
         buf.append(Integer.toHexString((v >> 8) | 0x100).substring(1, 3)); // high - order bits
         buf.append("\\x");
         buf.append(Integer.toHexString((v & 0xff) | 0x100).substring(1, 3)); // low -order bits
@@ -103,6 +106,7 @@ public class ActionScriptTarget extends Target {
      *  This is to match how the BitSet constructor works, where the bits are
      *  passed in in 32-bit chunks with low-order bits coming first.
 	 */
+	@Override
 	public String getTarget64BitStringFromValue(long word) {
 		StringBuffer buf = new StringBuffer(22); // enough for the two "0x", "," and " "
 		buf.append("0x");

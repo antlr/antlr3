@@ -127,10 +127,10 @@ public class Profiler extends BlankDebugEventListener {
 	//protected int decisionLevel = 0;
 	protected Token lastRealTokenTouchedInDecision;
 	protected Set<String> uniqueRules = new HashSet<String>();
-	protected Stack<String> currentGrammarFileName = new Stack();
-	protected Stack<String> currentRuleName = new Stack();
-	protected Stack<Integer> currentLine = new Stack();
-	protected Stack<Integer> currentPos = new Stack();
+	protected Stack<String> currentGrammarFileName = new Stack<String>();
+	protected Stack<String> currentRuleName = new Stack<String>();
+	protected Stack<Integer> currentLine = new Stack<Integer>();
+	protected Stack<Integer> currentPos = new Stack<Integer>();
 
 	// Vector<DecisionStats>
 	//protected Vector decisions = new Vector(200); // need setSize
@@ -152,6 +152,7 @@ public class Profiler extends BlankDebugEventListener {
 		this.parser = parser;
 	}
 
+	@Override
 	public void enterRule(String grammarFileName, String ruleName) {
 //		System.out.println("enterRule "+grammarFileName+":"+ruleName);
 		ruleLevel++;
@@ -162,6 +163,7 @@ public class Profiler extends BlankDebugEventListener {
 		currentRuleName.push( ruleName );
 	}
 
+	@Override
 	public void exitRule(String grammarFileName, String ruleName) {
 		ruleLevel--;
 		currentGrammarFileName.pop();
@@ -210,6 +212,7 @@ public class Profiler extends BlankDebugEventListener {
 		currentPos.push(pos);
 	}
 
+	@Override
 	public void enterDecision(int decisionNumber, boolean couldBacktrack) {
 		lastRealTokenTouchedInDecision = null;
 		stats.numDecisionEvents++;
@@ -219,16 +222,16 @@ public class Profiler extends BlankDebugEventListener {
 						   " backtrack depth " + backtrackDepth +
 						   " @ " + input.get(input.index()) +
 						   " rule " +locationDescription());
-		String g = (String) currentGrammarFileName.peek();
+		String g = currentGrammarFileName.peek();
 		DecisionDescriptor descriptor = decisions.get(g, decisionNumber);
 		if ( descriptor == null ) {
 			descriptor = new DecisionDescriptor();
 			decisions.put(g, decisionNumber, descriptor);
 			descriptor.decision = decisionNumber;
-			descriptor.fileName = (String)currentGrammarFileName.peek();
-			descriptor.ruleName = (String)currentRuleName.peek();
-			descriptor.line = (Integer)currentLine.peek();
-			descriptor.pos = (Integer)currentPos.peek();
+			descriptor.fileName = currentGrammarFileName.peek();
+			descriptor.ruleName = currentRuleName.peek();
+			descriptor.line = currentLine.peek();
+			descriptor.pos = currentPos.peek();
 			descriptor.couldBacktrack = couldBacktrack;
 		}
 		descriptor.n++;
@@ -240,6 +243,7 @@ public class Profiler extends BlankDebugEventListener {
 		d.startIndex = startingLookaheadIndex;
 	}
 
+	@Override
 	public void exitDecision(int decisionNumber) {
 		DecisionEvent d = decisionStack.pop();
 		d.stopTime = System.currentTimeMillis();
@@ -255,6 +259,7 @@ public class Profiler extends BlankDebugEventListener {
 		decisionEvents.add(d); // done with decision; track all
 	}
 
+	@Override
 	public void consumeToken(Token token) {
 		if (dump) System.out.println("consume token "+token);
 		if ( !inDecision() ) {
@@ -283,6 +288,7 @@ public class Profiler extends BlankDebugEventListener {
 		return decisionStack.size()>0;
 	}
 
+	@Override
 	public void consumeHiddenToken(Token token) {
 		//System.out.println("consume hidden token "+token);
 		if ( !inDecision() ) stats.numHiddenTokens++;
@@ -290,6 +296,7 @@ public class Profiler extends BlankDebugEventListener {
 
 	/** Track refs to lookahead if in a fixed/nonfixed decision.
 	 */
+	@Override
 	public void LT(int i, Token t) {
 		if ( inDecision() && i>0 ) {
 			DecisionEvent d = currentDecision();
@@ -335,6 +342,7 @@ public class Profiler extends BlankDebugEventListener {
 	 * 		...
 	 * 		exit rule
 	 */
+	@Override
 	public void beginBacktrack(int level) {
 		if (dump) System.out.println("enter backtrack "+level);
 		backtrackDepth++;
@@ -347,6 +355,7 @@ public class Profiler extends BlankDebugEventListener {
 	}
 
 	/** Successful or not, track how much lookahead synpreds use */
+	@Override
 	public void endBacktrack(int level, boolean successful) {
 		if (dump) System.out.println("exit backtrack "+level+": "+successful);
 		backtrackDepth--;		
@@ -373,10 +382,12 @@ public class Profiler extends BlankDebugEventListener {
 		return decisionStack.peek();
 	}
 
+	@Override
 	public void recognitionException(RecognitionException e) {
 		stats.numReportedErrors++;
 	}
 
+	@Override
 	public void semanticPredicate(boolean result, String predicate) {
 		stats.numSemanticPredicates++;
 		if ( inDecision() ) {
@@ -388,6 +399,7 @@ public class Profiler extends BlankDebugEventListener {
 		}
 	}
 
+	@Override
 	public void terminate() {
 		for (DecisionEvent e : decisionEvents) {
 			//System.out.println("decision "+e.decision.decision+": k="+e.k);
@@ -437,7 +449,7 @@ public class Profiler extends BlankDebugEventListener {
 	// R E P O R T I N G
 
 	public String toNotifyString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(Version);
 		buf.append('\t');
 		buf.append(parser.getClass().getName());
@@ -498,6 +510,7 @@ public class Profiler extends BlankDebugEventListener {
 		return buf.toString();
 	}
 
+	@Override
 	public String toString() {
 		return toString(getReport());
 	}
@@ -518,16 +531,16 @@ public class Profiler extends BlankDebugEventListener {
 		return stats;
 	}
 
-	public DoubleKeyMap getDecisionStats() {
+	public DoubleKeyMap<String, Integer, DecisionDescriptor> getDecisionStats() {
 		return decisions;
 	}
 
-	public List getDecisionEvents() {
+	public List<DecisionEvent> getDecisionEvents() {
 		return decisionEvents;
 	}
 
 	public static String toString(ProfileStats stats) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("ANTLR Runtime Report; Profile Version ");
 		buf.append(stats.Version);
 		buf.append(newline);
@@ -650,7 +663,7 @@ public class Profiler extends BlankDebugEventListener {
 	}
 
 	public String getDecisionStatsDump() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("location");
 		buf.append(DATA_SEP);
 		buf.append("n");
@@ -698,11 +711,11 @@ public class Profiler extends BlankDebugEventListener {
 		return X;
 	}
 
-	protected int[] toArray(List a) {
+	protected int[] toArray(List<Integer> a) {
 		int[] x = new int[a.size()];
 		for (int i = 0; i < a.size(); i++) {
-			Integer I = (Integer) a.get(i);
-			x[i] = I.intValue();
+			Integer I = a.get(i);
+			x[i] = I;
 		}
 		return x;
 	}

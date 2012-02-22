@@ -84,13 +84,15 @@ public class LookaheadSet {
 	}
 
 	public void remove(int a) {
-		tokenTypeSet = (IntervalSet)tokenTypeSet.subtract(IntervalSet.of(a));
+		tokenTypeSet = tokenTypeSet.subtract(IntervalSet.of(a));
 	}
 
+	@Override
 	public int hashCode() {
 		return tokenTypeSet.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object other) {
 		return tokenTypeSet.equals(((LookaheadSet)other).tokenTypeSet);
 	}
@@ -103,6 +105,7 @@ public class LookaheadSet {
 		return r;
 	}
 
+	@Override
 	public String toString() {
 		return toString(null);
 	}

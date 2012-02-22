@@ -109,10 +109,12 @@ public class NFAState extends State {
 		this.nfa = nfa;
 	}
 
+	@Override
 	public int getNumberOfTransitions() {
 		return numTransitions;
 	}
 
+	@Override
 	public void addTransition(Transition e) {
 		if ( e==null ) {
 			throw new IllegalArgumentException("You can't add a null transition");			
@@ -147,6 +149,7 @@ public class NFAState extends State {
 		numTransitions = 1;
 	}
 
+	@Override
 	public Transition transition(int i) {
 		return transition[i];
 	}
@@ -251,6 +254,7 @@ public class NFAState extends State {
 		return decisionStateType>0;
 	}
 
+	@Override
 	public String toString() {
 		return String.valueOf(stateNumber);
 	}

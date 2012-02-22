@@ -29,6 +29,8 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.Label;
+import org.antlr.analysis.NFAState;
 import org.stringtemplate.v4.ST;
 
 import java.util.Collection;
@@ -41,14 +43,14 @@ public class RecursionOverflowMessage extends Message {
 	public DecisionProbe probe;
 	public DFAState sampleBadState;
 	public int alt;
-	public Collection targetRules;
-	public Collection callSiteStates;
+	public Collection<String> targetRules;
+	public Collection<? extends Collection<? extends NFAState>> callSiteStates;
 
 	public RecursionOverflowMessage(DecisionProbe probe,
 									DFAState sampleBadState,
 									int alt,
-									Collection targetRules,
-									Collection callSiteStates)
+									Collection<String> targetRules,
+									Collection<? extends Collection<? extends NFAState>> callSiteStates)
 	{
 		super(ErrorManager.MSG_RECURSION_OVERLOW);
 		this.probe = probe;
@@ -58,6 +60,7 @@ public class RecursionOverflowMessage extends Message {
 		this.callSiteStates = callSiteStates;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
@@ -72,7 +75,7 @@ public class RecursionOverflowMessage extends Message {
 		st.add("alt", alt);
 		st.add("callSiteStates", callSiteStates);
 
-		List labels =
+		List<Label> labels =
 			probe.getSampleNonDeterministicInputSequence(sampleBadState);
 		String input = probe.getInputSequenceDisplay(labels);
 		st.add("input", input);

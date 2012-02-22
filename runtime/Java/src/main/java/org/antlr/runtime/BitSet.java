@@ -58,11 +58,11 @@ public class BitSet implements Cloneable {
     }
 
 	/** Construction from a list of integers */
-	public BitSet(List items) {
+	public BitSet(List<Integer> items) {
 		this();
 		for (int i = 0; i < items.size(); i++) {
-			Integer v = (Integer) items.get(i);
-			add(v.intValue());
+			Integer v = items.get(i);
+			add(v);
 		}
 	}
 
@@ -163,6 +163,7 @@ public class BitSet implements Cloneable {
         return 1L << bitPosition;
     }
 
+	@Override
     public Object clone() {
         BitSet s;
         try {
@@ -191,6 +192,7 @@ public class BitSet implements Cloneable {
         return deg;
     }
 
+	@Override
     public boolean equals(Object other) {
         if ( other == null || !(other instanceof BitSet) ) {
             return false;
@@ -293,12 +295,13 @@ public class BitSet implements Cloneable {
 		return bit >> LOG_BITS; // bit / BITS
 	}
 
+	@Override
 	public String toString() {
 		return toString(null);
 	}
 
 	public String toString(String[] tokenNames) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		String separator = ",";
 		boolean havePrintedAnElement = false;
 		buf.append('{');

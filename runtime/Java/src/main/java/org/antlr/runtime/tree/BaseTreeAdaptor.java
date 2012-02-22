@@ -40,9 +40,10 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 	 *  track ourselves.  That's ok, it's only for debugging, though it's
 	 *  expensive: we have to create a hashtable with all tree nodes in it.
 	 */
-	protected Map treeToUniqueIDMap;
+	protected Map<Object, Integer> treeToUniqueIDMap;
 	protected int uniqueNodeID = 1;
 
+	@Override
 	public Object nil() {
 		return create(null);
 	}
@@ -58,6 +59,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
      *  You don't have to subclass CommonErrorNode; you will likely need to
      *  subclass your own tree node class to avoid class cast exception.
 	 */
+	@Override
 	public Object errorNode(TokenStream input, Token start, Token stop,
 							RecognitionException e)
 	{
@@ -66,10 +68,12 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		return t;
 	}
 
+	@Override
 	public boolean isNil(Object tree) {
 		return ((Tree)tree).isNil();
 	}
 
+	@Override
 	public Object dupTree(Object tree) {
 		return dupTree(tree, null);
 	}
@@ -102,6 +106,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 	 *  make sure that this is consistent with have the user will build
 	 *  ASTs.
 	 */
+	@Override
 	public void addChild(Object t, Object child) {
 		if ( t!=null && child!=null ) {
 			((Tree)t).addChild((Tree)child);
@@ -134,6 +139,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 	 *  constructing these nodes so we should have this control for
 	 *  efficiency.
 	 */
+	@Override
 	public Object becomeRoot(Object newRoot, Object oldRoot) {
         //System.out.println("becomeroot new "+newRoot.toString()+" old "+oldRoot);
         Tree newRootTree = (Tree)newRoot;
@@ -144,7 +150,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		// handle ^(nil real-node)
 		if ( newRootTree.isNil() ) {
             int nc = newRootTree.getChildCount();
-            if ( nc==1 ) newRootTree = (Tree)newRootTree.getChild(0);
+            if ( nc==1 ) newRootTree = newRootTree.getChild(0);
             else if ( nc >1 ) {
 				// TODO: make tree run time exceptions hierarchy
 				throw new RuntimeException("more than one node as root (TODO: make exception hierarchy)");
@@ -158,6 +164,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 	}
 
 	/** Transform ^(nil x) to x and nil to null */
+	@Override
 	public Object rulePostProcessing(Object root) {
 		//System.out.println("rulePostProcessing: "+((Tree)root).toStringTree());
 		Tree r = (Tree)root;
@@ -166,7 +173,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 				r = null;
 			}
 			else if ( r.getChildCount()==1 ) {
-				r = (Tree)r.getChild(0);
+				r = r.getChild(0);
 				// whoever invokes rule will set parent and child index
 				r.setParent(null);
 				r.setChildIndex(-1);
@@ -175,10 +182,12 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		return r;
 	}
 
+	@Override
 	public Object becomeRoot(Token newRoot, Object oldRoot) {
 		return becomeRoot(create(newRoot), oldRoot);
 	}
 
+	@Override
 	public Object create(int tokenType, Token fromToken) {
 		fromToken = createToken(fromToken);
 		//((ClassicToken)fromToken).setType(tokenType);
@@ -187,6 +196,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		return t;
 	}
 
+	@Override
 	public Object create(int tokenType, Token fromToken, String text) {
         if (fromToken == null) return create(tokenType, text);
 		fromToken = createToken(fromToken);
@@ -196,54 +206,64 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 		return t;
 	}
 
+	@Override
 	public Object create(int tokenType, String text) {
 		Token fromToken = createToken(tokenType, text);
 		Tree t = (Tree)create(fromToken);
 		return t;
 	}
 
+	@Override
 	public int getType(Object t) {
 		return ((Tree)t).getType();
 	}
 
+	@Override
 	public void setType(Object t, int type) {
 		throw new NoSuchMethodError("don't know enough about Tree node");
 	}
 
+	@Override
 	public String getText(Object t) {
 		return ((Tree)t).getText();
 	}
 
+	@Override
 	public void setText(Object t, String text) {
 		throw new NoSuchMethodError("don't know enough about Tree node");
 	}
 
+	@Override
 	public Object getChild(Object t, int i) {
 		return ((Tree)t).getChild(i);
 	}
 
+	@Override
 	public void setChild(Object t, int i, Object child) {
 		((Tree)t).setChild(i, (Tree)child);
 	}
 
+	@Override
 	public Object deleteChild(Object t, int i) {
 		return ((Tree)t).deleteChild(i);
 	}
 
+	@Override
 	public int getChildCount(Object t) {
 		return ((Tree)t).getChildCount();
 	}
 
+	@Override
 	public int getUniqueID(Object node) {
 		if ( treeToUniqueIDMap==null ) {
-			 treeToUniqueIDMap = new HashMap();
+			 treeToUniqueIDMap = new HashMap<Object, Integer>();
 		}
-		Integer prevID = (Integer)treeToUniqueIDMap.get(node);
+		Integer prevID = treeToUniqueIDMap.get(node);
 		if ( prevID!=null ) {
-			return prevID.intValue();
+			return prevID;
 		}
 		int ID = uniqueNodeID;
-		treeToUniqueIDMap.put(node, new Integer(ID));
+		treeToUniqueIDMap.put(node, ID);
 		uniqueNodeID++;
 		return ID;
 		// GC makes these nonunique:

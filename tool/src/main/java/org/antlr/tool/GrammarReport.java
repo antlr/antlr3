@@ -112,9 +112,8 @@ public class GrammarReport {
 
 		int totalNonSynPredProductions = 0;
 		int totalNonSynPredRules = 0;
-		Collection rules = g.getRules();
-		for (Iterator it = rules.iterator(); it.hasNext();) {
-			Rule r = (Rule) it.next();
+		Collection<Rule> rules = g.getRules();
+		for (Rule r : rules) {
 			if ( !r.name.toUpperCase()
 				.startsWith(Grammar.SYNPRED_RULE_PREFIX.toUpperCase()) )
 			{
@@ -257,7 +256,7 @@ public class GrammarReport {
 	 *  send to the notify page at antlr.org
 	 */
 	public String toNotifyString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		ReportData data = getReportData(grammar);
 		Field[] fields = ReportData.class.getDeclaredFields();
 		int i = 0;
@@ -277,7 +276,7 @@ public class GrammarReport {
 	}
 
 	public String getBacktrackingReport() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("Backtracking report:");
 		buf.append(newline);
 		buf.append("Number of decisions that backtrack: ");
@@ -287,12 +286,10 @@ public class GrammarReport {
 		return buf.toString();
 	}
 
-	protected String getDFALocations(Set dfas) {
-		Set decisions = new HashSet();
-		StringBuffer buf = new StringBuffer();
-		Iterator it = dfas.iterator();
-		while ( it.hasNext() ) {
-			DFA dfa = (DFA) it.next();
+	protected String getDFALocations(Set<DFA> dfas) {
+		Set<Integer> decisions = new HashSet<Integer>();
+		StringBuilder buf = new StringBuilder();
+		for (DFA dfa : dfas) {
 			// if we aborted a DFA and redid with k=1, the backtrackin
 			if ( decisions.contains(Utils.integer(dfa.decisionNumber)) ) {
 				continue;
@@ -317,6 +314,7 @@ public class GrammarReport {
 	 *  return a human-readable version.  Return null if there is a
 	 *  problem with the data.
 	 */
+	@Override
 	public String toString() {
 		return toString(toNotifyString());
 	}
@@ -350,7 +348,7 @@ public class GrammarReport {
 		if ( data ==null ) {
 			return null;
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("ANTLR Grammar Report; Stats Version ");
 		buf.append(data.version);
 		buf.append('\n');

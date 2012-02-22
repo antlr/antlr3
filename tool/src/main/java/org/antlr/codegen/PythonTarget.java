@@ -43,6 +43,7 @@ import java.util.List;
 
 public class PythonTarget extends Target {
     /** Target must be able to override the labels used for token types */
+	@Override
     public String getTokenTypeAsTargetLabel(CodeGenerator generator,
 					    int ttype) {
 	// use ints for predefined types;
@@ -61,6 +62,7 @@ public class PythonTarget extends Target {
 	return name;
     }
 
+	@Override
     public String getTargetCharLiteralFromANTLRCharLiteral(
             CodeGenerator generator,
             String literal) {
@@ -68,8 +70,8 @@ public class PythonTarget extends Target {
 	return String.valueOf(c);
     }
 
-    private List splitLines(String text) {
-		ArrayList l = new ArrayList();
+    private List<String> splitLines(String text) {
+		ArrayList<String> l = new ArrayList<String>();
 		int idx = 0;
 
 		while ( true ) {
@@ -87,7 +89,8 @@ public class PythonTarget extends Target {
 		return l;
     }
 
-    public List postProcessAction(List chunks, Token actionToken) {
+	@Override
+    public List<Object> postProcessAction(List<Object> chunks, Token actionToken) {
 		/* TODO
 		   - check for and report TAB usage
 		 */
@@ -102,13 +105,13 @@ public class PythonTarget extends Target {
 		   - where every LF is at the end of a string chunk
 		*/
 
-		List nChunks = new ArrayList();
+		List<Object> nChunks = new ArrayList<Object>();
 		for (int i = 0; i < chunks.size(); i++) {
 			Object chunk = chunks.get(i);
 
 			if ( chunk instanceof String ) {
 				String text = (String)chunks.get(i);
-				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
+				if ( nChunks.isEmpty() && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// prepend to this chunk
 
@@ -119,14 +122,10 @@ public class PythonTarget extends Target {
 					text = ws + text;
 				}
 
-				List parts = splitLines(text);
-				for ( int j = 0 ; j < parts.size() ; j++ ) {
-					chunk = parts.get(j);
-					nChunks.add(chunk);
-				}
+				nChunks.addAll(splitLines(text));
 			}
 			else {
-				if ( nChunks.size() == 0 && actionToken.getCharPositionInLine() >= 0 ) {
+				if ( nChunks.isEmpty() && actionToken.getCharPositionInLine() >= 0 ) {
 					// first chunk and some 'virtual' WS at beginning
 					// add as a chunk of its own
 

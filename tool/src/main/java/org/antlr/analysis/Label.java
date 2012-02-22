@@ -37,7 +37,7 @@ import org.antlr.tool.Grammar;
  *  (which assumes an epsilon transition) or a tree of predicates (in a DFA).
  *  Special label types have to be < 0 to avoid conflict with char.
  */
-public class Label implements Comparable, Cloneable {
+public class Label implements Comparable<Label>, Cloneable {
     public static final int INVALID = -7;
 
 	public static final int ACTION = -6;
@@ -142,6 +142,7 @@ public class Label implements Comparable, Cloneable {
         this.labelSet = labelSet;
     }
 
+	@Override
 	public Object clone() {
 		Label l;
 		try {
@@ -263,6 +264,7 @@ public class Label implements Comparable, Cloneable {
 		return false;
 	}
 
+	@Override
     public int hashCode() {
         if (label==SET) {
             return labelSet.hashCode();
@@ -273,6 +275,7 @@ public class Label implements Comparable, Cloneable {
 	}
 
 	// TODO: do we care about comparing set {A} with atom A? Doesn't now.
+	@Override
 	public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
@@ -290,8 +293,9 @@ public class Label implements Comparable, Cloneable {
 		return true;  // label values are same, so true
     }
 
-    public int compareTo(Object o) {
-        return this.label-((Label)o).label;
+	@Override
+    public int compareTo(Label o) {
+        return this.label-o.label;
     }
 
     /** Predicates are lists of AST nodes from the NFA created from the
@@ -322,6 +326,7 @@ public class Label implements Comparable, Cloneable {
     }
       */
 
+	@Override
     public String toString() {
         switch (label) {
             case SET :

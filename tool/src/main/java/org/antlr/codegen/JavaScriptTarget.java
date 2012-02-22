@@ -36,6 +36,7 @@ public class JavaScriptTarget extends Target {
      *  This method overrides the parent class so that characters will always
      *  be encoded as Unicode literals (e.g. \u0011).
      */
+	@Override
     public String encodeIntAsCharEscape(int v) {
         String hex = Integer.toHexString(v|0x10000).substring(1,5);
         return "\\u"+hex;
@@ -52,6 +53,7 @@ public class JavaScriptTarget extends Target {
      *
      *  Note: stole the following two methods from the ActionScript target.
      */
+	@Override
     public String getTarget64BitStringFromValue(long word) {
         StringBuffer buf = new StringBuffer(22); // enough for the two "0x", "," and " "
         buf.append("0x");

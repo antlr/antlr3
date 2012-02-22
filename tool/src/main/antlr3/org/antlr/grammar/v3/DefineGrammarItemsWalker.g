@@ -80,7 +80,7 @@ protected final void trimGrammar() {
     GrammarAST p = root;
     // find the grammar spec
     while ( !p.getText().equals( "grammar" ) ) {
-        p = (GrammarAST)p.getNextSibling();
+        p = p.getNextSibling();
     }
     for ( int i = 0; i < p.getChildCount(); i++ ) {
         if ( p.getChild( i ).getType() != RULE )
@@ -628,7 +628,7 @@ rewrite_atom
 	if ( state.backtracking == 0 )
 	{
 		Rule r = grammar.getRule(currentRuleName);
-		Set tokenRefsInAlt = r.getTokenRefsInAlt(outerAltNum);
+		Set<String> tokenRefsInAlt = r.getTokenRefsInAlt(outerAltNum);
 		boolean imaginary =
 			$start.getType()==TOKEN_REF &&
 			!tokenRefsInAlt.contains($start.getText());

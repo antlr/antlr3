@@ -167,7 +167,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 		assertEquals("unexpected number of expected problems",
 				    1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be an unreachable alt",
 				    msg instanceof GrammarUnreachableAltsMessage);
 		GrammarUnreachableAltsMessage u = (GrammarUnreachableAltsMessage)msg;
@@ -347,7 +347,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 		assertEquals("unexpected number of expected problems",
 				    1, equeue.size());
-		Message msg = (Message)equeue.errors.get(0);
+		Message msg = equeue.errors.get(0);
 		assertTrue("warning must be an unreachable alt",
 				   msg instanceof GrammarUnreachableAltsMessage);
 		GrammarUnreachableAltsMessage u = (GrammarUnreachableAltsMessage)msg;
@@ -526,12 +526,12 @@ public class TestCharDFAConversion extends BaseTest {
 		FASerializer serializer = new FASerializer(g);
 		String result = serializer.serialize(dfa.startState);
 		//System.out.print(result);
-		List nonDetAlts = dfa.getUnreachableAlts();
+		List<Integer> nonDetAlts = dfa.getUnreachableAlts();
 		//System.out.println("alts w/o predict state="+nonDetAlts);
 
 		// first make sure nondeterministic alts are as expected
 		if ( expectingUnreachableAlts==null ) {
-			if ( nonDetAlts!=null && nonDetAlts.size()!=0 ) {
+			if ( nonDetAlts!=null && !nonDetAlts.isEmpty() ) {
 				System.err.println("nondeterministic alts (should be empty): "+nonDetAlts);
 			}
 			assertEquals("unreachable alts mismatch", 0, nonDetAlts!=null?nonDetAlts.size():0);

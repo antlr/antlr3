@@ -30,6 +30,7 @@ package org.antlr.tool;
 import org.antlr.Tool;
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.NFAState;
 import org.antlr.misc.BitSet;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
@@ -39,12 +40,7 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.misc.STMessage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /** Defines all the errors ANTLR can generator for both the tool and for
@@ -242,9 +238,9 @@ public class ErrorManager {
 	 *  Map<String,Set> where the key is a method name like danglingState.
 	 *  The set is whatever that method accepts or derives like a DFA.
 	 */
-	public static final Map emitSingleError = new HashMap() {
+	public static final Map<String, Set<String>> emitSingleError = new HashMap<String, Set<String>>() {
 		{
-			put("danglingState", new HashSet());
+			put("danglingState", new HashSet<String>());
 		}
 	};
 
@@ -255,9 +251,9 @@ public class ErrorManager {
 	/** Each thread might need it's own error listener; e.g., a GUI with
 	 *  multiple window frames holding multiple grammars.
 	 */
-	private static Map threadToListenerMap = new HashMap();
+	private static Map<Thread, ANTLRErrorListener> threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
 
-	static class ErrorState {
+	public static class ErrorState {
 		public int errors;
 		public int warnings;
 		public int infos;
@@ -273,13 +269,13 @@ public class ErrorManager {
 	/** Track the number of errors regardless of the listener but track
 	 *  per thread.
 	 */
-	private static Map threadToErrorStateMap = new HashMap();
+	private static Map<Thread, ErrorState> threadToErrorStateMap = new HashMap<Thread, ErrorState>();
 
 	/** Each thread has its own ptr to a Tool object, which knows how
 	 *  to panic, for example.  In a GUI, the thread might just throw an Error
 	 *  to exit rather than the suicide System.exit.
 	 */
-	private static Map threadToToolMap = new HashMap();
+	private static Map<Thread, Tool> threadToToolMap = new HashMap<Thread, Tool>();
 
 	/** The group of templates that represent all possible ANTLR errors. */
 	private static STGroup messages;
@@ -292,6 +288,7 @@ public class ErrorManager {
 	private static String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
 
 	static ANTLRErrorListener theDefaultErrorListener = new ANTLRErrorListener() {
+		@Override
 		public void info(String msg) {
 			if (formatWantsSingleLineMessage()) {
 				msg = msg.replaceAll("\n", " ");
@@ -299,6 +296,7 @@ public class ErrorManager {
 			System.err.println(msg);
 		}
 
+		@Override
 		public void error(Message msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -307,6 +305,7 @@ public class ErrorManager {
 			System.err.println(outputMsg);
 		}
 
+		@Override
 		public void warning(Message msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -315,6 +314,7 @@ public class ErrorManager {
 			System.err.println(outputMsg);
 		}
 
+		@Override
 		public void error(ToolMessage msg) {
 			String outputMsg = msg.toString();
 			if (formatWantsSingleLineMessage()) {
@@ -329,18 +329,22 @@ public class ErrorManager {
 	 */
 	static STErrorListener initSTListener =
 		new STErrorListener() {
+			@Override
 			public void compileTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+			@Override
 			public void runTimeError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+			@Override
 			public void IOError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
 
+			@Override
 			public void internalError(STMessage msg) {
 				System.err.println("ErrorManager init error: "+msg);
 			}
@@ -353,28 +357,32 @@ public class ErrorManager {
 	 */
 	static STErrorListener blankSTListener =
 		new STErrorListener() {
-			public void compileTimeError(STMessage msg) {			}
-			public void runTimeError(STMessage msg) {			}
-			public void IOError(STMessage msg) {			}
-			public void internalError(STMessage msg) {			}
+			@Override public void compileTimeError(STMessage msg) {			}
+			@Override public void runTimeError(STMessage msg) {			}
+			@Override public void IOError(STMessage msg) {			}
+			@Override public void internalError(STMessage msg) {			}
 		};
 
 	/** Errors during initialization related to ST must all go to System.err.
 	 */
 	static STErrorListener theDefaultSTListener =
 		new STErrorListener() {
+			@Override
 			public void compileTimeError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void runTimeError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void IOError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
 
+			@Override
 			public void internalError(STMessage msg) {
 				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
 			}
@@ -544,7 +552,7 @@ public class ErrorManager {
 
 	public static ANTLRErrorListener getErrorListener() {
 		ANTLRErrorListener el =
-			(ANTLRErrorListener)threadToListenerMap.get(Thread.currentThread());
+			threadToListenerMap.get(Thread.currentThread());
 		if ( el==null ) {
 			return theDefaultErrorListener;
 		}
@@ -553,7 +561,7 @@ public class ErrorManager {
 
 	public static ErrorState getErrorState() {
 		ErrorState ec =
-			(ErrorState)threadToErrorStateMap.get(Thread.currentThread());
+			threadToErrorStateMap.get(Thread.currentThread());
 		if ( ec==null ) {
 			ec = new ErrorState();
 			threadToErrorStateMap.put(Thread.currentThread(), ec);
@@ -566,7 +574,7 @@ public class ErrorManager {
 	}
 
 	public static void resetErrorState() {
-        threadToListenerMap = new HashMap();
+        threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
         ErrorState ec = new ErrorState();
 		threadToErrorStateMap.put(Thread.currentThread(), ec);
 	}
@@ -627,7 +635,7 @@ public class ErrorManager {
 		getErrorState().errors++;
 		Message msg = new GrammarDanglingStateMessage(probe,d);
 		getErrorState().errorMsgIDs.add(msg.msgID);
-		Set seen = (Set)emitSingleError.get("danglingState");
+		Set<String> seen = emitSingleError.get("danglingState");
 		if ( !seen.contains(d.dfa.decisionNumber+"|"+d.getAltSet()) ) {
 			getErrorListener().error(msg);
 			// we've seen this decision and this alt set; never again
@@ -644,7 +652,7 @@ public class ErrorManager {
 	}
 
 	public static void unreachableAlts(DecisionProbe probe,
-									   List alts)
+									   List<Integer> alts)
 	{
 		getErrorState().errors++;
 		Message msg = new GrammarUnreachableAltsMessage(probe,alts);
@@ -672,8 +680,8 @@ public class ErrorManager {
 	public static void recursionOverflow(DecisionProbe probe,
 										 DFAState sampleBadState,
 										 int alt,
-										 Collection targetRules,
-										 Collection callSiteStates)
+										 Collection<String> targetRules,
+										 Collection<? extends Collection<? extends NFAState>> callSiteStates)
 	{
 		getErrorState().errors++;
 		Message msg = new RecursionOverflowMessage(probe,sampleBadState, alt,
@@ -696,7 +704,7 @@ public class ErrorManager {
 	}
 	*/
 
-	public static void leftRecursionCycles(Collection cycles) {
+	public static void leftRecursionCycles(Collection<? extends Set<? extends Rule>> cycles) {
 		getErrorState().errors++;
 		Message msg = new LeftRecursionCyclesMessage(cycles);
 		getErrorState().errorMsgIDs.add(msg.msgID);
@@ -831,7 +839,7 @@ public class ErrorManager {
 			}
 			String templateName =
 				fieldName.substring("MSG_".length(),fieldName.length());
-			int msgID = 0;
+			int msgID;
 			try {
 				// get the constant value from this class object
 				msgID = f.getInt(ErrorManager.class);
@@ -912,7 +920,7 @@ public class ErrorManager {
 	 *  for GUIs etc...
 	 */
 	public static void panic() {
-		Tool tool = (Tool)threadToToolMap.get(Thread.currentThread());
+		Tool tool = threadToToolMap.get(Thread.currentThread());
 		if ( tool==null ) {
 			// no tool registered, exit
 			throw new Error("ANTLR ErrorManager panic");

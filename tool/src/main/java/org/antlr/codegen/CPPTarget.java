@@ -29,7 +29,6 @@ package org.antlr.codegen;
 
 import org.antlr.Tool;
 import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
 import org.antlr.tool.Grammar;
 
 import java.io.IOException;
@@ -75,7 +74,7 @@ public class CPPTarget extends Target {
 	 */
 	public String escapeString(String s)
 	{
-		StringBuffer retval = new StringBuffer();
+		StringBuilder retval = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			retval.append(escapeChar(s.charAt(i)));
 		}
@@ -83,6 +82,7 @@ public class CPPTarget extends Target {
 		return retval.toString();
 	}
 
+	@Override
 	protected void genRecognizerHeaderFile(Tool tool,
 										   CodeGenerator generator,
 										   Grammar grammar,
@@ -100,6 +100,7 @@ public class CPPTarget extends Target {
 	 *  around the incoming literal.
 	 *  Depending on the charvocabulary the charliteral should be prefixed with a 'L'
 	 */
+	@Override
 	public String getTargetCharLiteralFromANTLRCharLiteral( CodeGenerator codegen, String literal) {
 		int c = Grammar.getCharValueFromGrammarCharLiteral(literal);
 		String prefix = "'";
@@ -117,6 +118,7 @@ public class CPPTarget extends Target {
 	 *  around the incoming literal.
 	 *  Depending on the charvocabulary the string should be prefixed with a 'L'
 	 */
+	@Override
 	public String getTargetStringLiteralFromANTLRStringLiteral( CodeGenerator codegen, String literal) {
 		StringBuffer buf = Grammar.getUnescapedStringFromGrammarStringLiteral(literal);
 		String prefix = "\"";
@@ -129,6 +131,7 @@ public class CPPTarget extends Target {
 	 * being 255 or 0xFFFF the templates should generate normal character
 	 * constants or multibyte ones.
 	 */
+	@Override
 	public int getMaxCharValue( CodeGenerator codegen ) {
 		int maxval = 255; // codegen.grammar.get????();
 		if ( maxval <= 255 )

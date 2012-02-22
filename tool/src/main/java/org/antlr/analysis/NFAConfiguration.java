@@ -104,6 +104,7 @@ public class NFAConfiguration {
      *  semantic contexts, but might as well define equals to be
      *  everything.
      */
+	@Override
     public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
@@ -115,17 +116,19 @@ public class NFAConfiguration {
                this.semanticContext.equals(other.semanticContext);
     }
 
+	@Override
     public int hashCode() {
         int h = state + alt + context.hashCode();
         return h;
     }
 
+	@Override
 	public String toString() {
 		return toString(true);
 	}
 
 	public String toString(boolean showAlt) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(state);
 		if ( showAlt ) {
 			buf.append("|");

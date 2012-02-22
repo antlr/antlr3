@@ -139,6 +139,7 @@ public abstract class SemanticContext {
 		 *  Or, if they have the same constant value, return equal.
 		 *  As of July 2006 I'm not sure these are needed.
 		 */
+		@Override
 		public boolean equals(Object o) {
 			if ( !(o instanceof Predicate) ) {
 				return false;
@@ -156,6 +157,7 @@ public abstract class SemanticContext {
 			return predicateAST.getText().equals(other.predicateAST.getText());
 		}
 
+		@Override
 		public int hashCode() {
 			if (constantValue != INVALID_PRED_VALUE){
 				return constantValue;
@@ -168,11 +170,12 @@ public abstract class SemanticContext {
 			return predicateAST.getText().hashCode();
 		}
 
+		@Override
 		public ST genExpr(CodeGenerator generator,
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				if ( synpred ) {
 					eST = templates.getInstanceOf("evalSynPredicate");
@@ -415,7 +418,7 @@ public abstract class SemanticContext {
 
 		@Override
 		public String toString() {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			buf.append("(");
 			int i = 0;
 			for (SemanticContext semctx : operands) {
@@ -455,7 +458,7 @@ public abstract class SemanticContext {
 				if (result == null)
 					result = operand.genExpr(generator, templates, dfa);
 
-				ST eST = null;
+				ST eST;
 				if ( templates!=null ) {
 					eST = templates.getInstanceOf("andPredicates");
 				}
@@ -505,7 +508,7 @@ public abstract class SemanticContext {
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("orPredicates");
 			}
@@ -550,7 +553,7 @@ public abstract class SemanticContext {
 									  STGroup templates,
 									  DFA dfa)
 		{
-			ST eST = null;
+			ST eST;
 			if ( templates!=null ) {
 				eST = templates.getInstanceOf("notPredicate");
 			}
@@ -728,11 +731,11 @@ public abstract class SemanticContext {
 
 		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
-		if (result.size() == 0)
+		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
 
 		opsA.removeAll(result);
-		if (opsA.size() == 0)
+		if (opsA.isEmpty())
 			a = new TruePredicate();
 		else if (opsA.size() == 1)
 			a = opsA.iterator().next();
@@ -740,7 +743,7 @@ public abstract class SemanticContext {
 			a = new AND(opsA);
 
 		opsB.removeAll(result);
-		if (opsB.size() == 0)
+		if (opsB.isEmpty())
 			b = new TruePredicate();
 		else if (opsB.size() == 1)
 			b = opsB.iterator().next();
@@ -761,11 +764,11 @@ public abstract class SemanticContext {
 
 		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
-		if (result.size() == 0)
+		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
 
 		opsA.removeAll(result);
-		if (opsA.size() == 0)
+		if (opsA.isEmpty())
 			a = new FalsePredicate();
 		else if (opsA.size() == 1)
 			a = opsA.iterator().next();
@@ -773,7 +776,7 @@ public abstract class SemanticContext {
 			a = new OR(opsA);
 
 		opsB.removeAll(result);
-		if (opsB.size() == 0)
+		if (opsB.isEmpty())
 			b = new FalsePredicate();
 		else if (opsB.size() == 1)
 			b = opsB.iterator().next();

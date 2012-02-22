@@ -41,6 +41,7 @@ public class GrammarAnalysisAbortedMessage extends Message {
 		this.probe = probe;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();

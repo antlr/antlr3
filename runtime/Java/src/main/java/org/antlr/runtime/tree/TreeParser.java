@@ -58,6 +58,7 @@ public class TreeParser extends BaseRecognizer {
 		setTreeNodeStream(input);
     }
 
+	@Override
 	public void reset() {
 		super.reset(); // reset all recognizer state variables
 		if ( input!=null ) {
@@ -74,14 +75,17 @@ public class TreeParser extends BaseRecognizer {
 		return input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}
 
+	@Override
 	protected Object getCurrentInputSymbol(IntStream input) {
 		return ((TreeNodeStream)input).LT(1);
 	}
 
+	@Override
 	protected Object getMissingSymbol(IntStream input,
 									  RecognitionException e,
 									  int expectedTokenType,
@@ -97,6 +101,7 @@ public class TreeParser extends BaseRecognizer {
 	 *  entire tree if node has children.  If children, scan until
 	 *  corresponding UP node.
 	 */
+	@Override
 	public void matchAny(IntStream ignore) { // ignore stream, copy of input
 		state.errorRecovery = false;
 		state.failed = false;
@@ -127,6 +132,7 @@ public class TreeParser extends BaseRecognizer {
 	 *  plus we want to alter the exception type.  Don't try to recover
 	 *  from tree parser errors inline...
      */
+	@Override
     protected Object recoverFromMismatchedToken(IntStream input,
                                                 int ttype,
                                                 BitSet follow)
@@ -139,6 +145,7 @@ public class TreeParser extends BaseRecognizer {
 	 *  always intended for the programmer because the parser built
 	 *  the input tree not the user.
 	 */
+	@Override
 	public String getErrorHeader(RecognitionException e) {
 		return getGrammarFileName()+": node from "+
 			   (e.approximateLineInfo?"after ":"")+"line "+e.line+":"+e.charPositionInLine;
@@ -147,6 +154,7 @@ public class TreeParser extends BaseRecognizer {
 	/** Tree parsers parse nodes they usually have a token object as
 	 *  payload. Set the exception token and do the default behavior.
 	 */
+	@Override
 	public String getErrorMessage(RecognitionException e, String[] tokenNames) {
 		if ( this instanceof TreeParser ) {
 			TreeAdaptor adaptor = ((TreeNodeStream)e.input).getTreeAdaptor();

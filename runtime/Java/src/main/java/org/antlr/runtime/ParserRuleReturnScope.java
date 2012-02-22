@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime;
 
-import org.antlr.runtime.tree.CommonTree;
-
 /** Rules that return more than a single value must return an object
  *  containing all the values.  Besides the properties defined in
  *  RuleLabelScope.predefinedRulePropertiesScope there may be user-defined
@@ -49,9 +47,12 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public class ParserRuleReturnScope extends RuleReturnScope {
 	public Token start, stop;
+	@Override
 	public Object getStart() { return start; }
+	@Override
 	public Object getStop() { return stop; }
 
 	public Object tree; // only used when output=AST
+	@Override
 	public Object getTree() { return tree; }
 }

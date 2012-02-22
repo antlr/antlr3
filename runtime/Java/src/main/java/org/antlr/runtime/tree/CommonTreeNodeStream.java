@@ -32,8 +32,6 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.misc.LookaheadStream;
 import org.antlr.runtime.misc.IntArray;
 
-import java.util.*;
-
 public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;
@@ -69,6 +67,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         it = new TreeIterator(adaptor,root);
 	}
 
+	@Override
     public void reset() {
         super.reset();
         it.reset();
@@ -80,6 +79,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
     /** Pull elements from tree iterator.  Track tree level 0..max_level.
      *  If nil rooted tree, don't give initial nil and DOWN nor final UP.
      */
+	@Override
     public Object nextElement() {
         Object t = it.next();
         //System.out.println("pulled "+adaptor.getType(t));
@@ -97,26 +97,34 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         return t;
     }
 
+	@Override
     public boolean isEOF(Object o) { return adaptor.getType(o) == Token.EOF; }
 
+	@Override
     public void setUniqueNavigationNodes(boolean uniqueNavigationNodes) { }
 
+	@Override
 	public Object getTreeSource() {	return root; }
 
+	@Override
 	public String getSourceName() { return getTokenStream().getSourceName(); }
 
+	@Override
 	public TokenStream getTokenStream() { return tokens; }
 
 	public void setTokenStream(TokenStream tokens) { this.tokens = tokens; }
 
+	@Override
 	public TreeAdaptor getTreeAdaptor() { return adaptor; }
 
 	public void setTreeAdaptor(TreeAdaptor adaptor) { this.adaptor = adaptor; }
 
+	@Override
     public Object get(int i) {
         throw new UnsupportedOperationException("Absolute node indexes are meaningless in an unbuffered stream");
     }
 
+	@Override
     public int LA(int i) { return adaptor.getType(LT(i)); }
 
     /** Make stream jump to a new location, saving old location.
@@ -141,12 +149,14 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
 
 	// TREE REWRITE INTERFACE
 
+	@Override
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t) {
 		if ( parent!=null ) {
 			adaptor.replaceChildren(parent, startChildIndex, stopChildIndex, t);
 		}
 	}
 
+	@Override
 	public String toString(Object start, Object stop) {
         // we'll have to walk from start to stop in tree; we're not keeping
         // a complete node stream buffer
@@ -156,7 +166,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
     /** For debugging; destructive: moves tree iterator to end. */
     public String toTokenTypeString() {
         reset();
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
         Object o = LT(1);
         int type = adaptor.getType(o);
         while ( type!=Token.EOF ) {

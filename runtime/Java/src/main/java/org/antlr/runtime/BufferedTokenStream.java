@@ -68,32 +68,39 @@ public class BufferedTokenStream implements TokenStream {
 
 	protected int range = -1; // how deep have we gone?
 
-    public BufferedTokenStream() {;}
+    public BufferedTokenStream() {}
 
     public BufferedTokenStream(TokenSource tokenSource) {
         this.tokenSource = tokenSource;
     }
 
+	@Override
     public TokenSource getTokenSource() { return tokenSource; }
 
+	@Override
 	public int index() { return p; }
 
+	@Override
 	public int range() { return range; }
 
+	@Override
     public int mark() {
         if ( p == -1 ) setup();
 		lastMarker = index();
 		return lastMarker;
 	}
 
+	@Override
 	public void release(int marker) {
 		// no resources to release
 	}
 
+	@Override
     public void rewind(int marker) {
         seek(marker);
     }
 
+	@Override
     public void rewind() {
         seek(lastMarker);
     }
@@ -103,8 +110,10 @@ public class BufferedTokenStream implements TokenStream {
         lastMarker = 0;
     }
 
+	@Override
     public void seek(int index) { p = index; }
 
+	@Override
     public int size() { return tokens.size(); }
 
     /** Move the input pointer to the next incoming token.  The stream
@@ -114,6 +123,7 @@ public class BufferedTokenStream implements TokenStream {
      *
      *  Walk past any token not on the channel the parser is listening to.
      */
+	@Override
     public void consume() {
         if ( p == -1 ) setup();
         p++;
@@ -138,6 +148,7 @@ public class BufferedTokenStream implements TokenStream {
         }
     }
 
+	@Override
     public Token get(int i) {
         if ( i < 0 || i >= tokens.size() ) {
             throw new NoSuchElementException("token index "+i+" out of range 0.."+(tokens.size()-1));
@@ -146,10 +157,10 @@ public class BufferedTokenStream implements TokenStream {
     }
 
 	/** Get all tokens from start..stop inclusively */
-	public List get(int start, int stop) {
+	public List<? extends Token> get(int start, int stop) {
 		if ( start<0 || stop<0 ) return null;
 		if ( p == -1 ) setup();
-		List subset = new ArrayList();
+		List<Token> subset = new ArrayList<Token>();
 		if ( stop>=tokens.size() ) stop = tokens.size()-1;
 		for (int i = start; i <= stop; i++) {
 			Token t = tokens.get(i);
@@ -159,6 +170,7 @@ public class BufferedTokenStream implements TokenStream {
 		return subset;
 	}
 
+	@Override
 	public int LA(int i) { return LT(i).getType(); }
 
     protected Token LB(int k) {
@@ -166,6 +178,7 @@ public class BufferedTokenStream implements TokenStream {
         return tokens.get(p-k);
     }
 
+	@Override
     public Token LT(int k) {
         if ( p == -1 ) setup();
         if ( k==0 ) return null;
@@ -190,9 +203,9 @@ public class BufferedTokenStream implements TokenStream {
         p = -1;
     }
     
-    public List getTokens() { return tokens; }
+    public List<? extends Token> getTokens() { return tokens; }
 
-    public List getTokens(int start, int stop) {
+    public List<? extends Token> getTokens(int start, int stop) {
         return getTokens(start, stop, (BitSet)null);
     }
 
@@ -200,7 +213,7 @@ public class BufferedTokenStream implements TokenStream {
      *  the token type BitSet.  Return null if no tokens were found.  This
      *  method looks at both on and off channel tokens.
      */
-    public List getTokens(int start, int stop, BitSet types) {
+    public List<? extends Token> getTokens(int start, int stop, BitSet types) {
         if ( p == -1 ) setup();
         if ( stop>=tokens.size() ) stop=tokens.size()-1;
         if ( start<0 ) start=0;
@@ -214,34 +227,37 @@ public class BufferedTokenStream implements TokenStream {
                 filteredTokens.add(t);
             }
         }
-        if ( filteredTokens.size()==0 ) {
+        if ( filteredTokens.isEmpty() ) {
             filteredTokens = null;
         }
         return filteredTokens;
     }
 
-    public List getTokens(int start, int stop, List types) {
+    public List<? extends Token> getTokens(int start, int stop, List<Integer> types) {
         return getTokens(start,stop,new BitSet(types));
     }
 
-    public List getTokens(int start, int stop, int ttype) {
+    public List<? extends Token> getTokens(int start, int stop, int ttype) {
         return getTokens(start,stop,BitSet.of(ttype));
     }
 
+	@Override
     public String getSourceName() {	return tokenSource.getSourceName();	}
 
     /** Grab *all* tokens from stream and return string */
+	@Override
     public String toString() {
         if ( p == -1 ) setup();
         fill();
         return toString(0, tokens.size()-1);
     }
 
+	@Override
     public String toString(int start, int stop) {
         if ( start<0 || stop<0 ) return null;
         if ( p == -1 ) setup();
         if ( stop>=tokens.size() ) stop = tokens.size()-1;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = start; i <= stop; i++) {
             Token t = tokens.get(i);
             if ( t.getType()==Token.EOF ) break;
@@ -250,6 +266,7 @@ public class BufferedTokenStream implements TokenStream {
         return buf.toString();
     }
 
+	@Override
     public String toString(Token start, Token stop) {
         if ( start!=null && stop!=null ) {
             return toString(start.getTokenIndex(), stop.getTokenIndex());

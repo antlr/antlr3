@@ -77,7 +77,7 @@ import java.util.HashMap;
 <@end>
 
 <docComment>
-@SuppressWarnings({"all", "warnings", "unchecked"})
+@SuppressWarnings({"all", "warnings", "unchecked", "cast"})
 <recognizer>
 >>
 
@@ -141,7 +141,7 @@ filteringNextToken() ::= <<
 public Token nextToken() {
     while (true) {
         if ( input.LA(1)==CharStream.EOF ) {
-            Token eof = new CommonToken((CharStream)input,Token.EOF,
+            Token eof = new CommonToken(input,Token.EOF,
                                         Token.DEFAULT_CHANNEL,
                                         input.index(),input.index());
             eof.setLine(getLine());
@@ -1191,7 +1191,7 @@ globalAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
     <scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack <scope.name>_stack = new Stack();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
 <endif>
 >>
 
@@ -1200,7 +1200,7 @@ ruleAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
     <scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack <scope.name>_stack = new Stack();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
 <endif>
 >>
 

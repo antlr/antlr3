@@ -36,13 +36,14 @@ import java.util.Collection;
  *  invoked when a decision DFA construction finds a problem in closure.
  */
 public class LeftRecursionCyclesMessage extends Message {
-	public Collection cycles;
+	public Collection<? extends Collection<? extends Rule>> cycles;
 
-	public LeftRecursionCyclesMessage(Collection cycles) {
+	public LeftRecursionCyclesMessage(Collection<? extends Collection<? extends Rule>> cycles) {
 		super(ErrorManager.MSG_LEFT_RECURSION_CYCLES);
 		this.cycles = cycles;
 	}
 
+	@Override
 	public String toString() {
 		ST st = getMessageTemplate();
 		st.add("listOfCycles", cycles);

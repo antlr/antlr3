@@ -50,10 +50,12 @@ public class PredicateLabel extends Label {
 		this.semanticContext = semCtx;
 	}
 
+	@Override
 	public int hashCode() {
 		return semanticContext.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
@@ -67,18 +69,22 @@ public class PredicateLabel extends Label {
 		return semanticContext.equals(((PredicateLabel)o).semanticContext);
 	}
 
+	@Override
 	public boolean isSemanticPredicate() {
 		return true;
 	}
 
+	@Override
 	public SemanticContext getSemanticContext() {
 		return semanticContext;
 	}
 
+	@Override
 	public String toString() {
 		return "{"+semanticContext+"}?";
 	}
 
+	@Override
 	public String toString(Grammar g) {
 		return toString();
 	}

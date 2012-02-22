@@ -56,20 +56,23 @@ public class CommonErrorNode extends CommonTree {
 		this.trappedException = e;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public int getType() {
 		return Token.INVALID_TOKEN_TYPE;
 	}
 
+	@Override
 	public String getText() {
-		String badText = null;
+		String badText;
 		if ( start instanceof Token ) {
-			int i = ((Token)start).getTokenIndex();
-			int j = ((Token)stop).getTokenIndex();
-			if ( ((Token)stop).getType() == Token.EOF ) {
+			int i = start.getTokenIndex();
+			int j = stop.getTokenIndex();
+			if ( stop.getType() == Token.EOF ) {
 				j = ((TokenStream)input).size();
 			}
 			badText = ((TokenStream)input).toString(i, j);
@@ -85,6 +88,7 @@ public class CommonErrorNode extends CommonTree {
 		return badText;
 	}
 
+	@Override
 	public String toString() {
 		if ( trappedException instanceof MissingTokenException ) {
 			return "<missing type: "+

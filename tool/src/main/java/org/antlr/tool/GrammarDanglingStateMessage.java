@@ -29,6 +29,7 @@ package org.antlr.tool;
 
 import org.antlr.analysis.DFAState;
 import org.antlr.analysis.DecisionProbe;
+import org.antlr.analysis.Label;
 import org.stringtemplate.v4.ST;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class GrammarDanglingStateMessage extends Message {
 		this.problemState = problemState;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
@@ -58,10 +60,10 @@ public class GrammarDanglingStateMessage extends Message {
 		if ( fileName!=null ) {
 			file = fileName;
 		}
-		List labels = probe.getSampleNonDeterministicInputSequence(problemState);
+		List<Label> labels = probe.getSampleNonDeterministicInputSequence(problemState);
 		String input = probe.getInputSequenceDisplay(labels);
 		ST st = getMessageTemplate();
-		List alts = new ArrayList();
+		List<Integer> alts = new ArrayList<Integer>();
 		alts.addAll(problemState.getAltSet());
 		Collections.sort(alts);
 		st.add("danglingAlts", alts);

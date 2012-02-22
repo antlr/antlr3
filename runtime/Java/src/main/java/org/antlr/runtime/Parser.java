@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime;
 
-import org.antlr.runtime.debug.DebugTokenStream;
-
 /** A parser for TokenStreams.  "parser grammars" result in a subclass
  *  of this.
  */
@@ -45,6 +43,7 @@ public class Parser extends BaseRecognizer {
 		this.input = input;
     }
 
+	@Override
 	public void reset() {
 		super.reset(); // reset all recognizer state variables
 		if ( input!=null ) {
@@ -52,16 +51,18 @@ public class Parser extends BaseRecognizer {
 		}
 	}
 
+	@Override
 	protected Object getCurrentInputSymbol(IntStream input) {
 		return ((TokenStream)input).LT(1);
 	}
 
+	@Override
 	protected Object getMissingSymbol(IntStream input,
 									  RecognitionException e,
 									  int expectedTokenType,
 									  BitSet follow)
 	{
-		String tokenText = null;
+		String tokenText;
 		if ( expectedTokenType==Token.EOF ) tokenText = "<missing EOF>";
 		else tokenText = "<missing "+getTokenNames()[expectedTokenType]+">";
 		CommonToken t = new CommonToken(expectedTokenType, tokenText);
@@ -87,6 +88,7 @@ public class Parser extends BaseRecognizer {
 		return input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}

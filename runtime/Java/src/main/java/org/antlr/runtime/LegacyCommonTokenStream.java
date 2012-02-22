@@ -42,13 +42,13 @@ public class LegacyCommonTokenStream implements TokenStream {
 	/** Record every single token pulled from the source so we can reproduce
 	 *  chunks of it later.
 	 */
-	protected List tokens;
+	protected List<Token> tokens;
 
 	/** Map<tokentype, channel> to override some Tokens' channel numbers */
-	protected Map channelOverrideMap;
+	protected Map<Integer, Integer> channelOverrideMap;
 
 	/** Set<tokentype>; discard any tokens with this type */
-	protected Set discardSet;
+	protected Set<Integer> discardSet;
 
 	/** Skip tokens on any channel but this one; this is how we skip whitespace... */
 	protected int channel = Token.DEFAULT_CHANNEL;
@@ -67,7 +67,7 @@ public class LegacyCommonTokenStream implements TokenStream {
     protected int p = -1;
 
 	public LegacyCommonTokenStream() {
-		tokens = new ArrayList(500);
+		tokens = new ArrayList<Token>(500);
 	}
 
 	public LegacyCommonTokenStream(TokenSource tokenSource) {
@@ -99,10 +99,9 @@ public class LegacyCommonTokenStream implements TokenStream {
 			boolean discard = false;
 			// is there a channel override for token type?
 			if ( channelOverrideMap!=null ) {
-				Integer channelI = (Integer)
-					channelOverrideMap.get(new Integer(t.getType()));
+				Integer channelI = channelOverrideMap.get(t.getType());
 				if ( channelI!=null ) {
-					t.setChannel(channelI.intValue());
+					t.setChannel(channelI);
 				}
 			}
 			if ( discardSet!=null &&
@@ -132,6 +131,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 *
 	 *  Walk past any token not on the channel the parser is listening to.
 	 */
+	@Override
 	public void consume() {
 		if ( p<tokens.size() ) {
             p++;
@@ -144,14 +144,14 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 */
 	protected int skipOffTokenChannels(int i) {
 		int n = tokens.size();
-		while ( i<n && ((Token)tokens.get(i)).getChannel()!=channel ) {
+		while ( i<n && tokens.get(i).getChannel()!=channel ) {
 			i++;
 		}
 		return i;
 	}
 
 	protected int skipOffTokenChannelsReverse(int i) {
-		while ( i>=0 && ((Token)tokens.get(i)).getChannel()!=channel ) {
+		while ( i>=0 && tokens.get(i).getChannel()!=channel ) {
 			i--;
 		}
 		return i;
@@ -165,30 +165,30 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 */
 	public void setTokenTypeChannel(int ttype, int channel) {
 		if ( channelOverrideMap==null ) {
-			channelOverrideMap = new HashMap();
+			channelOverrideMap = new HashMap<Integer, Integer>();
 		}
-        channelOverrideMap.put(new Integer(ttype), new Integer(channel));
+        channelOverrideMap.put(ttype, channel);
 	}
 
 	public void discardTokenType(int ttype) {
 		if ( discardSet==null ) {
-			discardSet = new HashSet();
+			discardSet = new HashSet<Integer>();
 		}
-        discardSet.add(new Integer(ttype));
+        discardSet.add(ttype);
 	}
 
 	public void discardOffChannelTokens(boolean discardOffChannelTokens) {
 		this.discardOffChannelTokens = discardOffChannelTokens;
 	}
 
-	public List getTokens() {
+	public List<? extends Token> getTokens() {
 		if ( p == -1 ) {
 			fillBuffer();
 		}
 		return tokens;
 	}
 
-	public List getTokens(int start, int stop) {
+	public List<? extends Token> getTokens(int start, int stop) {
 		return getTokens(start, stop, (BitSet)null);
 	}
 
@@ -196,7 +196,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 *  the token type BitSet.  Return null if no tokens were found.  This
 	 *  method looks at both on and off channel tokens.
 	 */
-	public List getTokens(int start, int stop, BitSet types) {
+	public List<? extends Token> getTokens(int start, int stop, BitSet types) {
 		if ( p == -1 ) {
 			fillBuffer();
 		}
@@ -211,30 +211,31 @@ public class LegacyCommonTokenStream implements TokenStream {
 		}
 
 		// list = tokens[start:stop]:{Token t, t.getType() in types}
-		List filteredTokens = new ArrayList();
+		List<Token> filteredTokens = new ArrayList<Token>();
 		for (int i=start; i<=stop; i++) {
-			Token t = (Token)tokens.get(i);
+			Token t = tokens.get(i);
 			if ( types==null || types.member(t.getType()) ) {
 				filteredTokens.add(t);
 			}
 		}
-		if ( filteredTokens.size()==0 ) {
+		if ( filteredTokens.isEmpty() ) {
 			filteredTokens = null;
 		}
 		return filteredTokens;
 	}
 
-	public List getTokens(int start, int stop, List types) {
+	public List<? extends Token> getTokens(int start, int stop, List<Integer> types) {
 		return getTokens(start,stop,new BitSet(types));
 	}
 
-	public List getTokens(int start, int stop, int ttype) {
+	public List<? extends Token> getTokens(int start, int stop, int ttype) {
 		return getTokens(start,stop,BitSet.of(ttype));
 	}
 
 	/** Get the ith token from the current position 1..n where k=1 is the
 	 *  first symbol of lookahead.
 	 */
+	@Override
 	public Token LT(int k) {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -247,7 +248,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		}
 		//System.out.print("LT(p="+p+","+k+")=");
 		if ( (p+k-1) >= tokens.size() ) {
-            return (Token)tokens.get(tokens.size()-1);
+            return tokens.get(tokens.size()-1);
 		}
 		//System.out.println(tokens.get(p+k-1));
 		int i = p;
@@ -259,11 +260,11 @@ public class LegacyCommonTokenStream implements TokenStream {
 			n++;
 		}
 		if ( i>=tokens.size() ) {
-            return (Token)tokens.get(tokens.size()-1); // must be EOF
+            return tokens.get(tokens.size()-1); // must be EOF
 		}
 
 		if ( i>range ) range = i;
-        return (Token)tokens.get(i);
+        return tokens.get(i);
     }
 
 	/** Look backwards k tokens on-channel tokens */
@@ -290,27 +291,30 @@ public class LegacyCommonTokenStream implements TokenStream {
 		if ( i<0 ) {
 			return null;
 		}
-		return (Token)tokens.get(i);
+		return tokens.get(i);
 	}
 
 	/** Return absolute token i; ignore which channel the tokens are on;
 	 *  that is, count all tokens not just on-channel tokens.
 	 */
+	@Override
 	public Token get(int i) {
-		return (Token)tokens.get(i);
+		return tokens.get(i);
 	}
 
 	/** Get all tokens from start..stop inclusively */
-	public List get(int start, int stop) {
+	public List<? extends Token> get(int start, int stop) {
 		if ( p == -1 ) fillBuffer();
 		if ( start<0 || stop<0 ) return null;
 		return tokens.subList(start, stop);
 	}
 
+	@Override
 	public int LA(int i) {
         return LT(i).getType();
     }
 
+	@Override
     public int mark() {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -319,26 +323,32 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return lastMarker;
 	}
 
+	@Override
 	public void release(int marker) {
 		// no resources to release
 	}
 
+	@Override
 	public int size() {
 		return tokens.size();
 	}
 
+	@Override
     public int index() {
         return p;
     }
 
+	@Override
 	public int range() {
 		return range;
 	}
 
+	@Override
 	public void rewind(int marker) {
 		seek(marker);
 	}
 
+	@Override
 	public void rewind() {
 		seek(lastMarker);
 	}
@@ -348,18 +358,22 @@ public class LegacyCommonTokenStream implements TokenStream {
 		lastMarker = 0;
 	}
 	
+	@Override
 	public void seek(int index) {
 		p = index;
 	}
 
+	@Override
 	public TokenSource getTokenSource() {
 		return tokenSource;
 	}
 
+	@Override
 	public String getSourceName() {
 		return getTokenSource().getSourceName();
 	}
 
+	@Override
 	public String toString() {
 		if ( p == -1 ) {
 			fillBuffer();
@@ -367,6 +381,7 @@ public class LegacyCommonTokenStream implements TokenStream {
 		return toString(0, tokens.size()-1);
 	}
 
+	@Override
 	public String toString(int start, int stop) {
 		if ( start<0 || stop<0 ) {
 			return null;
@@ -377,14 +392,15 @@ public class LegacyCommonTokenStream implements TokenStream {
 		if ( stop>=tokens.size() ) {
 			stop = tokens.size()-1;
 		}
- 		StringBuffer buf = new StringBuffer();
+ 		StringBuilder buf = new StringBuilder();
 		for (int i = start; i <= stop; i++) {
-			Token t = (Token)tokens.get(i);
+			Token t = tokens.get(i);
 			buf.append(t.getText());
 		}
 		return buf.toString();
 	}
 
+	@Override
 	public String toString(Token start, Token stop) {
 		if ( start!=null && stop!=null ) {
 			return toString(start.getTokenIndex(), stop.getTokenIndex());

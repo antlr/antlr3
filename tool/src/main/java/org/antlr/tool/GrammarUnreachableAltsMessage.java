@@ -38,10 +38,10 @@ import java.util.List;
  */
 public class GrammarUnreachableAltsMessage extends Message {
 	public DecisionProbe probe;
-    public List alts;
+    public List<Integer> alts;
 
 	public GrammarUnreachableAltsMessage(DecisionProbe probe,
-										 List alts)
+										 List<Integer> alts)
 	{
 		super(ErrorManager.MSG_UNREACHABLE_ALTS);
 		this.probe = probe;
@@ -52,6 +52,7 @@ public class GrammarUnreachableAltsMessage extends Message {
 		}
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
@@ -66,9 +67,9 @@ public class GrammarUnreachableAltsMessage extends Message {
 		if ( probe.dfa.isTokensRuleDecision() ) {
 			// alts are token rules, convert to the names instead of numbers
 			for (int i = 0; i < alts.size(); i++) {
-				Integer altI = (Integer) alts.get(i);
+				Integer altI = alts.get(i);
 				String tokenName =
-					probe.getTokenNameForTokensRuleAlt(altI.intValue());
+					probe.getTokenNameForTokensRuleAlt(altI);
 				// reset the line/col to the token definition
 				NFAState ruleStart =
 					probe.dfa.nfa.grammar.getRuleStartState(tokenName);

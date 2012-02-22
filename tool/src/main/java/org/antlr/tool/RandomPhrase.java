@@ -38,6 +38,7 @@ import org.antlr.misc.Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -70,9 +71,9 @@ public class RandomPhrase {
 		NFAState state = g.getRuleStartState(startRule);
 		NFAState stopState = g.getRuleStopState(startRule);
 
-		Stack ruleInvocationStack = new Stack();
+		Stack<NFAState> ruleInvocationStack = new Stack<NFAState>();
 		while ( true ) {
-			if ( state==stopState && ruleInvocationStack.size()==0 ) {
+			if ( state==stopState && ruleInvocationStack.isEmpty() ) {
 				break;
 			}
 			if ( debug ) System.out.println("state "+state);
@@ -82,7 +83,7 @@ public class RandomPhrase {
 			}
 			// end of rule node
 			if ( state.isAcceptState() ) {
-				NFAState invokingState = (NFAState)ruleInvocationStack.pop();
+				NFAState invokingState = ruleInvocationStack.pop();
 				if ( debug ) System.out.println("pop invoking state "+invokingState);
 				//System.out.println("leave "+state.enclosingRule.name);
 				RuleClosureTransition invokingTransition =
@@ -166,7 +167,7 @@ public class RandomPhrase {
 			parser.composite.defineGrammarSymbols();
 			parser.composite.createNFAs();
 
-			List leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
+			List<? extends Collection<? extends Rule>> leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
 			if ( leftRecursiveRules.size()>0 ) {
 				return;
 			}
@@ -197,15 +198,15 @@ public class RandomPhrase {
 			randomPhrase(parser, tokenTypes, startRule);
 			System.out.println("token types="+tokenTypes);
 			for (int i = 0; i < tokenTypes.size(); i++) {
-				Integer ttypeI = (Integer) tokenTypes.get(i);
-				int ttype = ttypeI.intValue();
+				Integer ttypeI = tokenTypes.get(i);
+				int ttype = ttypeI;
 				String ttypeDisplayName = parser.getTokenDisplayName(ttype);
 				if ( Character.isUpperCase(ttypeDisplayName.charAt(0)) ) {
 					List<Integer> charsInToken = new ArrayList<Integer>(10);
 					randomPhrase(lexer, charsInToken, ttypeDisplayName);
 					System.out.print(" ");
 					for (int j = 0; j < charsInToken.size(); j++) {
-						java.lang.Integer cI = (java.lang.Integer) charsInToken.get(j);
+						Integer cI = charsInToken.get(j);
 						System.out.print((char)cI.intValue());
 					}
 				}

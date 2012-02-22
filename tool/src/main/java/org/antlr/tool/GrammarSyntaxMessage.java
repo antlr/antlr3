@@ -60,6 +60,7 @@ public class GrammarSyntaxMessage extends Message {
 		this.g = grammar;
 	}
 
+	@Override
 	public String toString() {
 		line = 0;
 		column = 0;

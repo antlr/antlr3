@@ -259,7 +259,7 @@ public class LL1Analyzer {
 					(RuleClosureTransition)transition0;
 				// remove the EOR and get what follows
 				//tset.remove(Label.EOR_TOKEN_TYPE);
-				NFAState following = (NFAState) ruleInvocationTrans.followState;
+				NFAState following = ruleInvocationTrans.followState;
 				LookaheadSet fset =	_FIRST(following, chaseFollowTransitions);
 				fset.orInPlace(tset); // tset cached; or into new set
 				fset.remove(Label.EOR_TOKEN_TYPE);
@@ -361,7 +361,7 @@ public class LL1Analyzer {
 				// should include A.
 				RuleClosureTransition ruleInvocationTrans =
 					(RuleClosureTransition)transition0;
-				NFAState following = (NFAState) ruleInvocationTrans.followState;
+				NFAState following = ruleInvocationTrans.followState;
 				int afterRuleResult =
 					_detectConfoundingPredicates(following,
 												 enclosingRule,
@@ -420,7 +420,7 @@ public class LL1Analyzer {
 		}
 
 		SemanticContext p = null;
-		SemanticContext p0 = null;
+		SemanticContext p0;
 		SemanticContext p1 = null;
 		if ( transition0.label.isSemanticPredicate() ) {
 			//System.out.println("pred "+transition0.label);

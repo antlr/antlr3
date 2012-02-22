@@ -28,7 +28,6 @@
 package org.antlr.runtime.tree;
 
 import org.antlr.runtime.Token;
-import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.misc.FastQueue;
 
 import java.util.Iterator;
@@ -38,7 +37,7 @@ import java.util.Iterator;
  *
  *  Emit navigation nodes (DOWN, UP, and EOF) to let show tree structure.
  */
-public class TreeIterator implements Iterator {
+public class TreeIterator implements Iterator<Object> {
     protected TreeAdaptor adaptor;
     protected Object root;
     protected Object tree;
@@ -52,7 +51,7 @@ public class TreeIterator implements Iterator {
     /** If we emit UP/DOWN nodes, we need to spit out multiple nodes per
      *  next() call.
      */
-    protected FastQueue nodes;
+    protected FastQueue<Object> nodes;
 
     public TreeIterator(Object tree) {
         this(new CommonTreeAdaptor(),tree);
@@ -62,7 +61,7 @@ public class TreeIterator implements Iterator {
         this.adaptor = adaptor;
         this.tree = tree;
         this.root = tree;
-        nodes = new FastQueue();
+        nodes = new FastQueue<Object>();
         down = adaptor.create(Token.DOWN, "DOWN");
         up = adaptor.create(Token.UP, "UP");
         eof = adaptor.create(Token.EOF, "EOF");
@@ -74,6 +73,7 @@ public class TreeIterator implements Iterator {
         nodes.clear();
     }
 
+	@Override
     public boolean hasNext() {
         if ( firstTime ) return root!=null;
         if ( nodes!=null && nodes.size()>0 ) return true;
@@ -82,6 +82,7 @@ public class TreeIterator implements Iterator {
         return adaptor.getParent(tree)!=null; // back at root?
     }
 
+	@Override
     public Object next() {
         if ( firstTime ) { // initial condition
             firstTime = false;
@@ -128,5 +129,6 @@ public class TreeIterator implements Iterator {
         return nodes.remove();
     }
 
+	@Override
     public void remove() { throw new UnsupportedOperationException(); }
 }

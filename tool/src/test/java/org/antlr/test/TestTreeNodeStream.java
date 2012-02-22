@@ -359,7 +359,7 @@ public class TestTreeNodeStream extends BaseTest {
 
 	public String toNodesOnlyString(TreeNodeStream nodes) {
         TreeAdaptor adaptor = nodes.getTreeAdaptor();
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
         Object o = nodes.LT(1);
         int type = adaptor.getType(o);
         while ( o!=null && type!=Token.EOF ) {

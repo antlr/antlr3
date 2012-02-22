@@ -58,7 +58,7 @@ public class ANTLRStringStream implements CharStream {
 	 *  move through the input stream.  Indexed from 1..markDepth.
      *  A null is kept @ index 0.  Create upon first call to mark().
 	 */
-	protected List markers;
+	protected List<CharStreamState> markers;
 
 	/** Track the last mark() call result value for use in rewind(). */
 	protected int lastMarker;
@@ -94,6 +94,7 @@ public class ANTLRStringStream implements CharStream {
 		markDepth = 0;
 	}
 
+	@Override
     public void consume() {
 		//System.out.println("prev p="+p+", c="+(char)data[p]);
         if ( p < n ) {
@@ -111,6 +112,7 @@ public class ANTLRStringStream implements CharStream {
         }
     }
 
+	@Override
     public int LA(int i) {
 		if ( i==0 ) {
 			return 0; // undefined
@@ -131,6 +133,7 @@ public class ANTLRStringStream implements CharStream {
 		return data[p+i-1];
     }
 
+	@Override
 	public int LT(int i) {
 		return LA(i);
 	}
@@ -139,27 +142,30 @@ public class ANTLRStringStream implements CharStream {
      *  last symbol has been read.  The index is the index of char to
 	 *  be returned from LA(1).
      */
+	@Override
     public int index() {
         return p;
     }
 
+	@Override
 	public int size() {
 		return n;
 	}
 
+	@Override
 	public int mark() {
         if ( markers==null ) {
-            markers = new ArrayList();
+            markers = new ArrayList<CharStreamState>();
             markers.add(null); // depth 0 means no backtracking, leave blank
         }
         markDepth++;
-		CharStreamState state = null;
+		CharStreamState state;
 		if ( markDepth>=markers.size() ) {
 			state = new CharStreamState();
 			markers.add(state);
 		}
 		else {
-			state = (CharStreamState)markers.get(markDepth);
+			state = markers.get(markDepth);
 		}
 		state.p = p;
 		state.line = line;
@@ -168,8 +174,9 @@ public class ANTLRStringStream implements CharStream {
 		return markDepth;
     }
 
+	@Override
     public void rewind(int m) {
-		CharStreamState state = (CharStreamState)markers.get(m);
+		CharStreamState state = markers.get(m);
 		// restore stream state
 		seek(state.p);
 		line = state.line;
@@ -177,10 +184,12 @@ public class ANTLRStringStream implements CharStream {
 		release(m);
 	}
 
+	@Override
 	public void rewind() {
 		rewind(lastMarker);
 	}
 
+	@Override
 	public void release(int marker) {
 		// unwind any other markers made after m and release m
 		markDepth = marker;
@@ -191,6 +200,7 @@ public class ANTLRStringStream implements CharStream {
 	/** consume() ahead until p==index; can't just set p=index as we must
 	 *  update line and charPositionInLine.
 	 */
+	@Override
 	public void seek(int index) {
 		if ( index<=p ) {
 			p = index; // just jump; don't update stream state (line, ...)
@@ -202,29 +212,36 @@ public class ANTLRStringStream implements CharStream {
 		}
 	}
 
+	@Override
 	public String substring(int start, int stop) {
 		return new String(data,start,stop-start+1);
 	}
 
+	@Override
 	public int getLine() {
 		return line;
 	}
 
+	@Override
 	public int getCharPositionInLine() {
 		return charPositionInLine;
 	}
 
+	@Override
 	public void setLine(int line) {
 		this.line = line;
 	}
 
+	@Override
 	public void setCharPositionInLine(int pos) {
 		this.charPositionInLine = pos;
 	}
 
+	@Override
 	public String getSourceName() {
 		return name;
 	}
 
+	@Override
     public String toString() { return new String(data); }
 }

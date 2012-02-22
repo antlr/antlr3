@@ -660,7 +660,7 @@ exceptionGroup[ST ruleST]
 exceptionHandler[ST ruleST]
 	:	^('catch' ARG_ACTION ACTION)
 		{
-			List chunks = generator.translateAction(currentRuleName,$ACTION);
+			List<? extends Object> chunks = generator.translateAction(currentRuleName,$ACTION);
 			$ruleST.addAggr("exceptions.{decl,action}",$ARG_ACTION.text,chunks);
 		}
 	;
@@ -668,7 +668,7 @@ exceptionHandler[ST ruleST]
 finallyClause[ST ruleST]
 	:	^('finally' ACTION)
 		{
-			List chunks = generator.translateAction(currentRuleName,$ACTION);
+			List<? extends Object> chunks = generator.translateAction(currentRuleName,$ACTION);
 			$ruleST.add("finally",chunks);
 		}
 	;
@@ -1002,7 +1002,7 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 			}
 
 			if ( $rarg!=null ) {
-				List args = generator.translateAction(currentRuleName,$rarg);
+				List<? extends Object> args = generator.translateAction(currentRuleName,$rarg);
 				$code.add("args", args);
 			}
 			int i = ((CommonToken)r.getToken()).getTokenIndex();
@@ -1054,7 +1054,7 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 					}
 					if ( $targ!=null )
 					{
-						List args = generator.translateAction(currentRuleName,$targ);
+						List<? extends Object> args = generator.translateAction(currentRuleName,$targ);
 						$code.add("args", args);
 					}
 				}
@@ -1240,7 +1240,7 @@ rewrite returns [ST code=null]
 				^( r=REWRITE (pred=SEMPRED)? alt=rewrite_alternative)
 				{
 					rewriteBlockNestingLevel = OUTER_REWRITE_NESTING_LEVEL;
-					List predChunks = null;
+					List<? extends Object> predChunks = null;
 					if ( $pred!=null )
 					{
 						//predText = #pred.getText();
@@ -1459,7 +1459,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 			$code.add("terminalOptions",term.terminalOptions);
 			if ( $arg!=null )
 			{
-				List args = generator.translateAction(currentRuleName,$arg);
+				List<? extends Object> args = generator.translateAction(currentRuleName,$arg);
 				$code.add("args", args);
 			}
 			$code.add("elementIndex", ((CommonToken)$start.getToken()).getTokenIndex());
@@ -1541,7 +1541,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 		{
 			// actions in rewrite rules yield a tree object
 			String actText = $ACTION.text;
-			List chunks = generator.translateAction(currentRuleName,$ACTION);
+			List<? extends Object> chunks = generator.translateAction(currentRuleName,$ACTION);
 			$code = templates.getInstanceOf("rewriteNodeAction"+(isRoot?"Root":""));
 			$code.add("action", chunks);
 		}
@@ -1564,7 +1564,7 @@ rewrite_template returns [ST code=null]
 				else if ( $ind!=null )
 				{ // must be \%({expr})(args)
 					$code = templates.getInstanceOf("rewriteIndirectTemplate");
-					List chunks=generator.translateAction(currentRuleName,$ind);
+					List<? extends Object> chunks=generator.translateAction(currentRuleName,$ind);
 					$code.add("expr", chunks);
 				}
 			}
@@ -1575,7 +1575,7 @@ rewrite_template returns [ST code=null]
 						// because actions like \%foo(name={\$ID.text}) aren't
 						// broken up yet into trees.
 						$a.outerAltNum = this.outerAltNum;
-						List chunks = generator.translateAction(currentRuleName,$a);
+						List<? extends Object> chunks = generator.translateAction(currentRuleName,$a);
 						$code.addAggr("args.{name,value}", $arg.text, chunks);
 					}
 					)

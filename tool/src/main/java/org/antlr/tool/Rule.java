@@ -44,10 +44,10 @@ public class Rule {
 	public NFAState stopState;
 
 	/** This rule's options */
-	protected Map options;
+	protected Map<String, Object> options;
 
-	public static final Set legalOptions =
-			new HashSet() {
+	public static final Set<String> legalOptions =
+			new HashSet<String>() {
                 {
                     add("k"); add("greedy"); add("memoize");
                     add("backtrack");
@@ -74,31 +74,31 @@ public class Rule {
 	public AttributeScope ruleScope;
 
 	/** A list of scope names (String) used by this rule */
-	public List useScopes;
+	public List<String> useScopes;
 
     /** Exceptions that this rule can throw */
     public Set<String> throwsSpec;
 
     /** A list of all LabelElementPair attached to tokens like id=ID */
-    public LinkedHashMap tokenLabels;
+    public LinkedHashMap<String, Grammar.LabelElementPair> tokenLabels;
 
     /** A list of all LabelElementPair attached to tokens like x=. in tree grammar */
-    public LinkedHashMap wildcardTreeLabels;
+    public LinkedHashMap<String, Grammar.LabelElementPair> wildcardTreeLabels;
 
     /** A list of all LabelElementPair attached to tokens like x+=. in tree grammar */
-    public LinkedHashMap wildcardTreeListLabels;
+    public LinkedHashMap<String, Grammar.LabelElementPair> wildcardTreeListLabels;
 
 	/** A list of all LabelElementPair attached to single char literals like x='a' */
-	public LinkedHashMap charLabels;
+	public LinkedHashMap<String, Grammar.LabelElementPair> charLabels;
 
 	/** A list of all LabelElementPair attached to rule references like f=field */
-	public LinkedHashMap ruleLabels;
+	public LinkedHashMap<String, Grammar.LabelElementPair> ruleLabels;
 
 	/** A list of all Token list LabelElementPair like ids+=ID */
-	public LinkedHashMap tokenListLabels;
+	public LinkedHashMap<String, Grammar.LabelElementPair> tokenListLabels;
 
 	/** A list of all rule ref list LabelElementPair like ids+=expr */
-	public LinkedHashMap ruleListLabels;
+	public LinkedHashMap<String, Grammar.LabelElementPair> ruleListLabels;
 
 	/** All labels go in here (plus being split per the above lists) to
 	 *  catch dup label and label type mismatches.
@@ -113,8 +113,8 @@ public class Rule {
 	 *  for errors.  A better name is probably namedActions, but I don't
 	 *  want everyone to have to change their code gen templates now.
 	 */
-	protected Map<String, GrammarAST> actions =
-		new HashMap<String, GrammarAST>();
+	protected Map<String, Object> actions =
+		new HashMap<String, Object>();
 
 	/** Track all executable actions other than named actions like @init.
 	 *  Also tracks exception handlers, predicates, and rewrite rewrites.
@@ -157,6 +157,7 @@ public class Rule {
 
 	public boolean imported = false;
 
+	@SuppressWarnings("unchecked")
 	public Rule(Grammar grammar,
 				String ruleName,
 				int ruleIndex,
@@ -167,8 +168,8 @@ public class Rule {
 		this.numberOfAlts = numberOfAlts;
 		this.grammar = grammar;
 		throwsSpec = new HashSet<String>();
-		altToTokenRefMap = new Map[numberOfAlts+1];
-		altToRuleRefMap = new Map[numberOfAlts+1];
+		altToTokenRefMap = (Map<String, List<GrammarAST>>[])new Map<?, ?>[numberOfAlts+1];
+		altToRuleRefMap = (Map<String, List<GrammarAST>>[])new Map<?, ?>[numberOfAlts+1];
 		for (int alt=1; alt<=numberOfAlts; alt++) {
 			altToTokenRefMap[alt] = new HashMap<String, List<GrammarAST>>();
 			altToRuleRefMap[alt] = new HashMap<String, List<GrammarAST>>();
@@ -187,60 +188,60 @@ public class Rule {
 		labelNameSpace.put(label.getText(), pair);
 		switch ( type ) {
             case Grammar.TOKEN_LABEL :
-                if ( tokenLabels==null ) tokenLabels = new LinkedHashMap();
+                if ( tokenLabels==null ) tokenLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
                 tokenLabels.put(label.getText(), pair);
                 break;
             case Grammar.WILDCARD_TREE_LABEL :
-                if ( wildcardTreeLabels==null ) wildcardTreeLabels = new LinkedHashMap();
+                if ( wildcardTreeLabels==null ) wildcardTreeLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
                 wildcardTreeLabels.put(label.getText(), pair);
                 break;
             case Grammar.WILDCARD_TREE_LIST_LABEL :
-                if ( wildcardTreeListLabels==null ) wildcardTreeListLabels = new LinkedHashMap();
+                if ( wildcardTreeListLabels==null ) wildcardTreeListLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
                 wildcardTreeListLabels.put(label.getText(), pair);
                 break;
 			case Grammar.RULE_LABEL :
-				if ( ruleLabels==null ) ruleLabels = new LinkedHashMap();
+				if ( ruleLabels==null ) ruleLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
 				ruleLabels.put(label.getText(), pair);
 				break;
 			case Grammar.TOKEN_LIST_LABEL :
-				if ( tokenListLabels==null ) tokenListLabels = new LinkedHashMap();
+				if ( tokenListLabels==null ) tokenListLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
 				tokenListLabels.put(label.getText(), pair);
 				break;
 			case Grammar.RULE_LIST_LABEL :
-				if ( ruleListLabels==null ) ruleListLabels = new LinkedHashMap();
+				if ( ruleListLabels==null ) ruleListLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
 				ruleListLabels.put(label.getText(), pair);
 				break;
 			case Grammar.CHAR_LABEL :
-				if ( charLabels==null ) charLabels = new LinkedHashMap();
+				if ( charLabels==null ) charLabels = new LinkedHashMap<String, Grammar.LabelElementPair>();
 				charLabels.put(label.getText(), pair);
 				break;
 		}
 	}
 
 	public Grammar.LabelElementPair getLabel(String name) {
-		return (Grammar.LabelElementPair)labelNameSpace.get(name);
+		return labelNameSpace.get(name);
 	}
 
 	public Grammar.LabelElementPair getTokenLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( tokenLabels!=null ) {
-			return (Grammar.LabelElementPair)tokenLabels.get(name);
+			return tokenLabels.get(name);
 		}
 		return pair;
 	}
 
-	public Map getRuleLabels() {
+	public Map<String, Grammar.LabelElementPair> getRuleLabels() {
 		return ruleLabels;
 	}
 
-	public Map getRuleListLabels() {
+	public Map<String, Grammar.LabelElementPair> getRuleListLabels() {
 		return ruleListLabels;
 	}
 
 	public Grammar.LabelElementPair getRuleLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( ruleLabels!=null ) {
-			return (Grammar.LabelElementPair)ruleLabels.get(name);
+			return ruleLabels.get(name);
 		}
 		return pair;
 	}
@@ -248,7 +249,7 @@ public class Rule {
 	public Grammar.LabelElementPair getTokenListLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( tokenListLabels!=null ) {
-			return (Grammar.LabelElementPair)tokenListLabels.get(name);
+			return tokenListLabels.get(name);
 		}
 		return pair;
 	}
@@ -256,7 +257,7 @@ public class Rule {
 	public Grammar.LabelElementPair getRuleListLabel(String name) {
 		Grammar.LabelElementPair pair = null;
 		if ( ruleListLabels!=null ) {
-			return (Grammar.LabelElementPair)ruleListLabels.get(name);
+			return ruleListLabels.get(name);
 		}
 		return pair;
 	}
@@ -268,40 +269,40 @@ public class Rule {
 	 *  token IDs to check for token IDs without corresponding lexer rules.
 	 */
 	public void trackTokenReferenceInAlt(GrammarAST refAST, int outerAltNum) {
-		List refs = (List)altToTokenRefMap[outerAltNum].get(refAST.getText());
+		List<GrammarAST> refs = altToTokenRefMap[outerAltNum].get(refAST.getText());
 		if ( refs==null ) {
-			refs = new ArrayList();
+			refs = new ArrayList<GrammarAST>();
 			altToTokenRefMap[outerAltNum].put(refAST.getText(), refs);
 		}
 		refs.add(refAST);
 	}
 
-	public List getTokenRefsInAlt(String ref, int outerAltNum) {
+	public List<GrammarAST> getTokenRefsInAlt(String ref, int outerAltNum) {
 		if ( altToTokenRefMap[outerAltNum]!=null ) {
-			List tokenRefASTs = (List)altToTokenRefMap[outerAltNum].get(ref);
+			List<GrammarAST> tokenRefASTs = altToTokenRefMap[outerAltNum].get(ref);
 			return tokenRefASTs;
 		}
 		return null;
 	}
 
 	public void trackRuleReferenceInAlt(GrammarAST refAST, int outerAltNum) {
-		List refs = (List)altToRuleRefMap[outerAltNum].get(refAST.getText());
+		List<GrammarAST> refs = altToRuleRefMap[outerAltNum].get(refAST.getText());
 		if ( refs==null ) {
-			refs = new ArrayList();
+			refs = new ArrayList<GrammarAST>();
 			altToRuleRefMap[outerAltNum].put(refAST.getText(), refs);
 		}
 		refs.add(refAST);
 	}
 
-	public List getRuleRefsInAlt(String ref, int outerAltNum) {
+	public List<GrammarAST> getRuleRefsInAlt(String ref, int outerAltNum) {
 		if ( altToRuleRefMap[outerAltNum]!=null ) {
-			List ruleRefASTs = (List)altToRuleRefMap[outerAltNum].get(ref);
+			List<GrammarAST> ruleRefASTs = altToRuleRefMap[outerAltNum].get(ref);
 			return ruleRefASTs;
 		}
 		return null;
 	}
 
-	public Set getTokenRefsInAlt(int altNum) {
+	public Set<String> getTokenRefsInAlt(int altNum) {
 		return altToTokenRefMap[altNum].keySet();
 	}
 
@@ -310,7 +311,7 @@ public class Rule {
 	 *  token types for which the rule needs a list of tokens.  This
 	 *  is called from the rule template not directly by the code generator.
 	 */
-	public Set getAllTokenRefsInAltsWithRewrites() {
+	public Set<String> getAllTokenRefsInAltsWithRewrites() {
 		String output = (String)grammar.getOption("output");
 		Set<String> tokens = new HashSet<String>();
 		if ( output==null || !output.equals("AST") ) {
@@ -332,7 +333,7 @@ public class Rule {
 		return tokens;
 	}
 
-	public Set getRuleRefsInAlt(int outerAltNum) {
+	public Set<String> getRuleRefsInAlt(int outerAltNum) {
 		return altToRuleRefMap[outerAltNum].keySet();
 	}
 
@@ -340,11 +341,11 @@ public class Rule {
 	 *  left-hand-side; so we need Lists.  This is a unique list of all
 	 *  rule results for which the rule needs a list of results.
 	 */
-	public Set getAllRuleRefsInAltsWithRewrites() {
-		Set rules = new HashSet();
+	public Set<String> getAllRuleRefsInAltsWithRewrites() {
+		Set<String> rules = new HashSet<String>();
 		for (int i = 1; i <= numberOfAlts; i++) {
 			if ( hasRewrite(i) ) {
-				Map m = altToRuleRefMap[i];
+				Map<String, ?> m = altToRuleRefMap[i];
 				rules.addAll(m.keySet());
 			}
 		}
@@ -358,7 +359,7 @@ public class Rule {
 	public boolean hasRewrite(int i) {
 		GrammarAST blk = tree.findFirstType(ANTLRParser.BLOCK);
 		GrammarAST alt = blk.getBlockALT(i);
-		GrammarAST rew = (GrammarAST)alt.getNextSibling();
+		GrammarAST rew = alt.getNextSibling();
 		if ( rew!=null && rew.getType()==ANTLRParser.REWRITES ) return true;
 		if ( alt.findFirstType(ANTLRParser.REWRITES)!=null ) return true;
 		return false;
@@ -408,19 +409,19 @@ public class Rule {
 			 Character.isUpperCase(refdSymbol.charAt(0)) )
 		{
 			// symbol is a token
-			List tokenRefs = getTokenRefsInAlt(refdSymbol, outerAltNum);
-			uniqueRefAST = (GrammarAST)tokenRefs.get(0);
+			List<GrammarAST> tokenRefs = getTokenRefsInAlt(refdSymbol, outerAltNum);
+			uniqueRefAST = tokenRefs.get(0);
 		}
 		else {
 			// symbol is a rule
-			List ruleRefs = getRuleRefsInAlt(refdSymbol, outerAltNum);
-			uniqueRefAST = (GrammarAST)ruleRefs.get(0);
+			List<GrammarAST> ruleRefs = getRuleRefsInAlt(refdSymbol, outerAltNum);
+			uniqueRefAST = ruleRefs.get(0);
 		}
 		if ( uniqueRefAST.code==null ) {
 			// no code?  must not have gen'd yet; forward ref
 			return null;
 		}
-		String labelName = null;
+		String labelName;
 		String existingLabelName =
 			(String)uniqueRefAST.code.getAttribute("label");
 		// reuse any label or list label if it exists
@@ -472,18 +473,14 @@ public class Rule {
 
 	public String getSingleValueReturnType() {
 		if ( returnScope!=null && returnScope.attributes.size()==1 ) {
-			Collection retvalAttrs = returnScope.attributes.values();
-			Object[] javaSucks = retvalAttrs.toArray();
-			return ((Attribute)javaSucks[0]).type;
+			return returnScope.attributes.values().iterator().next().type;
 		}
 		return null;
 	}
 
 	public String getSingleValueReturnName() {
 		if ( returnScope!=null && returnScope.attributes.size()==1 ) {
-			Collection retvalAttrs = returnScope.attributes.values();
-			Object[] javaSucks = retvalAttrs.toArray();
-			return ((Attribute)javaSucks[0]).name;
+			return returnScope.attributes.values().iterator().next().name;
 		}
 		return null;
 	}
@@ -512,11 +509,11 @@ public class Rule {
 		inlineActions.add(actionAST);
 	}
 
-	public Map<String, GrammarAST> getActions() {
+	public Map<String, Object> getActions() {
 		return actions;
 	}
 
-	public void setActions(Map<String, GrammarAST> actions) {
+	public void setActions(Map<String, Object> actions) {
 		this.actions = actions;
 	}
 
@@ -532,7 +529,7 @@ public class Rule {
 			return null;
 		}
 		if ( options==null ) {
-			options = new HashMap();
+			options = new HashMap<String, Object>();
 		}
         if ( key.equals("memoize") && value.toString().equals("true") ) {
 			grammar.composite.getRootGrammar().atLeastOneRuleMemoizes = true;
@@ -547,14 +544,14 @@ public class Rule {
 		return key;
 	}
 
-	public void setOptions(Map options, Token optionsStartToken) {
+	public void setOptions(Map<String, Object> options, Token optionsStartToken) {
 		if ( options==null ) {
 			this.options = null;
 			return;
 		}
-		Set keys = options.keySet();
-		for (Iterator it = keys.iterator(); it.hasNext();) {
-			String optionName = (String) it.next();
+		Set<String> keys = options.keySet();
+		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+			String optionName = it.next();
 			Object optionValue = options.get(optionName);
 			String stored=setOption(optionName, optionValue, optionsStartToken);
 			if ( stored==null ) {
@@ -576,6 +573,7 @@ public class Rule {
 	}
 	 * */
 
+	@Override
 	public String toString() { // used for testing
 		return "["+grammar.name+"."+name+",index="+index+",line="+tree.getToken().getLine()+"]";
 	}

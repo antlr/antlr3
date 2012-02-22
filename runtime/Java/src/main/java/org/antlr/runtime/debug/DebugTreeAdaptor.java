@@ -53,6 +53,7 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		this.adaptor = adaptor;
 	}
 
+	@Override
 	public Object create(Token payload) {
 		if ( payload.getTokenIndex() < 0 ) {
 			// could be token conjured up during error recovery
@@ -63,6 +64,7 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		return node;
 	}
 
+	@Override
 	public Object errorNode(TokenStream input, Token start, Token stop,
 							RecognitionException e)
 	{
@@ -73,6 +75,7 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		return node;
 	}
 
+	@Override
 	public Object dupTree(Object tree) {
 		Object t = adaptor.dupTree(tree);
 		// walk the tree and emit create and add child events
@@ -93,22 +96,26 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		}
 	}
 
+	@Override
 	public Object dupNode(Object treeNode) {
 		Object d = adaptor.dupNode(treeNode);
 		dbg.createNode(d);
 		return d;
 	}
 
+	@Override
 	public Object nil() {
 		Object node = adaptor.nil();
 		dbg.nilNode(node);
 		return node;
 	}
 
+	@Override
 	public boolean isNil(Object tree) {
 		return adaptor.isNil(tree);
 	}
 
+	@Override
 	public void addChild(Object t, Object child) {
 		if ( t==null || child==null ) {
 			return;
@@ -117,12 +124,14 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		dbg.addChild(t, child);
 	}
 
+	@Override
 	public Object becomeRoot(Object newRoot, Object oldRoot) {
 		Object n = adaptor.becomeRoot(newRoot, oldRoot);
 		dbg.becomeRoot(newRoot, oldRoot);
 		return n;
 	}
 
+	@Override
 	public Object rulePostProcessing(Object root) {
 		return adaptor.rulePostProcessing(root);
 	}
@@ -132,6 +141,7 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		this.addChild(t, n);
 	}
 
+	@Override
 	public Object becomeRoot(Token newRoot, Object oldRoot) {
 		Object n = this.create(newRoot);
 		adaptor.becomeRoot(n, oldRoot);
@@ -139,44 +149,53 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		return n;
 	}
 
+	@Override
 	public Object create(int tokenType, Token fromToken) {
 		Object node = adaptor.create(tokenType, fromToken);
 		dbg.createNode(node);
 		return node;
 	}
 
+	@Override
 	public Object create(int tokenType, Token fromToken, String text) {
 		Object node = adaptor.create(tokenType, fromToken, text);
 		dbg.createNode(node);
 		return node;
 	}
 
+	@Override
 	public Object create(int tokenType, String text) {
 		Object node = adaptor.create(tokenType, text);
 		dbg.createNode(node);
 		return node;
 	}
 
+	@Override
 	public int getType(Object t) {
 		return adaptor.getType(t);
 	}
 
+	@Override
 	public void setType(Object t, int type) {
 		adaptor.setType(t, type);
 	}
 
+	@Override
 	public String getText(Object t) {
 		return adaptor.getText(t);
 	}
 
+	@Override
 	public void setText(Object t, String text) {
 		adaptor.setText(t, text);
 	}
 
+	@Override
 	public Token getToken(Object t) {
 		return adaptor.getToken(t);
 	}
 
+	@Override
 	public void setTokenBoundaries(Object t, Token startToken, Token stopToken) {
 		adaptor.setTokenBoundaries(t, startToken, stopToken);
 		if ( t!=null && startToken!=null && stopToken!=null ) {
@@ -186,50 +205,62 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 		}
 	}
 
+	@Override
 	public int getTokenStartIndex(Object t) {
 		return adaptor.getTokenStartIndex(t);
 	}
 
+	@Override
 	public int getTokenStopIndex(Object t) {
 		return adaptor.getTokenStopIndex(t);
 	}
 
+	@Override
 	public Object getChild(Object t, int i) {
 		return adaptor.getChild(t, i);
 	}
 
+	@Override
 	public void setChild(Object t, int i, Object child) {
 		adaptor.setChild(t, i, child);
 	}
 
+	@Override
 	public Object deleteChild(Object t, int i) {
 		return deleteChild(t, i);
 	}
 
+	@Override
 	public int getChildCount(Object t) {
 		return adaptor.getChildCount(t);
 	}
 
+	@Override
 	public int getUniqueID(Object node) {
 		return adaptor.getUniqueID(node);
 	}
 
+	@Override
 	public Object getParent(Object t) {
 		return adaptor.getParent(t);
 	}
 
+	@Override
 	public int getChildIndex(Object t) {
 		return adaptor.getChildIndex(t);
 	}
 
+	@Override
 	public void setParent(Object t, Object parent) {
 		adaptor.setParent(t, parent);
 	}
 
+	@Override
 	public void setChildIndex(Object t, int index) {
 		adaptor.setChildIndex(t, index);
 	}
 
+	@Override
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t) {
 		adaptor.replaceChildren(parent, startChildIndex, stopChildIndex, t);
 	}

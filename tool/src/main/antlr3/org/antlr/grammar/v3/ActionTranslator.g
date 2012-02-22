@@ -47,7 +47,7 @@ import org.antlr.grammar.v3.ANTLRParser;
 }
 
 @members {
-public List chunks = new ArrayList();
+public List<Object> chunks = new ArrayList<Object>();
 Rule enclosingRule;
 int outerAltNum;
 Grammar grammar;
@@ -82,7 +82,7 @@ Token actionToken;
 /** Return a list of strings and ST objects that
  *  represent the translated action.
  */
-public List translateToChunks() {
+public List<Object> translateToChunks() {
 	// System.out.println("###\naction="+action);
 	Token t;
 	do {
@@ -92,11 +92,11 @@ public List translateToChunks() {
 }
 
 public String translate() {
-	List theChunks = translateToChunks();
+	List<Object> theChunks = translateToChunks();
 	//System.out.println("chunks="+a.chunks);
-	StringBuffer buf = new StringBuffer();
+	StringBuilder buf = new StringBuilder();
 	for (int i = 0; i < theChunks.size(); i++) {
-		Object o = (Object) theChunks.get(i);
+		Object o = theChunks.get(i);
 		if ( o instanceof ST ) buf.append(((ST)o).render());
 		else buf.append(o);
 	}
@@ -104,7 +104,7 @@ public String translate() {
 	return buf.toString();
 }
 
-public List translateAction(String action) {
+public List<Object> translateAction(String action) {
 	String rname = null;
 	if ( enclosingRule!=null ) {
 		rname = enclosingRule.name;
@@ -127,7 +127,7 @@ public Grammar.LabelElementPair getElementLabel(String id) {
 }
 
 public void checkElementRefUniqueness(String ref, boolean isToken) {
-		List refs = null;
+		List<GrammarAST> refs = null;
 		if ( isToken ) {
 		    refs = enclosingRule.getTokenRefsInAlt(ref, outerAltNum);
 		}

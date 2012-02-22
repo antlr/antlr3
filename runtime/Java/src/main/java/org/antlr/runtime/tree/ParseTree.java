@@ -38,38 +38,46 @@ import java.util.List;
  */
 public class ParseTree extends BaseTree {
 	public Object payload;
-	public List hiddenTokens;
+	public List<Token> hiddenTokens;
 
 	public ParseTree(Object label) {
 		this.payload = label;
 	}
 
+	@Override
 	public Tree dupNode() {
 		return null;
 	}
 
+	@Override
 	public int getType() {
 		return 0;
 	}
 
+	@Override
 	public String getText() {
 		return toString();
 	}
 
+	@Override
 	public int getTokenStartIndex() {
 		return 0;
 	}
 
+	@Override
 	public void setTokenStartIndex(int index) {
 	}
 
+	@Override
 	public int getTokenStopIndex() {
 		return 0;
 	}
 
+	@Override
 	public void setTokenStopIndex(int index) {
 	}
 
+	@Override
 	public String toString() {
 		if ( payload instanceof Token ) {
 			Token t = (Token)payload;
@@ -85,10 +93,10 @@ public class ParseTree extends BaseTree {
 	 *  hidden tokens after last real token.
 	 */
 	public String toStringWithHiddenTokens() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if ( hiddenTokens!=null ) {
 			for (int i = 0; i < hiddenTokens.size(); i++) {
-				Token hidden = (Token) hiddenTokens.get(i);
+				Token hidden = hiddenTokens.get(i);
 				buf.append(hidden.getText());
 			}
 		}

@@ -55,6 +55,7 @@ public class DelphiTarget extends Target
     return recognizerST;
   }
 
+	@Override
   public String encodeIntAsCharEscape(int v)
   {
     if (v <= 127)
@@ -66,11 +67,12 @@ public class DelphiTarget extends Target
     return "'#$" + hex + "'";
   }
   
+	@Override
   public String getTargetCharLiteralFromANTLRCharLiteral(
     CodeGenerator generator,
     String literal)
   {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     int c = Grammar.getCharValueFromGrammarCharLiteral(literal);
     if ( c<Label.MIN_CHAR_VALUE ) {
       return "0";
@@ -81,11 +83,12 @@ public class DelphiTarget extends Target
     return buf.toString();
   } 
 
+	@Override
   public String getTargetStringLiteralFromString(String s, boolean quoted) {
     if ( s==null ) {
       return null;
     }
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     if ( quoted ) {
       buf.append('\'');
     }
@@ -113,6 +116,7 @@ public class DelphiTarget extends Target
     return buf.toString();
   }
 
+	@Override
   public String getTargetStringLiteralFromANTLRStringLiteral(
     CodeGenerator generator,
     String literal)
@@ -121,15 +125,16 @@ public class DelphiTarget extends Target
     literal = Utils.replace(literal,"\\r\\n","'#13#10'"); 
     literal = Utils.replace(literal,"\\r","'#13'"); 
     literal = Utils.replace(literal,"\\n","'#10'"); 
-    StringBuffer buf = new StringBuffer(literal);
+    StringBuilder buf = new StringBuilder(literal);
     buf.setCharAt(0,'\'');
     buf.setCharAt(literal.length()-1,'\'');
     return buf.toString();
   }
    
+	@Override
   public String getTarget64BitStringFromValue(long word) {
     int numHexDigits = 8*2;
-    StringBuffer buf = new StringBuffer(numHexDigits+2);
+    StringBuilder buf = new StringBuilder(numHexDigits+2);
     buf.append("$");
     String digits = Long.toHexString(word);
     digits = digits.toUpperCase();

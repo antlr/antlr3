@@ -24,7 +24,8 @@
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */package org.antlr.runtime;
+ */
+package org.antlr.runtime;
 
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class RecognizerSharedState {
 	 *
 	 *  This is only used if rule memoization is on (which it is by default).
 	 */
-	public Map[] ruleMemo;
+	public Map<Integer, Integer>[] ruleMemo;
 
 
 	// LEXER FIELDS (must be in same state object to avoid casting
@@ -117,8 +118,9 @@ public class RecognizerSharedState {
  	 */
 	public String text;
 
-    public RecognizerSharedState() {;}
+    public RecognizerSharedState() {}
     
+	@SuppressWarnings("unchecked")
     public RecognizerSharedState(RecognizerSharedState state) {
         if ( this.following.length < state.following.length ) {
             this.following = new BitSet[state.following.length];
@@ -131,7 +133,7 @@ public class RecognizerSharedState {
         this.syntaxErrors = state.syntaxErrors;
         this.backtracking = state.backtracking;
         if ( state.ruleMemo!=null ) {
-            this.ruleMemo = new Map[state.ruleMemo.length];
+            this.ruleMemo = (Map<Integer, Integer>[])new Map<?, ?>[state.ruleMemo.length];
             System.arraycopy(state.ruleMemo, 0, this.ruleMemo, 0, state.ruleMemo.length);
         }
         this.token = state.token;

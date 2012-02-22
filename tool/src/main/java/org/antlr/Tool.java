@@ -104,7 +104,7 @@ public class Tool {
      * variables that must be initialized from it, such as the version of ANTLR.
      */
     private void loadResources() {
-        InputStream in = null;
+        InputStream in;
         in = this.getClass().getResourceAsStream("antlr.properties");
 
         // If we found the resource, then load it, otherwise revert to the
@@ -129,6 +129,7 @@ public class Tool {
         loadResources();
     }
 
+	@SuppressWarnings("OverridableMethodCallInConstructor")
     public Tool(String[] args) {
         loadResources();
 
@@ -407,7 +408,7 @@ public class Tool {
 
     public void process() {
         boolean exceptionWhenWritingLexerFile = false;
-        String lexerGrammarFileName = null;		// necessary at this scope to have access in the catch below
+        String lexerGrammarFileName;		// necessary at this scope to have access in the catch below
 
         // Have to be tricky here when Maven or build tools call in and must new Tool()
         // before setting options. The banner won't display that way!
@@ -558,7 +559,7 @@ public class Tool {
 
     public void sortGrammarFiles() throws IOException {
         //System.out.println("Grammar names "+getGrammarFileNames());
-        Graph g = new Graph();
+        Graph<String> g = new Graph<String>();
         List<String> missingFiles = new ArrayList<String>();
         for (String gfile : grammarFileNames) {
             try {
@@ -576,11 +577,11 @@ public class Tool {
                 missingFiles.add(gfile);
             }
         }
-        List<Object> sorted = g.sort();
+        List<String> sorted = g.sort();
         //System.out.println("sorted="+sorted);
         grammarFileNames.clear(); // wipe so we can give new ordered list
         for (int i = 0; i < sorted.size(); i++) {
-            String f = (String)sorted.get(i);
+            String f = sorted.get(i);
             if ( missingFiles.contains(f) ) continue;
             if ( !(f.endsWith(".g") || f.endsWith(".g3")) ) continue;
             grammarFileNames.add(f);
@@ -599,8 +600,8 @@ public class Tool {
         CompositeGrammar composite = new CompositeGrammar();
         Grammar grammar = new Grammar(this, grammarFileName, composite);
         composite.setDelegationRoot(grammar);
-        FileReader fr = null;
-        File f = null;
+        FileReader fr;
+        File f;
 
         if (haveInputDir) {
             f = new File(inputDirectory, grammarFileName);
@@ -660,7 +661,7 @@ public class Tool {
 
             List<Grammar> delegates = grammar.getDirectDelegates();
             for (int i = 0; delegates != null && i < delegates.size(); i++) {
-                Grammar delegate = (Grammar) delegates.get(i);
+                Grammar delegate = delegates.get(i);
                 if (delegate != grammar) { // already processing this one
                     generateRecognizer(delegate);
                 }
@@ -692,11 +693,10 @@ public class Tool {
 
     protected void generateNFAs(Grammar g) {
         DOTGenerator dotGenerator = new DOTGenerator(g);
-        Collection rules = g.getAllImportedRules();
+        Collection<Rule> rules = new HashSet<Rule>(g.getAllImportedRules());
         rules.addAll(g.getRules());
 
-        for (Iterator itr = rules.iterator(); itr.hasNext();) {
-            Rule r = (Rule) itr.next();
+        for (Rule r : rules) {
             try {
                 String dot = dotGenerator.getDOT(r.startState);
                 if (dot != null) {
@@ -883,7 +883,7 @@ public class Tool {
      */
     public File getOutputDirectory(String fileNameWithPath) {
 
-        File outputDir = new File(getOutputDirectory());
+        File outputDir;
         String fileDirectory;
 
         // Some files are given to us without a PATH but should should

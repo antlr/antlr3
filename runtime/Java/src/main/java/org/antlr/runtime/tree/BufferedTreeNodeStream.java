@@ -58,12 +58,14 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;
 
-    protected class StreamIterator implements Iterator {
+    protected class StreamIterator implements Iterator<Object> {
 		int i = 0;
+		@Override
 		public boolean hasNext() {
 			return i<nodes.size();
 		}
 
+		@Override
 		public Object next() {
 			int current = i;
 			i++;
@@ -73,6 +75,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			return eof;
 		}
 
+		@Override
 		public void remove() {
 			throw new RuntimeException("cannot remove nodes from stream");
 		}
@@ -94,7 +97,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	 *  of interest for reverseIndexing.  Slows us down a wee bit to
 	 *  do all of the if p==-1 testing everywhere though.
 	 */
-	protected List nodes;
+	protected List<Object> nodes;
 
 	/** Pull nodes from which tree? */
 	protected Object root;
@@ -130,7 +133,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	public BufferedTreeNodeStream(TreeAdaptor adaptor, Object tree, int initialBufferSize) {
 		this.root = tree;
 		this.adaptor = adaptor;
-		nodes = new ArrayList(initialBufferSize);
+		nodes = new ArrayList<Object>(initialBufferSize);
 		down = adaptor.create(Token.DOWN, "DOWN");
 		up = adaptor.create(Token.UP, "UP");
 		eof = adaptor.create(Token.EOF, "EOF");
@@ -174,7 +177,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			fillBuffer();
 		}
 		for (int i = 0; i < nodes.size(); i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			if ( t==node ) {
 				return i;
 			}
@@ -187,7 +190,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 	 *  so instantiate new ones when uniqueNavigationNodes is true.
 	 */
 	protected void addNavigationNode(final int ttype) {
-		Object navNode = null;
+		Object navNode;
 		if ( ttype==Token.DOWN ) {
 			if ( hasUniqueNavigationNodes() ) {
 				navNode = adaptor.create(Token.DOWN, "DOWN");
@@ -207,6 +210,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		nodes.add(navNode);
 	}
 
+	@Override
 	public Object get(int i) {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -214,6 +218,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return nodes.get(i);
 	}
 
+	@Override
 	public Object LT(int k) {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -263,14 +268,17 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return nodes.get(p-k);
 	}
 
+	@Override
 	public Object getTreeSource() {
 		return root;
 	}
 
+	@Override
 	public String getSourceName() {
 		return getTokenStream().getSourceName();
 	}
 
+	@Override
 	public TokenStream getTokenStream() {
 		return tokens;
 	}
@@ -279,6 +287,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		this.tokens = tokens;
 	}
 
+	@Override
 	public TreeAdaptor getTreeAdaptor() {
 		return adaptor;
 	}
@@ -291,10 +300,12 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return uniqueNavigationNodes;
 	}
 
+	@Override
 	public void setUniqueNavigationNodes(boolean uniqueNavigationNodes) {
 		this.uniqueNavigationNodes = uniqueNavigationNodes;
 	}
 
+	@Override
 	public void consume() {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -302,10 +313,12 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		p++;
 	}
 
+	@Override
 	public int LA(int i) {
 		return adaptor.getType(LT(i));
 	}
 
+	@Override
 	public int mark() {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -314,22 +327,27 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return lastMarker;
 	}
 
+	@Override
 	public void release(int marker) {
 		// no resources to release
 	}
 
+	@Override
 	public int index() {
 		return p;
 	}
 
+	@Override
 	public void rewind(int marker) {
 		seek(marker);
 	}
 
+	@Override
 	public void rewind() {
 		seek(lastMarker);
 	}
 
+	@Override
 	public void seek(int index) {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -357,6 +375,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return ret;
 	}
 
+	@Override
 	public void reset() {
 		p = 0;
 		lastMarker = 0;
@@ -365,6 +384,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
         }
     }
 
+	@Override
 	public int size() {
 		if ( p==-1 ) {
 			fillBuffer();
@@ -372,7 +392,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		return nodes.size();
 	}
 
-	public Iterator iterator() {
+	public Iterator<Object> iterator() {
 		if ( p==-1 ) {
 			fillBuffer();
 		}
@@ -381,6 +401,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 
 	// TREE REWRITE INTERFACE
 
+	@Override
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t) {
 		if ( parent!=null ) {
 			adaptor.replaceChildren(parent, startChildIndex, stopChildIndex, t);
@@ -392,9 +413,9 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		if ( p==-1 ) {
 			fillBuffer();
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < nodes.size(); i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			buf.append(" ");
 			buf.append(adaptor.getType(t));
 		}
@@ -406,15 +427,16 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 		if ( p==-1 ) {
 			fillBuffer();
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = start; i < nodes.size() && i <= stop; i++) {
-			Object t = (Object) nodes.get(i);
+			Object t = nodes.get(i);
 			buf.append(" ");
 			buf.append(adaptor.getToken(t));
 		}
 		return buf.toString();
 	}
 
+	@Override
 	public String toString(Object start, Object stop) {
 		System.out.println("toString");
 		if ( start==null || stop==null ) {
@@ -447,7 +469,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			return tokens.toString(beginTokenIndex, endTokenIndex);
 		}
 		// walk nodes looking for start
-		Object t = null;
+		Object t;
 		int i = 0;
 		for (; i < nodes.size(); i++) {
 			t = nodes.get(i);
@@ -456,7 +478,7 @@ public class BufferedTreeNodeStream implements TreeNodeStream {
 			}
 		}
 		// now walk until we see stop, filling string buffer with text
-		 StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		t = nodes.get(i);
 		while ( t!=stop ) {
 			String text = adaptor.getText(t);

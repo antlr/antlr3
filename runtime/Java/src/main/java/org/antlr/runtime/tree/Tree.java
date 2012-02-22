@@ -63,7 +63,7 @@ public interface Tree {
     /** Return a list of all ancestors of this node.  The first node of
      *  list is the root and the last is the parent of this node.
      */
-    public List getAncestors();
+    public List<?> getAncestors();
 
     /** This node is what child index? 0..n-1 */
 	public int getChildIndex();
@@ -123,5 +123,6 @@ public interface Tree {
 
 	String toStringTree();
 
+	@Override
 	String toString();
 }

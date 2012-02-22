@@ -291,10 +291,9 @@ public class NFAFactory {
 	 *  not invoked by another rule (they can only be invoked from outside).
 	 *  These are the start rules.
      */
-    public int build_EOFStates(Collection rules) {
+    public int build_EOFStates(Collection<Rule> rules) {
 		int numberUnInvokedRules = 0;
-        for (Iterator iterator = rules.iterator(); iterator.hasNext();) {
-			Rule r = (Rule) iterator.next();
+        for (Rule r : rules) {
 			NFAState endNFAState = r.stopState;
             // Is this rule a start symbol?  (no follow links)
 			if ( endNFAState.transition[0] ==null ) {
@@ -384,17 +383,17 @@ public class NFAFactory {
      *
      *  Set alt number (1..n) in the left-Transition NFAState.
      */
-    public StateCluster build_AlternativeBlock(List alternativeStateClusters)
+    public StateCluster build_AlternativeBlock(List<StateCluster> alternativeStateClusters)
     {
-        StateCluster result = null;
-        if ( alternativeStateClusters==null || alternativeStateClusters.size()==0 ) {
+        StateCluster result;
+        if ( alternativeStateClusters==null || alternativeStateClusters.isEmpty() ) {
             return null;
         }
 
 		// single alt case
 		if ( alternativeStateClusters.size()==1 ) {
 			// single alt, no decision, just return only alt state cluster
-			StateCluster g = (StateCluster)alternativeStateClusters.get(0);
+			StateCluster g = alternativeStateClusters.get(0);
 			NFAState startOfAlt = newState(); // must have this no matter what
 			transitionBetweenStates(startOfAlt, g.left, Label.EPSILON);
 
@@ -411,8 +410,7 @@ public class NFAFactory {
         NFAState blockEndNFAState = newState();
         blockEndNFAState.setDescription("end block");
         int altNum = 1;
-        for (Iterator iter = alternativeStateClusters.iterator(); iter.hasNext();) {
-            StateCluster g = (StateCluster) iter.next();
+        for (StateCluster g : alternativeStateClusters) {
             // add begin NFAState for this alt connected by epsilon
             NFAState left = newState();
             left.setDescription("alt "+altNum+" of ()");
@@ -451,7 +449,7 @@ public class NFAFactory {
      *  or, if A is a block, just add an empty alt to the end of the block
      */
     public StateCluster build_Aoptional(StateCluster A) {
-        StateCluster g = null;
+        StateCluster g;
         int n = nfa.grammar.getNumberOfAltsForDecisionNFA(A.left);
         if ( n==1 ) {
             // no decision, just wrap in an optional path
@@ -460,7 +458,7 @@ public class NFAFactory {
 			decisionState.setDescription("only alt of ()? block");
 			NFAState emptyAlt = newState();
             emptyAlt.setDescription("epsilon path of ()? block");
-            NFAState blockEndNFAState = null;
+            NFAState blockEndNFAState;
 			blockEndNFAState = newState();
 			transitionBetweenStates(A.right, blockEndNFAState, Label.EPSILON);
 			blockEndNFAState.setDescription("end ()? block");
@@ -700,7 +698,7 @@ public class NFAFactory {
         // make optional . alt
         StateCluster optionalNodeAlt = build_Wildcard(associatedAST);
 
-        List alts = new ArrayList();
+        List<StateCluster> alts = new ArrayList<StateCluster>();
         alts.add(wildRoot);
         alts.add(optionalNodeAlt);
         StateCluster blk = build_AlternativeBlock(alts);

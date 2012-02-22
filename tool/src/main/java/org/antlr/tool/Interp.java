@@ -33,6 +33,7 @@ import org.antlr.runtime.tree.ParseTree;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,7 @@ public class Interp {
     public static class FilteringTokenStream extends CommonTokenStream {
         public FilteringTokenStream(TokenSource src) { super(src); }
         Set<Integer> hide = new HashSet<Integer>();
+		@Override
         protected void sync(int i) {
             super.sync(i);
             if ( hide.contains(get(i).getType()) ) get(i).setChannel(Token.HIDDEN_CHANNEL);
@@ -85,7 +87,7 @@ public class Interp {
 		parser.composite.defineGrammarSymbols();
 		parser.composite.createNFAs();
 
-		List leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
+		List<? extends Collection<? extends Rule>> leftRecursiveRules = parser.checkAllRulesForLeftRecursion();
 		if ( leftRecursiveRules.size()>0 ) {
 			return;
 		}

@@ -41,7 +41,7 @@ public class FASerializer {
      *  walking in case you reuse this object.  Multiple threads will trash
      *  this shared variable.  Use a different FASerializer per thread.
      */
-    protected Set markedStates;
+    protected Set<State> markedStates;
 
     /** Each state we walk will get a new state number for serialization
      *  purposes.  This is the variable that tracks state numbers.
@@ -52,7 +52,7 @@ public class FASerializer {
      *  serializing machines, map old state numbers to new state numbers
      *  by a State object -> Integer new state number HashMap.
      */
-    protected Map stateNumberTranslator;
+    protected Map<State, Integer> stateNumberTranslator;
 
     protected Grammar grammar;
 
@@ -77,13 +77,13 @@ public class FASerializer {
      *  states.
      */
     public String serialize(State s, boolean renumber) {
-        markedStates = new HashSet();
+        markedStates = new HashSet<State>();
         stateCounter = 0;
 		if ( renumber ) {
-			stateNumberTranslator = new HashMap();
+			stateNumberTranslator = new HashMap<State, Integer>();
         	walkFANormalizingStateNumbers(s);
 		}
-		List lines = new ArrayList();
+		List<String> lines = new ArrayList<String>();
         if ( s.getNumberOfTransitions()>0 ) {
 			walkSerializingFA(lines, s);
 		}
@@ -92,12 +92,12 @@ public class FASerializer {
 			String s0 = getStateString(0, s);
 			lines.add(s0+"\n");
 		}
-        StringBuffer buf = new StringBuffer(0);
+        StringBuilder buf = new StringBuilder(0);
         // sort lines to normalize; makes states come out ordered
         // and then ordered by edge labels then by target state number :)
         Collections.sort(lines);
         for (int i = 0; i < lines.size(); i++) {
-            String line = (String) lines.get(i);
+            String line = lines.get(i);
             buf.append(line);
         }
         return buf.toString();
@@ -121,7 +121,7 @@ public class FASerializer {
 
         // visit nodes pointed to by each transition;
         for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
+            Transition edge = s.transition(i);
             walkFANormalizingStateNumbers(edge.target); // keep walkin'
             // if this transition is a rule reference, the node "following" this state
             // will not be found and appear to be not in graph.  Must explicitly jump
@@ -132,7 +132,7 @@ public class FASerializer {
         }
     }
 
-    protected void walkSerializingFA(List lines, State s) {
+    protected void walkSerializingFA(List<String> lines, State s) {
         if ( markedStates.contains(s) ) {
             return; // already visited this node
         }
@@ -141,16 +141,16 @@ public class FASerializer {
 
 		int normalizedStateNumber = s.stateNumber;
 		if ( stateNumberTranslator!=null ) {
-	        Integer normalizedStateNumberI = (Integer)stateNumberTranslator.get(s);
-			normalizedStateNumber = normalizedStateNumberI.intValue();
+	        Integer normalizedStateNumberI = stateNumberTranslator.get(s);
+			normalizedStateNumber = normalizedStateNumberI;
 		}
 
 		String stateStr = getStateString(normalizedStateNumber, s);
 
         // depth first walk each transition, printing its edge first
         for (int i = 0; i < s.getNumberOfTransitions(); i++) {
-            Transition edge = (Transition) s.transition(i);
-            StringBuffer buf = new StringBuffer();
+            Transition edge = s.transition(i);
+            StringBuilder buf = new StringBuilder();
             buf.append(stateStr);
 			if ( edge.isAction() ) {
 				buf.append("-{}->");
@@ -159,7 +159,7 @@ public class FASerializer {
 				buf.append("->");
 			}
 			else if ( edge.isSemanticPredicate() ) {
-				buf.append("-{"+edge.label.getSemanticContext()+"}?->");
+				buf.append("-{").append(edge.label.getSemanticContext()).append("}?->");
 			}
 			else {
 				String predsStr = "";
@@ -174,14 +174,14 @@ public class FASerializer {
 							+"}?";
 					}
 				}
-				buf.append("-"+edge.label.toString(grammar)+predsStr+"->");
+				buf.append("-").append(edge.label.toString(grammar)).append(predsStr).append("->");
 			}
 
 			int normalizedTargetStateNumber = edge.target.stateNumber;
 			if ( stateNumberTranslator!=null ) {
 				Integer normalizedTargetStateNumberI =
-					(Integer)stateNumberTranslator.get(edge.target);
-				normalizedTargetStateNumber = normalizedTargetStateNumberI.intValue();
+					stateNumberTranslator.get(edge.target);
+				normalizedTargetStateNumber = normalizedTargetStateNumberI;
 			}
 			buf.append(getStateString(normalizedTargetStateNumber, edge.target));
             buf.append("\n");

@@ -57,20 +57,24 @@ public class DebugTreeNodeStream implements TreeNodeStream {
 		this.dbg = dbg;
 	}
 
+	@Override
 	public TreeAdaptor getTreeAdaptor() {
 		return adaptor;
 	}
 
+	@Override
 	public void consume() {
 		Object node = input.LT(1);
 		input.consume();
 		dbg.consumeNode(node);
 	}
 
+	@Override
 	public Object get(int i) {
 		return input.get(i);
 	}
 
+	@Override
 	public Object LT(int i) {
 		Object node = input.LT(i);
 		int ID = adaptor.getUniqueID(node);
@@ -80,6 +84,7 @@ public class DebugTreeNodeStream implements TreeNodeStream {
 		return node;
 	}
 
+	@Override
 	public int LA(int i) {
 		Object node = input.LT(i);
 		int ID = adaptor.getUniqueID(node);
@@ -89,49 +94,60 @@ public class DebugTreeNodeStream implements TreeNodeStream {
 		return type;
 	}
 
+	@Override
 	public int mark() {
 		lastMarker = input.mark();
 		dbg.mark(lastMarker);
 		return lastMarker;
 	}
 
+	@Override
 	public int index() {
 		return input.index();
 	}
 
+	@Override
 	public void rewind(int marker) {
 		dbg.rewind(marker);
 		input.rewind(marker);
 	}
 
+	@Override
 	public void rewind() {
 		dbg.rewind();
 		input.rewind(lastMarker);
 	}
 
+	@Override
 	public void release(int marker) {
 	}
 
+	@Override
 	public void seek(int index) {
 		// TODO: implement seek in dbg interface
 		// db.seek(index);
 		input.seek(index);
 	}
 
+	@Override
 	public int size() {
 		return input.size();
 	}
 
+	@Override
     public void reset() { ; }
 
+	@Override
     public Object getTreeSource() {
 		return input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return getTokenStream().getSourceName();
 	}
 
+	@Override
 	public TokenStream getTokenStream() {
 		return input.getTokenStream();
 	}
@@ -141,14 +157,17 @@ public class DebugTreeNodeStream implements TreeNodeStream {
 	 *  define it.  It might be better to ignore the parameter but
 	 *  there might be a use for it later, so I'll leave.
 	 */
+	@Override
 	public void setUniqueNavigationNodes(boolean uniqueNavigationNodes) {
 		input.setUniqueNavigationNodes(uniqueNavigationNodes);
 	}
 
+	@Override
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t) {
 		input.replaceChildren(parent, startChildIndex, stopChildIndex, t);
 	}
 
+	@Override
 	public String toString(Object start, Object stop) {
 		return input.toString(start,stop);
 	}

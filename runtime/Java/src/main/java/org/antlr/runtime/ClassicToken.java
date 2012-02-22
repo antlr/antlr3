@@ -67,61 +67,76 @@ public class ClassicToken implements Token {
 		this.channel = channel;
 	}
 
+	@Override
 	public int getType() {
 		return type;
 	}
 
+	@Override
 	public void setLine(int line) {
 		this.line = line;
 	}
 
+	@Override
 	public String getText() {
 		return text;
 	}
 
+	@Override
 	public void setText(String text) {
 		this.text = text;
 	}
 
+	@Override
 	public int getLine() {
 		return line;
 	}
 
+	@Override
 	public int getCharPositionInLine() {
 		return charPositionInLine;
 	}
 
+	@Override
 	public void setCharPositionInLine(int charPositionInLine) {
 		this.charPositionInLine = charPositionInLine;
 	}
 
+	@Override
 	public int getChannel() {
 		return channel;
 	}
 
+	@Override
 	public void setChannel(int channel) {
 		this.channel = channel;
 	}
 
+	@Override
 	public void setType(int type) {
 		this.type = type;
 	}
 
+	@Override
 	public int getTokenIndex() {
 		return index;
 	}
 
+	@Override
 	public void setTokenIndex(int index) {
 		this.index = index;
 	}
 
+	@Override
 	public CharStream getInputStream() {
 		return null;
 	}
 
+	@Override
 	public void setInputStream(CharStream input) {
 	}
 	
+	@Override
 	public String toString() {
 		String channelStr = "";
 		if ( channel>0 ) {

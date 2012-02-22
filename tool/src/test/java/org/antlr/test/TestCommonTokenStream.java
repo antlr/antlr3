@@ -191,9 +191,11 @@ public class TestCommonTokenStream extends BaseTest {
                     tokens[6].setChannel(Lexer.HIDDEN);
                     tokens[8].setChannel(Lexer.HIDDEN);
                 }
+			@Override
                 public Token nextToken() {
                     return tokens[i++];
                 }
+			@Override
                 public String getSourceName() { return "test"; }
             };
 

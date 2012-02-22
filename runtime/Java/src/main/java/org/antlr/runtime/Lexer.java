@@ -48,6 +48,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		this.input = input;
 	}
 
+	@Override
 	public void reset() {
 		super.reset(); // reset all recognizer state variables
 		// wack Lexer state variables
@@ -69,6 +70,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 	/** Return a token from this source; i.e., match a token on the char
 	 *  stream.
 	 */
+	@Override
 	public Token nextToken() {
 		while (true) {
 			state.token = null;
@@ -78,7 +80,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 			state.tokenStartLine = input.getLine();
 			state.text = null;
 			if ( input.LA(1)==CharStream.EOF ) {
-                Token eof = new CommonToken((CharStream)input,Token.EOF,
+                Token eof = new CommonToken(input,Token.EOF,
                                             Token.DEFAULT_CHANNEL,
                                             input.index(),input.index());
                 eof.setLine(getLine());
@@ -134,6 +136,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		return this.input;
 	}
 
+	@Override
 	public String getSourceName() {
 		return input.getSourceName();
 	}
@@ -250,6 +253,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		state.text = text;
 	}
 
+	@Override
 	public void reportError(RecognitionException e) {
 		/** TODO: not thought about recovery in lexer yet.
 		 *
@@ -265,8 +269,9 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 		displayRecognitionError(this.getTokenNames(), e);
 	}
 
+	@Override
 	public String getErrorMessage(RecognitionException e, String[] tokenNames) {
-		String msg = null;
+		String msg;
 		if ( e instanceof MismatchedTokenException ) {
 			MismatchedTokenException mte = (MismatchedTokenException)e;
 			msg = "mismatched character "+getCharErrorDisplay(e.c)+" expecting "+getCharErrorDisplay(mte.expecting);

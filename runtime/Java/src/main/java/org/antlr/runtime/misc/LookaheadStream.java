@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime.misc;
 
-import org.antlr.runtime.Token;
-
 import java.util.NoSuchElementException;
 
 /** A lookahead queue that knows how to mark/release locations
@@ -57,6 +55,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     /** tracks how deep mark() calls are nested */
     protected int markDepth = 0;
 
+	@Override
     public void reset() {
         super.reset();
         currentElementIndex = 0;
@@ -74,6 +73,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     /** Get and remove first element in queue; override FastQueue.remove();
      *  it's the same, just checks for backtracking.
      */
+	@Override
     public T remove() {
         T o = elementAt(0);
         p++;
@@ -111,6 +111,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     }
 
     /** Size of entire stream is unknown; we only know buffer size from FastQueue */
+	@Override
     public int size() { throw new UnsupportedOperationException("streams are of unknown size"); }
 
     public T LT(int k) {

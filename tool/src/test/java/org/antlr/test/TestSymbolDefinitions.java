@@ -176,7 +176,7 @@ public class TestSymbolDefinitions extends BaseTest {
 		Grammar g = new Grammar(
 				"grammar t;\n"+
 				"a : '\\n';\n");
-		Set literals = g.getStringLiterals();
+		Set<String> literals = g.getStringLiterals();
 		// must store literals how they appear in the antlr grammar
 		assertEquals("'\\n'", literals.toArray()[0]);
 	}
@@ -842,18 +842,18 @@ public class TestSymbolDefinitions extends BaseTest {
 		// make sure expected += labels are there
 		Rule r = g.getRule(ruleName);
 		StringTokenizer st = new StringTokenizer(tokenLabelsStr, ", ");
-		Set tokenLabels = null;
+		Set<String> tokenLabels = null;
 		while ( st.hasMoreTokens() ) {
 			if ( tokenLabels==null ) {
-				tokenLabels = new HashSet();
+				tokenLabels = new HashSet<String>();
 			}
 			String labelName = st.nextToken();
 			tokenLabels.add(labelName);
 		}
-		Set ruleLabels = null;
+		Set<String> ruleLabels = null;
 		if ( ruleLabelsStr!=null ) {
 			st = new StringTokenizer(ruleLabelsStr, ", ");
-			ruleLabels = new HashSet();
+			ruleLabels = new HashSet<String>();
 			while ( st.hasMoreTokens() ) {
 				String labelName = st.nextToken();
 				ruleLabels.add(labelName);
@@ -878,7 +878,7 @@ public class TestSymbolDefinitions extends BaseTest {
 								String tokensStr)
 		throws Exception
 	{
-		Set tokens = g.getTokenDisplayNames();
+		Set<String> tokens = g.getTokenDisplayNames();
 
 		// make sure expected tokens are there
 		StringTokenizer st = new StringTokenizer(tokensStr, ", ");
@@ -889,8 +889,7 @@ public class TestSymbolDefinitions extends BaseTest {
 			tokens.remove(tokenName);
 		}
 		// make sure there are not any others (other than <EOF> etc...)
-		for (Iterator iter = tokens.iterator(); iter.hasNext();) {
-			String tokenName = (String) iter.next();
+		for (String tokenName : tokens) {
 			assertTrue("unexpected token name "+tokenName,
 					   g.getTokenType(tokenName)<Label.MIN_TOKEN_TYPE);
 		}
@@ -903,7 +902,7 @@ public class TestSymbolDefinitions extends BaseTest {
 			assertNotNull("rule "+ruleName+" expected", g.getRule(ruleName));
 			n++;
 		}
-		Collection rules = g.getRules();
+		Collection<Rule> rules = g.getRules();
 		//System.out.println("rules="+rules);
 		// make sure there are no extra rules
 		assertEquals("number of rules mismatch; expecting "+n+"; found "+rules.size(), n, rules.size());

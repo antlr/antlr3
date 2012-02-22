@@ -46,6 +46,7 @@ public class NonRegularDecisionMessage extends Message {
 		this.altsWithRecursion = altsWithRecursion;
 	}
 
+	@Override
 	public String toString() {
 		GrammarAST decisionASTNode = probe.dfa.getDecisionASTNode();
 		line = decisionASTNode.getLine();
@@ -58,7 +59,7 @@ public class NonRegularDecisionMessage extends Message {
 		ST st = getMessageTemplate();
 		String ruleName = probe.dfa.getNFADecisionStartState().enclosingRule.name;
 		st.add("ruleName", ruleName);
-		List sortedAlts = new ArrayList();
+		List<Integer> sortedAlts = new ArrayList<Integer>();
 		sortedAlts.addAll(altsWithRecursion);
 		Collections.sort(sortedAlts); // make sure it's 1, 2, ...
 		st.add("alts", sortedAlts);

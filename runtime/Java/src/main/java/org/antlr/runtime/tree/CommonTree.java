@@ -67,14 +67,17 @@ public class CommonTree extends BaseTree {
 		return token;
 	}
 
+	@Override
 	public Tree dupNode() {
 		return new CommonTree(this);
 	}
 
+	@Override
 	public boolean isNil() {
 		return token==null;
 	}
 
+	@Override
 	public int getType() {
 		if ( token==null ) {
 			return Token.INVALID_TOKEN_TYPE;
@@ -82,6 +85,7 @@ public class CommonTree extends BaseTree {
 		return token.getType();
 	}
 
+	@Override
 	public String getText() {
 		if ( token==null ) {
 			return null;
@@ -89,6 +93,7 @@ public class CommonTree extends BaseTree {
 		return token.getText();
 	}
 
+	@Override
 	public int getLine() {
 		if ( token==null || token.getLine()==0 ) {
 			if ( getChildCount()>0 ) {
@@ -99,6 +104,7 @@ public class CommonTree extends BaseTree {
 		return token.getLine();
 	}
 
+	@Override
 	public int getCharPositionInLine() {
 		if ( token==null || token.getCharPositionInLine()==-1 ) {
 			if ( getChildCount()>0 ) {
@@ -109,6 +115,7 @@ public class CommonTree extends BaseTree {
 		return token.getCharPositionInLine();
 	}
 
+	@Override
 	public int getTokenStartIndex() {
 		if ( startIndex==-1 && token!=null ) {
 			return token.getTokenIndex();
@@ -116,10 +123,12 @@ public class CommonTree extends BaseTree {
 		return startIndex;
 	}
 
+	@Override
 	public void setTokenStartIndex(int index) {
 		startIndex = index;
 	}
 
+	@Override
 	public int getTokenStopIndex() {
 		if ( stopIndex==-1 && token!=null ) {
 			return token.getTokenIndex();
@@ -127,6 +136,7 @@ public class CommonTree extends BaseTree {
 		return stopIndex;
 	}
 
+	@Override
 	public void setTokenStopIndex(int index) {
 		stopIndex = index;
 	}
@@ -154,22 +164,27 @@ public class CommonTree extends BaseTree {
         }
     }
 
+	@Override
 	public int getChildIndex() {
 		return childIndex;
 	}
 
+	@Override
 	public Tree getParent() {
 		return parent;
 	}
 
+	@Override
 	public void setParent(Tree t) {
 		this.parent = (CommonTree)t;
 	}
 
+	@Override
 	public void setChildIndex(int index) {
 		this.childIndex = index;
 	}
 
+	@Override
 	public String toString() {
 		if ( isNil() ) {
 			return "nil";

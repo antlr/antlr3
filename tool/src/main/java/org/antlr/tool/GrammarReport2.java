@@ -43,6 +43,7 @@ public class GrammarReport2 {
 		this.root = rootGrammar;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
 		stats(root, buf);
@@ -64,17 +65,17 @@ public class GrammarReport2 {
 			int k = d.dfa.getMaxLookaheadDepth();
 			Rule enclosingRule = d.dfa.decisionNFAStartState.enclosingRule;
 			if ( enclosingRule.isSynPred ) continue; // don't count synpred rules
-			buf.append(g.name+"."+enclosingRule.name+":" +
+			buf.append(g.name).append(".").append(enclosingRule.name).append(":" +
 					   "");
 			GrammarAST decisionAST =
 				d.dfa.decisionNFAStartState.associatedASTNode;
 			buf.append(decisionAST.getLine());
 			buf.append(":");
 			buf.append(decisionAST.getCharPositionInLine());
-			buf.append(" decision "+decision+":");
+			buf.append(" decision ").append(decision).append(":");
 			
 			if ( d.dfa.isCyclic() ) buf.append(" cyclic");
-			if ( k!=Integer.MAX_VALUE ) buf.append(" k="+k); // fixed, no sempreds
+			if ( k!=Integer.MAX_VALUE ) buf.append(" k=").append(k); // fixed, no sempreds
 			if ( d.dfa.hasSynPred() ) buf.append(" backtracks"); // isolated synpred not gated
 			if ( d.dfa.hasSemPred() ) buf.append(" sempred"); // user-defined sempred
 //			else {

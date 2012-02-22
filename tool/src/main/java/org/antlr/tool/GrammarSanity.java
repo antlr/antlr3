@@ -57,14 +57,14 @@ public class GrammarSanity {
 	 */
 	public List<Set<Rule>> checkAllRulesForLeftRecursion() {
 		grammar.buildNFA(); // make sure we have NFAs
-		grammar.leftRecursiveRules = new HashSet();
-		List<Set<Rule>> listOfRecursiveCycles = new ArrayList();
+		grammar.leftRecursiveRules = new HashSet<Rule>();
+		List<Set<Rule>> listOfRecursiveCycles = new ArrayList<Set<Rule>>();
 		for (int i = 0; i < grammar.composite.ruleIndexToRuleList.size(); i++) {
 			Rule r = grammar.composite.ruleIndexToRuleList.elementAt(i);
 			if ( r!=null ) {
-				visitedDuringRecursionCheck = new HashSet();
+				visitedDuringRecursionCheck = new HashSet<Rule>();
 				visitedDuringRecursionCheck.add(r);
-				Set visitedStates = new HashSet();
+				Set<NFAState> visitedStates = new HashSet<NFAState>();
 				traceStatesLookingForLeftRecursion(r.startState,
 												   visitedStates,
 												   listOfRecursiveCycles);
@@ -87,7 +87,7 @@ public class GrammarSanity {
 	 *  side-effect, set leftRecursiveRules.
 	 */
 	protected boolean traceStatesLookingForLeftRecursion(NFAState s,
-														 Set visitedStates,
+														 Set<NFAState> visitedStates,
 														 List<Set<Rule>> listOfRecursiveCycles)
 	{
 		if ( s.isAcceptState() ) {
@@ -122,7 +122,7 @@ public class GrammarSanity {
 				visitedDuringRecursionCheck.add(refRuleDef);
 				boolean callReachedAcceptState =
 					traceStatesLookingForLeftRecursion((NFAState)t0.target,
-													   new HashSet(),
+													   new HashSet<NFAState>(),
 													   listOfRecursiveCycles);
 				// we're back from visiting that rule
 				visitedDuringRecursionCheck.remove(refRuleDef);
@@ -178,7 +178,7 @@ public class GrammarSanity {
 			}
 		}
 		if ( !foundCycle ) {
-			Set cycle = new HashSet();
+			Set<Rule> cycle = new HashSet<Rule>();
 			cycle.add(targetRule);
 			cycle.add(enclosingRule);
 			listOfRecursiveCycles.add(cycle);
@@ -267,12 +267,12 @@ public class GrammarSanity {
 											int outerAltNum)
 	{
 		if ( isValidSimpleElementNode(elementAST) ) {
-			GrammarAST next = (GrammarAST)elementAST.getNextSibling();
+			GrammarAST next = elementAST.getNextSibling();
 			if ( !isNextNonActionElementEOA(next)) {
 				ErrorManager.grammarWarning(ErrorManager.MSG_REWRITE_FOR_MULTI_ELEMENT_ALT,
 											grammar,
 											next.token,
-											new Integer(outerAltNum));
+											outerAltNum);
 			}
 			return;
 		}
@@ -289,14 +289,14 @@ public class GrammarSanity {
 			case ANTLRParser.BACKTRACK_SEMPRED :
 			case ANTLRParser.GATED_SEMPRED :
 				ensureAltIsSimpleNodeOrTree(altAST,
-											(GrammarAST)elementAST.getNextSibling(),
+											elementAST.getNextSibling(),
 											outerAltNum);
 				return;
 		}
 		ErrorManager.grammarWarning(ErrorManager.MSG_REWRITE_FOR_MULTI_ELEMENT_ALT,
 									grammar,
 									elementAST.token,
-									new Integer(outerAltNum));
+									outerAltNum);
 	}
 
 	protected boolean isValidSimpleElementNode(Tree t) {
@@ -316,7 +316,7 @@ public class GrammarSanity {
 		while ( t.getType()==ANTLRParser.ACTION ||
 				t.getType()==ANTLRParser.SEMPRED )
 		{
-			t = (GrammarAST)t.getNextSibling();
+			t = t.getNextSibling();
 		}
 		if ( t.getType()==ANTLRParser.EOA ) {
 			return true;

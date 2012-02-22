@@ -85,6 +85,7 @@ public class RuleLabelScope extends AttributeScope {
 	/** If you label a rule reference, you can access that rule's
 	 *  return values as well as any predefined attributes.
 	 */
+	@Override
 	public Attribute getAttribute(String name) {
 		AttributeScope rulePropertiesScope =
 			RuleLabelScope.grammarTypeToRulePropertiesScope[grammar.type];
