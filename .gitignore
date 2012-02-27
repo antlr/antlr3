@@ -1,6 +1,17 @@
-/runtime/Java/target/
-/tool/target/
-/antlr3-maven-plugin/target/
-/gunit/target/
-/gunit-maven-plugin/target/
-/antlr3-maven-archetype/target/
+# Maven build folders
+target/
+
+# IntelliJ project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Eclipse project files
+.project
+.classpath
+.settings/
+
+# NetBeans user configuration
+nbactions.xml
+nb-configuration.xml
