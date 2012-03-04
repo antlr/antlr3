@@ -14,11 +14,15 @@
       -->
     <id>completejar</id>
 
-    <!--
-        Exclude the antlr-master pom from the jar - we don't need it
-        and it causes silly things to happen.
-      -->
-    <useProjectArtifact>false</useProjectArtifact>
+    <dependencySets>
+        <dependencySet>
+            <!--
+                Exclude the antlr-master pom from the jar - we don't need it
+                and it causes silly things to happen.
+              -->
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
 
     <!--
         The only output format we need is the executable jar file
