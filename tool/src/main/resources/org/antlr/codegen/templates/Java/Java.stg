@@ -446,7 +446,7 @@ ruleLabelDefs() ::= <<
     :{it |<labelType> <it.label.text>=null;}; separator="\n"
 >
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it |List list_<it.label.text>=null;}; separator="\n"
+    :{it |List\<Object> list_<it.label.text>=null;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 <ruleDescriptor.ruleListLabels:{ll|RuleReturnScope <ll.label.text> = null;}; separator="\n">
@@ -461,7 +461,7 @@ lexerRuleLabelDefs() ::= <<
 <ruleDescriptor.charLabels:{it |int <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleListLabels]
-    :{it |List list_<it.label.text>=null;}; separator="\n"
+    :{it |List\<Object> list_<it.label.text>=null;}; separator="\n"
 >
 >>
 
@@ -692,7 +692,7 @@ tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 >>
 
 listLabel(label,elem) ::= <<
-if (list_<label>==null) list_<label>=new ArrayList();
+if (list_<label>==null) list_<label>=new ArrayList\<Object>();
 list_<label>.add(<elem>);<\n>
 >>
 
