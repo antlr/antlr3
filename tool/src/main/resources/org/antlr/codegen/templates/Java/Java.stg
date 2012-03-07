@@ -126,7 +126,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 	<synpreds:{p | <lexerSynpred(p)>}>
 
 	<cyclicDFAs:{dfa | protected DFA<dfa.decisionNumber> dfa<dfa.decisionNumber> = new DFA<dfa.decisionNumber>(this);}; separator="\n">
-	<cyclicDFAs:cyclicDFA()> <! dump tables for all DFA !>
+	<cyclicDFAs:cyclicDFA(); separator="\n\n"> <! dump tables for all DFA !>
 
 }
 >>
@@ -253,10 +253,10 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 	<synpreds:{p | <synpred(p)>}>
 
 	<cyclicDFAs:{dfa | protected DFA<dfa.decisionNumber> dfa<dfa.decisionNumber> = new DFA<dfa.decisionNumber>(this);}; separator="\n">
-	<cyclicDFAs:cyclicDFA()> <! dump tables for all DFA !>
+	<cyclicDFAs:cyclicDFA(); separator="\n\n"> <! dump tables for all DFA !>
 
 	<bitsets:{it | <bitset(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
-							words64=it.bits)>}>
+							words64=it.bits)>}; separator="\n">
 }
 >>
 
@@ -392,7 +392,7 @@ public final <returnType(ruleDescriptor)> <ruleName>(<ruleDescriptor.parameterSc
 		reportError(re);
 		recover(input,re);
 	<@setErrorReturnValue()>
-	}<\n>
+	}
 <endif>
 <endif>
 <endif>
@@ -418,7 +418,7 @@ catch (<e.decl>) {
 ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <returnType(ruleDescriptor)> retval = new <returnType(ruleDescriptor)>();
-retval.start = input.LT(1);<\n>
+retval.start = input.LT(1);
 <else>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.type> <a.name> = <if(a.initValue)><a.initValue><else><initValue(a.type)><endif>;
@@ -480,7 +480,7 @@ retval
 ruleCleanUp() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!TREE_PARSER)>
-retval.stop = input.LT(-1);<\n>
+retval.stop = input.LT(-1);
 <endif>
 <endif>
 >>
@@ -507,7 +507,7 @@ public final void m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>) 
 		<ruleMemoization(name=ruleName)>
 		<lexerRuleLabelDefs()>
 		<ruleDescriptor.actions.init>
-		<block><\n>
+		<block>
 <else>
 		int _type = <ruleName>;
 		int _channel = DEFAULT_TOKEN_CHANNEL;
@@ -536,7 +536,7 @@ public final void m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>) 
  */
 tokensRule(ruleName,nakedBlock,args,block,ruleDescriptor) ::= <<
 public void mTokens() throws RecognitionException {
-	<block><\n>
+	<block>
 }
 >>
 
@@ -677,7 +677,7 @@ noRewrite(rewriteBlockLevel, treeLevel) ::= ""
 /** Dump the elements one per line */
 element(e) ::= <<
 <@prematch()>
-<e.el><\n>
+<e.el>
 >>
 
 /** match a token optionally with a label in front */
@@ -693,13 +693,13 @@ tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 
 listLabel(label,elem) ::= <<
 if (list_<label>==null) list_<label>=new ArrayList\<Object>();
-list_<label>.add(<elem>);<\n>
+list_<label>.add(<elem>);
 >>
 
 /** match a character */
 charRef(char,label) ::= <<
 <if(label)>
-<label> = input.LA(1);<\n>
+<label> = input.LA(1);
 <endif>
 match(<char>); <checkRuleBacktrackFailure()>
 >>
@@ -707,7 +707,7 @@ match(<char>); <checkRuleBacktrackFailure()>
 /** match a character range */
 charRangeRef(a,b,label) ::= <<
 <if(label)>
-<label> = input.LA(1);<\n>
+<label> = input.LA(1);
 <endif>
 matchRange(<a>,<b>); <checkRuleBacktrackFailure()>
 >>
@@ -716,9 +716,9 @@ matchRange(<a>,<b>); <checkRuleBacktrackFailure()>
 matchSet(s,label,elementIndex,terminalOptions,postmatchCode="") ::= <<
 <if(label)>
 <if(LEXER)>
-<label>= input.LA(1);<\n>
+<label>= input.LA(1);
 <else>
-<label>=(<labelType>)input.LT(1);<\n>
+<label>=(<labelType>)input.LT(1);
 <endif>
 <endif>
 if ( <s> ) {
@@ -742,7 +742,7 @@ else {
 	recoverFromMismatchedSet(input,mse,FOLLOW_set_in_<ruleName><elementIndex>);
 	!>
 <endif>
-}<\n>
+}
 >>
 
 matchRuleBlockSet ::= matchSet
@@ -763,13 +763,13 @@ int <label>StartCharPos<elementIndex> = getCharPositionInLine();
 <label>.setLine(<label>StartLine<elementIndex>);
 <label>.setCharPositionInLine(<label>StartCharPos<elementIndex>);
 <else>
-match(<string>); <checkRuleBacktrackFailure()><\n>
+match(<string>); <checkRuleBacktrackFailure()>
 <endif>
 >>
 
 wildcard(token,label,elementIndex,terminalOptions) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);<\n>
+<label>=(<labelType>)input.LT(1);
 <endif>
 matchAny(input); <checkRuleBacktrackFailure()>
 >>
@@ -782,7 +782,7 @@ wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
 /** Match . wildcard in lexer */
 wildcardChar(label, elementIndex) ::= <<
 <if(label)>
-<label> = input.LA(1);<\n>
+<label> = input.LA(1);
 <endif>
 matchAny(); <checkRuleBacktrackFailure()>
 >>
@@ -800,7 +800,7 @@ wildcardCharListLabel(label, elementIndex) ::= <<
  */
 ruleRef(rule,label,elementIndex,args,scope) ::= <<
 pushFollow(FOLLOW_<rule.name>_in_<ruleName><elementIndex>);
-<if(label)><label>=<endif><if(scope)><scope:delegateName()>.<endif><rule.name>(<args; separator=", ">);<\n>
+<if(label)><label>=<endif><if(scope)><scope:delegateName()>.<endif><rule.name>(<args; separator=", ">);
 state._fsp--;
 <checkRuleBacktrackFailure()>
 >>
@@ -890,7 +890,7 @@ if ( !(<evalPredicate(pred,description)>) ) {
 // F i x e d  D F A  (if-then-else)
 
 dfaState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
-int LA<decisionNumber>_<stateNumber> = input.LA(<k>);<\n>
+int LA<decisionNumber>_<stateNumber> = input.LA(<k>);
 <edges; separator="\nelse ">
 else {
 <if(eotPredictsAlt)>
@@ -898,7 +898,7 @@ else {
 <else>
 	<ruleBacktrackFailure()>
 	<(nvaExceptionWrapperMap.(k))({NoViableAltException nvae =
-	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
+	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);
 <@noViableAltException()>
 throw nvae;})>
 <endif>
@@ -942,7 +942,7 @@ try {
  *  expect "if ( LA(1)==X ) match(X);" and that's it.
  */
 dfaOptionalBlockState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
-int LA<decisionNumber>_<stateNumber> = input.LA(<k>);<\n>
+int LA<decisionNumber>_<stateNumber> = input.LA(<k>);
 <edges; separator="\nelse ">
 >>
 
@@ -953,15 +953,15 @@ int LA<decisionNumber>_<stateNumber> = input.LA(<k>);<\n>
  *  anything other than 'a' predicts exiting.
  */
 dfaLoopbackState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
-int LA<decisionNumber>_<stateNumber> = input.LA(<k>);<\n>
-<edges; separator="\nelse "><\n>
+int LA<decisionNumber>_<stateNumber> = input.LA(<k>);
+<edges; separator="\nelse ">
 <if(eotPredictsAlt)>
 <if(!edges)>
 alt<decisionNumber>=<eotPredictsAlt>; <! if no edges, don't gen ELSE !>
 <else>
 else {
 	alt<decisionNumber>=<eotPredictsAlt>;
-}<\n>
+}
 <endif>
 <endif>
 >>
@@ -993,28 +993,28 @@ default:
 <else>
 	<ruleBacktrackFailure()>
 	<(nvaExceptionWrapperMap.(k))({NoViableAltException nvae =
-	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);<\n>
+	new NoViableAltException("<description>", <decisionNumber>, <stateNumber>, input);
 <@noViableAltException()>
 throw nvae;})>
 <endif>
-}<\n>
+}
 >>
 
 dfaOptionalBlockStateSwitch(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 switch ( input.LA(<k>) ) {
 	<edges; separator="\n">
-}<\n>
+}
 >>
 
 dfaLoopbackStateSwitch(k, edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 switch ( input.LA(<k>) ) {
-<edges; separator="\n"><\n>
+<edges; separator="\n">
 <if(eotPredictsAlt)>
 default:
 	alt<decisionNumber>=<eotPredictsAlt>;
-	break;<\n>
+	break;
 <endif>
-}<\n>
+}
 >>
 
 dfaEdgeSwitch(labels, targetState) ::= <<
@@ -1111,30 +1111,30 @@ class DFA<dfa.decisionNumber> extends DFA {
 			<state>}; separator="\n">
 		}
 <if(backtracking)>
-		if (state.backtracking>0) {state.failed=true; return -1;}<\n>
+		if (state.backtracking>0) {state.failed=true; return -1;}
 <endif>
 		NoViableAltException nvae =
 			new NoViableAltException(getDescription(), <dfa.decisionNumber>, _s, input);
 		error(nvae);
 		throw nvae;
-	}<\n>
+	}
 <endif>
-}<\n>
+}
 >>
 
 /** A state in a cyclic DFA; it's a special state and part of a big switch on
  *  state.
  */
 cyclicDFAState(decisionNumber,stateNumber,edges,needErrorClause,semPredState) ::= <<
-int LA<decisionNumber>_<stateNumber> = input.LA(1);<\n>
+int LA<decisionNumber>_<stateNumber> = input.LA(1);
 <if(semPredState)> <! get next lookahead symbol to test edges, then rewind !>
 int index<decisionNumber>_<stateNumber> = input.index();
-input.rewind();<\n>
+input.rewind();
 <endif>
 s = -1;
 <edges; separator="\nelse ">
 <if(semPredState)> <! return input cursor to state before we rewound !>
-input.seek(index<decisionNumber>_<stateNumber>);<\n>
+input.seek(index<decisionNumber>_<stateNumber>);
 <endif>
 if ( s>=0 ) return s;
 break;
@@ -1144,14 +1144,14 @@ break;
  *  state to jump to next if successful.
  */
 cyclicDFAEdge(labelExpr, targetStateNumber, edgeNumber, predicates) ::= <<
-if ( (<labelExpr>) <if(predicates)>&& (<predicates>)<endif>) {s = <targetStateNumber>;}<\n>
+if ( (<labelExpr>) <if(predicates)>&& (<predicates>)<endif>) {s = <targetStateNumber>;}
 >>
 
 /** An edge pointing at end-of-token; essentially matches any char;
  *  always jump to the target.
  */
 eotDFAEdge(targetStateNumber,edgeNumber, predicates) ::= <<
-s = <targetStateNumber>;<\n>
+s = <targetStateNumber>;
 >>
 
 
@@ -1191,7 +1191,7 @@ globalAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
 	<scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();
 <endif>
 >>
 
@@ -1200,7 +1200,7 @@ ruleAttributeScope(scope) ::= <<
 protected static class <scope.name>_scope {
 	<scope.attributes:{it |<it.decl>;}; separator="\n">
 }
-protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();<\n>
+protected Stack\<<scope.name>_scope\> <scope.name>_stack = new Stack\<<scope.name>_scope\>();
 <endif>
 >>
 
@@ -1243,7 +1243,7 @@ initValue(typeName) ::= <<
 /** Define a rule label including default value */
 ruleLabelDef(label) ::= <%
 <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text> =
- <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;<\n>
+ <initValue(typeName=ruleLabelType(referencedRule=label.referencedRule))>;
 %>
 
 /** Define a return struct for a rule if the code needs to access its
@@ -1423,7 +1423,7 @@ execForcedAction(action) ::= "<action>"
 // M I S C (properties, etc...)
 
 bitset(name, words64) ::= <<
-public static final BitSet <name> = new BitSet(new long[]{<words64:{it |<it>L};separator=",">});<\n>
+public static final BitSet <name> = new BitSet(new long[]{<words64:{it |<it>L};separator=",">});
 >>
 
 codeFileExtension() ::= ".java"

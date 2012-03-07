@@ -37,12 +37,12 @@ public void setTreeAdaptor(TreeAdaptor adaptor) {
 	this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
 <else>
 	this.adaptor = (DebugTreeAdaptor)adaptor; // delegator sends dbg adaptor
-<endif><\n>
+<endif>
 	<grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
 }
 public TreeAdaptor getTreeAdaptor() {
 	return adaptor;
-}<\n>
+}
 >>
 
 parserCtorBody() ::= <<
@@ -78,7 +78,7 @@ setTreeAdaptor(adap);
 @ctorForPredefinedListener.finally() ::=<<
 <if(grammar.grammarIsRoot)> <! don't create new adaptor for delegates !>
 TreeAdaptor adap = new CommonTreeAdaptor();
-setTreeAdaptor(adap);<\n>
+setTreeAdaptor(adap);
 <endif>
 >>
 
