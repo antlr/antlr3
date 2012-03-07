@@ -4,3 +4,4 @@
 /gunit/target/
 /gunit-maven-plugin/target/
 /antlr3-maven-archetype/target/
+.idea/
