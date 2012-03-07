@@ -34,14 +34,14 @@ parserMembers() ::= <<
 protected DebugTreeAdaptor adaptor;
 public void setTreeAdaptor(TreeAdaptor adaptor) {
 <if(grammar.grammarIsRoot)>
-    this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
+	this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
 <else>
-    this.adaptor = (DebugTreeAdaptor)adaptor; // delegator sends dbg adaptor
+	this.adaptor = (DebugTreeAdaptor)adaptor; // delegator sends dbg adaptor
 <endif><\n>
-    <grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
+	<grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
 }
 public TreeAdaptor getTreeAdaptor() {
-    return adaptor;
+	return adaptor;
 }<\n>
 >>
 
@@ -51,14 +51,14 @@ parserCtorBody() ::= <<
 
 createListenerAndHandshake() ::= <<
 DebugEventSocketProxy proxy =
-    new DebugEventSocketProxy(this,port,<if(TREE_PARSER)>input.getTreeAdaptor()<else>adaptor<endif>);
+	new DebugEventSocketProxy(this,port,<if(TREE_PARSER)>input.getTreeAdaptor()<else>adaptor<endif>);
 setDebugListener(proxy);
 set<inputStreamType>(new Debug<inputStreamType>(input,proxy));
 try {
-    proxy.handshake();
+	proxy.handshake();
 }
 catch (IOException ioe) {
-    reportError(ioe);
+	reportError(ioe);
 }
 >>
 

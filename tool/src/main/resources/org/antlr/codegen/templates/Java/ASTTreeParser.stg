@@ -56,7 +56,7 @@ noRewrite(rewriteBlockLevel, treeLevel) ::= <<
 <if(rewriteMode)>
 retval.tree = (<ASTLabelType>)_first_0;
 if ( adaptor.getParent(retval.tree)!=null && adaptor.isNil( adaptor.getParent(retval.tree) ) )
-    retval.tree = (<ASTLabelType>)adaptor.getParent(retval.tree);
+	retval.tree = (<ASTLabelType>)adaptor.getParent(retval.tree);
 <endif>
 <if(backtracking)>}<endif>
 <endif>
@@ -66,7 +66,7 @@ if ( adaptor.getParent(retval.tree)!=null && adaptor.isNil( adaptor.getParent(re
  *  add tree construction actions.
  */
 tree(root, actionsAfterRoot, children, nullableChildList,
-     enclosingTreeLevel, treeLevel) ::= <<
+	 enclosingTreeLevel, treeLevel) ::= <<
 <if(!ruleDescriptor.isSynPred)>
 _last = (<ASTLabelType>)input.LT(1);
 {
@@ -87,9 +87,9 @@ if ( _first_<enclosingTreeLevel>==null ) _first_<enclosingTreeLevel> = <root.el.
 <actionsAfterRoot:element()>
 <if(nullableChildList)>
 if ( input.LA(1)==Token.DOWN ) {
-    match(input, Token.DOWN, null); <checkRuleBacktrackFailure()>
-    <children:element()>
-    match(input, Token.UP, null); <checkRuleBacktrackFailure()>
+	match(input, Token.DOWN, null); <checkRuleBacktrackFailure()>
+	<children:element()>
+	match(input, Token.UP, null); <checkRuleBacktrackFailure()>
 }
 <else>
 match(input, Token.DOWN, null); <checkRuleBacktrackFailure()>
