@@ -34,6 +34,7 @@
 #import "RuleMemo.h"
 #import "CommonToken.h"
 #import "Map.h"
+#import "NoViableAltException.h"
 
 extern NSInteger debug;
 
@@ -400,7 +401,8 @@ static NSString *NEXT_TOKEN_RULE_NAME;
         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
         // and "(decision="+nvae.decisionNumber+") and
         // "state "+nvae.stateNumber
-        msg = [NSString stringWithFormat:@"no viable alternative at input %@", [self getTokenErrorDisplay:e.token]];
+        //        msg = [NSString stringWithFormat:@"no viable alternative at input %@", [self getTokenErrorDisplay:e.token]];
+        msg = [NSString stringWithFormat:@"no viable alternative decision:%d state:%d at input %@", ((NoViableAltException *)e).stateNumber, ((NoViableAltException *)e).decisionNumber, [self getTokenErrorDisplay:e.token]];
     }
     else if ( [e isKindOfClass:[EarlyExitException class]] ) {
         //EarlyExitException *eee = (EarlyExitException *)e;
