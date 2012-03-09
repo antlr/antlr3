@@ -634,8 +634,8 @@ public class TestAttributes extends BaseTest {
 	@Test public void testRuleLabels() throws Exception {
 		String action = "$r.x; $r.start;\n $r.stop;\n $r.tree; $a.x; $a.stop;";
 		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null);" + newline +
-			"             (r!=null?((Token)r.stop):null);" + newline +
-			"             (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.stop):null);";
+			"\t\t\t (r!=null?((Token)r.stop):null);" + newline +
+			"\t\t\t (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);

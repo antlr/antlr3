@@ -57,15 +57,12 @@ public StringTemplateGroup getTemplateLib() {
 /** allows convenient multi-value initialization:
  *  "new STAttrMap().put(...).put(...)"
  */
-public static class STAttrMap extends HashMap {
-  public STAttrMap put(String attrName, Object value) {
-    super.put(attrName, value);
-    return this;
-  }
-  public STAttrMap put(String attrName, int value) {
-    super.put(attrName, new Integer(value));
-    return this;
-  }
+@SuppressWarnings("serial")
+public static class STAttrMap extends HashMap\<String, Object> {
+	public STAttrMap put(String attrName, Object value) {
+		super.put(attrName, value);
+		return this;
+	}
 }
 >>
 
@@ -107,11 +104,11 @@ rewriteTemplateAlt(alt) ::= <<
 // <alt.description>
 <if(alt.pred)>
 if (<alt.pred>) {
-    retval.st = <alt.alt>;
+	retval.st = <alt.alt>;
 }<\n>
 <else>
 {
-    retval.st = <alt.alt>;
+	retval.st = <alt.alt>;
 }<\n>
 <endif>
 >>
