@@ -19,22 +19,22 @@
     return [[ANTLRInputStream alloc] init];
 }
 
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput
++ (id) newANTLRInputStream:(NSInputStream *)anInput
 {
     return [[ANTLRInputStream alloc] initWithInput:anInput size:ANTLRReaderStream.INITIAL_BUFFER_SIZE readBufferSize:ANTLRReaderStream.READ_BUFFER_SIZE encoding:NSASCIIStringEncoding];
 }
 
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput size:(NSInteger)theSize
++ (id) newANTLRInputStream:(NSInputStream *)anInput size:(NSInteger)theSize
 {
     return [[ANTLRInputStream alloc] initWithInput:anInput size:theSize readBufferSize:ANTLRReaderStream.READ_BUFFER_SIZE encoding:NSASCIIStringEncoding];
 }
 
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput encoding:(NSStringEncoding)theEncoding
++ (id) newANTLRInputStream:(NSInputStream *)anInput encoding:(NSStringEncoding)theEncoding
 {
     return [[ANTLRInputStream alloc] initWithInput:anInput size:ANTLRReaderStream.INITIAL_BUFFER_SIZE readBufferSize:ANTLRReaderStream.READ_BUFFER_SIZE encoding:theEncoding];
 }
 
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput
++ (id) newANTLRInputStream:(NSInputStream *)anInput
                       size:(NSInteger)theSize
             readBufferSize:(NSInteger)theRBSize
                   encoding:(NSStringEncoding)theEncoding
@@ -48,14 +48,14 @@
     return self;
 }
 
-- (id) initWithInput:(NSFileHandle *)anInput
+- (id) initWithInput:(NSInputStream *)anInput
                 size:(NSInteger)theSize
       readBufferSize:(NSInteger)theRBSize
             encoding:(NSStringEncoding)theEncoding
 {
-    ;self = [super initWithReader:anInput size:theSize readBufferSize:theRBSize];
+    self = [super initWithReader:anInput size:theSize readBufferSize:theRBSize];
     if ( self != nil ) {
-        //[self load:theSize readBufferSize:theRBSize];
+        //[self load:theSize readBufferSize:theRBSize]; // load called in super class
     }
     return self;
 }

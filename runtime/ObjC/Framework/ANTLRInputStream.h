@@ -16,15 +16,15 @@
 @property (assign) NSStringEncoding encoding;
 
 + (id) newANTLRInputStream;
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput;
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput size:(NSInteger)theSize;
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput encoding:(NSStringEncoding)theEncoding;
-+ (id) newANTLRInputStream:(NSFileHandle *)anInput
++ (id) newANTLRInputStream:(NSInputStream *)anInput;
++ (id) newANTLRInputStream:(NSInputStream *)anInput size:(NSInteger)theSize;
++ (id) newANTLRInputStream:(NSInputStream *)anInput encoding:(NSStringEncoding)theEncoding;
++ (id) newANTLRInputStream:(NSInputStream *)anInput
                       size:(NSInteger)theSize
             readBufferSize:(NSInteger)theRBSize
                   encoding:(NSStringEncoding)theEncoding;
 - (id) init;
-- (id) initWithInput:(NSFileHandle *)anInput
+- (id) initWithInput:(NSInputStream *)anInput
                 size:(NSInteger)theSize
       readBufferSize:(NSInteger)theRBSize
             encoding:(NSStringEncoding)theEncoding;

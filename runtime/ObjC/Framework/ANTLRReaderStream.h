@@ -10,13 +10,14 @@
 #import "ANTLRStringStream.h"
 
 @interface ANTLRReaderStream : ANTLRStringStream {
-    NSFileHandle *fh;
+    NSInputStream *is;
     NSInteger size;
     NSInteger rbSize;
     //NSData *data; /* ANTLRStringStream has NSString *data */
+    NSInteger p1;
 }
 
-@property (retain) NSFileHandle *fh;
+@property (retain) NSInputStream *is;
 @property (assign) NSInteger size;
 @property (assign) NSInteger rbSize;
 //@property (retain) NSData *data;
@@ -25,11 +26,13 @@
 + (NSInteger) INITIAL_BUFFER_SIZE;
 
 + (id) newANTLRReaderStream;
-+ (id) newANTLRReaderStream:(NSFileHandle *)r;
-+ (id) newANTLRReaderStream:(NSFileHandle *)r size:(NSInteger)aSize;
-+ (id) newANTLRReaderStream:(NSFileHandle *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize;
-- (id) initWithReader:(NSFileHandle *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize;
++ (id) newANTLRReaderStream:(NSInputStream *)r;
++ (id) newANTLRReaderStream:(NSInputStream *)r size:(NSInteger)aSize;
++ (id) newANTLRReaderStream:(NSInputStream *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize;
+- (id) initWithReader:(NSInputStream *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize;
 - (void) load:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize;
+- (void) setUpStreamForFile;
+- (void) stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode;
 - (void) close;
 
 @end
