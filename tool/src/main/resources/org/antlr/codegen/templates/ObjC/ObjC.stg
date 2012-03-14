@@ -1601,7 +1601,7 @@ const static NSInteger *dfa<dfa.decisionNumber>_transition[] =
 
 - (void) dealloc
 {
-    free(transition);
+    //free(transition);
     [super dealloc];
 }
 
@@ -1837,6 +1837,7 @@ ruleAttributeScope(scope) ::= <%
 <if(scope.attributes)>
 /* ruleAttributeScope */<\n>
 static SymbolStack *<scope.name>_stack;<\n>
+static <scope.name>_Scope *<scope.name>_scope;
 <endif>
 %>
 
