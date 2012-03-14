@@ -345,7 +345,7 @@
     if ( [e isKindOfClass:[MismatchedTokenException class]] ) {
         MismatchedTokenException *mte = (MismatchedTokenException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\" expecting \"%@\"",
-               [self getCharErrorDisplay:mte.c], [self getCharErrorDisplay:mte.expecting]];
+            [self getCharErrorDisplay:mte.c], [self getCharErrorDisplay:mte.expectingChar]];
     }
     else if ( [e isKindOfClass:[NoViableAltException class]] ) {
         NoViableAltException *nvae = (NoViableAltException *)e;
@@ -387,7 +387,11 @@
 {
     NSString *s;
     switch ( c ) {
+        case 0:
+            s = @"char=<nil>";
+            break;
         case TokenTypeEOF :
+        case 65535:
             s = @"<EOF>";
             break;
         case '\n' :
