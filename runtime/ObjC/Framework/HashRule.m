@@ -84,7 +84,7 @@
                     tmp = (RuleMemo *)tmp.fNext;
                 else
                     tmp = nil;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -145,7 +145,7 @@
 {
     if ( np.fNext != nil )
         [self delete_chain:np.fNext];
-    [np dealloc];
+    [np release];
 }
 
 -(RuleMemo **)getPtrBuffer
