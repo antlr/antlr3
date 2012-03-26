@@ -64,21 +64,21 @@
 /*    form hash value for string s */
 - (NSInteger)hash:(NSString *)s;
 /*   look for s in ptrBuffer  */
-- (HashMap *)findscope:(int)level;
+- (HashMap *)findscope:(NSInteger)level;
 /*   look for s in ptrBuffer  */
-- (id)lookup:(NSString *)s Scope:(int)scope;
+- (id)lookup:(NSString *)s Scope:(NSInteger)scope;
 /*   look for s in ptrBuffer  */
-- (id)install:(MapElement *)sym Scope:(int)scope;
+- (id)install:(MapElement *)sym Scope:(NSInteger)scope;
 /*   look for s in ptrBuffer  */
 - (void)deleteHashMap:(MapElement *)np;
-- (int)RemoveSym:(NSString *)s;
+- (NSInteger)RemoveSym:(NSString *)s;
 - (void)delete_chain:(MapElement *)np;
 #ifdef DONTUSEYET
 - (int)bld_symtab:(KW_TABLE *)toknams;
 #endif
 - (MapElement **)getptrBuffer;
-- (MapElement *)getptrBufferEntry:(int)idx;
-- (void)setptrBuffer:(MapElement *)np Index:(int)idx;
+- (MapElement *)getptrBufferEntry:(NSInteger)idx;
+- (void)setptrBuffer:(MapElement *)np Index:(NSInteger)idx;
 - (NSInteger)getScope;
 - (void)setScope:(NSInteger)i;
 - (MapElement *)getTType:(NSString *)name;

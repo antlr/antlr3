@@ -31,13 +31,13 @@
 
 @interface DFA : NSObject {
 	// the tables are set by subclasses to their own static versions.
-	const int *eot;
-	const int *eof;
+	const NSInteger *eot;
+	const NSInteger *eof;
 	const unichar *min;
 	const unichar *max;
-	const int *accept;
-	const int *special;
-	const int **transition;
+	const NSInteger *accept;
+	const NSInteger *special;
+	const NSInteger **transition;
 	
 	__strong BaseRecognizer *recognizer;
 	NSInteger decisionNumber;
@@ -70,13 +70,13 @@
 - (void)setRecognizer:(BaseRecognizer *)aRecognizer;
 - (NSInteger)length;
 
-@property const int *eot;
-@property const int *eof;
+@property const NSInteger *eot;
+@property const NSInteger *eof;
 @property const unichar *min;
 @property const unichar *max;
-@property const int *accept;
-@property const int *special;
-@property const int **transition;
+@property const NSInteger *accept;
+@property const NSInteger *special;
+@property const NSInteger **transition;
 
 @property (retain, getter=getRecognizer,setter=setRecognizer:) BaseRecognizer *recognizer;
 @property (assign, getter=getDecision,setter=setDecision:) NSInteger decisionNumber;
