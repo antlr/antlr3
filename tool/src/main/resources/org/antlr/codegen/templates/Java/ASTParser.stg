@@ -39,8 +39,8 @@
  */
 
 @rule.setErrorReturnValue() ::= <<
-retval.tree = (<ASTLabelType>)adaptor.errorNode(input, retval.start, input.LT(-1), re);
-<! System.out.println("<ruleName> returns "+((CommonTree)retval.tree).toStringTree()); !>
+retval.tree = (<ASTLabelType>)adaptor.errorNode(input, retval.start, input.LT(-1), re);<!
+ System.out.println("<ruleName> returns "+((CommonTree)retval.tree).toStringTree()); !>
 >>
 
 // TOKEN AST STUFF
@@ -116,7 +116,7 @@ matchSetBang(s,label,elementIndex,terminalOptions,postmatchCode) ::= "<super.mat
 
 matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);<\n>
+<label>=(<labelType>)input.LT(1);
 <endif>
 <super.matchSet(postmatchCode={<if(!ruleDescriptor.isSynPred)><if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<createNodeFromToken(...)>, root_0);<endif>},...)>
 >>
@@ -192,7 +192,7 @@ new <terminalOptions.node>(<label>) <! new MethodNode(IDLabel) !>
 
 ruleCleanUp() ::= <<
 <super.ruleCleanUp()>
-<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<\n><endif>
+<if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 retval.tree = (<ASTLabelType>)adaptor.rulePostProcessing(root_0);
 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 <if(backtracking)>}<endif>
