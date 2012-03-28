@@ -211,9 +211,9 @@
                                                Channel:state.channel
                                                  Start:state.tokenStartCharIndex
                                                   Stop:input.index-1];
-    [aToken setLine:state.tokenStartLine];
     aToken.text = [self text];
     [aToken setCharPositionInLine:state.tokenStartCharPositionInLine];
+    [aToken setLine:state.tokenStartLine];
     [aToken retain];
     [self emit:aToken];
     // [aToken release];
