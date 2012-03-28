@@ -58,6 +58,8 @@
 - (id) initWithStream:(id<IntStream>)anInputStream reason:(NSString *)aReason;
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
+- (void) extractInformationFromTreeNodeStream:(id<IntStream>)input;
+
 - (NSInteger) unexpectedType;
 - (id<Token>)getUnexpectedToken;
 
