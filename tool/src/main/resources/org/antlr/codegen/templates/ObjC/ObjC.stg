@@ -2056,7 +2056,7 @@ ruleLabelPropertyRef_text(scope,attr) ::= <%
 (<scope>!=nil?[[input getTokenStream] toStringFromStart:[[input getTreeAdaptor] getTokenStartIndex:[<scope> getStart]]
          ToEnd:[[input getTreeAdaptor] getTokenStopIndex:[<scope> getStart]]]:0)
 <else>
-(<scope>!=nil?([input toStringFromStart:[<scope> getStart] ToEnd:[<scope> getStop]]:0)
+(<scope>!=nil?([input toStringFromToken:[<scope> getStart] ToToken:[<scope> getStop]]:0)
 <endif>
 %>
 ruleLabelPropertyRef_st(scope,attr) ::= "(<scope>!=nil?[<scope> st]:nil)"
