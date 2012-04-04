@@ -8,6 +8,7 @@
 
 #import "ANTLRBitSetTest.h"
 #import "ANTLRBitSet.h"
+#import "ACNumber.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreFoundation/CFBitVector.h>
 
@@ -27,12 +28,12 @@
 -(void) testWithBitArray
 {
 	AMutableArray *bits = [AMutableArray arrayWithCapacity:10];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:NO]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:NO]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:NO]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:NO]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
 	STAssertTrue([[bits objectAtIndex:0] boolValue], @"Value at index 0 was not true");
 	STAssertTrue([[bits objectAtIndex:1] boolValue], @"Value at index 1 was not true");
 	STAssertFalse([[bits objectAtIndex:2] boolValue], @"Value at index 2 was not false");

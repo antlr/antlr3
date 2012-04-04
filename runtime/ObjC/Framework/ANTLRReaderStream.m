@@ -7,7 +7,7 @@
 //
 
 #import "ANTLRReaderStream.h"
-
+#import "ACNumber.h"
 
 @implementation ANTLRReaderStream
 
@@ -122,7 +122,7 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode
 {
     NSMutableData *myData = nil;
-    NSNumber *bytesRead = [NSNumber numberWithInteger:0];
+    ACNumber *bytesRead = [ACNumber numberWithInteger:0];
     uint8_t buf[1024];
     switch(eventCode) {
         case NSStreamEventHasBytesAvailable:
@@ -134,8 +134,8 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
             len = [(NSInputStream *)stream read:buf maxLength:1024];
             if(len) {
                 [myData appendBytes:(const void *)buf length:len];
-                // bytesRead is an instance variable of type NSNumber.
-                bytesRead = [NSNumber numberWithInteger:[bytesRead intValue]+len];
+                // bytesRead is an instance variable of type ACNumber.
+                bytesRead = [ACNumber numberWithInteger:[bytesRead integerValue]+len];
                 data = [[NSString alloc] initWithData:myData encoding:NSASCIIStringEncoding];
             } else {
                 NSLog(@"no buffer!");

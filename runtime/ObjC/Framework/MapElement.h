@@ -30,6 +30,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
+#import "ACNumber.h"
 #import "BaseMapElement.h"
 
 @interface MapElement : BaseMapElement {

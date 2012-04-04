@@ -401,7 +401,7 @@ static NSInteger itIndex;
 
     aTType = ttype % BuffSize;
     for( np = self->ptrBuffer[aTType]; np != nil; np = [np getfNext] ) {
-        if ( [(NSNumber *)np.node integerValue] == ttype ) {
+        if ( [(ACNumber *)np.node integerValue] == ttype ) {
             return( np );        /*   found it       */
         }
     }

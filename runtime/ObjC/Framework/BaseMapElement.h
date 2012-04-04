@@ -31,17 +31,18 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LinkBase.h"
+#import "ACNumber.h"
 
 @interface BaseMapElement : LinkBase {
-    NSNumber *index;
+    ACNumber *index;
 }
 
-@property (retain) NSNumber *index;
+@property (retain) ACNumber *index;
 
 + (id) newBaseMapElement;
-+ (id) newBaseMapElementWithIndex:(NSNumber *)anIdx;
++ (id) newBaseMapElementWithIndex:(ACNumber *)anIdx;
 - (id) init;
-- (id) initWithAnIndex:(NSNumber *)anIdx;
+- (id) initWithAnIndex:(ACNumber *)anIdx;
 
 - (id) copyWithZone:(NSZone *)aZone;
 

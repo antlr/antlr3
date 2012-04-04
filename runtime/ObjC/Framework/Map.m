@@ -296,7 +296,7 @@
 
     aTType = ttype % HASHSIZE;
     for( np = self->ptrBuffer[ttype]; np != nil; np = [np getfNext] ) {
-        if ( [(NSNumber *)np.node integerValue] == ttype ) {
+        if ( [(ACNumber *)np.node integerValue] == ttype ) {
             return( np );        /*   found it       */
         }
     }
@@ -311,7 +311,7 @@
     idx = [(id<BaseTree>)aNode type];
     idx %= HASHSIZE;
     np = ptrBuffer[idx];
-    return( [(NSNumber *)np.node integerValue] );
+    return( [(ACNumber *)np.node integerValue] );
 }
 
 - (MapElement *)getTType:(NSString *)name

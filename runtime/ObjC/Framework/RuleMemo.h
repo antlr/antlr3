@@ -30,31 +30,32 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
+#import "ACNumber.h"
 #import "LinkBase.h"
 
 @interface RuleMemo : LinkBase {
-    NSNumber *startIndex;
-    NSNumber *stopIndex;
+    ACNumber *startIndex;
+    ACNumber *stopIndex;
 }
 
-@property (retain, getter=getStartIndex, setter=setStartIndex:) NSNumber *startIndex;
-@property (retain, getter=getStopIndex, setter=setStopIndex:) NSNumber *stopIndex;
+@property (retain, getter=getStartIndex, setter=setStartIndex:) ACNumber *startIndex;
+@property (retain, getter=getStopIndex, setter=setStopIndex:) ACNumber *stopIndex;
 
 + (RuleMemo *)newRuleMemo;
-+ (RuleMemo *)newRuleMemoWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;
++ (RuleMemo *)newRuleMemoWithStartIndex:(ACNumber *)aStartIndex StopIndex:(ACNumber *)aStopIndex;
 
 - (id) init;
-- (id) initWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex;
+- (id) initWithStartIndex:(ACNumber *)aStartIndex StopIndex:(ACNumber *)aStopIndex;
 
 - (NSInteger)count;
 - (NSInteger)size;
 
 - (RuleMemo *)getRuleWithStartIndex:(NSInteger)aStartIndex;
-- (NSNumber *)getStartIndex:(NSInteger)aStartIndex;
-- (NSNumber *)getStopIndex:(NSInteger)aStartIndex;
-- (NSNumber *)getStartIndex;
-- (void)setStartIndex:(NSNumber *)aStartIndex;
-- (NSNumber *)getStopIndex;
-- (void)setStopIndex:(NSNumber *)aStopIndex;
+- (ACNumber *)getStartIndex:(NSInteger)aStartIndex;
+- (ACNumber *)getStopIndex:(NSInteger)aStartIndex;
+- (ACNumber *)getStartIndex;
+- (void)setStartIndex:(ACNumber *)aStartIndex;
+- (ACNumber *)getStopIndex;
+- (void)setStopIndex:(ACNumber *)aStopIndex;
 
 @end

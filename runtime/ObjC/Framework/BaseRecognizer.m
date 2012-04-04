@@ -29,6 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import "ACNumber.h"
 #import "BaseRecognizer.h"
 #import "HashRule.h"
 #import "RuleMemo.h"
@@ -1000,7 +1001,7 @@ static NSString *NEXT_TOKEN_RULE_NAME;
  */
 - (NSInteger)getRuleMemoization:(NSInteger)ruleIndex StartIndex:(NSInteger)ruleStartIndex
 {
-    NSNumber *stopIndexI;
+    ACNumber *stopIndexI;
     HashRule *aHashRule;
     if ( (aHashRule = [state.ruleMemo objectAtIndex:ruleIndex]) == nil ) {
         aHashRule = [HashRule newHashRuleWithLen:17];

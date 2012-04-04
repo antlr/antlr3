@@ -7,6 +7,7 @@
 //ptrBuffer
 
 #import <Cocoa/Cocoa.h>
+#import "ACNumber.h"
 #import "BaseStack.h"
 #import "RuleMemo.h"
 

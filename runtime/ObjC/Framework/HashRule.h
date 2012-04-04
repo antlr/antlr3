@@ -28,6 +28,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
+#import "ACNumber.h"
 #import "RuleMemo.h"
 #import "PtrBuffer.h"
 
@@ -58,7 +59,7 @@
 - (void)delete_chain:(RuleMemo *)np;
 - (RuleMemo **)getPtrBuffer;
 - (void)setPtrBuffer:(RuleMemo **)np;
-- (NSNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex;
+- (ACNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex;
 - (void)putRuleMemoAtStartIndex:(NSInteger)aStartIndex StopIndex:(NSInteger)aStopIndex;
 - (NSInteger)getMode;
 - (void)setMode:(NSInteger)aMode;

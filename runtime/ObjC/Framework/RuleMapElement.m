@@ -29,6 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import "ACNumber.h"
 #import "RuleMapElement.h"
 
 
@@ -41,12 +42,12 @@
     return [[RuleMapElement alloc] init];
 }
 
-+ (RuleMapElement *)newRuleMapElementWithIndex:(NSNumber *)aNumber
++ (RuleMapElement *)newRuleMapElementWithIndex:(ACNumber *)aNumber
 {
-    return [[RuleMapElement alloc] initWithAnIndex:(NSNumber *)aNumber];
+    return [[RuleMapElement alloc] initWithAnIndex:(ACNumber *)aNumber];
 }
 
-+ (RuleMapElement *)newRuleMapElementWithIndex:(NSNumber *)aNumber RuleNum:(NSNumber *)aRuleNum
++ (RuleMapElement *)newRuleMapElementWithIndex:(ACNumber *)aNumber RuleNum:(ACNumber *)aRuleNum
 {
     return [[RuleMapElement alloc] initWithAnIndex:aNumber RuleNum:aRuleNum];
 }
@@ -60,7 +61,7 @@
     return (self);
 }
 
-- (id) initWithAnIndex:(NSNumber *)aNumber
+- (id) initWithAnIndex:(ACNumber *)aNumber
 {
     if ((self = [super initWithAnIndex:aNumber]) != nil ) {
         ruleNum = nil;
@@ -68,7 +69,7 @@
     return (self);
 }
 
-- (id) initWithAnIndex:(NSNumber *)aNumber RuleNum:(NSNumber *)aRuleNum
+- (id) initWithAnIndex:(ACNumber *)aNumber RuleNum:(ACNumber *)aRuleNum
 {
     if ((self = [super initWithAnIndex:aNumber]) != nil ) {
         [aRuleNum retain];
