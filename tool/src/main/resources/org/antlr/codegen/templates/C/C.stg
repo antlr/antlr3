@@ -2515,7 +2515,7 @@ static const ANTLR3_INT32 dfa<dfa.decisionNumber>_T<i0>[] =
  */
 static const ANTLR3_INT32 * const dfa<dfa.decisionNumber>_transitions[] =
 {
-    <dfa.transitionEdgeTables:{xref|dfa<dfa.decisionNumber>_T<xref>}; separator=", ", wrap="\n", null="_empty">
+    <dfa.transitionEdgeTables:{xref|dfa<dfa.decisionNumber>_T<xref>}; separator=", ", wrap="\n", null="NULL">
 };
 
 <if(dfa.specialStateSTs)>
