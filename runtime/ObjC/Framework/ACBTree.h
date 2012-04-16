@@ -18,7 +18,13 @@ typedef enum {
 #define BTNODESIZE 11
 #define BTHNODESIZE ((BTNODESIZE-1)/2)
 #define BTKeySize  38
+#if defined FAILURE
+#undef FAILURE
+#endif
 #define FAILURE -1
+#if defined SUCCESS
+#undef SUCCESS
+#endif
 #define SUCCESS 0
 
 @interface ACBKey : NSObject {

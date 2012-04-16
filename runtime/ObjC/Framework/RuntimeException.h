@@ -52,6 +52,29 @@
 
 @end
 
+@interface CloneNotSupportedException : RuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
+@interface ConcurrentModificationException : RuntimeException {
+}
+
++ (id) newException:(NSString *)aReason;
+
+- (id) init;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+@end
+
 @interface IllegalArgumentException : RuntimeException {
 }
 
@@ -60,8 +83,8 @@
 + (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 - (id) init;
-- (id)init:(NSString *)aReason;
-- (id)init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
 
 @end
 
@@ -78,7 +101,33 @@
 
 @end
 
+@interface IndexOutOfBoundsException : RuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id)init:(NSString *)aReason;
+- (id)init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
 @interface NoSuchElementException : RuntimeException {
+}
+
++ (id) newException;
++ (id) newException:(NSString *)aReason;
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (id) init;
+- (id) init:(NSString *)aReason;
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+@end
+
+@interface NullPointerException : RuntimeException {
 }
 
 + (id) newException;

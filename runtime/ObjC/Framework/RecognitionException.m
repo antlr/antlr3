@@ -138,9 +138,9 @@
 	[super dealloc];
 }
 
-- (void) extractInformationFromTreeNodeStream:(id<TreeNodeStream>)input
+- (void) extractInformationFromTreeNodeStream:(id<TreeNodeStream>)anInput
 {
-    id<TreeNodeStream> nodes = input;
+    id<TreeNodeStream> nodes = anInput;
     node = [nodes LT:1];
     id<TreeAdaptor> adaptor = [nodes getTreeAdaptor];
     id<Token> payload = [adaptor getToken:node];

@@ -61,6 +61,7 @@
 #import <ANTLR/DebugTreeParser.h>
 #import <ANTLR/DoubleKeyMap.h>
 #import <ANTLR/EarlyExitException.h>
+#import <ANTLR/Entry.h>
 #import <ANTLR/FailedPredicateException.h>
 #import <ANTLR/FastQueue.h>
 #import <ANTLR/HashMap.h>
@@ -70,6 +71,8 @@
 #import <ANTLR/Lexer.h>
 #import <ANTLR/LexerRuleReturnScope.h>
 #import <ANTLR/LinkBase.h>
+#import <ANTLR/LinkedHashMap.h>
+#import <ANTLR/LinkedList.h>
 #import <ANTLR/LookaheadStream.h>
 #import <ANTLR/MapElement.h>
 #import <ANTLR/Map.h>
