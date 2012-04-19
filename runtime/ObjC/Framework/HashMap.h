@@ -132,7 +132,7 @@
 - (BOOL) contains:(id)o;
 - (BOOL) remove:(id)o;
 - (void) clear;
-- (NSArray *)toArray;
+- (AMutableArray *)toArray;
 @end
 
 @interface Values : PtrBuffer
@@ -151,7 +151,7 @@
 - (NSUInteger) count;
 - (BOOL) contains:(id)o;
 - (void) clear;
-- (NSArray *)toArray;
+- (AMutableArray *)toArray;
 @end
 
 @interface HMEntrySet : NSSet
