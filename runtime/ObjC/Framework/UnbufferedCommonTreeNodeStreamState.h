@@ -25,11 +25,11 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRCommonTree.h"
+#import "CommonTree.h"
 
 @interface ANTLRUnbufferedCommonTreeNodeStreamState : NSObject {
-	ANTLRCommonTree *currentNode;
-	ANTLRCommonTree *previousNode;
+	CommonTree *currentNode;
+	CommonTree *previousNode;
 
 	int currentChildIndex;
 	int absoluteNodeIndex;
@@ -39,11 +39,11 @@
 	NSMutableArray *lookahead;
 }
 
-- (ANTLRCommonTree *) currentNode;
-- (void) setCurrentNode: (ANTLRCommonTree *) aCurrentNode;
+- (CommonTree *) currentNode;
+- (void) setCurrentNode: (CommonTree *) aCurrentNode;
 
-- (ANTLRCommonTree *) previousNode;
-- (void) setPreviousNode: (ANTLRCommonTree *) aPreviousNode;
+- (CommonTree *) previousNode;
+- (void) setPreviousNode: (CommonTree *) aPreviousNode;
 
 - (NSInteger) currentChildIndex;
 - (void) setCurrentChildIndex: (NSInteger) aCurrentChildIndex;
