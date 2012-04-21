@@ -97,6 +97,26 @@
 	STAssertTrue([c size] == [otherBitSet size], @"c should be the same as otherBitSet");
 }
 
+-(void) testOrInPlace
+{
+    
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];
+	[bitSet add:1];
+	[bitSet add:2];
+	[bitSet add:16];
+	CFIndex actual = (CFIndex)[bitSet numBits];
+	CFIndex expected = 3;
+	STAssertEquals(actual, expected, @"There should be three bits set in bitvector. But I have %d", actual);
+	ANTLRBitSet *followSet = [ANTLRBitSet newBitSet];
+    [followSet orInPlace:bitSet];
+	actual = (CFIndex)[followSet numBits];
+	expected = 3;
+    NSLog( @"%@\n", [followSet description] );
+	STAssertEquals(actual, expected, @"There should be three bits set in bitvector. But I have %d", actual);
+	[bitSet release];
+	[followSet release];
+}
+
 -(void) testDescription
 {
 	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];

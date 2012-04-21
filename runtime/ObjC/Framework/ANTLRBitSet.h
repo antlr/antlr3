@@ -81,8 +81,8 @@
 - (unsigned long long) bitMask:(NSUInteger) bitNumber;
 - (BOOL) member:(NSUInteger)bitNumber;
 - (BOOL) isNil;
-- (NSString *) toString;
 - (NSString *) description;
+- (NSString *) toString;
 
 #pragma mark NSCopying support
 

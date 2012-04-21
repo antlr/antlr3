@@ -19,6 +19,7 @@
 -(void) testRemove;
 -(void) testCopyBitSet;
 -(void) testOr;
+-(void) testOrInPlace;
 -(void) testDescription;
 
 @end
