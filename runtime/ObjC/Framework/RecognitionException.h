@@ -25,7 +25,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "RuntimeException.h"
 #import "Token.h"
 #import "IntStream.h"

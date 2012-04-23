@@ -3,7 +3,7 @@
 /* =============================================================================
  * Standard antlr3 OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 #import <ST4/ST.h>
 

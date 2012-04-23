@@ -6,7 +6,7 @@
 //  Copyright 2011 Alan Condit. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "ACBTree.h"
 #import "AMutableDictionary.h"
 #import "RuntimeException.h"

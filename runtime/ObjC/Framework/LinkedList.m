@@ -1,5 +1,5 @@
 #import "LinkedList.h"
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "AMutableArray.h"
 #import "RuntimeException.h"
 

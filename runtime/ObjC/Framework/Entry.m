@@ -1,5 +1,5 @@
 #import "Entry.h"
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "RuntimeException.h"
 
 @implementation HTEntry

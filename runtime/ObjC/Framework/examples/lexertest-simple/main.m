@@ -1,4 +1,4 @@
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "TestLexer.h"
 #import <ANTLR/ANTLR.h>
 #import <unistd.h>

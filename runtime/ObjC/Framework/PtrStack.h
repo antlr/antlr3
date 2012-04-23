@@ -6,7 +6,7 @@
 //  Copyright 2010 Alan's MachineWorks. All rights reserved.
 //ptrBuffer
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "ACNumber.h"
 #import "BaseStack.h"
 #import "RuleMemo.h"
