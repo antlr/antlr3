@@ -385,7 +385,7 @@ static NSInteger itIndex;
     if ( self ) {
         hm = aHM;
         anArray = [[AMutableArray arrayWithCapacity:16] retain];
-        HMEntryIterator *it = [hm newEntryIterator:hm];
+        HMEntryIterator *it = [hm newEntryIterator];
         while ( [it hasNext] ) {
             HMEntry *entry = [it next];
             [anArray addObject:entry];
@@ -1544,8 +1544,10 @@ float const DEFAULT_LOAD_FACTOR = 0.75f;
         NSString *key = e.key;
         id value = e.value;
         [sb appendFormat:@"%@=%@", (key == self ? @"[self Map]" : key), (value == self ? @"[self Map]" : value)];
-        if ( ![it hasNext] )
-            return [sb append:@"}"];
+        if ( ![it hasNext] ) {
+            [sb appendString:@"}"];
+            return sb;
+        }
         [sb appendString:@", "];
     }
 }
