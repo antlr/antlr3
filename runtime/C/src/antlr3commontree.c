@@ -509,7 +509,7 @@ getParent				(pANTLR3_BASE_TREE tree)
 static void					
 setParent				(pANTLR3_BASE_TREE tree, pANTLR3_BASE_TREE parent)
 {
-	((pANTLR3_COMMON_TREE)(tree->super))->parent = parent == NULL ? NULL : ((pANTLR3_COMMON_TREE)(parent->super))->parent;
+	((pANTLR3_COMMON_TREE)(tree->super))->parent = parent == NULL ? NULL : ((pANTLR3_COMMON_TREE)(parent->super));
 }
 
 static void    				
