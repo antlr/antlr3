@@ -113,6 +113,80 @@
 
 @end
 
+@implementation CloneNotSupportedException
+
++ (id) newException
+{
+    return [[CloneNotSupportedException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[CloneNotSupportedException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[CloneNotSupportedException alloc] init:aReason userInfo:aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"CloneNotSupportedException" reason:@"Attempted to clone non-cloneable object" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"CloneNotSupportedException" reason:(NSString *)aReason userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"CloneNotSupportedException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation ConcurrentModificationException
+
++ (id) newException
+{
+    return [[ConcurrentModificationException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[ConcurrentModificationException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[ConcurrentModificationException alloc] init:aReason userInfo:aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"ConcurrentModificationException" reason:@"UnknownException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"ConcurrentModificationException" reason:(NSString *)aReason userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"ConcurrentModificationException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
 @implementation IllegalArgumentException
 
 + (id) newException
@@ -132,7 +206,7 @@
 
 - (id) init
 {
-    self = [super initWithName:@"IllegalArgumentException" reason:@"UnknownException" userInfo:nil];
+    self = [super initWithName:@"IllegalArgumentException" reason:@"IllegalStateException" userInfo:nil];
     return(self);
 }
 
@@ -169,7 +243,7 @@
 
 - (id) init
 {
-    self = [super initWithName:@"IllegalStateException" reason:@"UnknownException" userInfo:nil];
+    self = [super initWithName:@"IllegalStateException" reason:@"IllegalStateException" userInfo:nil];
     return(self);
 }
 
@@ -182,6 +256,43 @@
 - (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
     self = [super initWithName:@"IllegalStateException" reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation IndexOutOfBoundsException
+
++ (id) newException
+{
+    return [[IndexOutOfBoundsException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[IndexOutOfBoundsException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[IndexOutOfBoundsException alloc] init:aReason userInfo:aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"IndexOutOfBoundsException" reason:@"IndexOutOfBoundsException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"IndexOutOfBoundsException" reason:(NSString *)aReason userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"IndexOutOfBoundsException" reason:aReason userInfo:aUserInfo];
     return(self);
 }
 
@@ -225,6 +336,43 @@
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
 {
     self = [super initWithName:aName reason:aReason userInfo:aUserInfo];
+    return(self);
+}
+
+@end
+
+@implementation NullPointerException
+
++ (id) newException
+{
+    return [[NullPointerException alloc] init];
+}
+
++ (id) newException:(NSString *)aReason
+{
+    return [[NullPointerException alloc] init:aReason];
+}
+
++ (id) newException:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    return [[NullPointerException alloc] init:aReason userInfo:(NSDictionary *)aUserInfo];
+}
+
+- (id) init
+{
+    self = [super initWithName:@"NullPointerException" reason:@"UnknownException" userInfo:nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason
+{
+    self = [super initWithName:@"NullPointerException" reason:(NSString *)aReason userInfo:(NSDictionary *)nil];
+    return(self);
+}
+
+- (id) init:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo
+{
+    self = [super initWithName:@"NullPointerException" reason:aReason userInfo:aUserInfo];
     return(self);
 }
 

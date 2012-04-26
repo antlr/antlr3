@@ -143,14 +143,16 @@
 {
 	if ((self = [super init]) != nil) {
 		unsigned int longNo;
+//        unsigned long long swappedBits = 0LL;
 		CFIndex bitIdx;
         bitVector = CFBitVectorCreateMutable ( kCFAllocatorDefault, 0 );
 		CFBitVectorSetCount( bitVector, sizeof(unsigned long long)*8*longCount );
 
 		for (longNo = 0; longNo < longCount; longNo++) {
 			for (bitIdx = 0; bitIdx < (CFIndex)sizeof(unsigned long long)*8; bitIdx++) {
-				unsigned long long swappedBits = CFSwapInt64HostToBig(theBits[longNo]);
-				if (swappedBits & (1LL << bitIdx)) {
+//				swappedBits = CFSwapInt64HostToBig(theBits[longNo]);
+//				if (swappedBits & (1LL << bitIdx)) {
+				if (theBits[longNo] & (1LL << bitIdx)) {
 					CFBitVectorSetBitAtIndex(bitVector, bitIdx+(longNo*(sizeof(unsigned long long)*8)), 1);
 				}
 			}
@@ -272,8 +274,9 @@
 	return ((CFBitVectorGetCountOfBit(bitVector, CFRangeMake(0,CFBitVectorGetCount(bitVector)), 1) == 0) ? YES : NO);
 }
 
+// debugging aid. GDB invokes this automagically
 // return a string representation of the bit vector, indicating by their bitnumber which bits are set
-- (NSString *) toString
+- (NSString *) description
 {
 	CFIndex length = CFBitVectorGetCount(bitVector);
 	CFIndex currBit;
@@ -292,10 +295,11 @@
 	return descString;
 }
 
-// debugging aid. GDB invokes this automagically
-- (NSString *) description
+// return a string representation of the bit vector, indicating by their bitnumber which bits are set
+- (NSString *) toString
 {
-	return [self toString];
+	
+	return [self description];
 }
 
 	// NSCopying

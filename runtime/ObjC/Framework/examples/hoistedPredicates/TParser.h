@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} T.g 2011-05-06 19:14:23
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/hoistedPredicates/T.g 2012-02-16 17:34:26
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -31,20 +31,16 @@ typedef enum {
 #define ID 4
 #define INT 5
 #define WS 6
-#pragma mark Dynamic Global Scopes
-#pragma mark Dynamic Rule Scopes
-#pragma mark Rule Return Scopes start
+#pragma mark Dynamic Global Scopes globalAttributeScopeInterface
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeInterface
+#pragma mark Rule Return Scopes returnScopeInterface
 
 /* Interface grammar class */
-@interface TParser : ANTLRParser { /* line 572 */
-/* ObjC start of ruleAttributeScopeMemVar */
+@interface TParser  : Parser { /* line 572 */
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeDecl
+#pragma mark Dynamic Global Rule Scopes globalAttributeScopeMemVar
 
 
-/* ObjC end of ruleAttributeScopeMemVar */
-/* ObjC start of globalAttributeScopeMemVar */
-
-
-/* ObjC end of globalAttributeScopeMemVar */
 /* ObjC start of actions.(actionScope).memVars */
 
 /* With this true, enum is seen as a keyword.  False, it's an identifier */
@@ -62,7 +58,7 @@ BOOL enableEnum;
 /* ObjC end of properties */
 
 + (void) initialize;
-+ (id) newTParser:(id<ANTLRTokenStream>)aStream;
++ (id) newTParser:(id<TokenStream>)aStream;
 /* ObjC start of actions.(actionScope).methodsDecl */
 /* ObjC end of actions.(actionScope).methodsDecl */
 

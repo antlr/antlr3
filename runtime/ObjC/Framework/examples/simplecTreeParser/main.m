@@ -1,5 +1,5 @@
-#import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <Foundation/Foundation.h>
+#import <ANTLR/ANTLR.h>
 #import "SimpleCLexer.h"
 #import "SimpleCParser.h"
 #import "SimpleCWalker.h"
@@ -9,7 +9,7 @@
 int main(int argc, const char * argv[]) {
     NSError *anError;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    char *inp = "/Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/simplecTreeParser/input";
+    char *inp = "/Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/simplecTreeParser/input";
     
 /*
     if (argc < 2) {
@@ -34,14 +34,14 @@ int main(int argc, const char * argv[]) {
 	
 	// For fun, you could print all tokens the lexer recognized, but we can only do it once. After that
 	// we would need to reset the lexer, and lex again.
-//    id<ANTLRToken> currentToken;
-//    while ((currentToken = [lexer nextToken]) && [currentToken type] != ANTLRTokenTypeEOF) {
+//    id<Token> currentToken;
+//    while ((currentToken = [lexer nextToken]) && [currentToken type] != TokenTypeEOF) {
 //        NSLog(@"%@", currentToken);
 //    }
 //	  [lexer reset];
 	
 	// Since the parser needs to scan back and forth over the tokens, we put them into a stream, too.
-	ANTLRCommonTokenStream *tokenStream = [ANTLRCommonTokenStream newANTLRCommonTokenStreamWithTokenSource:lexer];
+	CommonTokenStream *tokenStream = [CommonTokenStream newCommonTokenStreamWithTokenSource:lexer];
 
 	// Construct a parser and feed it the token stream.
 	SimpleCParser *parser = [[SimpleCParser alloc] initWithTokenStream:tokenStream];
@@ -52,14 +52,14 @@ int main(int argc, const char * argv[]) {
 	// initialized when you call a specific parser rule).
 	// This is a simple example, so we just call the top-most rule 'program'.
 	// Since we want to parse the AST the parser builds, we just ask the returned object for that.
-	ANTLRCommonTree *program_tree = [[parser program] getTree];
+	CommonTree *program_tree = [[parser program] getTree];
 
     NSLog(@"Reached end of first parse\n");
 	// Print the matched tree as a Lisp-style string
 	NSLog(@"tree: %@", [program_tree treeDescription]);
 	
 	// Create a new tree node stream that's feeding off of the root node (thus seeing the whole tree)
-	ANTLRCommonTreeNodeStream *treeStream = [ANTLRCommonTreeNodeStream newANTLRCommonTreeNodeStream:program_tree];
+	CommonTreeNodeStream *treeStream = [CommonTreeNodeStream newCommonTreeNodeStream:program_tree];
 	// tell the TreeNodeStream where the tokens originally came from, so we can retrieve arbitrary tokens and their text.
 	[treeStream setTokenStream:tokenStream];
 	

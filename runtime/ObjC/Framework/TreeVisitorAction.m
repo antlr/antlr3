@@ -96,7 +96,7 @@
                                               RuleD:(fptr *)aTDRule
                                               RuleU:(fptr *)aBURule
 {
-    return [TreeVisitorActionFiltered newTreeVisitorActionFiltered:aFilter];
+    return [[TreeVisitorActionFiltered alloc] initWithFilter:aFilter RuleD:aTDRule RuleU:aBURule];
 }
 
 - (id) initWithFilter:(TreeFilter *)aFilter

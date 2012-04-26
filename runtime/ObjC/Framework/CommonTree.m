@@ -279,7 +279,7 @@
 - (void) setUnknownTokenBoundaries
 {
     if ( children == nil ) {
-        if ( startIndex<0 || stopIndex<0 ) {
+        if ( startIndex < 0 || stopIndex < 0 ) {
             startIndex = stopIndex = [token getTokenIndex];
         }
         return;
@@ -319,11 +319,6 @@
 
 - (NSString *) description
 {
-    return [self toString];
-}
-
-- (NSString *) toString
-{
     if ( [self isNil] ) {
         return @"nil";
     }
@@ -334,6 +329,11 @@
         return nil;
     }
     return token.text;
+}
+
+- (NSString *) toString
+{
+    return [self description];
 }
 
 @synthesize token;

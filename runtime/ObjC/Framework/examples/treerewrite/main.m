@@ -1,5 +1,5 @@
-#import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <Foundation/Foundation.h>
+#import <ANTLR/ANTLR.h>
 #import "TreeRewriteLexer.h"
 #import "TreeRewriteParser.h"
 //#import "stdio.h"
@@ -11,16 +11,16 @@ int main() {
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:@"23 42"];
 	TreeRewriteLexer *lexer = [TreeRewriteLexer newTreeRewriteLexerWithCharStream:stream];
 	
-//    id<ANTLRToken> currentToken;
-//    while ((currentToken = [lexer nextToken]) && [currentToken type] != ANTLRTokenTypeEOF) {
+//    id<Token> currentToken;
+//    while ((currentToken = [lexer nextToken]) && [currentToken type] != TokenTypeEOF) {
 //        NSLog(@"%@", currentToken);
 //    }
 	
-	ANTLRCommonTokenStream *tokenStream = [ANTLRCommonTokenStream newANTLRCommonTokenStreamWithTokenSource:lexer];
+	CommonTokenStream *tokenStream = [CommonTokenStream newCommonTokenStreamWithTokenSource:lexer];
 	TreeRewriteParser *parser = [[TreeRewriteParser alloc] initWithTokenStream:tokenStream];
-	ANTLRCommonTree *rule_tree = [[parser rule] getTree];
+	CommonTree *rule_tree = [[parser rule] getTree];
 	NSLog(@"tree: %@", [rule_tree treeDescription]);
-//	ANTLRCommonTreeNodeStream *treeStream = [[ANTLRCommonTreeNodeStream alloc] initWithTree:program_tree];
+//	CommonTreeNodeStream *treeStream = [[CommonTreeNodeStream alloc] initWithTree:program_tree];
 //	SimpleCTP *walker = [[SimpleCTP alloc] initWithTreeNodeStream:treeStream];
 //	[walker program];
 

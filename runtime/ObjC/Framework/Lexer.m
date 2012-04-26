@@ -211,9 +211,9 @@
                                                Channel:state.channel
                                                  Start:state.tokenStartCharIndex
                                                   Stop:input.index-1];
-    [aToken setLine:state.tokenStartLine];
     aToken.text = [self text];
     [aToken setCharPositionInLine:state.tokenStartCharPositionInLine];
+    [aToken setLine:state.tokenStartLine];
     [aToken retain];
     [self emit:aToken];
     // [aToken release];
@@ -345,15 +345,15 @@
     if ( [e isKindOfClass:[MismatchedTokenException class]] ) {
         MismatchedTokenException *mte = (MismatchedTokenException *)e;
         msg = [NSString stringWithFormat:@"mismatched character \"%@\" expecting \"%@\"",
-               [self getCharErrorDisplay:mte.c], [self getCharErrorDisplay:mte.expecting]];
+            [self getCharErrorDisplay:mte.c], [self getCharErrorDisplay:mte.expectingChar]];
     }
     else if ( [e isKindOfClass:[NoViableAltException class]] ) {
         NoViableAltException *nvae = (NoViableAltException *)e;
         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
         // and "(decision="+nvae.decisionNumber+") and
         // "state "+nvae.stateNumber
-        msg = [NSString stringWithFormat:@"no viable alternative at character \"%@\"",
-               [self getCharErrorDisplay:(nvae.c)]];
+        msg = [NSString stringWithFormat:@"no viable alternative decision:%d state:%d at character \"%@\"",
+               nvae.decisionNumber, nvae.stateNumber, [self getCharErrorDisplay:(nvae.c)]];
     }
     else if ( [e isKindOfClass:[EarlyExitException class]] ) {
         EarlyExitException *eee = (EarlyExitException *)e;
@@ -387,7 +387,11 @@
 {
     NSString *s;
     switch ( c ) {
+        case 0:
+            s = @"char=<nil>";
+            break;
         case TokenTypeEOF :
+        case 65535:
             s = @"<EOF>";
             break;
         case '\n' :

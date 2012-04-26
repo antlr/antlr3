@@ -26,26 +26,26 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ANTLRTreeNodeStream.h"
-#import "ANTLRCommonTokenStream.h"
-#import "ANTLRCommonTree.h"
-#import "ANTLRCommonTreeAdaptor.h"
+#import "TreeNodeStream.h"
+#import "CommonTokenStream.h"
+#import "CommonTree.h"
+#import "CommonTreeAdaptor.h"
 
-@interface ANTLRUnbufferedCommonTreeNodeStream : NSObject < ANTLRTreeNodeStream > {
+@interface ANTLRUnbufferedCommonTreeNodeStream : NSObject < TreeNodeStream > {
 
 	BOOL shouldUseUniqueNavigationNodes;
 
-	ANTLRCommonTree *root;
-	ANTLRCommonTree *currentNode;
-	ANTLRCommonTree *previousNode;
+	CommonTree *root;
+	CommonTree *currentNode;
+	CommonTree *previousNode;
 
-	id<ANTLRTreeAdaptor> treeAdaptor;
+	id<TreeAdaptor> treeAdaptor;
 	
-	id<ANTLRTokenStream> tokenStream;
+	id<TokenStream> tokenStream;
 	
 	NSMutableArray *nodeStack;
 	NSMutableArray *indexStack;
-	ANTLRPtrBuffer *markers;
+	PtrBuffer *markers;
 	NSInteger lastMarker;
 	
 	NSInteger currentChildIndex;
@@ -56,14 +56,14 @@
 	NSUInteger tail;
 }
 
-@property (retain, getter=getRoot, setter=setRoot:) ANTLRCommonTree *root;
-@property (retain, getter=getCurrentNode, setter=setCurrentNode:) ANTLRCommonTree *currentNode;
-@property (retain, getter=getPreviousNode, setter=setPreviousNode:) ANTLRCommonTree *previousNode;
-@property (retain, getter=getTreeAdaptor, setter=setTreeAdaptor:) id<ANTLRTreeAdaptor> treeAdaptor;
-@property (retain, getter=getTokenStream, setter=setTokenStream:) id<ANTLRTokenStream> tokenStream;
+@property (retain, getter=getRoot, setter=setRoot:) CommonTree *root;
+@property (retain, getter=getCurrentNode, setter=setCurrentNode:) CommonTree *currentNode;
+@property (retain, getter=getPreviousNode, setter=setPreviousNode:) CommonTree *previousNode;
+@property (retain, getter=getTreeAdaptor, setter=setTreeAdaptor:) id<TreeAdaptor> treeAdaptor;
+@property (retain, getter=getTokenStream, setter=setTokenStream:) id<TokenStream> tokenStream;
 @property (retain, getter=getNodeStack, setter=setNodeStack:) NSMutableArray *nodeStack;
 @property (retain, getter=getIndexStack, setter=setIndexStackStack:) NSMutableArray *indexStack;
-@property (retain, getter=getMarkers, setter=setMarkers:) ANTLRPtrBuffer *markers;
+@property (retain, getter=getMarkers, setter=setMarkers:) PtrBuffer *markers;
 @property (assign, getter=getLastMarker, setter=setLastMarker:) NSInteger lastMarker;
 @property (assign, getter=getCurrentChildIndex, setter=setCurrentChildIndex:) NSInteger currentChildIndex;
 @property (assign, getter=getAbsoluteNodeIndex, setter=setAbsoluteNodeIndex:) NSInteger absoluteNodeIndex;
@@ -71,8 +71,8 @@
 @property (assign, getter=getHead, setter=setHead:) NSUInteger head;
 @property (assign, getter=getTail, setter=setTail:) NSUInteger tail;
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree;
-- (id) initWithTree:(ANTLRCommonTree *)theTree treeAdaptor:(ANTLRCommonTreeAdaptor *)theAdaptor;
+- (id) initWithTree:(CommonTree *)theTree;
+- (id) initWithTree:(CommonTree *)theTree treeAdaptor:(CommonTreeAdaptor *)theAdaptor;
 
 - (void) reset;
 
@@ -80,10 +80,10 @@
 
 - (id) LT:(NSInteger)k;
 - (id) treeSource;
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
-- (void)setTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor;
-- (id<ANTLRTokenStream>) getTokenStream;
-- (void) setTokenStream:(id<ANTLRTokenStream>)aTokenStream;	///< Added by subclass, not in protocol
+- (id<TreeAdaptor>) getTreeAdaptor;
+- (void)setTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor;
+- (id<TokenStream>) getTokenStream;
+- (void) setTokenStream:(id<TokenStream>)aTokenStream;	///< Added by subclass, not in protocol
 - (void) setUsesUniqueNavigationNodes:(BOOL)flag;
 
 - (id) nodeAtIndex:(NSUInteger) idx;
@@ -104,19 +104,19 @@
 - (NSUInteger) size;
 
 #pragma mark Lookahead Handling
-- (void) addLookahead:(id<ANTLRBaseTree>)aNode;
+- (void) addLookahead:(id<BaseTree>)aNode;
 - (NSUInteger) lookaheadSize;
 - (void) fillBufferWithLookahead:(NSInteger)k;
 - (id) nextObject;
 
 #pragma mark Node visiting
-- (ANTLRCommonTree *) handleRootNode;
-- (ANTLRCommonTree *) visitChild:(NSInteger)childNumber;
+- (CommonTree *) handleRootNode;
+- (CommonTree *) visitChild:(NSInteger)childNumber;
 - (void) walkBackToMostRecentNodeWithUnvisitedChildren;
 - (void) addNavigationNodeWithType:(NSInteger)tokenType;
 
 #pragma mark Accessors
-- (ANTLRCommonTree *) root;
-- (void) setRoot: (ANTLRCommonTree *) aRoot;
+- (CommonTree *) root;
+- (void) setRoot: (CommonTree *) aRoot;
 
 @end

@@ -84,7 +84,7 @@
                     tmp = (RuleMemo *)tmp.fNext;
                 else
                     tmp = nil;
-                [rtmp dealloc];
+                [rtmp release];
             }
         }
     }
@@ -145,7 +145,7 @@
 {
     if ( np.fNext != nil )
         [self delete_chain:np.fNext];
-    [np dealloc];
+    [np release];
 }
 
 -(RuleMemo **)getPtrBuffer
@@ -158,10 +158,10 @@
     ptrBuffer = np;
 }
 
-- (NSNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex
+- (ACNumber *)getRuleMemoStopIndex:(NSInteger)aStartIndex
 {
     RuleMemo *aRule;
-    NSNumber *stopIndex;
+    ACNumber *stopIndex;
     NSInteger anIndex;
     
     anIndex = ( aStartIndex >= BuffSize ) ? aStartIndex % BuffSize : aStartIndex;
@@ -201,8 +201,8 @@
     anIndex = (aStartIndex >= BuffSize) ? aStartIndex % BuffSize : aStartIndex;
     aRule = ptrBuffer[anIndex];
     if ( aRule == nil ) {
-        aRule = [RuleMemo newRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
-                                                    StopIndex:[NSNumber numberWithInteger:aStopIndex]];
+        aRule = [RuleMemo newRuleMemoWithStartIndex:[ACNumber numberWithInteger:aStartIndex]
+                                                    StopIndex:[ACNumber numberWithInteger:aStopIndex]];
         [aRule retain];
         ptrBuffer[anIndex] = aRule;
     }
@@ -219,8 +219,8 @@
         while (aRule.fNext != nil) {
             aMatchIndex = [((RuleMemo *)aRule.fNext).startIndex integerValue];
             if ( aStartIndex > aMatchIndex ) {
-                newRule = [RuleMemo newRuleMemoWithStartIndex:[NSNumber numberWithInteger:aStartIndex]
-                                                              StopIndex:[NSNumber numberWithInteger:aStopIndex]];
+                newRule = [RuleMemo newRuleMemoWithStartIndex:[ACNumber numberWithInteger:aStartIndex]
+                                                              StopIndex:[ACNumber numberWithInteger:aStopIndex]];
                 [newRule retain];
                 newRule.fNext = aRule.fNext;
                 aRule.fNext = newRule;

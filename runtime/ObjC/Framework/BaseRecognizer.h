@@ -25,7 +25,6 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 
 #import "IntStream.h"

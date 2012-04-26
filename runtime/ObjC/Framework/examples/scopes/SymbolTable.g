@@ -11,7 +11,7 @@ options {
 }
 
 scope Symbols {
-  ANTLRPtrBuffer *names;
+  PtrBuffer *names;
 }
 
 @memVars {
@@ -31,7 +31,7 @@ globals
 scope Symbols;
 @init {
     level++;
-    $Symbols::names = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:10];
+    $Symbols::names = [PtrBuffer newPtrBufferWithLen:10];
 }
     :   (decl)*
         {
@@ -48,7 +48,7 @@ block
 scope Symbols;
 @init {
     level++;
-    $Symbols::names = [ANTLRPtrBuffer newANTLRPtrBufferWithLen:10];
+    $Symbols::names = [PtrBuffer newPtrBufferWithLen:10];
 }
     :   '{' (decl)* (stat)* '}'
         {

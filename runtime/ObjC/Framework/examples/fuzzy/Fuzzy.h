@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} /Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/fuzzy/Fuzzy.g 2011-05-05 22:05:01
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/fuzzy/Fuzzy.g 2012-02-16 17:34:08
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -11,8 +11,8 @@
 
 /* Start cyclicDFAInterface */
 
-#pragma mark Rule return scopes start
-#pragma mark Rule return scopes end
+#pragma mark Rule return scopes Interface start
+#pragma mark Rule return scopes Interface end
 #pragma mark Tokens
 #ifdef EOF
 #undef EOF
@@ -37,7 +37,7 @@
 #define TYPE 20
 #define WS 21
 /* interface lexer class */
-@interface Fuzzy : ANTLRLexer { // line 283
+@interface Fuzzy : Lexer { // line 283
 SEL synpred9_FuzzySelector;
 SEL synpred2_FuzzySelector;
 SEL synpred7_FuzzySelector;
@@ -51,7 +51,7 @@ SEL synpred1_FuzzySelector;
 /* ObjC end of actions.lexer.memVars */
 }
 + (void) initialize;
-+ (Fuzzy *)newFuzzyWithCharStream:(id<ANTLRCharStream>)anInput;
++ (Fuzzy *)newFuzzyWithCharStream:(id<CharStream>)anInput;
 /* ObjC start actions.lexer.methodsDecl */
 /* ObjC end actions.lexer.methodsDecl */
 - (void) mIMPORT ; 

@@ -69,8 +69,8 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in LinkBase" );
 #endif
-	if (fNext) [fNext dealloc];
-	if (fPrev) [fPrev dealloc];
+	if (fNext) [fNext release];
+	if (fPrev) [fPrev release];
 	[super dealloc];
 }
 
