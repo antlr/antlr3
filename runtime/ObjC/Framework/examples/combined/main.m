@@ -1,6 +1,6 @@
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "CombinedLexer.h"
-#import "antlr3.h"
+#import <ANTLR/ANTLR.h>
 
 int main(int argc, const char * argv[])
 {
@@ -10,8 +10,8 @@ int main(int argc, const char * argv[])
 	NSLog(@"%@", string);
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:string];
 	CombinedLexer *lexer = [CombinedLexer newCombinedLexerWithCharStream:stream];
-	id<ANTLRToken> currentToken;
-	while ((currentToken = [lexer nextToken]) && [currentToken getType] != ANTLRTokenTypeEOF) {
+	id<Token> currentToken;
+	while ((currentToken = [lexer nextToken]) && currentToken.type != TokenTypeEOF) {
 		NSLog(@"%@", currentToken);
 	}
 	[lexer release];

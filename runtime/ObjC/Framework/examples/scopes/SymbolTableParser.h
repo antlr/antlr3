@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} SymbolTable.g 2011-05-06 15:04:42
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/scopes/SymbolTable.g 2012-02-16 17:50:30
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -38,46 +38,34 @@ typedef enum {
 #define ID 4
 #define INT 5
 #define WS 6
-#pragma mark Dynamic Global Scopes
+#pragma mark Dynamic Global Scopes globalAttributeScopeInterface
 /* globalAttributeScopeInterface */
-@interface Symbols_Scope : ANTLRSymbolsScope {
-ANTLRPtrBuffer * names;
-
-}
+@interface Symbols_Scope : SymbolsScope {
+PtrBuffer * names;
+ }
 /* start of globalAttributeScopeInterface properties */
-
-@property (assign, getter=getnames, setter=setnames:) ANTLRPtrBuffer * names;
-
+@property (assign, getter=getnames, setter=setnames:) PtrBuffer * names;
 /* end globalAttributeScopeInterface properties */
-
-
 + (Symbols_Scope *)newSymbols_Scope;
 - (id) init;
 /* start of globalAttributeScopeInterface methodsDecl */
-
-- (ANTLRPtrBuffer *)getnames;
-- (void)setnames:(ANTLRPtrBuffer *)aVal;
-
+- (PtrBuffer *)getnames;
+- (void)setnames:(PtrBuffer *)aVal;
 /* End of globalAttributeScopeInterface methodsDecl */
-
 @end /* end of Symbols_Scope interface */
 
-#pragma mark Dynamic Rule Scopes
-#pragma mark Rule Return Scopes start
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeInterface
+#pragma mark Rule Return Scopes returnScopeInterface
 
 /* Interface grammar class */
-@interface SymbolTableParser : ANTLRParser { /* line 572 */
-/* ObjC start of ruleAttributeScopeMemVar */
-
-
-/* ObjC end of ruleAttributeScopeMemVar */
-/* ObjC start of globalAttributeScopeMemVar */
+@interface SymbolTableParser  : Parser { /* line 572 */
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeDecl
+#pragma mark Dynamic Global Rule Scopes globalAttributeScopeMemVar
 /* globalAttributeScopeMemVar */
-//ANTLRSymbolStack *gStack;
-ANTLRSymbolStack *Symbols_stack;
+SymbolStack *Symbols_stack;
 Symbols_Scope *Symbols_scope;
 
-/* ObjC end of globalAttributeScopeMemVar */
+
 /* ObjC start of actions.(actionScope).memVars */
 
 int level;
@@ -94,7 +82,7 @@ int level;
 /* ObjC end of properties */
 
 + (void) initialize;
-+ (id) newSymbolTableParser:(id<ANTLRTokenStream>)aStream;
++ (id) newSymbolTableParser:(id<TokenStream>)aStream;
 /* ObjC start of actions.(actionScope).methodsDecl */
 /* ObjC end of actions.(actionScope).methodsDecl */
 

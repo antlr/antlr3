@@ -6,11 +6,13 @@
     mode, other than junit, which has a non Free BSD license and so
     we are reluctanct to include it in the jar.
   -->
-<assembly>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 
     <!--
         This is the suffix that will be used to name the uber jar
-        once it is jared up.
+        once it is jarred up.
       -->
     <id>completejar</id>
 
@@ -33,7 +35,7 @@
 
     <!--
         Make all jars unpack at the same level and don't include
-        any extranous directories.
+        any extraneous directories.
       -->
     <includeBaseDirectory>false</includeBaseDirectory>
 

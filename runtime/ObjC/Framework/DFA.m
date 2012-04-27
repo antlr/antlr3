@@ -82,7 +82,7 @@ NSInteger debug = 0;
 			}
 			// based on the lookahead lookup the next transition, consume and do transition
 			// or signal that we have no viable alternative
-			int c = [input LA:1];
+			NSInteger c = [input LA:1];
 			if ( (unichar)c >= min[s] && (unichar)c <= max[s]) {
 				int snext = transition[s][c-min[s]];
 				if (snext < 0) {
@@ -189,7 +189,7 @@ NSInteger debug = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         size += [encodedString characterAtIndex:i];
     }
-    __strong NSInteger *data = (short *)calloc(size, sizeof(NSInteger));
+    __strong NSInteger *data = (NSInteger *)calloc(size, sizeof(NSInteger));
     int di = 0;
     for (int i=0; i < [encodedString length]; i+=2) {
         char n = [encodedString characterAtIndex:i];

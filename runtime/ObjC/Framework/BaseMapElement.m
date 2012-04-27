@@ -41,9 +41,9 @@
     return [[BaseMapElement alloc] init];
 }
 
-+ (BaseMapElement *)newBaseMapElementWithIndex:(NSNumber *)aNumber
++ (BaseMapElement *)newBaseMapElementWithIndex:(ACNumber *)aNumber
 {
-    return [[BaseMapElement alloc] initWithAnIndex:(NSNumber *)aNumber];
+    return [[BaseMapElement alloc] initWithAnIndex:(ACNumber *)aNumber];
 }
 
 - (id) init
@@ -54,7 +54,7 @@
     return (self);
 }
 
-- (id) initWithAnIndex:(NSNumber *)aNumber
+- (id) initWithAnIndex:(ACNumber *)aNumber
 {
     if ((self = [super init]) != nil ) {
         index = aNumber;

@@ -2,7 +2,7 @@ tree grammar LangDumpDecl;
 options {
     tokenVocab=Lang;
 	language = ObjC;
-    ASTLabelType = ANTLRCommonTree;
+    ASTLabelType = CommonTree;
 }
 
 decl : ^(DECL type declarator)

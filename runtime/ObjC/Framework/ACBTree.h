@@ -18,7 +18,13 @@ typedef enum {
 #define BTNODESIZE 11
 #define BTHNODESIZE ((BTNODESIZE-1)/2)
 #define BTKeySize  38
+#if defined FAILURE
+#undef FAILURE
+#endif
 #define FAILURE -1
+#if defined SUCCESS
+#undef SUCCESS
+#endif
 #define SUCCESS 0
 
 @interface ACBKey : NSObject {
@@ -34,7 +40,8 @@ typedef enum {
 + (ACBKey *)newKeyWithKStr:(NSString *)aKey;
 - (id) init;
 - (id) initWithKStr:(NSString *)aKey;
-
+- (void)dealloc;
+- (NSString *) description;
 @end
 
 @interface ACBTree : NSObject {
@@ -74,6 +81,7 @@ typedef enum {
 + (ACBTree *) newNodeWithDictionary:(AMutableDictionary *)theDict;
 
 - (id)initWithDictionary:(AMutableDictionary *)theDict;
+- (void)dealloc;
 
 - (ACBTree *)createnode:(ACBKey *)kp0;
 - (ACBTree *)deletekey:(NSString *)dkey;
@@ -93,5 +101,5 @@ typedef enum {
 - (void)rotateright:(NSInteger)j;
 - (NSInteger) keyWalkLeaves;
 - (NSInteger) objectWalkLeaves;
-- (void)dealloc;
+- (NSString *) description;
 @end

@@ -1,26 +1,39 @@
-// $ANTLR 3.2 Aug 07, 2010 22:08:38 /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/lexertest-simple/Test.g 2010-08-11 13:24:39
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/lexertest-simple/TestLexer.g 2012-02-16 17:36:38
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <Foundation/Foundation.h>
+#import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
  */
 
+/* Start cyclicDFAInterface */
 
-#pragma mark Rule return scopes start
-#pragma mark Rule return scopes end
+#pragma mark Rule return scopes Interface start
+#pragma mark Rule return scopes Interface end
 #pragma mark Tokens
-#define DIGIT 5
-#define ID 6
+#ifdef EOF
+#undef EOF
+#endif
 #define EOF -1
-#define LETTER 4
-@interface TestLexer : ANTLRLexer {
+#define DIGIT 4
+#define ID 5
+#define LETTER 6
+/* interface lexer class */
+@interface TestLexer : Lexer { // line 283
+/* ObjC start of actions.lexer.memVars */
+/* ObjC end of actions.lexer.memVars */
 }
-- (void) mID; 
-- (void) mDIGIT; 
-- (void) mLETTER; 
-- (void) mTokens; 
-@end // end of Test interface
++ (void) initialize;
++ (TestLexer *)newTestLexerWithCharStream:(id<CharStream>)anInput;
+/* ObjC start actions.lexer.methodsDecl */
+/* ObjC end actions.lexer.methodsDecl */
+- (void) mID ; 
+- (void) mDIGIT ; 
+- (void) mLETTER ; 
+- (void) mTokens ; 
+
+@end /* end of TestLexer interface */
+

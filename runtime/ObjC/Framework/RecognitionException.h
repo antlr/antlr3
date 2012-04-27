@@ -25,7 +25,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "RuntimeException.h"
 #import "Token.h"
 #import "IntStream.h"
@@ -39,6 +39,7 @@
 	unichar c;
 	NSUInteger line;
 	NSUInteger charPositionInLine;
+	BOOL approximateLineInfo;
 }
 
 @property (retain, getter=getStream, setter=setStream:) id<IntStream> input;
@@ -48,6 +49,7 @@
 @property (assign) unichar c;
 @property (assign) NSUInteger line;
 @property (assign) NSUInteger charPositionInLine;
+@property (assign) BOOL approximateLineInfo;
 
 + (id) newException;
 + (id) newException:(id<IntStream>) anInputStream; 
@@ -55,6 +57,8 @@
 - (id) initWithStream:(id<IntStream>)anInputStream;
 - (id) initWithStream:(id<IntStream>)anInputStream reason:(NSString *)aReason;
 - (id) initWithName:(NSString *)aName reason:(NSString *)aReason userInfo:(NSDictionary *)aUserInfo;
+
+- (void) extractInformationFromTreeNodeStream:(id<IntStream>)input;
 
 - (NSInteger) unexpectedType;
 - (id<Token>)getUnexpectedToken;

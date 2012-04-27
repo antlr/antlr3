@@ -119,7 +119,7 @@
 - (NSString *) getText:(id)aNode;
 - (void) setText:(id)aNode Text:(NSString *)tokenText;
 
-//- (id<Token>) getToken:(id)t;
+- (id<Token>) getToken:(id)t;
 
 - (void) setTokenBoundaries:(id)aTree From:(id<Token>)startToken To:(id<Token>)stopToken;
 - (NSInteger) getTokenStartIndex:(id)aTree;

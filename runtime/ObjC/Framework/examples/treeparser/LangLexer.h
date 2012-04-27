@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} Lang.g 2011-05-06 17:38:52
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/treeparser/Lang.g 2012-02-16 17:58:54
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -11,8 +11,8 @@
 
 /* Start cyclicDFAInterface */
 
-#pragma mark Rule return scopes start
-#pragma mark Rule return scopes end
+#pragma mark Rule return scopes Interface start
+#pragma mark Rule return scopes Interface end
 #pragma mark Tokens
 #ifdef EOF
 #undef EOF
@@ -26,12 +26,12 @@
 #define INTTYPE 8
 #define WS 9
 /* interface lexer class */
-@interface LangLexer : ANTLRLexer { // line 283
+@interface LangLexer : Lexer { // line 283
 /* ObjC start of actions.lexer.memVars */
 /* ObjC end of actions.lexer.memVars */
 }
 + (void) initialize;
-+ (LangLexer *)newLangLexerWithCharStream:(id<ANTLRCharStream>)anInput;
++ (LangLexer *)newLangLexerWithCharStream:(id<CharStream>)anInput;
 /* ObjC start actions.lexer.methodsDecl */
 /* ObjC end actions.lexer.methodsDecl */
 - (void) mT__10 ; 

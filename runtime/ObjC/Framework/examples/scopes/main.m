@@ -1,22 +1,24 @@
-#import <Cocoa/Cocoa.h>
-#import <antlr3.h>
+#import <Foundation/Foundation.h>
+#import <ANTLR/ANTLR.h>
 #import "SymbolTableLexer.h"
 #import "SymbolTableParser.h"
 
-int main() {
+int main()
+{
+    NSError *error;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSString *string = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/scopes/input"];
+	NSString *string = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/scopes/input" encoding:NSASCIIStringEncoding error:&error];
 	NSLog(@"input is : %@", string);
 	ANTLRStringStream *stream = [[ANTLRStringStream alloc] initWithStringNoCopy:string];
 	SymbolTableLexer *lexer = [[SymbolTableLexer alloc] initWithCharStream:stream];
 	
-//	ANTLRCommonToken *currentToken;
-//	while ((currentToken = [lexer nextToken]) && [currentToken getType] != ANTLRTokenTypeEOF) {
+//	CommonToken *currentToken;
+//	while ((currentToken = [lexer nextToken]) && currentToken.type != TokenTypeEOF) {
 //		NSLog(@"%@", currentToken);
 //	}
 	
-	ANTLRCommonTokenStream *tokens = [[ANTLRCommonTokenStream alloc] initWithTokenSource:lexer];
+	CommonTokenStream *tokens = [[CommonTokenStream alloc] initWithTokenSource:lexer];
 	SymbolTableParser *parser = [[SymbolTableParser alloc] initWithTokenStream:tokens];
 	[parser prog];
 

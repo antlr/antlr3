@@ -29,26 +29,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "BaseMapElement.h"
 
 @interface RuleMapElement : BaseMapElement {
-    NSNumber *ruleNum;
+    ACNumber *ruleNum;
 }
 
-@property (retain, getter=getRuleNum, setter=setRuleNum:) NSNumber *ruleNum;
+@property (retain, getter=getRuleNum, setter=setRuleNum:) ACNumber *ruleNum;
 
 + (RuleMapElement *) newRuleMapElement;
-+ (RuleMapElement *) newRuleMapElementWithIndex:(NSNumber *)anIdx;
-+ (RuleMapElement *) newRuleMapElementWithIndex:(NSNumber *)anIdx RuleNum:(NSNumber *)aRuleNum;
++ (RuleMapElement *) newRuleMapElementWithIndex:(ACNumber *)anIdx;
++ (RuleMapElement *) newRuleMapElementWithIndex:(ACNumber *)anIdx RuleNum:(ACNumber *)aRuleNum;
 - (id) init;
-- (id) initWithAnIndex:(NSNumber *)anIdx;
-- (id) initWithAnIndex:(NSNumber *)anIdx RuleNum:(NSNumber *)aRuleNum;
+- (id) initWithAnIndex:(ACNumber *)anIdx;
+- (id) initWithAnIndex:(ACNumber *)anIdx RuleNum:(ACNumber *)aRuleNum;
 
 - (id) copyWithZone:(NSZone *)aZone;
 
-- (NSNumber *)getRuleNum;
-- (void)setRuleNum:(NSNumber *)aRuleNum;
+- (ACNumber *)getRuleNum;
+- (void)setRuleNum:(ACNumber *)aRuleNum;
 
 - (NSInteger)size;
 
