@@ -138,14 +138,18 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
 	}
 
 	public void rewind(int marker) {
-        markDepth--;
-        seek(marker); // assume marker is top
-        // release(marker); // waste of call; it does nothing in this class
-    }
+    markDepth--;
+    int delta = p - marker;
+    currentElementIndex -= delta;
+    p = marker;
+  }
 
-	public void rewind() {
-        seek(lastMarker); // rewind but do not release marker
-    }
+  public void rewind() {
+    // rewind but do not release marker
+    int delta = p - lastMarker;
+    currentElementIndex -= delta;
+    p = lastMarker;
+  }
 
     /** Seek to a 0-indexed position within data buffer.  Can't handle
      *  case where you seek beyond end of existing buffer.  Normally used
@@ -153,7 +157,16 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
      *  Doesn't see to absolute position in input stream since this stream
      *  is unbuffered. Seeks only into our moving window of elements.
      */
-    public void seek(int index) { p = index; }
+  public void seek(int index) {
+    int delta = currentElementIndex - index;
+    p -= delta;
+
+    if (p < 0) {
+      throw new IllegalArgumentException("Can't seek past the beginning of this stream's buffer");
+    }
+
+    currentElementIndex = index;
+  }
 
     protected T LB(int k) {
         if ( k==1 ) return prevElement;
