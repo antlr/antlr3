@@ -79,6 +79,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         p++;
         // have we hit end of buffer and not backtracking?
         if ( p == data.size() && markDepth==0 ) {
+          prevElement = o;
             // if so, it's an opportunity to start filling at index 0 again
             clear(); // size goes to 0, but retains memory
         }
@@ -88,7 +89,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     /** Make sure we have at least one element to remove, even if EOF */
     public void consume() {
         syncAhead(1);
-        prevElement = remove();
+        remove();
         currentElementIndex++;
     }
 
@@ -168,8 +169,13 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     currentElementIndex = index;
   }
 
-    protected T LB(int k) {
-        if ( k==1 ) return prevElement;
-        throw new NoSuchElementException("can't look backwards more than one token in this stream");
+  protected T LB(int k) {
+    if (p - k == -1) {
+      return prevElement;
     }
+    else if (p > 0) {
+      return elementAt(-1);
+    }
+    throw new NoSuchElementException("can't look backwards past the beginning of this stream's buffer");
+  }
 }

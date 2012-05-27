@@ -8,18 +8,22 @@ public class TestLookaheadStream extends TestCase {
     UnbufferedTokenStream stream = new UnbufferedTokenStream(createTokenSource());
 
     stream.consume();
+    assertEquals(0, stream.LA(-1));
     assertEquals(1, stream.LA(1));
 
     stream.mark();
 
     stream.consume();
+    assertEquals(1, stream.LA(-1));
     assertEquals(2, stream.LA(1));
 
     int index = stream.index();
     stream.rewind();
+    assertEquals(0, stream.LA(-1));
     assertEquals(1, stream.LA(1));
 
     stream.seek(index);
+    assertEquals(1, stream.LA(-1));
     assertEquals(2, stream.LA(1));
   }
 
