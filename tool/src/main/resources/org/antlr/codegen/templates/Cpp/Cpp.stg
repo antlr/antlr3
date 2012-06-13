@@ -224,7 +224,7 @@ headerFile( LEXER,
             generatedTimestamp,
             trace,
             scopes,
-	    superClass,
+	        superClass,
             literals
         ) ::=
 <<
@@ -429,6 +429,7 @@ public:
     void            reset();
     ~<name>();
     
+    <actions.(actionScope).members>
     <actions.(actionScope).context>
 };
 
@@ -575,8 +576,6 @@ bool	<name>::alreadyParsedRule(ANTLR_MARKER	ruleIndex)
  */
 
 <scopes:{it |<if(it.isDynamicGlobalScope)><globalAttributeScope(it)><endif>}>
-
-<actions.lexer.members>
 
 <name>::~<name>()
 {
@@ -949,8 +948,6 @@ static ANTLR_UINT8**	getTokenNames()
 {
         return <grammar.composite.rootGrammar.recognizerName>TokenNames;
 }
-
-    <members>
 
 /* Declare the bitsets
  */
