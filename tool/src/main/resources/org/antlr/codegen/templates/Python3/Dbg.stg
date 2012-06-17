@@ -185,7 +185,7 @@ public <name>(<inputStreamType> input, DebugEventListener dbg) {
 try:
     self._dbg.enterRule(self.getGrammarFileName(), "<ruleName>")
     if self.getRuleLevel() == 0:
-        self._dbg.commence();
+        self._dbg.commence()
     self.incRuleLevel()
     <! ST uses zero-based columns, we want one-base !>
     self._dbg.location(<ruleDescriptor.tree.line>, <ruleDescriptor.tree.charPositionInLine>+1)
@@ -307,7 +307,7 @@ try:
     self.isCyclicDecision = True
     <super.dfaDecision(...)>
 
-except NoViableAltException, nvae:
+except NoViableAltException as nvae:
     self._dbg.recognitionException(nvae)
     raise
 

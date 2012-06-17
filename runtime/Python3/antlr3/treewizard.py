@@ -36,9 +36,9 @@ See <http://www.antlr.org/wiki/display/~admin/2007/07/02/Exploring+Concept+of+Tr
 #
 # end[licence]
 
-from antlr3.constants import INVALID_TOKEN_TYPE
-from antlr3.tokens import CommonToken
-from antlr3.tree import CommonTree, CommonTreeAdaptor
+from .constants import INVALID_TOKEN_TYPE
+from .tokens import CommonToken
+from .tree import CommonTree, CommonTreeAdaptor
 
 
 def computeTokenTypes(tokenNames):
@@ -47,10 +47,10 @@ def computeTokenTypes(tokenNames):
     tokenNames (which maps int token types to names).
     """
 
-    if tokenNames is None:
-        return {}
+    if tokenNames:
+        return dict((name, type) for type, name in enumerate(tokenNames))
 
-    return dict((name, type) for type, name in enumerate(tokenNames))
+    return {}
 
 
 ## token types for pattern parser
@@ -275,18 +275,18 @@ class TreePattern(CommonTree):
     """
 
     def __init__(self, payload):
-        CommonTree.__init__(self, payload)
+        super().__init__(payload)
 
         self.label = None
         self.hasTextArg = None
 
 
     def toString(self):
-        if self.label is not None:
-            return '%' + self.label + ':' + CommonTree.toString(self)
+        if self.label:
+            return '%' + self.label + ':' + super().toString()
 
         else:
-            return CommonTree.toString(self)
+            return super().toString()
 
 
 class WildcardTreePattern(TreePattern):
@@ -330,7 +330,7 @@ class TreeWizard(object):
             self.tokenNameToTypeMap = computeTokenTypes(tokenNames)
 
         else:
-            if tokenNames is not None:
+            if tokenNames:
                 raise ValueError("Can't have both tokenNames and typeMap")
 
             self.tokenNameToTypeMap = typeMap
@@ -339,9 +339,9 @@ class TreeWizard(object):
     def getTokenType(self, tokenName):
         """Using the map of token names to token types, return the type."""
 
-        try:
+        if tokenName in self.tokenNameToTypeMap:
             return self.tokenNameToTypeMap[tokenName]
-        except KeyError:
+        else:
             return INVALID_TOKEN_TYPE
 
 
@@ -404,10 +404,10 @@ class TreeWizard(object):
 
         """
 
-        if isinstance(what, (int, long)):
+        if isinstance(what, int):
             return self._findTokenType(tree, what)
 
-        elif isinstance(what, basestring):
+        elif isinstance(what, str):
             return self._findPattern(tree, what)
 
         else:
@@ -469,10 +469,10 @@ class TreeWizard(object):
         label.
         """
 
-        if isinstance(what, (int, long)):
+        if isinstance(what, int):
             self._visitType(tree, None, 0, what, visitor)
 
-        elif isinstance(what, basestring):
+        elif isinstance(what, str):
             self._visitPattern(tree, what, visitor)
 
         else:

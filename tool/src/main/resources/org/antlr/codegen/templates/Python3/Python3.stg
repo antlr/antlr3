@@ -31,16 +31,6 @@
  */
 apiVersion() ::= "1"
 
-// System.Boolean.ToString() returns "True" and "False", but the proper C# literals are "true" and "false"
-// The Java version of Boolean returns "true" and "false", so they map to themselves here.
-booleanLiteral ::= [
-	       "True":"true",
-	       "False":"false",
-	       "true":"true",
-	       "false":"false",
-	       default:"false"
-]
-
 /** The overall file structure of a recognizer; stores methods for rules
  *  and cyclic DFAs plus support code.
  */
@@ -60,7 +50,6 @@ from antlr3 import *
 <if(TREE_PARSER)>
 from antlr3.tree import *<\n>
 <endif>
-from antlr3.compat import set, frozenset
 <@end>
 
 <actions.(actionScope).header>
@@ -106,8 +95,14 @@ if __name__ == '__main__':
 
 lexer(grammar, name, tokens, scopes, rules, numRules, filterMode,
       labelType="CommonToken", superClass="Lexer") ::= <<
-<grammar.directDelegates:
- {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+<if(grammar.directDelegates)>
+if __name__ == "__main__":
+    <grammar.directDelegates:
+     {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+else:
+    <grammar.directDelegates:
+     {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
+<endif>
 
 class <grammar.recognizerName>(<@superClassName><superClass><@end>):
     <scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
@@ -118,7 +113,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
     def __init__(self<grammar.delegators:{g|, <g:delegateName()>}>, input=None, state=None):
         if state is None:
             state = RecognizerSharedState()
-        super(<grammar.recognizerName>, self).__init__(input, state)
+        super().__init__(input, state)
 
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
@@ -133,7 +128,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
         <grammar.delegators:
          {g|self.<g:delegateName()> = <g:delegateName()>}; separator="\n">
         <last(grammar.delegators):
-    	 {g|self.gParent = <g:delegateName()>}; separator="\n">
+         {g|self.gParent = <g:delegateName()>}; separator="\n">
         self.delegates = [<grammar.delegates: {g|self.<g:delegateName()>}; separator = ", ">]
 
         <cyclicDFAs:{dfa | <cyclicDFAInit(dfa)>}; separator="\n">
@@ -194,7 +189,7 @@ def nextToken(self):
                 self.emit()
                 return self._state.token
 
-        except RecognitionException, re:
+        except RecognitionException as re:
             # shouldn't happen in backtracking mode, but...
             self.reportError(re)
             self.recover(re)
@@ -203,12 +198,12 @@ def nextToken(self):
 def memoize(self, input, ruleIndex, ruleStartIndex, success):
     if self._state.backtracking > 1:
         # is Lexer always superclass?
-        super(<grammar.recognizerName>, self).memoize(input, ruleIndex, ruleStartIndex, success)
+        super().memoize(input, ruleIndex, ruleStartIndex, success)
 
 
 def alreadyParsedRule(self, input, ruleIndex):
     if self._state.backtracking > 1:
-        return super(<grammar.recognizerName>, self).alreadyParsedRule(input, ruleIndex)
+        return super().alreadyParsedRule(input, ruleIndex)
     return False
 
 
@@ -222,7 +217,7 @@ filteringActionGate() ::= "self._state.backtracking == 1"
 
 genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
               bitsets, inputStreamType, superClass, labelType, members,
-	      rewriteElementType, filterMode, init, ASTLabelType="Object") ::= <<
+              rewriteElementType, filterMode, init, ASTLabelType="Object") ::= <<
 <if(grammar.grammarIsRoot)>
 # token names
 tokenNames = [
@@ -234,8 +229,18 @@ from <grammar.composite.rootGrammar.recognizerName> import tokenNames<\n>
 <endif>
 <scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScopeClass(scope=it)><endif>}>
 
-<grammar.directDelegates:
- {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+<! I just want to say this is an awful hack. The delegates' grammars need to
+   import tokenNames from us, and it works despite the circular dependency
+   because we define it before we import them. !>
+
+<if(grammar.directDelegates)>
+if __name__ == "__main__":
+    <grammar.directDelegates:
+     {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+else:
+    <grammar.directDelegates:
+     {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
+<endif>
 
 <rules:{it|<ruleAttributeScopeClass(scope=it.ruleDescriptor.ruleScope)>}>
 
@@ -249,7 +254,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
             state = RecognizerSharedState()
 
         <@args()>
-        super(<grammar.recognizerName>, self).__init__(input, state, *args, **kwargs)
+        super().__init__(input, state, *args, **kwargs)
 
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
@@ -260,7 +265,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
         <cyclicDFAs:{dfa | <cyclicDFAInit(dfa)>}; separator="\n">
 
         <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeStack(scope=it)><endif>}>
-	<rules:{it | <ruleAttributeScopeStack(scope=it.ruleDescriptor.ruleScope)>}>
+        <rules:{it | <ruleAttributeScopeStack(scope=it.ruleDescriptor.ruleScope)>}>
 
         <init>
 
@@ -271,10 +276,10 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
         <grammar.directDelegates:
          {g|<g.delegates:{h|self.<h:delegateName()> = self.<g:delegateName()>.<h:delegateName()>}; separator="\n">}; separator="\n">
         <last(grammar.delegators):
-    	 {g|self.gParent = self.<g:delegateName()>}; separator="\n">
+         {g|self.gParent = self.<g:delegateName()>}; separator="\n">
         self.delegates = [<grammar.delegates: {g|self.<g:delegateName()>}; separator = ", ">]
 
-	<@init><@end>
+        <@init><@end>
 
 
     <@members><@end>
@@ -320,7 +325,7 @@ treeParser(grammar, name, scopes, tokens, tokenNames, globalAction, rules,
            numRules, bitsets, filterMode, labelType={<ASTLabelType>}, ASTLabelType="Object",
            superClass={<if(filterMode)><if(buildAST)>TreeRewriter<else>TreeFilter<endif><else>TreeParser<endif>},
            members={<actions.treeparser.members>},
-	   init={<actions.treeparser.init>}
+           init={<actions.treeparser.init>}
            ) ::= <<
 <genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
               bitsets, "TreeNodeStream", superClass,
@@ -448,7 +453,7 @@ try:
 <if(actions.(actionScope).rulecatch)>
     <actions.(actionScope).rulecatch>
 <else>
-    except RecognitionException, re:
+    except RecognitionException as re:
         self.reportError(re)
         self.recover(self.input, re)
         <@setErrorReturnValue()>
@@ -603,7 +608,7 @@ def m<ruleName>(self, <ruleDescriptor.parameterScope:parameterScope()>):
 <if(trace)>
         self.traceOut("<ruleName>", <ruleDescriptor.index>)<\n>
 <endif>
-	<ruleScopeCleanUp()>
+        <ruleScopeCleanUp()>
         <memoize()>
         pass
 
@@ -844,8 +849,8 @@ self.match(<string>)
 <label>StartLine<elementIndex> = self.getLine()
 <label>StartCharPos<elementIndex> = self.getCharPositionInLine()
 <label> = <labelType>(input=self.input, type=INVALID_TOKEN_TYPE, channel=DEFAULT_CHANNEL, start=<label>Start, stop=self.getCharIndex()-1)
-<label>.setLine(<label>StartLine<elementIndex>)
-<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
+<label>.line = <label>StartLine<elementIndex>
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>
 <else>
 self.match(<string>)
 <endif>
@@ -855,7 +860,7 @@ wildcard(token,label,elementIndex,terminalOptions) ::= <<
 <if(label)>
 <label> = self.input.LT(1)<\n>
 <endif>
-self.matchAny(self.input)
+self.matchAny()
 >>
 
 wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
@@ -911,8 +916,8 @@ self.<if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", "
     channel=DEFAULT_CHANNEL,
     start=<label>Start<elementIndex>,
     stop=self.getCharIndex()-1)
-<label>.setLine(<label>StartLine<elementIndex>)
-<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
+<label>.line = <label>StartLine<elementIndex>
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>
 <else>
 self.<if(scope)><scope:delegateName()>.<endif>m<rule.name>(<args; separator=", ">)
 <endif>
@@ -932,8 +937,8 @@ lexerMatchEOF(label,elementIndex) ::= <<
 <label>StartCharPos<elementIndex> = self.getCharPositionInLine()
 self.match(EOF)
 <label> = <labelType>(input=self.input, type=EOF, channel=DEFAULT_CHANNEL, start=<label>Start<elementIndex>, stop=self.getCharIndex()-1)
-<label>.setLine(<label>StartLine<elementIndex>)
-<label>.setCharPositionInLine(<label>StartCharPos<elementIndex>)
+<label>.line = <label>StartLine<elementIndex>
+<label>.charPositionInLine = <label>StartCharPos<elementIndex>
 <else>
 self.match(EOF)
 <endif>
@@ -1099,32 +1104,32 @@ cyclicDFA(dfa) ::= <<
 # lookup tables for DFA #<dfa.decisionNumber>
 
 DFA<dfa.decisionNumber>_eot = DFA.unpack(
-    u"<dfa.javaCompressedEOT; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedEOT; wrap="\"\n    \"">"
     )
 
 DFA<dfa.decisionNumber>_eof = DFA.unpack(
-    u"<dfa.javaCompressedEOF; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedEOF; wrap="\"\n    \"">"
     )
 
 DFA<dfa.decisionNumber>_min = DFA.unpack(
-    u"<dfa.javaCompressedMin; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedMin; wrap="\"\n    \"">"
     )
 
 DFA<dfa.decisionNumber>_max = DFA.unpack(
-    u"<dfa.javaCompressedMax; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedMax; wrap="\"\n    \"">"
     )
 
 DFA<dfa.decisionNumber>_accept = DFA.unpack(
-    u"<dfa.javaCompressedAccept; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedAccept; wrap="\"\n    \"">"
     )
 
 DFA<dfa.decisionNumber>_special = DFA.unpack(
-    u"<dfa.javaCompressedSpecial; wrap="\"\n    u\"">"
+    "<dfa.javaCompressedSpecial; wrap="\"\n    \"">"
     )
 
 
 DFA<dfa.decisionNumber>_transition = [
-    <dfa.javaCompressedTransition:{s|DFA.unpack(u"<s; wrap="\"\nu\"">")}; separator=",\n">
+    <dfa.javaCompressedTransition:{s|DFA.unpack("<s; wrap="\"\n\"">")}; separator=",\n">
 ]
 
 # class definition for DFA #<dfa.decisionNumber>
@@ -1286,7 +1291,7 @@ returnScope(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 class <ruleDescriptor:returnStructName()>(<if(TREE_PARSER)>Tree<else>Parser<endif>RuleReturnScope):
     def __init__(self):
-        super(<grammar.recognizerName>.<ruleDescriptor:returnStructName()>, self).__init__()
+        super().__init__()
 
         <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
         <@ruleReturnInit()>

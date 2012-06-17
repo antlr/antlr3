@@ -33,16 +33,14 @@
 import sys
 import inspect
 
-from antlr3 import compatible_api_versions
-from antlr3.constants import DEFAULT_CHANNEL, HIDDEN_CHANNEL, EOF, \
-     EOR_TOKEN_TYPE, INVALID_TOKEN_TYPE
-from antlr3.exceptions import RecognitionException, MismatchedTokenException, \
+from .constants import compatible_api_versions, DEFAULT_CHANNEL, \
+     HIDDEN_CHANNEL, EOF, EOR_TOKEN_TYPE, INVALID_TOKEN_TYPE
+from .exceptions import RecognitionException, MismatchedTokenException, \
      MismatchedRangeException, MismatchedTreeNodeException, \
      NoViableAltException, EarlyExitException, MismatchedSetException, \
      MismatchedNotSetException, FailedPredicateException, \
      BacktrackingFailed, UnwantedTokenException, MissingTokenException
-from antlr3.tokens import CommonToken, SKIP_TOKEN
-from antlr3.compat import set, frozenset, reversed
+from .tokens import CommonToken, SKIP_TOKEN
 
 
 class RecognizerSharedState(object):
@@ -76,7 +74,7 @@ class RecognizerSharedState(object):
         # If >0 then it's the level of backtracking.
         self.backtracking = 0
 
-        # An array[size num rules] of Map<Integer,Integer> that tracks
+        # An array[size num rules] of (int -> int) dicts that tracks
         # the stop token index for each rule.  ruleMemo[ruleIndex] is
         # the memoization table for ruleIndex.  For key ruleStartIndex, you
         # get back the stop token for associated rule or MEMO_RULE_FAILED.
@@ -92,7 +90,7 @@ class RecognizerSharedState(object):
         # constantly in generated code and Lexer object) :(
 
 
-	## The goal of all lexer rules/methods is to create a token object.
+        ## The goal of all lexer rules/methods is to create a token object.
         # This is an instance variable as multiple rules may collaborate to
         # create a single token.  nextToken will return this object after
         # matching lexer rule(s).  If you subclass to allow multiple token
@@ -164,10 +162,10 @@ class BaseRecognizer(object):
 
         if self.api_version not in compatible_api_versions:
             raise RuntimeError(
-                ("ANTLR version mismatch: "
-                 "The recognizer has been generated with API V%s, "
-                 "but this runtime does not support this.")
-                % self.api_version)
+                "ANTLR version mismatch: "
+                "The recognizer has been generated with API V{}, "
+                "but this runtime does not support this."
+                .format(self.api_version))
 
     # this one only exists to shut up pylint :(
     def setInput(self, input):
@@ -176,7 +174,7 @@ class BaseRecognizer(object):
 
     def reset(self):
         """
-        reset the parser's state; subclasses must rewinds the input stream
+        reset the parser's state; subclasses must rewind the input stream
         """
 
         # wack everything related to error recovery
@@ -222,7 +220,7 @@ class BaseRecognizer(object):
         return matchedSymbol
 
 
-    def matchAny(self, input):
+    def matchAny(self):
         """Match the wildcard: in a symbol"""
 
         self._state.errorRecovery = False
@@ -242,11 +240,11 @@ class BaseRecognizer(object):
         # compute what can follow this grammar element reference
         if EOR_TOKEN_TYPE in follow:
             viableTokensFollowingThisRule = self.computeContextSensitiveRuleFOLLOW()
-            follow = follow | viableTokensFollowingThisRule
+            follow |= viableTokensFollowingThisRule
 
             if len(self._state.following) > 0:
                 # remove EOR if we're not the start symbol
-                follow = follow - set([EOR_TOKEN_TYPE])
+                follow -= {EOR_TOKEN_TYPE}
 
         # if current token is consistent with what could come after set
         # then we know we're missing a token; error recovery is free to
@@ -267,7 +265,7 @@ class BaseRecognizer(object):
 
         1. error occurs
         2. enter recovery mode, report error
-        3. consume until token found in resynch set
+        3. consume until token found in resync set
         4. try to resume parsing
         5. next match() will reset errorRecovery mode
 
@@ -284,16 +282,16 @@ class BaseRecognizer(object):
         self._state.syntaxErrors += 1 # don't count spurious
         self._state.errorRecovery = True
 
-        self.displayRecognitionError(self.tokenNames, e)
+        self.displayRecognitionError(e)
 
 
-    def displayRecognitionError(self, tokenNames, e):
+    def displayRecognitionError(self, e):
         hdr = self.getErrorHeader(e)
-        msg = self.getErrorMessage(e, tokenNames)
-        self.emitErrorMessage(hdr+" "+msg)
+        msg = self.getErrorMessage(e)
+        self.emitErrorMessage(hdr + " " + msg)
 
 
-    def getErrorMessage(self, e, tokenNames):
+    def getErrorMessage(self, e):
         """
         What error message should be generated for the various
         exception types?
@@ -319,78 +317,71 @@ class BaseRecognizer(object):
         """
 
         if isinstance(e, UnwantedTokenException):
-            tokenName = "<unknown>"
             if e.expecting == EOF:
                 tokenName = "EOF"
-
             else:
                 tokenName = self.tokenNames[e.expecting]
 
-            msg = "extraneous input %s expecting %s" % (
+            msg = "extraneous input {} expecting {}".format(
                 self.getTokenErrorDisplay(e.getUnexpectedToken()),
                 tokenName
                 )
 
         elif isinstance(e, MissingTokenException):
-            tokenName = "<unknown>"
             if e.expecting == EOF:
                 tokenName = "EOF"
-
             else:
                 tokenName = self.tokenNames[e.expecting]
 
-            msg = "missing %s at %s" % (
+            msg = "missing {} at {}".format(
                 tokenName, self.getTokenErrorDisplay(e.token)
                 )
 
         elif isinstance(e, MismatchedTokenException):
-            tokenName = "<unknown>"
             if e.expecting == EOF:
                 tokenName = "EOF"
             else:
                 tokenName = self.tokenNames[e.expecting]
 
-            msg = "mismatched input " \
-                  + self.getTokenErrorDisplay(e.token) \
-                  + " expecting " \
-                  + tokenName
+            msg = "mismatched input {} expecting {}".format(
+                self.getTokenErrorDisplay(e.token),
+                tokenName
+                )
 
         elif isinstance(e, MismatchedTreeNodeException):
-            tokenName = "<unknown>"
             if e.expecting == EOF:
                 tokenName = "EOF"
             else:
                 tokenName = self.tokenNames[e.expecting]
 
-            msg = "mismatched tree node: %s expecting %s" \
-                  % (e.node, tokenName)
+            msg = "mismatched tree node: {} expecting {}".format(
+                e.node, tokenName)
 
         elif isinstance(e, NoViableAltException):
-            msg = "no viable alternative at input " \
-                  + self.getTokenErrorDisplay(e.token)
+            msg = "no viable alternative at input {}".format(
+                self.getTokenErrorDisplay(e.token))
 
         elif isinstance(e, EarlyExitException):
-            msg = "required (...)+ loop did not match anything at input " \
-                  + self.getTokenErrorDisplay(e.token)
+            msg = "required (...)+ loop did not match anything at input {}".format(
+                self.getTokenErrorDisplay(e.token))
 
         elif isinstance(e, MismatchedSetException):
-            msg = "mismatched input " \
-                  + self.getTokenErrorDisplay(e.token) \
-                  + " expecting set " \
-                  + repr(e.expecting)
+            msg = "mismatched input {} expecting set {!r}".format(
+                self.getTokenErrorDisplay(e.token),
+                e.expecting
+                )
 
         elif isinstance(e, MismatchedNotSetException):
-            msg = "mismatched input " \
-                  + self.getTokenErrorDisplay(e.token) \
-                  + " expecting set " \
-                  + repr(e.expecting)
+            msg = "mismatched input {} expecting set {!r}".format(
+                self.getTokenErrorDisplay(e.token),
+                e.expecting
+                )
 
         elif isinstance(e, FailedPredicateException):
-            msg = "rule " \
-                  + e.ruleName \
-                  + " failed predicate: {" \
-                  + e.predicateText \
-                  + "}?"
+            msg = "rule {} failed predicate: {{{}}}?".format(
+                e.ruleName,
+                e.predicateText
+                )
 
         else:
             msg = str(e)
@@ -403,10 +394,10 @@ class BaseRecognizer(object):
         Get number of recognition errors (lexer, parser, tree parser).  Each
         recognizer tracks its own number.  So parser and lexer each have
         separate count.  Does not count the spurious errors found between
-        an error and next valid token match
+        an error and next valid token match.
 
-        See also reportError()
-	"""
+        See also reportError().
+        """
         return self._state.syntaxErrors
 
 
@@ -417,8 +408,8 @@ class BaseRecognizer(object):
 
         source_name = self.getSourceName()
         if source_name is not None:
-            return "%s line %d:%d" % (source_name, e.line, e.charPositionInLine)
-        return "line %d:%d" % (e.line, e.charPositionInLine)
+            return "{} line {}:{}".format(source_name, e.line, e.charPositionInLine)
+        return "line {}:{}".format(e.line, e.charPositionInLine)
 
 
     def getTokenErrorDisplay(self, t):
@@ -437,7 +428,7 @@ class BaseRecognizer(object):
             if t.type == EOF:
                 s = "<EOF>"
             else:
-                s = "<"+t.type+">"
+                s = "<{}>".format(t.typeName)
 
         return repr(s)
 
@@ -619,7 +610,7 @@ class BaseRecognizer(object):
 
         The FOLLOW sets are all inclusive whereas context-sensitive
         FOLLOW sets are precisely what could follow a rule reference.
-        For input input "i=(3);", here is the derivation:
+        For input "i=(3);", here is the derivation:
 
         stat => ID '=' expr ';'
              => ID '=' atom ('+' atom)* ';'
@@ -781,22 +772,6 @@ class BaseRecognizer(object):
         return None
 
 
-##     def recoverFromMissingElement(self, input, e, follow):
-##         """
-##         This code is factored out from mismatched token and mismatched set
-##         recovery.  It handles "single token insertion" error recovery for
-##         both.  No tokens are consumed to recover from insertions.  Return
-##         true if recovery was possible else return false.
-##         """
-
-##         if self.mismatchIsMissingToken(input, follow):
-##             self.reportError(e)
-##             return True
-
-##         # nothing to do; throw exception
-##         return False
-
-
     def consumeUntil(self, input, tokenTypes):
         """
         Consume tokens until one matches the given token or token set
@@ -839,6 +814,7 @@ class BaseRecognizer(object):
         return self._getRuleInvocationStack(self.__module__)
 
 
+    @classmethod
     def _getRuleInvocationStack(cls, module):
         """
         A more general version of getRuleInvocationStack where you can
@@ -873,8 +849,6 @@ class BaseRecognizer(object):
 
         return rules
 
-    _getRuleInvocationStack = classmethod(_getRuleInvocationStack)
-
 
     def getBacktrackingLevel(self):
         return self._state.backtracking
@@ -899,7 +873,7 @@ class BaseRecognizer(object):
     def toStrings(self, tokens):
         """A convenience method for use most often with template rewrites.
 
-        Convert a List<Token> to List<String>
+        Convert a Token list to a str list.
         """
 
         if tokens is None:
@@ -966,19 +940,19 @@ class BaseRecognizer(object):
 
 
     def traceIn(self, ruleName, ruleIndex, inputSymbol):
-        sys.stdout.write("enter %s %s" % (ruleName, inputSymbol))
+        sys.stdout.write("enter {} {}".format(ruleName, inputSymbol))
 
         if self._state.backtracking > 0:
-            sys.stdout.write(" backtracking=%s" % self._state.backtracking)
+            sys.stdout.write(" backtracking={}".format(self._state.backtracking))
 
         sys.stdout.write('\n')
 
 
     def traceOut(self, ruleName, ruleIndex, inputSymbol):
-        sys.stdout.write("exit %s %s" % (ruleName, inputSymbol))
+        sys.stdout.write("exit {} {}".format(ruleName, inputSymbol))
 
         if self._state.backtracking > 0:
-            sys.stdout.write(" backtracking=%s" % self._state.backtracking)
+            sys.stdout.write(" backtracking={}".format(self._state.backtracking))
 
         # mmmm... we use BacktrackingFailed exceptions now. So how could we
         # get that information here?
@@ -1022,14 +996,14 @@ class TokenSource(object):
         """The TokenSource is an interator.
 
         The iteration will not include the final EOF token, see also the note
-        for the next() method.
+        for the __next__() method.
 
         """
 
         return self
 
 
-    def next(self):
+    def __next__(self):
         """Return next token or raise StopIteration.
 
         Note that this will raise StopIteration when hitting the EOF token,
@@ -1062,7 +1036,7 @@ class Lexer(BaseRecognizer, TokenSource):
 
 
     def reset(self):
-        BaseRecognizer.reset(self) # reset all recognizer state variables
+        super().reset() # reset all recognizer state variables
 
         if self.input is not None:
             # rewind the input
@@ -1118,11 +1092,11 @@ class Lexer(BaseRecognizer, TokenSource):
 
                 return self._state.token
 
-            except NoViableAltException, re:
+            except NoViableAltException as re:
                 self.reportError(re)
                 self.recover(re) # throw out current char and try again
 
-            except RecognitionException, re:
+            except RecognitionException as re:
                 self.reportError(re)
                 # match() routine has already called recover()
 
@@ -1187,7 +1161,7 @@ class Lexer(BaseRecognizer, TokenSource):
 
 
     def match(self, s):
-        if isinstance(s, basestring):
+        if isinstance(s, str):
             for c in s:
                 if self.input.LA(1) != ord(c):
                     if self._state.backtracking > 0:
@@ -1204,7 +1178,7 @@ class Lexer(BaseRecognizer, TokenSource):
                 if self._state.backtracking > 0:
                     raise BacktrackingFailed
 
-                mte = MismatchedTokenException(unichr(s), self.input)
+                mte = MismatchedTokenException(chr(s), self.input)
                 self.recover(mte) # don't really recover; just consume in lexer
                 raise mte
 
@@ -1220,7 +1194,7 @@ class Lexer(BaseRecognizer, TokenSource):
             if self._state.backtracking > 0:
                 raise BacktrackingFailed
 
-            mre = MismatchedRangeException(unichr(a), unichr(b), self.input)
+            mre = MismatchedRangeException(chr(a), chr(b), self.input)
             self.recover(mre)
             raise mre
 
@@ -1272,53 +1246,47 @@ class Lexer(BaseRecognizer, TokenSource):
         ## # if we've already reported an error and have not matched a token
         ## # yet successfully, don't report any errors.
         ## if self.errorRecovery:
-        ##     #System.err.print("[SPURIOUS] ");
-        ##     return;
+        ##     return
         ##
         ## self.errorRecovery = True
 
-        self.displayRecognitionError(self.tokenNames, e)
+        self.displayRecognitionError(e)
 
 
-    def getErrorMessage(self, e, tokenNames):
+    def getErrorMessage(self, e):
         msg = None
 
         if isinstance(e, MismatchedTokenException):
-            msg = "mismatched character " \
-                  + self.getCharErrorDisplay(e.c) \
-                  + " expecting " \
-                  + self.getCharErrorDisplay(e.expecting)
+            msg = "mismatched character {} expecting {}".format(
+                self.getCharErrorDisplay(e.c),
+                self.getCharErrorDisplay(e.expecting))
 
         elif isinstance(e, NoViableAltException):
-            msg = "no viable alternative at character " \
-                  + self.getCharErrorDisplay(e.c)
+            msg = "no viable alternative at character {}".format(
+                self.getCharErrorDisplay(e.c))
 
         elif isinstance(e, EarlyExitException):
-            msg = "required (...)+ loop did not match anything at character " \
-                  + self.getCharErrorDisplay(e.c)
+            msg = "required (...)+ loop did not match anything at character {}".format(
+                self.getCharErrorDisplay(e.c))
 
         elif isinstance(e, MismatchedNotSetException):
-            msg = "mismatched character " \
-                  + self.getCharErrorDisplay(e.c) \
-                  + " expecting set " \
-                  + repr(e.expecting)
+            msg = "mismatched character {} expecting set {!r}".format(
+                self.getCharErrorDisplay(e.c),
+                e.expecting)
 
         elif isinstance(e, MismatchedSetException):
-            msg = "mismatched character " \
-                  + self.getCharErrorDisplay(e.c) \
-                  + " expecting set " \
-                  + repr(e.expecting)
+            msg = "mismatched character {} expecting set {!r}".format(
+                self.getCharErrorDisplay(e.c),
+                e.expecting)
 
         elif isinstance(e, MismatchedRangeException):
-            msg = "mismatched character " \
-                  + self.getCharErrorDisplay(e.c) \
-                  + " expecting set " \
-                  + self.getCharErrorDisplay(e.a) \
-                  + ".." \
-                  + self.getCharErrorDisplay(e.b)
+            msg = "mismatched character {} expecting set {}..{}".format(
+                self.getCharErrorDisplay(e.c),
+                self.getCharErrorDisplay(e.a),
+                self.getCharErrorDisplay(e.b))
 
         else:
-            msg = BaseRecognizer.getErrorMessage(self, e, tokenNames)
+            msg = super().getErrorMessage(e)
 
         return msg
 
@@ -1341,21 +1309,21 @@ class Lexer(BaseRecognizer, TokenSource):
 
 
     def traceIn(self, ruleName, ruleIndex):
-        inputSymbol = "%s line=%d:%s" % (self.input.LT(1),
-                                         self.getLine(),
-                                         self.getCharPositionInLine()
-                                         )
+        inputSymbol = "{} line={}:{}".format(self.input.LT(1),
+                                             self.getLine(),
+                                             self.getCharPositionInLine()
+                                             )
 
-        BaseRecognizer.traceIn(self, ruleName, ruleIndex, inputSymbol)
+        super().traceIn(ruleName, ruleIndex, inputSymbol)
 
 
     def traceOut(self, ruleName, ruleIndex):
-        inputSymbol = "%s line=%d:%s" % (self.input.LT(1),
-                                         self.getLine(),
-                                         self.getCharPositionInLine()
-                                         )
+        inputSymbol = "{} line={}:{}".format(self.input.LT(1),
+                                             self.getLine(),
+                                             self.getCharPositionInLine()
+                                             )
 
-        BaseRecognizer.traceOut(self, ruleName, ruleIndex, inputSymbol)
+        super().traceOut(ruleName, ruleIndex, inputSymbol)
 
 
 
@@ -1365,13 +1333,13 @@ class Parser(BaseRecognizer):
     """
 
     def __init__(self, lexer, state=None):
-        BaseRecognizer.__init__(self, state)
+        super().__init__(state)
 
         self.input = lexer
 
 
     def reset(self):
-        BaseRecognizer.reset(self) # reset all recognizer state variables
+        super().reset() # reset all recognizer state variables
         if self.input is not None:
             self.input.seek(0) # rewind the input
 
@@ -1384,7 +1352,7 @@ class Parser(BaseRecognizer):
         if expectedTokenType == EOF:
             tokenText = "<missing EOF>"
         else:
-            tokenText = "<missing " + self.tokenNames[expectedTokenType] + ">"
+            tokenText = "<missing {}>".format(self.tokenNames[expectedTokenType])
         t = CommonToken(type=expectedTokenType, text=tokenText)
         current = input.LT(1)
         if current.type == EOF:
@@ -1414,11 +1382,11 @@ class Parser(BaseRecognizer):
 
 
     def traceIn(self, ruleName, ruleIndex):
-        BaseRecognizer.traceIn(self, ruleName, ruleIndex, self.input.LT(1))
+        super().traceIn(ruleName, ruleIndex, self.input.LT(1))
 
 
     def traceOut(self, ruleName, ruleIndex):
-        BaseRecognizer.traceOut(self, ruleName, ruleIndex, self.input.LT(1))
+        super().traceOut(ruleName, ruleIndex, self.input.LT(1))
 
 
 class RuleReturnScope(object):

@@ -613,7 +613,7 @@ class TreeAdaptor(object):
             return self.createWithPayload(args[0])
 
         if (len(args) == 2
-            and isinstance(args[0], (int, long))
+            and isinstance(args[0], int)
             and isinstance(args[1], Token)
             ):
             # Object create(int tokenType, Token fromToken);
@@ -625,9 +625,9 @@ class TreeAdaptor(object):
             return self.createFromToken(args[0], args[1])
 
         if (len(args) == 3
-            and isinstance(args[0], (int, long))
+            and isinstance(args[0], int)
             and isinstance(args[1], Token)
-            and isinstance(args[2], basestring)
+            and isinstance(args[2], str)
             ):
             # Object create(int tokenType, Token fromToken, String text);
 ##             warnings.warn(
@@ -638,8 +638,8 @@ class TreeAdaptor(object):
             return self.createFromToken(args[0], args[1], args[2])
 
         if (len(args) == 2
-            and isinstance(args[0], (int, long))
-            and isinstance(args[1], basestring)
+            and isinstance(args[0], int)
+            and isinstance(args[1], str)
             ):
             # Object create(int tokenType, String text);
 ##             warnings.warn(
@@ -1109,9 +1109,9 @@ class BaseTreeAdaptor(TreeAdaptor):
         if fromToken is None:
             return self.createFromType(tokenType, text)
 
-        assert isinstance(tokenType, (int, long)), type(tokenType).__name__
+        assert isinstance(tokenType, int), type(tokenType).__name__
         assert isinstance(fromToken, Token), type(fromToken).__name__
-        assert text is None or isinstance(text, basestring), type(text).__name__
+        assert text is None or isinstance(text, str), type(text).__name__
 
         fromToken = self.createToken(fromToken)
         fromToken.type = tokenType
@@ -1122,8 +1122,8 @@ class BaseTreeAdaptor(TreeAdaptor):
 
 
     def createFromType(self, tokenType, text):
-        assert isinstance(tokenType, (int, long)), type(tokenType).__name__
-        assert isinstance(text, basestring) or text is None, type(text).__name__
+        assert isinstance(tokenType, int), type(tokenType).__name__
+        assert isinstance(text, str) or text is None, type(text).__name__
 
         fromToken = self.createToken(tokenType=tokenType, text=text)
         t = self.createWithPayload(fromToken)
@@ -1254,7 +1254,7 @@ class CommonTree(BaseTree):
         if self.token is None:
             return INVALID_TOKEN_TYPE
 
-        return self.token.getType()
+        return self.token.type
 
     type = property(getType)
 
@@ -1269,33 +1269,33 @@ class CommonTree(BaseTree):
 
 
     def getLine(self):
-        if self.token is None or self.token.getLine() == 0:
+        if self.token is None or self.token.line == 0:
             if self.getChildCount():
                 return self.getChild(0).getLine()
             else:
                 return 0
 
-        return self.token.getLine()
+        return self.token.line
 
     line = property(getLine)
 
 
     def getCharPositionInLine(self):
-        if self.token is None or self.token.getCharPositionInLine() == -1:
+        if self.token is None or self.token.charPositionInLine == -1:
             if self.getChildCount():
                 return self.getChild(0).getCharPositionInLine()
             else:
                 return 0
 
         else:
-            return self.token.getCharPositionInLine()
+            return self.token.charPositionInLine
 
     charPositionInLine = property(getCharPositionInLine)
 
 
     def getTokenStartIndex(self):
-        if self.startIndex == -1 and self.token is not None:
-            return self.token.getTokenIndex()
+        if self.startIndex == -1 and self.token:
+            return self.token.index
 
         return self.startIndex
 
@@ -1306,8 +1306,8 @@ class CommonTree(BaseTree):
 
 
     def getTokenStopIndex(self):
-        if self.stopIndex == -1 and self.token is not None:
-            return self.token.getTokenIndex()
+        if self.stopIndex == -1 and self.token:
+            return self.token.index
 
         return self.stopIndex
 
@@ -1325,7 +1325,7 @@ class CommonTree(BaseTree):
 
         if self.children is None:
             if self.startIndex < 0 or self.stopIndex < 0:
-                self.startIndex = self.stopIndex = self.token.getTokenIndex()
+                self.startIndex = self.stopIndex = self.token.index
 
             return
 
@@ -1401,11 +1401,7 @@ class CommonErrorNode(CommonTree):
     def __init__(self, input, start, stop, exc):
         CommonTree.__init__(self, None)
 
-        if (stop is None or
-            (stop.getTokenIndex() < start.getTokenIndex() and
-             stop.getType() != EOF
-             )
-            ):
+        if (stop is None or (stop.index < start.index and stop.type != EOF)):
             # sometimes resync does not consume a token (when LT(1) is
             # in follow set.  So, stop will be 1 to left to start. adjust.
             # Also handle case where start is the first token and no token
@@ -1428,9 +1424,9 @@ class CommonErrorNode(CommonTree):
 
     def getText(self):
         if isinstance(self.start, Token):
-            i = self.start.getTokenIndex()
-            j = self.stop.getTokenIndex()
-            if self.stop.getType() == EOF:
+            i = self.start.index
+            j = self.stop.index
+            if self.stop.type == EOF:
                 j = self.input.size()
 
             badText = self.input.toString(i, j)
@@ -1560,14 +1556,14 @@ class CommonTreeAdaptor(BaseTreeAdaptor):
     def getText(self, t):
         if t is None:
             return None
-        return t.getText()
+        return t.text
 
 
     def getType(self, t):
         if t is None:
             return INVALID_TOKEN_TYPE
 
-        return t.getType()
+        return t.type
 
 
     def getToken(self, t):
@@ -2308,7 +2304,7 @@ class TreeParser(BaseRecognizer):
         return None
 
 
-    def matchAny(self, ignore): # ignore stream, copy of this.input
+    def matchAny(self):
         """
         Match '.' in tree parser has special meaning.  Skip node or
         entire tree if node has children.  If children, scan until
@@ -2357,14 +2353,12 @@ class TreeParser(BaseRecognizer):
         """
 
         return (self.getGrammarFileName() +
-                ": node from %sline %s:%s"
-                % (['', "after "][e.approximateLineInfo],
-                   e.line,
-                   e.charPositionInLine
-                   )
-                )
+                ": node from {}line {}:{}".format(
+                    "after " if e.approximateLineInfo else '',
+                    e.line,
+                    e.charPositionInLine))
 
-    def getErrorMessage(self, e, tokenNames):
+    def getErrorMessage(self, e):
         """
         Tree parsers parse nodes they usually have a token object as
         payload. Set the exception token and do the default behavior.
@@ -2379,7 +2373,7 @@ class TreeParser(BaseRecognizer):
                     text=adaptor.getText(e.node)
                     )
 
-        return BaseRecognizer.getErrorMessage(self, e, tokenNames)
+        return BaseRecognizer.getErrorMessage(self, e)
 
 
     def traceIn(self, ruleName, ruleIndex):
@@ -2499,7 +2493,7 @@ class TreeIterator(object):
         return self.adaptor.getParent(self.tree) is not None
 
 
-    def next(self):
+    def __next__(self):
         if not self.has_next():
             raise StopIteration
 

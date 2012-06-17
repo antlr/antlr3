@@ -32,9 +32,11 @@
 
 
 import sys
-import optparse
+import argparse
 
-import antlr3
+from .streams import ANTLRStringStream, ANTLRFileStream, \
+     ANTLRInputStream, CommonTokenStream
+from .tree import CommonTreeNodeStream
 
 
 class _Main(object):
@@ -44,100 +46,60 @@ class _Main(object):
         self.stderr = sys.stderr
 
 
-    def parseOptions(self, argv):
-        optParser = optparse.OptionParser()
-        optParser.add_option(
-            "--encoding",
-            action="store",
-            type="string",
-            dest="encoding"
-            )
-        optParser.add_option(
-            "--input",
-            action="store",
-            type="string",
-            dest="input"
-            )
-        optParser.add_option(
-            "--interactive", "-i",
-            action="store_true",
-            dest="interactive"
-            )
-        optParser.add_option(
-            "--no-output",
-            action="store_true",
-            dest="no_output"
-            )
-        optParser.add_option(
-            "--profile",
-            action="store_true",
-            dest="profile"
-            )
-        optParser.add_option(
-            "--hotshot",
-            action="store_true",
-            dest="hotshot"
-            )
-        optParser.add_option(
-            "--port",
-            type="int",
-            dest="port",
-            default=None
-            )
-        optParser.add_option(
-            "--debug-socket",
-            action='store_true',
-            dest="debug_socket",
-            default=None
-            )
+    def parseArgs(self, argv):
+        argParser = argparse.ArgumentParser()
+        argParser.add_argument("--input")
+        argParser.add_argument("--interactive", "-i", action="store_true")
+        argParser.add_argument("--no-output", action="store_true")
+        argParser.add_argument("--profile", action="store_true")
+        argParser.add_argument("--hotshot", action="store_true")
+        argParser.add_argument("--port", type=int)
+        argParser.add_argument("--debug-socket", action='store_true')
+        argParser.add_argument("file", nargs='?')
 
-        self.setupOptions(optParser)
+        self.setupArgs(argParser)
 
-        return optParser.parse_args(argv[1:])
+        return argParser.parse_args(argv[1:])
 
 
-    def setupOptions(self, optParser):
+    def setupArgs(self, argParser):
         pass
 
 
     def execute(self, argv):
-        options, args = self.parseOptions(argv)
+        args = self.parseArgs(argv)
 
-        self.setUp(options)
+        self.setUp(args)
 
-        if options.interactive:
+        if args.interactive:
             while True:
                 try:
-                    input = raw_input(">>> ")
+                    input_str = input(">>> ")
                 except (EOFError, KeyboardInterrupt):
                     self.stdout.write("\nBye.\n")
                     break
 
-                inStream = antlr3.ANTLRStringStream(input)
-                self.parseStream(options, inStream)
+                inStream = ANTLRStringStream(input_str)
+                self.parseStream(args, inStream)
 
         else:
-            if options.input is not None:
-                inStream = antlr3.ANTLRStringStream(options.input)
+            if args.input:
+                inStream = ANTLRStringStream(args.input)
 
-            elif len(args) == 1 and args[0] != '-':
-                inStream = antlr3.ANTLRFileStream(
-                    args[0], encoding=options.encoding
-                    )
+            elif args.file and args.file != '-':
+                inStream = ANTLRFileStream(args.file)
 
             else:
-                inStream = antlr3.ANTLRInputStream(
-                    self.stdin, encoding=options.encoding
-                    )
+                inStream = ANTLRInputStream(self.stdin)
 
-            if options.profile:
+            if args.profile:
                 try:
                     import cProfile as profile
                 except ImportError:
                     import profile
 
                 profile.runctx(
-                    'self.parseStream(options, inStream)',
+                    'self.parseStream(args, inStream)',
                     globals(),
                     locals(),
                     'profile.dat'
@@ -149,157 +111,124 @@ class _Main(object):
                 stats.sort_stats('time')
                 stats.print_stats(100)
 
-            elif options.hotshot:
+            elif args.hotshot:
                 import hotshot
 
                 profiler = hotshot.Profile('hotshot.dat')
                 profiler.runctx(
-                    'self.parseStream(options, inStream)',
+                    'self.parseStream(args, inStream)',
                     globals(),
                     locals()
                     )
 
             else:
-                self.parseStream(options, inStream)
+                self.parseStream(args, inStream)
 
 
-    def setUp(self, options):
+    def setUp(self, args):
         pass
 
 
-    def parseStream(self, options, inStream):
+    def parseStream(self, args, inStream):
         raise NotImplementedError
 
 
-    def write(self, options, text):
-        if not options.no_output:
+    def write(self, args, text):
+        if not args.no_output:
             self.stdout.write(text)
 
 
-    def writeln(self, options, text):
-        self.write(options, text + '\n')
+    def writeln(self, args, text):
+        self.write(args, text + '\n')
 
 
 class LexerMain(_Main):
     def __init__(self, lexerClass):
-        _Main.__init__(self)
+        super().__init__()
 
         self.lexerClass = lexerClass
 
 
-    def parseStream(self, options, inStream):
+    def parseStream(self, args, inStream):
         lexer = self.lexerClass(inStream)
         for token in lexer:
-            self.writeln(options, str(token))
+            self.writeln(args, str(token))
 
 
 class ParserMain(_Main):
     def __init__(self, lexerClassName, parserClass):
-        _Main.__init__(self)
+        super().__init__()
 
         self.lexerClassName = lexerClassName
         self.lexerClass = None
         self.parserClass = parserClass
 
 
-    def setupOptions(self, optParser):
-        optParser.add_option(
-            "--lexer",
-            action="store",
-            type="string",
-            dest="lexerClass",
-            default=self.lexerClassName
-            )
-        optParser.add_option(
-            "--rule",
-            action="store",
-            type="string",
-            dest="parserRule"
-            )
+    def setupArgs(self, argParser):
+        argParser.add_argument("--lexer", dest="lexerClass",
+                               default=self.lexerClassName)
+        argParser.add_argument("--rule", dest="parserRule")
 
 
-    def setUp(self, options):
-        lexerMod = __import__(options.lexerClass)
-        self.lexerClass = getattr(lexerMod, options.lexerClass)
+    def setUp(self, args):
+        lexerMod = __import__(args.lexerClass)
+        self.lexerClass = getattr(lexerMod, args.lexerClass)
 
 
-    def parseStream(self, options, inStream):
+    def parseStream(self, args, inStream):
         kwargs = {}
-        if options.port is not None:
-            kwargs['port'] = options.port
-        if options.debug_socket is not None:
+        if args.port is not None:
+            kwargs['port'] = args.port
+        if args.debug_socket:
             kwargs['debug_socket'] = sys.stderr
 
         lexer = self.lexerClass(inStream)
-        tokenStream = antlr3.CommonTokenStream(lexer)
+        tokenStream = CommonTokenStream(lexer)
         parser = self.parserClass(tokenStream, **kwargs)
-        result = getattr(parser, options.parserRule)()
-        if result is not None:
-            if hasattr(result, 'tree') and result.tree is not None:
-                self.writeln(options, result.tree.toStringTree())
+        result = getattr(parser, args.parserRule)()
+        if result:
+            if hasattr(result, 'tree') and result.tree:
+                self.writeln(args, result.tree.toStringTree())
             else:
-                self.writeln(options, repr(result))
+                self.writeln(args, repr(result))
 
 
 class WalkerMain(_Main):
     def __init__(self, walkerClass):
-        _Main.__init__(self)
+        super().__init__()
 
         self.lexerClass = None
         self.parserClass = None
         self.walkerClass = walkerClass
 
 
-    def setupOptions(self, optParser):
-        optParser.add_option(
-            "--lexer",
-            action="store",
-            type="string",
-            dest="lexerClass",
-            default=None
-            )
-        optParser.add_option(
-            "--parser",
-            action="store",
-            type="string",
-            dest="parserClass",
-            default=None
-            )
-        optParser.add_option(
-            "--parser-rule",
-            action="store",
-            type="string",
-            dest="parserRule",
-            default=None
-            )
-        optParser.add_option(
-            "--rule",
-            action="store",
-            type="string",
-            dest="walkerRule"
-            )
+    def setupArgs(self, argParser):
+        argParser.add_argument("--lexer", dest="lexerClass")
+        argParser.add_argument("--parser", dest="parserClass")
+        argParser.add_argument("--parser-rule", dest="parserRule")
+        argParser.add_argument("--rule", dest="walkerRule")
 
 
-    def setUp(self, options):
-        lexerMod = __import__(options.lexerClass)
-        self.lexerClass = getattr(lexerMod, options.lexerClass)
-        parserMod = __import__(options.parserClass)
-        self.parserClass = getattr(parserMod, options.parserClass)
+    def setUp(self, args):
+        lexerMod = __import__(args.lexerClass)
+        self.lexerClass = getattr(lexerMod, args.lexerClass)
+        parserMod = __import__(args.parserClass)
+        self.parserClass = getattr(parserMod, args.parserClass)
 
 
-    def parseStream(self, options, inStream):
+    def parseStream(self, args, inStream):
         lexer = self.lexerClass(inStream)
-        tokenStream = antlr3.CommonTokenStream(lexer)
+        tokenStream = CommonTokenStream(lexer)
         parser = self.parserClass(tokenStream)
-        result = getattr(parser, options.parserRule)()
-        if result is not None:
+        result = getattr(parser, args.parserRule)()
+        if result:
             assert hasattr(result, 'tree'), "Parser did not return an AST"
-            nodeStream = antlr3.tree.CommonTreeNodeStream(result.tree)
+            nodeStream = CommonTreeNodeStream(result.tree)
             nodeStream.setTokenStream(tokenStream)
             walker = self.walkerClass(nodeStream)
-            result = getattr(walker, options.walkerRule)()
-            if result is not None:
+            result = getattr(walker, args.walkerRule)()
+            if result:
                 if hasattr(result, 'tree'):
-                    self.writeln(options, result.tree.toStringTree())
+                    self.writeln(args, result.tree.toStringTree())
                 else:
-                    self.writeln(options, repr(result))
+                    self.writeln(args, repr(result))

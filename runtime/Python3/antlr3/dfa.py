@@ -28,10 +28,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# end[licensc]
+# end[licence]
 
-from antlr3.constants import EOF
-from antlr3.exceptions import NoViableAltException, BacktrackingFailed
+from .constants import EOF
+from .exceptions import NoViableAltException, BacktrackingFailed
 
 
 class DFA(object):
@@ -64,19 +64,16 @@ class DFA(object):
     def predict(self, input):
         """
         From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	"""
+        using this DFA (representing the covering regular approximation
+        to the underlying CFL).  Return an alternative number 1..n.  Throw
+        an exception upon error.
+        """
         mark = input.mark()
         s = 0 # we always start at s0
         try:
-            for _ in xrange(50000):
-                #print "***Current state = %d" % s
-                
+            for _ in range(50000):
                 specialState = self.special[s]
                 if specialState >= 0:
-                    #print "is special"
                     s = self.specialStateTransition(specialState, input)
                     if s == -1:
                         self.noViableAlt(s, input)
@@ -85,29 +82,21 @@ class DFA(object):
                     continue
 
                 if self.accept[s] >= 1:
-                    #print "accept state for alt %d" % self.accept[s]
                     return self.accept[s]
 
                 # look for a normal char transition
                 c = input.LA(1)
 
-                #print "LA = %d (%r)" % (c, unichr(c) if c >= 0 else 'EOF')
-                #print "range = %d..%d" % (self.min[s], self.max[s])
-
                 if c >= self.min[s] and c <= self.max[s]:
                     # move to next state
                     snext = self.transition[s][c-self.min[s]]
-                    #print "in range, next state = %d" % snext
                     
                     if snext < 0:
-                        #print "not a normal transition"
                         # was in range but not a normal transition
                         # must check EOT, which is like the else clause.
                         # eot[s]>=0 indicates that an EOT edge goes to another
                         # state.
                         if self.eot[s] >= 0: # EOT Transition to accept state?
-                            #print "EOT trans to accept state %d" % self.eot[s]
-                            
                             s = self.eot[s]
                             input.consume()
                             # TODO: I had this as return accept[eot[s]]
@@ -117,7 +106,6 @@ class DFA(object):
                             # target?
                             continue
 
-                        #print "no viable alt"
                         self.noViableAlt(s, input)
                         return 0
 
@@ -126,16 +114,12 @@ class DFA(object):
                     continue
 
                 if self.eot[s] >= 0:
-                    #print "EOT to %d" % self.eot[s]
-                    
                     s = self.eot[s]
                     input.consume()
                     continue
 
                 # EOF Transition to accept state?
                 if c == EOF and self.eof[s] >= 0:
-                    #print "EOF Transition to accept state %d" \
-                    #  % self.accept[self.eof[s]]
                     return self.accept[self.eof[s]]
 
                 # not in range and not EOF/EOT, must be invalid symbol
@@ -181,6 +165,7 @@ class DFA(object):
 ##         return 0
 
 
+    @classmethod
     def unpack(cls, string):
         """@brief Unpack the runlength encoded table data.
 
@@ -199,15 +184,12 @@ class DFA(object):
         """
         
         ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        for i in range(0, len(string) - 1, 2):
+            (n, v) = ord(string[i]), ord(string[i + 1])
 
-            # Is there a bitwise operation to do this?
             if v == 0xFFFF:
                 v = -1
 
             ret += [v] * n
 
         return ret
-    
-    unpack = classmethod(unpack)
