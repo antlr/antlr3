@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 
+from io import StringIO
 import os
 import unittest
-from StringIO import StringIO
 
 from antlr3.tree import (CommonTreeNodeStream, CommonTree, CommonTreeAdaptor,
                          TreeParser, TreeVisitor, TreeIterator)
@@ -27,27 +26,25 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = self.newStream(t)
         expecting = "101"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testTwoChildrenOfNilRoot(self):
         class V(CommonTree):
-            def __init__(self, token=None, ttype=None, x=None):
-                if x is not None:
-                    self.x = x
-
-                if ttype is not None and token is None:
-                    self.token = CommonToken(type=ttype)
-
-                if token is not None:
+            def __init__(self, token=None, ttype=None):
+                if token:
                     self.token = token
+                    
+                elif ttype:
+                    self.token = CommonToken(type=ttype)
+                    
 
             def __str__(self):
-                if self.token is not None:
+                if self.token:
                     txt = self.token.text
                 else:
                     txt = ""
@@ -55,15 +52,15 @@ class TestTreeNodeStream(unittest.TestCase):
                 txt += "<V>"
                 return txt
 
-        root_0 = self.adaptor.nil();
-        t = V(ttype=101, x=2)
+        root_0 = self.adaptor.nil()
+        t = V(ttype=101)
         u = V(token=CommonToken(type=102, text="102"))
         self.adaptor.addChild(root_0, t)
         self.adaptor.addChild(root_0, u)
-        self.assert_(root_0.parent is None)
-        self.assertEquals(-1, root_0.childIndex)
-        self.assertEquals(0, t.childIndex)
-        self.assertEquals(1, u.childIndex)
+        self.assertIsNone(root_0.parent)
+        self.assertEqual(-1, root_0.childIndex)
+        self.assertEqual(0, t.childIndex)
+        self.assertEqual(1, u.childIndex)
 
 
     def test4Nodes(self):
@@ -76,11 +73,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = self.newStream(t)
         expecting = "101 102 103 104"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101 2 102 2 103 3 104 3"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testList(self):
@@ -99,11 +96,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = CommonTreeNodeStream(root)
         expecting = "101 102 103 104 105"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101 2 102 2 103 3 104 3 105"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testFlatList(self):
@@ -116,11 +113,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = CommonTreeNodeStream(root)
         expecting = "101 102 103"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101 102 103"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testListWithOneNode(self):
@@ -131,11 +128,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = CommonTreeNodeStream(root)
         expecting = "101"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testAoverB(self):
@@ -145,11 +142,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream = self.newStream(t)
         expecting = "101 102"
         found = self.toNodesOnlyString(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         expecting = "101 2 102 3"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testLT(self):
@@ -160,17 +157,17 @@ class TestTreeNodeStream(unittest.TestCase):
         t.addChild(CommonTree(CommonToken(104)))
 
         stream = self.newStream(t)
-        self.failUnlessEqual(101, stream.LT(1).getType())
-        self.failUnlessEqual(DOWN, stream.LT(2).getType())
-        self.failUnlessEqual(102, stream.LT(3).getType())
-        self.failUnlessEqual(DOWN, stream.LT(4).getType())
-        self.failUnlessEqual(103, stream.LT(5).getType())
-        self.failUnlessEqual(UP, stream.LT(6).getType())
-        self.failUnlessEqual(104, stream.LT(7).getType())
-        self.failUnlessEqual(UP, stream.LT(8).getType())
-        self.failUnlessEqual(EOF, stream.LT(9).getType())
+        self.assertEqual(101, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(2).getType())
+        self.assertEqual(102, stream.LT(3).getType())
+        self.assertEqual(DOWN, stream.LT(4).getType())
+        self.assertEqual(103, stream.LT(5).getType())
+        self.assertEqual(UP, stream.LT(6).getType())
+        self.assertEqual(104, stream.LT(7).getType())
+        self.assertEqual(UP, stream.LT(8).getType())
+        self.assertEqual(EOF, stream.LT(9).getType())
         # check way ahead
-        self.failUnlessEqual(EOF, stream.LT(100).getType())
+        self.assertEqual(EOF, stream.LT(100).getType())
 
 
     def testMarkRewindEntire(self):
@@ -193,8 +190,8 @@ class TestTreeNodeStream(unittest.TestCase):
             stream.LT(1)
             stream.consume()
 
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
-        self.failUnlessEqual(UP, stream.LT(-1).getType())  #TODO: remove?
+        self.assertEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(-1).getType())  #TODO: remove?
         stream.rewind(m)      # REWIND
 
         # consume til end again :)
@@ -202,8 +199,8 @@ class TestTreeNodeStream(unittest.TestCase):
             stream.LT(1)
             stream.consume()
 
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
-        self.failUnlessEqual(UP, stream.LT(-1).getType())  #TODO: remove?
+        self.assertEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(-1).getType())  #TODO: remove?
 
 
     def testMarkRewindInMiddle(self):
@@ -225,7 +222,7 @@ class TestTreeNodeStream(unittest.TestCase):
             #System.out.println(tream.LT(1).getType())
             stream.consume()
 
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         m = stream.mark() # MARK
         stream.consume() # consume 107
         stream.consume() # consume UP
@@ -233,21 +230,21 @@ class TestTreeNodeStream(unittest.TestCase):
         stream.consume() # consume 104
         stream.rewind(m)      # REWIND
 
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(104, stream.LT(1).getType())
+        self.assertEqual(104, stream.LT(1).getType())
         stream.consume()
         # now we're past rewind position
-        self.failUnlessEqual(105, stream.LT(1).getType())
+        self.assertEqual(105, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
-        self.failUnlessEqual(UP, stream.LT(-1).getType())
+        self.assertEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(-1).getType())
 
 
     def testMarkRewindNested(self):
@@ -274,19 +271,19 @@ class TestTreeNodeStream(unittest.TestCase):
         stream.consume() # consume 103
         stream.consume() # consume 106
         stream.rewind(m2)      # REWIND to 102
-        self.failUnlessEqual(102, stream.LT(1).getType())
+        self.assertEqual(102, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume()
         # stop at 103 and rewind to start
         stream.rewind(m) # REWIND to 101
-        self.failUnlessEqual(101, stream.LT(1).getType())
+        self.assertEqual(101, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(102, stream.LT(1).getType())
+        self.assertEqual(102, stream.LT(1).getType())
         stream.consume()
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
 
 
     def testSeek(self):
@@ -308,11 +305,11 @@ class TestTreeNodeStream(unittest.TestCase):
         stream.consume() # consume DN
         stream.consume() # consume 102
         stream.seek(7)   # seek to 107
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         stream.consume() # consume 107
         stream.consume() # consume UP
         stream.consume() # consume UP
-        self.failUnlessEqual(104, stream.LT(1).getType())
+        self.assertEqual(104, stream.LT(1).getType())
 
 
     def testSeekFromStart(self):
@@ -331,11 +328,11 @@ class TestTreeNodeStream(unittest.TestCase):
 
         stream = CommonTreeNodeStream(r0)
         stream.seek(7)   # seek to 107
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         stream.consume() # consume 107
         stream.consume() # consume UP
         stream.consume() # consume UP
-        self.failUnlessEqual(104, stream.LT(1).getType())
+        self.assertEqual(104, stream.LT(1).getType())
 
 
     def testReset(self):
@@ -356,7 +353,7 @@ class TestTreeNodeStream(unittest.TestCase):
         v1 = self.toNodesOnlyString(stream) # scan all
         stream.reset()
         v2 = self.toNodesOnlyString(stream) # scan all
-        self.assertEquals(v1, v2)
+        self.assertEqual(v1, v2)
 
 
     def testIterator(self):
@@ -381,9 +378,9 @@ class TestTreeNodeStream(unittest.TestCase):
     def toNodesOnlyString(self, nodes):
         buf = []
         for i in range(nodes.size()):
-            t = nodes.LT(i+1)
+            t = nodes.LT(i + 1)
             type = nodes.getTreeAdaptor().getType(t)
-            if not (type==DOWN or type==UP):
+            if type not in {DOWN, UP}:
                 buf.append(str(type))
 
         return ' '.join(buf)
@@ -412,7 +409,7 @@ class TestCommonTreeNodeStream(unittest.TestCase):
         stream = CommonTreeNodeStream(r0)
         expecting = "101 2 102 2 103 3 104 2 105 3 106 2 107 3 108 109 3"
         found = str(stream)
-        self.failUnlessEqual(expecting, found)
+        self.assertEqual(expecting, found)
 
         # Assume we want to hit node 107 and then "call 102" then return
 
@@ -422,18 +419,18 @@ class TestCommonTreeNodeStream(unittest.TestCase):
             stream.consume()
 
         # CALL 102
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         stream.push(indexOf102)
-        self.failUnlessEqual(102, stream.LT(1).getType())
+        self.assertEqual(102, stream.LT(1).getType())
         stream.consume() # consume 102
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume() # consume DN
-        self.failUnlessEqual(103, stream.LT(1).getType())
+        self.assertEqual(103, stream.LT(1).getType())
         stream.consume() # consume 103
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         # RETURN
         stream.pop()
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
 
 
     def testNestedPushPop(self):
@@ -463,33 +460,33 @@ class TestCommonTreeNodeStream(unittest.TestCase):
         for _ in range(indexOf107): # consume til 107 node
             stream.consume()
 
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
         # CALL 102
         stream.push(indexOf102)
-        self.failUnlessEqual(102, stream.LT(1).getType())
+        self.assertEqual(102, stream.LT(1).getType())
         stream.consume() # consume 102
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume() # consume DN
-        self.failUnlessEqual(103, stream.LT(1).getType())
+        self.assertEqual(103, stream.LT(1).getType())
         stream.consume() # consume 103
 
         # CALL 104
         indexOf104 = 6
         stream.push(indexOf104)
-        self.failUnlessEqual(104, stream.LT(1).getType())
+        self.assertEqual(104, stream.LT(1).getType())
         stream.consume() # consume 102
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume() # consume DN
-        self.failUnlessEqual(105, stream.LT(1).getType())
+        self.assertEqual(105, stream.LT(1).getType())
         stream.consume() # consume 103
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         # RETURN (to UP node in 102 subtree)
         stream.pop()
 
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         # RETURN (to empty stack)
         stream.pop()
-        self.failUnlessEqual(107, stream.LT(1).getType())
+        self.assertEqual(107, stream.LT(1).getType())
 
 
     def testPushPopFromEOF(self):
@@ -516,33 +513,33 @@ class TestCommonTreeNodeStream(unittest.TestCase):
 
         indexOf102 = 2
         indexOf104 = 6
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(EOF, stream.LT(1).getType())
 
         # CALL 102
         stream.push(indexOf102)
-        self.failUnlessEqual(102, stream.LT(1).getType())
+        self.assertEqual(102, stream.LT(1).getType())
         stream.consume() # consume 102
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume() # consume DN
-        self.failUnlessEqual(103, stream.LT(1).getType())
+        self.assertEqual(103, stream.LT(1).getType())
         stream.consume() # consume 103
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         # RETURN (to empty stack)
         stream.pop()
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(EOF, stream.LT(1).getType())
 
         # CALL 104
         stream.push(indexOf104)
-        self.failUnlessEqual(104, stream.LT(1).getType())
+        self.assertEqual(104, stream.LT(1).getType())
         stream.consume() # consume 102
-        self.failUnlessEqual(DOWN, stream.LT(1).getType())
+        self.assertEqual(DOWN, stream.LT(1).getType())
         stream.consume() # consume DN
-        self.failUnlessEqual(105, stream.LT(1).getType())
+        self.assertEqual(105, stream.LT(1).getType())
         stream.consume() # consume 103
-        self.failUnlessEqual(UP, stream.LT(1).getType())
+        self.assertEqual(UP, stream.LT(1).getType())
         # RETURN (to empty stack)
         stream.pop()
-        self.failUnlessEqual(EOF, stream.LT(1).getType())
+        self.assertEqual(EOF, stream.LT(1).getType())
 
 
 class TestCommonTree(unittest.TestCase):
@@ -556,8 +553,8 @@ class TestCommonTree(unittest.TestCase):
 
     def testSingleNode(self):
         t = CommonTree(CommonToken(101))
-        self.failUnless(t.parent is None)
-        self.failUnlessEqual(-1, t.childIndex)
+        self.assertIsNone(t.parent)
+        self.assertEqual(-1, t.childIndex)
 
 
     def test4Nodes(self):
@@ -567,8 +564,8 @@ class TestCommonTree(unittest.TestCase):
         r0.getChild(0).addChild(CommonTree(CommonToken(103)))
         r0.addChild(CommonTree(CommonToken(104)))
 
-        self.failUnless(r0.parent is None)
-        self.failUnlessEqual(-1, r0.childIndex)
+        self.assertIsNone(r0.parent)
+        self.assertEqual(-1, r0.childIndex)
 
 
     def testList(self):
@@ -581,14 +578,14 @@ class TestCommonTree(unittest.TestCase):
         c2=CommonTree(CommonToken(103))
         r0.addChild(c2)
 
-        self.failUnless(r0.parent is None)
-        self.failUnlessEqual(-1, r0.childIndex)
-        self.failUnlessEqual(r0, c0.parent)
-        self.failUnlessEqual(0, c0.childIndex)
-        self.failUnlessEqual(r0, c1.parent)
-        self.failUnlessEqual(1, c1.childIndex)
-        self.failUnlessEqual(r0, c2.parent)
-        self.failUnlessEqual(2, c2.childIndex)
+        self.assertIsNone(r0.parent)
+        self.assertEqual(-1, r0.childIndex)
+        self.assertEqual(r0, c0.parent)
+        self.assertEqual(0, c0.childIndex)
+        self.assertEqual(r0, c1.parent)
+        self.assertEqual(1, c1.childIndex)
+        self.assertEqual(r0, c2.parent)
+        self.assertEqual(2, c2.childIndex)
 
 
     def testList2(self):
@@ -607,15 +604,15 @@ class TestCommonTree(unittest.TestCase):
 
         root.addChild(r0)
 
-        self.failUnless(root.parent is None)
-        self.failUnlessEqual(-1, root.childIndex)
+        self.assertIsNone(root.parent)
+        self.assertEqual(-1, root.childIndex)
         # check children of root all point at root
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(0, c0.childIndex)
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(1, c1.childIndex)
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(2, c2.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(0, c0.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(1, c1.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(2, c2.childIndex)
 
 
     def testAddListToExistChildren(self):
@@ -635,15 +632,15 @@ class TestCommonTree(unittest.TestCase):
 
         root.addChild(r0)
 
-        self.failUnless(root.parent is None)
-        self.failUnlessEqual(-1, root.childIndex)
+        self.assertIsNone(root.parent)
+        self.assertEqual(-1, root.childIndex)
         # check children of root all point at root
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(1, c0.childIndex)
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(2, c1.childIndex)
-        self.failUnlessEqual(root, c0.parent)
-        self.failUnlessEqual(3, c2.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(1, c0.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(2, c1.childIndex)
+        self.assertEqual(root, c0.parent)
+        self.assertEqual(3, c2.childIndex)
 
 
     def testDupTree(self):
@@ -660,8 +657,8 @@ class TestCommonTree(unittest.TestCase):
 
         dup = self.adaptor.dupTree(r0)
 
-        self.failUnless(dup.parent is None)
-        self.failUnlessEqual(-1, dup.childIndex)
+        self.assertIsNone(dup.parent)
+        self.assertEqual(-1, dup.childIndex)
         dup.sanityCheckParentAndChildIndexes()
 
 
@@ -736,13 +733,7 @@ class TestCommonTree(unittest.TestCase):
         t = CommonTree(CommonToken(101))
         newChild = CommonTree(CommonToken(5))
         error = False
-        try:
-        	t.replaceChildren(0, 0, newChild)
-
-        except IndexError:
-        	error = True
-
-        self.failUnless(error)
+        self.assertRaises(IndexError, t.replaceChildren, 0, 0, newChild)
 
 
     def testReplaceWithOneChildren(self):
@@ -754,7 +745,7 @@ class TestCommonTree(unittest.TestCase):
         newChild = CommonTree(CommonToken(99, text="c"))
         t.replaceChildren(0, 0, newChild)
         expecting = "(a c)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -767,7 +758,7 @@ class TestCommonTree(unittest.TestCase):
         newChild = CommonTree(CommonToken(99, text="x"))
         t.replaceChildren(1, 1, newChild)
         expecting = "(a b x d)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -780,7 +771,7 @@ class TestCommonTree(unittest.TestCase):
         newChild = CommonTree(CommonToken(99, text="x"))
         t.replaceChildren(0, 0, newChild)
         expecting = "(a x c d)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -793,7 +784,7 @@ class TestCommonTree(unittest.TestCase):
         newChild = CommonTree(CommonToken(99, text="x"))
         t.replaceChildren(2, 2, newChild)
         expecting = "(a b c x)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -809,7 +800,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(0, 0, newChildren)
         expecting = "(a x y c d)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -825,7 +816,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(2, 2, newChildren)
         expecting = "(a b c x y)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -841,7 +832,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(1, 1, newChildren)
         expecting = "(a b x y d)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -855,7 +846,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(0, 1, newChild)
         expecting = "(a x d)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -869,7 +860,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(1, 2, newChild)
         expecting = "(a b x)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -883,7 +874,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(0, 2, newChild)
         expecting = "(a x)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -899,7 +890,7 @@ class TestCommonTree(unittest.TestCase):
 
         t.replaceChildren(0, 2, newChildren)
         expecting = "(a x y)"
-        self.failUnlessEqual(expecting, t.toStringTree())
+        self.assertEqual(expecting, t.toStringTree())
         t.sanityCheckParentAndChildIndexes()
 
 
@@ -927,7 +918,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testNoParent(self):
@@ -946,7 +937,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = False
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testParentWithWildcard(self):
@@ -965,7 +956,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testWildcardAtStartIgnored(self):
@@ -984,7 +975,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "...VEC")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testWildcardInBetween(self):
@@ -1003,7 +994,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT...VEC")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testLotsOfWildcards(self):
@@ -1022,7 +1013,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "... PRINT ... VEC ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testDeep(self):
@@ -1041,7 +1032,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testDeepAndFindRoot(self):
@@ -1060,7 +1051,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testDeepAndFindRoot2(self):
@@ -1079,7 +1070,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT ... VEC ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testChain(self):
@@ -1098,7 +1089,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = True
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT MULT VEC MULT")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     ## TEST INVALID CONTEXTS
@@ -1119,7 +1110,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = False
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testMismatch(self):
@@ -1139,7 +1130,7 @@ class TestTreeContext(unittest.TestCase):
         expecting = False
         ## missing MULT
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT VEC MULT")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testMismatch2(self):
@@ -1158,7 +1149,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = False
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT VEC ...")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testMismatch3(self):
@@ -1177,7 +1168,7 @@ class TestTreeContext(unittest.TestCase):
 
         expecting = False
         found = TreeParser._inContext(adaptor, self.tokenNames, node, "VEC ... VEC MULT")
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testDoubleEtc(self):
@@ -1194,13 +1185,9 @@ class TestTreeContext(unittest.TestCase):
         self.assertTrue(valid)
         node = labels.get("x")
 
-        try:
-            TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT ... ... VEC")
-            self.fail()
-        except ValueError, exc:
-            expecting = "invalid syntax: ... ..."
-            found = str(exc)
-            self.assertEquals(expecting, found)
+        self.assertRaisesRegex(
+            ValueError, r'invalid syntax: \.\.\. \.\.\.',
+            TreeParser._inContext, adaptor, self.tokenNames, node, "PRINT ... ... VEC")
 
 
     def testDotDot(self):
@@ -1217,13 +1204,9 @@ class TestTreeContext(unittest.TestCase):
         self.assertTrue(valid)
         node = labels.get("x")
 
-        try:
-            TreeParser._inContext(adaptor, self.tokenNames, node, "PRINT .. VEC")
-            self.fail()
-        except ValueError, exc:
-            expecting = "invalid syntax: .."
-            found = str(exc)
-            self.assertEquals(expecting, found)
+        self.assertRaisesRegex(
+            ValueError, r'invalid syntax: \.\.',
+            TreeParser._inContext, adaptor, self.tokenNames, node, "PRINT .. VEC")
 
 
 class TestTreeVisitor(unittest.TestCase):
@@ -1242,10 +1225,10 @@ class TestTreeVisitor(unittest.TestCase):
 
         found = []
         def pre(t):
-            found.append("pre(%s)" % t)
+            found.append("pre({})".format(t))
             return t
         def post(t):
-            found.append("post(%s)" % t)
+            found.append("post({})".format(t))
             return t
 
         visitor = TreeVisitor(adaptor)
@@ -1256,7 +1239,7 @@ class TestTreeVisitor(unittest.TestCase):
                       "post(1)", "post(MULT)", "pre(2)", "post(2)", "pre(3)",
                       "post(3)", "post(VEC)", "post(MULT)", "post(PRINT)" ]
 
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
 class TestTreeIterator(unittest.TestCase):
@@ -1271,7 +1254,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testFlatAB(self):
@@ -1281,7 +1264,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "nil DOWN A B UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testAB(self):
@@ -1291,7 +1274,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A DOWN B UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testABC(self):
@@ -1301,7 +1284,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A DOWN B C UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testVerticalList(self):
@@ -1311,7 +1294,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A DOWN B DOWN C UP UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testComplex(self):
@@ -1321,7 +1304,7 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def testReset(self):
@@ -1331,12 +1314,12 @@ class TestTreeIterator(unittest.TestCase):
         it = TreeIterator(t)
         expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
         it.reset()
         expecting = "A DOWN B DOWN C DOWN D E UP F UP G UP EOF"
         found = self.toString(it)
-        self.assertEquals(expecting, found)
+        self.assertEqual(expecting, found)
 
 
     def toString(self, it):

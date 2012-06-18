@@ -42,10 +42,10 @@ class TestDFA(unittest.TestCase):
     def testUnpack(self):
         """DFA.unpack()"""
 
-        self.failUnlessEqual(
+        self.assertEqual(
             antlr3.DFA.unpack(
-            u"\1\3\1\4\2\uffff\1\5\22\uffff\1\2\31\uffff\1\6\6\uffff"
-            u"\32\6\4\uffff\1\6\1\uffff\32\6"
+            "\1\3\1\4\2\uffff\1\5\22\uffff\1\2\31\uffff\1\6\6\uffff"
+            "\32\6\4\uffff\1\6\1\uffff\32\6"
             ),
             [ 3, 4, -1, -1, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
               -1, -1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1,

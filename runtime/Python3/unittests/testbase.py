@@ -3,8 +3,8 @@ import unittest
 class BrokenTest(unittest.TestCase.failureException):
     def __repr__(self):
         name, reason = self.args
-        return '%s: %s: %s works now' % (
-            (self.__class__.__name__, name, reason))
+        return '{}: {}: {} works now'.format(
+            self.__class__.__name__, name, reason)
 
 
 def broken(reason, *exceptions):
