@@ -1,6 +1,6 @@
 lexer grammar t019lexer;
 options {
-    language=Python;
+    language=Python3;
     filter=true;
 }
 

@@ -9,7 +9,7 @@ class T(testbase.ANTLRTest):
     def parserClass(self, base):
         class TParser(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self._output = ""
 
@@ -36,7 +36,7 @@ class T(testbase.ANTLRTest):
     def lexerClass(self, base):
         class TLexer(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self._output = ""
 
@@ -69,7 +69,7 @@ class T(testbase.ANTLRTest):
         parser = parserCls(tStream)
         r = getattr(parser, grammarEntry)()
 
-        if r is not None:
+        if r:
             return r.tree.toStringTree()
 
         return ""
@@ -89,7 +89,7 @@ class T(testbase.ANTLRTest):
         walker = walkerCls(nodes)
         r = getattr(walker, treeEntry)()
 
-        if r is not None:
+        if r:
             return r.tree.toStringTree()
 
         return ""
@@ -102,7 +102,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T1;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -122,7 +122,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenCommonTree(self):
@@ -130,7 +130,7 @@ class T(testbase.ANTLRTest):
             r'''
             grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID<CommonTree> ;
@@ -142,7 +142,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             input="a")
 
-        self.failUnlessEqual("a", found)
+        self.assertEqual("a", found)
 
 
     def testTokenWithQualifiedType(self):
@@ -150,7 +150,7 @@ class T(testbase.ANTLRTest):
             r'''
             grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             @members {
@@ -169,7 +169,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testNamedType(self):
@@ -177,7 +177,7 @@ class T(testbase.ANTLRTest):
             r"""
             grammar $T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             @header {
@@ -192,7 +192,7 @@ class T(testbase.ANTLRTest):
             """)
 
         found = self.execParser(grammar, 'a', input="a")
-        self.assertEquals("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenWithLabel(self):
@@ -200,7 +200,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T2;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -220,7 +220,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenWithListLabel(self):
@@ -228,7 +228,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T3;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -248,7 +248,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenRoot(self):
@@ -256,7 +256,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T4;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -276,7 +276,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenRootWithListLabel(self):
@@ -284,7 +284,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T5;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -304,7 +304,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testString(self):
@@ -312,7 +312,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T6;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -332,7 +332,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     def testStringRoot(self):
@@ -340,7 +340,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T7;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -360,7 +360,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     # PARSERS -- REWRITE AST
@@ -370,7 +370,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T8;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -390,7 +390,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testRewriteTokenWithArgs(self):
@@ -398,7 +398,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T9;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -418,18 +418,18 @@ class T(testbase.ANTLRTest):
                     y, z = 0, 0
 
                 else:
-                    raise TypeError("Invalid args \%r" \% (args,))
+                    raise TypeError("Invalid args {!r}".format(args))
 
-                CommonTree.__init__(self, token)
+                super().__init__(token)
                 self.x = x
                 self.y = y
                 self.z = z
 
             def toString(self):
                 txt = ""
-                if self.token is not None:
+                if self.token:
                     txt += self.token.text
-                txt +="<V>;\%d\%d\%d" \% (self.x, self.y, self.z)
+                txt +="<V>;{0.x}{0.y}{0.z}".format(self)
                 return txt
             __str__ = toString
 
@@ -444,7 +444,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("<V>;421930 a<V>;9900", found)
+        self.assertEqual("<V>;421930 a<V>;9900", found)
 
 
     def testRewriteTokenRoot(self):
@@ -452,7 +452,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T10;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -473,7 +473,7 @@ class T(testbase.ANTLRTest):
             input="a 2"
             )
 
-        self.failUnlessEqual("(a<V> 2)", found)
+        self.assertEqual("(a<V> 2)", found)
 
 
     def testRewriteString(self):
@@ -481,7 +481,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T11;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -501,7 +501,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     def testRewriteStringRoot(self):
@@ -509,7 +509,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T12;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         @header {
@@ -530,14 +530,14 @@ class T(testbase.ANTLRTest):
             input="begin 2"
             )
 
-        self.failUnlessEqual("(begin<V> 2)", found)
+        self.assertEqual("(begin<V> 2)", found)
 
     def testRewriteRuleResults(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             tokens {LIST;}
@@ -549,7 +549,7 @@ class T(testbase.ANTLRTest):
 
             class W(CommonTree):
                 def __init__(self, tokenType, txt):
-                    super(W, self).__init__(
+                    super().__init__(
                         CommonToken(type=tokenType, text=txt))
 
                 def toString(self):
@@ -567,14 +567,14 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             input="a,b,c")
 
-        self.failUnlessEqual("(LIST<W> a<V> b<V> c<V>)", found)
+        self.assertEqual("(LIST<W> a<V> b<V> c<V>)", found)
 
     def testCopySemanticsWithHetero(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             @header {
@@ -597,7 +597,7 @@ class T(testbase.ANTLRTest):
         found = self.execParser(
             grammar, 'a',
             input="int a, b, c;")
-        self.failUnlessEqual("(int<V> a) (int<V> b) (int<V> c)", found)
+        self.assertEqual("(int<V> a) (int<V> b) (int<V> c)", found)
 
     # TREE PARSERS -- REWRITE AST
 
@@ -606,7 +606,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T13;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID INT;
@@ -619,7 +619,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP13;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T13;
@@ -646,7 +646,7 @@ class T(testbase.ANTLRTest):
             input="abc 34"
             )
 
-        self.failUnlessEqual("34<V> abc<W>", found)
+        self.assertEqual("34<V> abc<W>", found)
 
 
     def testTreeParserRewriteTree(self):
@@ -654,7 +654,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T14;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID INT;
@@ -667,7 +667,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP14;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T14;
@@ -694,7 +694,7 @@ class T(testbase.ANTLRTest):
             input="abc 34"
             )
 
-        self.failUnlessEqual("(34<V> abc<W>)", found)
+        self.assertEqual("(34<V> abc<W>)", found)
 
 
     def testTreeParserRewriteImaginary(self):
@@ -702,7 +702,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T15;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID ;
@@ -715,7 +715,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP15;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T15;
@@ -724,7 +724,7 @@ class T(testbase.ANTLRTest):
         @header {
         class V(CommonTree):
             def __init__(self, tokenType):
-                CommonTree.__init__(self, CommonToken(tokenType))
+                super().__init__(CommonToken(tokenType))
 
             def toString(self):
                 return tokenNames[self.token.type] + "<V>"
@@ -742,7 +742,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V> abc", found)
+        self.assertEqual("ROOT<V> abc", found)
 
 
     def testTreeParserRewriteImaginaryWithArgs(self):
@@ -750,7 +750,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T16;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID ;
@@ -763,7 +763,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP16;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T16;
@@ -772,7 +772,7 @@ class T(testbase.ANTLRTest):
         @header {
         class V(CommonTree):
             def __init__(self, tokenType, x):
-                CommonTree.__init__(self, CommonToken(tokenType))
+                super().__init__(CommonToken(tokenType))
                 self.x = x
 
             def toString(self):
@@ -790,7 +790,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V>;42 abc", found)
+        self.assertEqual("ROOT<V>;42 abc", found)
 
 
     def testTreeParserRewriteImaginaryRoot(self):
@@ -798,7 +798,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T17;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID ;
@@ -811,7 +811,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP17;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T17;
@@ -820,7 +820,7 @@ class T(testbase.ANTLRTest):
         @header {
         class V(CommonTree):
             def __init__(self, tokenType):
-                CommonTree.__init__(self, CommonToken(tokenType))
+                super().__init__(CommonToken(tokenType))
 
             def toString(self):
                 return tokenNames[self.token.type] + "<V>"
@@ -837,7 +837,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("(ROOT<V> abc)", found)
+        self.assertEqual("(ROOT<V> abc)", found)
 
 
     def testTreeParserRewriteImaginaryFromReal(self):
@@ -845,7 +845,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T18;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID ;
@@ -858,7 +858,7 @@ class T(testbase.ANTLRTest):
         r'''
         tree grammar TP18;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
             ASTLabelType=CommonTree;
             tokenVocab=T18;
@@ -868,9 +868,9 @@ class T(testbase.ANTLRTest):
         class V(CommonTree):
             def __init__(self, tokenType, tree=None):
                 if tree is None:
-                    CommonTree.__init__(self, CommonToken(tokenType))
+                    super().__init__(CommonToken(tokenType))
                 else:
-                    CommonTree.__init__(self, tree)
+                    super().__init__(tree)
                     self.token.type = tokenType
 
             def toString(self):
@@ -888,7 +888,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V>@1", found)
+        self.assertEqual("ROOT<V>@1", found)
 
 
     def testTreeParserAutoHeteroAST(self):
@@ -896,7 +896,7 @@ class T(testbase.ANTLRTest):
             r'''
             grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID ';' ;
@@ -909,7 +909,7 @@ class T(testbase.ANTLRTest):
             r'''
             tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
                 ASTLabelType=CommonTree;
                 tokenVocab=T;
@@ -932,7 +932,7 @@ class T(testbase.ANTLRTest):
             input="abc;"
             )
 
-        self.failUnlessEqual("abc<V> ;<V>", found)
+        self.assertEqual("abc<V> ;<V>", found)
 
 
 if __name__ == '__main__':

@@ -44,10 +44,7 @@ class T(testbase.ANTLRTest):
 
         ''')
 
-        self.failUnlessEqual(
-            str(tStream),
-            expectedOutput
-            )
+        self.assertEqual(str(tStream), expectedOutput)
 
 
 if __name__ == '__main__':

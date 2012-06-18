@@ -27,7 +27,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "0abc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testInsertAfterLastIndex(self):
@@ -36,7 +36,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abcx"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def test2InsertBeforeAfterMiddleIndex(self):
@@ -46,7 +46,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "axbxc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceIndex0(self):
@@ -55,7 +55,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "xbc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceLastIndex(self):
@@ -64,7 +64,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abx"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceMiddleIndex(self):
@@ -73,7 +73,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "axc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def test2ReplaceMiddleIndex(self):
@@ -83,7 +83,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "ayc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def test2ReplaceMiddleIndex1InsertBefore(self):
@@ -94,7 +94,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "_ayc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testReplaceThenDeleteMiddleIndex(self):
@@ -104,22 +104,18 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "ac"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testInsertInPriorReplace(self):
         tokens = self._parse("abc")
         tokens.replace(0, 2, "x")
         tokens.insertBefore(1, "0")
-        try:
-            tokens.toString()
-            self.fail()
-        except ValueError, exc:
-            self.failUnlessEqual(
-                str(exc),
-                "insert op <InsertBeforeOp@1:\"0\"> within boundaries of "
-                "previous <ReplaceOp@0..2:\"x\">"
-                )
+        self.assertRaisesRegex(
+            ValueError,
+            (r'insert op <InsertBeforeOp@1:"0"> within boundaries of '
+             r'previous <ReplaceOp@0\.\.2:"x">'),
+            tokens.toString)
 
     def testInsertThenReplaceSameIndex(self):
         tokens = self._parse("abc")
@@ -128,7 +124,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "0xbc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def test2InsertMiddleIndex(self):
@@ -138,7 +134,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "ayxbc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def test2InsertThenReplaceIndex0(self):
@@ -149,7 +145,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "yxzbc"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceThenInsertBeforeLastIndex(self):
@@ -159,7 +155,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abyx"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testInsertThenReplaceLastIndex(self):
@@ -169,7 +165,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abyx"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceThenInsertAfterLastIndex(self):
@@ -179,7 +175,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abxy"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceRangeThenInsertAtLeftEdge(self):
@@ -189,7 +185,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abyxba"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceRangeThenInsertAtRightEdge(self):
@@ -197,14 +193,11 @@ class T1(testbase.ANTLRTest):
         tokens.replace(2, 4, "x")
         tokens.insertBefore(4, "y") # no effect; within range of a replace
 
-        try:
-            tokens.toString()
-            self.fail()
-        except ValueError, exc:
-            self.failUnlessEqual(
-                str(exc),
-                "insert op <InsertBeforeOp@4:\"y\"> within boundaries of "
-                "previous <ReplaceOp@2..4:\"x\">")
+        self.assertRaisesRegex(
+            ValueError,
+            (r'insert op <InsertBeforeOp@4:"y"> within boundaries of '
+             r'previous <ReplaceOp@2\.\.4:"x">'),
+            tokens.toString)
 
 
     def testReplaceRangeThenInsertAfterRightEdge(self):
@@ -214,7 +207,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "abxyba"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceAll(self):
@@ -223,7 +216,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "x"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceSubsetThenFetch(self):
@@ -232,7 +225,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString(0, 6)
         expecting = "abxyzba"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testReplaceThenReplaceSuperset(self):
@@ -240,14 +233,11 @@ class T1(testbase.ANTLRTest):
         tokens.replace(2, 4, "xyz")
         tokens.replace(3, 5, "foo") # overlaps, error
 
-        try:
-            tokens.toString()
-            self.fail()
-        except ValueError, exc:
-            self.failUnlessEqual(
-                str(exc),
-                "replace op boundaries of <ReplaceOp@3..5:\"foo\"> overlap "
-                "with previous <ReplaceOp@2..4:\"xyz\">")
+        self.assertRaisesRegex(
+            ValueError,
+            (r'replace op boundaries of <ReplaceOp@3\.\.5:"foo"> overlap '
+             r'with previous <ReplaceOp@2\.\.4:"xyz">'),
+            tokens.toString)
 
 
     def testReplaceThenReplaceLowerIndexedSuperset(self):
@@ -255,14 +245,11 @@ class T1(testbase.ANTLRTest):
         tokens.replace(2, 4, "xyz")
         tokens.replace(1, 3, "foo") # overlap, error
 
-        try:
-            tokens.toString()
-            self.fail()
-        except ValueError, exc:
-            self.failUnlessEqual(
-                str(exc),
-                "replace op boundaries of <ReplaceOp@1..3:\"foo\"> overlap "
-                "with previous <ReplaceOp@2..4:\"xyz\">")
+        self.assertRaisesRegex(
+            ValueError,
+            (r'replace op boundaries of <ReplaceOp@1\.\.3:"foo"> overlap '
+             r'with previous <ReplaceOp@2\.\.4:"xyz">'),
+            tokens.toString)
 
 
     def testReplaceSingleMiddleThenOverlappingSuperset(self):
@@ -272,7 +259,7 @@ class T1(testbase.ANTLRTest):
 
         result = tokens.toString()
         expecting = "fooa"
-        self.failUnlessEqual(result, expecting)
+        self.assertEqual(result, expecting)
 
 
     def testCombineInserts(self):
@@ -281,7 +268,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(0, "y")
         result = tokens.toString()
         expecting = "yxabc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testCombine3Inserts(self):
@@ -291,7 +278,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(1, "z")
         result = tokens.toString()
         expecting = "yazxbc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testCombineInsertOnLeftWithReplace(self):
@@ -300,7 +287,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(0, "z") # combine with left edge of rewrite
         result = tokens.toString()
         expecting = "zfoo"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testCombineInsertOnLeftWithDelete(self):
@@ -309,7 +296,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(0, "z") # combine with left edge of rewrite
         result = tokens.toString()
         expecting = "z" # make sure combo is not znull
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testDisjointInserts(self):
@@ -319,7 +306,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(0, "z")
         result = tokens.toString()
         expecting = "zaxbyc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testOverlappingReplace(self):
@@ -328,7 +315,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(0, 3, "bar") # wipes prior nested replace
         result = tokens.toString()
         expecting = "bar"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testOverlappingReplace2(self):
@@ -336,14 +323,11 @@ class T1(testbase.ANTLRTest):
         tokens.replace(0, 3, "bar")
         tokens.replace(1, 2, "foo") # cannot split earlier replace
 
-        try:
-            tokens.toString()
-            self.fail()
-        except ValueError, exc:
-            self.failUnlessEqual(
-                str(exc),
-                "replace op boundaries of <ReplaceOp@1..2:\"foo\"> overlap "
-                "with previous <ReplaceOp@0..3:\"bar\">")
+        self.assertRaisesRegex(
+            ValueError,
+            (r'replace op boundaries of <ReplaceOp@1\.\.2:"foo"> overlap '
+             r'with previous <ReplaceOp@0\.\.3:"bar">'),
+            tokens.toString)
 
 
     def testOverlappingReplace3(self):
@@ -352,7 +336,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(0, 2, "bar") # wipes prior nested replace
         result = tokens.toString()
         expecting = "barc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testOverlappingReplace4(self):
@@ -361,7 +345,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(1, 3, "bar") # wipes prior nested replace
         result = tokens.toString()
         expecting = "abar"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testDropIdenticalReplace(self):
@@ -370,7 +354,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(1, 2, "foo") # drop previous, identical
         result = tokens.toString()
         expecting = "afooc"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testDropPrevCoveredInsert(self):
@@ -379,7 +363,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(1, 2, "foo") # kill prev insert
         result = tokens.toString()
         expecting = "afoofoo"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testLeaveAloneDisjointInsert(self):
@@ -388,7 +372,7 @@ class T1(testbase.ANTLRTest):
         tokens.replace(2, 3, "foo")
         result = tokens.toString()
         expecting = "axbfoo"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testLeaveAloneDisjointInsert2(self):
@@ -397,7 +381,7 @@ class T1(testbase.ANTLRTest):
         tokens.insertBefore(1, "x")
         result = tokens.toString()
         expecting = "axbfoo"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testInsertBeforeTokenThenDeleteThatToken(self):
@@ -406,7 +390,7 @@ class T1(testbase.ANTLRTest):
         tokens.delete(2)
         result = tokens.toString()
         expecting = "aby"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
 class T2(testbase.ANTLRTest):
@@ -431,19 +415,19 @@ class T2(testbase.ANTLRTest):
 
         result = tokens.toOriginalString()
         expecting = "x = 3 * 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString()
         expecting = "x = 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(0, 9)
         expecting = "x = 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(4, 8)
         expecting = "0"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
     def testToStringStartStop2(self):
@@ -453,37 +437,37 @@ class T2(testbase.ANTLRTest):
 
         result = tokens.toOriginalString()
         expecting = "x = 3 * 0 + 2 * 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         tokens.replace(4, 8, "0") # replace 3 * 0 with 0
         result = tokens.toString()
         expecting = "x = 0 + 2 * 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(0, 17)
         expecting = "x = 0 + 2 * 0;"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(4, 8)
         expecting = "0"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(0, 8)
         expecting = "x = 0"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(12, 16)
         expecting = "2 * 0"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         tokens.insertAfter(17, "// comment")
         result = tokens.toString(12, 18)
         expecting = "2 * 0;// comment"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
         result = tokens.toString(0, 8) # try again after insert at end
         expecting = "x = 0"
-        self.failUnlessEqual(expecting, result)
+        self.assertEqual(expecting, result)
 
 
 if __name__ == '__main__':

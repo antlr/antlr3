@@ -13,7 +13,7 @@ class t016actions(testbase.ANTLRTest):
         tStream = antlr3.CommonTokenStream(lexer)
         parser = self.getParser(tStream)
         name = parser.declaration()
-        assert name == 'foo', name
+        self.assertEqual(name, 'foo')
             
 
 if __name__ == '__main__':

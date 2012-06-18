@@ -9,7 +9,7 @@ class t017parser(testbase.ANTLRTest):
     def parserClass(self, base):
         class TestParser(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self.reportedErrors = []
         
@@ -27,7 +27,7 @@ class t017parser(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.program()
 
-        assert len(parser.reportedErrors) == 0, parser.reportedErrors
+        self.assertEqual(parser.reportedErrors, [])
 
 
     def testMalformedInput1(self):
@@ -39,7 +39,7 @@ class t017parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 1, parser.reportedErrors
+        self.assertEqual(len(parser.reportedErrors), 1, parser.reportedErrors)
 
 
     def testMalformedInput2(self):
@@ -51,7 +51,7 @@ class t017parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 2, parser.reportedErrors
+        self.assertEqual(len(parser.reportedErrors), 2, parser.reportedErrors)
 
 
 if __name__ == '__main__':

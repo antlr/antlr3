@@ -1,6 +1,6 @@
 lexer grammar t011lexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 IDENTIFIER: 
@@ -10,8 +10,8 @@ IDENTIFIER:
         |'0'..'9'
         |'_'
             { 
-              print "Underscore" 
-              print "foo"
+              print("Underscore")
+              print("foo")
             }
         )*
     ;

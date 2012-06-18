@@ -1,6 +1,6 @@
 lexer grammar t048rewrite;
 options {
-    language=Python;
+    language=Python3;
 }
 
 A: 'a';

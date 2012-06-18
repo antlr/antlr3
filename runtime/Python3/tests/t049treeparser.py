@@ -8,7 +8,7 @@ class T(testbase.ANTLRTest):
     def walkerClass(self, base):
         class TWalker(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self._output = ""
 
@@ -53,7 +53,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
         r'''grammar T;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ID INT;
@@ -65,11 +65,11 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
         r'''tree grammar TP;
         options {
-            language=Python;
+            language=Python3;
             ASTLabelType=CommonTree;
         }
         a : ID INT
-            {self.capture("\%s, \%s" \% ($ID, $INT))}
+            {self.capture("{}, {}".format($ID, $INT))}
           ;
         ''')
 
@@ -79,7 +79,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("abc, 34", found)
+        self.assertEqual("abc, 34", found)
         
 
 
@@ -87,7 +87,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID INT -> ^(ID INT);
@@ -99,7 +99,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : ^(ID INT)
@@ -113,14 +113,14 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
             
-        self.failUnlessEqual("abc, 34", found)
+        self.assertEqual("abc, 34", found)
 
 
     def testFlatVsTreeDecision(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : b c ;
@@ -134,7 +134,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : b b ;
@@ -148,14 +148,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 b 2"
             )
-        self.failUnlessEqual("^(a 1)b 2\n", found)
+        self.assertEqual("^(a 1)b 2\n", found)
 
 
     def testFlatVsTreeDecision2(self):
         grammar = textwrap.dedent(
             r"""grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : b c ;
@@ -169,7 +169,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : b b ;
@@ -183,14 +183,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 2 3 b 4 5"
             )
-        self.failUnlessEqual("^(a 3)b 5\n", found)
+        self.assertEqual("^(a 3)b 5\n", found)
 
 
     def testCyclicDFALookahead(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID INT+ PERIOD;
@@ -204,7 +204,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : ID INT+ PERIOD {self.capture("alt 1")}
@@ -217,36 +217,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 2 3."
             )
-        self.failUnlessEqual("alt 1", found)
-
-
-##     def testTemplateOutput(self):
-## 		String grammar =
-## 			"grammar T;\n" +
-## 			"options {output=AST;}\n" +
-## 			"a : ID INT;\n" +
-## 			"ID : 'a'..'z'+ ;\n" +
-## 			"INT : '0'..'9'+;\n" +
-## 			"WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
-
-## 		String treeGrammar =
-## 			"tree grammar TP;\n" +
-## 			"options {output=template; ASTLabelType=CommonTree;}\n" +
-## 			"s : a {System.out.println($a.st);};\n" +
-## 			"a : ID INT -> {new StringTemplate($INT.text)}\n" +
-## 			"  ;\n";
-
-## 		String found = execTreeParser("T.g", grammar, "TParser", "TP.g",
-## 				    treeGrammar, "TP", "TLexer", "a", "s", "abc 34");
-## 		assertEquals("34\n", found);
-## 	}
+        self.assertEqual("alt 1", found)
 
 
     def testNullableChildList(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID INT? -> ^(ID INT?);
@@ -258,7 +236,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : ^(ID INT?)
@@ -271,14 +249,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc"
             )
-        self.failUnlessEqual("abc", found)
+        self.assertEqual("abc", found)
 
 
     def testNullableChildList2(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : ID INT? SEMI -> ^(ID INT?) SEMI ;
@@ -291,7 +269,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : ^(ID INT?) SEMI
@@ -304,14 +282,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc;"
             )
-        self.failUnlessEqual("abc", found)
+        self.assertEqual("abc", found)
 
 
     def testNullableChildList3(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : x=ID INT? (y=ID)? SEMI -> ^($x INT? $y?) SEMI ;
@@ -324,7 +302,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a : ^(ID INT? b) SEMI
@@ -338,14 +316,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc def;"
             )
-        self.failUnlessEqual("abc, def", found)
+        self.assertEqual("abc, def", found)
 
 
     def testActionsAfterRoot(self):
         grammar = textwrap.dedent(
             r'''grammar T;
             options {
-                language=Python;
+                language=Python3;
                 output=AST;
             }
             a : x=ID INT? SEMI -> ^($x INT?) ;
@@ -358,7 +336,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar TP;
             options {
-                language=Python;
+                language=Python3;
                 ASTLabelType=CommonTree;
             }
             a @init {x=0} : ^(ID {x=1} {x=2} INT?)
@@ -371,14 +349,14 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc;"
             )
-        self.failUnless("abc, 2\n", found)
+        self.assertEqual("abc, 2", found)
 
 
     def testWildcardLookahead(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python; output=AST;}
+            options {language=Python3; output=AST;}
             a : ID '+'^ INT;
             ID : 'a'..'z'+ ;
             INT : '0'..'9'+;
@@ -390,7 +368,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''
             tree grammar TP; 
-            options {language=Python; tokenVocab=T; ASTLabelType=CommonTree;}
+            options {language=Python3; tokenVocab=T; ASTLabelType=CommonTree;}
             a : ^('+' . INT) { self.capture("alt 1") }
               ;
             ''')
@@ -399,14 +377,14 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 'a',
             "a + 2")
-        self.assertEquals("alt 1", found)
+        self.assertEqual("alt 1", found)
 
 
     def testWildcardLookahead2(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python; output=AST;}
+            options {language=Python3; output=AST;}
             a : ID '+'^ INT;
             ID : 'a'..'z'+ ;
             INT : '0'..'9'+;
@@ -418,7 +396,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''
             tree grammar TP;
-            options {language=Python; tokenVocab=T; ASTLabelType=CommonTree;}
+            options {language=Python3; tokenVocab=T; ASTLabelType=CommonTree;}
             a : ^('+' . INT) { self.capture("alt 1") }
               | ^('+' . .)   { self.capture("alt 2") }
               ;
@@ -430,14 +408,14 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 'a',
             "a + 2")
-        self.assertEquals("alt 1", found)
+        self.assertEqual("alt 1", found)
 
 
     def testWildcardLookahead3(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python; output=AST;}
+            options {language=Python3; output=AST;}
             a : ID '+'^ INT;
             ID : 'a'..'z'+ ;
             INT : '0'..'9'+;
@@ -449,7 +427,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''
             tree grammar TP;
-            options {language=Python; tokenVocab=T; ASTLabelType=CommonTree;}
+            options {language=Python3; tokenVocab=T; ASTLabelType=CommonTree;}
             a : ^('+' ID INT) { self.capture("alt 1") }
               | ^('+' . .)   { self.capture("alt 2") }
               ;
@@ -461,14 +439,14 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 'a',
             "a + 2")
-        self.assertEquals("alt 1", found)
+        self.assertEqual("alt 1", found)
 
 
     def testWildcardPlusLookahead(self):
         grammar = textwrap.dedent(
             r'''
             grammar T;
-            options {language=Python; output=AST;}
+            options {language=Python3; output=AST;}
             a : ID '+'^ INT;
             ID : 'a'..'z'+ ;
             INT : '0'..'9'+;
@@ -480,7 +458,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''
             tree grammar TP;
-            options {language=Python; tokenVocab=T; ASTLabelType=CommonTree;}
+            options {language=Python3; tokenVocab=T; ASTLabelType=CommonTree;}
             a : ^('+' INT INT ) { self.capture("alt 1") }
               | ^('+' .+)   { self.capture("alt 2") }
               ;
@@ -492,7 +470,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 'a',
             "a + 2")
-        self.assertEquals("alt 2", found)
+        self.assertEqual("alt 2", found)
 
 
 if __name__ == '__main__':

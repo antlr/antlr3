@@ -36,11 +36,7 @@ class t022scopes(testbase.ANTLRTest):
         tStream = antlr3.CommonTokenStream(lexer)
         parser = self.getParser(tStream)
 
-        try:
-            parser.b(False)
-            self.fail()
-        except antlr3.RecognitionException:
-            pass
+        self.assertRaises(antlr3.RecognitionException, parser.b, False)
         
 
     def testb2(self):
@@ -66,7 +62,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         symbols = parser.c()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             symbols,
             set(['i', 'j'])
             )
@@ -87,11 +83,7 @@ class t022scopes(testbase.ANTLRTest):
         tStream = antlr3.CommonTokenStream(lexer)
         parser = self.getParser(tStream)
 
-        try:
-            parser.c()
-            self.fail()
-        except RuntimeError, exc:
-            self.failUnlessEqual(exc.args[0], 'x')
+        self.assertRaisesRegex(RuntimeError, r'x', parser.c)
 
 
     def testd1(self):
@@ -114,7 +106,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         symbols = parser.d()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             symbols,
             set(['i', 'j'])
             )
@@ -131,7 +123,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.e()
 
-        self.failUnlessEqual(res, 12)
+        self.assertEqual(res, 12)
 
 
     def testf1(self):
@@ -145,7 +137,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.f()
 
-        self.failUnlessEqual(res, None)
+        self.assertIsNone(res)
 
 
     def testf2(self):
@@ -159,7 +151,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.f()
 
-        self.failUnlessEqual(res, None)
+        self.assertIsNone(res)
 
 
 

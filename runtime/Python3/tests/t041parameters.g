@@ -1,6 +1,6 @@
 grammar t041parameters;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a[arg1, arg2] returns [l]

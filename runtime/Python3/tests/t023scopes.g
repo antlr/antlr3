@@ -1,7 +1,7 @@
 grammar t023scopes;
 
 options {
-    language=Python;
+    language=Python3;
 }
 
 prog

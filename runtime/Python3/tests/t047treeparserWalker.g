@@ -1,6 +1,6 @@
 tree grammar t047treeparserWalker;
 options {
-    language=Python;
+    language=Python3;
     tokenVocab=t047treeparser;
     ASTLabelType=CommonTree;
 }

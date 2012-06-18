@@ -1,6 +1,6 @@
 lexer grammar t040bug80; 
 options {
-  language = Python;
+  language = Python3;
 }
  
 ID_LIKE

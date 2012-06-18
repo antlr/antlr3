@@ -36,15 +36,15 @@ class t039labels(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         ids, w = parser.a()
 
-        assert len(ids) == 6, ids
-        assert ids[0].text == 'a', ids[0]
-        assert ids[1].text == 'b', ids[1]
-        assert ids[2].text == 'c', ids[2]
-        assert ids[3].text == '1', ids[3]
-        assert ids[4].text == '2', ids[4]
-        assert ids[5].text == 'A', ids[5]
+        self.assertEqual(len(ids), 6, ids)
+        self.assertEqual(ids[0].text, 'a', ids[0])
+        self.assertEqual(ids[1].text, 'b', ids[1])
+        self.assertEqual(ids[2].text, 'c', ids[2])
+        self.assertEqual(ids[3].text, '1', ids[3])
+        self.assertEqual(ids[4].text, '2', ids[4])
+        self.assertEqual(ids[5].text, 'A', ids[5])
 
-        assert w.text == 'GNU1', w
+        self.assertEqual(w.text, 'GNU1', w)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 grammar t047treeparser;
 options {
-    language=Python;
+    language=Python3;
     output=AST;
 }
 

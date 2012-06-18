@@ -1,21 +1,22 @@
-import unittest
-import imp
-import os
-import errno
-import sys
-import glob
-import re
-import tempfile
-import shutil
-import inspect
-import hashlib
 from distutils.errors import *
+import errno
+import glob
+import hashlib
+import imp
+import inspect
+import os
+import re
+import shutil
+import sys
+import tempfile
+import unittest
+
 import antlr3
 
 def unlink(path):
     try:
         os.unlink(path)
-    except OSError, exc:
+    except OSError as exc:
         if exc.errno != errno.ENOENT:
             raise
 
@@ -35,7 +36,7 @@ testbasedir = os.path.join(
 class BrokenTest(unittest.TestCase.failureException):
     def __repr__(self):
         name, reason = self.args
-        return '%s: %s: %s works now' % (
+        return '{}: {}: {} works now'.format(
             (self.__class__.__name__, name, reason))
 
 
@@ -67,27 +68,24 @@ if 'CLASSPATH' not in os.environ:
     baseDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
     libDir = os.path.join(baseDir, 'lib')
 
-    jar = os.path.join(libDir, 'ST-4.0.1.jar')
+    jar = os.path.join(libDir, 'ST-4.0.5.jar')
     if not os.path.isfile(jar):
         raise DistutilsFileError(
-            "Missing file '%s'. Grap it from a distribution package."
-            % jar,
+            "Missing file '{}'. Grab it from a distribution package.".format(jar)
             )
     cp.append(jar)
 
-    jar = os.path.join(libDir, 'antlr-2.7.7.jar')
+    jar = os.path.join(libDir, 'antlr-3.4.1-SNAPSHOT.jar')
     if not os.path.isfile(jar):
         raise DistutilsFileError(
-            "Missing file '%s'. Grap it from a distribution package."
-            % jar,
+            "Missing file '{}'. Grab it from a distribution package.".format(jar)
             )
     cp.append(jar)
 
-    jar = os.path.join(libDir, 'junit-4.2.jar')
+    jar = os.path.join(libDir, 'antlr-runtime-3.4.jar')
     if not os.path.isfile(jar):
         raise DistutilsFileError(
-            "Missing file '%s'. Grap it from a distribution package."
-            % jar,
+            "Missing file '{}'. Grab it from a distribution package.".format(jar)
             )
     cp.append(jar)
 
@@ -101,7 +99,7 @@ else:
 
 class ANTLRTest(unittest.TestCase):
     def __init__(self, *args, **kwargs):
-        unittest.TestCase.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.moduleName = os.path.splitext(os.path.basename(sys.modules[self.__module__].__file__))[0]
         self.className = self.__class__.__name__
@@ -112,17 +110,6 @@ class ANTLRTest(unittest.TestCase):
 
         self.grammarName = None
         self.grammarType = None
-
-
-    def assertListEqual(self, a, b):
-        if a == b:
-            return
-
-        import difflib
-        a = [str(l) + '\n' for l in a]
-        b = [str(l) + '\n' for l in b]
-
-        raise AssertionError(''.join(difflib.unified_diff(a, b)))
 
 
     @property
@@ -157,7 +144,7 @@ class ANTLRTest(unittest.TestCase):
 
 
     def _invokeantlr(self, dir, file, options, javaOptions=''):
-        cmd = 'cd %s; java %s %s org.antlr.Tool -o . %s %s 2>&1' % (
+        cmd = 'cd {}; java {} {} org.antlr.Tool -o . {} {} 2>&1'.format(
             dir, javaOptions, classpath, options, file
             )
         fp = os.popen(cmd)
@@ -170,13 +157,12 @@ class ANTLRTest(unittest.TestCase):
                 failed = True
 
         rc = fp.close()
-        if rc is not None:
+        if rc:
             failed = True
 
         if failed:
             raise GrammarCompileError(
-                "Failed to compile grammar '%s':\n%s\n\n" % (file, cmd)
-                + output
+                "Failed to compile grammar '{}':\n{}\n\n{}".format(file, cmd, output)
                 )
 
 
@@ -196,15 +182,13 @@ class ANTLRTest(unittest.TestCase):
         grammarPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), grammarName)
 
         # get type and name from first grammar line
-        grammar = open(grammarPath, 'r').read()
+        with open(grammarPath, 'r') as fp:
+            grammar = fp.read()
         m = re.match(r'\s*((lexer|parser|tree)\s+|)grammar\s+(\S+);', grammar, re.MULTILINE)
-        assert m is not None, grammar
-        self.grammarType = m.group(2)
-        if self.grammarType is None:
-            self.grammarType = 'combined'
+        self.assertIsNotNone(m, grammar)
+        self.grammarType = m.group(2) or 'combined'
 
-        if self.grammarType is None:
-            assert self.grammarType in ('lexer', 'parser', 'tree', 'combined'), self.grammarType
+        self.assertIn(self.grammarType, ('lexer', 'parser', 'tree', 'combined'))
 
         # don't try to rebuild grammar, if it already failed
         if grammarName in compileErrorCache:
@@ -242,11 +226,8 @@ class ANTLRTest(unittest.TestCase):
 
         #         if failed:
         #             raise GrammarCompileError(
-        #                 "antlr -depend failed with code %s on grammar '%s':\n\n"
-        #                 % (rc, grammarName)
-        #                 + cmd
-        #                 + "\n"
-        #                 + output
+        #                 "antlr -depend failed with code {} on grammar '{}':\n\n{}\n{}".format(
+        #                     rc, grammarName, cmd, output)
         #                 )
 
         #         # add dependencies to my .stg files
@@ -300,12 +281,10 @@ class ANTLRTest(unittest.TestCase):
 
 
     def __load_module(self, name):
-        modFile, modPathname, modDescription \
-                 = imp.find_module(name, [self.baseDir])
+        modFile, modPathname, modDescription = imp.find_module(name, [self.baseDir])
 
-        return imp.load_module(
-            name, modFile, modPathname, modDescription
-            )
+        with modFile:
+            return imp.load_module(name, modFile, modPathname, modDescription)
 
 
     def getLexer(self, *args, **kwargs):
@@ -358,26 +337,23 @@ class ANTLRTest(unittest.TestCase):
         # to avoid class name reuse. This kinda sucks. Need to find a way so
         # tests can use the same grammar name without messing up the namespace.
         # Well, first I should figure out what the exact problem is...
-        id = hashlib.md5(self.baseDir).hexdigest()[-8:]
+        id = hashlib.md5(self.baseDir.encode('utf-8')).hexdigest()[-8:]
         grammar = grammar.replace('$TP', 'TP' + id)
         grammar = grammar.replace('$T', 'T' + id)
 
         # get type and name from first grammar line
         m = re.match(r'\s*((lexer|parser|tree)\s+|)grammar\s+(\S+);', grammar, re.MULTILINE)
-        assert m is not None, grammar
-        grammarType = m.group(2)
-        if grammarType is None:
-            grammarType = 'combined'
+        self.assertIsNotNone(m, grammar)
+        grammarType = m.group(2) or 'combined'
         grammarName = m.group(3)
 
-        assert grammarType in ('lexer', 'parser', 'tree', 'combined'), grammarType
+        self.assertIn(grammarType, ('lexer', 'parser', 'tree', 'combined'))
 
         grammarPath = os.path.join(self.baseDir, grammarName + '.g')
 
         # dump temp grammar file
-        fp = open(grammarPath, 'w')
-        fp.write(grammar)
-        fp.close()
+        with open(grammarPath, 'w') as fp:
+            fp.write(grammar)
 
         return grammarName, grammarPath, grammarType
 
@@ -386,9 +362,8 @@ class ANTLRTest(unittest.TestCase):
         testDir = os.path.dirname(os.path.abspath(__file__))
         path = os.path.join(self.baseDir, name)
 
-        fp = open(path, 'w')
-        fp.write(contents)
-        fp.close()
+        with open(path, 'w') as fp:
+            fp.write(contents)
 
         return path
 

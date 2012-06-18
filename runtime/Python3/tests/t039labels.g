@@ -1,6 +1,6 @@
 grammar t039labels;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a returns [l]
@@ -10,9 +10,9 @@ a returns [l]
 
 A: 'a'..'z';
 B: '0'..'9';
-C: a='A' { print $a };
-D: a='FOOBAR' { print $a };
-E: 'GNU' a=. { print $a };
-F: 'BLARZ' a=EOF { print $a };
+C: a='A' { print($a) };
+D: a='FOOBAR' { print($a) };
+E: 'GNU' a=. { print($a) };
+F: 'BLARZ' a=EOF { print($a) };
 
 WS: ' '+  { $channel = HIDDEN };

@@ -1,6 +1,6 @@
 lexer grammar t004lexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 FOO: 'f' 'o'*;

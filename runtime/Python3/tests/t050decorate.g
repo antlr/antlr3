@@ -1,6 +1,6 @@
 grammar t050decorate;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @header {

@@ -1,6 +1,6 @@
 grammar t030specialStates;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @init {

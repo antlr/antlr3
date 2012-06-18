@@ -18,7 +18,7 @@ class t021hoist(testbase.ANTLRTest):
         parser.enableEnum = True
         enumIs = parser.stat()
 
-        assert enumIs == 'keyword', repr(enumIs)
+        self.assertEqual(enumIs, 'keyword')
 
 
     def testValid2(self):
@@ -29,7 +29,7 @@ class t021hoist(testbase.ANTLRTest):
         parser.enableEnum = False
         enumIs = parser.stat()
 
-        assert enumIs == 'ID', repr(enumIs)
+        self.assertEqual(enumIs, 'ID')
 
 
 

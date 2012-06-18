@@ -1,6 +1,6 @@
 grammar t035ruleLabelPropertyRef;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a returns [bla]: t=b

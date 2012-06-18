@@ -1,6 +1,6 @@
 grammar t037rulePropertyRef;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a returns [bla]

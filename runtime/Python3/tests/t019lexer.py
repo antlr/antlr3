@@ -10,7 +10,8 @@ class t019lexer(testbase.ANTLRTest):
 
     def testValid(self):
         inputPath = os.path.splitext(__file__)[0] + '.input'
-        stream = antlr3.StringStream(open(inputPath).read())
+        with open(inputPath) as f:
+            stream = antlr3.StringStream(f.read())
         lexer = self.getLexer(stream)
 
         while True:

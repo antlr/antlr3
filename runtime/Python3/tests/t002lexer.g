@@ -1,6 +1,6 @@
 lexer grammar t002lexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 ZERO: '0';

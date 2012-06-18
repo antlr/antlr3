@@ -1,6 +1,6 @@
 grammar t015calc;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @header {

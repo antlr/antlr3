@@ -12,7 +12,7 @@ import time
 
 class Debugger(threading.Thread):
     def __init__(self, port):
-        super(Debugger, self).__init__()
+        super().__init__()
         self.events = []
         self.success = False
         self.port = port
@@ -26,7 +26,9 @@ class Debugger(threading.Thread):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(('127.0.0.1', self.port))
                 break
-            except socket.error, exc:
+            except socket.error as exc:
+                if s:
+                    s.close()
                 if exc.args[0] != errno.ECONNREFUSED:
                     raise
                 time.sleep(0.1)
@@ -38,15 +40,15 @@ class Debugger(threading.Thread):
         s.setblocking(1)
         s.settimeout(10.0)
 
-        output = s.makefile('w', 0)
-        input = s.makefile('r', 0)
+        output = s.makefile('wb', 0)
+        input = s.makefile('rb', 0)
 
         try:
             # handshake
             l = input.readline().strip()
-            assert l == 'ANTLR 2'
+            self.assertEqual(l, 'ANTLR 2')
             l = input.readline().strip()
-            assert l.startswith('grammar "')
+            self.assertTrue(l.startswith('grammar "'))
 
             output.write('ACK\n')
             output.flush()
@@ -64,10 +66,10 @@ class Debugger(threading.Thread):
 
         except socket.timeout:
             self.events.append(['timeout'])
-        except socket.error, exc:
+        except socket.error as exc:
             self.events.append(['socketerror', exc.args])
-
-        s.close()
+        finally:
+            s.close()
 
 
 class T(testbase.ANTLRTest):
@@ -102,11 +104,11 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID EOF;
         ID : 'a'..'z'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         listener = antlr3.debug.RecordDebugEventListener()
@@ -139,11 +141,11 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID EOF;
         ID : 'a'..'z'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -174,11 +176,11 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID EOF;
         ID : 'a'..'z'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -219,11 +221,11 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : {True}? ID EOF;
         ID : 'a'..'z'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -257,12 +259,12 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID ( ID | INT )+ EOF;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -332,12 +334,12 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID ( ID | INT )* EOF;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -407,12 +409,12 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID ( ID | INT ) EOF;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -449,14 +451,14 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID ( b | c ) EOF;
         b : ID;
         c : INT;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -506,7 +508,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ID ( b | c ) EOF;
         b : ID;
@@ -514,7 +516,7 @@ class T(testbase.ANTLRTest):
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
         BANG : '!' ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -558,14 +560,14 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : b | c;
         b : ID;
         c : INT;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -602,13 +604,13 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : b;
         b : ID;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -642,13 +644,13 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ( b );
         b : ID;
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -684,7 +686,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
         }
         a : ( b | c ) EOF;
         b : ID* INT;
@@ -692,7 +694,7 @@ class T(testbase.ANTLRTest):
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
         BANG : '!';
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         debugger = self.execParser(
@@ -756,7 +758,7 @@ class T(testbase.ANTLRTest):
         r'''
         grammar T;
         options {
-            language=Python;
+            language=Python3;
             output=AST;
         }
         a : ( b | c ) EOF!;
@@ -765,7 +767,7 @@ class T(testbase.ANTLRTest):
         ID : 'a'..'z'+ ;
         INT : '0'..'9'+ ;
         BANG : '!';
-        WS : (' '|'\n') {$channel=HIDDEN;} ;
+        WS : (' '|'\n') {$channel=HIDDEN} ;
         ''')
 
         listener = antlr3.debug.RecordDebugEventListener()

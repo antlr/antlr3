@@ -11,7 +11,7 @@ class T(testbase.ANTLRTest):
     def lexerClass(self, base):
         class TLexer(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self.traces = []
 
@@ -34,7 +34,7 @@ class T(testbase.ANTLRTest):
     def parserClass(self, base):
         class TParser(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self.traces = []
 
@@ -64,7 +64,7 @@ class T(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.a()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             lexer.traces,
             [ '>T__7', '<T__7', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
               '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
@@ -72,7 +72,7 @@ class T(testbase.ANTLRTest):
               '>T__8', '<T__8']
             )
 
-        self.failUnlessEqual(
+        self.assertEqual(
             parser.traces,
             [ '>a', '>synpred1_t044trace_fragment', '<synpred1_t044trace_fragment', '>b', '>c',
               '<c', '>c', '<c', '>c', '<c', '<b', '<a' ]
@@ -86,10 +86,7 @@ class T(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.a()
 
-        self.failUnlessEqual(
-            parser._stack,
-            ['a', 'b', 'c']
-            )
+        self.assertEqual(parser._stack, ['a', 'b', 'c'])
 
 if __name__ == '__main__':
     unittest.main()

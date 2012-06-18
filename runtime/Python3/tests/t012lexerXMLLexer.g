@@ -1,10 +1,10 @@
 lexer grammar t012lexerXMLLexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @header {
-from cStringIO import StringIO
+from io import StringIO
 }
 
 @lexer::init {
@@ -13,7 +13,7 @@ self.outbuf = StringIO()
 
 @lexer::members {
 def output(self, line):
-    self.outbuf.write(line.encode('utf-8') + "\n")
+    self.outbuf.write(line + "\n")
 }
 
 DOCUMENT
@@ -60,11 +60,11 @@ fragment ELEMENT
     : ( START_TAG
             (ELEMENT
             | t=PCDATA
-                {self.output("PCDATA: \""+$t.text+"\"")}
+                {self.output('PCDATA: "{}"'.format($t.text))}
             | t=CDATA
-                {self.output("CDATA: \""+$t.text+"\"")}
+                {self.output('CDATA: "{}"'.format($t.text))}
             | t=COMMENT
-                {self.output("Comment: \""+$t.text+"\"")}
+                {self.output('Comment: "{}"'.format($t.text))}
             | pi=PI
             )*
             END_TAG
@@ -86,7 +86,7 @@ fragment EMPTY_ELEMENT
 
 fragment ATTRIBUTE 
     : name=GENERIC_ID WS? '=' WS? value=VALUE
-        {self.output("Attr: "+name.text+"="+value.text)}
+        {self.output("Attr: {}={}".format(name.text, value.text))}
     ;
 
 fragment END_TAG 

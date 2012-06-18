@@ -1,6 +1,6 @@
 grammar t033backtracking;
 options {
-    language=Python;
+    language=Python3;
     backtrack=true;
     memoize=true;
     k=2;
@@ -8,25 +8,6 @@ options {
 
 scope Symbols {
 	types;
-}
-
-@header {
-# compatibility stuff
-try:
-    set = set
-    frozenset = frozenset
-except NameError:
-    from sets import Set as set, ImmutableSet as frozenset
-
-
-try:
-    reversed = reversed
-except NameError:
-    def reversed(l):
-        l = l[:]
-        l.reverse()
-        return l
-
 }
 
 @members {
@@ -196,9 +177,9 @@ declarator
 direct_declarator
 	:   (	IDENTIFIER
 			{
-			if len($declaration)>0 and $declaration::isTypedef:
+			if $declaration and $declaration::isTypedef:
 				$Symbols::types.add($IDENTIFIER.text)
-				print "define type "+$IDENTIFIER.text
+				print("define type "+$IDENTIFIER.text)
 			}
 		|	'(' declarator ')'
 		)

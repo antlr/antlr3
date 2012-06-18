@@ -1,6 +1,6 @@
 grammar t036multipleReturnValues;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a returns [foo, bar]: A

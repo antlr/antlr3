@@ -1,6 +1,6 @@
 lexer grammar t010lexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 IDENTIFIER: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;

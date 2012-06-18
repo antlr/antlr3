@@ -1,7 +1,7 @@
 grammar t022scopes;
 
 options {
-    language=Python;
+    language=Python3;
 }
 
 /* global scopes */

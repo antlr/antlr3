@@ -14,7 +14,7 @@ class t013parser(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.document()
 
-        assert parser.events == ['before', 'after']
+        self.assertEqual(parser.events, ['before', 'after'])
           
 
 if __name__ == '__main__':

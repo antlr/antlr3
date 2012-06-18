@@ -3,8 +3,7 @@ import sys
 import antlr3
 import testbase
 import unittest
-from cStringIO import StringIO
-import difflib
+from io import StringIO
 
 class t020fuzzy(testbase.ANTLRTest):
     def setUp(self):
@@ -13,7 +12,8 @@ class t020fuzzy(testbase.ANTLRTest):
 
     def testValid(self):
         inputPath = os.path.splitext(__file__)[0] + '.input'
-        stream = antlr3.StringStream(open(inputPath).read())
+        with open(inputPath) as f:
+            stream = antlr3.StringStream(f.read())
         lexer = self.getLexer(stream)
 
         while True:
@@ -25,15 +25,10 @@ class t020fuzzy(testbase.ANTLRTest):
         output = lexer.output.getvalue()
 
         outputPath = os.path.splitext(__file__)[0] + '.output'
-        testOutput = open(outputPath).read()
+        with open(outputPath) as f:
+            testOutput = f.read()
 
-        success = (output == testOutput)
-        if not success:
-            d = difflib.Differ()
-            r = d.compare(output.splitlines(1), testOutput.splitlines(1))
-            self.fail(
-                ''.join([l.encode('ascii', 'backslashreplace') for l in r])
-                )
+        self.assertEqual(output, testOutput)
 
 
 if __name__ == '__main__':

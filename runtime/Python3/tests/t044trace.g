@@ -1,6 +1,6 @@
 grammar t044trace;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @init {

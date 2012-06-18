@@ -7,7 +7,7 @@ class t026actions(testbase.ANTLRTest):
     def parserClass(self, base):
         class TParser(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self._errors = []
                 self._output = ""
@@ -27,7 +27,7 @@ class t026actions(testbase.ANTLRTest):
     def lexerClass(self, base):
         class TLexer(base):
             def __init__(self, *args, **kwargs):
-                base.__init__(self, *args, **kwargs)
+                super().__init__(*args, **kwargs)
 
                 self._errors = []
                 self._output = ""
@@ -60,7 +60,9 @@ class t026actions(testbase.ANTLRTest):
             'init;after;finally;')
         self.assertEqual(
             lexer._output,
-            'action;u\'foobar\' 4 1 0 -1 0 0 5;attribute;action;u\'_Ab98\' 4 1 7 -1 0 7 11;attribute;action;u\'A12sdf\' 4 2 1 -1 0 15 20;attribute;')
+            "action;'foobar' 4 1 0 -1 0 0 5;attribute;action;"
+            "'_Ab98' 4 1 7 -1 0 7 11;attribute;action;"
+            "'A12sdf' 4 2 1 -1 0 15 20;attribute;")
 
 if __name__ == '__main__':
     unittest.main()

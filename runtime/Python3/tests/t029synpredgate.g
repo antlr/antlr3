@@ -1,6 +1,6 @@
 lexer grammar t029synpredgate;
 options {
-  language = Python;
+  language = Python3;
 }
 
 FOO

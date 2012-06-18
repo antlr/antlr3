@@ -1,6 +1,6 @@
 lexer grammar t025lexerRulePropertyRef;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @lexer::init {

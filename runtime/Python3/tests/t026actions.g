@@ -1,6 +1,6 @@
 grammar t026actions;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @lexer::init {
@@ -16,7 +16,7 @@ prog
 }
     :   IDENTIFIER EOF
     ;
-    catch [ RecognitionException, exc ] {
+    catch [ RecognitionException as exc ] {
         self.capture('catch;')
         raise
     }
@@ -30,7 +30,7 @@ IDENTIFIER
         {
             # a comment
           self.capture('action;')
-            self.capture('\%r \%r \%r \%r \%r \%r \%r \%r;' \% ($text, $type, $line, $pos, $index, $channel, $start, $stop))
+            self.capture('{!r} {!r} {!r} {!r} {!r} {!r} {!r} {!r};'.format($text, $type, $line, $pos, $index, $channel, $start, $stop))
             if True:
                 self.capture(self.foobar)
         }

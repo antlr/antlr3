@@ -25,19 +25,19 @@ class t006lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 0, token.start
-        assert token.stop == 1, token.stop
-        assert token.text == 'fo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 1)
+        self.assertEqual(token.text, 'fo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 2, token.start
-        assert token.stop == 7, token.stop
-        assert token.text == 'faaooa', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 2)
+        self.assertEqual(token.stop, 7)
+        self.assertEqual(token.text, 'faaooa')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
 
 
     def testMalformedInput(self):
@@ -48,13 +48,13 @@ class t006lexer(testbase.ANTLRTest):
         lexer.nextToken()
         try:
             token = lexer.nextToken()
-            raise AssertionError, token
+            self.fail(token)
 
-        except antlr3.MismatchedTokenException, exc:
-            assert exc.expecting == 'f', repr(exc.expecting)
-            assert exc.unexpectedType == '2', repr(exc.unexpectedType)
-            assert exc.charPositionInLine == 10, repr(exc.charPositionInLine)
-            assert exc.line == 1, repr(exc.line)
+        except antlr3.MismatchedTokenException as exc:
+            self.assertEqual(exc.expecting, 'f')
+            self.assertEqual(exc.unexpectedType, '2')
+            self.assertEqual(exc.charPositionInLine, 10)
+            self.assertEqual(exc.line, 1)
             
 
 if __name__ == '__main__':

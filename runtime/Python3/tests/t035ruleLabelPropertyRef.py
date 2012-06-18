@@ -35,12 +35,12 @@ class t035ruleLabelPropertyRef(testbase.ANTLRTest):
         start, stop, text = parser.a()
 
         # first token of rule b is the 2nd token (counting hidden tokens)
-        assert start.index == 1, start
+        self.assertEqual(start.index, 1, start)
 
         # first token of rule b is the 7th token (counting hidden tokens)
-        assert stop.index == 7, stop
+        self.assertEqual(stop.index, 7, stop)
 
-        assert text == "a a a a", text
+        self.assertEqual(text, "a a a a")
 
 
 if __name__ == '__main__':

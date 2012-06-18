@@ -1,6 +1,6 @@
 grammar t032subrulePredict;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a: 'BEGIN' b WS+ 'END';

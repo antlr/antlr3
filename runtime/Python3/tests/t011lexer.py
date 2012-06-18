@@ -25,37 +25,37 @@ class t011lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.IDENTIFIER
-        assert token.start == 0, token.start
-        assert token.stop == 5, token.stop
-        assert token.text == 'foobar', token.text
+        self.assertEqual(token.type, self.lexerModule.IDENTIFIER)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 5)
+        self.assertEqual(token.text, 'foobar')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.WS
-        assert token.start == 6, token.start
-        assert token.stop == 6, token.stop
-        assert token.text == ' ', token.text
+        self.assertEqual(token.type, self.lexerModule.WS)
+        self.assertEqual(token.start, 6)
+        self.assertEqual(token.stop, 6)
+        self.assertEqual(token.text, ' ')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.IDENTIFIER
-        assert token.start == 7, token.start
-        assert token.stop == 11, token.stop
-        assert token.text == '_Ab98', token.text
+        self.assertEqual(token.type, self.lexerModule.IDENTIFIER)
+        self.assertEqual(token.start, 7)
+        self.assertEqual(token.stop, 11)
+        self.assertEqual(token.text, '_Ab98')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.WS
-        assert token.start == 12, token.start
-        assert token.stop == 14, token.stop
-        assert token.text == ' \n ', token.text
+        self.assertEqual(token.type, self.lexerModule.WS)
+        self.assertEqual(token.start, 12)
+        self.assertEqual(token.stop, 14)
+        self.assertEqual(token.text, ' \n ')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.IDENTIFIER
-        assert token.start == 15, token.start
-        assert token.stop == 20, token.stop
-        assert token.text == 'A12sdf', token.text
+        self.assertEqual(token.type, self.lexerModule.IDENTIFIER)
+        self.assertEqual(token.start, 15)
+        self.assertEqual(token.stop, 20)
+        self.assertEqual(token.text, 'A12sdf')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
 
 
     def testMalformedInput(self):
@@ -65,12 +65,12 @@ class t011lexer(testbase.ANTLRTest):
         lexer.nextToken()
         try:
             token = lexer.nextToken()
-            raise AssertionError, token
+            self.fail(token)
 
-        except antlr3.NoViableAltException, exc:
-            assert exc.unexpectedType == '-', repr(exc.unexpectedType)
-            assert exc.charPositionInLine == 1, repr(exc.charPositionInLine)
-            assert exc.line == 1, repr(exc.line)
+        except antlr3.NoViableAltException as exc:
+            self.assertEqual(exc.unexpectedType, '-')
+            self.assertEqual(exc.charPositionInLine, 1)
+            self.assertEqual(exc.line, 1)
 
             
 

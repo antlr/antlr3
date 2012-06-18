@@ -25,31 +25,31 @@ class t004lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 0, token.start
-        assert token.stop == 0, token.stop
-        assert token.text == 'f', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 0)
+        self.assertEqual(token.text, 'f')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 1, token.start
-        assert token.stop == 2, token.stop
-        assert token.text == 'fo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 1)
+        self.assertEqual(token.stop, 2)
+        self.assertEqual(token.text, 'fo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 3, token.start
-        assert token.stop == 5, token.stop
-        assert token.text == 'foo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 3)
+        self.assertEqual(token.stop, 5)
+        self.assertEqual(token.text, 'foo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 6, token.start
-        assert token.stop == 9, token.stop
-        assert token.text == 'fooo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 6)
+        self.assertEqual(token.stop, 9)
+        self.assertEqual(token.text, 'fooo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
         
 
     def testMalformedInput(self):
@@ -60,9 +60,9 @@ class t004lexer(testbase.ANTLRTest):
             token = lexer.nextToken()
             self.fail()
 
-        except antlr3.MismatchedTokenException, exc:
-            self.failUnlessEqual(exc.expecting, 'f')
-            self.failUnlessEqual(exc.unexpectedType, '2')
+        except antlr3.MismatchedTokenException as exc:
+            self.assertEqual(exc.expecting, 'f')
+            self.assertEqual(exc.unexpectedType, '2')
             
 
 if __name__ == '__main__':

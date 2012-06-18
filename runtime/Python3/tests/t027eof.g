@@ -1,7 +1,7 @@
 lexer grammar t027eof;
 
 options {
-    language=Python;
+    language=Python3;
 }
 
 END: EOF;

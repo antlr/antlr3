@@ -1,6 +1,6 @@
 grammar t016actions;
 options {
-  language = Python;
+  language = Python3;
 }
 
 declaration returns [name]

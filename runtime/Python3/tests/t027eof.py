@@ -14,10 +14,10 @@ class t027eof(testbase.ANTLRTest):
         lexer = self.getLexer(cStream)
         
         tok = lexer.nextToken()
-        assert tok.type == self.lexerModule.SPACE, tok
+        self.assertEqual(tok.type, self.lexerModule.SPACE, tok)
         
         tok = lexer.nextToken()
-        assert tok.type == self.lexerModule.END, tok
+        self.assertEqual(tok.type, self.lexerModule.END, tok)
 
 
 if __name__ == '__main__':

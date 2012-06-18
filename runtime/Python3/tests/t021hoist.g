@@ -1,6 +1,6 @@
 grammar t021hoist;
 options {
-    language=Python;
+    language=Python3;
 }
 
 /* With this true, enum is seen as a keyword.  False, it's an identifier */

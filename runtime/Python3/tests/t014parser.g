@@ -1,6 +1,6 @@
 grammar t014parser;
 options {
-  language = Python;
+  language = Python3;
 }
 
 @parser::init {

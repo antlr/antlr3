@@ -25,19 +25,19 @@ class t007lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 0, token.start
-        assert token.stop == 1, token.stop
-        assert token.text == 'fo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 1)
+        self.assertEqual(token.text, 'fo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 2, token.start
-        assert token.stop == 12, token.stop
-        assert token.text == 'fababbooabb', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 2)
+        self.assertEqual(token.stop, 12)
+        self.assertEqual(token.text, 'fababbooabb')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
 
 
     def testMalformedInput(self):
@@ -46,12 +46,12 @@ class t007lexer(testbase.ANTLRTest):
 
         try:
             token = lexer.nextToken()
-            raise AssertionError, token
+            self.fail(token)
 
-        except antlr3.EarlyExitException, exc:
-            assert exc.unexpectedType == 'o', repr(exc.unexpectedType)
-            assert exc.charPositionInLine == 6, repr(exc.charPositionInLine)
-            assert exc.line == 1, repr(exc.line)
+        except antlr3.EarlyExitException as exc:
+            self.assertEqual(exc.unexpectedType, 'o')
+            self.assertEqual(exc.charPositionInLine, 6)
+            self.assertEqual(exc.line, 1)
             
 
 if __name__ == '__main__':

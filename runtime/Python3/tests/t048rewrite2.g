@@ -1,6 +1,6 @@
 lexer grammar t048rewrite2;
 options {
-    language=Python;
+    language=Python3;
 }
 
 ID : 'a'..'z'+;

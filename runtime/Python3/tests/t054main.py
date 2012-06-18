@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import unittest
 import textwrap
@@ -6,7 +5,7 @@ import antlr3
 import antlr3.tree
 import testbase
 import sys
-from StringIO import StringIO
+from io import StringIO
 
 class T(testbase.ANTLRTest):
     def setUp(self):
@@ -22,7 +21,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""lexer grammar T3;
             options {
-              language = Python;
+              language = Python3;
               }
 
             @main {
@@ -38,13 +37,7 @@ class T(testbase.ANTLRTest):
         stdout = StringIO()
 
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
-        try:
-            lexerMod.main(
-            ['lexer.py']
-            )
-            self.fail()
-        except RuntimeError:
-            pass
+        self.assertRaises(RuntimeError, lexerMod.main, ['lexer.py'])
 
 
     def testLexerFromFile(self):
@@ -54,7 +47,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""lexer grammar T1;
             options {
-              language = Python;
+              language = Python3;
               }
 
             ID: 'a'..'z'+;
@@ -70,7 +63,7 @@ class T(testbase.ANTLRTest):
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testLexerFromStdIO(self):
@@ -79,7 +72,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""lexer grammar T2;
             options {
-              language = Python;
+              language = Python3;
               }
 
             ID: 'a'..'z'+;
@@ -96,16 +89,16 @@ class T(testbase.ANTLRTest):
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testLexerEncoding(self):
-        input = u"föö bär".encode('utf-8')
+        input = "föö bär"
 
         grammar = textwrap.dedent(
             r"""lexer grammar T3;
             options {
-              language = Python;
+              language = Python3;
               }
 
             ID: ('a'..'z' | '\u00c0'..'\u00ff')+;
@@ -117,12 +110,12 @@ class T(testbase.ANTLRTest):
 
         lexerMod = self.compileInlineGrammar(grammar, returnModule=True)
         lexerMod.main(
-            ['lexer.py', '--encoding', 'utf-8'],
+            ['lexer.py'],
             stdin=StringIO(input),
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testCombined(self):
@@ -131,7 +124,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""grammar T4;
             options {
-              language = Python;
+              language = Python3;
               }
 
             r returns [res]: (ID)+ EOF { $res = $text; };
@@ -151,7 +144,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue()
-        self.failUnlessEqual(len(stdout.splitlines()), 1, stdout)
+        self.assertEqual(len(stdout.splitlines()), 1, stdout)
 
 
     def testCombinedOutputAST(self):
@@ -160,7 +153,7 @@ class T(testbase.ANTLRTest):
         grammar = textwrap.dedent(
             r"""grammar T5;
             options {
-              language = Python;
+              language = Python3;
               output = AST;
             }
 
@@ -182,14 +175,14 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "(+ foo bar)")
+        self.assertEqual(stdout, "(+ foo bar)")
 
 
     def testTreeParser(self):
         grammar = textwrap.dedent(
             r'''grammar T6;
             options {
-              language = Python;
+              language = Python3;
               output = AST;
             }
 
@@ -203,7 +196,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar T6Walker;
             options {
-            language=Python;
+            language=Python3;
             ASTLabelType=CommonTree;
             tokenVocab=T6;
             }
@@ -223,14 +216,14 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "u'a + b'")
+        self.assertEqual(stdout, "'a + b'")
 
 
     def testTreeParserRewrite(self):
         grammar = textwrap.dedent(
             r'''grammar T7;
             options {
-              language = Python;
+              language = Python3;
               output = AST;
             }
 
@@ -244,7 +237,7 @@ class T(testbase.ANTLRTest):
         treeGrammar = textwrap.dedent(
             r'''tree grammar T7Walker;
             options {
-              language=Python;
+              language=Python3;
               ASTLabelType=CommonTree;
               tokenVocab=T7;
               output=AST;
@@ -266,7 +259,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "(+ (ARG a) (ARG b))")
+        self.assertEqual(stdout, "(+ (ARG a) (ARG b))")
 
 
 
@@ -275,7 +268,7 @@ class T(testbase.ANTLRTest):
             r'''
             parser grammar T8S;
             options {
-              language=Python;
+              language=Python3;
             }
 
             a : B;
@@ -284,16 +277,14 @@ class T(testbase.ANTLRTest):
         parserName = self.writeInlineGrammar(slave)[0]
         # slave parsers are imported as normal python modules
         # to force reloading current version, purge module from sys.modules
-        try:
+        if parserName + 'Parser' in sys.modules:
             del sys.modules[parserName+'Parser']
-        except KeyError:
-            pass
 
         master = textwrap.dedent(
             r'''
             grammar T8M;
             options {
-              language=Python;
+              language=Python3;
             }
             import T8S;
             s returns [res]: a { $res = $a.text };
@@ -311,7 +302,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "u'b'")
+        self.assertEqual(stdout, "'b'")
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ import testbase
 #     def parserClass(self, base):
 #         class TParser(base):
 #             def __init__(self, *args, **kwargs):
-#                 base.__init__(self, *args, **kwargs)
+#                 super().__init__(*args, **kwargs)
 
 #                 self._output = ""
 
@@ -53,9 +53,9 @@ import testbase
 #             if build_ast:
 #               found += r.tree.toStringTree()
 
-#             self.assertEquals(
+#             self.assertEqual(
 #                 expecting, found,
-#                 "%r != %r (for input %r)" % (expecting, found, input))
+#                 "{!r} != {!r} (for input {!r})".format(expecting, found, input))
 
 
 #     def testSimple(self):
@@ -63,7 +63,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #             }
 #             s : a { self.capture($a.text) } ;
 #             a : a ID
@@ -75,7 +75,7 @@ import testbase
 
 #         found = self.execParser(grammar, 's', 'a b c')
 #         expecting = "abc"
-#         self.assertEquals(expecting, found)
+#         self.assertEqual(expecting, found)
 
 
 #     def testSemPred(self):
@@ -83,7 +83,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #             }
 #             s : a { self.capture($a.text) } ;
 #             a : a {True}? ID
@@ -95,14 +95,14 @@ import testbase
 
 #         found = self.execParser(grammar, "s", "a b c")
 #         expecting = "abc"
-#         self.assertEquals(expecting, found)
+#         self.assertEqual(expecting, found)
 
 #     def testTernaryExpr(self):
 #         grammar = textwrap.dedent(
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             e : e '*'^ e
@@ -134,7 +134,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             declarator
@@ -171,7 +171,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             declarator
@@ -208,7 +208,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             e : e '.'^ ID
@@ -248,7 +248,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             e : e '.' ID                   -> ^('.' e ID)
@@ -285,7 +285,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             e
@@ -327,7 +327,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
 #             expressionList
@@ -420,7 +420,7 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #             }
 #             s : e { self.capture($e.v) } ;
 #             e returns [v, ignored]
@@ -444,10 +444,10 @@ import testbase
 #             r"""
 #             grammar T;
 #             options {
-#                 language=Python;
+#                 language=Python3;
 #                 output=AST;
 #             }
-#             s : e { self.capture("v=\%s, " \% $e.v) } ;
+#             s : e { self.capture("v={}, ".format($e.v)) } ;
 #             e returns [v, ignored]
 #               : e '*'^ b=e {$v *= $b.v;}
 #               | e '+'^ b=e {$v += $b.v;}

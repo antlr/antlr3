@@ -34,7 +34,7 @@ class t041parameters(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         r = parser.a('foo', 'bar')
 
-        assert r == ('foo', 'bar'), r
+        self.assertEqual(r, ('foo', 'bar'))
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 grammar t031emptyAlt;
 options {
-  language = Python;
+  language = Python3;
 }
 
 r

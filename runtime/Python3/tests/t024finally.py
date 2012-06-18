@@ -15,7 +15,7 @@ class t024finally(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         events = parser.prog()
 
-        assert events == ['catch', 'finally'], events
+        self.assertEqual(events, ['catch', 'finally'])
 
 
 if __name__ == '__main__':

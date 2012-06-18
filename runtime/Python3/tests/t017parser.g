@@ -1,7 +1,7 @@
 grammar t017parser;
 
 options {
-    language = Python;
+    language = Python3;
 }
 
 program

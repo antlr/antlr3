@@ -14,8 +14,8 @@ class t013parser(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.document()
 
-        assert len(parser.reportedErrors) == 0, parser.reportedErrors
-        assert parser.identifiers == ['foobar']
+        self.assertEqual(parser.reportedErrors, [])
+        self.assertEqual(parser.identifiers, ['foobar'])
 
 
     def testMalformedInput1(self):
@@ -28,7 +28,7 @@ class t013parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 1, parser.reportedErrors
+        self.assertEqual(len(parser.reportedErrors), 1, parser.reportedErrors)
             
 
 if __name__ == '__main__':

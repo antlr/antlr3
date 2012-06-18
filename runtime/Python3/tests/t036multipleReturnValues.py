@@ -33,8 +33,8 @@ class t036multipleReturnValues(testbase.ANTLRTest):
         tStream = antlr3.CommonTokenStream(lexer)
         parser = self.getParser(tStream)
         ret = parser.a()
-        assert ret.foo == 'foo', ret.foo
-        assert ret.bar == 'bar', ret.bar
+        self.assertEqual(ret.foo, 'foo')
+        self.assertEqual(ret.bar, 'bar')
 
 
 if __name__ == '__main__':

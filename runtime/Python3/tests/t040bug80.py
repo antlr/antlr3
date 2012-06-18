@@ -24,7 +24,7 @@ class t040bug80(testbase.ANTLRTest):
             t = lexer.nextToken()
             if t.type == antlr3.EOF:
                 break
-            print t
+            print(t)
 
 
 if __name__ == '__main__':

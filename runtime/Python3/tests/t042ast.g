@@ -1,6 +1,6 @@
 grammar t042ast;
 options {
-    language = Python;
+    language = Python3;
     output = AST;
 }
 

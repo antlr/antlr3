@@ -1,6 +1,6 @@
 grammar t043synpred;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a: ((s+ P)=> s+ b)? E;

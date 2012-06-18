@@ -25,25 +25,25 @@ class t005lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 0, token.start
-        assert token.stop == 1, token.stop
-        assert token.text == 'fo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 1)
+        self.assertEqual(token.text, 'fo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 2, token.start
-        assert token.stop == 4, token.stop
-        assert token.text == 'foo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 2)
+        self.assertEqual(token.stop, 4)
+        self.assertEqual(token.text, 'foo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.FOO
-        assert token.start == 5, token.start
-        assert token.stop == 8, token.stop
-        assert token.text == 'fooo', token.text
+        self.assertEqual(token.type, self.lexerModule.FOO)
+        self.assertEqual(token.start, 5)
+        self.assertEqual(token.stop, 8)
+        self.assertEqual(token.text, 'fooo')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
         
 
     def testMalformedInput1(self):
@@ -52,11 +52,11 @@ class t005lexer(testbase.ANTLRTest):
 
         try:
             token = lexer.nextToken()
-            raise AssertionError
+            self.fail()
 
-        except antlr3.MismatchedTokenException, exc:
-            assert exc.expecting == 'f', repr(exc.expecting)
-            assert exc.unexpectedType == '2', repr(exc.unexpectedType)
+        except antlr3.MismatchedTokenException as exc:
+            self.assertEqual(exc.expecting, 'f')
+            self.assertEqual(exc.unexpectedType, '2')
 
 
     def testMalformedInput2(self):
@@ -65,10 +65,10 @@ class t005lexer(testbase.ANTLRTest):
 
         try:
             token = lexer.nextToken()
-            raise AssertionError
+            self.fail()
 
-        except antlr3.EarlyExitException, exc:
-            assert exc.unexpectedType == antlr3.EOF, repr(exc.unexpectedType)
+        except antlr3.EarlyExitException as exc:
+            self.assertEqual(exc.unexpectedType, antlr3.EOF)
             
 
 if __name__ == '__main__':

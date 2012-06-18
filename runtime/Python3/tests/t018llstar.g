@@ -1,11 +1,11 @@
 grammar t018llstar;
 
 options {
-    language = Python;
+    language = Python3;
 }
 
 @header {
-from cStringIO import StringIO
+from io import StringIO
 }
 
 @init {

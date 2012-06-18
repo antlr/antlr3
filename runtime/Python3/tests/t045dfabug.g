@@ -1,6 +1,6 @@
 grammar t045dfabug;
 options {
-    language = Python;
+    language = Python3;
     output = AST;
 }
 

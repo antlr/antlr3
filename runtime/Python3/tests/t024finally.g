@@ -1,7 +1,7 @@
 grammar t024finally;
 
 options {
-    language=Python;
+    language=Python3;
 }
 
 prog returns [events]

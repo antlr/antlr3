@@ -1,11 +1,11 @@
 lexer grammar t020fuzzyLexer;
 options {
-    language=Python;
+    language=Python3;
     filter=true;
 }
 
 @header {
-from cStringIO import StringIO
+from io import StringIO
 }
 
 @init {

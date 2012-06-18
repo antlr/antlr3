@@ -1,6 +1,6 @@
 grammar t046rewrite;
 options {
-    language=Python;
+    language=Python3;
 }
 
 program

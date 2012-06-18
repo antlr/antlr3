@@ -13,8 +13,9 @@ class t015calc(testbase.ANTLRTest):
         tStream = antlr3.CommonTokenStream(lexer)
         parser = self.getParser(tStream)
         result = parser.evaluate()
-        assert result == expected, "%r != %r" % (result, expected)
-        assert len(parser.reportedErrors) == len(errors), parser.reportedErrors
+        self.assertEqual(result, expected)
+        self.assertEqual(len(parser.reportedErrors), len(errors),
+                         parser.reportedErrors)
 
 
     def testValid01(self):

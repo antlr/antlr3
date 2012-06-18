@@ -1,17 +1,17 @@
 grammar t034tokenLabelPropertyRef;
 options {
-  language = Python;
+  language = Python3;
 }
 
 a: t=A
         {
-            print $t.text
-            print $t.type
-            print $t.line
-            print $t.pos
-            print $t.channel
-            print $t.index
-            #print $t.tree
+            print($t.text)
+            print($t.type)
+            print($t.line)
+            print($t.pos)
+            print($t.channel)
+            print($t.index)
+            #print($t.tree)
         }
     ;
 

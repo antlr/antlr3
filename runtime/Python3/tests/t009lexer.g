@@ -1,6 +1,6 @@
 lexer grammar t009lexer;
 options {
-  language = Python;
+  language = Python3;
 }
 
 DIGIT: '0' .. '9';

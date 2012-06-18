@@ -14,13 +14,10 @@ class t014parser(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.document()
 
-        assert len(parser.reportedErrors) == 0, parser.reportedErrors
-        assert parser.events == [
-            ('decl', 'foobar'),
-            ('call', 'gnarz'),
-            ('decl', 'blupp'),
-            ('call', 'flupp')
-            ], parser.events
+        self.assertEqual(parser.reportedErrors, [])
+        self.assertEqual(parser.events,
+                         [('decl', 'foobar'), ('call', 'gnarz'),
+                          ('decl', 'blupp'), ('call', 'flupp')])
 
 
     def testMalformedInput1(self):
@@ -33,8 +30,8 @@ class t014parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 1, parser.reportedErrors
-        assert parser.events == [], parser.events
+        self.assertEqual(len(parser.reportedErrors), 1, parser.reportedErrors)
+        self.assertEqual(parser.events, [])
 
 
     def testMalformedInput2(self):
@@ -47,10 +44,8 @@ class t014parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 1, parser.reportedErrors
-        assert parser.events == [
-            ('call', 'gnarz'),
-            ], parser.events
+        self.assertEqual(len(parser.reportedErrors), 1, parser.reportedErrors)
+        self.assertEqual(parser.events, [('call', 'gnarz')])
 
 
     def testMalformedInput3(self):
@@ -63,11 +58,8 @@ class t014parser(testbase.ANTLRTest):
 
         # FIXME: currently strings with formatted errors are collected
         # can't check error locations yet
-        assert len(parser.reportedErrors) == 1, parser.reportedErrors
-        assert parser.events == [
-            ('call', 'gnarz'),
-            ('call', 'flupp'),
-            ], parser.events
+        self.assertEqual(len(parser.reportedErrors), 1, parser.reportedErrors)
+        self.assertEqual(parser.events, [('call', 'gnarz'), ('call', 'flupp')])
             
 
 if __name__ == '__main__':

@@ -25,25 +25,25 @@ class t009lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.DIGIT
-        assert token.start == 0, token.start
-        assert token.stop == 0, token.stop
-        assert token.text == '0', token.text
+        self.assertEqual(token.type, self.lexerModule.DIGIT)
+        self.assertEqual(token.start, 0)
+        self.assertEqual(token.stop, 0)
+        self.assertEqual(token.text, '0')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.DIGIT
-        assert token.start == 1, token.start
-        assert token.stop == 1, token.stop
-        assert token.text == '8', token.text
+        self.assertEqual(token.type, self.lexerModule.DIGIT)
+        self.assertEqual(token.start, 1)
+        self.assertEqual(token.stop, 1)
+        self.assertEqual(token.text, '8')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.DIGIT
-        assert token.start == 2, token.start
-        assert token.stop == 2, token.stop
-        assert token.text == '5', token.text
+        self.assertEqual(token.type, self.lexerModule.DIGIT)
+        self.assertEqual(token.start, 2)
+        self.assertEqual(token.stop, 2)
+        self.assertEqual(token.text, '5')
 
         token = lexer.nextToken()
-        assert token.type == self.lexerModule.EOF
+        self.assertEqual(token.type, self.lexerModule.EOF)
 
 
     def testMalformedInput(self):
@@ -53,14 +53,14 @@ class t009lexer(testbase.ANTLRTest):
         lexer.nextToken()
         try:
             token = lexer.nextToken()
-            raise AssertionError, token
+            self.fail(token)
 
-        except antlr3.MismatchedSetException, exc:
+        except antlr3.MismatchedSetException as exc:
             # TODO: This should provide more useful information
-            assert exc.expecting is None
-            assert exc.unexpectedType == 'a', repr(exc.unexpectedType)
-            assert exc.charPositionInLine == 1, repr(exc.charPositionInLine)
-            assert exc.line == 1, repr(exc.line)
+            self.assertIsNone(exc.expecting)
+            self.assertEqual(exc.unexpectedType, 'a')
+            self.assertEqual(exc.charPositionInLine, 1)
+            self.assertEqual(exc.line, 1)
 
 
 if __name__ == '__main__':
