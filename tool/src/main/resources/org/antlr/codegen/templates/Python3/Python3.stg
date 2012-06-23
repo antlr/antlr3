@@ -1078,7 +1078,7 @@ else:
 >>
 
 dfaEdgeSwitch(labels, targetState) ::= <<
-if <labels:{it | LA<decisionNumber> == <it>}; separator=" or ">:
+if LA<decisionNumber> in {<labels; separator=", ">}:
     <targetState>
 >>
 
