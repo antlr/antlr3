@@ -882,8 +882,8 @@ class DebugEventSocketProxy(DebugEventListener):
             self.connection.setblocking(1)
             self.connection.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
 
-            self.output = self.connection.makefile('w', 0)
-            self.input = self.connection.makefile('r', 0)
+            self.output = self.connection.makefile('w', 1)
+            self.input = self.connection.makefile('r', 1)
 
             self.write("ANTLR {}".format(self.PROTOCOL_VERSION))
             self.write('grammar "{}"'.format(self.grammarFileName))
@@ -902,8 +902,8 @@ class DebugEventSocketProxy(DebugEventListener):
 
 
     def transmit(self, event):
-        self.write(event);
-        self.ack();
+        self.write(event)
+        self.ack()
 
 
     def commence(self):
@@ -941,7 +941,7 @@ class DebugEventSocketProxy(DebugEventListener):
 
     def enterDecision(self, decisionNumber, couldBacktrack):
         self.transmit(
-            "enterDecision\t{}\t{}".format(decisionNumber, couldBacktrack))
+            "enterDecision\t{}\t{:d}".format(decisionNumber, couldBacktrack))
 
 
     def exitDecision(self, decisionNumber):

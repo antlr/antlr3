@@ -40,15 +40,15 @@ class Debugger(threading.Thread):
         s.setblocking(1)
         s.settimeout(10.0)
 
-        output = s.makefile('wb', 0)
-        input = s.makefile('rb', 0)
+        output = s.makefile('w', 1)
+        input = s.makefile('r', 1)
 
         try:
             # handshake
             l = input.readline().strip()
-            self.assertEqual(l, 'ANTLR 2')
+            assert l == 'ANTLR 2'
             l = input.readline().strip()
-            self.assertTrue(l.startswith('grammar "'))
+            assert l.startswith('grammar "'), l
 
             output.write('ACK\n')
             output.flush()
@@ -69,6 +69,8 @@ class Debugger(threading.Thread):
         except socket.error as exc:
             self.events.append(['socketerror', exc.args])
         finally:
+            output.close()
+            input.close()
             s.close()
 
 
