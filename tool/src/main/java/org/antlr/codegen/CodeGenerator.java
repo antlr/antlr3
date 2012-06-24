@@ -763,11 +763,37 @@ public class CodeGenerator {
 		}
 		String testSTName = "lookaheadTest";
 		String testRangeSTName = "lookaheadRangeTest";
+		String varSTName = "lookaheadVarName";
 		if ( !partOfDFA ) {
 			testSTName = "isolatedLookaheadTest";
 			testRangeSTName = "isolatedLookaheadRangeTest";
+			varSTName = "isolatedLookaheadVarName";
 		}
 		ST setST = templates.getInstanceOf("setTest");
+		// If setTest asks for varName (e.g. so it can test via set inclusion),
+		// give it the var name.
+		if ( setST.impl.formalArguments.get("varName")!=null ) {
+			ST varST = templates.getInstanceOf(varSTName);
+			varST.add("k", Utils.integer(k));
+			setST.add("varName", varST);
+			// If setTest asks for all the values in one list,
+			// skip the ordinary ranges variable.
+			if ( setST.impl.formalArguments.get("allValues")!=null ) {
+				// Flatten the IntervalSet into a list of integers.
+				Iterator<Interval> iter = iset.getIntervals().iterator();
+				while (iter.hasNext()) {
+					Interval I = iter.next();
+					int a = I.a;
+					int b = I.b;
+					for (int i = a; i <= b; i++) {
+						setST.add("allValues", getTokenTypeAsTargetLabel(i));
+						setST.add("allValuesAsInt", Utils.integer(i));
+					}
+				}
+				// Skip doing anything with ranges.
+				return setST;
+			}
+		}
 		Iterator<Interval> iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;
 		while (iter.hasNext()) {

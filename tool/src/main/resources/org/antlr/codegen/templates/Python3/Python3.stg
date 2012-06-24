@@ -1217,7 +1217,7 @@ se:
 
 andPredicates(left,right) ::= "((<left>) and (<right>))"
 
-orPredicates(operands) ::= "(<first(operands)><rest(operands):{o |  or <o>}>)"
+orPredicates(operands) ::= "(<operands; separator=\" or \">)"
 
 notPredicate(pred) ::= "not (<evalPredicate(pred, {})>)"
 
@@ -1238,7 +1238,12 @@ lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
 
 isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(<lower> \<= self.input.LA(<k>) \<= <upper>)"
 
-setTest(ranges) ::= "<ranges; separator=\" or \">"
+lookaheadVarName(k) ::= "LA<decisionNumber>_<stateNumber>"
+isolatedLookaheadVarName(k) ::= "self.input.LA(<k>)"
+
+setTest(varName,allValues,allValuesAsInt) ::= <%
+<varName> in {<allValues; separator=", ">}
+%>
 
 // A T T R I B U T E S
 
