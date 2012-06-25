@@ -41,6 +41,18 @@ from .constants import DEFAULT_CHANNEL, EOF, INVALID_TOKEN_TYPE
 class Token(object):
     """@brief Abstract token baseclass."""
 
+    TOKEN_NAMES_MAP = None
+
+    @classmethod
+    def registerTokenNamesMap(cls, tokenNamesMap):
+        """@brief Store a mapping from token type to token name.
+        
+        This enables token.typeName to give something more meaningful
+        than, e.g., '6'.
+        """
+        cls.TOKEN_NAMES_MAP = tokenNamesMap
+        cls.TOKEN_NAMES_MAP[EOF] = "EOF"
+
     def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
                  index=-1, line=0, charPositionInLine=-1, input=None):
         # We use -1 for index and charPositionInLine as an invalid index
@@ -74,6 +86,12 @@ class Token(object):
     def getType(self):
         return self._type
 
+    @property
+    def typeName(self):
+        if self.TOKEN_NAMES_MAP:
+            return self.TOKEN_NAMES_MAP.get(self._type, "INVALID_TOKEN_TYPE")
+        else:
+            return str(self._type)
     
     @property
     def line(self):
@@ -206,11 +224,6 @@ class CommonToken(Token):
         was converted to a new string in the token object.
         """
         self._text = value
-
-
-    @property
-    def typeName(self):
-        return str(self.type)
 
 
     def getInputStream(self):
