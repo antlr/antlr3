@@ -29,6 +29,8 @@
 # end[licence]
 
 import socket
+import sys
+from .constants import INVALID_TOKEN_TYPE
 from .exceptions import RecognitionException
 from .recognizers import Parser
 from .streams import TokenStream
@@ -78,7 +80,7 @@ class DebugParser(Parser):
 
 
     def endBacktrack(self, level, successful):
-        self._dbg.endBacktrack(level,successful)
+        self._dbg.endBacktrack(level, successful)
 
 
     def reportError(self, exc):
@@ -90,6 +92,7 @@ class DebugParser(Parser):
 
 class DebugTokenStream(TokenStream):
     def __init__(self, input, dbg=None):
+        super().__init__()
         self.input = input
         self.initialStreamState = True
         # Track the last mark() call result value for use in rewind().
@@ -216,6 +219,7 @@ class DebugTreeAdaptor(TreeAdaptor):
     """
 
     def __init__(self, dbg, adaptor):
+        super().__init__()
         self.dbg = dbg
         self.adaptor = adaptor
 
@@ -241,9 +245,9 @@ class DebugTreeAdaptor(TreeAdaptor):
 
 
     def errorNode(self, input, start, stop, exc):
-        node = selfadaptor.errorNode(input, start, stop, exc)
+        node = self.adaptor.errorNode(input, start, stop, exc)
         if node is not None:
-            dbg.errorNode(node)
+            self.dbg.errorNode(node)
 
         return node
 
@@ -387,7 +391,7 @@ class DebugTreeAdaptor(TreeAdaptor):
     ## support
 
     def getDebugListener(self):
-        return dbg
+        return self.dbg
 
     def setDebugListener(self, dbg):
         self.dbg = dbg
@@ -486,6 +490,9 @@ class DebugEventListener(object):
         what token was seen at that depth.  A remote debugger cannot look
         ahead into a file it doesn't have so LT events must pass the token
         even if the info is redundant.
+        For tree parsers, if the type is UP or DOWN,
+        then the ID is not really meaningful as it's fixed--there is
+        just one UP node and one DOWN navigation node.
         """
         pass
 
@@ -643,15 +650,6 @@ class DebugEventListener(object):
         just one UP node and one DOWN navigation node.
         """
         pass
-
-
-    def LT(self, i, t):
-        """The tree parser lookedahead.  If the type is UP or DOWN,
-        then the ID is not really meaningful as it's fixed--there is
-        just one UP node and one DOWN navigation node.
-        """
-        pass
-
 
 
     ## A S T  E v e n t s
@@ -1071,9 +1069,8 @@ class DebugEventSocketProxy(DebugEventListener):
     def errorNode(self, t):
         self.transmit('errorNode\t{}\t{}\t"{}'.format(
              self.adaptor.getUniqueID(t),
-             Token.INVALID_TOKEN_TYPE,
+             INVALID_TOKEN_TYPE,
              self.escapeNewlines(t.toString())))
-
 
 
     def createNode(self, node, token=None):

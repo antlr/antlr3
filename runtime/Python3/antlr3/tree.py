@@ -614,8 +614,7 @@ class TreeAdaptor(object):
 
         if (len(args) == 2
             and isinstance(args[0], int)
-            and isinstance(args[1], Token)
-            ):
+            and isinstance(args[1], Token)):
             # Object create(int tokenType, Token fromToken);
 ##             warnings.warn(
 ##                 "Using create() is deprecated, use createFromToken()",
@@ -627,8 +626,7 @@ class TreeAdaptor(object):
         if (len(args) == 3
             and isinstance(args[0], int)
             and isinstance(args[1], Token)
-            and isinstance(args[2], str)
-            ):
+            and isinstance(args[2], str)):
             # Object create(int tokenType, Token fromToken, String text);
 ##             warnings.warn(
 ##                 "Using create() is deprecated, use createFromToken()",
@@ -639,8 +637,7 @@ class TreeAdaptor(object):
 
         if (len(args) == 2
             and isinstance(args[0], int)
-            and isinstance(args[1], str)
-            ):
+            and isinstance(args[1], str)):
             # Object create(int tokenType, String text);
 ##             warnings.warn(
 ##                 "Using create() is deprecated, use createFromType()",
@@ -650,9 +647,8 @@ class TreeAdaptor(object):
             return self.createFromType(args[0], args[1])
 
         raise TypeError(
-            "No create method with this signature found: %s"
-            % (', '.join(type(v).__name__ for v in args))
-            )
+            "No create method with this signature found: {}"
+            .format(', '.join(type(v).__name__ for v in args)))
 
 
 ############################################################################
@@ -690,7 +686,7 @@ class BaseTree(Tree):
         be copied as the children are not considered part of this node.
         """
 
-        Tree.__init__(self)
+        super().__init__()
         self.children = []
         self.parent = None
         self.childIndex = 0
@@ -799,8 +795,7 @@ class BaseTree(Tree):
         """
 
         if (startChildIndex >= len(self.children)
-            or stopChildIndex >= len(self.children)
-            ):
+            or stopChildIndex >= len(self.children)):
             raise IndexError("indexes invalid")
 
         replacingHowMany = stopChildIndex - startChildIndex + 1
@@ -849,15 +844,13 @@ class BaseTree(Tree):
     def sanityCheckParentAndChildIndexes(self, parent=None, i=-1):
         if parent != self.parent:
             raise ValueError(
-                "parents don't match; expected %r found %r"
-                % (parent, self.parent)
-                )
+                "parents don't match; expected {!r} found {!r}"
+                .format(parent, self.parent))
 
         if i != self.childIndex:
             raise ValueError(
-                "child indexes don't match; expected %d found %d"
-                % (i, self.childIndex)
-                )
+                "child indexes don't match; expected {} found {}"
+                .format(i, self.childIndex))
 
         for idx, child in enumerate(self.children):
             child.sanityCheckParentAndChildIndexes(self, idx)
@@ -906,7 +899,7 @@ class BaseTree(Tree):
         The first node of list is the root and the last is the parent of
         this node.
         """
-        if selfgetParent() is None:
+        if self.getParent() is None:
             return None
 
         ancestors = []
@@ -1382,7 +1375,7 @@ class CommonTree(BaseTree):
 
         ret = ''
         if not self.isNil():
-            ret += '(%s ' % (self.toString())
+            ret += '({!s} '.format(self)
 
         ret += ' '.join([child.toStringTree() for child in self.children])
 
@@ -1855,10 +1848,6 @@ class CommonTreeNodeStream(TreeNodeStream):
         self.calls = []
 
 
-    def __iter__(self):
-        return TreeIterator(self.root, self.adaptor)
-
-
     def fillBuffer(self):
         """Walk tree with depth-first-search and fill nodes buffer.
         Don't do DOWN, UP nodes if its a list (t is isNil).
@@ -2239,8 +2228,8 @@ class TreeParser(BaseRecognizer):
         node to be the root.
         """
 
-        return _inContext(
-            self.input.getTreeAdaptor(), self.getTokenNames(),
+        return self._inContext(
+            self.input.getTreeAdaptor(), self.tokenNames,
             self.input.LT(1), context)
 
     @classmethod
@@ -2825,6 +2814,7 @@ class TreeRuleReturnScope(RuleReturnScope):
     """
 
     def __init__(self):
+        super().__init__()
         self.start = None
         self.tree = None
 

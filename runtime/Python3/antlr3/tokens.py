@@ -211,7 +211,7 @@ class CommonToken(Token):
             return None
 
         if self.start < self.input.size() and self.stop < self.input.size():
-          return self.input.substring(self.start, self.stop)
+            return self.input.substring(self.start, self.stop)
 
         return '<EOF>'
 

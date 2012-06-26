@@ -33,7 +33,7 @@
 from io import StringIO
 
 from .constants import DEFAULT_CHANNEL, EOF
-from .tokens import Token, CommonToken
+from .tokens import Token
 
 
 ############################################################################
@@ -191,6 +191,14 @@ class CharStream(IntStream):
 
     EOF = -1
 
+    def __init__(self):
+        # line number 1..n within the input
+        self._line = 1
+
+        # The index of the character relative to the beginning of the
+        # line 0..n-1
+        self._charPositionInLine = 0
+
 
     def substring(self, start, stop):
         """
@@ -213,30 +221,29 @@ class CharStream(IntStream):
         raise NotImplementedError
 
 
-    def getLine(self):
+    @property
+    def line(self):
         """ANTLR tracks the line information automatically"""
+        return self._line
 
-        raise NotImplementedError
-
-
-    def setLine(self, line):
+    @line.setter
+    def line(self, value):
         """
         Because this stream can rewind, we need to be able to reset the line
         """
+        self._line = value
 
-        raise NotImplementedError
 
-
-    def getCharPositionInLine(self):
+    @property
+    def charPositionInLine(self):
         """
         The index of the character relative to the beginning of the line 0..n-1
         """
+        return self._charPositionInLine
 
-        raise NotImplementedError
-
-
-    def setCharPositionInLine(self, pos):
-        raise NotImplementedError
+    @charPositionInLine.setter
+    def charPositionInLine(self, pos):
+        self._charPositionInLine = pos
 
 
 class TokenStream(IntStream):
@@ -348,13 +355,6 @@ class ANTLRStringStream(CharStream):
 
         # 0..n-1 index into string of next char
         self.p = 0
-
-        # line number 1..n within the input
-        self._line = 1
-
-        # The index of the character relative to the beginning of the
-        # line 0..n-1
-        self._charPositionInLine = 0
 
         # A list of CharStreamState objects that tracks the stream state
         # values line, charPositionInLine, and p that can change as you
@@ -486,21 +486,6 @@ class ANTLRStringStream(CharStream):
 
     def substring(self, start, stop):
         return self.strdata[start:stop + 1]
-
-
-    @property
-    def line(self):
-        return self._line
-
-
-
-    @property
-    def charPositionInLine(self):
-        return self._charPositionInLine
-
-    @charPositionInLine.setter
-    def charPositionInLine(self, pos):
-        self._charPositionInLine = pos
 
 
     def getSourceName(self):
@@ -1390,8 +1375,8 @@ class TokenRewriteStream(CommonTokenStream):
 
                 elif not disjoint and not same:
                     raise ValueError(
-                        "replace op boundaries of %s overlap with previous %s"
-                        % (rop, prevRop))
+                        "replace op boundaries of {} overlap with previous {}"
+                        .format(rop, prevRop))
 
         # WALK INSERTS
         for i, iop in enumerate(rewrites):
@@ -1421,8 +1406,8 @@ class TokenRewriteStream(CommonTokenStream):
 
                 if iop.index >= rop.index and iop.index <= rop.lastIndex:
                     raise ValueError(
-                        "insert op %s within boundaries of previous %s"
-                        % (iop, rop))
+                        "insert op {} within boundaries of previous {}"
+                        .format(iop, rop))
 
         m = {}
         for i, op in enumerate(rewrites):

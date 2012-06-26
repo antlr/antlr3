@@ -141,6 +141,7 @@ class BaseRecognizer(object):
     HIDDEN = HIDDEN_CHANNEL
 
     # overridden by generated subclasses
+    grammarFileName = None
     tokenNames = None
 
     # The api_version attribute has been introduced in 3.3. If it is not
@@ -1436,6 +1437,7 @@ class ParserRuleReturnScope(RuleReturnScope):
     """
 
     def __init__(self):
+        super().__init__()
         self.start = None
         self.stop = None
         self.tree = None  # only used when output=AST
