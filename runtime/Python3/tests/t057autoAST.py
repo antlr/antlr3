@@ -997,7 +997,7 @@ class TestAutoAST(testbase.ANTLRTest):
         found, errors = self.execParser(grammar, "a", "*", expectErrors=True)
         self.assertEqual(["line 1:0 no viable alternative at input '*'"],
                          errors)
-        self.assertEqual("<unexpected: [@0,0:0='*',<6>,1:0], resync=*>",
+        self.assertEqual("<unexpected: [@0,0:0='*',<S>,1:0], resync=*>",
                          found)
 
 

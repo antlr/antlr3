@@ -1458,6 +1458,8 @@ class CommonErrorNode(CommonTree):
 
         return "<error: "+self.getText()+">"
 
+    __str__ = toString
+
 
 class CommonTreeAdaptor(BaseTreeAdaptor):
     """
