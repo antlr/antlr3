@@ -73,14 +73,11 @@ class unittest(Command):
 
     description = "run unit tests for package"
 
-    user_options = [
-        ('xml-output=', None,
-         "Directory for JUnit compatible XML files."),
-        ]
+    user_options = []
     boolean_options = []
 
     def initialize_options(self):
-        self.xml_output = None
+        pass
 
     def finalize_options(self):
         pass
@@ -89,7 +86,7 @@ class unittest(Command):
         testDir = os.path.join(os.path.dirname(__file__), 'unittests')
         if not os.path.isdir(testDir):
             raise DistutilsFileError(
-                "There is not 'unittests' directory. Did you fetch the "
+                "There is no 'unittests' directory. Did you fetch the "
                 "development version?",
                 )
 
@@ -131,18 +128,13 @@ class unittest(Command):
                     (os.path.basename(testPath), buf.getvalue())
                     )
 
-        if self.xml_output:
-            import xmlrunner
-            runner = xmlrunner.XMLTestRunner(
-                stream=open(os.path.join(self.xml_output, 'unittest.xml'), 'w'))
-        else:
-            runner = unittest.TextTestRunner(verbosity=2)
+        runner = unittest.TextTestRunner(verbosity=2)
         result = runner.run(suite)
 
         for testName, error in loadFailures:
             sys.stderr.write('\n' + '='*70 + '\n')
             sys.stderr.write(
-                "Failed to load test module %s\n" % testName
+                "Failed to load test module {}\n".format(testName)
                 )
             sys.stderr.write(error)
             sys.stderr.write('\n')
@@ -165,8 +157,6 @@ class functest(Command):
          "ANTLR version to use [default: HEAD (in ../../build)]"),
         ('antlr-jar=', None,
          "Explicit path to an antlr jar (overrides --antlr-version)"),
-        ('xml-output=', None,
-         "Directory for JUnit compatible XML files."),
         ]
 
     boolean_options = []
@@ -175,7 +165,6 @@ class functest(Command):
         self.testcase = None
         self.antlr_version = 'HEAD'
         self.antlr_jar = None
-        self.xml_output = None
 
     def finalize_options(self):
         pass
@@ -210,7 +199,7 @@ class functest(Command):
         else:
             classpath = [
                 os.path.join(rootDir, 'archive',
-                             'antlr-%s.jar' % self.antlr_version)
+                             'antlr-{}.jar'.format(self.antlr_version))
                 ]
 
         classpath.extend([
@@ -261,19 +250,14 @@ class functest(Command):
                 loadFailures.append(
                     (os.path.basename(testPath), buf.getvalue()))
 
-        if self.xml_output:
-            import xmlrunner
-            runner = xmlrunner.XMLTestRunner(
-                stream=open(os.path.join(self.xml_output, 'functest.xml'), 'w'))
-        else:
-            runner = unittest.TextTestRunner(verbosity=2)
+        runner = unittest.TextTestRunner(verbosity=2)
 
         result = runner.run(suite)
 
         for testName, error in loadFailures:
             sys.stderr.write('\n' + '='*70 + '\n')
             sys.stderr.write(
-                "Failed to load test module %s\n" % testName
+                "Failed to load test module {}\n".format(testName)
                 )
             sys.stderr.write(error)
             sys.stderr.write('\n')
