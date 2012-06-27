@@ -8,7 +8,7 @@ This module contains all support classes for AST construction and tree parsers.
 # begin[licence]
 #
 # [The "BSD licence"]
-# Copyright (c) 2005-2008 Terence Parr
+# Copyright (c) 2005-2012 Terence Parr
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
