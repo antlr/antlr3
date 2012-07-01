@@ -103,12 +103,13 @@ if __name__ == '__main__':
 lexer(grammar, name, tokens, scopes, rules, numRules, filterMode,
       labelType="CommonToken", superClass="Lexer") ::= <<
 <if(grammar.directDelegates)>
-try:
-    <grammar.directDelegates:
-     {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
-except ValueError:
-    <grammar.directDelegates:
-     {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+# path hack to allow absolute import of related grammars.
+from os.path import dirname
+__path__ = [dirname(__file__)]
+del dirname
+
+<grammar.directDelegates:
+ {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
 <endif>
 
 class <grammar.recognizerName>(<@superClassName><superClass><@end>):
@@ -234,12 +235,13 @@ tokenNames = [
 <scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScopeClass(scope=it)><endif>}>
 
 <if(grammar.directDelegates)>
-try:
-    <grammar.directDelegates:
-     {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
-except ValueError:
-    <grammar.directDelegates:
-     {g|from <g.recognizerName> import <g.recognizerName>}; separator="\n">
+# path hack to allow absolute import of related grammars.
+from os.path import dirname
+__path__ = [dirname(__file__)]
+del dirname
+
+<grammar.directDelegates:
+ {g|from .<g.recognizerName> import <g.recognizerName>}; separator="\n">
 <endif>
 
 <rules:{it|<ruleAttributeScopeClass(scope=it.ruleDescriptor.ruleScope)>}>

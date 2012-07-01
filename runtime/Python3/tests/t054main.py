@@ -30,7 +30,7 @@ class T(testbase.ANTLRTest):
             }
 
             ID: ('a'..'z' | '\u00c0'..'\u00ff')+;
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -51,7 +51,7 @@ class T(testbase.ANTLRTest):
               }
 
             ID: 'a'..'z'+;
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -76,7 +76,7 @@ class T(testbase.ANTLRTest):
               }
 
             ID: 'a'..'z'+;
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -102,7 +102,7 @@ class T(testbase.ANTLRTest):
               }
 
             ID: ('a'..'z' | '\u00c0'..'\u00ff')+;
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -127,10 +127,10 @@ class T(testbase.ANTLRTest):
               language = Python3;
               }
 
-            r returns [res]: (ID)+ EOF { $res = $text; };
+            r returns [res]: (ID)+ EOF { $res = $text };
 
             ID: 'a'..'z'+;
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -161,7 +161,7 @@ class T(testbase.ANTLRTest):
 
             ID: 'a'..'z'+;
             OP: '+';
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             """)
 
 
@@ -190,7 +190,7 @@ class T(testbase.ANTLRTest):
 
             ID: 'a'..'z'+;
             OP: '+';
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             ''')
 
         treeGrammar = textwrap.dedent(
@@ -201,7 +201,7 @@ class T(testbase.ANTLRTest):
             tokenVocab=T6;
             }
             r returns [res]: ^(OP a=ID b=ID)
-              { $res = "\%s \%s \%s" \% ($a.text, $OP.text, $b.text) }
+              { $res = "{} {} {}".format($a.text, $OP.text, $b.text) }
               ;
             ''')
 
@@ -231,7 +231,7 @@ class T(testbase.ANTLRTest):
 
             ID: 'a'..'z'+;
             OP: '+';
-            WS: ' '+ { $channel = HIDDEN; };
+            WS: ' '+ { $channel = HIDDEN };
             ''')
 
         treeGrammar = textwrap.dedent(
