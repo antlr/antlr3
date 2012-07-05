@@ -145,8 +145,8 @@ extern NSInteger debug;
         aRuleMemo = [[RuleMemo newRuleMemo] retain];
         [aHashRule insertObject:aRuleMemo atIndex:aStartIndex];
     }
-    [aRuleMemo setStartIndex:[NSNumber numberWithInteger:aStartIndex]];
-    [aRuleMemo setStopIndex:[NSNumber numberWithInteger:aStopIndex]];
+    [aRuleMemo setStartIndex:[ACNumber numberWithInteger:aStartIndex]];
+    [aRuleMemo setStopIndex:[ACNumber numberWithInteger:aStopIndex]];
 }
 
 @end

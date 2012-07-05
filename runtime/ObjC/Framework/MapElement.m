@@ -29,7 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "MapElement.h"
 
 
@@ -77,7 +77,7 @@
 {
     self = [super init];
     if ( self != nil ) {
-        index = [[NSNumber numberWithInteger: aTType] retain];
+        index = [[ACNumber numberWithInteger: aTType] retain];
         name  = [[NSString stringWithString:aName] retain];
     }
     return self;
@@ -85,7 +85,7 @@
 
 - (id) initWithNode:(NSInteger)aTType Node:(id)aNode
 {
-    self = [super initWithAnIndex:[NSNumber numberWithInteger:aTType]];
+    self = [super initWithAnIndex:[ACNumber numberWithInteger:aTType]];
     if ( self != nil ) {
         node  = aNode;
         if ( node ) [node retain];

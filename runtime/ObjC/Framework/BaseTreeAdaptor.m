@@ -338,13 +338,13 @@
     if ( treeToUniqueIDMap == nil ) {
         treeToUniqueIDMap = [UniqueIDMap newUniqueIDMap];
     }
-    NSNumber *prevID = [treeToUniqueIDMap getNode:node];
+    ACNumber *prevID = [treeToUniqueIDMap getNode:node];
     if ( prevID != nil ) {
         return [prevID integerValue];
     }
     NSInteger anID = uniqueNodeID;
-    // MapElement *aMapNode = [MapElement newMapElementWithObj1:[NSNumber numberWithInteger:anID] Obj2:node];
-    [treeToUniqueIDMap putID:[NSNumber numberWithInteger:anID] Node:node];
+    // MapElement *aMapNode = [MapElement newMapElementWithObj1:[ACNumber numberWithInteger:anID] Obj2:node];
+    [treeToUniqueIDMap putID:[ACNumber numberWithInteger:anID] Node:node];
     uniqueNodeID++;
     return anID;
     // GCC makes these nonunique:

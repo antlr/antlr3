@@ -91,10 +91,12 @@
 - (void) addObjectsFromArray:(NSArray *)otherArray
 {
     NSInteger cnt, i;
+    id tmp;
     cnt = [otherArray count];
     [self ensureCapacity:count+cnt];
     for( i = 0; i < cnt; i++) {
-        [self addObject:[otherArray objectAtIndex:i]];
+        tmp = [otherArray objectAtIndex:i];
+        [self addObject:tmp];
     }
     return;
 }
@@ -264,11 +266,13 @@
 {
     NSMutableString *str;
     NSInteger idx, cnt;
+    id tmp;
     cnt = [self count];
     str = [NSMutableString stringWithCapacity:30];
     [str appendString:@"["];
     for (idx = 0; idx < cnt; idx++ ) {
-        [str appendString:[[self objectAtIndex:idx] toString]];
+        tmp = [self objectAtIndex:idx];
+        [str appendString:((tmp == nil) ? @"nil" : [tmp description])];
     }
     [str appendString:@"]"];
     return str;

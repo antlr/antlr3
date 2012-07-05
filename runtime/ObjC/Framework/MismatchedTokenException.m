@@ -91,7 +91,7 @@
 	if (isTokenType) {
 		[desc appendFormat:@" expected:%d got:%d", expecting, [self unexpectedType]];
 	} else {
-		[desc appendFormat:@" expected:%c got:%c", expectingChar, (unichar)[self unexpectedType]];
+		[desc appendFormat:@" expected:%C got:%c", self.c, (unichar)expectingChar];
 	}
 	return desc;
 }

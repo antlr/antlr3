@@ -8,6 +8,7 @@
 
 #import "ANTLRBitSetTest.h"
 #import "ANTLRBitSet.h"
+#import "ACNumber.h"
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreFoundation/CFBitVector.h>
 
@@ -27,12 +28,12 @@
 -(void) testWithBitArray
 {
 	AMutableArray *bits = [AMutableArray arrayWithCapacity:10];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:NO]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
-	[bits addObject:[NSNumber numberWithBool:NO]];
-	[bits addObject:[NSNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:NO]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
+	[bits addObject:[ACNumber numberWithBool:NO]];
+	[bits addObject:[ACNumber numberWithBool:YES]];
 	STAssertTrue([[bits objectAtIndex:0] boolValue], @"Value at index 0 was not true");
 	STAssertTrue([[bits objectAtIndex:1] boolValue], @"Value at index 1 was not true");
 	STAssertFalse([[bits objectAtIndex:2] boolValue], @"Value at index 2 was not false");
@@ -94,6 +95,26 @@
 	
 	ANTLRBitSet *c = [bitSet or:otherBitSet];
 	STAssertTrue([c size] == [otherBitSet size], @"c should be the same as otherBitSet");
+}
+
+-(void) testOrInPlace
+{
+    
+	ANTLRBitSet *bitSet = [ANTLRBitSet newBitSet];
+	[bitSet add:1];
+	[bitSet add:2];
+	[bitSet add:16];
+	CFIndex actual = (CFIndex)[bitSet numBits];
+	CFIndex expected = 3;
+	STAssertEquals(actual, expected, @"There should be three bits set in bitvector. But I have %d", actual);
+	ANTLRBitSet *followSet = [ANTLRBitSet newBitSet];
+    [followSet orInPlace:bitSet];
+	actual = (CFIndex)[followSet numBits];
+	expected = 3;
+    NSLog( @"%@\n", [followSet description] );
+	STAssertEquals(actual, expected, @"There should be three bits set in bitvector. But I have %d", actual);
+	[bitSet release];
+	[followSet release];
 }
 
 -(void) testDescription

@@ -24,7 +24,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import "ANTLRUnbufferedCommonTreeNodeStreamState.h"
+#import "UnbufferedCommonTreeNodeStreamState.h"
 
 
 @implementation ANTLRUnbufferedCommonTreeNodeStreamState
@@ -45,12 +45,12 @@
 	[super dealloc];
 }
 
-- (ANTLRCommonTree *) currentNode
+- (CommonTree *) currentNode
 {
     return currentNode; 
 }
 
-- (void) setCurrentNode: (ANTLRCommonTree *) aCurrentNode
+- (void) setCurrentNode: (CommonTree *) aCurrentNode
 {
     if (currentNode != aCurrentNode) {
         [aCurrentNode retain];
@@ -59,12 +59,12 @@
     }
 }
 
-- (ANTLRCommonTree *) previousNode
+- (CommonTree *) previousNode
 {
     return previousNode; 
 }
 
-- (void) setPreviousNode: (ANTLRCommonTree *) aPreviousNode
+- (void) setPreviousNode: (CommonTree *) aPreviousNode
 {
     if (previousNode != aPreviousNode) {
         [aPreviousNode retain];

@@ -1,20 +1,20 @@
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "Fuzzy.h"
-#import "antlr3.h"
+#import <ANTLR/ANTLR.h>
 
 int main(int argc, const char * argv[])
 {
     NSError *error;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSString *input = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/fuzzy/input"  encoding:NSASCIIStringEncoding error:&error];
+	NSString *input = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/fuzzy/input"  encoding:NSASCIIStringEncoding error:&error];
 	NSLog(@"%@", input);
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:input];
 	Fuzzy *lex = [Fuzzy newFuzzyWithCharStream:stream];
-	ANTLRCommonTokenStream *tokens = [ANTLRCommonTokenStream newANTLRCommonTokenStreamWithTokenSource:lex];
+	CommonTokenStream *tokens = [CommonTokenStream newCommonTokenStreamWithTokenSource:lex];
 	NSLog( [tokens toString] );
 
-	id<ANTLRToken> currentToken;
-	while ((currentToken = [lex nextToken]) && [currentToken getType] != ANTLRTokenTypeEOF) {
+	id<Token> currentToken;
+	while ((currentToken = [lex nextToken]) && currentToken.type != TokenTypeEOF) {
 		NSLog(@"### %@", [currentToken toString]);
 	}
 

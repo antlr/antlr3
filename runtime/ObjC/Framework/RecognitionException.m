@@ -24,17 +24,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import "Foundation/NSObjCRuntime.h"
 #import "RecognitionException.h"
 #import "TokenStream.h"
 #import "TreeNodeStream.h"
+#import "BufferedTokenStream.h"
 
 @implementation RecognitionException
 
 @synthesize input;
+@synthesize index;
 @synthesize token;
 @synthesize node;
+@synthesize c;
 @synthesize line;
 @synthesize charPositionInLine;
+@synthesize approximateLineInfo;
 
 + (id) newException
 {
@@ -90,6 +95,26 @@
 {
 	self = [super initWithName:NSStringFromClass([self class]) reason:@"Runtime Exception" userInfo:nil];
 	if ( self != nil ) {
+        self.input = anInputStream;
+        self.index = input.index;
+        if ( [anInputStream isKindOfClass:[BufferedTokenStream class]] ) {
+            self.token = [(id<TokenStream>)anInputStream LT:1];
+            self.line = [token line];
+            self.charPositionInLine = [token charPositionInLine];
+           if ( [input conformsToProtocol:objc_getProtocol("TreeNodeStream")] ) {
+               [self extractInformationFromTreeNodeStream:anInputStream];
+           }
+           else if ( [[anInputStream class] instancesRespondToSelector:@selector(LA1:)] ) {
+               c = [anInputStream LA:1];
+               if ( [[anInputStream class] instancesRespondToSelector:@selector(getLine)] )
+                   line = [anInputStream getLine];
+               if ( [[anInputStream class] instancesRespondToSelector:@selector(getCharPositionInLine)] )
+                   charPositionInLine = [anInputStream getCharPositionInLine];
+           }
+           else {
+               c = [anInputStream LA:1];
+           }
+        }
 	}
 	return self;
 }
@@ -111,6 +136,50 @@
 	if ( token ) [token release];
 	if ( node ) [node release];
 	[super dealloc];
+}
+
+- (void) extractInformationFromTreeNodeStream:(id<TreeNodeStream>)anInput
+{
+    id<TreeNodeStream> nodes = anInput;
+    node = [nodes LT:1];
+    id<TreeAdaptor> adaptor = [nodes getTreeAdaptor];
+    id<Token> payload = [adaptor getToken:node];
+    if ( payload != nil ) {
+        token = payload;
+        if ( payload.line <= 0 ) {
+            // imaginary node; no line/pos info; scan backwards
+            int i = -1;
+            id priorNode = [nodes LT:i];
+            while ( priorNode != nil ) {
+                id<Token> priorPayload = [adaptor getToken:priorNode];
+                if ( priorPayload!=nil && priorPayload.line > 0 ) {
+                    // we found the most recent real line / pos info
+                    line = priorPayload.line;
+                    charPositionInLine = priorPayload.charPositionInLine;
+                    approximateLineInfo = YES;
+                    break;
+                }
+                --i;
+                priorNode = [nodes LT:i];
+            }
+        }
+        else { // node created from real token
+            line = payload.line;
+            charPositionInLine = payload.charPositionInLine;
+        }
+    }
+    else if ( [self.node isKindOfClass:[CommonTree class]] ) {
+        line = ((id<Tree>)node).line;
+        charPositionInLine = ((id<Tree>)node).charPositionInLine;
+        if ( [node isMemberOfClass:[CommonTree class]]) {
+            token = ((CommonTree *)node).token;
+        }
+    }
+    else {
+        NSInteger type = [adaptor getType:node];
+        NSString *text = [adaptor getText:node];
+        self.token = [CommonToken newToken:type Text:text];
+    }
 }
 
 - (NSInteger) unexpectedType
@@ -210,6 +279,4 @@
     charPositionInLine = aPos;
 }
 
-@synthesize index;
-@synthesize c;
 @end

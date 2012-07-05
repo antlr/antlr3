@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Aug 13, 2010 14:19:31 SimpleC.g 2010-08-13 14:29:19
+// $ANTLR 3.2 Aug 13, 2010 19:41:25 /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g 2010-08-13 19:42:18
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -59,7 +59,7 @@ public class SimpleCParser extends Parser {
     }
 
     public String[] getTokenNames() { return SimpleCParser.tokenNames; }
-    public String getGrammarFileName() { return "SimpleC.g"; }
+    public String getGrammarFileName() { return "/usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g"; }
 
 
     public static class program_return extends ParserRuleReturnScope {
@@ -68,7 +68,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "program"
-    // SimpleC.g:16:1: program : ( declaration )+ ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:16:1: program : ( declaration )+ ;
     public final SimpleCParser.program_return program() throws RecognitionException {
         SimpleCParser.program_return retval = new SimpleCParser.program_return();
         retval.start = input.LT(1);
@@ -80,12 +80,12 @@ public class SimpleCParser extends Parser {
 
 
         try {
-            // SimpleC.g:17:5: ( ( declaration )+ )
-            // SimpleC.g:17:9: ( declaration )+
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:17:5: ( ( declaration )+ )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:17:9: ( declaration )+
             {
             root_0 = (Object)adaptor.nil();
 
-            // SimpleC.g:17:9: ( declaration )+
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:17:9: ( declaration )+
             int cnt1=0;
             loop1:
             do {
@@ -99,7 +99,7 @@ public class SimpleCParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // SimpleC.g:17:9: declaration
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:17:9: declaration
             	    {
             	    pushFollow(FOLLOW_declaration_in_program85);
             	    declaration1=declaration();
@@ -147,7 +147,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "declaration"
-    // SimpleC.g:20:1: declaration : ( variable | functionHeader ';' -> ^( FUNC_DECL functionHeader ) | functionHeader block -> ^( FUNC_DEF functionHeader block ) );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:20:1: declaration : ( variable | functionHeader ';' -> ^( FUNC_DECL functionHeader ) | functionHeader block -> ^( FUNC_DEF functionHeader block ) );
     public final SimpleCParser.declaration_return declaration() throws RecognitionException {
         SimpleCParser.declaration_return retval = new SimpleCParser.declaration_return();
         retval.start = input.LT(1);
@@ -169,12 +169,12 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_functionHeader=new RewriteRuleSubtreeStream(adaptor,"rule functionHeader");
         RewriteRuleSubtreeStream stream_block=new RewriteRuleSubtreeStream(adaptor,"rule block");
         try {
-            // SimpleC.g:21:5: ( variable | functionHeader ';' -> ^( FUNC_DECL functionHeader ) | functionHeader block -> ^( FUNC_DEF functionHeader block ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:21:5: ( variable | functionHeader ';' -> ^( FUNC_DECL functionHeader ) | functionHeader block -> ^( FUNC_DEF functionHeader block ) )
             int alt2=3;
             alt2 = dfa2.predict(input);
             switch (alt2) {
                 case 1 :
-                    // SimpleC.g:21:9: variable
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:21:9: variable
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -188,7 +188,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // SimpleC.g:22:9: functionHeader ';'
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:22:9: functionHeader ';'
                     {
                     pushFollow(FOLLOW_functionHeader_in_declaration115);
                     functionHeader3=functionHeader();
@@ -214,7 +214,7 @@ public class SimpleCParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 22:28: -> ^( FUNC_DECL functionHeader )
                     {
-                        // SimpleC.g:22:31: ^( FUNC_DECL functionHeader )
+                        // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:22:31: ^( FUNC_DECL functionHeader )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNC_DECL, "FUNC_DECL"), root_1);
@@ -230,7 +230,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // SimpleC.g:23:9: functionHeader block
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:23:9: functionHeader block
                     {
                     pushFollow(FOLLOW_functionHeader_in_declaration135);
                     functionHeader5=functionHeader();
@@ -247,7 +247,7 @@ public class SimpleCParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: block, functionHeader
+                    // elements: functionHeader, block
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -259,7 +259,7 @@ public class SimpleCParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 23:30: -> ^( FUNC_DEF functionHeader block )
                     {
-                        // SimpleC.g:23:33: ^( FUNC_DEF functionHeader block )
+                        // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:23:33: ^( FUNC_DEF functionHeader block )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNC_DEF, "FUNC_DEF"), root_1);
@@ -301,7 +301,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "variable"
-    // SimpleC.g:26:1: variable : type declarator ';' -> ^( VAR_DEF type declarator ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:26:1: variable : type declarator ';' -> ^( VAR_DEF type declarator ) ;
     public final SimpleCParser.variable_return variable() throws RecognitionException {
         SimpleCParser.variable_return retval = new SimpleCParser.variable_return();
         retval.start = input.LT(1);
@@ -319,8 +319,8 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_declarator=new RewriteRuleSubtreeStream(adaptor,"rule declarator");
         RewriteRuleSubtreeStream stream_type=new RewriteRuleSubtreeStream(adaptor,"rule type");
         try {
-            // SimpleC.g:27:5: ( type declarator ';' -> ^( VAR_DEF type declarator ) )
-            // SimpleC.g:27:9: type declarator ';'
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:27:5: ( type declarator ';' -> ^( VAR_DEF type declarator ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:27:9: type declarator ';'
             {
             pushFollow(FOLLOW_type_in_variable166);
             type7=type();
@@ -340,7 +340,7 @@ public class SimpleCParser extends Parser {
 
 
             // AST REWRITE
-            // elements: declarator, type
+            // elements: type, declarator
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -352,7 +352,7 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 27:29: -> ^( VAR_DEF type declarator )
             {
-                // SimpleC.g:27:32: ^( VAR_DEF type declarator )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:27:32: ^( VAR_DEF type declarator )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(VAR_DEF, "VAR_DEF"), root_1);
@@ -392,7 +392,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "declarator"
-    // SimpleC.g:30:1: declarator : ID ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:30:1: declarator : ID ;
     public final SimpleCParser.declarator_return declarator() throws RecognitionException {
         SimpleCParser.declarator_return retval = new SimpleCParser.declarator_return();
         retval.start = input.LT(1);
@@ -404,8 +404,8 @@ public class SimpleCParser extends Parser {
         Object ID10_tree=null;
 
         try {
-            // SimpleC.g:31:5: ( ID )
-            // SimpleC.g:31:9: ID
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:31:5: ( ID )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:31:9: ID
             {
             root_0 = (Object)adaptor.nil();
 
@@ -440,7 +440,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "functionHeader"
-    // SimpleC.g:34:1: functionHeader : type ID '(' ( formalParameter ( ',' formalParameter )* )? ')' -> ^( FUNC_HDR type ID ( formalParameter )+ ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:34:1: functionHeader : type ID '(' ( formalParameter ( ',' formalParameter )* )? ')' -> ^( FUNC_HDR type ID ( formalParameter )+ ) ;
     public final SimpleCParser.functionHeader_return functionHeader() throws RecognitionException {
         SimpleCParser.functionHeader_return retval = new SimpleCParser.functionHeader_return();
         retval.start = input.LT(1);
@@ -469,8 +469,8 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_formalParameter=new RewriteRuleSubtreeStream(adaptor,"rule formalParameter");
         RewriteRuleSubtreeStream stream_type=new RewriteRuleSubtreeStream(adaptor,"rule type");
         try {
-            // SimpleC.g:35:5: ( type ID '(' ( formalParameter ( ',' formalParameter )* )? ')' -> ^( FUNC_HDR type ID ( formalParameter )+ ) )
-            // SimpleC.g:35:9: type ID '(' ( formalParameter ( ',' formalParameter )* )? ')'
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:5: ( type ID '(' ( formalParameter ( ',' formalParameter )* )? ')' -> ^( FUNC_HDR type ID ( formalParameter )+ ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:9: type ID '(' ( formalParameter ( ',' formalParameter )* )? ')'
             {
             pushFollow(FOLLOW_type_in_functionHeader219);
             type11=type();
@@ -484,7 +484,7 @@ public class SimpleCParser extends Parser {
             char_literal13=(Token)match(input,22,FOLLOW_22_in_functionHeader223);  
             stream_22.add(char_literal13);
 
-            // SimpleC.g:35:21: ( formalParameter ( ',' formalParameter )* )?
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:21: ( formalParameter ( ',' formalParameter )* )?
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -493,7 +493,7 @@ public class SimpleCParser extends Parser {
             }
             switch (alt4) {
                 case 1 :
-                    // SimpleC.g:35:23: formalParameter ( ',' formalParameter )*
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:23: formalParameter ( ',' formalParameter )*
                     {
                     pushFollow(FOLLOW_formalParameter_in_functionHeader227);
                     formalParameter14=formalParameter();
@@ -501,7 +501,7 @@ public class SimpleCParser extends Parser {
                     state._fsp--;
 
                     stream_formalParameter.add(formalParameter14.getTree());
-                    // SimpleC.g:35:39: ( ',' formalParameter )*
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:39: ( ',' formalParameter )*
                     loop3:
                     do {
                         int alt3=2;
@@ -514,7 +514,7 @@ public class SimpleCParser extends Parser {
 
                         switch (alt3) {
                     	case 1 :
-                    	    // SimpleC.g:35:41: ',' formalParameter
+                    	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:35:41: ',' formalParameter
                     	    {
                     	    char_literal15=(Token)match(input,23,FOLLOW_23_in_functionHeader231);  
                     	    stream_23.add(char_literal15);
@@ -546,7 +546,7 @@ public class SimpleCParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ID, formalParameter, type
+            // elements: formalParameter, ID, type
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -558,7 +558,7 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 36:9: -> ^( FUNC_HDR type ID ( formalParameter )+ )
             {
-                // SimpleC.g:36:12: ^( FUNC_HDR type ID ( formalParameter )+ )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:36:12: ^( FUNC_HDR type ID ( formalParameter )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(FUNC_HDR, "FUNC_HDR"), root_1);
@@ -606,7 +606,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "formalParameter"
-    // SimpleC.g:39:1: formalParameter : type declarator -> ^( ARG_DEF type declarator ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:39:1: formalParameter : type declarator -> ^( ARG_DEF type declarator ) ;
     public final SimpleCParser.formalParameter_return formalParameter() throws RecognitionException {
         SimpleCParser.formalParameter_return retval = new SimpleCParser.formalParameter_return();
         retval.start = input.LT(1);
@@ -621,8 +621,8 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_declarator=new RewriteRuleSubtreeStream(adaptor,"rule declarator");
         RewriteRuleSubtreeStream stream_type=new RewriteRuleSubtreeStream(adaptor,"rule type");
         try {
-            // SimpleC.g:40:5: ( type declarator -> ^( ARG_DEF type declarator ) )
-            // SimpleC.g:40:9: type declarator
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:40:5: ( type declarator -> ^( ARG_DEF type declarator ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:40:9: type declarator
             {
             pushFollow(FOLLOW_type_in_formalParameter281);
             type18=type();
@@ -651,7 +651,7 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 40:25: -> ^( ARG_DEF type declarator )
             {
-                // SimpleC.g:40:28: ^( ARG_DEF type declarator )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:40:28: ^( ARG_DEF type declarator )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ARG_DEF, "ARG_DEF"), root_1);
@@ -691,7 +691,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "type"
-    // SimpleC.g:43:1: type : ( 'int' | 'char' | 'void' | ID );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:43:1: type : ( 'int' | 'char' | 'void' | ID );
     public final SimpleCParser.type_return type() throws RecognitionException {
         SimpleCParser.type_return retval = new SimpleCParser.type_return();
         retval.start = input.LT(1);
@@ -703,8 +703,8 @@ public class SimpleCParser extends Parser {
         Object set20_tree=null;
 
         try {
-            // SimpleC.g:44:5: ( 'int' | 'char' | 'void' | ID )
-            // SimpleC.g:
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:44:5: ( 'int' | 'char' | 'void' | ID )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -746,7 +746,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "block"
-    // SimpleC.g:50:1: block : lc= '{' ( variable )* ( stat )* '}' -> ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:50:1: block : lc= '{' ( variable )* ( stat )* '}' -> ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* ) ;
     public final SimpleCParser.block_return block() throws RecognitionException {
         SimpleCParser.block_return retval = new SimpleCParser.block_return();
         retval.start = input.LT(1);
@@ -767,13 +767,13 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_variable=new RewriteRuleSubtreeStream(adaptor,"rule variable");
         RewriteRuleSubtreeStream stream_stat=new RewriteRuleSubtreeStream(adaptor,"rule stat");
         try {
-            // SimpleC.g:51:5: (lc= '{' ( variable )* ( stat )* '}' -> ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* ) )
-            // SimpleC.g:51:9: lc= '{' ( variable )* ( stat )* '}'
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:51:5: (lc= '{' ( variable )* ( stat )* '}' -> ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:51:9: lc= '{' ( variable )* ( stat )* '}'
             {
             lc=(Token)match(input,25,FOLLOW_25_in_block376);  
             stream_25.add(lc);
 
-            // SimpleC.g:52:13: ( variable )*
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:52:13: ( variable )*
             loop5:
             do {
                 int alt5=2;
@@ -795,7 +795,7 @@ public class SimpleCParser extends Parser {
 
                 switch (alt5) {
             	case 1 :
-            	    // SimpleC.g:52:13: variable
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:52:13: variable
             	    {
             	    pushFollow(FOLLOW_variable_in_block390);
             	    variable21=variable();
@@ -812,7 +812,7 @@ public class SimpleCParser extends Parser {
                 }
             } while (true);
 
-            // SimpleC.g:53:13: ( stat )*
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:53:13: ( stat )*
             loop6:
             do {
                 int alt6=2;
@@ -825,7 +825,7 @@ public class SimpleCParser extends Parser {
 
                 switch (alt6) {
             	case 1 :
-            	    // SimpleC.g:53:13: stat
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:53:13: stat
             	    {
             	    pushFollow(FOLLOW_stat_in_block405);
             	    stat22=stat();
@@ -848,7 +848,7 @@ public class SimpleCParser extends Parser {
 
 
             // AST REWRITE
-            // elements: stat, variable
+            // elements: variable, stat
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -860,18 +860,18 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 55:9: -> ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* )
             {
-                // SimpleC.g:55:12: ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:55:12: ^( BLOCK[$lc,@\"BLOCK\"] ( variable )* ( stat )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(BLOCK, lc, @"BLOCK"), root_1);
 
-                // SimpleC.g:55:34: ( variable )*
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:55:34: ( variable )*
                 while ( stream_variable.hasNext() ) {
                     adaptor.addChild(root_1, stream_variable.nextTree());
 
                 }
                 stream_variable.reset();
-                // SimpleC.g:55:44: ( stat )*
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:55:44: ( stat )*
                 while ( stream_stat.hasNext() ) {
                     adaptor.addChild(root_1, stream_stat.nextTree());
 
@@ -910,7 +910,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "stat"
-    // SimpleC.g:58:1: stat : ( forStat | expr ';' | block | assignStat ';' | ';' );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:58:1: stat : ( forStat | expr ';' | block | assignStat ';' | ';' );
     public final SimpleCParser.stat_return stat() throws RecognitionException {
         SimpleCParser.stat_return retval = new SimpleCParser.stat_return();
         retval.start = input.LT(1);
@@ -934,7 +934,7 @@ public class SimpleCParser extends Parser {
         Object char_literal30_tree=null;
 
         try {
-            // SimpleC.g:58:5: ( forStat | expr ';' | block | assignStat ';' | ';' )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:58:5: ( forStat | expr ';' | block | assignStat ';' | ';' )
             int alt7=5;
             switch ( input.LA(1) ) {
             case FOR:
@@ -985,7 +985,7 @@ public class SimpleCParser extends Parser {
 
             switch (alt7) {
                 case 1 :
-                    // SimpleC.g:58:7: forStat
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:58:7: forStat
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -999,7 +999,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // SimpleC.g:59:7: expr ';'
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:59:7: expr ';'
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1014,7 +1014,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // SimpleC.g:60:7: block
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:60:7: block
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1028,7 +1028,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // SimpleC.g:61:7: assignStat ';'
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:61:7: assignStat ';'
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1043,7 +1043,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // SimpleC.g:62:7: ';'
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:62:7: ';'
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1077,7 +1077,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "forStat"
-    // SimpleC.g:65:1: forStat : 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block -> ^( 'for' $start expr $next block ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:65:1: forStat : 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block -> ^( 'for' $start expr $next block ) ;
     public final SimpleCParser.forStat_return forStat() throws RecognitionException {
         SimpleCParser.forStat_return retval = new SimpleCParser.forStat_return();
         retval.start = input.LT(1);
@@ -1111,8 +1111,8 @@ public class SimpleCParser extends Parser {
         RewriteRuleSubtreeStream stream_block=new RewriteRuleSubtreeStream(adaptor,"rule block");
         RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"rule expr");
         try {
-            // SimpleC.g:66:5: ( 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block -> ^( 'for' $start expr $next block ) )
-            // SimpleC.g:66:9: 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:66:5: ( 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block -> ^( 'for' $start expr $next block ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:66:9: 'for' '(' start= assignStat ';' expr ';' next= assignStat ')' block
             {
             string_literal31=(Token)match(input,FOR,FOLLOW_FOR_in_forStat507);  
             stream_FOR.add(string_literal31);
@@ -1156,7 +1156,7 @@ public class SimpleCParser extends Parser {
 
 
             // AST REWRITE
-            // elements: next, start, FOR, block, expr
+            // elements: block, expr, FOR, start, next
             // token labels: 
             // rule labels: retval, start, next
             // token list labels: 
@@ -1170,7 +1170,7 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 67:9: -> ^( 'for' $start expr $next block )
             {
-                // SimpleC.g:67:12: ^( 'for' $start expr $next block )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:67:12: ^( 'for' $start expr $next block )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FOR.nextNode(), root_1);
@@ -1212,7 +1212,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "assignStat"
-    // SimpleC.g:70:1: assignStat : ID EQ expr -> ^( EQ ID expr ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:70:1: assignStat : ID EQ expr -> ^( EQ ID expr ) ;
     public final SimpleCParser.assignStat_return assignStat() throws RecognitionException {
         SimpleCParser.assignStat_return retval = new SimpleCParser.assignStat_return();
         retval.start = input.LT(1);
@@ -1230,8 +1230,8 @@ public class SimpleCParser extends Parser {
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
         RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"rule expr");
         try {
-            // SimpleC.g:71:5: ( ID EQ expr -> ^( EQ ID expr ) )
-            // SimpleC.g:71:9: ID EQ expr
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:71:5: ( ID EQ expr -> ^( EQ ID expr ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:71:9: ID EQ expr
             {
             ID38=(Token)match(input,ID,FOLLOW_ID_in_assignStat570);  
             stream_ID.add(ID38);
@@ -1248,7 +1248,7 @@ public class SimpleCParser extends Parser {
 
 
             // AST REWRITE
-            // elements: EQ, ID, expr
+            // elements: EQ, expr, ID
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1260,7 +1260,7 @@ public class SimpleCParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 71:20: -> ^( EQ ID expr )
             {
-                // SimpleC.g:71:23: ^( EQ ID expr )
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:71:23: ^( EQ ID expr )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_EQ.nextNode(), root_1);
@@ -1300,7 +1300,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "expr"
-    // SimpleC.g:74:1: expr : condExpr ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:74:1: expr : condExpr ;
     public final SimpleCParser.expr_return expr() throws RecognitionException {
         SimpleCParser.expr_return retval = new SimpleCParser.expr_return();
         retval.start = input.LT(1);
@@ -1312,8 +1312,8 @@ public class SimpleCParser extends Parser {
 
 
         try {
-            // SimpleC.g:74:5: ( condExpr )
-            // SimpleC.g:74:9: condExpr
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:74:5: ( condExpr )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:74:9: condExpr
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1350,7 +1350,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "condExpr"
-    // SimpleC.g:77:1: condExpr : aexpr ( ( '==' | '<' ) aexpr )? ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:77:1: condExpr : aexpr ( ( '==' | '<' ) aexpr )? ;
     public final SimpleCParser.condExpr_return condExpr() throws RecognitionException {
         SimpleCParser.condExpr_return retval = new SimpleCParser.condExpr_return();
         retval.start = input.LT(1);
@@ -1368,8 +1368,8 @@ public class SimpleCParser extends Parser {
         Object char_literal44_tree=null;
 
         try {
-            // SimpleC.g:78:5: ( aexpr ( ( '==' | '<' ) aexpr )? )
-            // SimpleC.g:78:9: aexpr ( ( '==' | '<' ) aexpr )?
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:5: ( aexpr ( ( '==' | '<' ) aexpr )? )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:9: aexpr ( ( '==' | '<' ) aexpr )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1379,7 +1379,7 @@ public class SimpleCParser extends Parser {
             state._fsp--;
 
             adaptor.addChild(root_0, aexpr42.getTree());
-            // SimpleC.g:78:15: ( ( '==' | '<' ) aexpr )?
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:15: ( ( '==' | '<' ) aexpr )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -1388,9 +1388,9 @@ public class SimpleCParser extends Parser {
             }
             switch (alt9) {
                 case 1 :
-                    // SimpleC.g:78:17: ( '==' | '<' ) aexpr
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:17: ( '==' | '<' ) aexpr
                     {
-                    // SimpleC.g:78:17: ( '==' | '<' )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:17: ( '==' | '<' )
                     int alt8=2;
                     int LA8_0 = input.LA(1);
 
@@ -1408,7 +1408,7 @@ public class SimpleCParser extends Parser {
                     }
                     switch (alt8) {
                         case 1 :
-                            // SimpleC.g:78:18: '=='
+                            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:18: '=='
                             {
                             string_literal43=(Token)match(input,EQEQ,FOLLOW_EQEQ_in_condExpr622); 
                             string_literal43_tree = (Object)adaptor.create(string_literal43);
@@ -1418,7 +1418,7 @@ public class SimpleCParser extends Parser {
                             }
                             break;
                         case 2 :
-                            // SimpleC.g:78:26: '<'
+                            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:78:26: '<'
                             {
                             char_literal44=(Token)match(input,LT,FOLLOW_LT_in_condExpr627); 
                             char_literal44_tree = (Object)adaptor.create(char_literal44);
@@ -1469,7 +1469,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "aexpr"
-    // SimpleC.g:81:1: aexpr : atom ( '+' atom )* ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:81:1: aexpr : atom ( '+' atom )* ;
     public final SimpleCParser.aexpr_return aexpr() throws RecognitionException {
         SimpleCParser.aexpr_return retval = new SimpleCParser.aexpr_return();
         retval.start = input.LT(1);
@@ -1485,8 +1485,8 @@ public class SimpleCParser extends Parser {
         Object char_literal47_tree=null;
 
         try {
-            // SimpleC.g:82:5: ( atom ( '+' atom )* )
-            // SimpleC.g:82:9: atom ( '+' atom )*
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:82:5: ( atom ( '+' atom )* )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:82:9: atom ( '+' atom )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1496,7 +1496,7 @@ public class SimpleCParser extends Parser {
             state._fsp--;
 
             adaptor.addChild(root_0, atom46.getTree());
-            // SimpleC.g:82:14: ( '+' atom )*
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:82:14: ( '+' atom )*
             loop10:
             do {
                 int alt10=2;
@@ -1509,7 +1509,7 @@ public class SimpleCParser extends Parser {
 
                 switch (alt10) {
             	case 1 :
-            	    // SimpleC.g:82:16: '+' atom
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:82:16: '+' atom
             	    {
             	    char_literal47=(Token)match(input,PLUS,FOLLOW_PLUS_in_aexpr657); 
             	    char_literal47_tree = (Object)adaptor.create(char_literal47);
@@ -1557,7 +1557,7 @@ public class SimpleCParser extends Parser {
     };
 
     // $ANTLR start "atom"
-    // SimpleC.g:85:1: atom : ( ID | INT | '(' expr ')' -> expr );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:85:1: atom : ( ID | INT | '(' expr ')' -> expr );
     public final SimpleCParser.atom_return atom() throws RecognitionException {
         SimpleCParser.atom_return retval = new SimpleCParser.atom_return();
         retval.start = input.LT(1);
@@ -1579,7 +1579,7 @@ public class SimpleCParser extends Parser {
         RewriteRuleTokenStream stream_24=new RewriteRuleTokenStream(adaptor,"token 24");
         RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"rule expr");
         try {
-            // SimpleC.g:86:5: ( ID | INT | '(' expr ')' -> expr )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:86:5: ( ID | INT | '(' expr ')' -> expr )
             int alt11=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -1606,7 +1606,7 @@ public class SimpleCParser extends Parser {
 
             switch (alt11) {
                 case 1 :
-                    // SimpleC.g:86:7: ID
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:86:7: ID
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1618,7 +1618,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // SimpleC.g:87:7: INT
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:87:7: INT
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1630,7 +1630,7 @@ public class SimpleCParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // SimpleC.g:88:7: '(' expr ')'
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleC.g:88:7: '(' expr ')'
                     {
                     char_literal51=(Token)match(input,22,FOLLOW_22_in_atom708);  
                     stream_22.add(char_literal51);

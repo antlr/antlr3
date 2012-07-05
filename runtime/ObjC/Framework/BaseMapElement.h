@@ -29,19 +29,20 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "LinkBase.h"
+#import "ACNumber.h"
 
 @interface BaseMapElement : LinkBase {
-    NSNumber *index;
+    ACNumber *index;
 }
 
-@property (retain) NSNumber *index;
+@property (retain) ACNumber *index;
 
 + (id) newBaseMapElement;
-+ (id) newBaseMapElementWithIndex:(NSNumber *)anIdx;
++ (id) newBaseMapElementWithIndex:(ACNumber *)anIdx;
 - (id) init;
-- (id) initWithAnIndex:(NSNumber *)anIdx;
+- (id) initWithAnIndex:(ACNumber *)anIdx;
 
 - (id) copyWithZone:(NSZone *)aZone;
 

@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} LangDumpDecl.g 2011-05-06 17:39:09
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/treeparser/LangDumpDecl.g 2012-02-16 17:59:08
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -34,32 +34,33 @@ typedef enum {
 #define INT 7
 #define INTTYPE 8
 #define WS 9
-#pragma mark Dynamic Global Scopes
-#pragma mark Dynamic Rule Scopes
-#pragma mark Rule Return Scopes start
+#pragma mark Dynamic Global Scopes globalAttributeScopeInterface
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeInterface
+#pragma mark Rule Return Scopes returnScopeInterface
 /* returnScopeInterface LangDumpDecl_declarator_return */
-@interface LangDumpDecl_declarator_return :ANTLRTreeRuleReturnScope { /* returnScopeInterface line 1838 */
+@interface LangDumpDecl_declarator_return : TreeRuleReturnScope { /* returnScopeInterface line 1838 */
  /* ObjC start of memVars() */
+
 }
-/* start properties */
+/* start property declarations */
+
+
+/* start of method declarations */
+
 + (LangDumpDecl_declarator_return *)newLangDumpDecl_declarator_return;
 /* this is start of set and get methods */
   /* methodsDecl */
+
 @end /* end of returnScopeInterface interface */
 
 
 
-
 /* Interface grammar class */
-@interface LangDumpDecl : ANTLRTreeParser { /* line 572 */
-/* ObjC start of ruleAttributeScopeMemVar */
+@interface LangDumpDecl  : TreeParser { /* line 572 */
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeDecl
+#pragma mark Dynamic Global Rule Scopes globalAttributeScopeMemVar
 
 
-/* ObjC end of ruleAttributeScopeMemVar */
-/* ObjC start of globalAttributeScopeMemVar */
-
-
-/* ObjC end of globalAttributeScopeMemVar */
 /* ObjC start of actions.(actionScope).memVars */
 /* ObjC end of actions.(actionScope).memVars */
 /* ObjC start of memVars */
@@ -73,7 +74,7 @@ typedef enum {
 /* ObjC end of properties */
 
 + (void) initialize;
-+ (id) newLangDumpDecl:(id<ANTLRTreeNodeStream>)aStream;
++ (id) newLangDumpDecl:(id<TreeNodeStream>)aStream;
 /* ObjC start of actions.(actionScope).methodsDecl */
 /* ObjC end of actions.(actionScope).methodsDecl */
 

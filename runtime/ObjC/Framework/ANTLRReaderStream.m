@@ -7,11 +7,11 @@
 //
 
 #import "ANTLRReaderStream.h"
-
+#import "ACNumber.h"
 
 @implementation ANTLRReaderStream
 
-@synthesize fh;
+@synthesize is;
 @synthesize size;
 @synthesize rbSize;
 
@@ -33,17 +33,17 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
     return [[ANTLRReaderStream alloc] init];
 }
 
-+ (id) newANTLRReaderStream:(NSFileHandle *)r
++ (id) newANTLRReaderStream:(NSInputStream *)r
 {
     return [[ANTLRReaderStream alloc] initWithReader:r size:INITIAL_BUFFER_SIZE readBufferSize:READ_BUFFER_SIZE];
 }
 
-+ (id) newANTLRReaderStream:(NSFileHandle *)r size:(NSInteger)aSize
++ (id) newANTLRReaderStream:(NSInputStream *)r size:(NSInteger)aSize
 {
     return [[ANTLRReaderStream alloc] initWithReader:r size:aSize readBufferSize:READ_BUFFER_SIZE];
 }
 
-+ (id) newANTLRReaderStream:(NSFileHandle *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
++ (id) newANTLRReaderStream:(NSInputStream *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
 {
 //    load(r, aSize, aReadChunkSize);
     return [[ANTLRReaderStream alloc] initWithReader:r size:aSize readBufferSize:aReadChunkSize];
@@ -53,29 +53,36 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
 {
 	self = [super init];
 	if ( self != nil ) {
-        fh = nil;
+        int p1 = n;  // init from ANTLRStringStream val
+        is = nil;
         rbSize = READ_BUFFER_SIZE;
         size = INITIAL_BUFFER_SIZE;
     }
     return self;
 }
 
-- (id) initWithReader:(NSFileHandle *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
+- (id) initWithReader:(NSInputStream *)r size:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
 {
 	self = [super init];
 	if ( self != nil ) {
-        fh = r;
+        int p1 = n;  // init from ANTLRStringStream val
+        is = r;
         rbSize = aSize;
         size = aReadChunkSize;
-        [self load:aSize readBufferSize:aReadChunkSize];
+        [is open];
+//        [self setUpStreamForFile];
+        if ( [is hasBytesAvailable] ) {
+            [self load:aSize readBufferSize:aReadChunkSize];
+        }
     }
     return self;
 }
 
 - (void) load:(NSInteger)aSize readBufferSize:(NSInteger)aReadChunkSize
 {
-    NSData *retData = nil;
-    if ( fh==nil ) {
+    NSMutableData *retData = nil;
+    uint8_t buf[1024];
+    if ( is==nil ) {
         return;
     }
     if ( aSize<=0 ) {
@@ -87,46 +94,49 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
 #pragma mark fix these NSLog calls
     @try {
         int numRead=0;
-        int p1 = 0;
-        retData = [fh readDataToEndOfFile];
-        numRead = [retData length];
+        numRead = [is read:buf maxLength:aReadChunkSize];
+        retData = [NSMutableData dataWithCapacity:numRead];
+        [retData appendBytes:(const void *)buf length:numRead];
         NSLog( @"read %d chars; p was %d is now %d", n, p1, (p1+numRead) );
         p1 += numRead;
         n = p1;
         data = [[NSString alloc] initWithData:retData encoding:NSASCIIStringEncoding];
-        NSLog( @"n=%d", n );
+        NSLog( @"n=%d\n", n );
     }
     @finally {
-        [fh closeFile];
+        [self close];
     }
 }
 
-- (void)setUpStreamForFile:(NSString *)path {
+- (void)setUpStreamForFile
+{
     // iStream is NSInputStream instance variable
-    NSInputStream *iStream = [[NSInputStream alloc] initWithFileAtPath:path];
-//    [iStream setDelegate:self];
-    [iStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+//    if ( is == nil )
+//        is = [[NSInputStream alloc] initWithFileAtPath:path];
+    [is setDelegate:self];
+    [is scheduleInRunLoop:[NSRunLoop currentRunLoop]
                        forMode:NSDefaultRunLoopMode];
-    [iStream open];
+    [is open];
 }
 
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode
 {
     NSMutableData *myData = nil;
-    NSNumber *bytesRead = [NSNumber numberWithInteger:0];
+    ACNumber *bytesRead = [ACNumber numberWithInteger:0];
+    uint8_t buf[1024];
     switch(eventCode) {
         case NSStreamEventHasBytesAvailable:
         {
             if(!myData) {
                 myData = [[NSMutableData data] retain];
             }
-            uint8_t buf[1024];
             unsigned int len = 0;
             len = [(NSInputStream *)stream read:buf maxLength:1024];
             if(len) {
                 [myData appendBytes:(const void *)buf length:len];
-                // bytesRead is an instance variable of type NSNumber.
-                bytesRead = [NSNumber numberWithInteger:[bytesRead intValue]+len];
+                // bytesRead is an instance variable of type ACNumber.
+                bytesRead = [ACNumber numberWithInteger:[bytesRead integerValue]+len];
+                data = [[NSString alloc] initWithData:myData encoding:NSASCIIStringEncoding];
             } else {
                 NSLog(@"no buffer!");
             }
@@ -141,13 +151,14 @@ static NSInteger INITIAL_BUFFER_SIZE = 1024;
             stream = nil; // stream is ivar, so reinit it
             break;
         }
-            // continued
+        // continued
     }
 }
 
 - (void) close
 {
-    [fh closeFile];
+    [is close];
+    is = nil;
 }
 
 @end
