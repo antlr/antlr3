@@ -489,6 +489,10 @@ public class Antlr3Mojo
 
         File unprefixedGrammarFileName = new File(grammarFileName.substring(srcPath.length()));
 
-        return unprefixedGrammarFileName.getParent() + File.separator;
+        if (unprefixedGrammarFileName.getParent() != null) {
+            return unprefixedGrammarFileName.getParent() + File.separator;
+        } else {
+            return "";
+        }
     }
 }
