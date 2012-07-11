@@ -147,8 +147,7 @@ public class gUnitExecutor implements ITestSuite {
 			}
 		}
 		catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+			handleUnexpectedException(e);
         }
 		return testResultST.toString();
 	}
@@ -277,17 +276,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
         } catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// This exception could be caused from ANTLR Runtime Exception, e.g. MismatchedTokenException
         	return getTestExceptionResult(e);
         } finally {
@@ -409,17 +408,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
 		} catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+			handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// This exception could be caused from ANTLR Runtime Exception, e.g. MismatchedTokenException
         	return getTestExceptionResult(e);
         } finally {
@@ -578,17 +577,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
 		} catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+			handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// note: This exception could be caused from ANTLR Runtime Exception...
         	return getTestExceptionResult(e);
         } finally {
@@ -651,5 +650,10 @@ public class gUnitExecutor implements ITestSuite {
     public void onFail(ITestCase failTest) {
 
     }
+
+	protected void handleUnexpectedException(Exception e) {
+		e.printStackTrace();
+		System.exit(1);
+	}
 
 }
