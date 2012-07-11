@@ -634,11 +634,21 @@ public class gUnitExecutor implements ITestSuite {
     	return testResult;
 	}
 
+	/**
+	 * Verify the input has been properly consumed
+	 */
 	protected void checkForValidInput(CommonTokenStream tokens, PrintStream ps2) {
-		/** Invalid input */
 		if ( tokens.index() != tokens.size() - 1 ) {
-			// throw new InvalidInputException();
-			ps2.print( "Invalid input" );
+			//At this point we need to check for redundant EOF tokens
+			//which might have been added by the Parser:
+			List<? extends Token> endingTokens = tokens.getTokens(tokens.index(), tokens.size() -1);
+			for (Token endToken : endingTokens) {
+				if (! "<EOF>".equals(endToken.getText())) {
+					//writing to ps2 will mark the test as failed:
+					ps2.print( "Invalid input" );
+					return;
+				}
+			}
 		}
 	}
 
