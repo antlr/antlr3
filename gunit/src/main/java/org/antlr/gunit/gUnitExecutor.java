@@ -377,11 +377,7 @@ public class gUnitExecutor implements ITestSuite {
                 }
             }
 
-            /** Invalid input */
-            if ( tokens.index()!=tokens.size()-1 ) {
-            	//throw new InvalidInputException();
-            	ps2.print("Invalid input");
-            }
+            checkForValidInput(tokens, ps2);
 
 			if ( err.toString().length()>0 ) {
 				gUnitTestResult testResult = new gUnitTestResult(false, err.toString());
@@ -545,11 +541,7 @@ public class gUnitExecutor implements ITestSuite {
                 }
             }
 
-            /** Invalid input */
-            if ( tokens.index()!=tokens.size()-1 ) {
-            	//throw new InvalidInputException();
-            	ps2.print("Invalid input");
-            }
+			checkForValidInput( tokens, ps2 );
 
 			if ( err.toString().length()>0 ) {
 				gUnitTestResult testResult = new gUnitTestResult(false, err.toString());
@@ -642,6 +634,13 @@ public class gUnitExecutor implements ITestSuite {
     	return testResult;
 	}
 
+	protected void checkForValidInput(CommonTokenStream tokens, PrintStream ps2) {
+		/** Invalid input */
+		if ( tokens.index() != tokens.size() - 1 ) {
+			// throw new InvalidInputException();
+			ps2.print( "Invalid input" );
+		}
+	}
 
     public void onPass(ITestCase passTest) {
 
