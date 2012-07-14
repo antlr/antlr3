@@ -115,17 +115,17 @@ public abstract class gUnitBaseTest extends TestCase {
 				return null;
 			}
         } catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
         } catch (InvocationTargetException e) {	// This exception could be caused from ANTLR Runtime Exception, e.g. MismatchedTokenException
         	if ( e.getCause()!=null ) this.stderr = e.getCause().toString();
 			else this.stderr = e.toString();
@@ -260,16 +260,16 @@ public abstract class gUnitBaseTest extends TestCase {
 			}
 		}
         catch (ClassNotFoundException e) {
-			e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
 		}
         catch (SecurityException e) {
-			e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
 		}
         catch (NoSuchMethodException e) {
-			e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
 		}
         catch (IllegalAccessException e) {
-			e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException(e);
 		}
         catch (InvocationTargetException e) {
             this.stdout = out.toString();
@@ -432,13 +432,13 @@ public abstract class gUnitBaseTest extends TestCase {
 				return null;
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace(); System.exit(1);
+			handleUnexpectedException(e);
 		} catch (SecurityException e) {
-			e.printStackTrace(); System.exit(1);
+			handleUnexpectedException(e);
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace(); System.exit(1);
+			handleUnexpectedException(e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace(); System.exit(1);
+			handleUnexpectedException(e);
 		} catch (InvocationTargetException e) {
 			if ( e.getCause()!=null ) this.stderr = e.getCause().toString();
 			else this.stderr = e.toString();
@@ -479,6 +479,11 @@ public abstract class gUnitBaseTest extends TestCase {
 		else {	// return the same object for the other token types
 			return retVal;
 		}
+	}
+
+	protected void handleUnexpectedException(Exception e) {
+		e.printStackTrace();
+		System.exit(1);
 	}
 
 }

@@ -147,8 +147,7 @@ public class gUnitExecutor implements ITestSuite {
 			}
 		}
 		catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+			handleUnexpectedException(e);
         }
 		return testResultST.toString();
 	}
@@ -188,7 +187,7 @@ public class gUnitExecutor implements ITestSuite {
 					//System.out.println("; Expecting " + test.getExpected() + "; Success?: " + test.getExpected().equals(test.getResult(result)));
 				} catch ( InvalidInputException e) {
 					numOfInvalidInput++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual(input.input);
 					invalids.add(test);
 					continue;
@@ -200,7 +199,7 @@ public class gUnitExecutor implements ITestSuite {
 
 				if (actual == null) {
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual("null");
 					failures.add(test);
 					onFail(test);
@@ -213,14 +212,14 @@ public class gUnitExecutor implements ITestSuite {
 				// TODO: something with ACTIONS - at least create action test type and throw exception.
 				else if ( ts.testSuites.get(input).getType()==gUnitParser.ACTION ) {	// expected Token: ACTION
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					test.setActual("\t"+"{ACTION} is not supported in the grammarInfo yet...");
 					failures.add(test);
 					onFail(test);
 				}
 				else {
 					numOfFailure++;
-                    test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line);
+					test.setHeader(rule, lexicalRule, treeRule, numOfTest, input.line, input.input);
 					failures.add(test);
 					onFail(test);
 				}
@@ -277,17 +276,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
         } catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// This exception could be caused from ANTLR Runtime Exception, e.g. MismatchedTokenException
         	return getTestExceptionResult(e);
         } finally {
@@ -378,11 +377,7 @@ public class gUnitExecutor implements ITestSuite {
                 }
             }
 
-            /** Invalid input */
-            if ( tokens.index()!=tokens.size()-1 ) {
-            	//throw new InvalidInputException();
-            	ps2.print("Invalid input");
-            }
+            checkForValidInput(tokens, ps2);
 
 			if ( err.toString().length()>0 ) {
 				gUnitTestResult testResult = new gUnitTestResult(false, err.toString());
@@ -409,17 +404,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
 		} catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+			handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// This exception could be caused from ANTLR Runtime Exception, e.g. MismatchedTokenException
         	return getTestExceptionResult(e);
         } finally {
@@ -546,11 +541,7 @@ public class gUnitExecutor implements ITestSuite {
                 }
             }
 
-            /** Invalid input */
-            if ( tokens.index()!=tokens.size()-1 ) {
-            	//throw new InvalidInputException();
-            	ps2.print("Invalid input");
-            }
+			checkForValidInput( tokens, ps2 );
 
 			if ( err.toString().length()>0 ) {
 				gUnitTestResult testResult = new gUnitTestResult(false, err.toString());
@@ -578,17 +569,17 @@ public class gUnitExecutor implements ITestSuite {
 		} catch (IOException e) {
 			return getTestExceptionResult(e);
 		} catch (ClassNotFoundException e) {
-        	e.printStackTrace(); System.exit(1);
+			handleUnexpectedException( e );
         } catch (SecurityException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (NoSuchMethodException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalArgumentException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InstantiationException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (IllegalAccessException e) {
-        	e.printStackTrace(); System.exit(1);
+        	handleUnexpectedException( e );
         } catch (InvocationTargetException e) {	// note: This exception could be caused from ANTLR Runtime Exception...
         	return getTestExceptionResult(e);
         } finally {
@@ -643,6 +634,23 @@ public class gUnitExecutor implements ITestSuite {
     	return testResult;
 	}
 
+	/**
+	 * Verify the input has been properly consumed
+	 */
+	protected void checkForValidInput(CommonTokenStream tokens, PrintStream ps2) {
+		if ( tokens.index() != tokens.size() - 1 ) {
+			//At this point we need to check for redundant EOF tokens
+			//which might have been added by the Parser:
+			List<? extends Token> endingTokens = tokens.getTokens(tokens.index(), tokens.size() -1);
+			for (Token endToken : endingTokens) {
+				if (! "<EOF>".equals(endToken.getText())) {
+					//writing to ps2 will mark the test as failed:
+					ps2.print( "Invalid input" );
+					return;
+				}
+			}
+		}
+	}
 
     public void onPass(ITestCase passTest) {
 
@@ -651,5 +659,10 @@ public class gUnitExecutor implements ITestSuite {
     public void onFail(ITestCase failTest) {
 
     }
+
+	protected void handleUnexpectedException(Exception e) {
+		e.printStackTrace();
+		System.exit(1);
+	}
 
 }
