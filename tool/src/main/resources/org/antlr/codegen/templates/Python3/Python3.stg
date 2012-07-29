@@ -516,9 +516,7 @@ ruleLabelDefs() ::= <<
   ruleDescriptor.wildcardTreeListLabels]
     :{it | list_<it.label.text> = None}; separator="\n"
 >
-<[ruleDescriptor.ruleLabels,ruleDescriptor.ruleListLabels]
-    :ruleLabelDef(); separator="\n"
->
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 <ruleDescriptor.ruleListLabels:{it | <it.label.text> = None}; separator="\n">
 >>
 
@@ -1285,7 +1283,7 @@ delegateName(d) ::= <<
 
 /** Define a rule label including default value */
 ruleLabelDef(label) ::= <<
-<label.label.text> = None<\n>
+<label.label.text> = None
 >>
 
 returnStructName(r) ::= "<r.name>_return"
