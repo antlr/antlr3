@@ -39,11 +39,13 @@
  */
 
 finishedBacktracking(block) ::= <<
+<if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>
 if <actions.(actionScope).synpredgate>:
     <block>
 <else>
 <block>
+<endif>
 <endif>
 >>
 

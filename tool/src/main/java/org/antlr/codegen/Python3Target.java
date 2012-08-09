@@ -42,6 +42,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Python3Target extends Target {
+    @Override
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return false;
+    }
+
     /** Target must be able to override the labels used for token types */
 	@Override
     public String getTokenTypeAsTargetLabel(CodeGenerator generator,
