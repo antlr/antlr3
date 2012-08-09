@@ -7,6 +7,10 @@ University of San Francisco
 
 CHANGES
 
+August 9, 2012
+
+* Provide Lexer get end of file method so people can override it.
+
 November 25, 2011
 
 * stderr not test correctly in gunit examineExecResult
