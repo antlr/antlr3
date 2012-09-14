@@ -763,36 +763,51 @@ public class CodeGenerator {
 		}
 		String testSTName = "lookaheadTest";
 		String testRangeSTName = "lookaheadRangeTest";
+		String testSetSTName = "lookaheadSetTest";
 		String varSTName = "lookaheadVarName";
 		if ( !partOfDFA ) {
 			testSTName = "isolatedLookaheadTest";
 			testRangeSTName = "isolatedLookaheadRangeTest";
+			testSetSTName = "isolatedLookaheadSetTest";
 			varSTName = "isolatedLookaheadVarName";
 		}
 		ST setST = templates.getInstanceOf("setTest");
-		// If setTest asks for varName (e.g. so it can test via set inclusion),
-		// give it the var name.
-		if ( setST.impl.formalArguments.get("varName")!=null ) {
-			ST varST = templates.getInstanceOf(varSTName);
-			varST.add("k", Utils.integer(k));
-			setST.add("varName", varST);
-			// If setTest asks for all the values in one list,
-			// skip the ordinary ranges variable.
-			if ( setST.impl.formalArguments.get("allValues")!=null ) {
-				// Flatten the IntervalSet into a list of integers.
-				Iterator<Interval> iter = iset.getIntervals().iterator();
-				while (iter.hasNext()) {
-					Interval I = iter.next();
-					int a = I.a;
-					int b = I.b;
+		// If the SetTest template exists, separate the ranges:
+		// flatten the small ones into one list and make that a range,
+		// and leave the others as they are.
+		if ( templates.isDefined(testSetSTName) ) {
+			// Flatten the IntervalSet into a list of integers.
+			ST sST = templates.getInstanceOf(testSetSTName);
+			Iterator<Interval> iter = iset.getIntervals().iterator();
+			int rangeNumber = 1;
+			while (iter.hasNext()) {
+				Interval I = iter.next();
+				int a = I.a;
+				int b = I.b;
+				// Not flattening the large ranges helps us avoid making a
+				// set that contains 90% of Unicode when we could just use
+				// a simple range like (LA(1)>=123 && LA(1)<=65535).
+				// This flattens all ranges of length 4 or less.
+				if (b - a < 4) {
 					for (int i = a; i <= b; i++) {
-						setST.add("allValues", getTokenTypeAsTargetLabel(i));
-						setST.add("allValuesAsInt", Utils.integer(i));
+						sST.add("values", getTokenTypeAsTargetLabel(i));
+						sST.add("valuesAsInt", Utils.integer(i));
 					}
+				} else {
+					ST eST = templates.getInstanceOf(testRangeSTName);
+					eST.add("lower", getTokenTypeAsTargetLabel(a));
+					eST.add("lowerAsInt", Utils.integer(a));
+					eST.add("upper", getTokenTypeAsTargetLabel(b));
+					eST.add("upperAsInt", Utils.integer(b));
+					eST.add("rangeNumber", Utils.integer(rangeNumber));
+					eST.add("k", Utils.integer(k));
+					setST.add("ranges", eST);
+					rangeNumber++;
 				}
-				// Skip doing anything with ranges.
-				return setST;
 			}
+			sST.add("k", Utils.integer(k));
+			setST.add("ranges", sST);
+			return setST;
 		}
 		Iterator<Interval> iter = iset.getIntervals().iterator();
 		int rangeNumber = 1;

@@ -1238,12 +1238,18 @@ lookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= <%
 
 isolatedLookaheadRangeTest(lower,upper,k,rangeNumber,lowerAsInt,upperAsInt) ::= "(<lower> \<= self.input.LA(<k>) \<= <upper>)"
 
+lookaheadSetTest(values,k,valuesAsInt) ::= <%
+LA<decisionNumber>_<stateNumber> in {<values; separator=", ">}
+%>
+
+isolatedLookaheadSetTest(values,k,valuesAsInt) ::= <%
+self.input.LA(<k>) in {<values; separator=", ">}
+%>
+
 lookaheadVarName(k) ::= "LA<decisionNumber>_<stateNumber>"
 isolatedLookaheadVarName(k) ::= "self.input.LA(<k>)"
 
-setTest(varName,allValues,allValuesAsInt) ::= <%
-<varName> in {<allValues; separator=", ">}
-%>
+setTest(ranges) ::= "<ranges; separator=\" or \">"
 
 // A T T R I B U T E S
 
