@@ -15,3 +15,6 @@ target/
 # NetBeans user configuration
 nbactions.xml
 nb-configuration.xml
+
+# Python runtime files
+*.py[co]
