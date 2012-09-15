@@ -68,29 +68,6 @@
 
   <!--
 
-    Inform Maven of the ANTLR snapshot repository, which it will
-    need to consult to get the latest snapshot build of the runtime
-    if it was not built and installed locally.
-    -->
-    <repositories>
-
-      <!--
-        This is the ANTLR repository.
-        -->
-        <repository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>http://antlr.org/antlr-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-
-    </repositories>
-
-  <!--
-
     Tell Maven which other artifacts we need in order to
     build, run and test the ANTLR jars.
     This is the master pom, and so it only contains those
