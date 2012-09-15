@@ -183,34 +183,6 @@ Jim Idle - March 2009
         </site>
     </distributionManagement>
 
-    <!--
-
-    Inform Maven of the ANTLR snapshot repository, which it will
-    need to consult to get the latest snapshot build of the runtime and tool
-    if it was not built and installed locally.
-    -->
-    <repositories>
-
-      <!--
-        This is the ANTLR repository.
-        -->
-        <repository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>http://antlr.org/antlr-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            
-        </repository>
-
-    </repositories>
-    
     <!-- Ancilliary information for completeness
       -->
     <inceptionYear>2009</inceptionYear>
