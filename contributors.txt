@@ -49,3 +49,4 @@ CONTRIBUTORS:
 
 YYYY/MM/DD, github id, Full name, email
 2012/07/12, parrt, Terence Parr, parrt@antlr.org
+2012/08/08, Zannick, Benjamin S Wolf, jokeserver@gmail.com
