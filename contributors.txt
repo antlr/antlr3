@@ -1,4 +1,4 @@
-ANTLR Project Contributors Certification of Origin and Rights 
+ANTLR Project Contributors Certification of Origin and Rights
 
 All contributors to ANTLR v3 must formally agree to abide by this
 certificate of origin by signing on the bottom with their github
@@ -50,3 +50,4 @@ CONTRIBUTORS:
 YYYY/MM/DD, github id, Full name, email
 2012/07/12, parrt, Terence Parr, parrt@antlr.org
 2012/08/08, Zannick, Benjamin S Wolf, jokeserver@gmail.com
+2012/09/15, martint, Martin Traverso, mtraverso@gmail.com
