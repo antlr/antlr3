@@ -7,6 +7,26 @@ University of San Francisco
 
 CHANGES
 
+??? 2012 -- release 3.4.1
+
+September 15, 2012
+
+* LookaheadStream bug fixes;
+  https://github.com/antlr/antlr3/pull/21
+
+* Pulled "Fix Python handling of syntactic predicates"
+  https://github.com/antlr/antlr3/pull/33
+
+July 15, 2012
+
+* GUnit improvements
+  https://github.com/antlr/antlr3/pull/27
+
+May 2012:
+
+* ANTLR3 update of ObjC runtime to go with latest ST4-ObjC
+  https://github.com/antlr/antlr3/pull/17
+
 August 9, 2012
 
 * Provide Lexer get end of file method so people can override it.
