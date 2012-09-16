@@ -1,0 +1,58 @@
+2012-06-26  Benjamin S Wolf  <jokeserver+antlr3@gmail.com>
+
+	Initial Python3 target, branched from the Python target by Benjamin
+	Niemann, with lots of code cleanup and minor refactoring.
+
+	* CodeGenerator.java, Python3.stg:
+	Generated code now uses set notation for setTest, rather than long
+	conditionals like "a == FOO or a == BAR or 10 <= a <= 12". This is
+	a (slight) performance improvement.
+
+	* tokens.py:
+	Token objects no longer have get/set methods for their attributes as I
+	switched them to use @property instead. The attributes should be accessed
+	directly.
+
+	* tokens.py, Python3.stg:
+	Fix a circular dependency in generated parsers, and give Token objects the
+	ability to return their typeName when asked for it. (The generated
+	recognizer gives Token the mapping from token type to type name.)
+
+2007-11-03  Benjamin Niemann  <pink@odahoda.de>
+
+	* PythonTarget.java, dfa.py, exceptions.py, recognizer.py, streams.py:
+	ANTLRStringStream.LA() now returns the character's ordinal and
+	generated lexers operate on integers. Also made various performance
+	tunings.
+
+2007-10-07  Benjamin Niemann  <pink@odahoda.de>
+
+	* main.py, Python.stg (outputFile): Added simple __main__ section to
+	generated code, so (simple) grammars can be executed as standalone
+	script.
+
+	* tree.py (RecognitionException.extractInformationFromTreeNodeStream),
+	exceptions.py (CommonTree): Small bugfixes.
+
+2007-09-30  Benjamin Niemann  <pink@odahoda.de>
+
+	* recognizers.py (TokenSource): Added iterator interface to TokenSource
+	class - and thus to Lexer.
+
+2007-06-27  Benjamin Niemann  <pink@odahoda.de>
+
+	* Python.stg (genericParser, parser, treeParser): Use correct @init
+	action block for tree parsers.
+
+2007-05-24  Benjamin Niemann  <pink@odahoda.de>
+
+	* Python.stg (rule): Added support for @decorate {...} action for
+	parser rules to add decorators to the rule method.
+
+2007-05-18  Benjamin Niemann  <pink@odahoda.de>
+
+	* Python.stg (isolatedLookaheadRangeTest, lookaheadRangeTest): 
+	Minor improvement of generated code (use '<lower> <= <LA> <= <upper>'
+	instead of '<LA> >= <lower> and <LA> <= <upper>').
+	
+
