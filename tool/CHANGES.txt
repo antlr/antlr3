@@ -9,6 +9,11 @@ CHANGES
 
 ??? 2012 -- release 3.4.1
 
+September 16, 2012
+
+* Python 3.3 target added :)
+  https://github.com/antlr/antlr3/pull/23
+
 September 15, 2012
 
 * LookaheadStream bug fixes;
