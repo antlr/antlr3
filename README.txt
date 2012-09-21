@@ -1,5 +1,5 @@
-ANTLR v3.4
-July 18, 2011
+ANTLR v3.5
+???, 2012
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
@@ -113,27 +113,33 @@ See migration guide:
 
 How do I install this damn thing?
 
-Just untar antlr-3.4.tar.gz and you'll get:
+Just untar antlr-3.5.tar.gz and you'll get:
 
-antlr-3.4/BUILD.txt
-antlr-3.4/antlr3-maven-plugin
-antlr-3.4/antlrjar.xml
-antlr-3.4/antlrsources.xml
-antlr-3.4/gunit
-antlr-3.4/gunit-maven-plugin
-antlr-3.4/pom.xml
-antlr-3.4/runtime
-antlr-3.4/tool
-antlr-3.4/lib
+antlr-3.5/BUILD.txt
+antlr-3.5/antlr3-maven-plugin
+antlr-3.5/antlrjar.xml
+antlr-3.5/antlrsources.xml
+antlr-3.5/gunit
+antlr-3.5/gunit-maven-plugin
+antlr-3.5/pom.xml
+antlr-3.5/runtime
+antlr-3.5/tool
+antlr-3.5/lib
 
 This is the source and java binaries.  You could grab the
-antlr-3.4-complete.jar file from the website, but it's in lib dir.
+antlr-3.5-complete.jar file from the website, but it's in lib dir.
 It has all of the jars you need combined into one. Then you need to
-add antlr-3.4-complete.jar to your CLASSPATH or add
+add antlr-3.5-complete.jar to your CLASSPATH or add
 to arg list; e.g., on unix:
 
-$ java -cp "/usr/local/lib/antlr-3.4-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
+$ java -cp "/usr/local/lib/antlr-3.5-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
 
 Please see the FAQ
 
     http://www.antlr.org/wiki/display/ANTLR3/ANTLR+v3+FAQ
+
+-------------------------
+
+How can I contribute to ANTLR v3?
+
+http://www.antlr.org/wiki/pages/viewpage.action?pageId=33947666
