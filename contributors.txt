@@ -53,3 +53,4 @@ YYYY/MM/DD, github id, Full name, email
 2012/09/15, martint, Martin Traverso, mtraverso@gmail.com
 2012/09/16, qmx, Douglas Campos, qmx@qmx.me
 2012/09/17, ksgokul, Gokulakannan Somasundaram, gokul007@gmail.com
+2012/0921,  stephengaito, Stephen Gaito, stephen@percepitsys.co.uk
