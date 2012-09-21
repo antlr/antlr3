@@ -79,6 +79,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         p++;
         // have we hit end of buffer and not backtracking?
         if ( p == data.size() && markDepth==0 ) {
+          prevElement = o;
             // if so, it's an opportunity to start filling at index 0 again
             clear(); // size goes to 0, but retains memory
         }
@@ -88,7 +89,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     /** Make sure we have at least one element to remove, even if EOF */
     public void consume() {
         syncAhead(1);
-        prevElement = remove();
+        remove();
         currentElementIndex++;
     }
 
@@ -138,14 +139,18 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
 	}
 
 	public void rewind(int marker) {
-        markDepth--;
-        seek(marker); // assume marker is top
-        // release(marker); // waste of call; it does nothing in this class
-    }
+    markDepth--;
+    int delta = p - marker;
+    currentElementIndex -= delta;
+    p = marker;
+  }
 
-	public void rewind() {
-        seek(lastMarker); // rewind but do not release marker
-    }
+  public void rewind() {
+    // rewind but do not release marker
+    int delta = p - lastMarker;
+    currentElementIndex -= delta;
+    p = lastMarker;
+  }
 
     /** Seek to a 0-indexed position within data buffer.  Can't handle
      *  case where you seek beyond end of existing buffer.  Normally used
@@ -153,10 +158,24 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
      *  Doesn't see to absolute position in input stream since this stream
      *  is unbuffered. Seeks only into our moving window of elements.
      */
-    public void seek(int index) { p = index; }
+  public void seek(int index) {
+    int delta = currentElementIndex - index;
+    p -= delta;
 
-    protected T LB(int k) {
-        if ( k==1 ) return prevElement;
-        throw new NoSuchElementException("can't look backwards more than one token in this stream");
+    if (p < 0) {
+      throw new IllegalArgumentException("Can't seek past the beginning of this stream's buffer");
     }
+
+    currentElementIndex = index;
+  }
+
+  protected T LB(int k) {
+    if (p - k == -1) {
+      return prevElement;
+    }
+    else if (p > 0) {
+      return elementAt(-1);
+    }
+    throw new NoSuchElementException("can't look backwards past the beginning of this stream's buffer");
+  }
 }

@@ -70,7 +70,6 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 	/** Return a token from this source; i.e., match a token on the char
 	 *  stream.
 	 */
-	@Override
 	public Token nextToken() {
 		while (true) {
 			state.token = null;
@@ -80,12 +79,7 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 			state.tokenStartLine = input.getLine();
 			state.text = null;
 			if ( input.LA(1)==CharStream.EOF ) {
-                Token eof = new CommonToken(input,Token.EOF,
-                                            Token.DEFAULT_CHANNEL,
-                                            input.index(),input.index());
-                eof.setLine(getLine());
-                eof.setCharPositionInLine(getCharPositionInLine());
-                return eof;
+				return getEOFToken();
 			}
 			try {
 				mTokens();
@@ -110,6 +104,18 @@ public abstract class Lexer extends BaseRecognizer implements TokenSource {
 				recover(re); // throw out current char and try again
 			}
 		}
+	}
+
+	/** Returns the EOF token (default), if you need
+	 *  to return a custom token instead override this method.
+	 */
+	public Token getEOFToken() {
+		Token eof = new CommonToken(input,Token.EOF,
+									Token.DEFAULT_CHANNEL,
+									input.index(),input.index());
+		eof.setLine(getLine());
+		eof.setCharPositionInLine(getCharPositionInLine());
+		return eof;
 	}
 
 	/** Instruct the lexer to skip creating a token for current lexer rule

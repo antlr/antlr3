@@ -63,7 +63,7 @@ public abstract class AbstractTest implements ITestCase {
 	public String getTestedRuleName() { return this.testedRuleName; }
 	public int getTestCaseIndex() { return this.testCaseIndex; }
 	
-	public void setHeader(String rule, String lexicalRule, String treeRule, int numOfTest, int line) {
+	public void setHeader(String rule, String lexicalRule, String treeRule, int numOfTest, int line, String input) {
 		StringBuffer buf = new StringBuffer();
 		buf.append("test" + numOfTest + " (");
 		if ( treeRule!=null ) {
@@ -73,6 +73,9 @@ public abstract class AbstractTest implements ITestCase {
 			buf.append(lexicalRule + ", line"+line+")" + " - ");
 		}
 		else buf.append(rule + ", line"+line+")" + " - ");
+		buf.append( "\"" );
+		buf.append( input );
+		buf.append( "\"" );
 		this.header = buf.toString();
 	}
 	public void setActual(String actual) { this.actual = actual; }

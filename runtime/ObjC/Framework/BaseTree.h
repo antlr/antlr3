@@ -100,7 +100,7 @@
 
 @end
 
-@interface BaseTree : NSObject <Tree>
+@interface BaseTree : NSObject <BaseTree>
 {
 	__strong AMutableArray *children;
     __strong NSException *anException;

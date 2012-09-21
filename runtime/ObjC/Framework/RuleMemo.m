@@ -42,7 +42,7 @@
     return [[RuleMemo alloc] init];
 }
 
-+ (RuleMemo *)newRuleMemoWithStartIndex:(NSNumber *)anIndex StopIndex:(NSNumber *)aStopIndex
++ (RuleMemo *)newRuleMemoWithStartIndex:(ACNumber *)anIndex StopIndex:(ACNumber *)aStopIndex
 {
     return [[RuleMemo alloc] initWithStartIndex:anIndex StopIndex:aStopIndex];
 }
@@ -56,7 +56,7 @@
     return (self);
 }
 
-- (id) initWithStartIndex:(NSNumber *)aStartIndex StopIndex:(NSNumber *)aStopIndex
+- (id) initWithStartIndex:(ACNumber *)aStartIndex StopIndex:(ACNumber *)aStopIndex
 {
     if ((self = [super init]) != nil ) {
         [aStartIndex retain];
@@ -103,7 +103,7 @@
     return nil;
 }
 
-- (NSNumber *)getStartIndex:(NSInteger)aStartIndex
+- (ACNumber *)getStartIndex:(NSInteger)aStartIndex
 {
     RuleMemo *aMatchMemo = self;
     do {
@@ -115,7 +115,7 @@
     return nil;
 }
 
-- (NSNumber *)getStopIndex:(NSInteger)aStartIndex
+- (ACNumber *)getStopIndex:(NSInteger)aStartIndex
 {
     RuleMemo *aMatchMemo = self;
     do {
@@ -127,12 +127,12 @@
     return nil;
 }
 
-- (NSNumber *)getStartIndex;
+- (ACNumber *)getStartIndex;
 {
     return startIndex;
 }
 
-- (void)setStartIndex:(NSNumber *)aStartIndex
+- (void)setStartIndex:(ACNumber *)aStartIndex
 {
     if ( aStartIndex != startIndex ) {
         if ( startIndex ) [startIndex release];
@@ -141,12 +141,12 @@
     startIndex = aStartIndex;
 }
 
-- (NSNumber *)getStopIndex;
+- (ACNumber *)getStopIndex;
 {
     return stopIndex;
 }
 
-- (void)setStopIndex:(NSNumber *)aStopIndex
+- (void)setStopIndex:(ACNumber *)aStopIndex
 {
     if ( aStopIndex != stopIndex ) {
         if ( stopIndex ) [stopIndex release];

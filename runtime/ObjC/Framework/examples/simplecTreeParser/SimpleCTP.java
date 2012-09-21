@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Aug 13, 2010 14:19:31 SimpleCTP.g 2010-08-13 14:29:19
+// $ANTLR 3.2 Aug 13, 2010 19:41:25 /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g 2010-08-13 19:42:13
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;import java.util.Stack;
@@ -48,18 +48,18 @@ public class SimpleCTP extends TreeParser {
         
 
     public String[] getTokenNames() { return SimpleCTP.tokenNames; }
-    public String getGrammarFileName() { return "SimpleCTP.g"; }
+    public String getGrammarFileName() { return "/usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g"; }
 
 
 
     // $ANTLR start "program"
-    // SimpleCTP.g:8:1: program : ( declaration )+ ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:8:1: program : ( declaration )+ ;
     public final void program() throws RecognitionException {
         try {
-            // SimpleCTP.g:9:5: ( ( declaration )+ )
-            // SimpleCTP.g:9:9: ( declaration )+
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:9:5: ( ( declaration )+ )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:9:9: ( declaration )+
             {
-            // SimpleCTP.g:9:9: ( declaration )+
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:9:9: ( declaration )+
             int cnt1=0;
             loop1:
             do {
@@ -73,7 +73,7 @@ public class SimpleCTP extends TreeParser {
 
                 switch (alt1) {
             	case 1 :
-            	    // SimpleCTP.g:9:9: declaration
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:9:9: declaration
             	    {
             	    pushFollow(FOLLOW_declaration_in_program43);
             	    declaration();
@@ -109,10 +109,10 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "declaration"
-    // SimpleCTP.g:12:1: declaration : ( variable | ^( FUNC_DECL functionHeader ) | ^( FUNC_DEF functionHeader block ) );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:12:1: declaration : ( variable | ^( FUNC_DECL functionHeader ) | ^( FUNC_DEF functionHeader block ) );
     public final void declaration() throws RecognitionException {
         try {
-            // SimpleCTP.g:13:5: ( variable | ^( FUNC_DECL functionHeader ) | ^( FUNC_DEF functionHeader block ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:13:5: ( variable | ^( FUNC_DECL functionHeader ) | ^( FUNC_DEF functionHeader block ) )
             int alt2=3;
             switch ( input.LA(1) ) {
             case VAR_DEF:
@@ -139,7 +139,7 @@ public class SimpleCTP extends TreeParser {
 
             switch (alt2) {
                 case 1 :
-                    // SimpleCTP.g:13:9: variable
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:13:9: variable
                     {
                     pushFollow(FOLLOW_variable_in_declaration63);
                     variable();
@@ -150,7 +150,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // SimpleCTP.g:14:9: ^( FUNC_DECL functionHeader )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:14:9: ^( FUNC_DECL functionHeader )
                     {
                     match(input,FUNC_DECL,FOLLOW_FUNC_DECL_in_declaration74); 
 
@@ -166,7 +166,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // SimpleCTP.g:15:9: ^( FUNC_DEF functionHeader block )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:15:9: ^( FUNC_DEF functionHeader block )
                     {
                     match(input,FUNC_DEF,FOLLOW_FUNC_DEF_in_declaration88); 
 
@@ -201,11 +201,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "variable"
-    // SimpleCTP.g:18:1: variable : ^( VAR_DEF type declarator ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:18:1: variable : ^( VAR_DEF type declarator ) ;
     public final void variable() throws RecognitionException {
         try {
-            // SimpleCTP.g:19:5: ( ^( VAR_DEF type declarator ) )
-            // SimpleCTP.g:19:9: ^( VAR_DEF type declarator )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:19:5: ( ^( VAR_DEF type declarator ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:19:9: ^( VAR_DEF type declarator )
             {
             match(input,VAR_DEF,FOLLOW_VAR_DEF_in_variable113); 
 
@@ -238,11 +238,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "declarator"
-    // SimpleCTP.g:22:1: declarator : ID ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:22:1: declarator : ID ;
     public final void declarator() throws RecognitionException {
         try {
-            // SimpleCTP.g:23:5: ( ID )
-            // SimpleCTP.g:23:9: ID
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:23:5: ( ID )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:23:9: ID
             {
             match(input,ID,FOLLOW_ID_in_declarator137); 
 
@@ -261,11 +261,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "functionHeader"
-    // SimpleCTP.g:26:1: functionHeader : ^( FUNC_HDR type ID ( formalParameter )+ ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:26:1: functionHeader : ^( FUNC_HDR type ID ( formalParameter )+ ) ;
     public final void functionHeader() throws RecognitionException {
         try {
-            // SimpleCTP.g:27:5: ( ^( FUNC_HDR type ID ( formalParameter )+ ) )
-            // SimpleCTP.g:27:9: ^( FUNC_HDR type ID ( formalParameter )+ )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:27:5: ( ^( FUNC_HDR type ID ( formalParameter )+ ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:27:9: ^( FUNC_HDR type ID ( formalParameter )+ )
             {
             match(input,FUNC_HDR,FOLLOW_FUNC_HDR_in_functionHeader158); 
 
@@ -276,7 +276,7 @@ public class SimpleCTP extends TreeParser {
             state._fsp--;
 
             match(input,ID,FOLLOW_ID_in_functionHeader162); 
-            // SimpleCTP.g:27:28: ( formalParameter )+
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:27:28: ( formalParameter )+
             int cnt3=0;
             loop3:
             do {
@@ -290,7 +290,7 @@ public class SimpleCTP extends TreeParser {
 
                 switch (alt3) {
             	case 1 :
-            	    // SimpleCTP.g:27:28: formalParameter
+            	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:27:28: formalParameter
             	    {
             	    pushFollow(FOLLOW_formalParameter_in_functionHeader164);
             	    formalParameter();
@@ -328,11 +328,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "formalParameter"
-    // SimpleCTP.g:30:1: formalParameter : ^( ARG_DEF type declarator ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:30:1: formalParameter : ^( ARG_DEF type declarator ) ;
     public final void formalParameter() throws RecognitionException {
         try {
-            // SimpleCTP.g:31:5: ( ^( ARG_DEF type declarator ) )
-            // SimpleCTP.g:31:9: ^( ARG_DEF type declarator )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:31:5: ( ^( ARG_DEF type declarator ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:31:9: ^( ARG_DEF type declarator )
             {
             match(input,ARG_DEF,FOLLOW_ARG_DEF_in_formalParameter186); 
 
@@ -365,11 +365,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "type"
-    // SimpleCTP.g:34:1: type : ( 'int' | 'char' | 'void' | ID );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:34:1: type : ( 'int' | 'char' | 'void' | ID );
     public final void type() throws RecognitionException {
         try {
-            // SimpleCTP.g:35:5: ( 'int' | 'char' | 'void' | ID )
-            // SimpleCTP.g:
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:35:5: ( 'int' | 'char' | 'void' | ID )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:
             {
             if ( input.LA(1)==ID||(input.LA(1)>=INT_TYPE && input.LA(1)<=VOID) ) {
                 input.consume();
@@ -396,17 +396,17 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "block"
-    // SimpleCTP.g:41:1: block : ^( BLOCK ( variable )* ( stat )* ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:41:1: block : ^( BLOCK ( variable )* ( stat )* ) ;
     public final void block() throws RecognitionException {
         try {
-            // SimpleCTP.g:42:5: ( ^( BLOCK ( variable )* ( stat )* ) )
-            // SimpleCTP.g:42:9: ^( BLOCK ( variable )* ( stat )* )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:5: ( ^( BLOCK ( variable )* ( stat )* ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:9: ^( BLOCK ( variable )* ( stat )* )
             {
             match(input,BLOCK,FOLLOW_BLOCK_in_block273); 
 
             if ( input.LA(1)==Token.DOWN ) {
                 match(input, Token.DOWN, null); 
-                // SimpleCTP.g:42:17: ( variable )*
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:17: ( variable )*
                 loop4:
                 do {
                     int alt4=2;
@@ -419,7 +419,7 @@ public class SimpleCTP extends TreeParser {
 
                     switch (alt4) {
                 	case 1 :
-                	    // SimpleCTP.g:42:17: variable
+                	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:17: variable
                 	    {
                 	    pushFollow(FOLLOW_variable_in_block275);
                 	    variable();
@@ -435,7 +435,7 @@ public class SimpleCTP extends TreeParser {
                     }
                 } while (true);
 
-                // SimpleCTP.g:42:27: ( stat )*
+                // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:27: ( stat )*
                 loop5:
                 do {
                     int alt5=2;
@@ -448,7 +448,7 @@ public class SimpleCTP extends TreeParser {
 
                     switch (alt5) {
                 	case 1 :
-                	    // SimpleCTP.g:42:27: stat
+                	    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:42:27: stat
                 	    {
                 	    pushFollow(FOLLOW_stat_in_block278);
                 	    stat();
@@ -483,10 +483,10 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "stat"
-    // SimpleCTP.g:45:1: stat : ( forStat | expr | block );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:45:1: stat : ( forStat | expr | block );
     public final void stat() throws RecognitionException {
         try {
-            // SimpleCTP.g:45:5: ( forStat | expr | block )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:45:5: ( forStat | expr | block )
             int alt6=3;
             switch ( input.LA(1) ) {
             case FOR:
@@ -518,7 +518,7 @@ public class SimpleCTP extends TreeParser {
 
             switch (alt6) {
                 case 1 :
-                    // SimpleCTP.g:45:7: forStat
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:45:7: forStat
                     {
                     pushFollow(FOLLOW_forStat_in_stat292);
                     forStat();
@@ -529,7 +529,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // SimpleCTP.g:46:7: expr
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:46:7: expr
                     {
                     pushFollow(FOLLOW_expr_in_stat300);
                     expr();
@@ -540,7 +540,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // SimpleCTP.g:47:7: block
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:47:7: block
                     {
                     pushFollow(FOLLOW_block_in_stat308);
                     block();
@@ -565,11 +565,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "forStat"
-    // SimpleCTP.g:50:1: forStat : ^( 'for' expr expr expr block ) ;
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:50:1: forStat : ^( 'for' expr expr expr block ) ;
     public final void forStat() throws RecognitionException {
         try {
-            // SimpleCTP.g:51:5: ( ^( 'for' expr expr expr block ) )
-            // SimpleCTP.g:51:9: ^( 'for' expr expr expr block )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:51:5: ( ^( 'for' expr expr expr block ) )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:51:9: ^( 'for' expr expr expr block )
             {
             match(input,FOR,FOLLOW_FOR_in_forStat328); 
 
@@ -614,7 +614,7 @@ public class SimpleCTP extends TreeParser {
     };
 
     // $ANTLR start "expr"
-    // SimpleCTP.g:54:1: expr : ( ^( EQEQ expr expr ) | ^( LT expr expr ) | ^( PLUS expr expr ) | ^( EQ ID e= expr ) | atom );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:54:1: expr : ( ^( EQEQ expr expr ) | ^( LT expr expr ) | ^( PLUS expr expr ) | ^( EQ ID e= expr ) | atom );
     public final SimpleCTP.expr_return expr() throws RecognitionException {
         SimpleCTP.expr_return retval = new SimpleCTP.expr_return();
         retval.start = input.LT(1);
@@ -624,7 +624,7 @@ public class SimpleCTP extends TreeParser {
 
 
         try {
-            // SimpleCTP.g:54:5: ( ^( EQEQ expr expr ) | ^( LT expr expr ) | ^( PLUS expr expr ) | ^( EQ ID e= expr ) | atom )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:54:5: ( ^( EQEQ expr expr ) | ^( LT expr expr ) | ^( PLUS expr expr ) | ^( EQ ID e= expr ) | atom )
             int alt7=5;
             switch ( input.LA(1) ) {
             case EQEQ:
@@ -662,7 +662,7 @@ public class SimpleCTP extends TreeParser {
 
             switch (alt7) {
                 case 1 :
-                    // SimpleCTP.g:54:9: ^( EQEQ expr expr )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:54:9: ^( EQEQ expr expr )
                     {
                     match(input,EQEQ,FOLLOW_EQEQ_in_expr352); 
 
@@ -683,7 +683,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // SimpleCTP.g:55:9: ^( LT expr expr )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:55:9: ^( LT expr expr )
                     {
                     match(input,LT,FOLLOW_LT_in_expr368); 
 
@@ -704,7 +704,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // SimpleCTP.g:56:9: ^( PLUS expr expr )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:56:9: ^( PLUS expr expr )
                     {
                     match(input,PLUS,FOLLOW_PLUS_in_expr384); 
 
@@ -725,7 +725,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 4 :
-                    // SimpleCTP.g:57:9: ^( EQ ID e= expr )
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:57:9: ^( EQ ID e= expr )
                     {
                     match(input,EQ,FOLLOW_EQ_in_expr400); 
 
@@ -745,7 +745,7 @@ public class SimpleCTP extends TreeParser {
                     }
                     break;
                 case 5 :
-                    // SimpleCTP.g:58:9: atom
+                    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:58:9: atom
                     {
                     pushFollow(FOLLOW_atom_in_expr419);
                     atom();
@@ -770,11 +770,11 @@ public class SimpleCTP extends TreeParser {
 
 
     // $ANTLR start "atom"
-    // SimpleCTP.g:61:1: atom : ( ID | INT );
+    // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:61:1: atom : ( ID | INT );
     public final void atom() throws RecognitionException {
         try {
-            // SimpleCTP.g:62:5: ( ID | INT )
-            // SimpleCTP.g:
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:62:5: ( ID | INT )
+            // /usr/local/ANTLR3-ObjC2.0-Runtime/Framework/examples/simplecTreeParser/SimpleCTP.g:
             {
             if ( input.LA(1)==ID||input.LA(1)==INT ) {
                 input.consume();

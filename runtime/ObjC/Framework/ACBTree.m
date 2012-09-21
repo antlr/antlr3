@@ -6,7 +6,7 @@
 //  Copyright 2011 Alan Condit. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "ACBTree.h"
 #import "AMutableDictionary.h"
 #import "RuntimeException.h"
@@ -56,6 +56,19 @@ static NSInteger RECNUM = 0;
     return self;
 }
 
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ACBKey" );
+#endif
+    [super dealloc];
+}
+
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"len =%02d\nrecnum=%04d\nkey=%@\n", [key length], recnum, key];
+}
+
 @end
 
 @implementation ACBTree
@@ -95,6 +108,14 @@ static NSInteger RECNUM = 0;
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in ACBTree" );
+#endif
+    [super dealloc];
 }
 
 - (ACBTree *)createnode:(ACBKey *)kp
@@ -710,12 +731,17 @@ ACBTree *t;
     return( idx );
 }
 
-- (void)dealloc
+- (NSString *) description
 {
-#ifdef DEBUG_DEALLOC
-    NSLog( @"called dealloc in ACBTree" );
-#endif
-    [super dealloc];
+    NSMutableString *str = [NSMutableString stringWithCapacity:16];
+    NSInteger i;
+    for (i = 0; i < numkeys; i++ ) {
+        [str appendString:[NSString stringWithFormat:@"key[%d]=%@", i, [keys[i] description]]];
+    }
+    for (i = 0; i < numkeys; i++ ) {
+        [str appendString:[NSString stringWithFormat:@"btnodes[%d]=%@\n", i, [btNodes[i] description]]];
+    }
+    return str;
 }
 
 @end

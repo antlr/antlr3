@@ -1,5 +1,5 @@
-#import <Cocoa/Cocoa.h>
-#import "antlr3.h"
+#import <Foundation/Foundation.h>
+#import <ANTLR/ANTLR.h>
 #import "LangLexer.h"
 #import "LangParser.h"
 #import "LangDumpDecl.h"
@@ -33,19 +33,19 @@ int main(int argc, const char * argv[])
 {
     NSError *error;
     NSLog(@"starting treeparser\n");
-    NSString *dir = @"/Users/acondit/source/antlr3/acondit_localhost/code/antlr/main/runtime/ObjC/Framework/examples/treeparser/input";
+    NSString *dir = @"/Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/treeparser/input";
 	NSString *string = [NSString stringWithContentsOfFile:dir  encoding:NSASCIIStringEncoding error:&error];
 	NSLog(@"input = %@", string);
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:string];
 	LangLexer *lex = [LangLexer newLangLexerWithCharStream:stream];
-    ANTLRCommonTokenStream *tokens = [ANTLRCommonTokenStream newANTLRCommonTokenStreamWithTokenSource:lex];
+    CommonTokenStream *tokens = [CommonTokenStream newCommonTokenStreamWithTokenSource:lex];
     LangParser *parser = [LangParser newLangParser:tokens];
 //    LangParser_decl_return *r = [parser decl];
     LangParser_start_return *r = [parser start];
     NSLog( @"tree: %@", [r.tree toStringTree]);
-    ANTLRCommonTree *r0 = [r getTree];
+    CommonTree *r0 = [r getTree];
     
-    ANTLRCommonTreeNodeStream *nodes = [ANTLRCommonTreeNodeStream newANTLRCommonTreeNodeStream:r0];
+    CommonTreeNodeStream *nodes = [CommonTreeNodeStream newCommonTreeNodeStream:r0];
     [nodes setTokenStream:tokens];
     LangDumpDecl *walker = [LangDumpDecl newLangDumpDecl:nodes];
     [walker decl];

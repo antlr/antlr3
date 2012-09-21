@@ -1,0 +1,6 @@
+Python target:
+Benjamin Niemann <pink at odahoda dot de>: Main developer of Python target.
+Clinton Roy <clinton.roy at gmail dot com>: AST templates and runtime.
+
+Python3 target:
+Benjamin S Wolf (http://github.com/Zannick): Converted Python target to Python3.

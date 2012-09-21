@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} SimpleC.g 2011-05-06 13:53:12
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/LL-star/SimpleC.g 2012-02-16 17:39:18
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -23,10 +23,10 @@ typedef enum {
 #endif
 
 #pragma mark Cyclic DFA interface start DFA2
-@interface DFA2 : ANTLRDFA {
+@interface DFA2 : DFA {
 }
-+ newDFA2WithRecognizer:(ANTLRBaseRecognizer *)theRecognizer;
-- initWithRecognizer:(ANTLRBaseRecognizer *)recognizer;
++ (DFA2 *) newDFA2WithRecognizer:(BaseRecognizer *)theRecognizer;
+- initWithRecognizer:(BaseRecognizer *)recognizer;
 @end /* end of DFA2 interface  */
 
 #pragma mark Cyclic DFA interface end DFA2
@@ -53,20 +53,16 @@ typedef enum {
 #define ID 4
 #define INT 5
 #define WS 6
-#pragma mark Dynamic Global Scopes
-#pragma mark Dynamic Rule Scopes
-#pragma mark Rule Return Scopes start
+#pragma mark Dynamic Global Scopes globalAttributeScopeInterface
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeInterface
+#pragma mark Rule Return Scopes returnScopeInterface
 
 /* Interface grammar class */
-@interface SimpleCParser : ANTLRParser { /* line 572 */
-/* ObjC start of ruleAttributeScopeMemVar */
+@interface SimpleCParser  : Parser { /* line 572 */
+#pragma mark Dynamic Rule Scopes ruleAttributeScopeDecl
+#pragma mark Dynamic Global Rule Scopes globalAttributeScopeMemVar
 
 
-/* ObjC end of ruleAttributeScopeMemVar */
-/* ObjC start of globalAttributeScopeMemVar */
-
-
-/* ObjC end of globalAttributeScopeMemVar */
 /* ObjC start of actions.(actionScope).memVars */
 /* ObjC end of actions.(actionScope).memVars */
 /* ObjC start of memVars */
@@ -81,7 +77,7 @@ DFA2 *dfa2;
 /* ObjC end of properties */
 
 + (void) initialize;
-+ (id) newSimpleCParser:(id<ANTLRTokenStream>)aStream;
++ (id) newSimpleCParser:(id<TokenStream>)aStream;
 /* ObjC start of actions.(actionScope).methodsDecl */
 /* ObjC end of actions.(actionScope).methodsDecl */
 

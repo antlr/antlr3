@@ -1,4 +1,4 @@
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 #import "TLexer.h"
 #import "TParser.h"
@@ -7,17 +7,17 @@ int main() {
     NSError *error;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	NSString *string = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr3/acondit_localhost/code/antlr/antlr3-main/runtime/ObjC/Framework/examples/hoistedPredicates/input" encoding:NSASCIIStringEncoding error:&error];
+	NSString *string = [NSString stringWithContentsOfFile:@"/Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/hoistedPredicates/input" encoding:NSASCIIStringEncoding error:&error];
 	NSLog(@"input is : %@", string);
 	ANTLRStringStream *stream = [ANTLRStringStream newANTLRStringStream:string];
 	TLexer *lexer = [TLexer newTLexerWithCharStream:stream];
 	
-	//	ANTLRToken *currentToken;
-	//	while ((currentToken = [lexer nextToken]) && [currentToken type] != ANTLRTokenTypeEOF) {
+	//	Token *currentToken;
+	//	while ((currentToken = [lexer nextToken]) && [currentToken type] != TokenTypeEOF) {
 	//		NSLog(@"%@", currentToken);
 	//	}
 	
-	ANTLRCommonTokenStream *tokenStream = [ANTLRCommonTokenStream newANTLRCommonTokenStreamWithTokenSource:lexer];
+	CommonTokenStream *tokenStream = [CommonTokenStream newCommonTokenStreamWithTokenSource:lexer];
 	TParser *parser = [[TParser alloc] initWithTokenStream:tokenStream];
 	[parser stat];
 	[lexer release];

@@ -7,6 +7,41 @@ University of San Francisco
 
 CHANGES
 
+??? 2012 -- release 3.5
+
+September 17, 2012
+
+* Add Gokulakannan Somasundaram's C++ target based upon C target.
+  Use language=Cpp in options. It's a header-only library, runtime/Cpp/include,
+  so installation is not required.
+
+September 16, 2012
+
+* Python 3.3 target added by Benjamin Wolf based upon Python 2 target
+  https://github.com/antlr/antlr3/pull/23
+
+September 15, 2012
+
+* LookaheadStream bug fixes;
+  https://github.com/antlr/antlr3/pull/21
+
+* Pulled "Fix Python handling of syntactic predicates"
+  https://github.com/antlr/antlr3/pull/33
+
+July 15, 2012
+
+* GUnit improvements
+  https://github.com/antlr/antlr3/pull/27
+
+May 2012:
+
+* ANTLR3 update of ObjC runtime to go with latest ST4-ObjC
+  https://github.com/antlr/antlr3/pull/17
+
+August 9, 2012
+
+* Provide Lexer get end of file method so people can override it.
+
 November 25, 2011
 
 * stderr not test correctly in gunit examineExecResult

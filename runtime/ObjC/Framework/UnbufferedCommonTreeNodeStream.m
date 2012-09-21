@@ -25,10 +25,10 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import "ANTLRUnbufferedCommonTreeNodeStream.h"
-#import "ANTLRUnbufferedCommonTreeNodeStreamState.h"
-#import "ANTLRBaseTree.h"
-#import "ANTLRToken.h"
+#import "UnbufferedCommonTreeNodeStream.h"
+#import "UnbufferedCommonTreeNodeStreamState.h"
+#import "BaseTree.h"
+#import "Token.h"
 
 #define INITIAL_LOOKAHEAD_BUFFER_SIZE 5
 @implementation ANTLRUnbufferedCommonTreeNodeStream
@@ -48,22 +48,22 @@
 @synthesize head;
 @synthesize tail;
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree
+- (id) initWithTree:(CommonTree *)theTree
 {
 	return [self initWithTree:theTree treeAdaptor:nil];
 }
 
-- (id) initWithTree:(ANTLRCommonTree *)theTree treeAdaptor:(ANTLRCommonTreeAdaptor *)theAdaptor
+- (id) initWithTree:(CommonTree *)theTree treeAdaptor:(CommonTreeAdaptor *)theAdaptor
 {
 	if ((self = [super init]) != nil) {
 		[self setRoot:theTree];
 		if ( theAdaptor == nil ) 
-			[self setTreeAdaptor:[ANTLRCommonTreeAdaptor newTreeAdaptor]];
+			[self setTreeAdaptor:[CommonTreeAdaptor newTreeAdaptor]];
 		else
 			[self setTreeAdaptor:theAdaptor];
 		nodeStack = [[NSMutableArray arrayWithCapacity:5] retain];
 		indexStack = [[NSMutableArray arrayWithCapacity:5] retain];
-		markers = [[ANTLRPtrBuffer newANTLRPtrBufferWithLen:100] retain];
+		markers = [[PtrBuffer newPtrBufferWithLen:100] retain];
         // [markers insertObject:[NSNull null] atIndex:0];	// markers is one based - maybe fix this later
 		lookahead = [NSMutableArray arrayWithCapacity:INITIAL_LOOKAHEAD_BUFFER_SIZE];	// lookahead is filled with [NSNull null] in -reset
         [lookahead retain];
@@ -113,7 +113,7 @@
 	if (k < 0)
 		@throw [NSException exceptionWithName:@"ANTLRTreeException" reason:@"-LT: looking back more than one node unsupported for unbuffered streams" userInfo:nil];
 	if (k == 0)
-		return ANTLRBaseTree.INVALID_NODE;
+		return BaseTree.INVALID_NODE;
 	[self fillBufferWithLookahead:k];
 	return [lookahead objectAtIndex:(head+k-1) % [lookahead count]];
 }
@@ -123,12 +123,12 @@
 	return [self root];
 }
 
-- (id<ANTLRTreeAdaptor>) getTreeAdaptor;
+- (id<TreeAdaptor>) getTreeAdaptor;
 {
 	return treeAdaptor;
 }
 
-- (void)setTreeAdaptor:(id<ANTLRTreeAdaptor>)aTreeAdaptor
+- (void)setTreeAdaptor:(id<TreeAdaptor>)aTreeAdaptor
 {
     if (treeAdaptor != aTreeAdaptor) {
         [aTreeAdaptor retain];
@@ -137,12 +137,12 @@
     }
 }
 
-- (id<ANTLRTokenStream>) getTokenStream
+- (id<TokenStream>) getTokenStream
 {
 	return tokenStream;
 }
 
-- (void) setTokenStream:(id<ANTLRTokenStream>)aTokenStream
+- (void) setTokenStream:(id<TokenStream>)aTokenStream
 {
 	if (tokenStream != aTokenStream) {
 		[tokenStream release];
@@ -188,9 +188,9 @@
 
 - (NSInteger) LA:(NSUInteger) i
 {
-	ANTLRCommonTree *node = [self LT:i];
+	CommonTree *node = [self LT:i];
 	if (!node) 
-		return ANTLRTokenTypeInvalid;
+		return TokenTypeInvalid;
 	int ttype = [node getType];
 	return ttype;
 }
@@ -270,7 +270,7 @@
 
 
 #pragma mark Lookahead Handling
-- (void) addLookahead:(id<ANTLRBaseTree>)aNode
+- (void) addLookahead:(id<BaseTree>)aNode
 {
 	[lookahead replaceObjectAtIndex:tail withObject:aNode];
 	tail = (tail+1) % [lookahead count];
@@ -319,7 +319,7 @@
 	// NOTE: this could/should go into an NSEnumerator subclass for treenode streams.
 	if (currentNode == nil) {
         if ( navigationNodeEOF == nil ) {
-            navigationNodeEOF = [[ANTLRTreeNavigationNodeEOF alloc] init];
+            navigationNodeEOF = [[TreeNavigationNodeEOF alloc] init];
         }
 		[self addLookahead:navigationNodeEOF];
 		return nil;
@@ -339,9 +339,9 @@
 }	
 
 #pragma mark Node visiting
-- (ANTLRCommonTree *) handleRootNode
+- (CommonTree *) handleRootNode
 {
-	ANTLRCommonTree *node = currentNode;
+	CommonTree *node = currentNode;
 	currentChildIndex = 0;
 	if ([node isNil]) {
 		node = [self visitChild:currentChildIndex];
@@ -354,14 +354,14 @@
 	return node;
 }
 
-- (ANTLRCommonTree *) visitChild:(NSInteger)childNumber
+- (CommonTree *) visitChild:(NSInteger)childNumber
 {
-	ANTLRCommonTree *node = nil;
+	CommonTree *node = nil;
 	
 	[nodeStack addObject:currentNode];
 	[indexStack addObject:[NSNumber numberWithInt:childNumber]];
 	if (childNumber == 0 && ![currentNode isNil])
-		[self addNavigationNodeWithType:ANTLRTokenTypeDOWN];
+		[self addNavigationNodeWithType:TokenTypeDOWN];
 
 	currentNode = [currentNode getChild:childNumber];
 	currentChildIndex = 0;
@@ -375,14 +375,14 @@
 {
 	while (currentNode != nil && currentChildIndex >= (NSInteger)[currentNode getChildCount])
 	{
-		currentNode = (ANTLRCommonTree *)[nodeStack lastObject];
+		currentNode = (CommonTree *)[nodeStack lastObject];
 		[nodeStack removeLastObject];
 		currentChildIndex = [(NSNumber *)[indexStack lastObject] intValue];
 		[indexStack removeLastObject];
 		currentChildIndex++; // move to next child
 		if (currentChildIndex >= (NSInteger)[currentNode getChildCount]) {
 			if (![currentNode isNil]) {
-				[self addNavigationNodeWithType:ANTLRTokenTypeUP];
+				[self addNavigationNodeWithType:TokenTypeUP];
 			}
 			if (currentNode == root) { // we done yet?
 				currentNode = nil;
@@ -396,16 +396,16 @@
 {
 	// TODO: this currently ignores shouldUseUniqueNavigationNodes.
 	switch (tokenType) {
-		case ANTLRTokenTypeDOWN: {
+		case TokenTypeDOWN: {
             if (navigationNodeDown == nil) {
-                navigationNodeDown = [[ANTLRTreeNavigationNodeDown alloc] init];
+                navigationNodeDown = [[TreeNavigationNodeDown alloc] init];
             }
 			[self addLookahead:navigationNodeDown];
 			break;
 		}
-		case ANTLRTokenTypeUP: {
+		case TokenTypeUP: {
             if (navigationNodeUp == nil) {
-                navigationNodeUp = [[ANTLRTreeNavigationNodeUp alloc] init];
+                navigationNodeUp = [[TreeNavigationNodeUp alloc] init];
             }
 			[self addLookahead:navigationNodeUp];
 			break;
@@ -414,12 +414,12 @@
 }
 
 #pragma mark Accessors
-- (ANTLRCommonTree *) root
+- (CommonTree *) root
 {
     return root; 
 }
 
-- (void) setRoot: (ANTLRCommonTree *) aRoot
+- (void) setRoot: (CommonTree *) aRoot
 {
     if (root != aRoot) {
         [aRoot retain];

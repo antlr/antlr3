@@ -25,7 +25,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import "Token.h"
 #import "AMutableArray.h"
@@ -81,8 +81,8 @@
 - (unsigned long long) bitMask:(NSUInteger) bitNumber;
 - (BOOL) member:(NSUInteger)bitNumber;
 - (BOOL) isNil;
-- (NSString *) toString;
 - (NSString *) description;
+- (NSString *) toString;
 
 #pragma mark NSCopying support
 

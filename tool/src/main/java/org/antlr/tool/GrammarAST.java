@@ -344,7 +344,7 @@ public class GrammarAST extends CommonTree {
 
 
     public GrammarAST[] getChildrenAsArray() {
-        return getChildren().toArray(new GrammarAST[getChildCount()]);
+        return (GrammarAST[])(getChildren().toArray(new GrammarAST[getChildCount()]));
     }
 
     private static final GrammarAST DescendantDownNode = new GrammarAST(Token.DOWN, "DOWN");

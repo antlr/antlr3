@@ -1,9 +1,9 @@
-// $ANTLR ${project.version} ${buildNumber} SimpleC.g 2011-05-06 15:09:17
+// $ANTLR 3.4 /Users/acondit/source/antlr/code/antlr3/runtime/ObjC/Framework/examples/simplecTreeParser/SimpleC.g 2012-02-16 17:40:52
 
 /* =============================================================================
- * Standard antlr3 OBJC runtime definitions
+ * Standard antlr OBJC runtime definitions
  */
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 /* End of standard antlr3 runtime definitions
  * =============================================================================
@@ -11,8 +11,8 @@
 
 /* Start cyclicDFAInterface */
 
-#pragma mark Rule return scopes start
-#pragma mark Rule return scopes end
+#pragma mark Rule return scopes Interface start
+#pragma mark Rule return scopes Interface end
 #pragma mark Tokens
 #ifdef EOF
 #undef EOF
@@ -42,12 +42,12 @@
 #define VAR_DEF 25
 #define WS 26
 /* interface lexer class */
-@interface SimpleCLexer : ANTLRLexer { // line 283
+@interface SimpleCLexer : Lexer { // line 283
 /* ObjC start of actions.lexer.memVars */
 /* ObjC end of actions.lexer.memVars */
 }
 + (void) initialize;
-+ (SimpleCLexer *)newSimpleCLexerWithCharStream:(id<ANTLRCharStream>)anInput;
++ (SimpleCLexer *)newSimpleCLexerWithCharStream:(id<CharStream>)anInput;
 /* ObjC start actions.lexer.methodsDecl */
 /* ObjC end actions.lexer.methodsDecl */
 - (void) mK_FOR ; 

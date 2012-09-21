@@ -42,11 +42,11 @@ import org.antlr.runtime.tree.*;<\n>
 parserMembers() ::= <<
 protected TreeAdaptor adaptor = new CommonTreeAdaptor();<\n>
 public void setTreeAdaptor(TreeAdaptor adaptor) {
-    this.adaptor = adaptor;
-    <grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
+	this.adaptor = adaptor;
+	<grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
 }
 public TreeAdaptor getTreeAdaptor() {
-    return adaptor;
+	return adaptor;
 }
 >>
 
@@ -69,14 +69,14 @@ ruleLabelDefs() ::= <<
 <ruleDescriptor.tokenListLabels:{it | <ASTLabelType> <it.label.text>_tree=null;}; separator="\n">
 <if(ruleDescriptor.supportsLabelOptimization)>
 <ruleDescriptor.allTokenRefsInRewrites
-    :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
+	:{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
 <ruleDescriptor.allRuleRefsInRewrites
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
 <else>
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
+	:{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>");}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>");}; separator="\n">
 <endif>
 <endif>
 >>
@@ -181,9 +181,9 @@ root_0 = (<ASTLabelType>)adaptor.nil();
 <if(rewriteMode)>
 <prevRuleRootRef()>.tree = (<ASTLabelType>)adaptor.rulePostProcessing(root_0);
 input.replaceChildren(adaptor.getParent(retval.start),
-                      adaptor.getChildIndex(retval.start),
-                      adaptor.getChildIndex(_last),
-                      retval.tree);
+					  adaptor.getChildIndex(retval.start),
+					  adaptor.getChildIndex(_last),
+					  retval.tree);
 <endif>
 <endif>
 <! if parser or tree-parser && rewrite!=true, we need to set result !>
@@ -201,28 +201,28 @@ input.replaceChildren(adaptor.getParent(retval.start),
 
 rewriteCodeLabels() ::= <<
 <referencedTokenLabels
-    :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>",<it>);};
-    separator="\n"
+	:{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>",<it>);};
+	separator="\n"
 >
 <referencedTokenListLabels
-    :{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>", list_<it>);};
-    separator="\n"
+	:{it | RewriteRule<rewriteElementType>Stream stream_<it>=new RewriteRule<rewriteElementType>Stream(adaptor,"token <it>", list_<it>);};
+	separator="\n"
 >
 <referencedWildcardLabels
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",<it>);};
-    separator="\n"
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",<it>);};
+	separator="\n"
 >
 <referencedWildcardListLabels
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",list_<it>);};
-    separator="\n"
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"wildcard <it>",list_<it>);};
+	separator="\n"
 >
 <referencedRuleLabels
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.getTree():null);};
-    separator="\n"
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"rule <it>",<it>!=null?<it>.getTree():null);};
+	separator="\n"
 >
 <referencedRuleListLabels
-    :{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"token <it>",list_<it>);};
-    separator="\n"
+	:{it | RewriteRuleSubtreeStream stream_<it>=new RewriteRuleSubtreeStream(adaptor,"token <it>",list_<it>);};
+	separator="\n"
 >
 >>
 
@@ -237,7 +237,7 @@ rewriteOptionalBlock(
 <<
 // <fileName>:<description>
 if ( <referencedElementsDeep:{el | stream_<el>.hasNext()}; separator="||"> ) {
-    <alt>
+	<alt>
 }
 <referencedElementsDeep:{el | stream_<el>.reset();<\n>}>
 >>
@@ -250,7 +250,7 @@ rewriteClosureBlock(
 <<
 // <fileName>:<description>
 while ( <referencedElements:{el | stream_<el>.hasNext()}; separator="||"> ) {
-    <alt>
+	<alt>
 }
 <referencedElements:{el | stream_<el>.reset();<\n>}>
 >>
@@ -262,10 +262,10 @@ rewritePositiveClosureBlock(
 	description) ::=
 <<
 if ( !(<referencedElements:{el | stream_<el>.hasNext()}; separator="||">) ) {
-    throw new RewriteEarlyExitException();
+	throw new RewriteEarlyExitException();
 }
 while ( <referencedElements:{el | stream_<el>.hasNext()}; separator="||"> ) {
-    <alt>
+	<alt>
 }
 <referencedElements:{el | stream_<el>.reset();<\n>}>
 >>
@@ -274,11 +274,11 @@ rewriteAlt(a) ::= <<
 // <a.description>
 <if(a.pred)>
 if (<a.pred>) {
-    <a.alt>
+	<a.alt>
 }<\n>
 <else>
 {
-    <a.alt>
+	<a.alt>
 }<\n>
 <endif>
 >>
