@@ -209,7 +209,7 @@ ADAPTOR->addChild(ADAPTOR, root_<treeLevel>, <label>_tree);
 
 matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
 <matchSet(...)>
-<noRewrite()> <! set return tree !>
+<noRewrite(...)> <! set return tree !>
 >>
 
 matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
@@ -319,7 +319,7 @@ if ( <actions.(actionScope).synpredgate> ) {<\n>
 }
 <endif>
 <ruleDescriptor.allTokenRefsInAltsWithRewrites
-    :{if (stream_<it> != NULL) stream_<it>->free(stream_<it>);}; separator="\n">
+    :{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>);}; separator="\n">
 <ruleDescriptor.allRuleRefsInAltsWithRewrites
-    :{if (stream_<it> != NULL) stream_<it>->free(stream_<it>);}; separator="\n">
+    :{it | if (stream_<it> != NULL) stream_<it>->free(stream_<it>);}; separator="\n">
 >>
