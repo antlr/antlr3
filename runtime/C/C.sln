@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C", "C.vcproj", "{0F0FE03A-78F3-4B34-9DCE-0CDFF1FB5C40}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccProjectName0 = Perforce\u0020Project
-		SccLocalPath0 = ..\\..
-		SccProvider0 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection0 = runtime\\C\\
-		SccProjectUniqueName1 = C.vcproj
-		SccLocalPath1 = ..\\..
-		SccProjectFilePathRelativizedFromConnection1 = runtime\\C\\
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64

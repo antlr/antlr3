@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT(libantlr3c, 3.4-beta3, jimi@temporal-wave.com)
+AC_INIT(libantlr3c, 3.4, jimi@temporal-wave.com)
 AC_PREREQ(2.60)
 AC_COPYRIGHT([
  (The "BSD licence")

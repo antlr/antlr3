@@ -243,7 +243,7 @@ errorNode				(pANTLR3_BASE_TREE_ADAPTOR adaptor, pANTLR3_TOKEN_STREAM ctnstream,
 	// need to track and free the memory allocated to it, so for now, we just
 	// want something in the tree that isn't a NULL pointer.
 	//
-	return adaptor->createTypeText(adaptor, ANTLR3_TOKEN_INVALID, (pANTLR3_UINT8)"Tree Error Node");
+	return (pANTLR3_BASE_TREE)adaptor->createTypeText(adaptor, ANTLR3_TOKEN_INVALID, (pANTLR3_UINT8)"Tree Error Node");
 
 }
 
@@ -252,7 +252,7 @@ errorNode				(pANTLR3_BASE_TREE_ADAPTOR adaptor, pANTLR3_TOKEN_STREAM ctnstream,
 static	pANTLR3_BASE_TREE
 dupNode		(pANTLR3_BASE_TREE_ADAPTOR adaptor, pANTLR3_BASE_TREE treeNode)
 {
-	return  treeNode == NULL ? NULL : treeNode->dupNode(treeNode);
+	return  treeNode == NULL ? NULL : (pANTLR3_BASE_TREE)treeNode->dupNode(treeNode);
 }
 
 static	pANTLR3_BASE_TREE
@@ -453,7 +453,7 @@ replaceChildren
 static	pANTLR3_BASE_TREE
 getChild				(pANTLR3_BASE_TREE_ADAPTOR adaptor, pANTLR3_BASE_TREE t, ANTLR3_UINT32 i)
 {
-	return t->getChild(t, i);
+	return (pANTLR3_BASE_TREE)t->getChild(t, i);
 }
 static  void
 setChild				(pANTLR3_BASE_TREE_ADAPTOR adaptor, pANTLR3_BASE_TREE t, ANTLR3_UINT32 i, pANTLR3_BASE_TREE child)

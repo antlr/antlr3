@@ -345,8 +345,8 @@ antlr3RecognitionExceptionNew(pANTLR3_BASE_RECOGNIZER recognizer)
 	case    ANTLR3_TOKENSTREAM:
 
 		ex->token		= cts->tstream->_LT						(cts->tstream, 1);	    /* Current input token			    */
-		ex->line		= ((pANTLR3_COMMON_TOKEN)(ex->token))->getLine			(ex->token);
-		ex->charPositionInLine	= ((pANTLR3_COMMON_TOKEN)(ex->token))->getCharPositionInLine	(ex->token);
+		ex->line		= ((pANTLR3_COMMON_TOKEN)(ex->token))->getLine			((pANTLR3_COMMON_TOKEN)(ex->token));
+		ex->charPositionInLine	= ((pANTLR3_COMMON_TOKEN)(ex->token))->getCharPositionInLine	((pANTLR3_COMMON_TOKEN)(ex->token));
 		ex->index		= cts->tstream->istream->index					(cts->tstream->istream);
 		if	(((pANTLR3_COMMON_TOKEN)(ex->token))->type == ANTLR3_TOKEN_EOF)
 		{
@@ -362,8 +362,8 @@ antlr3RecognitionExceptionNew(pANTLR3_BASE_RECOGNIZER recognizer)
 	case    ANTLR3_COMMONTREENODE:
 
 		ex->token		= tns->_LT						    (tns, 1);	    /* Current input tree node			    */
-		ex->line		= ((pANTLR3_BASE_TREE)(ex->token))->getLine		    (ex->token);
-		ex->charPositionInLine	= ((pANTLR3_BASE_TREE)(ex->token))->getCharPositionInLine   (ex->token);
+		ex->line		= ((pANTLR3_BASE_TREE)(ex->token))->getLine		    ((pANTLR3_BASE_TREE)(ex->token));
+		ex->charPositionInLine	= ((pANTLR3_BASE_TREE)(ex->token))->getCharPositionInLine   ((pANTLR3_BASE_TREE)(ex->token));
 		ex->index		= tns->istream->index					    (tns->istream);
 
 		// Are you ready for this? Deep breath now...
@@ -586,7 +586,7 @@ mismatchIsMissingToken(pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_INT_STREAM is
 		// EOR can follow, but if we are not the start symbol, we
 		// need to remove it.
 		//
-		if	(recognizer->state->following->vector->count >= 0)
+		//if	(recognizer->state->following->vector->count >= 0) ml: always true
 		{
 			followClone->remove(followClone, ANTLR3_EOR_TOKEN_TYPE);
 		}
@@ -1589,7 +1589,7 @@ recoverFromMismatchedSet	    (pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_BITSET
 	{
 		// We can fake the missing token and proceed
 		//
-		matchedSymbol = recognizer->getMissingSymbol(recognizer, is, recognizer->state->exception, ANTLR3_TOKEN_INVALID, follow);
+		matchedSymbol = (pANTLR3_COMMON_TOKEN)recognizer->getMissingSymbol(recognizer, is, recognizer->state->exception, ANTLR3_TOKEN_INVALID, follow);
 		recognizer->state->exception->type	= ANTLR3_MISSING_TOKEN_EXCEPTION;
 		recognizer->state->exception->token	= matchedSymbol;
 

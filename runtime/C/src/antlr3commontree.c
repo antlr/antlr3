@@ -157,7 +157,7 @@ newPoolTree	    (pANTLR3_ARBORETUM factory)
 
     // If we have anything on the re claim stack, reuse that sucker first
     //
-    tree = factory->nilStack->peek(factory->nilStack);
+    tree = (pANTLR3_COMMON_TREE)factory->nilStack->peek(factory->nilStack);
 
     if  (tree != NULL)
     {
@@ -337,7 +337,7 @@ ANTLR3_API pANTLR3_COMMON_TREE
 antlr3CommonTreeNew()
 {
 	pANTLR3_COMMON_TREE	tree;
-	tree    = ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
+	tree    = (pANTLR3_COMMON_TREE)ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
 
 	if	(tree == NULL)
 	{
@@ -503,6 +503,8 @@ static pANTLR3_STRING	    toString			(pANTLR3_BASE_TREE tree)
 static pANTLR3_BASE_TREE	
 getParent				(pANTLR3_BASE_TREE tree)
 {
+	if (((pANTLR3_COMMON_TREE)(tree->super))->parent == NULL)
+		return NULL;
 	return & (((pANTLR3_COMMON_TREE)(tree->super))->parent->baseTree);
 }
 
