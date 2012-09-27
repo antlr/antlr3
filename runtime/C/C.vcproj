@@ -5,9 +5,6 @@
 	Name="C"
 	ProjectGUID="{0F0FE03A-78F3-4B34-9DCE-0CDFF1FB5C40}"
 	RootNamespace="C"
-	SccProjectName="Perforce Project"
-	SccLocalPath="..\.."
-	SccProvider="MSSCCI:Perforce SCM"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>

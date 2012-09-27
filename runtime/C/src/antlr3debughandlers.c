@@ -94,7 +94,7 @@ antlr3DebugListenerNew()
 {
 	pANTLR3_DEBUG_EVENT_LISTENER	delboy;
 
-	delboy = ANTLR3_CALLOC(1, sizeof(ANTLR3_DEBUG_EVENT_LISTENER));
+	delboy = (pANTLR3_DEBUG_EVENT_LISTENER)ANTLR3_CALLOC(1, sizeof(ANTLR3_DEBUG_EVENT_LISTENER));
 
 	if	(delboy == NULL)
 	{
@@ -136,7 +136,7 @@ antlr3DebugListenerNew()
 	delboy->terminate				= terminate;
 	delboy->errorNode				= errorNode;
 
-	delboy->PROTOCOL_VERSION		= 2;	// ANTLR 3.1 is at protocol version 2
+	delboy->protocol_version		= 2;	// ANTLR 3.1 is at protocol version 2
 
 	delboy->port					= DEFAULT_DEBUGGER_PORT;
 
@@ -299,7 +299,7 @@ handshake				(pANTLR3_DEBUG_EVENT_LISTENER delboy)
 		// Disable Nagle as this is essentially a chat exchange
 		//
 		optVal	= 1;
-		setsockopt(delboy->socket, SOL_SOCKET, TCP_NODELAY, (const void *)&optVal, sizeof(optVal));
+		setsockopt(delboy->socket, SOL_SOCKET, TCP_NODELAY, (const char *)&optVal, sizeof(optVal));
 		
 	}
 
@@ -307,7 +307,7 @@ handshake				(pANTLR3_DEBUG_EVENT_LISTENER delboy)
 	// send it the protocol version we are using and what the name of the grammar
 	// is that we represent.
 	//
-	sprintf		(message, "ANTLR %d\n", delboy->PROTOCOL_VERSION);
+	sprintf		(message, "ANTLR %d\n", delboy->protocol_version);
 	sockSend	(delboy->socket, message, (int)strlen(message));
 	sprintf		(message, "grammar \"%s\n", delboy->grammarFileName->chars);
 	sockSend	(delboy->socket, message, (int)strlen(message));
