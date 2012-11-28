@@ -4,7 +4,9 @@
     <artifactId>gunit</artifactId>
     <packaging>jar</packaging>
   
-    <name>ANTLR gUnit</name>
+    <name>ANTLR 3 gUnit</name>
+    <description>gUnit grammar testing tool for ANTLR 3</description>
+
   <!--
 
     Inherit from the ANTLR master pom, which tells us what
@@ -15,61 +17,11 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.4.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>3.5.1-SNAPSHOT</version>
     </parent>
 
     <url>http://www.antlr.org/wiki/display/ANTLR3/gUnit+-+Grammar+Unit+Testing</url>
 
-    <!--
-
-    Define where the ANTLR gUnit jar is deployed both for
-    the main ANTLR repository, which syncs with the maven main
-    repository, and the snapshot repository, which can be
-    used by developers that need the latest development version of
-    something, but is used here to ensure that snapshot builds of the
-    ANTLR tool pick up the latest snapshot of the runtime and string tempalte
-    and whatever else it might need in the future.
-    -->
-    <distributionManagement>
-
-        <repository>
-            <id>antlr-repo</id>
-            <name>ANTLR Testing repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-repo</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-snapshot</url>
-        </snapshotRepository>
-
-    </distributionManagement>
-
-  <!--
-
-    Inform Maven of the ANTLR snapshot repository, which it will
-    need to consult to get the latest snapshot build of the runtime and so on, should
-    this project need the latest builds from the antlr snapshots and not the pre-built
-    released jars from the repository.
-    -->
-    <repositories>
-
-      <!--
-        This is the ANTLR repository.
-        -->
-        <repository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>http://antlr.org/antlr-snapshot</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-
-    </repositories>
-  
   <!--
 
     Tell Maven which other artifacts we need in order to
@@ -104,13 +56,9 @@
             <scope>compile</scope>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
-
-        <defaultGoal>install</defaultGoal>
 
         <plugins>
 
@@ -129,16 +77,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <sourceDirectory>src</sourceDirectory>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
 
@@ -154,15 +92,6 @@
 
         </plugins>
 
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions>
-
-    
     </build>
 
 </project>
