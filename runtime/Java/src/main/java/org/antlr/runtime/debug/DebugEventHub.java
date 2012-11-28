@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *  use the event mechanism to build parse trees etc...  Not thread-safe.
  *  Don't add events in one thread while parser fires events in another.
  * 
- *  @see also DebugEventRepeater
+ *  @see DebugEventRepeater
  */
 public class DebugEventHub implements DebugEventListener {
 	protected List<DebugEventListener> listeners = new ArrayList<DebugEventListener>();

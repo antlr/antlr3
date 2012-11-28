@@ -879,7 +879,6 @@ public class Tool {
      * to the input directory.
      *
      * @param fileNameWithPath path to input source
-     * @return
      */
     public File getOutputDirectory(String fileNameWithPath) {
 
