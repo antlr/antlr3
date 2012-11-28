@@ -158,50 +158,6 @@
             </plugin>
 
             <plugin>
-
-                <!--
-
-                    Build an uber-jar for the ANTLR Tool that is packaged with all the other dependencies,
-                    such as the antlr-runtime and stringtemplate etc. This will be useful
-                    for developers, who then do not need to download anything else or
-                    remember that they need stringtemplate.jar in their CLASSPATH and so
-                    on.
-
-                    This does not preclude any of the module generated jars from
-                    being used on their own of course.
-
-                    Here, we also build a master source jar as I was unable to pursuade
-                    this plugin to use multiple configurations and not have the thing
-                    screw up because of multiple modules :-(
-
-                  -->
-
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <!--
-                    Do not make the child modules build an assembly
-                  -->
-                <inherited>false</inherited>
-
-                <configuration>
-                    <descriptors>
-                        <descriptor>antlrjar.xml</descriptor>
-                        <descriptor>antlrsources.xml</descriptor>
-                    </descriptors>
-                        <!--
-                            Specify that we want the resulting jar to be executable
-                            via java -jar, which we do by modifying the manifest
-                            of course.
-                          -->
-                    <archive>
-                        <manifest>
-                            <mainClass>org.antlr.Tool</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
