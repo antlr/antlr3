@@ -137,4 +137,23 @@ public class TestJavaCodeGeneration extends BaseTest {
 		boolean expecting = true; // should be ok
 		assertEquals(expecting, found);
 	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#20: StackOverflow error when
+	 * compiling grammar with backtracking.
+	 * https://github.com/antlr/antlr3/issues/20
+	 */
+	@Test
+	public void testSemanticPredicateAnalysisStackOverflow() throws Exception {
+		String grammar =
+			"grammar T;\n"
+			+ "\n"
+			+ "options {\n"
+			+ "  backtrack=true;\n"
+			+ "}\n"
+			+ "\n"
+			+ "main : ('x'*)*;\n";
+		boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+		assertTrue(success);
+	}
 }
