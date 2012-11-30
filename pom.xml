@@ -85,6 +85,13 @@
             </dependency>
 
             <dependency>
+              <groupId>org.antlr</groupId>
+              <artifactId>stringtemplate</artifactId>
+              <version>3.2.1</version>
+              <scope>compile</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.antlr</groupId>
                 <artifactId>ST4</artifactId>
                 <version>4.0.7-SNAPSHOT</version>
