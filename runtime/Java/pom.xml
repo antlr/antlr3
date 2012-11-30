@@ -53,7 +53,6 @@
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>stringtemplate</artifactId>
-      <version>3.2.1</version>
       <scope>compile</scope>
     </dependency>
 
@@ -63,20 +62,5 @@
     </dependency>
 
   </dependencies>
-  
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-            <version>2.5.2</version>
-            <configuration>
-                <findbugsXmlOutput>true</findbugsXmlOutput>
-                <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                <xmlOutput>true</xmlOutput>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
 
 </project>
