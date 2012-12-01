@@ -77,8 +77,9 @@ import java.util.HashMap;
 <@end>
 
 <docComment>
-@SuppressWarnings({"all", "warnings", "unchecked", "cast"})
+@SuppressWarnings("all")
 <recognizer>
+
 >>
 
 lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="CommonToken",
@@ -116,7 +117,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 			{g|this.<g:delegateName()> = <g:delegateName()>;}; separator="\n">
 		<last(grammar.delegators):{g|gParent = <g:delegateName()>;}>
 	}
-	public String getGrammarFileName() { return "<fileName>"; }
+	@Override public String getGrammarFileName() { return "<fileName>"; }
 
 <if(filterMode)>
 	<filteringNextToken()>
@@ -237,8 +238,8 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 	}
 	<@end>
 
-	public String[] getTokenNames() { return <grammar.composite.rootGrammar.recognizerName>.tokenNames; }
-	public String getGrammarFileName() { return "<fileName>"; }
+	@Override public String[] getTokenNames() { return <grammar.composite.rootGrammar.recognizerName>.tokenNames; }
+	@Override public String getGrammarFileName() { return "<fileName>"; }
 
 	<members>
 
@@ -535,6 +536,7 @@ public final void m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>) 
  *  that chooses between lexer rules.
  */
 tokensRule(ruleName,nakedBlock,args,block,ruleDescriptor) ::= <<
+@Override
 public void mTokens() throws RecognitionException {
 	<block>
 }
@@ -1089,11 +1091,13 @@ class DFA<dfa.decisionNumber> extends DFA {
 		this.special = DFA<dfa.decisionNumber>_special;
 		this.transition = DFA<dfa.decisionNumber>_transition;
 	}
+	@Override
 	public String getDescription() {
 		return "<dfa.description>";
 	}
 	<@errorMethod()>
 <if(dfa.specialStateSTs)>
+	@Override
 	public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
 		<if(LEXER)>
 		IntStream input = _input;

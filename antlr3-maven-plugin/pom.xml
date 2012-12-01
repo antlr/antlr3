@@ -60,12 +60,13 @@
     <artifactId>antlr3-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
-    <!-- Note that as this plugin depends on the ANTLR tool itself
-         we cannot use the paren pom to control the version number
-         and MUST update <version> in this pom manually!
-         -->
-    <version>3.4.1-SNAPSHOT</version>
-    <name>Maven plugin for ANTLR V3</name>
+    <parent>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr-master</artifactId>
+        <version>3.5.1-SNAPSHOT</version>
+    </parent>
+
+    <name>ANTLR 3 Maven plugin</name>
     <prerequisites>
         <maven>2.0</maven>
     </prerequisites>
@@ -145,65 +146,6 @@ Jim Idle - March 2009
 
     </developers>
 
-    <!-- Where do we track bugs for this project?
-      -->
-    <issueManagement>
-        <system>JIRA</system>
-        <url>http://antlr.org/jira/browse/ANTLR</url>
-    </issueManagement>
-
-    <!-- Location of the license description for this project
-      -->
-    <licenses>
-        <license>
-            <distribution>repo</distribution>
-            <name>The BSD License</name>
-            <url>http://www.antlr.org/LICENSE.txt </url>
-        </license>
-    </licenses>
-
-    <distributionManagement>
-
-        <repository>
-            <id>antlr-repo</id>
-            <name>ANTLR Testing repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-repo</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-snapshot</url>
-        </snapshotRepository>
-
-        <site>
-            <id>antlr-repo</id>
-            <name>ANTLR Maven Plugin Web Site</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-maven-webs/antlr3-maven-plugin</url>
-        </site>
-    </distributionManagement>
-
-    <!-- Ancilliary information for completeness
-      -->
-    <inceptionYear>2009</inceptionYear>
-
-    <mailingLists>
-        <mailingList>
-            <archive>http://antlr.markmail.org/</archive>
-            <otherArchives>
-                <otherArchive>http://www.antlr.org/pipermail/antlr-interest/</otherArchive>
-            </otherArchives>
-            <name>ANTLR Users</name>
-            <subscribe>http://www.antlr.org/mailman/listinfo/antlr-interest/</subscribe>
-            <unsubscribe>http://www.antlr.org/mailman/options/antlr-interest/</unsubscribe>
-            <post>antlr-interest@antlr.org</post>
-        </mailingList>
-    </mailingLists>
-
-    <organization>
-        <name>ANTLR.org</name>
-        <url>http://www.antlr.org</url>
-    </organization>
     <!-- ============================================================================= -->
 
     <!--
@@ -245,25 +187,13 @@ Jim Idle - March 2009
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
-            <version>3.4.1-SNAPSHOT</version>
-        </dependency>
-
-        <!--
-          Testing requirements...
-          -->
-        <dependency>
-
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>test</scope>
         </dependency>
         
@@ -271,26 +201,7 @@ Jim Idle - March 2009
     
     <build>
 
-        <defaultGoal>install</defaultGoal>
-
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions>
-
         <plugins>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -305,20 +216,6 @@ Jim Idle - March 2009
                 <configuration>
                     <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>
