@@ -41,7 +41,13 @@ import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.misc.STMessage;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /** Defines all the errors ANTLR can generator for both the tool and for
  *  issues with a grammar.
@@ -181,6 +187,7 @@ public class ErrorManager {
     public static final int MSG_CONFLICTING_OPTION_IN_TREE_FILTER = 167;
 	public static final int MSG_ILLEGAL_OPTION_VALUE = 168;
 	public static final int MSG_ALL_OPS_NEED_SAME_ASSOC = 169;
+	public static final int MSG_RANGE_OP_ILLEGAL = 170;
 
 	// GRAMMAR WARNINGS
 	public static final int MSG_GRAMMAR_NONDETERMINISM = 200; // A predicts alts 1,2

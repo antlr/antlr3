@@ -228,6 +228,7 @@ WILDCARD_AS_ROOT(arg) ::= "Wildcard invalid as root; wildcard can itself be a tr
 CONFLICTING_OPTION_IN_TREE_FILTER(arg,arg2) ::= "option <arg>=<arg2> conflicts with tree grammar filter mode"
 ILLEGAL_OPTION_VALUE(arg, arg2) ::= "value '<arg2>' invalid for option <arg>"
 ALL_OPS_NEED_SAME_ASSOC(arg) ::= "all operators of alt <alt> of left-recursive rule must have same associativity"
+RANGE_OP_ILLEGAL(arg) ::= "the .. range operator isn't allowed in parser rules"
 
 // GRAMMAR WARNINGS
 
