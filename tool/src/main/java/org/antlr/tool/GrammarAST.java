@@ -124,7 +124,6 @@ public class GrammarAST extends CommonTree {
 
     /**
      *
-     * @return
      */
     public Map<String, Object> getBlockOptions() {
         return blockOptions;

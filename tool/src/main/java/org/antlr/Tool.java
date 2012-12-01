@@ -41,7 +41,7 @@ import java.util.*;
 public class Tool {
 
     public final Properties antlrSettings = new Properties();
-    public String VERSION = "3.4.1-SNAPSHOT";
+    public String VERSION = "3.5.1-SNAPSHOT";
     //public static final String VERSION = "${project.version}";
     public static final String UNINITIALIZED_DIR = "<unset-dir>";
     private List<String> grammarFileNames = new ArrayList<String>();
@@ -879,7 +879,6 @@ public class Tool {
      * to the input directory.
      *
      * @param fileNameWithPath path to input source
-     * @return
      */
     public File getOutputDirectory(String fileNameWithPath) {
 

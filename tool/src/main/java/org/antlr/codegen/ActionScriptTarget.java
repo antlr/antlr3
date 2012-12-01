@@ -74,7 +74,6 @@ public class ActionScriptTarget extends Target {
      * may be a compressed AMF encoding that is embedded using an Embed tag in ActionScript.
      *
      * @param v
-     * @return
      */
 	@Override
     public String encodeIntAsCharEscape(int v) {

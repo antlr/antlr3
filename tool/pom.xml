@@ -3,9 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>antlr</artifactId>
     <packaging>jar</packaging>
-    <name>ANTLR Tool 3.4.1-SNAPSHOT</name>
-    <url>http://antlr.org</url>
-
+    <name>ANTLR 3 Tool</name>
+    <description>The ANTLR 3 tool.</description>
 
   <!--
 
@@ -17,9 +16,9 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.4.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>3.5.1-SNAPSHOT</version>
     </parent>
+
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
@@ -56,15 +55,38 @@
 
     <build>
 
-        <defaultGoal>install</defaultGoal>
-
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <createSourcesJar>true</createSourcesJar>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.antlr.Tool</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
 
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
-                <version>3.4</version>
+                <version>3.4.1-SNAPSHOT</version>
                 <configuration>
                     <libDirectory>target/generated-sources/antlr/org/antlr/grammar/v3</libDirectory>
                 </configuration>
@@ -76,21 +98,6 @@
                     </execution>
                 </executions>
 
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <sourceDirectory>src</sourceDirectory>
-                    <showWarnings>true</showWarnings>
-                    <compilerArgument>-Xlint:-serial</compilerArgument>
-                    <compilerArguments>
-                        <Xlint/>
-                    </compilerArguments>
-                </configuration>
             </plugin>
 
         </plugins>
