@@ -9,6 +9,10 @@ CHANGES
 
 ??? 2012 -- release 3.5
 
+December 1, 2012
+
+* Added error msg for .. in parser
+
 September 17, 2012
 
 * Add Gokulakannan Somasundaram's C++ target based upon C target.
