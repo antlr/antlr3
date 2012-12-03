@@ -801,11 +801,10 @@ ebnf
 	;
 
 range!
-	:	{grammarType == Grammar.LEXER}?=>
+	:	{Rule.getRuleType(currentRuleName) == Grammar.LEXER}? =>
 	 	c1=CHAR_LITERAL RANGE c2=CHAR_LITERAL
 		-> ^(CHAR_RANGE[$c1,".."] $c1 $c2)
-	|	{grammarType != Grammar.LEXER &&
-	     Rule.getRuleType(currentRuleName) == Grammar.PARSER}?=> // range elsewhere is an error
+	|	// range elsewhere is an error
 		(	t=TOKEN_REF r=RANGE TOKEN_REF
 		|	t=STRING_LITERAL r=RANGE STRING_LITERAL
 		|	t=CHAR_LITERAL r=RANGE CHAR_LITERAL
