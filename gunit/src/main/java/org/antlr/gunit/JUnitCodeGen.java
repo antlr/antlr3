@@ -73,7 +73,7 @@ public class JUnitCodeGen {
         this.testsuiteDir = testsuiteDir;
         /** Map the name of rules having return value to its return type */
         ruleWithReturn = new HashMap<String, String>();
-        Class parserClass = locateParserClass( grammarInfo, classLoader );
+        Class<?> parserClass = locateParserClass( grammarInfo, classLoader );
         Method[] methods = parserClass.getDeclaredMethods();
         for(Method method : methods) {
             if ( !method.getReturnType().getName().equals("void") ) {
@@ -82,7 +82,7 @@ public class JUnitCodeGen {
         }
     }
 
-    private Class locateParserClass(GrammarInfo grammarInfo, ClassLoader classLoader) throws ClassNotFoundException {
+    private Class<?> locateParserClass(GrammarInfo grammarInfo, ClassLoader classLoader) throws ClassNotFoundException {
         String parserClassName = grammarInfo.getGrammarName() + "Parser";
         if ( grammarInfo.getGrammarPackage() != null ) {
             parserClassName = grammarInfo.getGrammarPackage()+ "." + parserClassName;

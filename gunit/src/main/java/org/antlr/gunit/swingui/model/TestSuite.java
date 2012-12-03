@@ -95,6 +95,6 @@ public class TestSuite {
     }
     
     // only for stringtemplate use
-    public List getRulesForStringTemplate() {return rules;}
+    public List<Rule> getRulesForStringTemplate() {return rules;}
     
 }

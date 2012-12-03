@@ -36,7 +36,7 @@ import java.util.HashMap;
  */
 public class ParserLoader extends ClassLoader {
 
-    private HashMap<String, Class> classList;
+    private HashMap<String, Class<?>> classList;
     private String grammar;
 
     /**
@@ -51,7 +51,7 @@ public class ParserLoader extends ClassLoader {
         // load all the class files in the "classDir" related to the grammarName
         File dir = new File(classDir);
         if(dir.isDirectory()) {
-            classList = new HashMap<String, Class>();
+            classList = new HashMap<String, Class<?>>();
             grammar = grammarName;
             File[] files = dir.listFiles(new ClassFilenameFilter(grammarName));
             for(File f : files) {
@@ -63,7 +63,7 @@ public class ParserLoader extends ClassLoader {
                 in.close();
 
                 // define class
-                final Class newClass = defineClass(null, classData, 0, classData.length);
+                final Class<?> newClass = defineClass(null, classData, 0, classData.length);
                 assert(newClass != null);
                 resolveClass(newClass);
 
@@ -86,7 +86,7 @@ public class ParserLoader extends ClassLoader {
 
 
     @Override
-    public synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    public synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //System.out.print("loading: " + name);
         if(name.startsWith(grammar)) {
             if(classList.containsKey(name)) {
@@ -98,7 +98,7 @@ public class ParserLoader extends ClassLoader {
             }
             
         } else {
-            final Class c = findSystemClass(name);
+            final Class<?> c = findSystemClass(name);
             //System.out.println(" .... system found " + c.getName());
             return c;
         }

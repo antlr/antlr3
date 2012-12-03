@@ -70,19 +70,17 @@ public abstract class gUnitBaseTest extends TestCase {
 		else {
 			input = new ANTLRStringStream(testInput);
 		}
-		Class lexer = null;
+		Class<? extends Lexer> lexer;
 		PrintStream ps = null;		// for redirecting stdout later
 		PrintStream ps2 = null;		// for redirecting stderr later
         try {
             /** Use Reflection to create instances of lexer and parser */
-        	lexer = Class.forName(lexerPath);
-            Class[] lexArgTypes = new Class[]{CharStream.class};				// assign type to lexer's args
-            Constructor lexConstructor = lexer.getConstructor(lexArgTypes);
-            Object[] lexArgs = new Object[]{input};								// assign value to lexer's args
-            Lexer lexObj = (Lexer)lexConstructor.newInstance(lexArgs);				// makes new instance of lexer
+        	lexer = Class.forName(lexerPath).asSubclass(Lexer.class);
+            Constructor<? extends Lexer> lexConstructor = lexer.getConstructor(CharStream.class);
+            Lexer lexObj = lexConstructor.newInstance(input);				// makes new instance of lexer
             input.setLine(line);
 
-            Method ruleName = lexer.getMethod("m"+testRuleName, new Class[0]);
+            Method ruleName = lexer.getMethod("m"+testRuleName);
 
             /** Start of I/O Redirecting */
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -95,7 +93,7 @@ public abstract class gUnitBaseTest extends TestCase {
 
             /** Invoke lexer rule, and get the current index in CharStream */
             ruleName.invoke(lexObj, new Object[0]);
-            Method ruleName2 = lexer.getMethod("getCharIndex", new Class[0]);
+            Method ruleName2 = lexer.getMethod("getCharIndex");
             int currentIndex = (Integer) ruleName2.invoke(lexObj, new Object[0]);
             if ( currentIndex!=input.size() ) {
             	ps2.println("extra text found, '"+input.substring(currentIndex, input.size()-1)+"'");
@@ -161,33 +159,28 @@ public abstract class gUnitBaseTest extends TestCase {
 		else {
 			input = new ANTLRStringStream(testInput);
 		}
-		Class lexer = null;
-		Class parser = null;
+		Class<? extends Lexer> lexer;
+		Class<? extends Parser> parser;
 		PrintStream ps = null;		// for redirecting stdout later
 		PrintStream ps2 = null;		// for redirecting stderr later
         ByteArrayOutputStream out = null;
         ByteArrayOutputStream err = null;
 		try {
 			/** Use Reflection to create instances of lexer and parser */
-			lexer = Class.forName(lexerPath);
-            Class[] lexArgTypes = new Class[]{CharStream.class};				// assign type to lexer's args
-            Constructor lexConstructor = lexer.getConstructor(lexArgTypes);
-            Object[] lexArgs = new Object[]{input};								// assign value to lexer's args
-            Lexer lexObj = (Lexer)lexConstructor.newInstance(lexArgs);				// makes new instance of lexer
+			lexer = Class.forName(lexerPath).asSubclass(Lexer.class);
+            Constructor<? extends Lexer> lexConstructor = lexer.getConstructor(CharStream.class);
+            Lexer lexObj = lexConstructor.newInstance(input);				// makes new instance of lexer
             input.setLine(line);
 
             CommonTokenStream tokens = new CommonTokenStream(lexObj);
-            parser = Class.forName(parserPath);
-            Class[] parArgTypes = new Class[]{TokenStream.class};				// assign type to parser's args
-            Constructor parConstructor = parser.getConstructor(parArgTypes);
-            Object[] parArgs = new Object[]{tokens};							// assign value to parser's args
-            Parser parObj = (Parser)parConstructor.newInstance(parArgs);				// makes new instance of parser
+            parser = Class.forName(parserPath).asSubclass(Parser.class);
+            Constructor<? extends Parser> parConstructor = parser.getConstructor(TokenStream.class);
+            Parser parObj = parConstructor.newInstance(tokens);				// makes new instance of parser
 
             // set up customized tree adaptor if necessary
             if ( treeAdaptorPath!=null ) {
-            	parArgTypes = new Class[]{TreeAdaptor.class};
-            	Method _setTreeAdaptor = parser.getMethod("setTreeAdaptor", parArgTypes);
-            	Class _treeAdaptor = Class.forName(treeAdaptorPath);
+            	Method _setTreeAdaptor = parser.getMethod("setTreeAdaptor", TreeAdaptor.class);
+            	Class<? extends TreeAdaptor> _treeAdaptor = Class.forName(treeAdaptorPath).asSubclass(TreeAdaptor.class);
             	_setTreeAdaptor.invoke(parObj, _treeAdaptor.newInstance());
             }
 
@@ -210,7 +203,7 @@ public abstract class gUnitBaseTest extends TestCase {
             if ( ruleReturn!=null ) {
                 if ( ruleReturn.getClass().toString().indexOf(testRuleName+"_return")>0 ) {
                 	try {	// NullPointerException may happen here...
-                		Class _return = Class.forName(parserPath+"$"+testRuleName+"_return");
+                		Class<?> _return = Class.forName(parserPath+"$"+testRuleName+"_return");
                 		Method[] methods = _return.getDeclaredMethods();
                 		for(Method method : methods) {
 			                if ( method.getName().equals("getTree") ) {
@@ -307,34 +300,29 @@ public abstract class gUnitBaseTest extends TestCase {
 		else {
 			input = new ANTLRStringStream(testInput);
 		}
-		Class lexer = null;
-		Class parser = null;
-		Class treeParser = null;
+		Class<? extends Lexer> lexer;
+		Class<? extends Parser> parser;
+		Class<? extends TreeParser> treeParser;
 		PrintStream ps = null;		// for redirecting stdout later
 		PrintStream ps2 = null;		// for redirecting stderr later
 		try {
 			/** Use Reflection to create instances of lexer and parser */
-        	lexer = Class.forName(lexerPath);
-            Class[] lexArgTypes = new Class[]{CharStream.class};				// assign type to lexer's args
-            Constructor lexConstructor = lexer.getConstructor(lexArgTypes);
-            Object[] lexArgs = new Object[]{input};								// assign value to lexer's args
-            Object lexObj = lexConstructor.newInstance(lexArgs);				// makes new instance of lexer
+        	lexer = Class.forName(lexerPath).asSubclass(Lexer.class);
+            Constructor<? extends Lexer> lexConstructor = lexer.getConstructor(CharStream.class);
+            Lexer lexObj = lexConstructor.newInstance(input);				// makes new instance of lexer
 
-            CommonTokenStream tokens = new CommonTokenStream((Lexer) lexObj);
+            CommonTokenStream tokens = new CommonTokenStream(lexObj);
 
-            parser = Class.forName(parserPath);
-            Class[] parArgTypes = new Class[]{TokenStream.class};				// assign type to parser's args
-            Constructor parConstructor = parser.getConstructor(parArgTypes);
-            Object[] parArgs = new Object[]{tokens};							// assign value to parser's args
-            Object parObj = parConstructor.newInstance(parArgs);				// makes new instance of parser
+            parser = Class.forName(parserPath).asSubclass(Parser.class);
+            Constructor<? extends Parser> parConstructor = parser.getConstructor(TokenStream.class);
+            Parser parObj = parConstructor.newInstance(tokens);				// makes new instance of parser
 
             // set up customized tree adaptor if necessary
             TreeAdaptor customTreeAdaptor = null;
             if ( treeAdaptorPath!=null ) {
-            	parArgTypes = new Class[]{TreeAdaptor.class};
-            	Method _setTreeAdaptor = parser.getMethod("setTreeAdaptor", parArgTypes);
-            	Class _treeAdaptor = Class.forName(treeAdaptorPath);
-            	customTreeAdaptor = (TreeAdaptor) _treeAdaptor.newInstance();
+            	Method _setTreeAdaptor = parser.getMethod("setTreeAdaptor", TreeAdaptor.class);
+            	Class<? extends TreeAdaptor> _treeAdaptor = Class.forName(treeAdaptorPath).asSubclass(TreeAdaptor.class);
+            	customTreeAdaptor = _treeAdaptor.newInstance();
             	_setTreeAdaptor.invoke(parObj, customTreeAdaptor);
             }
 
@@ -352,7 +340,7 @@ public abstract class gUnitBaseTest extends TestCase {
             /** Invoke grammar rule, and get the return value */
             Object ruleReturn = ruleName.invoke(parObj);
 
-            Class _return = Class.forName(parserPath+"$"+testRuleName+"_return");
+            Class<?> _return = Class.forName(parserPath+"$"+testRuleName+"_return");
         	Method returnName = _return.getMethod("getTree");
         	CommonTree tree = (CommonTree) returnName.invoke(ruleReturn);
 
@@ -367,11 +355,9 @@ public abstract class gUnitBaseTest extends TestCase {
         	// AST nodes have payload that point into token stream
         	nodes.setTokenStream(tokens);
         	// Create a tree walker attached to the nodes stream
-        	treeParser = Class.forName(treeParserPath);
-            Class[] treeParArgTypes = new Class[]{TreeNodeStream.class};		// assign type to tree parser's args
-            Constructor treeParConstructor = treeParser.getConstructor(treeParArgTypes);
-            Object[] treeParArgs = new Object[]{nodes};							// assign value to tree parser's args
-            Object treeParObj = treeParConstructor.newInstance(treeParArgs);	// makes new instance of tree parser
+        	treeParser = Class.forName(treeParserPath).asSubclass(TreeParser.class);
+            Constructor<? extends TreeParser> treeParConstructor = treeParser.getConstructor(TreeNodeStream.class);
+            TreeParser treeParObj = treeParConstructor.newInstance(nodes);	// makes new instance of tree parser
         	// Invoke the tree rule, and store the return value if there is
             Method treeRuleName = treeParser.getMethod(testTreeRuleName);
             Object treeRuleReturn = treeRuleName.invoke(treeParObj);
@@ -382,7 +368,7 @@ public abstract class gUnitBaseTest extends TestCase {
             if ( treeRuleReturn!=null ) {
                 if ( treeRuleReturn.getClass().toString().indexOf(testTreeRuleName+"_return")>0 ) {
                 	try {	// NullPointerException may happen here...
-                		Class _treeReturn = Class.forName(treeParserPath+"$"+testTreeRuleName+"_return");
+                		Class<?> _treeReturn = Class.forName(treeParserPath+"$"+testTreeRuleName+"_return");
                 		Method[] methods = _treeReturn.getDeclaredMethods();
 			            for(Method method : methods) {
 			                if ( method.getName().equals("getTree") ) {
