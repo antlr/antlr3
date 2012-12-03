@@ -1276,24 +1276,24 @@ parameterSetAttributeRef(attr,expr) ::= "<attr.name> =<expr>;"
 
 scopeAttributeRef(scope,attr,index,negIndex) ::= <%
 <if(negIndex)>
-((<scope>_scope)<scope>_stack.elementAt(<scope>_stack.size()-<negIndex>-1)).<attr.name>
+<scope>_stack.elementAt(<scope>_stack.size()-<negIndex>-1).<attr.name>
 <else>
 <if(index)>
-((<scope>_scope)<scope>_stack.elementAt(<index>)).<attr.name>
+<scope>_stack.elementAt(<index>).<attr.name>
 <else>
-((<scope>_scope)<scope>_stack.peek()).<attr.name>
+<scope>_stack.peek().<attr.name>
 <endif>
 <endif>
 %>
 
 scopeSetAttributeRef(scope,attr,expr,index,negIndex) ::= <%
 <if(negIndex)>
-((<scope>_scope)<scope>_stack.elementAt(<scope>_stack.size()-<negIndex>-1)).<attr.name> =<expr>;
+<scope>_stack.elementAt(<scope>_stack.size()-<negIndex>-1).<attr.name> =<expr>;
 <else>
 <if(index)>
-((<scope>_scope)<scope>_stack.elementAt(<index>)).<attr.name> =<expr>;
+<scope>_stack.elementAt(<index>).<attr.name> =<expr>;
 <else>
-((<scope>_scope)<scope>_stack.peek()).<attr.name> =<expr>;
+<scope>_stack.peek().<attr.name> =<expr>;
 <endif>
 <endif>
 %>
