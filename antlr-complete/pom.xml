@@ -81,6 +81,14 @@
                 <configuration>
                     <minimizeJar>false</minimizeJar>
                     <createSourcesJar>true</createSourcesJar>
+                    <filters>
+                        <filter>
+                            <artifact>org.antlr:antlr-complete</artifact>
+                            <includes>
+                                <include>META-INF/**</include>
+                            </includes>
+                        </filter>
+                    </filters>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>org.antlr.Tool</mainClass>
@@ -89,10 +97,42 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>complete-no-st3</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>no-st3</shadedClassifierName>
+                            <filters>
+                                <filter>
+                                    <artifact>antlr:antlr</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.antlr:stringtemplate</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>complete</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
