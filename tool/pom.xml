@@ -72,6 +72,21 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <createSourcesJar>true</createSourcesJar>
+                            <shadedClassifierName>complete</shadedClassifierName>
+                            <filters>
+                                <filter>
+                                    <artifact>org.antlr:antlr-runtime</artifact>
+                                    <includes>
+                                        <include>org/antlr/runtime/**</include>
+                                    </includes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.antlr:stringtemplate</artifact>
+                                    <includes>
+                                        <include>org/antlr/stringtemplate/**</include>
+                                    </includes>
+                                </filter>
+                            </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>org.antlr.Tool</mainClass>
