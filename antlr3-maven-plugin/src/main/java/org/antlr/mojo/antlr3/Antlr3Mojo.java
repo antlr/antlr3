@@ -172,7 +172,7 @@ public class Antlr3Mojo
      *
      * @parameter
      */
-    protected Set includes = new HashSet();
+    protected Set<String> includes = new HashSet<String>();
     /**
      * Provides an explicit list of any grammars that should be excluded from
      * the generate phase of the plugin. Files listed here will not be sent for
@@ -180,7 +180,7 @@ public class Antlr3Mojo
      *
      * @parameter 
      */
-    protected Set excludes = new HashSet();
+    protected Set<String> excludes = new HashSet<String>();
     /**
      * @parameter expression="${project}"
      * @required
@@ -254,15 +254,13 @@ public class Antlr3Mojo
 
             // Excludes
             //
-            for (String e : (Set<String>) excludes) {
-
+            for (String e : excludes) {
                 log.debug("ANTLR: Exclude: " + e);
             }
 
             // Includes
             //
-            for (String e : (Set<String>) includes) {
-
+            for (String e : includes) {
                 log.debug("ANTLR: Include: " + e);
             }
 
@@ -411,11 +409,11 @@ public class Antlr3Mojo
             throws TokenStreamException, RecognitionException, IOException, InclusionScanException {
         // Which files under the source set should we be looking for as grammar files
         //
-        SourceMapping mapping = new SuffixMapping("g", Collections.EMPTY_SET);
+        SourceMapping mapping = new SuffixMapping("g", Collections.<String>emptySet());
 
         // What are the sets of includes (defaulted or otherwise).
         //
-        Set includes = getIncludesPatterns();
+        Set<String> includes = getIncludesPatterns();
 
         // Now, to the excludes, we need to add the imports directory
         // as this is autoscanned for importd grammars and so is auto-excluded from the
@@ -426,7 +424,7 @@ public class Antlr3Mojo
         SourceInclusionScanner scan = new SimpleSourceInclusionScanner(includes, excludes);
 
         scan.addSourceMapping(mapping);
-        Set grammarFiles = scan.getIncludedSources(sourceDirectory, null);
+        Set<File> grammarFiles = scan.getIncludedSources(sourceDirectory, null);
 
         if (grammarFiles.isEmpty()) {
             if (getLog().isInfoEnabled()) {
@@ -441,7 +439,7 @@ public class Antlr3Mojo
             // Iterate each grammar file we were given and add it into the tool's list of
             // grammars to process.
             //
-            for (File grammar : (Set<File>) grammarFiles) {
+            for (File grammar : grammarFiles) {
 
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Grammar file '" + grammar.getPath() + "' detected.");
@@ -462,7 +460,7 @@ public class Antlr3Mojo
 
     }
 
-    public Set getIncludesPatterns() {
+    public Set<String> getIncludesPatterns() {
         if (includes == null || includes.isEmpty()) {
             return Collections.singleton("**/*.g");
         }
