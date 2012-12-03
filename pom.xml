@@ -38,6 +38,7 @@
         <module>gunit</module>
         <module>gunit-maven-plugin</module>
         <module>antlr3-maven-archetype</module>
+        <module>antlr-complete</module>
     </modules>
 
   <!--

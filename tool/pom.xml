@@ -58,47 +58,6 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <createSourcesJar>true</createSourcesJar>
-                            <shadedClassifierName>complete</shadedClassifierName>
-                            <filters>
-                                <filter>
-                                    <artifact>org.antlr:antlr-runtime</artifact>
-                                    <includes>
-                                        <include>org/antlr/runtime/**</include>
-                                    </includes>
-                                </filter>
-                                <filter>
-                                    <artifact>org.antlr:stringtemplate</artifact>
-                                    <includes>
-                                        <include>org/antlr/stringtemplate/**</include>
-                                    </includes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.antlr.Tool</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
                 <version>3.4.1-SNAPSHOT</version>
