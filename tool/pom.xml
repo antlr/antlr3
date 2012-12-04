@@ -60,7 +60,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
-                <version>3.4.1-SNAPSHOT</version>
+                <version>3.5-rc-1</version>
                 <configuration>
                     <libDirectory>target/generated-sources/antlr/org/antlr/grammar/v3</libDirectory>
                 </configuration>
