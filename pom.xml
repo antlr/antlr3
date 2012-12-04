@@ -53,6 +53,14 @@
         <bootclasspath.testCompile>${java6.home}/jre/lib/rt.jar</bootclasspath.testCompile>
     </properties>
 
+    <licenses>
+        <license>
+            <name>BSD licence</name>
+            <url>http://antlr.org/license.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/antlr/antlr3/issues</url>
