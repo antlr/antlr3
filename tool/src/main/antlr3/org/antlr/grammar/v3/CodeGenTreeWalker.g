@@ -1456,7 +1456,9 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 				stName += "Root";
 			}
 			$code = templates.getInstanceOf(stName);
-			$code.add("terminalOptions",term.terminalOptions);
+			if (term.terminalOptions != null) {
+				$code.add("terminalOptions",term.terminalOptions);
+			}
 			if ( $arg!=null )
 			{
 				List<? extends Object> args = generator.translateAction(currentRuleName,$arg);
