@@ -249,7 +249,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
    appear to be defined in this recognizer. !>
 	// Delegated rules
 <grammar.delegatedRules:{ruleDescriptor|
-	public <returnType(ruleDescriptor)> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">); \}}; separator="\n">
+	public <returnType(ruleDescriptor)> <ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>) throws <ruleDescriptor.throwsSpec; separator=", "> { <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", "><endif>); \}}; separator="\n">
 
 	<synpreds:{p | <synpred(p)>}>
 
@@ -420,7 +420,7 @@ ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <returnType(ruleDescriptor)> retval = new <returnType(ruleDescriptor)>();
 retval.start = input.LT(1);
-<else>
+<elseif(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.type> <a.name> = <if(a.initValue)><a.initValue><else><initValue(a.type)><endif>;
 }>
@@ -1200,11 +1200,13 @@ protected Stack\<<scope.name>_scope> <scope.name>_stack = new Stack\<<scope.name
 >>
 
 ruleAttributeScope(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 protected static class <scope.name>_scope {
 	<scope.attributes:{it |<it.decl>;}; separator="\n">
 }
 protected Stack\<<scope.name>_scope> <scope.name>_stack = new Stack\<<scope.name>_scope>();
+<endif>
 <endif>
 >>
 
@@ -1257,7 +1259,7 @@ ruleLabelDef(label) ::= <%
 returnScope(scope) ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 public static class <ruleDescriptor:returnStructName()> extends <returnScopeBaseType()> {
-	<scope.attributes:{it |public <it.decl>;}; separator="\n">
+	<if(scope)><scope.attributes:{it |public <it.decl>;}; separator="\n"><endif>
 	<@ruleReturnMembers()>
 };
 <endif>
