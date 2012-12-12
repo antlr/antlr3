@@ -75,6 +75,8 @@ import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -2080,25 +2082,32 @@ outer:
 	 *  any else.
 	 */
 	public boolean isEmptyRule(GrammarAST block) {
-		GrammarAST aTokenRefNode =
-			block.findFirstType(ANTLRParser.TOKEN_REF);
-		GrammarAST aStringLiteralRefNode =
-			block.findFirstType(ANTLRParser.STRING_LITERAL);
-		GrammarAST aCharLiteralRefNode =
-			block.findFirstType(ANTLRParser.CHAR_LITERAL);
-		GrammarAST aWildcardRefNode =
-			block.findFirstType(ANTLRParser.WILDCARD);
-		GrammarAST aRuleRefNode =
-			block.findFirstType(ANTLRParser.RULE_REF);
-		if ( aTokenRefNode==null&&
-			 aStringLiteralRefNode==null&&
-			 aCharLiteralRefNode==null&&
-			 aWildcardRefNode==null&&
-			 aRuleRefNode==null )
-		{
-			return true;
+		BitSet nonEmptyTerminals = new BitSet();
+		nonEmptyTerminals.set(ANTLRParser.TOKEN_REF);
+		nonEmptyTerminals.set(ANTLRParser.STRING_LITERAL);
+		nonEmptyTerminals.set(ANTLRParser.CHAR_LITERAL);
+		nonEmptyTerminals.set(ANTLRParser.WILDCARD);
+		nonEmptyTerminals.set(ANTLRParser.RULE_REF);
+		return findFirstTypeOutsideRewrite(block, nonEmptyTerminals) == null;
+	}
+
+	protected GrammarAST findFirstTypeOutsideRewrite(GrammarAST block, BitSet types) {
+		ArrayList<GrammarAST> worklist = new ArrayList<GrammarAST>();
+		worklist.add(block);
+		while (!worklist.isEmpty()) {
+			GrammarAST current = worklist.remove(worklist.size() - 1);
+			if (current.getType() == ANTLRParser.REWRITE) {
+				continue;
+			}
+
+			if (current.getType() >= 0 && types.get(current.getType())) {
+				return current;
+			}
+
+			worklist.addAll(Arrays.asList(current.getChildrenAsArray()));
 		}
-		return false;
+
+		return null;
 	}
 
 	public boolean isAtomTokenType(int ttype) {

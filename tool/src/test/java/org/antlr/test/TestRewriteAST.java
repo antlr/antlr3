@@ -1456,4 +1456,18 @@ public class TestRewriteAST extends BaseTest {
 		assertEquals("<unexpected: [@0,0:0='*',<6>,1:0], resync=*>\n", found);
 	}
 
+	@Test public void testRewriteEmptyRule() throws Exception {
+		String grammar =
+			"grammar T;\n" +
+			"options {output=AST;}\n" +
+			"tokens {IMAGINARY;}\n" +
+			"a : empty EOF! ;\n" +
+			"empty : -> IMAGINARY;\n" +
+			"WS : ' ';\n";
+		String result = execParser("T.g", grammar, "TParser", "TLexer",
+				   "a", "", debug);
+		assertEquals("IMAGINARY\n", result);
+		assertNull(stderrDuringParse);
+	}
+
 }
