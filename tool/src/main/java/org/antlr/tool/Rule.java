@@ -37,6 +37,11 @@ import java.util.*;
 
 /** Combine the info associated with a rule. */
 public class Rule {
+	public static final boolean supportsLabelOptimization;
+	static {
+		supportsLabelOptimization = false;
+	}
+
 	public String name;
 	public int index;
 	public String modifier;
