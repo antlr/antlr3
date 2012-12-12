@@ -197,11 +197,13 @@ public abstract class BaseTest {
 							   String input,
 							   boolean debug)
 	{
-		rawGenerateAndBuildRecognizer(grammarFileName,
+		boolean compiled = rawGenerateAndBuildRecognizer(grammarFileName,
 									  grammarStr,
 									  null,
 									  lexerName,
 									  debug);
+		Assert.assertTrue(compiled);
+
 		writeFile(tmpdir, "input", input);
 		return rawExecRecognizer(null,
 								 null,
@@ -221,11 +223,13 @@ public abstract class BaseTest {
 								String startRuleName,
 								String input, boolean debug)
 	{
-		rawGenerateAndBuildRecognizer(grammarFileName,
+		boolean compiled = rawGenerateAndBuildRecognizer(grammarFileName,
 									  grammarStr,
 									  parserName,
 									  lexerName,
 									  debug);
+		Assert.assertTrue(compiled);
+
 		writeFile(tmpdir, "input", input);
 		boolean parserBuildsTrees =
 			grammarStr.indexOf("output=AST")>=0 ||
@@ -281,18 +285,20 @@ public abstract class BaseTest {
 									boolean debug)
 	{
 		// build the parser
-		rawGenerateAndBuildRecognizer(parserGrammarFileName,
+		boolean compiled = rawGenerateAndBuildRecognizer(parserGrammarFileName,
 									  parserGrammarStr,
 									  parserName,
 									  lexerName,
 									  debug);
+		Assert.assertTrue(compiled);
 
 		// build the tree parser
-		rawGenerateAndBuildRecognizer(treeParserGrammarFileName,
+		compiled = rawGenerateAndBuildRecognizer(treeParserGrammarFileName,
 									  treeParserGrammarStr,
 									  treeParserName,
 									  lexerName,
 									  debug);
+		Assert.assertTrue(compiled);
 
 		writeFile(tmpdir, "input", input);
 
@@ -327,6 +333,10 @@ public abstract class BaseTest {
 		//System.out.println(grammarStr);
 		boolean allIsWell =
 			antlr(grammarFileName, grammarFileName, grammarStr, debug);
+		if (!allIsWell) {
+			return false;
+		}
+
 		if ( lexerName!=null ) {
 			boolean ok;
 			if ( parserName!=null ) {
