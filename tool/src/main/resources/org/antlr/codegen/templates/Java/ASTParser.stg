@@ -170,7 +170,7 @@ adaptor.addChild(root_0, <label>_tree);
 <endif>
 >>
 
-wildcardBang(label,elementIndex) ::= "<super.wildcard(...)>"
+wildcardBang(label,elementIndex) ::= "<super.wildcard(token=[],...)>"
 
 wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
 <super.wildcard(...)>
