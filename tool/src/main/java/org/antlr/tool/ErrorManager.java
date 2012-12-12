@@ -38,6 +38,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
+import org.stringtemplate.v4.misc.ErrorType;
 import org.stringtemplate.v4.misc.STMessage;
 
 import java.lang.reflect.Field;
@@ -117,6 +118,7 @@ public class ErrorManager {
 	public static final int MSG_CODE_GEN_TEMPLATES_INCOMPLETE = 22;
 	public static final int MSG_CANNOT_CREATE_TARGET_GENERATOR = 23;
 	//public static final int MSG_CANNOT_COMPUTE_SAMPLE_INPUT_SEQ = 24;
+	public static final int MSG_STRING_TEMPLATE_ERROR = 24;
 
 	// GRAMMAR ERRORS
 	public static final int MSG_SYNTAX_ERROR = 100;
@@ -376,22 +378,32 @@ public class ErrorManager {
 		new STErrorListener() {
 			@Override
 			public void compileTimeError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 
 			@Override
 			public void runTimeError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				switch (msg.error) {
+				case NO_SUCH_ATTRIBUTE:
+				case NO_SUCH_ATTRIBUTE_PASS_THROUGH:
+				case NO_SUCH_PROPERTY:
+					ErrorManager.warning(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString());
+					return;
+
+				default:
+					ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
+					return;
+				}
 			}
 
 			@Override
 			public void IOError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 
 			@Override
 			public void internalError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 		};
 

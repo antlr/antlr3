@@ -42,7 +42,7 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 
 	public void loadPrecRuleTemplates() {
 		recRuleTemplates =
-			new STGroupFile(CodeGenerator.classpathTemplateRootDirectoryName+
+			new ToolSTGroupFile(CodeGenerator.classpathTemplateRootDirectoryName+
 							"/LeftRecursiveRules.stg");
 		if ( !recRuleTemplates.isDefined("recRuleName") ) {
 			ErrorManager.error(ErrorManager.MSG_MISSING_CODE_GEN_TEMPLATES,

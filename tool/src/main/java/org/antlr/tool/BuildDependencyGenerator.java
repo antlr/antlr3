@@ -211,7 +211,7 @@ public class BuildDependencyGenerator {
     public void loadDependencyTemplates() {
         if (templates != null) return;
         String fileName = "org/antlr/tool/templates/depend.stg";
-        templates = new STGroupFile(fileName);
+        templates = new ToolSTGroupFile(fileName);
     }
 
     public String getTokenVocab() {
