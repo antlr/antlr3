@@ -353,7 +353,7 @@ _last = (<ASTLabelType>)input.LT(1);
 /** Streams for token refs are tree nodes now; override to
  *  change nextToken to nextNode.
  */
-createRewriteNodeFromElement(token,terminalOptions,scope) ::= <<
+createRewriteNodeFromElement(token,terminalOptions,args) ::= <<
 <if(terminalOptions.node)>
 new <terminalOptions.node>(stream_<token>.nextNode())
 <else>
