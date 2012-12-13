@@ -2198,7 +2198,7 @@ eotDFAEdge(targetStateNumber,edgeNumber, predicates) ::= <<
 
 andPredicates(left,right) ::= "( (<left>) && (<right>) )"
 
-orPredicates(operands) ::= "((<first(operands)>)<rest(operands):{o | ||(<o>)}>)"
+orPredicates(operands) ::= "(<operands:{o|(<o>)}; separator=\"||\">)"
 
 notPredicate(pred) ::= "!( <evalPredicate(pred,{})> )"
 

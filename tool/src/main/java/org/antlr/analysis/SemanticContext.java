@@ -515,7 +515,7 @@ public abstract class SemanticContext {
 				eST = templates.getInstanceOf("orPredicates");
 			}
 			else {
-				eST = new ST("(<first(operands)><rest(operands):{o | ||<o>}>)");
+				eST = new ST("(<operands; separator=\"||\">)");
 			}
 			for (SemanticContext semctx : operands) {
 				eST.add("operands", semctx.genExpr(generator,templates,dfa));
