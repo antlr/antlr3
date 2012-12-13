@@ -646,7 +646,12 @@ public abstract class SemanticContext {
 		//    return a;
 
 		//System.out.println("## have to AND");
-		return new AND(a,b);
+		AND result = new AND(a,b);
+		if (result.operands.size() == 1) {
+			return result.operands.iterator().next();
+		}
+
+		return result;
 	}
 
 	public static SemanticContext or(SemanticContext a, SemanticContext b) {
