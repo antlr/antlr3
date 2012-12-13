@@ -157,15 +157,20 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     p = lastMarker;
   }
 
-    /**
-     * Seek to a 0-indexed absolute token index. This method can only be used to
-     * seek within the current data buffer. Normally used to seek backwards in
-     * the buffer. Does not force loading of nodes.
-     *
-     * @throws IllegalArgumentException if {@code index} is less than 0
-     * @throws UnsupportedOperationException if {@code index} does not lie
-     * within the moving window of elements
-     */
+	/**
+	 * Seek to a 0-indexed absolute token index. Normally used to seek backwards
+	 * in the buffer. Does not force loading of nodes.
+	 * <p/>
+	 * To preserve backward compatibility, this method allows seeking past the
+	 * end of the currently buffered data. In this case, the input pointer will
+	 * be moved but the data will only actually be loaded upon the next call to
+	 * {@link #consume} or {@link #LT} for {@code k>0}.
+	 *
+	 * @throws IllegalArgumentException if {@code index} is less than 0
+	 * @throws UnsupportedOperationException if {@code index} lies before the
+	 * beginning of the moving window buffer
+	 * ({@code index < }{@link #currentElementIndex currentElementIndex}<code> - </code>{@link #p p}).
+	 */
     public void seek(int index) {
         if (index < 0) {
             throw new IllegalArgumentException("can't seek before the beginning of the input");
@@ -174,9 +179,6 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         int delta = currentElementIndex - index;
         if (p - delta < 0) {
             throw new UnsupportedOperationException("can't seek before the beginning of this stream's buffer");
-        }
-        else if (p - delta >= data.size()) {
-            throw new UnsupportedOperationException("can't seek past the end of the stream's buffer");
         }
 
         p -= delta;
