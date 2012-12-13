@@ -727,7 +727,7 @@ matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(LEXER)>
 <label>= input.LA(1);
 <else>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 <endif>
 if ( <s> ) {
@@ -778,7 +778,7 @@ match(<string>); <checkRuleBacktrackFailure()>
 
 wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 matchAny(input); <checkRuleBacktrackFailure()>
 >>
@@ -1449,3 +1449,15 @@ isEmptyString ::= [
 	"" : true,
 	default : false
 ]
+
+isDefaultLabelType ::= [
+	"Token" : true,
+	default : false
+]
+
+castToLabelType(value) ::= <%
+<if(!isDefaultLabelType.(labelType))>
+(<labelType>)
+<endif>
+<value>
+%>
