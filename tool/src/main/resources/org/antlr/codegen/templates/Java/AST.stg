@@ -53,7 +53,8 @@ public TreeAdaptor getTreeAdaptor() {
 
 @returnScope.ruleReturnMembers() ::= <<
 <ASTLabelType> tree;
-public Object getTree() { return tree; }
+@Override
+public <ASTLabelType> getTree() { return tree; }
 >>
 
 /** Add a variable to track rule's return AST */
