@@ -455,8 +455,10 @@ public abstract class SemanticContext {
 		{
 			ST result = null;
 			for (SemanticContext operand : operands) {
-				if (result == null)
+				if (result == null) {
 					result = operand.genExpr(generator, templates, dfa);
+					continue;
+				}
 
 				ST eST;
 				if ( templates!=null ) {
