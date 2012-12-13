@@ -901,6 +901,7 @@ if ( !(<evalPredicate(pred,description)>) ) {
 dfaState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 int LA<decisionNumber>_<stateNumber> = input.LA(<k>);
 <edges; separator="\nelse ">
+<if((!isTrue.(last(edges).labelExpr)) && (!last(edges).predicates))>
 else {
 <if(eotPredictsAlt)>
 	alt<decisionNumber>=<eotPredictsAlt>;
@@ -912,6 +913,7 @@ else {
 throw nvae;})>
 <endif>
 }
+<endif>
 >>
 
 nvaExceptionWrapperMap ::= [
@@ -1447,6 +1449,11 @@ false_value() ::= "false"
 
 isEmptyString ::= [
 	"" : true,
+	default : false
+]
+
+isTrue ::= [
+	"true" : true,
 	default : false
 ]
 
