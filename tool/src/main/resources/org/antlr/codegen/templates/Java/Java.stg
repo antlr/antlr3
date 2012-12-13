@@ -1078,7 +1078,7 @@ static {
 	}
 }
 
-class DFA<dfa.decisionNumber> extends DFA {
+protected class DFA<dfa.decisionNumber> extends DFA {
 
 	public DFA<dfa.decisionNumber>(BaseRecognizer recognizer) {
 		this.recognizer = recognizer;
