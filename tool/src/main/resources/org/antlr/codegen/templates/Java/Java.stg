@@ -596,7 +596,7 @@ int cnt<decisionNumber>=0;
 <decls>
 <@preloop()>
 loop<decisionNumber>:
-do {
+while (true) {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
 	<decision>
@@ -611,7 +611,7 @@ do {
 		throw eee;
 	}
 	cnt<decisionNumber>++;
-} while (true);
+}
 <@postloop()>
 >>
 
@@ -623,7 +623,7 @@ closureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,m
 <decls>
 <@preloop()>
 loop<decisionNumber>:
-do {
+while (true) {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
 	<decision>
@@ -633,7 +633,7 @@ do {
 	default :
 		break loop<decisionNumber>;
 	}
-} while (true);
+}
 <@postloop()>
 >>
 
