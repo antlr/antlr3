@@ -27,8 +27,6 @@
  */
 package org.antlr.runtime.misc;
 
-import java.util.NoSuchElementException;
-
 /**
  * A lookahead queue that knows how to mark/release locations in the buffer for
  * backtracking purposes. Any markers force the {@link FastQueue} superclass to
@@ -163,25 +161,46 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
      * Seek to a 0-indexed absolute token index. This method can only be used to
      * seek within the current data buffer. Normally used to seek backwards in
      * the buffer. Does not force loading of nodes.
+     *
+     * @throws IllegalArgumentException if {@code index} is less than 0
+     * @throws UnsupportedOperationException if {@code index} does not lie
+     * within the moving window of elements
      */
-  public void seek(int index) {
-    int delta = currentElementIndex - index;
-    p -= delta;
+    public void seek(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("can't seek before the beginning of the input");
+        }
 
-    if (p < 0) {
-      throw new IllegalArgumentException("Can't seek past the beginning of this stream's buffer");
+        int delta = currentElementIndex - index;
+        if (p - delta < 0) {
+            throw new UnsupportedOperationException("can't seek before the beginning of this stream's buffer");
+        }
+        else if (p - delta >= data.size()) {
+            throw new UnsupportedOperationException("can't seek past the end of the stream's buffer");
+        }
+
+        p -= delta;
+        currentElementIndex = index;
     }
 
-    currentElementIndex = index;
-  }
+    protected T LB(int k) {
+        assert k > 0;
 
-  protected T LB(int k) {
-    if (p - k == -1) {
-      return prevElement;
+        int index = p - k;
+        if (index == -1) {
+            return prevElement;
+        }
+
+        // if k>0 then we know index < data.size(). avoid the double-check for
+        // performance.
+        if (index >= 0 /*&& index < data.size()*/) {
+            return data.get(index);
+        }
+
+        if (index < -1) {
+            throw new UnsupportedOperationException("can't look more than one token before the beginning of this stream's buffer");
+        }
+
+        throw new UnsupportedOperationException("can't look past the end of this stream's buffer using LB(int)");
     }
-    else if (p > 0) {
-      return elementAt(-1);
-    }
-    throw new NoSuchElementException("can't look backwards past the beginning of this stream's buffer");
-  }
 }

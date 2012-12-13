@@ -140,8 +140,13 @@ public class RecognitionException extends Exception {
 						this.approximateLineInfo = true;
 						break;
 					}
+
 					--i;
-					priorNode = nodes.LT(i);
+					try {
+						priorNode = nodes.LT(i);
+					} catch (UnsupportedOperationException ex) {
+						priorNode = null;
+					}
 				}
 			}
 			else { // node created from real token
