@@ -39,9 +39,12 @@ import org.antlr.tool.ANTLRErrorListener;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.GrammarSemanticsMessage;
 import org.antlr.tool.Message;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import javax.tools.*;
 import java.io.*;
@@ -76,6 +79,17 @@ public abstract class BaseTest {
      */
 	protected String stderrDuringParse;
 
+	@Rule
+	public final TestRule testWatcher = new TestWatcher() {
+
+		@Override
+		protected void succeeded(Description description) {
+			// remove tmpdir if no error.
+			eraseTempDir();
+		}
+
+	};
+
     @Before
 	public void setUp() throws Exception {
         lastTestFailed = false; // hope for the best, but set to true in asserts that fail
@@ -85,13 +99,6 @@ public abstract class BaseTest {
 						  System.currentTimeMillis()).getAbsolutePath();
         ErrorManager.resetErrorState();
         STGroup.defaultGroup = new STGroup();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        // remove tmpdir if no error.
-        if ( !lastTestFailed ) eraseTempDir();
-
     }
 
     protected Tool newTool(String[] args) {
