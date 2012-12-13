@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** Test hetero trees in parsers and tree parsers */
 public class TestHeteroAST extends BaseTest {
 	protected boolean debug = false;

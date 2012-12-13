@@ -57,6 +57,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.junit.Assert.*;
 
 public abstract class BaseTest {
 	// -J-Dorg.antlr.test.BaseTest.level=FINE
@@ -83,9 +84,6 @@ public abstract class BaseTest {
 
 	public String tmpdir = null;
 
-    /** reset during setUp and set to true if we find a problem */
-    protected boolean lastTestFailed = false;
-
 	/** If error during parser execution, store stderr here; can't return
      *  stdout and stderr.  This doesn't trap errors from running antlr.
      */
@@ -104,7 +102,6 @@ public abstract class BaseTest {
 
     @Before
 	public void setUp() throws Exception {
-        lastTestFailed = false; // hope for the best, but set to true in asserts that fail
         // new output dir for each test
         tmpdir = new File(System.getProperty("java.io.tmpdir"),
 						  "antlr-"+getClass().getName()+"-"+
@@ -979,23 +976,4 @@ public abstract class BaseTest {
         System.out.println("Tree map looks like: " + nset.toString());
         return nset.toString();
     }
-
-    // override to track errors
-
-    public void assertEquals(String msg, Object a, Object b) { try {Assert.assertEquals(msg,a,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertEquals(Object a, Object b) { try {Assert.assertEquals(a,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertEquals(String msg, long a, long b) { try {Assert.assertEquals(msg,a,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertEquals(long a, long b) { try {Assert.assertEquals(a,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-
-    public void assertTrue(String msg, boolean b) { try {Assert.assertTrue(msg,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertTrue(boolean b) { try {Assert.assertTrue(b);} catch (Error e) {lastTestFailed=true; throw e;} }
-
-    public void assertFalse(String msg, boolean b) { try {Assert.assertFalse(msg,b);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertFalse(boolean b) { try {Assert.assertFalse(b);} catch (Error e) {lastTestFailed=true; throw e;} }
-
-    public void assertNotNull(String msg, Object p) { try {Assert.assertNotNull(msg, p);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertNotNull(Object p) { try {Assert.assertNotNull(p);} catch (Error e) {lastTestFailed=true; throw e;} }
-
-    public void assertNull(String msg, Object p) { try {Assert.assertNull(msg, p);} catch (Error e) {lastTestFailed=true; throw e;} }
-    public void assertNull(Object p) { try {Assert.assertNull(p);} catch (Error e) {lastTestFailed=true; throw e;} }
 }

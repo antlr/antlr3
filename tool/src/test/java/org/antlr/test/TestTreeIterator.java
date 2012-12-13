@@ -30,7 +30,7 @@ package org.antlr.test;
 import org.antlr.runtime.tree.*;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class TestTreeIterator {
     static final String[] tokens = new String[] {

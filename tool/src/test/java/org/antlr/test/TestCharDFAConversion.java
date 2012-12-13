@@ -35,6 +35,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 public class TestCharDFAConversion extends BaseTest {
 
 	/** Public default constructor used by TestRig */

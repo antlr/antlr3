@@ -30,6 +30,8 @@ package org.antlr.test;
 import org.antlr.tool.Grammar;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestASTConstruction extends BaseTest {
 
     /** Public default constructor used by TestRig */

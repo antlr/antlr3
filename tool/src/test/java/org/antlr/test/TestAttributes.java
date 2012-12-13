@@ -41,6 +41,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /** Check the $x, $x.y attributes.  For checking the actual
  *  translation, assume the Java target.  This is still a great test
  *  for the semantics of the $x.y stuff regardless of the target.

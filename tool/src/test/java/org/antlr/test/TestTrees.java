@@ -35,6 +35,8 @@ import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestTrees extends BaseTest {
 	TreeAdaptor adaptor = new CommonTreeAdaptor();
 	protected boolean debug = false;

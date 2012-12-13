@@ -40,6 +40,8 @@ import org.antlr.tool.GrammarSemanticsMessage;
 import org.antlr.tool.Message;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** Test templates in actions; %... shorthands */
 public class TestTemplates extends BaseTest {
 	private static final String LINE_SEP = System.getProperty("line.separator");

@@ -37,6 +37,8 @@ import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSemanticsMessage;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestMessages extends BaseTest {
 
 	/** Public default constructor used by TestRig */

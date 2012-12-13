@@ -31,6 +31,8 @@ import org.antlr.analysis.Label;
 import org.antlr.misc.IntervalSet;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestIntervalSet extends BaseTest {
 
     /** Public default constructor used by TestRig */

@@ -38,6 +38,8 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static org.junit.Assert.*;
+
 public class TestDFAConversion extends BaseTest {
 
 	@Test public void testA() throws Exception {

@@ -33,6 +33,8 @@ import org.stringtemplate.v4.ST;
 import org.antlr.tool.Grammar;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestLexer extends BaseTest {
 	protected boolean debug = false;
 

@@ -30,6 +30,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** test runtime parse errors */
 public class TestSyntaxErrors extends BaseTest {
 	@Test public void testLL2() throws Exception {
