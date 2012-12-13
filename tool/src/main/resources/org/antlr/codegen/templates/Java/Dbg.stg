@@ -37,7 +37,7 @@ import java.io.IOException;
 @genericParser.members() ::= <<
 <if(grammar.grammarIsRoot)>
 	public static final String[] ruleNames = new String[] {
-		"invalidRule", <grammar.allImportedRules:{rST | "<rST.name>"}; wrap="\n    ", separator=", ">
+		"invalidRule", <grammar.allImportedRules:{rST | "<rST.name>"}; wrap="\n\t\t", separator=", ">
 	};<\n>
 <endif>
 	public static final boolean[] decisionCanBacktrack = new boolean[] {
@@ -55,7 +55,7 @@ import java.io.IOException;
 	<ctorForRootGrammar()>
 <endif>
 	<ctorForPredefinedListener()>
-<else> <! imported grammar !>
+<else><! imported grammar !>
 	public int getRuleLevel() { return <grammar.delegators:{g| <g:delegateName()>}>.getRuleLevel(); }
 	public void incRuleLevel() { <grammar.delegators:{g| <g:delegateName()>}>.incRuleLevel(); }
 	public void decRuleLevel() { <grammar.delegators:{g| <g:delegateName()>}>.decRuleLevel(); }
@@ -66,7 +66,8 @@ import java.io.IOException;
 		int stopIndex = getRuleMemoization(ruleIndex, input.index());
 		((Profiler)dbg).examineRuleMemoization(input, ruleIndex, stopIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames[ruleIndex]);
 		return super.alreadyParsedRule(input, ruleIndex);
-	}<\n>
+	}
+
 	public void memoize(IntStream input,
 						int ruleIndex,
 						int ruleStartIndex)

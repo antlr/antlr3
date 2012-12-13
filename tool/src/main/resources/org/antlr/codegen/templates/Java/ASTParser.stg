@@ -182,13 +182,13 @@ root_0 = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_0);
 <endif>
 >>
 
-createNodeFromToken(label,terminalOptions={}) ::= <<
+createNodeFromToken(label,terminalOptions={}) ::= <%
 <if(terminalOptions.node)>
 new <terminalOptions.node>(<label>) <! new MethodNode(IDLabel) !>
 <else>
 (<ASTLabelType>)adaptor.create(<label>)
 <endif>
->>
+%>
 
 ruleCleanUp() ::= <<
 <super.ruleCleanUp()>
