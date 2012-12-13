@@ -223,7 +223,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 
 	<scopes:{it |<if(it.isDynamicGlobalScope)><globalAttributeScope(it)><endif>}>
 
-	<@members>
+<@members>
 	<! WARNING. bug in ST: this is cut-n-paste into Dbg.stg !>
 	public <grammar.recognizerName>(<inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>) {
 		this(input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}>);
@@ -236,7 +236,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 		<grammar.indirectDelegates:{g | <g:delegateName()> = <g.delegator:delegateName()>.<g:delegateName()>;}; separator="\n">
 		<last(grammar.delegators):{g|gParent = <g:delegateName()>;}>
 	}
-	<@end>
+<@end>
 
 	@Override public String[] getTokenNames() { return <grammar.composite.rootGrammar.recognizerName>.tokenNames; }
 	@Override public String getGrammarFileName() { return "<fileName>"; }

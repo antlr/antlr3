@@ -35,7 +35,7 @@ import org.antlr.runtime.tree.*;<\n>
 
 @genericParser.members() ::= <<
 <@super.members()>
-<parserMembers()>
+	<parserMembers()>
 >>
 
 /** Add an adaptor property that knows how to build trees */

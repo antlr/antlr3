@@ -45,25 +45,25 @@ public String toString() { return st==null?null:st.toString(); }
 
 @genericParser.members() ::= <<
 <@super.members()>
-protected StringTemplateGroup templateLib =
-  new StringTemplateGroup("<name>Templates", AngleBracketTemplateLexer.class);
+	protected StringTemplateGroup templateLib =
+	  new StringTemplateGroup("<name>Templates", AngleBracketTemplateLexer.class);
 
-public void setTemplateLib(StringTemplateGroup templateLib) {
-  this.templateLib = templateLib;
-}
-public StringTemplateGroup getTemplateLib() {
-  return templateLib;
-}
-/** allows convenient multi-value initialization:
- *  "new STAttrMap().put(...).put(...)"
- */
-@SuppressWarnings("serial")
-public static class STAttrMap extends HashMap\<String, Object> {
-	public STAttrMap put(String attrName, Object value) {
-		super.put(attrName, value);
-		return this;
+	public void setTemplateLib(StringTemplateGroup templateLib) {
+	  this.templateLib = templateLib;
 	}
-}
+	public StringTemplateGroup getTemplateLib() {
+	  return templateLib;
+	}
+	/** allows convenient multi-value initialization:
+	 *  "new STAttrMap().put(...).put(...)"
+	 */
+	@SuppressWarnings("serial")
+	public static class STAttrMap extends HashMap\<String, Object> {
+		public STAttrMap put(String attrName, Object value) {
+			super.put(attrName, value);
+			return this;
+		}
+	}
 >>
 
 /** x+=rule when output=template */

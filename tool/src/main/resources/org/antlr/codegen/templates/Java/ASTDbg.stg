@@ -31,18 +31,18 @@
  */
 
 parserMembers() ::= <<
-protected DebugTreeAdaptor adaptor;
-public void setTreeAdaptor(TreeAdaptor adaptor) {
+	protected DebugTreeAdaptor adaptor;
+	public void setTreeAdaptor(TreeAdaptor adaptor) {
 <if(grammar.grammarIsRoot)>
-	this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
+		this.adaptor = new DebugTreeAdaptor(dbg,adaptor);
 <else>
-	this.adaptor = (DebugTreeAdaptor)adaptor; // delegator sends dbg adaptor
+		this.adaptor = (DebugTreeAdaptor)adaptor; // delegator sends dbg adaptor
 <endif>
-	<grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
-}
-public TreeAdaptor getTreeAdaptor() {
-	return adaptor;
-}
+		<grammar.directDelegates:{g|<g:delegateName()>.setTreeAdaptor(this.adaptor);}>
+	}
+	public TreeAdaptor getTreeAdaptor() {
+		return adaptor;
+	}
 >>
 
 parserCtorBody() ::= <<
