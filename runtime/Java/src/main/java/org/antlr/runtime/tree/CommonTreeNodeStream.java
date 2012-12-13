@@ -27,12 +27,13 @@
  */
 package org.antlr.runtime.tree;
 
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.misc.LookaheadStream;
 import org.antlr.runtime.misc.IntArray;
 
-public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream {
+public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream, PositionTrackingStream<Object> {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;
 
@@ -57,6 +58,17 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
     /** Tracks tree depth.  Level=0 means we're at root node level. */
     protected int level = 0;
 
+	/**
+	 * Tracks the last node before the start of {@link #data} which contains
+	 * position information to provide information for error reporting. This is
+	 * tracked in addition to {@link #prevElement} which may or may not contain
+	 * position information.
+	 *
+	 * @see #hasPositionInformation
+	 * @see RecognitionException#extractInformationFromTreeNodeStream
+	 */
+	protected Object previousLocationElement;
+
 	public CommonTreeNodeStream(Object tree) {
 		this(new CommonTreeAdaptor(), tree);
 	}
@@ -73,6 +85,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         it.reset();
         hasNilRoot = false;
         level = 0;
+		previousLocationElement = null;
         if ( calls != null ) calls.clear();
     }
 
@@ -96,6 +109,16 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         }
         return t;
     }
+
+	@Override
+	public Object remove() {
+		Object result = super.remove();
+		if (p == 0 && hasPositionInformation(prevElement)) {
+			previousLocationElement = prevElement;
+		}
+
+		return result;
+	}
 
 	@Override
     public boolean isEOF(Object o) { return adaptor.getType(o) == Token.EOF; }
@@ -146,6 +169,48 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         seek(ret);
         return ret;
     }
+
+	/**
+	 * Returns an element containing position information. If {@code allowApproximateLocation} is {@code false}, then
+	 * this method will return the {@code LT(1)} element if it contains position information, and otherwise return {@code null}.
+	 * If {@code allowApproximateLocation} is {@code true}, then this method will return the last known element containing position information.
+	 *
+	 * @see #hasPositionInformation
+	 */
+	@Override
+	public Object getKnownPositionElement(boolean allowApproximateLocation) {
+		Object node = data.get(p);
+		if (hasPositionInformation(node)) {
+			return node;
+		}
+
+		if (!allowApproximateLocation) {
+			return null;
+		}
+
+		for (int index = p - 1; index >= 0; index--) {
+			node = data.get(index);
+			if (hasPositionInformation(node)) {
+				return node;
+			}
+		}
+
+		return previousLocationElement;
+	}
+
+	@Override
+	public boolean hasPositionInformation(Object node) {
+		Token token = adaptor.getToken(node);
+		if (token == null) {
+			return false;
+		}
+
+		if (token.getLine() <= 0) {
+			return false;
+		}
+
+		return true;
+	}
 
 	// TREE REWRITE INTERFACE
 

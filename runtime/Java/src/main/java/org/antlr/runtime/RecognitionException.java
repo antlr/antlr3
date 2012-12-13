@@ -122,9 +122,20 @@ public class RecognitionException extends Exception {
 
 	protected void extractInformationFromTreeNodeStream(IntStream input) {
 		TreeNodeStream nodes = (TreeNodeStream)input;
+
 		this.node = nodes.LT(1);
+
+		Object positionNode = null;
+		if (nodes instanceof PositionTrackingStream) {
+			positionNode = ((PositionTrackingStream<?>)nodes).getKnownPositionElement(false);
+			if (positionNode == null) {
+				positionNode = ((PositionTrackingStream<?>)nodes).getKnownPositionElement(true);
+				this.approximateLineInfo = positionNode != null;
+			}
+		}
+
 		TreeAdaptor adaptor = nodes.getTreeAdaptor();
-		Token payload = adaptor.getToken(node);
+		Token payload = adaptor.getToken(positionNode != null ? positionNode : this.node);
 		if ( payload!=null ) {
 			this.token = payload;
 			if ( payload.getLine()<= 0 ) {
