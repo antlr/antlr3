@@ -29,19 +29,23 @@ package org.antlr.runtime.misc;
 
 import java.util.NoSuchElementException;
 
-/** A lookahead queue that knows how to mark/release locations
- *  in the buffer for backtracking purposes. Any markers force the FastQueue
- *  superclass to keep all tokens until no more markers; then can reset
- *  to avoid growing a huge buffer.
+/**
+ * A lookahead queue that knows how to mark/release locations in the buffer for
+ * backtracking purposes. Any markers force the {@link FastQueue} superclass to
+ * keep all elements until no more markers; then can reset to avoid growing a
+ * huge buffer.
  */
 public abstract class LookaheadStream<T> extends FastQueue<T> {
     public static final int UNINITIALIZED_EOF_ELEMENT_INDEX = Integer.MAX_VALUE;
 
     /** Absolute token index. It's the index of the symbol about to be
-	 *  read via LT(1). Goes from 0 to numtokens.
+	 *  read via {@code LT(1)}. Goes from 0 to numtokens.
      */
     protected int currentElementIndex = 0;
 
+    /**
+     * This is the {@code LT(-1)} element for the first element in {@link #data}.
+     */
     protected T prevElement;
 
     /** Track object returned by nextElement upon end of stream;
@@ -60,18 +64,21 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         super.reset();
         currentElementIndex = 0;
         p = 0;
-        prevElement=null;        
+        prevElement = null;
     }
     
     /** Implement nextElement to supply a stream of elements to this
-     *  lookahead buffer.  Return eof upon end of the stream we're pulling from.
+     *  lookahead buffer.  Return EOF upon end of the stream we're pulling from.
+     *
+     * @see #isEOF
      */
     public abstract T nextElement();
 
     public abstract boolean isEOF(T o);
 
-    /** Get and remove first element in queue; override FastQueue.remove();
-     *  it's the same, just checks for backtracking.
+    /**
+     * Get and remove first element in queue; override
+     * {@link FastQueue#remove()}; it's the same, just checks for backtracking.
      */
 	@Override
     public T remove() {
@@ -79,7 +86,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         p++;
         // have we hit end of buffer and not backtracking?
         if ( p == data.size() && markDepth==0 ) {
-          prevElement = o;
+            prevElement = o;
             // if so, it's an opportunity to start filling at index 0 again
             clear(); // size goes to 0, but retains memory
         }
@@ -111,7 +118,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
         }
     }
 
-    /** Size of entire stream is unknown; we only know buffer size from FastQueue */
+    /** Size of entire stream is unknown; we only know buffer size from FastQueue. */
 	@Override
     public int size() { throw new UnsupportedOperationException("streams are of unknown size"); }
 
@@ -152,11 +159,10 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
     p = lastMarker;
   }
 
-    /** Seek to a 0-indexed position within data buffer.  Can't handle
-     *  case where you seek beyond end of existing buffer.  Normally used
-     *  to seek backwards in the buffer. Does not force loading of nodes.
-     *  Doesn't see to absolute position in input stream since this stream
-     *  is unbuffered. Seeks only into our moving window of elements.
+    /**
+     * Seek to a 0-indexed absolute token index. This method can only be used to
+     * seek within the current data buffer. Normally used to seek backwards in
+     * the buffer. Does not force loading of nodes.
      */
   public void seek(int index) {
     int delta = currentElementIndex - index;

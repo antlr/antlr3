@@ -39,19 +39,19 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
 	/** Pull nodes from which tree? */
 	protected Object root;
 
-	/** If this tree (root) was created from a token stream, track it. */
+	/** If this tree (root) was created from a {@link TokenStream}, track it. */
 	protected TokenStream tokens;
 
-	/** What tree adaptor was used to build these trees */
+	/** What {@link TreeAdaptor} was used to build these trees */
 	TreeAdaptor adaptor;
 
-    /** The tree iterator we using */
+    /** The {@link TreeIterator} we using. */
     protected TreeIterator it;
 
-    /** Stack of indexes used for push/pop calls */
+    /** Stack of indexes used for push/pop calls. */
     protected IntArray calls;
 
-    /** Tree (nil A B C) trees like flat A B C streams */
+    /** Tree {@code (nil A B C)} trees like flat {@code A B C} streams */
     protected boolean hasNilRoot = false;
 
     /** Tracks tree depth.  Level=0 means we're at root node level. */
@@ -138,7 +138,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         seek(index);
     }
 
-    /** Seek back to previous index saved during last push() call.
+    /** Seek back to previous index saved during last {@link #push} call.
      *  Return top of stack (return index).
      */
     public int pop() {
