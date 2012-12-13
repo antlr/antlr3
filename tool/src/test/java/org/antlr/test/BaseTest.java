@@ -48,14 +48,26 @@ import org.junit.runner.Description;
 
 import javax.tools.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public abstract class BaseTest {
+	// -J-Dorg.antlr.test.BaseTest.level=FINE
+	private static final Logger LOGGER = Logger.getLogger(BaseTest.class.getName());
+
 	public static final String newline = System.getProperty("line.separator");
 
 	public static final String jikes = null;//"/usr/bin/jikes";
 	public static final String pathSep = System.getProperty("path.separator");
+
+	public static final boolean TEST_IN_SAME_PROCESS = Boolean.parseBoolean(System.getProperty("antlr.testinprocess"));
 
    /**
     * When runnning from Maven, the junit tests are run via the surefire plugin. It sets the
@@ -377,11 +389,77 @@ public abstract class BaseTest {
 	}
 
 	public String execRecognizer() {
+		return execClass("Test");
+	}
+
+	public String execClass(String className) {
+		if (TEST_IN_SAME_PROCESS) {
+			try {
+				ClassLoader loader = new URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL() }, ClassLoader.getSystemClassLoader());
+                final Class<?> mainClass = (Class<?>)loader.loadClass(className);
+				final Method mainMethod = mainClass.getDeclaredMethod("main", String[].class);
+				PipedInputStream stdoutIn = new PipedInputStream();
+				PipedInputStream stderrIn = new PipedInputStream();
+				PipedOutputStream stdoutOut = new PipedOutputStream(stdoutIn);
+				PipedOutputStream stderrOut = new PipedOutputStream(stderrIn);
+				String inputFile = new File(tmpdir, "input").getAbsolutePath();
+				StreamVacuum stdoutVacuum = new StreamVacuum(stdoutIn, inputFile);
+				StreamVacuum stderrVacuum = new StreamVacuum(stderrIn, inputFile);
+
+				PrintStream originalOut = System.out;
+				System.setOut(new PrintStream(stdoutOut));
+				try {
+					PrintStream originalErr = System.err;
+					try {
+						System.setErr(new PrintStream(stderrOut));
+						stdoutVacuum.start();
+						stderrVacuum.start();
+						mainMethod.invoke(null, (Object)new String[] { inputFile });
+					}
+					finally {
+						System.setErr(originalErr);
+					}
+				}
+				finally {
+					System.setOut(originalOut);
+				}
+
+				stdoutOut.close();
+				stderrOut.close();
+				stdoutVacuum.join();
+				stderrVacuum.join();
+				String output = stdoutVacuum.toString();
+				if ( stderrVacuum.toString().length()>0 ) {
+					this.stderrDuringParse = stderrVacuum.toString();
+					System.err.println("exec stderrVacuum: "+ stderrVacuum);
+				}
+				return output;
+			} catch (MalformedURLException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (IOException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (InterruptedException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (IllegalAccessException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (IllegalArgumentException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (InvocationTargetException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (NoSuchMethodException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (SecurityException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			} catch (ClassNotFoundException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+			}
+		}
+
 		try {
 			String inputFile = new File(tmpdir, "input").getAbsolutePath();
 			String[] args = new String[] {
 				"java", "-classpath", tmpdir+pathSep+CLASSPATH,
-				"Test", inputFile
+				className, inputFile
 			};
 			//String cmdLine = "java -classpath "+CLASSPATH+pathSep+tmpdir+" Test " + new File(tmpdir, "input").getAbsolutePath();
 			//System.out.println("execParser: "+cmdLine);
