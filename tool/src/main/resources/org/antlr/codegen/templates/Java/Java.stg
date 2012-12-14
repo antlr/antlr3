@@ -108,7 +108,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 		super(input,state);
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
-		state.ruleMemo = new HashMap[<numRules>+1];<\n> <! index from 1..n !>
+		state.ruleMemo = new HashMap[<numRules>+1];<\n><! index from 1..n !>
 <endif>
 <endif>
 		<grammar.directDelegates:
@@ -205,8 +205,8 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 public class <grammar.recognizerName> extends <@superClassName><superClass><@end> {
 <if(grammar.grammarIsRoot)>
 	public static final String[] tokenNames = new String[] {
-		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
-	};<\n>
+		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", wrap="\n\t\t">
+	};
 <endif>
 	<tokens:{it |public static final int <it.name>=<it.type>;}; separator="\n">
 
@@ -223,7 +223,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 
 	<scopes:{it |<if(it.isDynamicGlobalScope)><globalAttributeScope(it)><endif>}>
 
-	<@members>
+<@members>
 	<! WARNING. bug in ST: this is cut-n-paste into Dbg.stg !>
 	public <grammar.recognizerName>(<inputStreamType> input<grammar.delegators:{g|, <g.recognizerName> <g:delegateName()>}>) {
 		this(input, new RecognizerSharedState()<grammar.delegators:{g|, <g:delegateName()>}>);
@@ -236,7 +236,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 		<grammar.indirectDelegates:{g | <g:delegateName()> = <g.delegator:delegateName()>.<g:delegateName()>;}; separator="\n">
 		<last(grammar.delegators):{g|gParent = <g:delegateName()>;}>
 	}
-	<@end>
+<@end>
 
 	@Override public String[] getTokenNames() { return <grammar.composite.rootGrammar.recognizerName>.tokenNames; }
 	@Override public String getGrammarFileName() { return "<fileName>"; }
@@ -264,7 +264,7 @@ public class <grammar.recognizerName> extends <@superClassName><superClass><@end
 parserCtorBody() ::= <<
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
-this.state.ruleMemo = new HashMap[<length(grammar.allImportedRules)>+1];<\n> <! index from 1..n !>
+this.state.ruleMemo = new HashMap[<length(grammar.allImportedRules)>+1];<\n><! index from 1..n !>
 <endif>
 <endif>
 <grammar.delegators:
@@ -596,7 +596,7 @@ int cnt<decisionNumber>=0;
 <decls>
 <@preloop()>
 loop<decisionNumber>:
-do {
+while (true) {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
 	<decision>
@@ -606,13 +606,12 @@ do {
 	default :
 		if ( cnt<decisionNumber> >= 1 ) break loop<decisionNumber>;
 		<ruleBacktrackFailure()>
-			EarlyExitException eee =
-				new EarlyExitException(<decisionNumber>, input);
-			<@earlyExitException()>
-			throw eee;
+		EarlyExitException eee = new EarlyExitException(<decisionNumber>, input);
+		<@earlyExitException()>
+		throw eee;
 	}
 	cnt<decisionNumber>++;
-} while (true);
+}
 <@postloop()>
 >>
 
@@ -624,7 +623,7 @@ closureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,m
 <decls>
 <@preloop()>
 loop<decisionNumber>:
-do {
+while (true) {
 	int alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
 	<decision>
@@ -634,7 +633,7 @@ do {
 	default :
 		break loop<decisionNumber>;
 	}
-} while (true);
+}
 <@postloop()>
 >>
 
@@ -930,8 +929,9 @@ try {
 wrapNvaExceptionForKN(exceptionCode) ::= <<
 int nvaeMark = input.mark();
 try {
-	for (int nvaeConsume = 0; nvaeConsume \< <k> - 1; nvaeConsume++)
+	for (int nvaeConsume = 0; nvaeConsume \< <k> - 1; nvaeConsume++) {
 		input.consume();
+	}
 	<exceptionCode>
 } finally {
 	input.rewind(nvaeMark);
@@ -1078,7 +1078,7 @@ static {
 	}
 }
 
-class DFA<dfa.decisionNumber> extends DFA {
+protected class DFA<dfa.decisionNumber> extends DFA {
 
 	public DFA<dfa.decisionNumber>(BaseRecognizer recognizer) {
 		this.recognizer = recognizer;

@@ -36,14 +36,14 @@ import java.io.IOException;
 
 @genericParser.members() ::= <<
 <if(grammar.grammarIsRoot)>
-public static final String[] ruleNames = new String[] {
-	"invalidRule", <grammar.allImportedRules:{rST | "<rST.name>"}; wrap="\n    ", separator=", ">
-};<\n>
+	public static final String[] ruleNames = new String[] {
+		"invalidRule", <grammar.allImportedRules:{rST | "<rST.name>"}; wrap="\n\t\t", separator=", ">
+	};<\n>
 <endif>
-public static final boolean[] decisionCanBacktrack = new boolean[] {
-	false, // invalid decision
-	<grammar.decisions:{d | <d.dfa.hasSynPred; null="false">}; wrap="\n    ", separator=", ">
-};<\n>
+	public static final boolean[] decisionCanBacktrack = new boolean[] {
+		false, // invalid decision
+		<grammar.decisions:{d | <d.dfa.hasSynPred; null="false">}; wrap="\n    ", separator=", ">
+	};<\n>
 <if(grammar.grammarIsRoot)> <! grammar imports other grammar(s) !>
 	public int ruleLevel = 0;
 	public int getRuleLevel() { return ruleLevel; }
@@ -54,31 +54,32 @@ public static final boolean[] decisionCanBacktrack = new boolean[] {
 <else>
 	<ctorForRootGrammar()>
 <endif>
-<ctorForPredefinedListener()>
-<else> <! imported grammar !>
+	<ctorForPredefinedListener()>
+<else><! imported grammar !>
 	public int getRuleLevel() { return <grammar.delegators:{g| <g:delegateName()>}>.getRuleLevel(); }
 	public void incRuleLevel() { <grammar.delegators:{g| <g:delegateName()>}>.incRuleLevel(); }
 	public void decRuleLevel() { <grammar.delegators:{g| <g:delegateName()>}>.decRuleLevel(); }
 	<ctorForDelegateGrammar()>
 <endif>
 <if(profile)>
-public boolean alreadyParsedRule(IntStream input, int ruleIndex) {
-	int stopIndex = getRuleMemoization(ruleIndex, input.index());
-	((Profiler)dbg).examineRuleMemoization(input, ruleIndex, stopIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames[ruleIndex]);
-	return super.alreadyParsedRule(input, ruleIndex);
-}<\n>
-public void memoize(IntStream input,
-					int ruleIndex,
-					int ruleStartIndex)
-{
-	((Profiler)dbg).memoize(input, ruleIndex, ruleStartIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames[ruleIndex]);
-	super.memoize(input, ruleIndex, ruleStartIndex);
-}<\n>
+	public boolean alreadyParsedRule(IntStream input, int ruleIndex) {
+		int stopIndex = getRuleMemoization(ruleIndex, input.index());
+		((Profiler)dbg).examineRuleMemoization(input, ruleIndex, stopIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames[ruleIndex]);
+		return super.alreadyParsedRule(input, ruleIndex);
+	}
+
+	public void memoize(IntStream input,
+						int ruleIndex,
+						int ruleStartIndex)
+	{
+		((Profiler)dbg).memoize(input, ruleIndex, ruleStartIndex, <grammar.composite.rootGrammar.recognizerName>.ruleNames[ruleIndex]);
+		super.memoize(input, ruleIndex, ruleStartIndex);
+	}<\n>
 <endif>
-protected boolean evalPredicate(boolean result, String predicate) {
-	dbg.semanticPredicate(result, predicate);
-	return result;
-}<\n>
+	protected boolean evalPredicate(boolean result, String predicate) {
+		dbg.semanticPredicate(result, predicate);
+		return result;
+	}<\n>
 >>
 
 ctorForRootGrammar() ::= <<
