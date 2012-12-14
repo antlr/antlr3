@@ -32,6 +32,8 @@ import org.antlr.codegen.CodeGenerator;
 import org.antlr.tool.*;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestRewriteTemplates extends BaseTest {
 	protected boolean debug = false;
 

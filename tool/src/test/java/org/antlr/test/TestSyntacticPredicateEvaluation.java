@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestSyntacticPredicateEvaluation extends BaseTest {
 	@Test public void testTwoPredsWithNakedAlt() throws Exception {
 		String grammar =

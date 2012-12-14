@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** General code generation testing; compilation and/or execution.
  *  These tests are more about avoiding duplicate var definitions
  *  etc... than testing a particular ANTLR feature.

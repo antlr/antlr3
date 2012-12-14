@@ -35,6 +35,8 @@ import org.antlr.tool.Grammar;
 import org.antlr.tool.Interpreter;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestInterpretedLexing extends BaseTest {
 
 	/*

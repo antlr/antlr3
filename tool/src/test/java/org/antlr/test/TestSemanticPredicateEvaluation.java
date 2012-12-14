@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestSemanticPredicateEvaluation extends BaseTest {
 	@Test public void testSimpleCyclicDFAWithPredicate() throws Exception {
 		String grammar =

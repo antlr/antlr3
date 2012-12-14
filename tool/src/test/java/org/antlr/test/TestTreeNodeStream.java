@@ -32,6 +32,8 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.*;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** Test the tree node stream. */
 public class TestTreeNodeStream extends BaseTest {
 

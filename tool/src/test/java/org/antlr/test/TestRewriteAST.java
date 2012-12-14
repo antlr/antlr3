@@ -35,6 +35,8 @@ import org.antlr.tool.GrammarSemanticsMessage;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestRewriteAST extends BaseTest {
 	protected boolean debug = false;
 
