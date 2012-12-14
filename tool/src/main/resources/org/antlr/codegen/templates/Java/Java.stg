@@ -1359,8 +1359,8 @@ tokenLabelPropertyRef_index(scope,attr) ::= "(<scope>!=null?<scope>.getTokenInde
 tokenLabelPropertyRef_tree(scope,attr) ::= "<scope>_tree"
 tokenLabelPropertyRef_int(scope,attr) ::= "(<scope>!=null?Integer.valueOf(<scope>.getText()):0)"
 
-ruleLabelPropertyRef_start(scope,attr) ::= "(<scope>!=null?((<labelType>)<scope>.start):null)"
-ruleLabelPropertyRef_stop(scope,attr) ::= "(<scope>!=null?((<labelType>)<scope>.stop):null)"
+ruleLabelPropertyRef_start(scope,attr) ::= "(<scope>!=null?(<castToLabelType({<scope>.start})>):null)"
+ruleLabelPropertyRef_stop(scope,attr) ::= "(<scope>!=null?(<castToLabelType({<scope>.stop})>):null)"
 ruleLabelPropertyRef_tree(scope,attr) ::= "(<scope>!=null?((<ASTLabelType>)<scope>.getTree()):null)"
 ruleLabelPropertyRef_text(scope,attr) ::= <%
 <if(TREE_PARSER)>
@@ -1393,9 +1393,9 @@ lexerRuleLabelPropertyRef_int(scope,attr) ::=
 	"(<scope>!=null?Integer.valueOf(<scope>.getText()):0)"
 
 // Somebody may ref $template or $tree or $stop within a rule:
-rulePropertyRef_start(scope,attr) ::= "((<labelType>)retval.start)"
-rulePropertyRef_stop(scope,attr) ::= "((<labelType>)retval.stop)"
-rulePropertyRef_tree(scope,attr) ::= "((<ASTLabelType>)retval.tree)"
+rulePropertyRef_start(scope,attr) ::= "(<castToLabelType(\"retval.start\")>)"
+rulePropertyRef_stop(scope,attr) ::= "(<castToLabelType(\"retval.stop\")>)"
+rulePropertyRef_tree(scope,attr) ::= "retval.tree"
 rulePropertyRef_text(scope,attr) ::= <%
 <if(TREE_PARSER)>
 input.getTokenStream().toString(
