@@ -54,7 +54,7 @@ noRewrite(rewriteBlockLevel=false, treeLevel=false) ::= <<
 <if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
 <if(rewriteMode)>
-retval.tree = (<ASTLabelType>)_first_0;
+retval.tree = _first_0;
 if ( adaptor.getParent(retval.tree)!=null && adaptor.isNil( adaptor.getParent(retval.tree) ) )
 	retval.tree = (<ASTLabelType>)adaptor.getParent(retval.tree);
 <endif>

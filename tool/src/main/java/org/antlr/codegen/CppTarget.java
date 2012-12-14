@@ -34,7 +34,7 @@ import org.stringtemplate.v4.misc.Aggregate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class CppTarget extends Target {
@@ -66,7 +66,7 @@ public class CppTarget extends Target {
 
 		//Its better we remove the EOF Token, as it would have been defined everywhere in C.
 		//we define it later as "EOF_TOKEN" instead of "EOF"
-        ST.AttributeList<?> tokens = (ST.AttributeList<?>) headerFileST.getAttribute("tokens");
+		List<?> tokens = (List<?>)headerFileST.getAttribute("tokens");
 		for( int i = 0; i < tokens.size(); ++i )
 		{
 			boolean can_break = false;

@@ -27,12 +27,14 @@
  */
 package org.antlr.runtime.tree;
 
+import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.Token;
 
-/** This is identical to the ParserRuleReturnScope except that
- *  the start property is a tree nodes not Token object
+/** This is identical to the {@link ParserRuleReturnScope} except that
+ *  the start property is a tree nodes not {@link Token} object
  *  when you are parsing trees.  To be generic the tree node types
- *  have to be Object.
+ *  have to be {@link Object}.
  */
 public class TreeRuleReturnScope extends RuleReturnScope {
 	/** First node or root node of tree matched for this rule. */
