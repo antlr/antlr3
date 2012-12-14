@@ -346,18 +346,18 @@ lexerSynpred(name) ::= <<
 
 ruleMemoization(name) ::= <<
 <if(memoize)>
-if ( state.backtracking>0 && alreadyParsedRule(input, <ruleDescriptor.index>) ) { return <ruleReturnValue()>; }
+if ( state.backtracking>0 && alreadyParsedRule(input, <ruleDescriptor.index>) ) { <returnStatement(({<ruleReturnValue()>}))> }
 <endif>
 >>
 
 /** How to test for failure and return from rule */
 checkRuleBacktrackFailure() ::= <<
-<if(backtracking)>if (state.failed) return <ruleReturnValue()>;<endif>
+<if(backtracking)>if (state.failed) <returnStatement(({<ruleReturnValue()>}))><endif>
 >>
 
 /** This rule has failed, exit indicating failure during backtrack */
 ruleBacktrackFailure() ::= <<
-<if(backtracking)>if (state.backtracking>0) {state.failed=true; return <ruleReturnValue()>;}<endif>
+<if(backtracking)>if (state.backtracking>0) {state.failed=true; <returnStatement(({<ruleReturnValue()>}))>}<endif>
 >>
 
 /** How to generate code for a rule.  This includes any return type
@@ -405,10 +405,18 @@ public final <returnType(ruleDescriptor)> <ruleName>(<ruleDescriptor.parameterSc
 		<finally>
 	}
 	<@postamble()>
-	return <ruleReturnValue()>;
+	<returnStatement(({<ruleReturnValue()>}), false)>
 }
 // $ANTLR end "<ruleName>"
 >>
+
+returnStatement(returnValue, force=true) ::= <%
+<if(!isEmptyString.(returnValue))>
+	return <returnValue>;
+<elseif(force)>
+	return;
+<endif>
+%>
 
 catch(decl,action) ::= <<
 catch (<e.decl>) {
@@ -719,7 +727,7 @@ matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(LEXER)>
 <label>= input.LA(1);
 <else>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 <endif>
 if ( <s> ) {
@@ -770,7 +778,7 @@ match(<string>); <checkRuleBacktrackFailure()>
 
 wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 matchAny(input); <checkRuleBacktrackFailure()>
 >>
@@ -893,6 +901,7 @@ if ( !(<evalPredicate(pred,description)>) ) {
 dfaState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 int LA<decisionNumber>_<stateNumber> = input.LA(<k>);
 <edges; separator="\nelse ">
+<if((!isTrue.(last(edges).labelExpr)) && (!last(edges).predicates))>
 else {
 <if(eotPredictsAlt)>
 	alt<decisionNumber>=<eotPredictsAlt>;
@@ -904,6 +913,7 @@ else {
 throw nvae;})>
 <endif>
 }
+<endif>
 >>
 
 nvaExceptionWrapperMap ::= [
@@ -1436,3 +1446,25 @@ codeFileExtension() ::= ".java"
 
 true_value() ::= "true"
 false_value() ::= "false"
+
+isEmptyString ::= [
+	"" : true,
+	default : false
+]
+
+isTrue ::= [
+	"true" : true,
+	default : false
+]
+
+isDefaultLabelType ::= [
+	"Token" : true,
+	default : false
+]
+
+castToLabelType(value) ::= <%
+<if(!isDefaultLabelType.(labelType))>
+(<labelType>)
+<endif>
+<value>
+%>

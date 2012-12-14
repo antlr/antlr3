@@ -116,7 +116,7 @@ matchSetBang(s,label,elementIndex,postmatchCode,terminalOptions={}) ::= "<super.
 
 matchSetRuleRoot(s,label,elementIndex,debug,terminalOptions={}) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 <super.matchSet(postmatchCode={<if(!ruleDescriptor.isSynPred)><if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<createNodeFromToken(...)>, root_0);<endif>},...)>
 >>
