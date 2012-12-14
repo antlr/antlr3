@@ -52,7 +52,6 @@ public class ParserRuleReturnScope extends RuleReturnScope {
 	@Override
 	public Object getStop() { return stop; }
 
-	public Object tree; // only used when output=AST
 	@Override
-	public Object getTree() { return tree; }
+	public Object getTree() { return null; }
 }
