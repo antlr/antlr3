@@ -1163,7 +1163,7 @@ s = <targetStateNumber>;
 
 andPredicates(left,right) ::= "(<left>&&<right>)"
 
-orPredicates(operands) ::= "(<first(operands)><rest(operands):{o | ||<o>}>)"
+orPredicates(operands) ::= "(<operands; separator=\"||\">)"
 
 notPredicate(pred) ::= "!(<evalPredicate(pred,{})>)"
 

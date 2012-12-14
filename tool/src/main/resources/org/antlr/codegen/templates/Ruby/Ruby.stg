@@ -996,7 +996,7 @@ e
 
 andPredicates(left,right) ::= "( <left> ) and ( <right> )"
 
-orPredicates(operands) ::= "( <first(operands)> )<rest(operands):{o|  or ( <o> )}>"
+orPredicates(operands) ::= "<operands:{o|( <o> )}; separator=\" or \">"
 
 notPredicate(pred) ::= "not ( <pred> )"
 

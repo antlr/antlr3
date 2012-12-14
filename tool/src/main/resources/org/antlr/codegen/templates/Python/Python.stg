@@ -1210,7 +1210,7 @@ se:
 
 andPredicates(left,right) ::= "((<left>) and (<right>))"
 
-orPredicates(operands) ::= "(<first(operands)><rest(operands):{o |  or <o>}>)"
+orPredicates(operands) ::= "(<operands; separator=\" or \">)"
 
 notPredicate(pred) ::= "not (<evalPredicate(pred, {})>)"
 
