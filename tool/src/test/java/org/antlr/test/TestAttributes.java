@@ -635,9 +635,9 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleLabels() throws Exception {
 		String action = "$r.x; $r.start;\n $r.stop;\n $r.tree; $a.x; $a.stop;";
-		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null);" + newline +
-			"\t\t\t (r!=null?((Token)r.stop):null);" + newline +
-			"\t\t\t (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.stop):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?(r.start):null);" + newline +
+			"\t\t\t (r!=null?(r.stop):null);" + newline +
+			"\t\t\t (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?(r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -707,7 +707,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testForwardRefRuleLabels() throws Exception {
 		String action = "$r.x; $r.start; $r.stop; $r.tree; $a.x; $a.tree;";
-		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null); (r!=null?((Token)r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Object)r.getTree()):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?(r.start):null); (r!=null?(r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Object)r.getTree()):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1512,7 +1512,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleRefWhenRuleHasScope() throws Exception {
 		String action = "$b.start;";
-		String expecting = "(b1!=null?((Token)b1.start):null);";
+		String expecting = "(b1!=null?(b1.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1609,7 +1609,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRefToStartAttributeForCurrentRule() throws Exception {
 		String action = "$start;";
-		String expecting = "((Token)retval.start);";
+		String expecting = "(retval.start);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1975,7 +1975,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(r1!=null?((Token)r1.start):null);";
+		String expecting = "(r1!=null?(r1.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1999,7 +1999,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testReuseExistingLabelWithImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(x!=null?((Token)x.start):null);";
+		String expecting = "(x!=null?(x.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2023,7 +2023,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testReuseExistingListLabelWithImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(x!=null?((Token)x.start):null);";
+		String expecting = "(x!=null?(x.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2883,7 +2883,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testAssignToTreeNodeAttribute() throws Exception {
 		String action = "$tree.scope = localScope;";
-		String expecting = "((Object)retval.tree).scope = localScope;";
+		String expecting = "retval.tree.scope = localScope;";
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
 		Grammar g = new Grammar(
