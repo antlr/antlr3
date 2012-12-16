@@ -176,18 +176,15 @@ private static class GrammarASTErrorNode extends GrammarAST {
     public boolean isNil() { return false; }
 
     @Override
-    public String getText()
-    {
+    public String getText() {
         String badText = null;
-        if (start instanceof Token) {
-            int i = ((Token)start).getTokenIndex();
-            int j = ((Token)stop).getTokenIndex();
-            if (((Token)stop).getType() == Token.EOF) {
-                j = ((TokenStream)input).size();
+        if (start != null) {
+            int i = start.getTokenIndex();
+            int j = stop.getTokenIndex();
+            if (stop.getType() == Token.EOF) {
+                j = input.size();
             }
             badText = ((TokenStream)input).toString(i, j);
-        } else if (start instanceof Tree) {
-            badText = ((TreeNodeStream)input).toString(start, stop);
         } else {
             // people should subclass if they alter the tree type so this
             // next one is for sure correct.

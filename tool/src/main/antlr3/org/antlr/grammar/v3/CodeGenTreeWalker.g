@@ -575,7 +575,7 @@ options { k=1; }
 					// add the rewrite code as just another element in the alt :)
 					// (unless it's a " -> ..." rewrite
 					// ( -> ... )
-					GrammarAST firstRewriteAST = (GrammarAST)$rew.start.findFirstType(REWRITE);
+					GrammarAST firstRewriteAST = $rew.start.findFirstType(REWRITE);
 					boolean etc =
 						$rew.start.getType()==REWRITES &&
 						firstRewriteAST.getChild(0)!=null &&
@@ -857,7 +857,7 @@ ebnf returns [ST code=null]
 {
 	org.antlr.analysis.DFA dfa=null;
 	GrammarAST b = (GrammarAST)$start.getChild(0);
-	GrammarAST eob = (GrammarAST)b.getLastChild(); // loops will use EOB DFA
+	GrammarAST eob = b.getLastChild(); // loops will use EOB DFA
 }
 	:	(	{ dfa = $start.getLookaheadDFA(); }
 			blk=block["block", dfa]
@@ -953,13 +953,13 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 			 ($start.getType()==RULE_REF||$start.getType()==TOKEN_REF||
 			  $start.getType()==CHAR_LITERAL||$start.getType()==STRING_LITERAL) )
 		{
-			Rule encRule = grammar.getRule(((GrammarAST)$start).enclosingRuleName);
+			Rule encRule = grammar.getRule($start.enclosingRuleName);
 			if ( encRule!=null && encRule.hasRewrite(outerAltNum) && astSuffix!=null )
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_AST_OP_IN_ALT_WITH_REWRITE,
 										  grammar,
-										  ((GrammarAST)$start).getToken(),
-										  ((GrammarAST)$start).enclosingRuleName,
+										  $start.getToken(),
+										  $start.enclosingRuleName,
 										  outerAltNum);
 				astSuffix = null;
 			}
@@ -1018,7 +1018,7 @@ atom[GrammarAST scope, GrammarAST label, GrammarAST astSuffix]
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_HETERO_ILLEGAL_IN_REWRITE_ALT,
 										grammar,
-										((GrammarAST)($t)).getToken(),
+										$t.getToken(),
 										$t.text);
 			}
 			grammar.checkRuleReference(scope, $t, $targ, currentRuleName);
@@ -1410,7 +1410,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_UNDEFINED_RULE_REF,
 										  grammar,
-										  ((GrammarAST)($r)).getToken(),
+										  $r.getToken(),
 										  ruleRefName);
 				$code = new ST(""); // blank; no code gen
 			}
@@ -1419,7 +1419,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_REWRITE_ELEMENT_NOT_PRESENT_ON_LHS,
 										  grammar,
-										  ((GrammarAST)($r)).getToken(),
+										  $r.getToken(),
 										  ruleRefName);
 				$code = new ST(""); // blank; no code gen
 			}
@@ -1472,7 +1472,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_UNDEFINED_TOKEN_REF_IN_REWRITE,
 										  grammar,
-										  ((GrammarAST)($start)).getToken(),
+										  $start.getToken(),
 										  tokenName);
 				$code = new ST(""); // blank; no code gen
 			}
@@ -1491,7 +1491,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 				{
 					ErrorManager.grammarError(ErrorManager.MSG_RULE_REF_AMBIG_WITH_RULE_IN_ALT,
 											  grammar,
-											  ((GrammarAST)($LABEL)).getToken(),
+											  $LABEL.getToken(),
 											  labelName);
 				}
 				ST labelST = templates.getInstanceOf("prevRuleRootRef");
@@ -1502,7 +1502,7 @@ rewrite_atom[boolean isRoot] returns [ST code=null]
 			{
 				ErrorManager.grammarError(ErrorManager.MSG_UNDEFINED_LABEL_REF_IN_REWRITE,
 										  grammar,
-										  ((GrammarAST)($LABEL)).getToken(),
+										  $LABEL.getToken(),
 										  labelName);
 				$code = new ST("");
 			}
