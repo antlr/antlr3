@@ -27,6 +27,7 @@
  */
 package org.antlr.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -419,6 +420,7 @@ public class TestSyntacticPredicateEvaluation extends BaseTest {
 		assertEquals("alt1\n", found);
 	}
 
+	@Ignore
 	@Test public void testSynPredWithSemPredReferencingLabeledRule() throws Exception {
 		String grammar =
 			"grammar T;\n" +
