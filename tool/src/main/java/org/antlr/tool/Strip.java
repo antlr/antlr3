@@ -64,7 +64,7 @@ public class Strip {
         tokens = new TokenRewriteStream(lex);
         ANTLRv3Parser g = new ANTLRv3Parser(tokens);
         ANTLRv3Parser.grammarDef_return r = g.grammarDef();
-        CommonTree t = (CommonTree)r.getTree();
+        CommonTree t = r.getTree();
         if (tree_option) System.out.println(t.toStringTree());
         rewrite(g.getTreeAdaptor(),t,g.getTokenNames());
     }
