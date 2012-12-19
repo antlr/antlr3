@@ -772,12 +772,12 @@ element(e) ::= <<
 >>
 
 /** match a token optionally with a label in front */
-tokenRef(token,label,elementIndex,terminalOptions) ::= <<
+tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)><label> = <endif>self.match(self.input, <token>, self.FOLLOW_<token>_in_<ruleName><elementIndex>)
 >>
 
 /** ids+=ID */
-tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRef(token,label,elementIndex,terminalOptions)>
 <listLabel(label, label)>
 >>
@@ -805,7 +805,7 @@ self.matchRange(<a>, <b>)
 >>
 
 /** For now, sets are interval tests and must be tested inline */
-matchSet(s,label,elementIndex,terminalOptions,postmatchCode="") ::= <<
+matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(label)>
 <label> = self.input.LT(1)<\n>
 <endif>
@@ -856,14 +856,14 @@ self.match(<string>)
 <endif>
 >>
 
-wildcard(token,label,elementIndex,terminalOptions) ::= <<
+wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)>
 <label> = self.input.LT(1)<\n>
 <endif>
 self.matchAny()
 >>
 
-wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+wildcardAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <wildcard(...)>
 <listLabel(label,label)>
 >>

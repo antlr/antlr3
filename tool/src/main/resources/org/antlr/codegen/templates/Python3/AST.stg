@@ -107,7 +107,7 @@ root_0 = self._adaptor.nil()<\n>
 // T r a c k i n g  R u l e  E l e m e n t s
 
 /** ID and track it for use in a rewrite rule */
-tokenRefTrack(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefTrack(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefBang(...)> <! Track implies no auto AST construction!>
 <finishedBacktracking({stream_<token>.add(<label>)})>
 >>
@@ -115,19 +115,19 @@ tokenRefTrack(token,label,elementIndex,terminalOptions) ::= <<
 /** ids+=ID and track it for use in a rewrite rule; adds to ids *and*
  *  to the tracking list stream_ID for use in the rewrite.
  */
-tokenRefTrackAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefTrackAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefTrack(...)>
 <listLabel(elem=label,...)>
 >>
 
 /** ^(ID ...) track for rewrite */
-tokenRefRuleRootTrack(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefRuleRootTrack(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefBang(...)>
 <finishedBacktracking({stream_<token>.add(<label>)})>
 >>
 
 /** Match ^(label+=TOKEN ...) track for rewrite */
-tokenRefRuleRootTrackAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefRuleRootTrackAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefRuleRootTrack(...)>
 <listLabel(elem=label,...)>
 >>
@@ -325,7 +325,7 @@ rewriteElement(e) ::= <<
 >>
 
 /** Gen ID or ID[args] */
-rewriteTokenRef(token,elementIndex,terminalOptions,args) ::= <<
+rewriteTokenRef(token,elementIndex,args,terminalOptions={}) ::= <<
 self._adaptor.addChild(root_<treeLevel>, <createRewriteNodeFromElement(...)>)<\n>
 >>
 
@@ -348,16 +348,16 @@ root_<treeLevel> = self._adaptor.becomeRoot(stream_<label>.nextNode(), root_<tre
 rewriteTokenListLabelRefRoot ::= rewriteTokenLabelRefRoot
 
 /** Gen ^(ID ...) or ^(ID[args] ...) */
-rewriteTokenRefRoot(token,elementIndex,terminalOptions,args) ::= <<
+rewriteTokenRefRoot(token,elementIndex,args,terminalOptions={}) ::= <<
 root_<treeLevel> = self._adaptor.becomeRoot(<createRewriteNodeFromElement(...)>, root_<treeLevel>)<\n>
 >>
 
-rewriteImaginaryTokenRef(args,token,terminalOptions,elementIndex) ::= <<
-self._adaptor.addChild(root_<treeLevel>, <createImaginaryNode(token, terminalOptions, args)>)<\n>
+rewriteImaginaryTokenRef(args,token,elementIndex,terminalOptions={}) ::= <<
+self._adaptor.addChild(root_<treeLevel>, <createImaginaryNode(token, args, terminalOptions)>)<\n>
 >>
 
-rewriteImaginaryTokenRefRoot(args,token,terminalOptions,elementIndex) ::= <<
-root_<treeLevel> = self._adaptor.becomeRoot(<createImaginaryNode(token, terminalOptions, args)>, root_<treeLevel>)<\n>
+rewriteImaginaryTokenRefRoot(args,token,elementIndex,terminalOptions={}) ::= <<
+root_<treeLevel> = self._adaptor.becomeRoot(<createImaginaryNode(token, args, terminalOptions)>, root_<treeLevel>)<\n>
 >>
 
 /** plain -> {foo} action */
@@ -413,7 +413,7 @@ rewriteWildcardLabelRef(label) ::= <<
 self._adaptor.addChild(root_<treeLevel>, stream_<label>.nextTree())<\n>
 >>
 
-createImaginaryNode(tokenType,terminalOptions,args) ::= <<
+createImaginaryNode(tokenType,args,terminalOptions={}) ::= <<
 <if(terminalOptions.node)>
 <! new MethodNode(IDLabel, args) !>
 <terminalOptions.node>(<tokenType><if(args)>, <args; separator=", "><endif>)
@@ -433,7 +433,7 @@ createImaginaryNode(tokenType,terminalOptions,args) ::= <<
 //<endif>
 
 
-createRewriteNodeFromElement(token,terminalOptions,args) ::= <<
+createRewriteNodeFromElement(token,args,terminalOptions={}) ::= <<
 <if(terminalOptions.node)>
 <terminalOptions.node>(stream_<token>.nextToken()<if(args)>, <args; separator=", "><endif>)
 <else>
