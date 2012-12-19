@@ -88,7 +88,7 @@ public class TestTreeWizard extends BaseTest {
 	@Test public void testInvalidListTree() throws Exception {
 		TreeWizard wiz = new TreeWizard(adaptor, tokens);
 		CommonTree t = (CommonTree)wiz.create("A B C");
-		assertTrue(t==null);
+		assertNull(t);
 	}
 
 	@Test public void testDoubleLevelTree() throws Exception {
