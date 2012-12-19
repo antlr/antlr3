@@ -157,7 +157,7 @@ class DOTTreeGenerator(object):
         uniqueName = "n%d" % self.getNodeNumber(t)
         nodeST.setAttribute("name", uniqueName)
         if text is not None:
-            text = text.replace('"', r'\\"')
+            text = text.replace('"', r'\"')
         nodeST.setAttribute("text", text)
         return nodeST
 
