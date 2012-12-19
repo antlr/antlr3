@@ -297,7 +297,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
 
 delegateRule(ruleDescriptor) ::= <<
 def <ruleDescriptor.name>(self, <ruleDescriptor.parameterScope:parameterScope()>):
-<\ >   <if(ruleDescriptor.hasReturnValue)>return <endif>self.<ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">)
+<\ >   <if(ruleDescriptor.hasReturnValue)>return <endif>self.<ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", "><endif>)
 
 
 >>
@@ -480,7 +480,7 @@ ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 retval = self.<ruleDescriptor.name>_return()
 retval.start = self.input.LT(1)<\n>
-<else>
+<elseif(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.name> = <if(a.initValue)><a.initValue><else>None<endif>
 }>
@@ -1236,32 +1236,40 @@ setTest(ranges) ::= "<ranges; separator=\" or \">"
 // A T T R I B U T E S
 
 globalAttributeScopeClass(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 class <scope.name>_scope(object):
     def __init__(self):
         <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
 
+<endif>
 <endif>
 >>
 
 globalAttributeScopeStack(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 self.<scope.name>_stack = []<\n>
+<endif>
 <endif>
 >>
 
 ruleAttributeScopeClass(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 class <scope.name>_scope(object):
     def __init__(self):
         <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
 
 <endif>
+<endif>
 >>
 
 ruleAttributeScopeStack(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 self.<scope.name>_stack = []<\n>
+<endif>
 <endif>
 >>
 
@@ -1286,7 +1294,7 @@ class <ruleDescriptor:returnStructName()>(<if(TREE_PARSER)>Tree<else>Parser<endi
     def __init__(self):
         super(<grammar.recognizerName>.<ruleDescriptor:returnStructName()>, self).__init__()
 
-        <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
+        <if(scope)><scope.attributes:{it | self.<it.decl> = None}; separator="\n"><endif>
         <@ruleReturnInit()>
 
 
@@ -1296,7 +1304,7 @@ class <ruleDescriptor:returnStructName()>(<if(TREE_PARSER)>Tree<else>Parser<endi
 >>
 
 parameterScope(scope) ::= <<
-<scope.attributes:{it | <it.decl>}; separator=", ">
+<if(scope)><scope.attributes:{it | <it.decl>}; separator=", "><endif>
 >>
 
 parameterAttributeRef(attr) ::= "<attr.name>"
