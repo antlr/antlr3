@@ -38,7 +38,6 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
-import org.stringtemplate.v4.misc.ErrorType;
 import org.stringtemplate.v4.misc.STMessage;
 
 import java.lang.reflect.Field;
@@ -49,6 +48,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 /** Defines all the errors ANTLR can generator for both the tool and for
  *  issues with a grammar.
@@ -260,7 +260,7 @@ public class ErrorManager {
 	/** Each thread might need it's own error listener; e.g., a GUI with
 	 *  multiple window frames holding multiple grammars.
 	 */
-	private static Map<Thread, ANTLRErrorListener> threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
+	private static final Map<Thread, ANTLRErrorListener> threadToListenerMap = new WeakHashMap<Thread, ANTLRErrorListener>();
 
 	public static class ErrorState {
 		public int errors;
@@ -278,13 +278,13 @@ public class ErrorManager {
 	/** Track the number of errors regardless of the listener but track
 	 *  per thread.
 	 */
-	private static Map<Thread, ErrorState> threadToErrorStateMap = new HashMap<Thread, ErrorState>();
+	private static final Map<Thread, ErrorState> threadToErrorStateMap = new WeakHashMap<Thread, ErrorState>();
 
 	/** Each thread has its own ptr to a Tool object, which knows how
 	 *  to panic, for example.  In a GUI, the thread might just throw an Error
 	 *  to exit rather than the suicide System.exit.
 	 */
-	private static Map<Thread, Tool> threadToToolMap = new HashMap<Thread, Tool>();
+	private static final Map<Thread, Tool> threadToToolMap = new WeakHashMap<Thread, Tool>();
 
 	/** The group of templates that represent all possible ANTLR errors. */
 	private static STGroup messages;
@@ -294,7 +294,7 @@ public class ErrorManager {
 	/** From a msgID how can I get the name of the template that describes
 	 *  the error or warning?
 	 */
-	private static String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
+	private static final String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
 
 	static ANTLRErrorListener theDefaultErrorListener = new ANTLRErrorListener() {
 		@Override
@@ -593,7 +593,7 @@ public class ErrorManager {
 	}
 
 	public static void resetErrorState() {
-        threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
+        threadToListenerMap.clear();
         ErrorState ec = new ErrorState();
 		threadToErrorStateMap.put(Thread.currentThread(), ec);
 	}
