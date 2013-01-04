@@ -9,6 +9,13 @@ CHANGES
 
 ??? 2012 -- release 3.5
 
+January 3, 2012
+
+* Improve error reporting and recovery for STRAY_BRACKET, fixes antlr/antlr3#42
+* Do not write output files if errors were reported, fixes antlr/antlr3#61
+* Fix AST operator on labeled set of terminals e.g. x=(A|B)^
+* Fix labeled set of terminals with rewrite e.g. x=(A|B) -> $x
+
 December 1, 2012
 
 * Added error msg for .. in parser
