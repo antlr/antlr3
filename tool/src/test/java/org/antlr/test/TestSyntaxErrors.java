@@ -28,13 +28,12 @@
 
 package org.antlr.test;
 
-import org.antlr.tool.ANTLRErrorListener;
 import org.antlr.tool.ErrorManager;
-import org.antlr.tool.Message;
-import org.antlr.tool.ToolMessage;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import java.io.File;
 
 /** test runtime parse errors */
 public class TestSyntaxErrors extends BaseTest {
@@ -135,6 +134,32 @@ public class TestSyntaxErrors extends BaseTest {
 		assertFalse(found);
 		assertEquals(
 			"[error(100): :4:27: syntax error: antlr: dangling ']'? make sure to escape with \\]]",
+			errorQueue.errors.toString());
+	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#61.
+	 * https://github.com/antlr/antlr3/issues/61
+	 */
+	@Test public void testMissingAttributeAccessPreventsCodeGeneration() throws Exception {
+		String grammar =
+			"grammar T;\n" +
+			"options {\n" +
+			"    backtrack = true; \n" +
+			"}\n" +
+			"// if b is rule ref, gens bad void x=null code\n" +
+			"a : x=b {Object o = $x; System.out.println(\"alt1\");}\n" +
+			"  | y=b\n" +
+			"  ;\n" +
+			"\n" +
+			"b : 'a' ;\n" ;
+
+		ErrorQueue errorQueue = new ErrorQueue();
+		ErrorManager.setErrorListener(errorQueue);
+		boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+		assertFalse(success);
+		assertEquals(
+			"[error(117): "+tmpdir.toString()+File.separatorChar+"T.g:6:9: missing attribute access on rule scope: x]",
 			errorQueue.errors.toString());
 	}
 }
