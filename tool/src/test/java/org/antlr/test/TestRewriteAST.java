@@ -1020,10 +1020,7 @@ public class TestRewriteAST extends BaseTest {
 		assertEquals("2\n", found);
 	}
 
-	@Ignore 
-    // TODO: FAILS. The should probably generate a warning from antlr
-    // See http://www.antlr.org:8888/browse/ANTLR-162
-    //
+	@Test
     public void testSetWithLabel() throws Exception {
 		
 		String grammar =

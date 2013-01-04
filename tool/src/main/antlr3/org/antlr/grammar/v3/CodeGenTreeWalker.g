@@ -426,7 +426,7 @@ rule returns [ST code=null]
 			( ^(OPTIONS .*) )?
 			(ruleScopeSpec)?
 			( ^(AMPERSAND .*) )*
-			b=block["ruleBlock", dfa]
+			b=block["ruleBlock", dfa, null]
 			{
 				description =
 					grammar.grammarTreeToString((GrammarAST)$start.getFirstChildWithType(BLOCK),
@@ -527,7 +527,7 @@ ruleScopeSpec
 	:	^( 'scope' ( ^(AMPERSAND .*) )* (ACTION)? ( ID )* )
 	;
 
-block[String blockTemplateName, org.antlr.analysis.DFA dfa]
+block[String blockTemplateName, org.antlr.analysis.DFA dfa, GrammarAST label]
 	 returns [ST code=null]
 options { k=1; }
 @init
@@ -566,7 +566,7 @@ options { k=1; }
 
 	|	^(  BLOCK
 			( ^(OPTIONS .*) )? // ignore
-			( alt=alternative rew=rewrite
+			( alt=alternative[$label] rew=rewrite
 				{
 					if ( this.blockNestingLevel==RULE_BLOCK_NESTING_LEVEL )
 					{
@@ -673,7 +673,7 @@ finallyClause[ST ruleST]
 		}
 	;
 
-alternative returns [ST code]
+alternative[GrammarAST label] returns [ST code]
 @init
 {
 	if ( state.backtracking == 0 )
@@ -696,7 +696,7 @@ alternative returns [ST code]
 }
 	:	^(	a=ALT
 			(
-				e=element[null,null]
+				e=element[$label,null]
 				{
 					if ($e.code != null)
 					{
@@ -719,10 +719,10 @@ options { k=1; }
 	IntSet elements=null;
 	GrammarAST ast = null;
 }
-	:	^(ROOT e=element[label,$ROOT])
+	:	^(ROOT e=element[$label,$ROOT])
 		{ $code = $e.code; }
 
-	|	^(BANG e=element[label,$BANG])
+	|	^(BANG e=element[$label,$BANG])
 		{ $code = $e.code; }
 
 	|	^( n=NOT ne=notElement[$n, $label, $astSuffix] )
@@ -747,7 +747,7 @@ options { k=1; }
 			}
 		}
 
-	|	({((GrammarAST)input.LT(1)).getSetValue()==null}? (BLOCK|OPTIONAL|CLOSURE|POSITIVE_CLOSURE)) => /*{$start.getSetValue()==null}?*/ ebnf
+	|	({((GrammarAST)input.LT(1)).getSetValue()==null}? (BLOCK|OPTIONAL|CLOSURE|POSITIVE_CLOSURE)) => /*{$start.getSetValue()==null}?*/ ebnf[$label]
 		{ $code = $ebnf.code; }
 
 	|	atom[null, $label, $astSuffix]
@@ -852,7 +852,7 @@ notElement[GrammarAST n, GrammarAST label, GrammarAST astSuffix] returns [ST cod
 		}
 	;
 
-ebnf returns [ST code=null]
+ebnf[GrammarAST label] returns [ST code=null]
 @init
 {
 	org.antlr.analysis.DFA dfa=null;
@@ -860,16 +860,16 @@ ebnf returns [ST code=null]
 	GrammarAST eob = b.getLastChild(); // loops will use EOB DFA
 }
 	:	(	{ dfa = $start.getLookaheadDFA(); }
-			blk=block["block", dfa]
+			blk=block["block", dfa, $label]
 			{ $code = $blk.code; }
 		|	{ dfa = $start.getLookaheadDFA(); }
-			^( OPTIONAL blk=block["optionalBlock", dfa] )
+			^( OPTIONAL blk=block["optionalBlock", dfa, $label] )
 			{ $code = $blk.code; }
 		|	{ dfa = eob.getLookaheadDFA(); }
-			^( CLOSURE blk=block["closureBlock", dfa] )
+			^( CLOSURE blk=block["closureBlock", dfa, $label] )
 			{ $code = $blk.code; }
 		|	{ dfa = eob.getLookaheadDFA(); }
-			^( POSITIVE_CLOSURE blk=block["positiveClosureBlock", dfa] )
+			^( POSITIVE_CLOSURE blk=block["positiveClosureBlock", dfa, $label] )
 			{ $code = $blk.code; }
 		)
 		{
