@@ -367,9 +367,7 @@ public class TestAutoAST extends BaseTest {
 		assertEquals("(+ abc)\n", found);
 	}
 
-	@Ignore
-    // TODO: FAILS until I rebuild the antlr.g in v3
-    //
+	@Test
     public void testSetRootWithLabel() throws Exception {
 		
 		String grammar =

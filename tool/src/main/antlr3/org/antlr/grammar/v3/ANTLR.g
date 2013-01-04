@@ -735,10 +735,10 @@ elementNoOptionSpec
 {
 	IntSet elements=null;
 }
-	:	(	(	id (ASSIGN^|PLUS_ASSIGN^) (atom|block)
+	:	(	id (ASSIGN^|PLUS_ASSIGN^)
+			(	atom (sub=ebnfSuffix[root_0,false]! {root_0 = $sub.tree;})?
+			|	ebnf
 			)
-			(	sub=ebnfSuffix[root_0,false]! {root_0 = $sub.tree;}
-			)?
 		|	a=atom
 			(	sub2=ebnfSuffix[$a.tree,false]! {root_0=$sub2.tree;}
 			)?
