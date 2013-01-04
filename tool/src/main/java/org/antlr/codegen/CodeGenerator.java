@@ -444,6 +444,11 @@ public class CodeGenerator {
 		// all recognizers can see Grammar object
 		recognizerST.add("grammar", grammar);
 
+		// do not render templates to disk if errors occurred
+		if ( ErrorManager.getErrorState().errors > 0 ) {
+			return null;
+		}
+
 		if (LAUNCH_ST_INSPECTOR) {
 			outputFileST.inspect();
 			if ( templates.isDefined("headerFile") ) headerFileST.inspect();
