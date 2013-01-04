@@ -135,6 +135,24 @@ public String getFileName() {
 public void setFileName(String value) {
     fileName = value;
 }
+
+@Override
+public Token nextToken() {
+	Token token = super.nextToken();
+	while (token.getType() == STRAY_BRACKET) {
+		ErrorManager.syntaxError(
+			ErrorManager.MSG_SYNTAX_ERROR,
+			null,
+			token,
+			"antlr: dangling ']'? make sure to escape with \\]",
+			null);
+
+		// skip this token
+		token = super.nextToken();
+	}
+
+	return token;
+}
 }
 
 @parser::members {
@@ -1148,14 +1166,6 @@ DOLLAR : '$' ;
 
 STRAY_BRACKET
 	:	']'
-		{
-			ErrorManager.syntaxError(
-				ErrorManager.MSG_SYNTAX_ERROR,
-				null,
-				state.token,
-				"antlr: dangling ']'? make sure to escape with \\]",
-				null);
-		}
 	;
 
 CHAR_LITERAL
