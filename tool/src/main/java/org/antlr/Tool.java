@@ -154,14 +154,17 @@ public class Tool {
             return;
         }
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-o") || args[i].equals("-fo")) {
+            if (args[i].equals("-o") || args[i].equals("-fo") || args[i].equals("-ro")) {
                 if (i + 1 >= args.length) {
-                    System.err.println("missing output directory with -fo/-o option; ignoring");
+                    System.err.println("missing output directory with " + args[i] + " option; ignoring");
                 }
                 else {
                     if (args[i].equals("-fo")) { // force output into dir
                         setForceAllFilesToOutputDir(true);
                     }
+					else if (args[i].equals("-ro")) {
+						setForceRelativeOutput(true);
+					}
                     i++;
                     outputDirectory = args[i];
                     if (outputDirectory.endsWith("/") ||
@@ -177,6 +180,25 @@ public class Tool {
                     }
                 }
             }
+			else if (args[i].equals("-in")) {
+				if (i + 1 >= args.length) {
+					System.err.println("missing input directory with -in option; ignoring");
+				}
+				else {
+					i++;
+					String directory = args[i];
+					if (directory.endsWith("/") || directory.endsWith("\\")) {
+						directory = directory.substring(0, directory.length() - 1);
+					}
+
+					if (!new File(directory).isDirectory()) {
+						System.err.println("the specified input directory does not exist");
+						continue;
+					}
+
+					setInputDirectory(args[i]);
+				}
+			}
 			else if (args[i].equals("-lib")) {
 				if (i + 1 >= args.length) {
 					System.err.println("missing library directory with -lib option; ignoring");
