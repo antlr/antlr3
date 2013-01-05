@@ -391,6 +391,15 @@ public class Tool {
         for (File outputFile : outputFiles) {
             if (!outputFile.exists() || grammarLastModified > outputFile.lastModified()) {
                 // One of the output files does not exist or is out of date, so we must build it
+				if (isVerbose()) {
+					if (!outputFile.exists()) {
+						System.out.println("Output file " + outputFile + " does not exist: must build " + grammarFile);
+					}
+					else {
+						System.out.println("Output file " + outputFile + " is not up-to-date: must build " + grammarFile);
+					}
+				}
+
                 return true;
             }
             // Check all of the imported grammars and see if any of these are younger
@@ -400,6 +409,10 @@ public class Tool {
 
                     if (inputFile.lastModified() > outputFile.lastModified()) {
                         // One of the imported grammar files has been updated so we must build
+						if (isVerbose()) {
+							System.out.println("Input file " + inputFile + " is newer than output: must rebuild " + grammarFile);
+						}
+
                         return true;
                     }
                 }
