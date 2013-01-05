@@ -1,5 +1,5 @@
 ANTLR 3.5 Release
-???, 2012
+January 4, 2012
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
@@ -7,7 +7,7 @@ University of San Francisco
 
 CHANGES
 
-??? 2012 -- release 3.5
+January 4 2012 -- release 3.5
 
 January 3, 2012
 
