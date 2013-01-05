@@ -43,7 +43,6 @@
         <module>gunit</module>
         <module>gunit-maven-plugin</module>
         <module>antlr3-maven-archetype</module>
-        <module>antlr-complete</module>
     </modules>
 
   <!--
@@ -129,6 +128,41 @@
 
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>sonatype-oss-release</id>
+            <modules>
+                <module>antlr-complete</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <configuration>
+                                    <compilerArguments>
+                                        <bootclasspath>${bootclasspath.compile}</bootclasspath>
+                                    </compilerArguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <configuration>
+                                    <compilerArguments>
+                                        <bootclasspath>${bootclasspath.testCompile}</bootclasspath>
+                                    </compilerArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
 
         <defaultGoal>install</defaultGoal>
@@ -189,7 +223,6 @@
                             <target>1.5</target>
                             <compilerArgument>-Xlint:-serial</compilerArgument>
                             <compilerArguments>
-                                <bootclasspath>${bootclasspath.compile}</bootclasspath>
                                 <Xlint/>
                             </compilerArguments>
                         </configuration>
@@ -201,7 +234,6 @@
                             <target>1.6</target>
                             <compilerArgument>-Xlint:-serial</compilerArgument>
                             <compilerArguments>
-                                <bootclasspath>${bootclasspath.testCompile}</bootclasspath>
                                 <Xlint/>
                             </compilerArguments>
                         </configuration>
@@ -229,47 +261,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <!-- override the version inherited from the parent -->
                 <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <!-- override the version inherited from the parent -->
                 <version>2.9</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <quiet>true</quiet>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <quiet>true</quiet>
+                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
+                <!-- override the version inherited from the parent -->
                 <version>1.4</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>
