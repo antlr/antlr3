@@ -1,5 +1,5 @@
 ANTLR v3.5
-???, 2012
+January 4, 2013
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
@@ -13,8 +13,8 @@ recognizers, interpreters, compilers, and translators from grammatical
 descriptions containing actions in a variety of target
 languages. ANTLR provides excellent support for tree construction,
 tree walking, translation, error recovery, and error reporting. I've
-been working on parser generators for 20 years and on this particular
-version of ANTLR for 7 years.
+been working on parser generators for 25 years and on this particular
+version of ANTLR for 9 years.
 
 You should use v3 in conjunction with ANTLRWorks:
 
@@ -74,16 +74,11 @@ EXAMPLES
 
 ANTLR v3 sample grammars:
 
-    http://www.antlr.org/download/examples-v3.tar.gz
+    https://github.com/antlr/examples-v3
 
 Examples from Language Implementation Patterns:
 
     http://www.pragprog.com/titles/tpdsl/source_code
-
-Also check out Mantra Programming Language for a prototype (work in
-progress) using v3:
-
-    http://www.linguamantra.org/
 
 ----------------------------------------------------------------------
 
@@ -113,7 +108,17 @@ See migration guide:
 
 How do I install this damn thing?
 
-Just untar antlr-3.5.tar.gz and you'll get:
+You will have grabbed either of these:
+
+	http://antlr.org/download/antlr-3.5-complete-no-antlrv2.jar
+	http://antlr.org/download/antlr-3.5-complete.jar
+
+It has all of the jars you need combined into one. Then you need to
+add antlr-3.5-complete.jar to your CLASSPATH or add to arg list; e.g., on unix:
+
+$ java -cp "/usr/local/lib/antlr-3.5-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
+
+Source + java binaries: Just untar antlr-3.5.tar.gz and you'll get:
 
 antlr-3.5/BUILD.txt
 antlr-3.5/antlr3-maven-plugin
@@ -125,14 +130,6 @@ antlr-3.5/pom.xml
 antlr-3.5/runtime
 antlr-3.5/tool
 antlr-3.5/lib
-
-This is the source and java binaries.  You could grab the
-antlr-3.5-complete.jar file from the website, but it's in lib dir.
-It has all of the jars you need combined into one. Then you need to
-add antlr-3.5-complete.jar to your CLASSPATH or add
-to arg list; e.g., on unix:
-
-$ java -cp "/usr/local/lib/antlr-3.5-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
 
 Please see the FAQ
 
