@@ -15,6 +15,11 @@
     <name>ANTLR 3 Master build control POM</name>
     <description>Master build POM for ANTLR 3</description>
     <url>http://antlr.org</url>
+    <inceptionYear>1992</inceptionYear>
+    <organization>
+        <name>ANTLR</name>
+        <url>http://www.antlr.org</url>
+    </organization>
 
   <!--
     What version of ANTLR are we building? This sets the
@@ -68,8 +73,15 @@
         <url>https://github.com/antlr/antlr3/issues</url>
     </issueManagement>
 
+    <mailingLists>
+        <mailingList>
+            <name>antlr-discussion</name>
+            <archive>https://groups.google.com/forum/?fromgroups#!forum/antlr-discussion</archive>
+        </mailingList>
+    </mailingLists>
+
     <scm>
-        <url>git://github.com/antlr/antlr3.git</url>
+        <url>https://github.com/antlr/antlr3/tree/master</url>
         <connection>scm:git:git://github.com/antlr/antlr3.git</connection>
         <developerConnection>scm:git:git@github.com:antlr/antlr3.git</developerConnection>
     </scm>
@@ -263,4 +275,21 @@
         </plugins>
 
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>

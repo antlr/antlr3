@@ -6,18 +6,20 @@
   <version position="left"/>
 
   <poweredBy>
-    <logo name="ANTLR Web Site" href="http://antlr.org/"
+    <logo name="ANTLR Web Site" href="http://antlr3.org/"
           img="http://www.antlr.org/wiki/download/attachments/292/ANTLR3"/>
   </poweredBy>
 
   <body>
     <links>
-      <item name="Antlr Web Site" href="http://www.antlr.org/"/>
+      <item name="Antlr Web Site" href="http://www.antlr3.org/"/>
     </links>
 
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
+      <item name="Goals" href="plugin-info.html"/>
       <item name="Usage" href="usage.html"/>
+      <item name="FAQ" href="faq.html"/>
     </menu>
 
     <menu name="Examples">
