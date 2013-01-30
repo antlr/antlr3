@@ -43,7 +43,7 @@ using System.Security;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Tunnel Vision Laboratories, LLC" )]
 [assembly: AssemblyProduct( "Antlr3.Runtime" )]
-[assembly: AssemblyCopyright("Copyright © Sam Harwell 2011")]
+[assembly: AssemblyCopyright("Copyright © Sam Harwell 2013")]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 [assembly: CLSCompliant( true )]
@@ -68,5 +68,5 @@ using System.Security;
  *      the Major or Minor version is incremented.
  *   3. Revision is the Perforce changelist number associated with the release.
  */
-[assembly: AssemblyVersion("3.4.1.9004")]
-[assembly: AssemblyFileVersion("3.4.1.9004")]
+[assembly: AssemblyVersion("3.5.0.0")]
+[assembly: AssemblyFileVersion("3.5.0.0")]

@@ -98,7 +98,7 @@ lexerInputStreamType() ::= <<
 >>
 
 lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="CommonToken",
-      superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Lexer<endif>},
+	  superClass={<if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else>Antlr.Runtime.Lexer<endif>},
 	  rewriteElementType={}, ASTLabelType={}) ::= <<
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "<ANTLRVersion>")]
 [System.CLSCompliant(false)]
@@ -108,13 +108,13 @@ lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="Com
 	<scopes:{it|<if(it.isDynamicGlobalScope)><globalAttributeScope(scope=it)><endif>}>
 	<actions.lexer.members>
 
-    // delegates
-    <grammar.delegates:
-         {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
-    // delegators
-    <grammar.delegators:
-         {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
-    <last(grammar.delegators):{g|private <g.recognizerName> gParent;}>
+	// delegates
+	<grammar.delegates:
+		 {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
+	// delegators
+	<grammar.delegators:
+		 {g|private <g.recognizerName> <g:delegateName()>;}; separator="\n">
+	<last(grammar.delegators):{g|private <g.recognizerName> gParent;}>
 
 	<actions.(actionScope).ctorModifier; null="public"> <grammar.recognizerName>()<! needed by subclasses !>
 	{
@@ -193,7 +193,7 @@ lexer(grammar, name, tokens, scopes, rules, numRules, filterMode, labelType="Com
 		<cyclicDFAs:{dfa | dfa<dfa.decisionNumber> = new DFA<dfa.decisionNumber>(this<if(dfa.specialStateSTs)>, SpecialStateTransition<dfa.decisionNumber><endif>);}; separator="\n">
 	}
 
-	<cyclicDFAs:cyclicDFA()> <! dump tables for all DFA !>
+	<cyclicDFAs:cyclicDFA()><! dump tables for all DFA !>
 	#endregion
 
 }
@@ -336,7 +336,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
    appear to be defined in this recognizer. !>
 	#region Delegated rules
 <grammar.delegatedRules:{ruleDescriptor|
-	<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType(ruleDescriptor)> <ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope:parameterScope()>) <!throws RecognitionException !>{ <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope.attributes:{a|<a.name; format="id">}; separator=", ">); \}}; separator="\n">
+	<ruleModifier(grammar=grammar,ruleDescriptor=ruleDescriptor)> <returnType(ruleDescriptor)> <ruleDescriptor.name; format="id">(<ruleDescriptor.parameterScope:parameterScope()>)<!throws RecognitionException !>{ <if(ruleDescriptor.hasReturnValue)>return <endif><ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name; format="id">(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name; format="id">}; separator=", "><endif>); \}}; separator="\n">
 	#endregion Delegated rules
 <endif>
 
@@ -566,7 +566,7 @@ partial void LeaveRule_<ruleName>();
 	{
 		ReportError(re);
 		Recover(input,re);
-	<@setErrorReturnValue()>
+		<@setErrorReturnValue()>
 	}
 <endif>
 <endif>
@@ -609,7 +609,7 @@ ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <returnType(ruleDescriptor)> retval = new <returnType(ruleDescriptor)>(<if(ruleDescriptor.returnScope.attributes)>this<endif>);
 retval.Start = (<labelType>)input.LT(1);
-<else>
+<elseif(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.type> <a.name; format="id"> = <if(a.initValue)><a.initValue><else><initValue(a.type)><endif>;
 }>
@@ -631,13 +631,13 @@ ruleScopeCleanUp() ::= <<
 
 ruleLabelDefs(ruleDescriptor, labelType, ASTLabelType, rewriteElementType) ::= <<
 <[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels,ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it|<labelType> <it.label.text> = default(<labelType>);}; separator="\n"
+	:{it|<labelType> <it.label.text> = default(<labelType>);}; separator="\n"
 >
 <ruleDescriptor.tokenListLabels
-    :{it|List\<<labelType>\> list_<it.label.text> = null;}; separator="\n"
+	:{it|List\<<labelType>\> list_<it.label.text> = null;}; separator="\n"
 >
 <[ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it|List\<<ASTLabelType>\> list_<it.label.text> = null;}; separator="\n"
+	:{it|List\<<ASTLabelType>\> list_<it.label.text> = null;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 <ruleDescriptor.ruleListLabels:ruleLabelDef(); separator="\n">
@@ -647,7 +647,7 @@ lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it|<labelType> <it.label.text> = default(<labelType>);}; separator="\n"
+	:{it|<labelType> <it.label.text> = default(<labelType>);}; separator="\n"
 >
 <[ruleDescriptor.charListLabels,
   ruleDescriptor.charLabels]
@@ -655,9 +655,9 @@ lexerRuleLabelDefs() ::= <<
 >
 <[ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleListLabels]
-    :{it|List\<<labelType>\> list_<it.label.text> = null;}; separator="\n"
+	:{it|List\<<labelType>\> list_<it.label.text> = null;}; separator="\n"
 >
-<ruleDescriptor.charListLabels:{it|List\<int\> list_<it.label.text> = null;}; separator="\n"
+<ruleDescriptor.charListLabels:{it|List\<int> list_<it.label.text> = null;}; separator="\n"
 >
 >>
 
@@ -924,12 +924,12 @@ DebugLocation(<it.line>, <it.pos>);<\n>
 %>
 
 /** match a token optionally with a label in front */
-tokenRef(token,label,elementIndex,terminalOptions) ::= <<
+tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)><label>=(<labelType>)<endif>Match(input,<token>,Follow._<token>_in_<ruleName><elementIndex>); <checkRuleBacktrackFailure()>
 >>
 
 /** ids+=ID */
-tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRef(...)>
 <listLabelElem(elem=label,elemType=labelType,...)>
 >>
@@ -960,7 +960,7 @@ MatchRange(<a>,<b>); <checkRuleBacktrackFailure()>
 >>
 
 /** For now, sets are interval tests and must be tested inline */
-matchSet(s,label,terminalOptions,elementIndex,postmatchCode="") ::= <<
+matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(label)>
 <matchSetLabel()>
 <endif>
@@ -1029,14 +1029,14 @@ Match(<string>); <checkRuleBacktrackFailure()><\n>
 <endif>
 %>
 
-wildcard(token,label,elementIndex,terminalOptions) ::= <<
+wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)>
 <label>=(<labelType>)input.LT(1);<\n>
 <endif>
 MatchAny(input); <checkRuleBacktrackFailure()>
 >>
 
-wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+wildcardAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <wildcard(...)>
 <listLabelElem(elem=label,elemType=labelType,...)>
 >>
@@ -1460,6 +1460,7 @@ setTest(ranges) ::= <<
 // A T T R I B U T E S
 
 attributeScope(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 protected sealed partial class <scope.name>_scope
 {
@@ -1484,7 +1485,8 @@ protected void <scope.name>_scopeAfter( <scope.name>_scope scope )
 <else>
 partial void <scope.name>_scopeAfter( <scope.name>_scope scope );
 <endif>
-protected readonly ListStack\<<scope.name>_scope\> <scope.name>_stack = new ListStack\<<scope.name>_scope\>();
+protected readonly ListStack\<<scope.name>_scope> <scope.name>_stack = new ListStack\<<scope.name>_scope>();
+<endif>
 <endif>
 >>
 
