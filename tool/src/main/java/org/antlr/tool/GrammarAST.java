@@ -537,8 +537,13 @@ public class GrammarAST extends CommonTree {
 		}
 	}
 
-	String toStringList() {
-		return "";
+	public String toStringList() {
+		String result = toStringTree();
+		if (this.getNextSibling() != null) {
+			result += ' ' + getNextSibling().toStringList();
+		}
+
+		return result;
 	}
 
 	/** Track start/stop token for subtree root created for a rule.
