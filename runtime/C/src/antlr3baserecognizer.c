@@ -2196,6 +2196,7 @@ getMissingSymbol			(pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_INT_STREAM	istre
 		recognizer->state->tokFactory = antlr3TokenFactoryNew(current->input);
 	}
 	token	= recognizer->state->tokFactory->newToken(recognizer->state->tokFactory);
+	if (token == NULL) { return NULL; }
 
 	// Set some of the token properties based on the current token
 	//
