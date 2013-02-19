@@ -451,26 +451,32 @@ antlr38BitMark	(pANTLR3_INT_STREAM is)
 
     /* New mark point 
      */
-    input->markDepth++;
+    ++input->markDepth;
 
     /* See if we are revisiting a mark as we can just reuse the vector
      * entry if we are, otherwise, we need a new one
      */
     if	(input->markDepth > input->markers->count)
     {	
-	state	= ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
+		state = (pANTLR3_LEX_STATE)ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
+		if (state == NULL)
+		{
+			// malloc failed
+			--input->markDepth;
+			return 0;
+		}
 
-	/* Add it to the table
-	 */
-	input->markers->add(input->markers, state, ANTLR3_FREE_FUNC);	/* No special structure, just free() on delete */
+		/* Add it to the table
+		 */
+		input->markers->add(input->markers, state, ANTLR3_FREE_FUNC);	/* No special structure, just free() on delete */
     }
     else
     {
-	state	= (pANTLR3_LEX_STATE)input->markers->get(input->markers, input->markDepth - 1);
+		state	= (pANTLR3_LEX_STATE)input->markers->get(input->markers, input->markDepth - 1);
 
-	/* Assume no errors for speed, it will just blow up if the table failed
-	 * for some reasons, hence lots of unit tests on the tables ;-)
-	 */
+		/* Assume no errors for speed, it will just blow up if the table failed
+		 * for some reasons, hence lots of unit tests on the tables ;-)
+		 */
     }
 
     /* We have created or retrieved the state, so update it with the current
@@ -522,6 +528,7 @@ antlr38BitRewind	(pANTLR3_INT_STREAM is, ANTLR3_MARKER mark)
     /* Find the supplied mark state 
      */
     state   = (pANTLR3_LEX_STATE)input->markers->get(input->markers, (ANTLR3_UINT32)(mark - 1));
+	if (state == NULL) { return; }
 
     /* Seek input pointer to the requested point (note we supply the void *pointer
      * to whatever is implementing the int stream to seek).

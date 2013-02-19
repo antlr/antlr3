@@ -54,3 +54,4 @@ YYYY/MM/DD, github id, Full name, email
 2012/09/16, qmx, Douglas Campos, qmx@qmx.me
 2012/09/17, ksgokul, Gokulakannan Somasundaram, gokul007@gmail.com
 2012/11/22, sharwell, Sam Harwell, sam@tunnelvisionlabs.com
+2013/02/19, murrayju, Justin Murray, murrayju@addpcs.com
