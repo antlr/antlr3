@@ -558,7 +558,7 @@ public class Tool {
                 }
                 else {
                     ErrorManager.error(ErrorManager.MSG_CANNOT_OPEN_FILE,
-                                       grammarFileName);
+                                       grammarFileName, e);
                 }
             }
             catch (Exception e) {
@@ -591,7 +591,7 @@ public class Tool {
                 g.addEdge(grammarName+CodeGenerator.VOCAB_FILE_EXTENSION, gfile);
             }
             catch (FileNotFoundException fnfe) {
-                ErrorManager.error(ErrorManager.MSG_CANNOT_OPEN_FILE, gfile);
+                ErrorManager.error(ErrorManager.MSG_CANNOT_OPEN_FILE, gfile, fnfe);
                 missingFiles.add(gfile);
             }
         }
