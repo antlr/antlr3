@@ -1694,8 +1694,8 @@ matchSetAndListLabel(s,label,elementIndex,postmatchCode) ::= <<
 /** Match a string literal */
 lexerStringRef(string,label,elementIndex) ::= <<
 <if(label)>
-<label>Start = this->getCharIndex();
-MATCHS(<string>);
+ANTLR_MARKER <label>Start = this->getCharIndex();
+this->matchs(<string>);
 <checkRuleBacktrackFailure()>
 <label> = new CommonTokenType;
 <label>->set_type( CommonTokenType::TOKEN_INVALID );
