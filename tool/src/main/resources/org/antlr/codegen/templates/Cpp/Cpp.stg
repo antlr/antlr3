@@ -185,17 +185,17 @@ outputFile( LEXER,
 >>
 headerFileExtension() ::= ".hpp"
 
-beginNamespace(actions) ::= <<
+beginNamespace(actions) ::= <%
 	<if(actions.(actionScope).namespace)>
 	namespace <actions.(actionScope).namespace> {
 	<endif>
->>
+%>
 
-endNamespace(actions) ::= <<
+endNamespace(actions) ::= <%
 	<if(actions.(actionScope).namespace)>
 	}
 	<endif>
->>
+%>
 
 
 headerFile( LEXER,
@@ -224,21 +224,20 @@ headerFile( LEXER,
             generatedTimestamp,
             trace,
             scopes,
-	    superClass,
+            superClass,
             literals
         ) ::=
 <<
 <leadIn("C++ header")>
 <if(PARSER)>
- * The parser <mainName()>
+ * The parser <mainName()> has the callable functions (rules) shown below,
 <endif>
 <if(LEXER)>
- * The lexer <mainName()>
+ * The lexer <mainName()> has the callable functions (rules) shown below,
 <endif>
 <if(TREE_PARSER)>
- * The tree parser <mainName()>
+ * The tree parser <mainName()> has the callable functions (rules) shown below,
 <endif>
-has the callable functions (rules) shown below,
  * which will invoke the code for the associated rule in the source grammar
  * assuming that the input stream is pointing to a token/text stream that could begin
  * this rule.
@@ -282,7 +281,7 @@ has the callable functions (rules) shown below,
 /* =============================================================================
  * Standard antlr3 C++ runtime definitions
  */
-#include    \<antlr3.hpp>
+#include \<antlr3.hpp>
 
 /* End of standard antlr 3 runtime definitions
  * =============================================================================
@@ -443,7 +442,6 @@ extern ANTLR_UINT8*   <recognizer.grammar.composite.rootGrammar.recognizerName>T
 /* End of token definitions for <name>
  * =============================================================================
  */
-/** \} */
 
 <endNamespace(actions)>
 
@@ -477,7 +475,7 @@ componentType() ::= <<
 <endif>
 >>
 
-componentBaseType() ::= <<
+componentBaseType() ::= <%
 <if(PARSER)>
 <name>ImplTraits::BaseParserType
 <endif>
@@ -487,7 +485,7 @@ componentBaseType() ::= <<
 <if(TREE_PARSER)>
 <name>ImplTraits::BaseTreeParserType
 <endif>
->>
+%>
 
 streamType() ::= <<
 <if(PARSER)>
@@ -502,7 +500,7 @@ streamType() ::= <<
 >>
 
 
-mainName() ::= <<
+mainName() ::= <%
 <if(PARSER)>
 <name>
 <endif>
@@ -512,11 +510,11 @@ mainName() ::= <<
 <if(TREE_PARSER)>
 <name>
 <endif>
->>
+%>
 
 headerReturnScope(ruleDescriptor) ::= "<returnScope(...)>"
 
-headerReturnType(ruleDescriptor) ::= <<
+headerReturnType(ruleDescriptor) ::= <%
 <if(LEXER)>
 <if(!ruleDescriptor.isSynPred)>
  void
@@ -526,7 +524,7 @@ headerReturnType(ruleDescriptor) ::= <<
 <else>
  <returnType()>
 <endif>
->>
+%>
 
 // Produce the lexer output
 //
