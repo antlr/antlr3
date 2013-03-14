@@ -339,7 +339,7 @@ headerFile( LEXER,
 typedef <name>Traits <name>ImplTraits;
 
 <rules:{r | <if(r.ruleDescriptor.isSynPred)> struct <r.ruleDescriptor.name> {\}; <endif>}; separator="\n">
-<rules:{r |<headerReturnScope(ruleDescriptor=r.ruleDescriptor,...)>}>
+<rules:{r | <if(r.ruleDescriptor.ruleScope)><headerReturnScope(ruleDescriptor=r.ruleDescriptor,...)><endif>}>
 
 class <name>Tokens
 {
@@ -378,7 +378,7 @@ public:
 <endif>
 	
 	<scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeDecl(it)><endif>}>
-	<rules:{r |<ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)>}>
+	<rules:{r | <if(r.ruleDescriptor.ruleScope)><ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)><endif>}>
 	
 private:	
 <if(recognizer.grammar.delegates)>
@@ -1235,9 +1235,11 @@ ruleDeclarations() ::= <<
 <if(PARSER)>
     <name>ImplTraits::RuleReturnValueType _antlr_rule_exit(this);
 <endif>  
+<if(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.type> <a.name>;
 }>
+<endif>
 <endif>
 <if(memoize)>
 ANTLR_MARKER <ruleDescriptor.name>_StartIndex;
