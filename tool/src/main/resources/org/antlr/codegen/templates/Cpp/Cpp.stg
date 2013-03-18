@@ -2082,24 +2082,25 @@ public:
 	<endif>		
 	}
 
-        <if(dfa.specialStateSTs)>
-        ANTLR_UINT32 LA(ANTLR_INT32 i)
-        {
-        	return m_ctx->LA(i);
-        }
-        
-        template\<typename PredType>
-        bool msynpred( PredType pred )
-        {
-        	return m_ctx->msynpred(pred);
-        }
-        
-        <if(PARSER)>
-	const CtxType::CommonTokenType*  LT(ANTLR_INT32 k)
-	{
-		return m_ctx->LT(k);
-	}
-	<endif>
+    <if(dfa.specialStateSTs)>
+    ANTLR_UINT32 LA(ANTLR_INT32 i)
+    {
+        return m_ctx->LA(i);
+    }
+
+    <if(PARSER)>
+    const CtxType::CommonTokenType*  LT(ANTLR_INT32 k)
+    {
+        return m_ctx->LT(k);
+    }
+    <endif>
+    <if(synpreds)>
+    template\<typename PredType>
+    bool msynpred( PredType pred )
+    {
+        return m_ctx->msynpred(pred);
+    }
+    <endif>
         
 	ANTLR_INT32  specialStateTransition(CtxType * ctx, RecognizerType* recognizer, IntStreamType* is, ANTLR_INT32 s)
 	{
