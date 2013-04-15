@@ -345,7 +345,6 @@ class <name>Tokens
 {
 public:
 	/** Symbolic definitions of all the tokens that the <grammarType()> will work with.
-	 * \{
 	 *
 	 * Antlr will define EOF, but we can't use that as it it is too common in
 	 * in C header files and that would be confusing. There is no way to filter this out at the moment
@@ -451,7 +450,7 @@ extern ANTLR_UINT8*   <recognizer.grammar.composite.rootGrammar.recognizerName>T
 
 >>
 
-grammarType() ::= <<
+grammarType() ::= <%
 <if(PARSER)>
 parser
 <endif>
@@ -461,7 +460,7 @@ lexer
 <if(TREE_PARSER)>
 tree parser
 <endif>
->>
+%>
 
 componentType() ::= <<
 <if(PARSER)>
