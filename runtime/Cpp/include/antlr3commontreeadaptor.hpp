@@ -45,7 +45,7 @@ public:
 	typedef typename ImplTraits::TreeType TreeType;
 	typedef	TreeType TokenType;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
-	typedef typename ImplTraits::DebugEventListener DebuggerType;
+	typedef typename ImplTraits::DebugEventListenerType DebuggerType;
 
 public:
 	//The parameter is there only to provide uniform constructor interface
