@@ -407,12 +407,14 @@ public:
 <if(recognizer.filterMode)>
     void  memoize(ANTLR_MARKER  ruleIndex, ANTLR_MARKER  ruleParseStart);
     bool  alreadyParsedRule(ANTLR_MARKER	ruleIndex);
+    <filteringNextToken()>
 <endif>    
     <rules:{r | <if(!r.ruleDescriptor.isSynPred)><headerReturnType(ruleDescriptor=r.ruleDescriptor)>  m<r.ruleDescriptor.name>( <r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
     <rules:{r | <if(r.ruleDescriptor.isSynPred)>  <headerReturnType(ruleDescriptor=r.ruleDescriptor)> msynpred( antlr3::ClassForwarder\< <r.ruleDescriptor.name> > <r.ruleDescriptor.parameterScope:parameterScope()>);
     void m<r.ruleDescriptor.name>_fragment (<r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
 <endif>
 <if(!LEXER)>
+    <rules:{r | <headerReturnScope(ruleDescriptor=r.ruleDescriptor)>}>
     <rules:{r | <if(!r.ruleDescriptor.isSynPred)> <headerReturnType(ruleDescriptor=r.ruleDescriptor)> <r.ruleDescriptor.name> (<r.ruleDescriptor.parameterScope:parameterScope()>); <endif>}; separator="\n">
     <rules:{r | <if(r.ruleDescriptor.isSynPred)>  <headerReturnType(ruleDescriptor=r.ruleDescriptor)> msynpred( antlr3::ClassForwarder\< <r.ruleDescriptor.name> > <r.ruleDescriptor.parameterScope:parameterScope()>);
     void m<r.ruleDescriptor.name>_fragment (<r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
@@ -2279,7 +2281,7 @@ returnStructName(r) ::= "<r.name>_return"
 returnType() ::= <%
 <if(!ruleDescriptor.isSynPred)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-<ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>
+<ruleDescriptor.grammar.recognizerName>::<ruleDescriptor:returnStructName()>
 <else>
 <if(ruleDescriptor.hasSingleReturnValue)>
 <ruleDescriptor.singleValueReturnType>
@@ -2297,7 +2299,7 @@ bool
  */
 ruleLabelType(referencedRule) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-<referencedRule.grammar.recognizerName>_<referencedRule.name>_return
+<referencedRule.name>_return
 <else>
 <if(referencedRule.hasSingleReturnValue)>
 <referencedRule.singleValueReturnType>
@@ -2335,9 +2337,8 @@ ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>
 returnScope(scope) ::= <<
 <if(!ruleDescriptor.isSynPred)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-
 <if(!TREE_PARSER)>
-struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
+struct <ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
 {
 public:
 	typedef <name>ImplTraits::RuleReturnValueType BaseType;
@@ -2349,27 +2350,18 @@ struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName(
 <endif>
     <@ruleReturnMembers()>
     <ruleDescriptor.returnScope.attributes:{it |<it.type> <it.name>;}; separator="\n">
-    
 <if(!TREE_PARSER)>    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>()
-    {
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( BaseParserType* parser )
-        : BaseType(parser)
-    {
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
+    <ruleDescriptor:returnStructName()>() {}
+    <ruleDescriptor:returnStructName()>( BaseParserType* parser ) : BaseType(parser) {}
+    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& n )
     : BaseType(n)
     <if(ruleDescriptor.returnScope.attributes)>
     , <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
     <endif>
-    {
-    }
+    {}
     
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
-    operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
+    <ruleDescriptor:returnStructName()>&
+    operator=( const <ruleDescriptor:returnStructName()>& n )
     {
     	BaseType::operator=( n );
     	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
