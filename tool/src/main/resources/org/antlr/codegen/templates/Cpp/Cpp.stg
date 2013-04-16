@@ -800,28 +800,17 @@ actionGate() ::= "this->get_backtracking()==0"
 filteringActionGate() ::= "this->get_backtracking()==1"
 
 /** How to generate a parser */
-genericParser(  grammar,
-		name,
-                scopes,
-                tokens,
-                tokenNames,
-                rules,
-                numRules,
-                bitsets,
-                inputStreamType,
-                superClass,
-                labelType,
-		members,
-		rewriteElementType, filterMode,
-                ASTLabelType="ImplTraits::TreeType*"
-              ) ::= <<
+genericParser(  grammar, name, scopes, tokens, tokenNames, rules, numRules,
+                bitsets, inputStreamType, superClass,
+                labelType, members,	rewriteElementType,
+                filterMode, ASTLabelType="ImplTraits::TreeType*") ::= <<
 
 using namespace antlr3;
 <if(grammar.grammarIsRoot)>
 /** \brief Table of all token names in symbolic order, mainly used for
  *         error reporting.
  */
-ANTLR_UINT8*   <name>TokenNames[<length(tokenNames)>+4]
+ANTLR_UINT8* <name>TokenNames[<length(tokenNames)>+4]
      = {
         (ANTLR_UINT8*) "\<invalid>",       /* String to print to indicate an invalid token */
         (ANTLR_UINT8*) "\<EOR>",
@@ -874,7 +863,6 @@ const char* <name>::getGrammarFileName()
 void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 {
     <actions.parser.apifuncs>
-    <actions.treeparser.apifuncs>
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
     /* Create a LIST for recording rule memos.
@@ -1018,7 +1006,7 @@ parser(	grammar,
 		members={<actions.parser.members>}
 		) ::= <<
 <beginNamespace(actions)>
-<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="TOKEN", ...)>
+<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="TOKEN", filterMode=false, ...)>
 <endNamespace(actions)>
 >>
 
@@ -1036,7 +1024,7 @@ treeParser(	grammar,
 			bitsets,
 			filterMode,
 			labelType={<ASTLabelType>},
-			ASTLabelType="TreeType*",
+			ASTLabelType="ImplTraits::TreeType*",
 			superClass="TreeParser",
 			members={<actions.treeparser.members>}
 			) ::= <<
@@ -1271,9 +1259,7 @@ ruleLabelDefs() ::= <<
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]
     :{it | VectorType\<const CommonTokenType*>   list_<it.label.text>;}; separator="\n"
 >
-<[ruleDescriptor.ruleLabels,ruleDescriptor.ruleListLabels]
-    :ruleLabelDef(); separator="\n"
->
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 >>
 
 ruleLabelInitializations() ::= <<
@@ -2335,13 +2321,12 @@ initValue(typeName) ::= <<
 /** Define a rule label  */
 ruleLabelDef(label) ::= <<
 <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text>;
-typedef	<ruleLabelType(referencedRule=label.referencedRule)> RETURN_TYPE_<label.label.text>;<\n>
 >>
 /**  Rule label default value */
 ruleLabelInitVal(label) ::= <<
 >>
 
-ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>TreeType*<endif>"
+ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>ImplTraits::TreeType*<endif>"
 
 /** Define a return struct for a rule if the code needs to access its
  *  start/stop tokens, tree stuff, attributes, ...  Leave a hole for
