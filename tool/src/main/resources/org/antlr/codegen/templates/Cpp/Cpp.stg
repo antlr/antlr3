@@ -339,7 +339,6 @@ headerFile( LEXER,
 typedef <name>Traits <name>ImplTraits;
 
 <rules:{r | <if(r.ruleDescriptor.isSynPred)> struct <r.ruleDescriptor.name> {\}; <endif>}; separator="\n">
-<rules:{r | <if(r.ruleDescriptor.ruleScope)><headerReturnScope(ruleDescriptor=r.ruleDescriptor,...)><endif>}>
 
 class <name>Tokens
 {
