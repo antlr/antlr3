@@ -136,6 +136,13 @@
 		CECF4121175BBADD007441EA /* run-maven.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "run-maven.sh"; sourceTree = "<group>"; };
 		CECF4132175BBB10007441EA /* composite_java */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = composite_java; sourceTree = BUILT_PRODUCTS_DIR; };
 		CECF4149175BBC67007441EA /* dynamic_scope */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dynamic_scope; sourceTree = BUILT_PRODUCTS_DIR; };
+		CECF415C175BD3FA007441EA /* JavaTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaTokens.hxx; sourceTree = "<group>"; };
+		CECF415E175BD476007441EA /* TTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TTokens.hxx; sourceTree = "<group>"; };
+		CECF415F175BDCCE007441EA /* JavaAnnotationsTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaAnnotationsTokens.hxx; sourceTree = "<group>"; };
+		CECF4160175BDCCE007441EA /* JavaDeclTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaDeclTokens.hxx; sourceTree = "<group>"; };
+		CECF4161175BDCCF007441EA /* JavaExprTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaExprTokens.hxx; sourceTree = "<group>"; };
+		CECF4162175BDCCF007441EA /* JavaLexerRulesTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaLexerRulesTokens.hxx; sourceTree = "<group>"; };
+		CECF4163175BDCCF007441EA /* JavaStatTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaStatTokens.hxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +194,7 @@
 				CECF40C7175BBADD007441EA /* Java.g */,
 				CECF40C8175BBADD007441EA /* java.hpp */,
 				CECF40C9175BBADD007441EA /* Java.tokens */,
+				CECF415C175BD3FA007441EA /* JavaTokens.hxx */,
 				CECF40CA175BBADD007441EA /* Java_JavaAnnotations.cpp */,
 				CECF40CB175BBADD007441EA /* Java_JavaAnnotations.hpp */,
 				CECF40CC175BBADD007441EA /* Java_JavaDecl.cpp */,
@@ -199,18 +207,23 @@
 				CECF40D3175BBADD007441EA /* Java_JavaStat.hpp */,
 				CECF40D4175BBADD007441EA /* JavaAnnotations.g */,
 				CECF40D5175BBADD007441EA /* JavaAnnotations.tokens */,
+				CECF415F175BDCCE007441EA /* JavaAnnotationsTokens.hxx */,
 				CECF40D6175BBADD007441EA /* JavaDecl.g */,
 				CECF40D7175BBADD007441EA /* JavaDecl.tokens */,
+				CECF4160175BDCCE007441EA /* JavaDeclTokens.hxx */,
 				CECF40D8175BBADD007441EA /* JavaExpr.g */,
 				CECF40D9175BBADD007441EA /* JavaExpr.tokens */,
+				CECF4161175BDCCF007441EA /* JavaExprTokens.hxx */,
 				CECF40DA175BBADD007441EA /* JavaLexer.cpp */,
 				CECF40DB175BBADD007441EA /* JavaLexer.hpp */,
 				CECF40DC175BBADD007441EA /* JavaLexerRules.g */,
 				CECF40DD175BBADD007441EA /* JavaLexerRules.tokens */,
+				CECF4162175BDCCF007441EA /* JavaLexerRulesTokens.hxx */,
 				CECF40DE175BBADD007441EA /* JavaParser.cpp */,
 				CECF40DF175BBADD007441EA /* JavaParser.hpp */,
 				CECF40E0175BBADD007441EA /* JavaStat.g */,
 				CECF40E1175BBADD007441EA /* JavaStat.tokens */,
+				CECF4163175BDCCF007441EA /* JavaStatTokens.hxx */,
 				CECF40E2175BBADD007441EA /* jimdirent.cpp */,
 				CECF40E3175BBADD007441EA /* jimdirent.hpp */,
 				CECF40E4175BBADD007441EA /* main.cpp */,
@@ -228,6 +241,7 @@
 				CECF40EA175BBADD007441EA /* output */,
 				CECF40EB175BBADD007441EA /* T.g */,
 				CECF40EC175BBADD007441EA /* T.tokens */,
+				CECF415E175BD476007441EA /* TTokens.hxx */,
 				CECF40ED175BBADD007441EA /* TLexer.cpp */,
 				CECF40EE175BBADD007441EA /* TLexer.hpp */,
 				CECF40EF175BBADD007441EA /* TParser.cpp */,
@@ -518,6 +532,7 @@
 				CECF413B175BBB10007441EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CECF4150175BBC67007441EA /* Build configuration list for PBXNativeTarget "dynamic_scope" */ = {
 			isa = XCConfigurationList;
@@ -526,6 +541,7 @@
 				CECF4152175BBC67007441EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
