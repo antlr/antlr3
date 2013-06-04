@@ -17,9 +17,9 @@
 // The compiler must use -I (or set the project settings in VS2005)
 // to locate the antlr3 runtime files and -I. to find this file
 //
-#include    <JavaLexer.hpp>
-#include    <JavaParser.hpp>
-#include    <jimdirent.hpp>
+#include "JavaLexer.hpp"
+#include "JavaParser.hpp"
+#include "jimdirent.hpp"
 
 # ifdef	WIN32
 #  pragma warning( disable : 4100 )

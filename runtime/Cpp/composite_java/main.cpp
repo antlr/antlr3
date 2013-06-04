@@ -32,7 +32,7 @@
 // multiple times) and your own project related header files. Use <> to include and
 // -I on the compile line (which vs2005 now handles, where vs2003 did not).
 //
-#include    <java.hpp>
+#include "java.hpp"
 
 using namespace User;
 

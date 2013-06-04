@@ -18,6 +18,7 @@
 		CECF4153175BBC8D007441EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E9175BBADD007441EA /* main.cpp */; };
 		CECF4154175BBC92007441EA /* TLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40ED175BBADD007441EA /* TLexer.cpp */; };
 		CECF4155175BBC92007441EA /* TParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40EF175BBADD007441EA /* TParser.cpp */; };
+		CECF4164175BE21E007441EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E4175BBADD007441EA /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -410,6 +411,7 @@
 				CECF4141175BBB57007441EA /* JavaLexer.cpp in Sources */,
 				CECF4142175BBB57007441EA /* JavaParser.cpp in Sources */,
 				CECF4143175BBB57007441EA /* jimdirent.cpp in Sources */,
+				CECF4164175BE21E007441EA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -315,6 +315,16 @@ public class CppTarget extends Target {
         return strref;
     }
 
+    @Override
+    public String getTokenTypeAsTargetLabel(CodeGenerator generator, int ttype) {
+        // Avoid 'EOF'
+        if (ttype == -1) {
+            return "EOF_TOKEN";
+        }
+
+        return super.getTokenTypeAsTargetLabel(generator, ttype);
+    }
+
     /**
      * Overrides the standard grammar analysis so we can prepare the analyser
      * a little differently from the other targets.
