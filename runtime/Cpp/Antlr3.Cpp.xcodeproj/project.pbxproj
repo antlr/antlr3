@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE147F26175CFB6C00914152 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF416C175CA442007441EA /* main.cpp */; };
 		CECF413C175BBB57007441EA /* Java_JavaAnnotations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CA175BBADD007441EA /* Java_JavaAnnotations.cpp */; };
 		CECF413D175BBB57007441EA /* Java_JavaDecl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CC175BBADD007441EA /* Java_JavaDecl.cpp */; };
 		CECF413E175BBB57007441EA /* Java_JavaExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CE175BBADD007441EA /* Java_JavaExpr.cpp */; };
@@ -19,6 +20,8 @@
 		CECF4154175BBC92007441EA /* TLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40ED175BBADD007441EA /* TLexer.cpp */; };
 		CECF4155175BBC92007441EA /* TParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40EF175BBADD007441EA /* TParser.cpp */; };
 		CECF4164175BE21E007441EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E4175BBADD007441EA /* main.cpp */; };
+		CECF4185175CA4D8007441EA /* CLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF4170175CA442007441EA /* CLexer.cpp */; };
+		CECF4186175CA4D8007441EA /* CParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF4172175CA442007441EA /* CParser.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +35,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		CECF4147175BBC67007441EA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		CECF4178175CA4A7007441EA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -144,6 +156,17 @@
 		CECF4161175BDCCF007441EA /* JavaExprTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaExprTokens.hxx; sourceTree = "<group>"; };
 		CECF4162175BDCCF007441EA /* JavaLexerRulesTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaLexerRulesTokens.hxx; sourceTree = "<group>"; };
 		CECF4163175BDCCF007441EA /* JavaStatTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaStatTokens.hxx; sourceTree = "<group>"; };
+		CECF416B175CA442007441EA /* input */ = {isa = PBXFileReference; lastKnownFileType = text; path = input; sourceTree = "<group>"; };
+		CECF416C175CA442007441EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CECF416D175CA442007441EA /* output */ = {isa = PBXFileReference; lastKnownFileType = text; path = output; sourceTree = "<group>"; };
+		CECF416E175CA442007441EA /* C.g */ = {isa = PBXFileReference; lastKnownFileType = text; path = C.g; sourceTree = "<group>"; };
+		CECF416F175CA442007441EA /* C.tokens */ = {isa = PBXFileReference; lastKnownFileType = text; path = C.tokens; sourceTree = "<group>"; };
+		CECF4170175CA442007441EA /* CLexer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CLexer.cpp; sourceTree = "<group>"; };
+		CECF4171175CA442007441EA /* CLexer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CLexer.hpp; sourceTree = "<group>"; };
+		CECF4172175CA442007441EA /* CParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CParser.cpp; sourceTree = "<group>"; };
+		CECF4173175CA442007441EA /* CParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CParser.hpp; sourceTree = "<group>"; };
+		CECF4174175CA442007441EA /* CTokens.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CTokens.hxx; sourceTree = "<group>"; };
+		CECF417A175CA4A7007441EA /* predicates_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = predicates_test; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +184,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CECF4177175CA4A7007441EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -170,6 +200,7 @@
 				CECF40F1175BBADD007441EA /* include */,
 				CECF40C3175BBADD007441EA /* composite_java */,
 				CECF40E7175BBADD007441EA /* dynamic_scope */,
+				CECF416A175CA442007441EA /* predicates_test */,
 				CECF411F175BBADD007441EA /* quickrepack.sh */,
 				CECF4120175BBADD007441EA /* run-antlr.py */,
 				CECF4121175BBADD007441EA /* run-maven.sh */,
@@ -182,6 +213,7 @@
 			children = (
 				CECF4132175BBB10007441EA /* composite_java */,
 				CECF4149175BBC67007441EA /* dynamic_scope */,
+				CECF417A175CA4A7007441EA /* predicates_test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -303,6 +335,23 @@
 			path = include;
 			sourceTree = "<group>";
 		};
+		CECF416A175CA442007441EA /* predicates_test */ = {
+			isa = PBXGroup;
+			children = (
+				CECF416B175CA442007441EA /* input */,
+				CECF416C175CA442007441EA /* main.cpp */,
+				CECF416D175CA442007441EA /* output */,
+				CECF416E175CA442007441EA /* C.g */,
+				CECF416F175CA442007441EA /* C.tokens */,
+				CECF4174175CA442007441EA /* CTokens.hxx */,
+				CECF4170175CA442007441EA /* CLexer.cpp */,
+				CECF4171175CA442007441EA /* CLexer.hpp */,
+				CECF4172175CA442007441EA /* CParser.cpp */,
+				CECF4173175CA442007441EA /* CParser.hpp */,
+			);
+			path = predicates_test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -342,6 +391,24 @@
 			productReference = CECF4149175BBC67007441EA /* dynamic_scope */;
 			productType = "com.apple.product-type.tool";
 		};
+		CECF4179175CA4A7007441EA /* predicates_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CECF4181175CA4A7007441EA /* Build configuration list for PBXNativeTarget "predicates_test" */;
+			buildPhases = (
+				CECF4184175CA4AC007441EA /* ShellScript */,
+				CECF4176175CA4A7007441EA /* Sources */,
+				CECF4177175CA4A7007441EA /* Frameworks */,
+				CECF4178175CA4A7007441EA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = predicates_test;
+			productName = predicates_test;
+			productReference = CECF417A175CA4A7007441EA /* predicates_test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -365,6 +432,7 @@
 			targets = (
 				CECF4131175BBB10007441EA /* composite_java */,
 				CECF4148175BBC67007441EA /* dynamic_scope */,
+				CECF4179175CA4A7007441EA /* predicates_test */,
 			);
 		};
 /* End PBXProject section */
@@ -396,6 +464,19 @@
 			shellPath = /bin/sh;
 			shellScript = "cd $SRCROOT\nsource common.sh\npython ./run-antlr.py dynamic_scope/T.g -o dynamic_scope -j $UBERJAR_PATH";
 		};
+		CECF4184175CA4AC007441EA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT\nsource common.sh\npython ./run-antlr.py predicates_test/C.g -o predicates_test -j $UBERJAR_PATH";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -422,6 +503,16 @@
 				CECF4153175BBC8D007441EA /* main.cpp in Sources */,
 				CECF4154175BBC92007441EA /* TLexer.cpp in Sources */,
 				CECF4155175BBC92007441EA /* TParser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECF4176175CA4A7007441EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CECF4185175CA4D8007441EA /* CLexer.cpp in Sources */,
+				CECF4186175CA4D8007441EA /* CParser.cpp in Sources */,
+				CE147F26175CFB6C00914152 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,6 +606,20 @@
 			};
 			name = Release;
 		};
+		CECF4182175CA4A7007441EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CECF4183175CA4A7007441EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -541,6 +646,15 @@
 			buildConfigurations = (
 				CECF4151175BBC67007441EA /* Debug */,
 				CECF4152175BBC67007441EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CECF4181175CA4A7007441EA /* Build configuration list for PBXNativeTarget "predicates_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECF4182175CA4A7007441EA /* Debug */,
+				CECF4183175CA4A7007441EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
