@@ -57,16 +57,14 @@ main	(int argc, char *argv[])
     //
     if (argc < 2 || argv[1] == NULL)
     {
-	processDir("./input"); // Note in VS2005 debug, working directory must be configured
+        processDir("./input"); // Note in VS2005 debug, working directory must be configured
     }
     else
     {
-	int i;
-
-	for (i = 1; i < argc; i++)
-	{
-	    processDir(argv[i]);
-	}
+        for (int i = 1; i < argc; i++)
+        {
+            processDir(argv[i]);
+        }
     }
 
     printf("finished parsing OK\n");	// Finnish parking is pretty good - I think it is all the snow
