@@ -1,0 +1,665 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE147F26175CFB6C00914152 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF416C175CA442007441EA /* main.cpp */; };
+		CECF413C175BBB57007441EA /* Java_JavaAnnotations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CA175BBADD007441EA /* Java_JavaAnnotations.cpp */; };
+		CECF413D175BBB57007441EA /* Java_JavaDecl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CC175BBADD007441EA /* Java_JavaDecl.cpp */; };
+		CECF413E175BBB57007441EA /* Java_JavaExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40CE175BBADD007441EA /* Java_JavaExpr.cpp */; };
+		CECF413F175BBB57007441EA /* Java_JavaLexerRules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40D0175BBADD007441EA /* Java_JavaLexerRules.cpp */; };
+		CECF4140175BBB57007441EA /* Java_JavaStat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40D2175BBADD007441EA /* Java_JavaStat.cpp */; };
+		CECF4141175BBB57007441EA /* JavaLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40DA175BBADD007441EA /* JavaLexer.cpp */; };
+		CECF4142175BBB57007441EA /* JavaParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40DE175BBADD007441EA /* JavaParser.cpp */; };
+		CECF4143175BBB57007441EA /* jimdirent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E2175BBADD007441EA /* jimdirent.cpp */; };
+		CECF4153175BBC8D007441EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E9175BBADD007441EA /* main.cpp */; };
+		CECF4154175BBC92007441EA /* TLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40ED175BBADD007441EA /* TLexer.cpp */; };
+		CECF4155175BBC92007441EA /* TParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40EF175BBADD007441EA /* TParser.cpp */; };
+		CECF4164175BE21E007441EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF40E4175BBADD007441EA /* main.cpp */; };
+		CECF4185175CA4D8007441EA /* CLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF4170175CA442007441EA /* CLexer.cpp */; };
+		CECF4186175CA4D8007441EA /* CParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CECF4172175CA442007441EA /* CParser.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CECF4130175BBB10007441EA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		CECF4147175BBC67007441EA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		CECF4178175CA4A7007441EA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CECF40C4175BBADD007441EA /* antlr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = antlr; sourceTree = "<group>"; };
+		CECF40C5175BBADD007441EA /* files */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = files; sourceTree = "<group>"; };
+		CECF40C6175BBADD007441EA /* input */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input; sourceTree = "<group>"; };
+		CECF40C7175BBADD007441EA /* Java.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Java.g; sourceTree = "<group>"; };
+		CECF40C8175BBADD007441EA /* java.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = java.hpp; sourceTree = "<group>"; };
+		CECF40C9175BBADD007441EA /* Java.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Java.tokens; sourceTree = "<group>"; };
+		CECF40CA175BBADD007441EA /* Java_JavaAnnotations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Java_JavaAnnotations.cpp; sourceTree = "<group>"; };
+		CECF40CB175BBADD007441EA /* Java_JavaAnnotations.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Java_JavaAnnotations.hpp; sourceTree = "<group>"; };
+		CECF40CC175BBADD007441EA /* Java_JavaDecl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Java_JavaDecl.cpp; sourceTree = "<group>"; };
+		CECF40CD175BBADD007441EA /* Java_JavaDecl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Java_JavaDecl.hpp; sourceTree = "<group>"; };
+		CECF40CE175BBADD007441EA /* Java_JavaExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Java_JavaExpr.cpp; sourceTree = "<group>"; };
+		CECF40CF175BBADD007441EA /* Java_JavaExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Java_JavaExpr.hpp; sourceTree = "<group>"; };
+		CECF40D0175BBADD007441EA /* Java_JavaLexerRules.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Java_JavaLexerRules.cpp; sourceTree = "<group>"; };
+		CECF40D1175BBADD007441EA /* Java_JavaLexerRules.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Java_JavaLexerRules.hpp; sourceTree = "<group>"; };
+		CECF40D2175BBADD007441EA /* Java_JavaStat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Java_JavaStat.cpp; sourceTree = "<group>"; };
+		CECF40D3175BBADD007441EA /* Java_JavaStat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Java_JavaStat.hpp; sourceTree = "<group>"; };
+		CECF40D4175BBADD007441EA /* JavaAnnotations.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaAnnotations.g; sourceTree = "<group>"; };
+		CECF40D5175BBADD007441EA /* JavaAnnotations.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaAnnotations.tokens; sourceTree = "<group>"; };
+		CECF40D6175BBADD007441EA /* JavaDecl.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaDecl.g; sourceTree = "<group>"; };
+		CECF40D7175BBADD007441EA /* JavaDecl.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaDecl.tokens; sourceTree = "<group>"; };
+		CECF40D8175BBADD007441EA /* JavaExpr.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaExpr.g; sourceTree = "<group>"; };
+		CECF40D9175BBADD007441EA /* JavaExpr.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaExpr.tokens; sourceTree = "<group>"; };
+		CECF40DA175BBADD007441EA /* JavaLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JavaLexer.cpp; sourceTree = "<group>"; };
+		CECF40DB175BBADD007441EA /* JavaLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaLexer.hpp; sourceTree = "<group>"; };
+		CECF40DC175BBADD007441EA /* JavaLexerRules.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaLexerRules.g; sourceTree = "<group>"; };
+		CECF40DD175BBADD007441EA /* JavaLexerRules.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaLexerRules.tokens; sourceTree = "<group>"; };
+		CECF40DE175BBADD007441EA /* JavaParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JavaParser.cpp; sourceTree = "<group>"; };
+		CECF40DF175BBADD007441EA /* JavaParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaParser.hpp; sourceTree = "<group>"; };
+		CECF40E0175BBADD007441EA /* JavaStat.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaStat.g; sourceTree = "<group>"; };
+		CECF40E1175BBADD007441EA /* JavaStat.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JavaStat.tokens; sourceTree = "<group>"; };
+		CECF40E2175BBADD007441EA /* jimdirent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jimdirent.cpp; sourceTree = "<group>"; };
+		CECF40E3175BBADD007441EA /* jimdirent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = jimdirent.hpp; sourceTree = "<group>"; };
+		CECF40E4175BBADD007441EA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CECF40E5175BBADD007441EA /* output */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output; sourceTree = "<group>"; };
+		CECF40E6175BBADD007441EA /* UserTraits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserTraits.hpp; sourceTree = "<group>"; };
+		CECF40E8175BBADD007441EA /* input */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input; sourceTree = "<group>"; };
+		CECF40E9175BBADD007441EA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CECF40EA175BBADD007441EA /* output */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output; sourceTree = "<group>"; };
+		CECF40EB175BBADD007441EA /* T.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = T.g; sourceTree = "<group>"; };
+		CECF40EC175BBADD007441EA /* T.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = T.tokens; sourceTree = "<group>"; };
+		CECF40ED175BBADD007441EA /* TLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TLexer.cpp; sourceTree = "<group>"; };
+		CECF40EE175BBADD007441EA /* TLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TLexer.hpp; sourceTree = "<group>"; };
+		CECF40EF175BBADD007441EA /* TParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TParser.cpp; sourceTree = "<group>"; };
+		CECF40F0175BBADD007441EA /* TParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TParser.hpp; sourceTree = "<group>"; };
+		CECF40F2175BBADD007441EA /* antlr3.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3.hpp; sourceTree = "<group>"; };
+		CECF40F3175BBADD007441EA /* antlr3.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3.inl; sourceTree = "<group>"; };
+		CECF40F4175BBADD007441EA /* antlr3baserecognizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3baserecognizer.hpp; sourceTree = "<group>"; };
+		CECF40F5175BBADD007441EA /* antlr3baserecognizer.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3baserecognizer.inl; sourceTree = "<group>"; };
+		CECF40F6175BBADD007441EA /* antlr3bitset.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3bitset.hpp; sourceTree = "<group>"; };
+		CECF40F7175BBADD007441EA /* antlr3bitset.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3bitset.inl; sourceTree = "<group>"; };
+		CECF40F8175BBADD007441EA /* antlr3collections.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3collections.hpp; sourceTree = "<group>"; };
+		CECF40F9175BBADD007441EA /* antlr3collections.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3collections.inl; sourceTree = "<group>"; };
+		CECF40FA175BBADD007441EA /* antlr3commontoken.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3commontoken.hpp; sourceTree = "<group>"; };
+		CECF40FB175BBADD007441EA /* antlr3commontoken.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3commontoken.inl; sourceTree = "<group>"; };
+		CECF40FC175BBADD007441EA /* antlr3commontree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3commontree.hpp; sourceTree = "<group>"; };
+		CECF40FD175BBADD007441EA /* antlr3commontree.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3commontree.inl; sourceTree = "<group>"; };
+		CECF40FE175BBADD007441EA /* antlr3commontreeadaptor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3commontreeadaptor.hpp; sourceTree = "<group>"; };
+		CECF40FF175BBADD007441EA /* antlr3commontreeadaptor.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3commontreeadaptor.inl; sourceTree = "<group>"; };
+		CECF4100175BBADD007441EA /* antlr3commontreenodestream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3commontreenodestream.hpp; sourceTree = "<group>"; };
+		CECF4101175BBADD007441EA /* antlr3commontreenodestream.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3commontreenodestream.inl; sourceTree = "<group>"; };
+		CECF4102175BBADD007441EA /* antlr3convertutf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3convertutf.hpp; sourceTree = "<group>"; };
+		CECF4103175BBADD007441EA /* antlr3cyclicdfa.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3cyclicdfa.hpp; sourceTree = "<group>"; };
+		CECF4104175BBADD007441EA /* antlr3cyclicdfa.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3cyclicdfa.inl; sourceTree = "<group>"; };
+		CECF4105175BBADD007441EA /* antlr3debugeventlistener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3debugeventlistener.hpp; sourceTree = "<group>"; };
+		CECF4106175BBADD007441EA /* antlr3defs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3defs.hpp; sourceTree = "<group>"; };
+		CECF4107175BBADD007441EA /* antlr3errors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3errors.hpp; sourceTree = "<group>"; };
+		CECF4108175BBADD007441EA /* antlr3exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3exception.hpp; sourceTree = "<group>"; };
+		CECF4109175BBADD007441EA /* antlr3exception.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3exception.inl; sourceTree = "<group>"; };
+		CECF410A175BBADD007441EA /* antlr3filestream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3filestream.hpp; sourceTree = "<group>"; };
+		CECF410B175BBADD007441EA /* antlr3filestream.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3filestream.inl; sourceTree = "<group>"; };
+		CECF410C175BBADD007441EA /* antlr3input.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3input.hpp; sourceTree = "<group>"; };
+		CECF410D175BBADD007441EA /* antlr3input.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3input.inl; sourceTree = "<group>"; };
+		CECF410E175BBADD007441EA /* antlr3interfaces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3interfaces.hpp; sourceTree = "<group>"; };
+		CECF410F175BBADD007441EA /* antlr3intstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3intstream.hpp; sourceTree = "<group>"; };
+		CECF4110175BBADD007441EA /* antlr3intstream.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3intstream.inl; sourceTree = "<group>"; };
+		CECF4111175BBADD007441EA /* antlr3lexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3lexer.hpp; sourceTree = "<group>"; };
+		CECF4112175BBADD007441EA /* antlr3lexer.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3lexer.inl; sourceTree = "<group>"; };
+		CECF4113175BBADD007441EA /* antlr3memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3memory.hpp; sourceTree = "<group>"; };
+		CECF4114175BBADD007441EA /* antlr3parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3parser.hpp; sourceTree = "<group>"; };
+		CECF4115175BBADD007441EA /* antlr3parser.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3parser.inl; sourceTree = "<group>"; };
+		CECF4116175BBADD007441EA /* antlr3recognizersharedstate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3recognizersharedstate.hpp; sourceTree = "<group>"; };
+		CECF4117175BBADD007441EA /* antlr3recognizersharedstate.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3recognizersharedstate.inl; sourceTree = "<group>"; };
+		CECF4118175BBADD007441EA /* antlr3rewritestreams.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3rewritestreams.hpp; sourceTree = "<group>"; };
+		CECF4119175BBADD007441EA /* antlr3rewritestreams.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3rewritestreams.inl; sourceTree = "<group>"; };
+		CECF411A175BBADD007441EA /* antlr3tokenstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3tokenstream.hpp; sourceTree = "<group>"; };
+		CECF411B175BBADD007441EA /* antlr3tokenstream.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3tokenstream.inl; sourceTree = "<group>"; };
+		CECF411C175BBADD007441EA /* antlr3traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3traits.hpp; sourceTree = "<group>"; };
+		CECF411D175BBADD007441EA /* antlr3treeparser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = antlr3treeparser.hpp; sourceTree = "<group>"; };
+		CECF411E175BBADD007441EA /* antlr3treeparser.inl */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = antlr3treeparser.inl; sourceTree = "<group>"; };
+		CECF411F175BBADD007441EA /* quickrepack.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = quickrepack.sh; sourceTree = "<group>"; };
+		CECF4120175BBADD007441EA /* run-antlr.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = "run-antlr.py"; sourceTree = "<group>"; };
+		CECF4121175BBADD007441EA /* run-maven.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "run-maven.sh"; sourceTree = "<group>"; };
+		CECF4132175BBB10007441EA /* composite_java */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = composite_java; sourceTree = BUILT_PRODUCTS_DIR; };
+		CECF4149175BBC67007441EA /* dynamic_scope */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dynamic_scope; sourceTree = BUILT_PRODUCTS_DIR; };
+		CECF415C175BD3FA007441EA /* JavaTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaTokens.hxx; sourceTree = "<group>"; };
+		CECF415E175BD476007441EA /* TTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TTokens.hxx; sourceTree = "<group>"; };
+		CECF415F175BDCCE007441EA /* JavaAnnotationsTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaAnnotationsTokens.hxx; sourceTree = "<group>"; };
+		CECF4160175BDCCE007441EA /* JavaDeclTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaDeclTokens.hxx; sourceTree = "<group>"; };
+		CECF4161175BDCCF007441EA /* JavaExprTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaExprTokens.hxx; sourceTree = "<group>"; };
+		CECF4162175BDCCF007441EA /* JavaLexerRulesTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaLexerRulesTokens.hxx; sourceTree = "<group>"; };
+		CECF4163175BDCCF007441EA /* JavaStatTokens.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JavaStatTokens.hxx; sourceTree = "<group>"; };
+		CECF416B175CA442007441EA /* input */ = {isa = PBXFileReference; lastKnownFileType = text; path = input; sourceTree = "<group>"; };
+		CECF416C175CA442007441EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CECF416D175CA442007441EA /* output */ = {isa = PBXFileReference; lastKnownFileType = text; path = output; sourceTree = "<group>"; };
+		CECF416E175CA442007441EA /* C.g */ = {isa = PBXFileReference; lastKnownFileType = text; path = C.g; sourceTree = "<group>"; };
+		CECF416F175CA442007441EA /* C.tokens */ = {isa = PBXFileReference; lastKnownFileType = text; path = C.tokens; sourceTree = "<group>"; };
+		CECF4170175CA442007441EA /* CLexer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CLexer.cpp; sourceTree = "<group>"; };
+		CECF4171175CA442007441EA /* CLexer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CLexer.hpp; sourceTree = "<group>"; };
+		CECF4172175CA442007441EA /* CParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CParser.cpp; sourceTree = "<group>"; };
+		CECF4173175CA442007441EA /* CParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CParser.hpp; sourceTree = "<group>"; };
+		CECF4174175CA442007441EA /* CTokens.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CTokens.hxx; sourceTree = "<group>"; };
+		CECF417A175CA4A7007441EA /* predicates_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = predicates_test; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CECF412F175BBB10007441EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECF4146175BBC67007441EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECF4177175CA4A7007441EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CECF40A6175BBA94007441EA = {
+			isa = PBXGroup;
+			children = (
+				CECF40F1175BBADD007441EA /* include */,
+				CECF40C3175BBADD007441EA /* composite_java */,
+				CECF40E7175BBADD007441EA /* dynamic_scope */,
+				CECF416A175CA442007441EA /* predicates_test */,
+				CECF411F175BBADD007441EA /* quickrepack.sh */,
+				CECF4120175BBADD007441EA /* run-antlr.py */,
+				CECF4121175BBADD007441EA /* run-maven.sh */,
+				CECF40B2175BBA94007441EA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CECF40B2175BBA94007441EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CECF4132175BBB10007441EA /* composite_java */,
+				CECF4149175BBC67007441EA /* dynamic_scope */,
+				CECF417A175CA4A7007441EA /* predicates_test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CECF40C3175BBADD007441EA /* composite_java */ = {
+			isa = PBXGroup;
+			children = (
+				CECF40C4175BBADD007441EA /* antlr */,
+				CECF40C5175BBADD007441EA /* files */,
+				CECF40C6175BBADD007441EA /* input */,
+				CECF40C7175BBADD007441EA /* Java.g */,
+				CECF40C8175BBADD007441EA /* java.hpp */,
+				CECF40C9175BBADD007441EA /* Java.tokens */,
+				CECF415C175BD3FA007441EA /* JavaTokens.hxx */,
+				CECF40CA175BBADD007441EA /* Java_JavaAnnotations.cpp */,
+				CECF40CB175BBADD007441EA /* Java_JavaAnnotations.hpp */,
+				CECF40CC175BBADD007441EA /* Java_JavaDecl.cpp */,
+				CECF40CD175BBADD007441EA /* Java_JavaDecl.hpp */,
+				CECF40CE175BBADD007441EA /* Java_JavaExpr.cpp */,
+				CECF40CF175BBADD007441EA /* Java_JavaExpr.hpp */,
+				CECF40D0175BBADD007441EA /* Java_JavaLexerRules.cpp */,
+				CECF40D1175BBADD007441EA /* Java_JavaLexerRules.hpp */,
+				CECF40D2175BBADD007441EA /* Java_JavaStat.cpp */,
+				CECF40D3175BBADD007441EA /* Java_JavaStat.hpp */,
+				CECF40D4175BBADD007441EA /* JavaAnnotations.g */,
+				CECF40D5175BBADD007441EA /* JavaAnnotations.tokens */,
+				CECF415F175BDCCE007441EA /* JavaAnnotationsTokens.hxx */,
+				CECF40D6175BBADD007441EA /* JavaDecl.g */,
+				CECF40D7175BBADD007441EA /* JavaDecl.tokens */,
+				CECF4160175BDCCE007441EA /* JavaDeclTokens.hxx */,
+				CECF40D8175BBADD007441EA /* JavaExpr.g */,
+				CECF40D9175BBADD007441EA /* JavaExpr.tokens */,
+				CECF4161175BDCCF007441EA /* JavaExprTokens.hxx */,
+				CECF40DA175BBADD007441EA /* JavaLexer.cpp */,
+				CECF40DB175BBADD007441EA /* JavaLexer.hpp */,
+				CECF40DC175BBADD007441EA /* JavaLexerRules.g */,
+				CECF40DD175BBADD007441EA /* JavaLexerRules.tokens */,
+				CECF4162175BDCCF007441EA /* JavaLexerRulesTokens.hxx */,
+				CECF40DE175BBADD007441EA /* JavaParser.cpp */,
+				CECF40DF175BBADD007441EA /* JavaParser.hpp */,
+				CECF40E0175BBADD007441EA /* JavaStat.g */,
+				CECF40E1175BBADD007441EA /* JavaStat.tokens */,
+				CECF4163175BDCCF007441EA /* JavaStatTokens.hxx */,
+				CECF40E2175BBADD007441EA /* jimdirent.cpp */,
+				CECF40E3175BBADD007441EA /* jimdirent.hpp */,
+				CECF40E4175BBADD007441EA /* main.cpp */,
+				CECF40E5175BBADD007441EA /* output */,
+				CECF40E6175BBADD007441EA /* UserTraits.hpp */,
+			);
+			path = composite_java;
+			sourceTree = "<group>";
+		};
+		CECF40E7175BBADD007441EA /* dynamic_scope */ = {
+			isa = PBXGroup;
+			children = (
+				CECF40E8175BBADD007441EA /* input */,
+				CECF40E9175BBADD007441EA /* main.cpp */,
+				CECF40EA175BBADD007441EA /* output */,
+				CECF40EB175BBADD007441EA /* T.g */,
+				CECF40EC175BBADD007441EA /* T.tokens */,
+				CECF415E175BD476007441EA /* TTokens.hxx */,
+				CECF40ED175BBADD007441EA /* TLexer.cpp */,
+				CECF40EE175BBADD007441EA /* TLexer.hpp */,
+				CECF40EF175BBADD007441EA /* TParser.cpp */,
+				CECF40F0175BBADD007441EA /* TParser.hpp */,
+			);
+			path = dynamic_scope;
+			sourceTree = "<group>";
+		};
+		CECF40F1175BBADD007441EA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				CECF40F2175BBADD007441EA /* antlr3.hpp */,
+				CECF40F3175BBADD007441EA /* antlr3.inl */,
+				CECF40F4175BBADD007441EA /* antlr3baserecognizer.hpp */,
+				CECF40F5175BBADD007441EA /* antlr3baserecognizer.inl */,
+				CECF40F6175BBADD007441EA /* antlr3bitset.hpp */,
+				CECF40F7175BBADD007441EA /* antlr3bitset.inl */,
+				CECF40F8175BBADD007441EA /* antlr3collections.hpp */,
+				CECF40F9175BBADD007441EA /* antlr3collections.inl */,
+				CECF40FA175BBADD007441EA /* antlr3commontoken.hpp */,
+				CECF40FB175BBADD007441EA /* antlr3commontoken.inl */,
+				CECF40FC175BBADD007441EA /* antlr3commontree.hpp */,
+				CECF40FD175BBADD007441EA /* antlr3commontree.inl */,
+				CECF40FE175BBADD007441EA /* antlr3commontreeadaptor.hpp */,
+				CECF40FF175BBADD007441EA /* antlr3commontreeadaptor.inl */,
+				CECF4100175BBADD007441EA /* antlr3commontreenodestream.hpp */,
+				CECF4101175BBADD007441EA /* antlr3commontreenodestream.inl */,
+				CECF4102175BBADD007441EA /* antlr3convertutf.hpp */,
+				CECF4103175BBADD007441EA /* antlr3cyclicdfa.hpp */,
+				CECF4104175BBADD007441EA /* antlr3cyclicdfa.inl */,
+				CECF4105175BBADD007441EA /* antlr3debugeventlistener.hpp */,
+				CECF4106175BBADD007441EA /* antlr3defs.hpp */,
+				CECF4107175BBADD007441EA /* antlr3errors.hpp */,
+				CECF4108175BBADD007441EA /* antlr3exception.hpp */,
+				CECF4109175BBADD007441EA /* antlr3exception.inl */,
+				CECF410A175BBADD007441EA /* antlr3filestream.hpp */,
+				CECF410B175BBADD007441EA /* antlr3filestream.inl */,
+				CECF410C175BBADD007441EA /* antlr3input.hpp */,
+				CECF410D175BBADD007441EA /* antlr3input.inl */,
+				CECF410E175BBADD007441EA /* antlr3interfaces.hpp */,
+				CECF410F175BBADD007441EA /* antlr3intstream.hpp */,
+				CECF4110175BBADD007441EA /* antlr3intstream.inl */,
+				CECF4111175BBADD007441EA /* antlr3lexer.hpp */,
+				CECF4112175BBADD007441EA /* antlr3lexer.inl */,
+				CECF4113175BBADD007441EA /* antlr3memory.hpp */,
+				CECF4114175BBADD007441EA /* antlr3parser.hpp */,
+				CECF4115175BBADD007441EA /* antlr3parser.inl */,
+				CECF4116175BBADD007441EA /* antlr3recognizersharedstate.hpp */,
+				CECF4117175BBADD007441EA /* antlr3recognizersharedstate.inl */,
+				CECF4118175BBADD007441EA /* antlr3rewritestreams.hpp */,
+				CECF4119175BBADD007441EA /* antlr3rewritestreams.inl */,
+				CECF411A175BBADD007441EA /* antlr3tokenstream.hpp */,
+				CECF411B175BBADD007441EA /* antlr3tokenstream.inl */,
+				CECF411C175BBADD007441EA /* antlr3traits.hpp */,
+				CECF411D175BBADD007441EA /* antlr3treeparser.hpp */,
+				CECF411E175BBADD007441EA /* antlr3treeparser.inl */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		CECF416A175CA442007441EA /* predicates_test */ = {
+			isa = PBXGroup;
+			children = (
+				CECF416B175CA442007441EA /* input */,
+				CECF416C175CA442007441EA /* main.cpp */,
+				CECF416D175CA442007441EA /* output */,
+				CECF416E175CA442007441EA /* C.g */,
+				CECF416F175CA442007441EA /* C.tokens */,
+				CECF4174175CA442007441EA /* CTokens.hxx */,
+				CECF4170175CA442007441EA /* CLexer.cpp */,
+				CECF4171175CA442007441EA /* CLexer.hpp */,
+				CECF4172175CA442007441EA /* CParser.cpp */,
+				CECF4173175CA442007441EA /* CParser.hpp */,
+			);
+			path = predicates_test;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CECF4131175BBB10007441EA /* composite_java */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CECF4139175BBB10007441EA /* Build configuration list for PBXNativeTarget "composite_java" */;
+			buildPhases = (
+				CECF4144175BBB6E007441EA /* ShellScript */,
+				CECF412E175BBB10007441EA /* Sources */,
+				CECF412F175BBB10007441EA /* Frameworks */,
+				CECF4130175BBB10007441EA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = composite_java;
+			productName = composite_java;
+			productReference = CECF4132175BBB10007441EA /* composite_java */;
+			productType = "com.apple.product-type.tool";
+		};
+		CECF4148175BBC67007441EA /* dynamic_scope */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CECF4150175BBC67007441EA /* Build configuration list for PBXNativeTarget "dynamic_scope" */;
+			buildPhases = (
+				CECF4156175BBCB8007441EA /* ShellScript */,
+				CECF4145175BBC67007441EA /* Sources */,
+				CECF4146175BBC67007441EA /* Frameworks */,
+				CECF4147175BBC67007441EA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dynamic_scope;
+			productName = dynamic_scope;
+			productReference = CECF4149175BBC67007441EA /* dynamic_scope */;
+			productType = "com.apple.product-type.tool";
+		};
+		CECF4179175CA4A7007441EA /* predicates_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CECF4181175CA4A7007441EA /* Build configuration list for PBXNativeTarget "predicates_test" */;
+			buildPhases = (
+				CECF4184175CA4AC007441EA /* ShellScript */,
+				CECF4176175CA4A7007441EA /* Sources */,
+				CECF4177175CA4A7007441EA /* Frameworks */,
+				CECF4178175CA4A7007441EA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = predicates_test;
+			productName = predicates_test;
+			productReference = CECF417A175CA4A7007441EA /* predicates_test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CECF40A8175BBA94007441EA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Nickolas V. Pohilets";
+			};
+			buildConfigurationList = CECF40AB175BBA94007441EA /* Build configuration list for PBXProject "Antlr3.Cpp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CECF40A6175BBA94007441EA;
+			productRefGroup = CECF40B2175BBA94007441EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CECF4131175BBB10007441EA /* composite_java */,
+				CECF4148175BBC67007441EA /* dynamic_scope */,
+				CECF4179175CA4A7007441EA /* predicates_test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CECF4144175BBB6E007441EA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT\nsource common.sh\npython ./run-antlr.py composite_java/Java.g -o composite_java -j $UBERJAR_PATH";
+		};
+		CECF4156175BBCB8007441EA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT\nsource common.sh\npython ./run-antlr.py dynamic_scope/T.g -o dynamic_scope -j $UBERJAR_PATH";
+		};
+		CECF4184175CA4AC007441EA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT\nsource common.sh\npython ./run-antlr.py predicates_test/C.g -o predicates_test -j $UBERJAR_PATH";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CECF412E175BBB10007441EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CECF413C175BBB57007441EA /* Java_JavaAnnotations.cpp in Sources */,
+				CECF413D175BBB57007441EA /* Java_JavaDecl.cpp in Sources */,
+				CECF413E175BBB57007441EA /* Java_JavaExpr.cpp in Sources */,
+				CECF413F175BBB57007441EA /* Java_JavaLexerRules.cpp in Sources */,
+				CECF4140175BBB57007441EA /* Java_JavaStat.cpp in Sources */,
+				CECF4141175BBB57007441EA /* JavaLexer.cpp in Sources */,
+				CECF4142175BBB57007441EA /* JavaParser.cpp in Sources */,
+				CECF4143175BBB57007441EA /* jimdirent.cpp in Sources */,
+				CECF4164175BE21E007441EA /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECF4145175BBC67007441EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CECF4153175BBC8D007441EA /* main.cpp in Sources */,
+				CECF4154175BBC92007441EA /* TLexer.cpp in Sources */,
+				CECF4155175BBC92007441EA /* TParser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CECF4176175CA4A7007441EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CECF4185175CA4D8007441EA /* CLexer.cpp in Sources */,
+				CECF4186175CA4D8007441EA /* CParser.cpp in Sources */,
+				CE147F26175CFB6C00914152 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CECF40B9175BBA94007441EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					$SRCROOT/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		CECF40BA175BBA94007441EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					$SRCROOT/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CECF413A175BBB10007441EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CECF413B175BBB10007441EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CECF4151175BBC67007441EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CECF4152175BBC67007441EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CECF4182175CA4A7007441EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CECF4183175CA4A7007441EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CECF40AB175BBA94007441EA /* Build configuration list for PBXProject "Antlr3.Cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECF40B9175BBA94007441EA /* Debug */,
+				CECF40BA175BBA94007441EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CECF4139175BBB10007441EA /* Build configuration list for PBXNativeTarget "composite_java" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECF413A175BBB10007441EA /* Debug */,
+				CECF413B175BBB10007441EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CECF4150175BBC67007441EA /* Build configuration list for PBXNativeTarget "dynamic_scope" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECF4151175BBC67007441EA /* Debug */,
+				CECF4152175BBC67007441EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CECF4181175CA4A7007441EA /* Build configuration list for PBXNativeTarget "predicates_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CECF4182175CA4A7007441EA /* Debug */,
+				CECF4183175CA4A7007441EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CECF40A8175BBA94007441EA /* Project object */;
+}

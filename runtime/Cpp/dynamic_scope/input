@@ -1,0 +1,7 @@
+method foo() {
+  i = 3;
+  method bar() {
+    j = i*2;
+  }
+  k = i;
+}

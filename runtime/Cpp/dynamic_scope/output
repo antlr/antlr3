@@ -1,0 +1,4 @@
+int 3 in method foo
+ref i from method bar
+int 2 in method bar
+ref i from method foo
