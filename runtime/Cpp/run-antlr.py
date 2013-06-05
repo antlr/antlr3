@@ -1,3 +1,14 @@
+# Helper script that wraps invocation of ANTLR
+#
+# Script runs ANTLR only if generated files are older then grammar files or ANTLR itself.
+# Generated files are made read-only.
+# Script encapsulates building list of generated files. This is used for integration with CMake.
+#
+# Python is used instead of BASH to make it platform-independent.
+#
+# TODO: Add this functionality to ANTLR itself and get rid of this script
+#
+
 import argparse
 import os
 import os.path
@@ -27,6 +38,9 @@ TREE_PARSER_GRAMMAR = 4
 
 IMPORT_KEYWORD = "import "
 
+# This is a very primitive and unreliable way of parsing grammar files.
+# TODO: Use ANTLR-generated parser to parse grammar files. Again, it would be better
+#       to implement this functionality in ANTLR itself and get rid of the script.
 def scan_grammar(grammarFile):
     f = file(grammarFile, "r")
     retVal = None

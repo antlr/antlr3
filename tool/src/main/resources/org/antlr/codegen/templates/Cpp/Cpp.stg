@@ -2082,7 +2082,7 @@ public:
     {
     }
 <if(dfa.specialStateSTs)>
-    ANTLR_INT32 specialStateTransition(CtxType * ctx, RecognizerType* recognizer, IntStreamType* is, ANTLR_INT32 s)
+    ANTLR_INT32 specialStateTransition(CtxType * ctx, RecognizerType* /*recognizer*/, IntStreamType* /*is*/, ANTLR_INT32 s)
     {
         return ctx->dfa<dfa.decisionNumber>_sst(s);
     }

@@ -1,3 +1,6 @@
+// Test grammar file used to reproduce generating of uncompilable C++ code,
+// if semantic predicate is invoked from DFA
+
 grammar C;
 
 options {
@@ -78,6 +81,12 @@ main : ( t=( DOT
           std::cout << std::endl;
         }
     )+;
+    
+foo : (DOT | RANGE)+ ID AT (BOOL | INT)? ;
+bar : foo? DOT foo ;
+baz : (DOT AT BOOL)=> foo
+    | DOT+ AT+ BOOL+
+    ;
 
 DOT
     : '.'
