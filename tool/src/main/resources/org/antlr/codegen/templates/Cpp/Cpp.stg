@@ -32,14 +32,14 @@
  * Gokulakannan Somasundaram ( heavy lifting from C Run-time by Jim Idle )
  */
 cTypeInitMap ::= [
-	"int"		    : "0",              // Integers     start out being 0
-	"long"		    : "0",              // Longs        start out being 0
-	"float"		    : "0.0",           // Floats       start out being 0
-	"double"	    : "0.0",           // Doubles      start out being 0
-	"bool"    	    : "false",   // Booleans     start out being Antlr C for false
-	"byte"		    : "0",              // Bytes        start out being 0
-	"short"		    : "0",              // Shorts       start out being 0
-	"char"		    : "0"              // Chars        start out being 0
+    "int"		    : "0",              // Integers     start out being 0
+    "long"		    : "0",              // Longs        start out being 0
+    "float"		    : "0.0",           // Floats       start out being 0
+    "double"	    : "0.0",           // Doubles      start out being 0
+    "bool"    	    : "false",   // Booleans     start out being Antlr C for false
+    "byte"		    : "0",              // Bytes        start out being 0
+    "short"		    : "0",              // Shorts       start out being 0
+    "char"		    : "0"              // Chars        start out being 0
 ]
 
 leadIn(type) ::=
@@ -186,15 +186,15 @@ outputFile( LEXER,
 headerFileExtension() ::= ".hpp"
 
 beginNamespace(actions) ::= <<
-	<if(actions.(actionScope).namespace)>
-	namespace <actions.(actionScope).namespace> {
-	<endif>
+    <if(actions.(actionScope).namespace)>
+    namespace <actions.(actionScope).namespace> {
+    <endif>
 >>
 
 endNamespace(actions) ::= <<
-	<if(actions.(actionScope).namespace)>
-	}
-	<endif>
+    <if(actions.(actionScope).namespace)>
+    }
+    <endif>
 >>
 
 
@@ -224,7 +224,7 @@ headerFile( LEXER,
             generatedTimestamp,
             trace,
             scopes,
-	    superClass,
+        superClass,
             literals
         ) ::=
 <<
@@ -345,19 +345,19 @@ typedef <name>Traits <name>ImplTraits;
 class <name>Tokens
 {
 public:
-	/** Symbolic definitions of all the tokens that the <grammarType()> will work with.
-	 * \{
-	 *
-	 * Antlr will define EOF, but we can't use that as it it is too common in
-	 * in C header files and that would be confusing. There is no way to filter this out at the moment
-	 * so we just undef it here for now. That isn't the value we get back from C recognizers
-	 * anyway. We are looking for ANTLR_TOKEN_EOF.
-	 */
-	enum Tokens 
-	{
-		EOF_TOKEN = <name>ImplTraits::CommonTokenType::TOKEN_EOF
-		<tokens:{it | , <it.name> = <it.type> }; separator="\n">
-	};
+    /** Symbolic definitions of all the tokens that the <grammarType()> will work with.
+     * \{
+     *
+     * Antlr will define EOF, but we can't use that as it it is too common in
+     * in C header files and that would be confusing. There is no way to filter this out at the moment
+     * so we just undef it here for now. That isn't the value we get back from C recognizers
+     * anyway. We are looking for ANTLR_TOKEN_EOF.
+     */
+    enum Tokens 
+    {
+        EOF_TOKEN = <name>ImplTraits::CommonTokenType::TOKEN_EOF
+        <tokens:{it | , <it.name> = <it.type> }; separator="\n">
+    };
 
 };
 
@@ -366,28 +366,28 @@ public:
 class <name> : public <componentBaseType()>, public <name>Tokens
 {
 public:
-	typedef <name>ImplTraits ImplTraits;
-	typedef <name> ComponentType;
-	typedef ComponentType::StreamType StreamType;
-	typedef <componentBaseType()> BaseType;
-	typedef ImplTraits::RecognizerSharedStateType\<StreamType> RecognizerSharedStateType;
-	typedef StreamType InputType;
+    typedef <name>ImplTraits ImplTraits;
+    typedef <name> ComponentType;
+    typedef ComponentType::StreamType StreamType;
+    typedef <componentBaseType()> BaseType;
+    typedef ImplTraits::RecognizerSharedStateType\<StreamType> RecognizerSharedStateType;
+    typedef StreamType InputType;
 <if(recognizer.filterMode)>
-	static const bool IsFiltered = true;
+    static const bool IsFiltered = true;
 <else>
-	static const bool IsFiltered = false;
+    static const bool IsFiltered = false;
 <endif>
-	
-	<scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeDecl(it)><endif>}>
-	<rules:{r |<ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)>}>
-	
+    
+    <scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeDecl(it)><endif>}>
+    <rules:{r |<ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)>}>
+    
 private:	
 <if(recognizer.grammar.delegates)>
-	<recognizer.grammar.delegates:
+    <recognizer.grammar.delegates:
          {g|<g.recognizerName>*	 m_<g:delegateName()>;}; separator="\n">
 <endif>
 <if(recognizer.grammar.delegators)>
-	<recognizer.grammar.delegators:
+    <recognizer.grammar.delegators:
          {g|<g.recognizerName>*	 m_<g:delegateName()>;}; separator="\n">
 <endif>
 <scopes:{it | <if(it.isDynamicGlobalScope)>
@@ -396,6 +396,9 @@ private:
 <rules: {r |<if(r.ruleDescriptor.ruleScope)>
     <ruleAttributeScopeDef(scope=r.ruleDescriptor.ruleScope)>
 <endif>}>
+<if(cyclicDFAs)>
+<cyclicDFAs:cyclicDFA_sst()>
+<endif>
     <@members>
     <@end>
 
@@ -531,7 +534,7 @@ headerReturnType(ruleDescriptor) ::= <<
 // Produce the lexer output
 //
 lexer(  grammar,
-	name,
+    name,
         tokens,
         scopes,
         rules,
@@ -553,18 +556,18 @@ using namespace antlr3;
  */
 void	<name>::memoize(ANTLR_MARKER  ruleIndex, ANTLR_MARKER  ruleParseStart)
 {
-	BaseType* base = this;
-	if ( this->get_backtracking()>1 ) 
-		base->memoize( ruleIndex, ruleParseStart );
+    BaseType* base = this;
+    if ( this->get_backtracking()>1 ) 
+        base->memoize( ruleIndex, ruleParseStart );
 
 }
 
 bool	<name>::alreadyParsedRule(ANTLR_MARKER	ruleIndex)
 {
-	BaseType* base = this;
-	if ( this->get_backtracking() > 1 )
-		return base->haveParsedRule(ruleIndex);
-	return false;
+    BaseType* base = this;
+    if ( this->get_backtracking() > 1 )
+        return base->haveParsedRule(ruleIndex);
+    return false;
 }
 
 <endif>
@@ -581,18 +584,18 @@ bool	<name>::alreadyParsedRule(ANTLR_MARKER	ruleIndex)
 <name>::~<name>()
 {
 <if(memoize)>
-	RuleMemoType* rulememo = this->getRuleMemo();
-	if(rulememo != NULL)
-	{
-		delete rulememo;
-		this->setRuleMemo(NULL);
-	}
+    RuleMemoType* rulememo = this->getRuleMemo();
+    if(rulememo != NULL)
+    {
+        delete rulememo;
+        this->setRuleMemo(NULL);
+    }
 <endif>
 <if(grammar.directDelegates)>
-	// Free the lexers that we delegated to
-	// functions to. NULL the state so we only free it once.
-	//
-	<grammar.directDelegates:
+    // Free the lexers that we delegated to
+    // functions to. NULL the state so we only free it once.
+    //
+    <grammar.directDelegates:
          {g| m_<g:delegateName()>->set_lexstate(NULL);
          delete m_<g:delegateName()>; }; separator="\n">
 <endif>
@@ -612,7 +615,7 @@ static const char fileName[] = "<fileName>";
  */
 const char* <name>::getGrammarFileName()
 {
-	return fileName;
+    return fileName;
 }
 
 /** \brief Create a new lexer called <name>
@@ -625,9 +628,9 @@ const char* <name>::getGrammarFileName()
 <name>::<name>(StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 :<name>ImplTraits::BaseLexerType(ANTLR_SIZE_HINT, instream, NULL)
 {
-	// See if we can create a new lexer with the standard constructor
-	//
-	this->init(instream <grammar.delegators:{g|, <g:delegateName()>}>);
+    // See if we can create a new lexer with the standard constructor
+    //
+    this->init(instream <grammar.delegators:{g|, <g:delegateName()>}>);
 }
 
 /** \brief Create a new lexer called <name>
@@ -641,7 +644,7 @@ const char* <name>::getGrammarFileName()
 <name>::<name>(StreamType* instream, RecognizerSharedStateType* state<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 :<name>ImplTraits::BaseLexerType(ANTLR_SIZE_HINT, instream, state)
 {
-	this->init(instream <grammar.delegators:{g|, <g:delegateName()>} >);
+    this->init(instream <grammar.delegators:{g|, <g:delegateName()>} >);
 }
 
 void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>} >)
@@ -666,17 +669,17 @@ void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName
 <endif>
 
 <if(grammar.directDelegates)>
-	// Initialize the lexers that we are going to delegate some
-	// functions to.
-	//
-	<grammar.directDelegates:
+    // Initialize the lexers that we are going to delegate some
+    // functions to.
+    //
+    <grammar.directDelegates:
          {g|m_<g:delegateName()> = new <g.recognizerName>(instream, this->get_lexstate(), this<grammar.delegators:{g|, <g:delegateName()>}>);}; separator="\n">
 <endif>
 <if(grammar.delegators)>
-	// Install the pointers back to lexers that will delegate us to perform certain functions
-	// for them.
-	//
-	<grammar.delegators:
+    // Install the pointers back to lexers that will delegate us to perform certain functions
+    // for them.
+    //
+    <grammar.delegators:
          {g| m_<g:delegateName()> = <g:delegateName()>;}; separator="\n">
 <endif>
 }
@@ -752,48 +755,48 @@ filteringNextToken() ::= <<
      */
     for	(;;)
     {
-		if (lexer->LA(1) == ANTLR_CHARSTREAM_EOF)
-		{
-			/* Reached the end of the stream, nothing more to do.
-			 */
-			CommonTokenType&    teof = m_eofToken;
+        if (lexer->LA(1) == ANTLR_CHARSTREAM_EOF)
+        {
+            /* Reached the end of the stream, nothing more to do.
+             */
+            CommonTokenType&    teof = m_eofToken;
 
-			teof.set_startIndex(lexer->getCharIndex());
-			teof.set_stopIndex(lexer->getCharIndex());
-			teof.setLine(lexer->getLine());
-			return  &teof;
-		}
+            teof.set_startIndex(lexer->getCharIndex());
+            teof.set_stopIndex(lexer->getCharIndex());
+            teof.setLine(lexer->getLine());
+            return  &teof;
+        }
 
-		state->set_token_present(false);
-		state->set_error(false);	    /* Start out without an exception	*/
+        state->set_token_present(false);
+        state->set_error(false);	    /* Start out without an exception	*/
 
-		{
-			ANTLR_MARKER   m;
+        {
+            ANTLR_MARKER   m;
 
-			m	= this->get_istream()->mark();
-			state->set_backtracking(1);				/* No exceptions */
-			state->set_failedflag(false);
+            m	= this->get_istream()->mark();
+            state->set_backtracking(1);				/* No exceptions */
+            state->set_failedflag(false);
 
-			/* Call the generated lexer, see if it can get a new token together.
-			 */
-			lexer->mTokens();
-    			state->set_backtracking(0);
+            /* Call the generated lexer, see if it can get a new token together.
+             */
+            lexer->mTokens();
+                state->set_backtracking(0);
 
-    		<! mTokens backtracks with synpred at BACKTRACKING==2
-				and we set the synpredgate to allow actions at level 1. !>
+            <! mTokens backtracks with synpred at BACKTRACKING==2
+                and we set the synpredgate to allow actions at level 1. !>
 
-			if(state->get_failed())
-			{
-				lexer->rewind(m);
-				lexer->consume(); <! advance one char and try again !>
-			}
-			else
-			{
-				lexer->emit();					/* Assemble the token and emit it to the stream */
-				TokenType& tok = state->get_token();
-				return &tok;
-			}
-		}
+            if(state->get_failed())
+            {
+                lexer->rewind(m);
+                lexer->consume(); <! advance one char and try again !>
+            }
+            else
+            {
+                lexer->emit();					/* Assemble the token and emit it to the stream */
+                TokenType& tok = state->get_token();
+                return &tok;
+            }
+        }
     }
 }
 >>
@@ -804,7 +807,7 @@ filteringActionGate() ::= "this->get_backtracking()==1"
 
 /** How to generate a parser */
 genericParser(  grammar,
-		name,
+        name,
                 scopes,
                 tokens,
                 tokenNames,
@@ -814,8 +817,8 @@ genericParser(  grammar,
                 inputStreamType,
                 superClass,
                 labelType,
-		members,
-		rewriteElementType, filterMode,
+        members,
+        rewriteElementType, filterMode,
                 ASTLabelType="ImplTraits::TreeType*"
               ) ::= <<
 
@@ -846,7 +849,7 @@ static const char fileName[] = "<fileName>";
  */
 const char* <name>::getGrammarFileName()
 {
-	return fileName;
+    return fileName;
 }
 /** \brief Create a new <name> parser and return a context for it.
  *
@@ -857,9 +860,9 @@ const char* <name>::getGrammarFileName()
 <name>::<name>( StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 <constructorInitializerType("NULL")>
 {
-	// See if we can create a new parser with the standard constructor
-	//
-	this->init(instream<grammar.delegators:{g|, <g:delegateName()>}>);
+    // See if we can create a new parser with the standard constructor
+    //
+    this->init(instream<grammar.delegators:{g|, <g:delegateName()>}>);
 }
 
 /** \brief Create a new <name> parser and return a context for it.
@@ -871,7 +874,7 @@ const char* <name>::getGrammarFileName()
 <name>::<name>( StreamType* instream, RecognizerSharedStateType* state<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 <constructorInitializerType("state")>
 {
-	this->init(instream <grammar.delegators:{g|, <g:delegateName()>}>);
+    this->init(instream <grammar.delegators:{g|, <g:delegateName()>}>);
 }
 
 void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
@@ -887,23 +890,23 @@ void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName
 <endif>
 <endif>
 <if(grammar.directDelegates)>
-	// Initialize the lexers that we are going to delegate some
-	// functions to.
-	//
-	<grammar.directDelegates:
-	      	{g|m_<g:delegateName()> = new <g.recognizerName>(instream, this->get_psrstate(), this<grammar.delegators:{g|, <g:delegateName()>}>);}; separator="\n">
-	<endif>
+    // Initialize the lexers that we are going to delegate some
+    // functions to.
+    //
+    <grammar.directDelegates:
+            {g|m_<g:delegateName()> = new <g.recognizerName>(instream, this->get_psrstate(), this<grammar.delegators:{g|, <g:delegateName()>}>);}; separator="\n">
+    <endif>
         <if(grammar.delegators)>
-     	// Install the pointers back to lexers that will delegate us to perform certain functions
-     	// for them.
-     	//
-     		<grammar.delegators: {g| m_<g:delegateName()> = <g:delegateName()>;}; separator="\n">
-	<endif>
-	/* Install the token table
-	*/
-	this->get_psrstate()->set_tokenNames( <grammar.composite.rootGrammar.recognizerName>TokenNames );
+        // Install the pointers back to lexers that will delegate us to perform certain functions
+        // for them.
+        //
+            <grammar.delegators: {g| m_<g:delegateName()> = <g:delegateName()>;}; separator="\n">
+    <endif>
+    /* Install the token table
+    */
+    this->get_psrstate()->set_tokenNames( <grammar.composite.rootGrammar.recognizerName>TokenNames );
 
-	<@debugStuff()>
+    <@debugStuff()>
 
 }
 
@@ -920,20 +923,20 @@ void
     <@cleanup>
     <@end>
 <if(grammar.directDelegates)>
-	// Free the parsers that we delegated to
-	// functions to.NULL the state so we only free it once.
-	//
-	<grammar.directDelegates:
+    // Free the parsers that we delegated to
+    // functions to.NULL the state so we only free it once.
+    //
+    <grammar.directDelegates:
          {g| m_<g:delegateName()>->set_psrstate( NULL );
          delete m_<g:delegateName()>;}; separator="\n">
 <endif>
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
-	if(this->getRuleMemo() != NULL)
-	{
-		delete this->getRuleMemo();
-		this->setRuleMemo(NULL);
-	}
+    if(this->getRuleMemo() != NULL)
+    {
+        delete this->getRuleMemo();
+        this->setRuleMemo(NULL);
+    }
 <endif>
 <endif>
 }
@@ -974,14 +977,14 @@ static ANTLR_UINT8**	getTokenNames()
  */
 <rules; separator="\n\n">
 <if(grammar.delegatedRules)>
-	// Delegated methods that appear to be a part of this
-	// parser
-	//
+    // Delegated methods that appear to be a part of this
+    // parser
+    //
 <grammar.delegatedRules:{ruleDescriptor|
     <returnType()> <name>::<ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>)
     {
         <if(ruleDescriptor.hasReturnValue)>return <endif>   m_<ruleDescriptor.grammar:delegateName()>-><ruleDescriptor.name>( <ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">);
-	\}}; separator="\n">
+    \}}; separator="\n">
 
 <endif>
 /* End of parsing rules
@@ -1008,18 +1011,18 @@ constructorInitializerType(rec_state) ::=<<
 >>
 
 parser(	grammar,
-		name,
-		scopes,
-		tokens,
-		tokenNames,
-		rules,
-		numRules,
-		bitsets,
-		ASTLabelType,
-		superClass="Parser",
-		labelType="const CommonTokenType*",
-		members={<actions.parser.members>}
-		) ::= <<
+        name,
+        scopes,
+        tokens,
+        tokenNames,
+        rules,
+        numRules,
+        bitsets,
+        ASTLabelType,
+        superClass="Parser",
+        labelType="const CommonTokenType*",
+        members={<actions.parser.members>}
+        ) ::= <<
 <beginNamespace(actions)>
 <genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="TOKEN", ...)>
 <endNamespace(actions)>
@@ -1029,20 +1032,20 @@ parser(	grammar,
  *  stream is a different type.
  */
 treeParser(	grammar,
-			name,
-			scopes,
-			tokens,
-			tokenNames,
-			globalAction,
-			rules,
-			numRules,
-			bitsets,
-			filterMode,
-			labelType={<ASTLabelType>},
-			ASTLabelType="TreeType*",
-			superClass="TreeParser",
-			members={<actions.treeparser.members>}
-			) ::= <<
+            name,
+            scopes,
+            tokens,
+            tokenNames,
+            globalAction,
+            rules,
+            numRules,
+            bitsets,
+            filterMode,
+            labelType={<ASTLabelType>},
+            ASTLabelType="TreeType*",
+            superClass="TreeParser",
+            members={<actions.treeparser.members>}
+            ) ::= <<
 <beginNamespace(actions)>
 <genericParser(inputStreamType="CommonTreeNodeStream*", rewriteElementType="NODE", ...)>
 <endNamespace(actions)>
@@ -1060,8 +1063,8 @@ synpredRule(ruleName, ruleDescriptor, block, description, nakedBlock) ::=
 // $ANTLR start <ruleName>
 void <name>::m<ruleName>_fragment( <ruleDescriptor.parameterScope:parameterScope()> )
 {
-	<ruleLabelDefs()>
-	<ruleLabelInitializations()>
+    <ruleLabelDefs()>
+    <ruleLabelInitializations()>
 <if(trace)>
     ANTLR_PRINTF("enter <ruleName> %d failed = %d, backtracking = %d\\n", this->LT(1),failed,this->get_backtracking() );
     <block>
@@ -1105,7 +1108,7 @@ if ( (this->get_backtracking()>0) && (this->haveParsedRule(<ruleDescriptor.index
 {
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!ruleDescriptor.isSynPred)>
-	retval.start = 0;<\n>
+    retval.start = 0;<\n>
 <endif>
 <endif>
     <(ruleDescriptor.actions.after):execAfter()>
@@ -1167,7 +1170,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
     <ruleLabelInitializations()>
     
     <if(actions.(actionScope).rulecatch)>
-    	try {
+        try {
     <else> 
     <if(exceptions)>
         try {
@@ -1184,7 +1187,7 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
     <exceptions:{e|<catch(decl=e.decl,action=e.action)><\n>}>
 <else>
     <if(!emptyRule)>
-    	if (this->hasException())
+        if (this->hasException())
         {
             this->preporterror();
             this->precover();
@@ -1196,8 +1199,8 @@ rule(ruleName,ruleDescriptor,block,emptyRule,description,exceptions,finally,memo
             <(ruleDescriptor.actions.after):execAfter()>
         }<\n>
         <endif>
-	<if(actions.(actionScope).rulecatch)>
-	    } <actions.(actionScope).rulecatch>
+    <if(actions.(actionScope).rulecatch)>
+        } <actions.(actionScope).rulecatch>
         <endif>
     <endif>
 <endif>
@@ -1409,7 +1412,7 @@ void <name>::m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>)
     <ruleDescriptor.actions.init>
 
     <block>
-	this->get_lexstate()->set_type(_type);
+    this->get_lexstate()->set_type(_type);
 <endif>
     <if(trace)> ANTLR_FPRINTF(stderr, "exit <ruleName> '%c' line=%d:%d failed = %d, backtracking =%d\n",this->LA(1),this->getLine(),this->getCharPositionInLine(),failed,this->get_backtracking());<endif>
     <ruleCleanUp()>
@@ -1452,7 +1455,7 @@ block(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK,max
     <@prebranch()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | <altSwitchCase(i,a)>}>
+    <alts:{a | <altSwitchCase(i,a)>}>
     }
     <@postbranch()>
 }
@@ -1473,7 +1476,7 @@ ruleBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK
     <@postdecision()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | <altSwitchCase(i,a)>}>
+    <alts:{a | <altSwitchCase(i,a)>}>
     }
 }
 >>
@@ -1506,24 +1509,24 @@ positiveClosureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decision
     for (;;)
     {
         int alt<decisionNumber>=<maxAlt>;
-	<@predecision()>
-	<decision>
-	<@postdecision()>
-	switch (alt<decisionNumber>)
-	{
-	    <alts:{a | <altSwitchCase(i,a)>}>
-	    default:
+    <@predecision()>
+    <decision>
+    <@postdecision()>
+    switch (alt<decisionNumber>)
+    {
+        <alts:{a | <altSwitchCase(i,a)>}>
+        default:
 
-		if ( cnt<decisionNumber> >= 1 )
-		{
-		    goto loop<decisionNumber>;
-		}
-		<ruleBacktrackFailure()>
-		<earlyExitEx()>
-		<@earlyExitException()>
-		goto rule<ruleDescriptor.name>Ex;
-	}
-	cnt<decisionNumber>++;
+        if ( cnt<decisionNumber> >= 1 )
+        {
+            goto loop<decisionNumber>;
+        }
+        <ruleBacktrackFailure()>
+        <earlyExitEx()>
+        <@earlyExitException()>
+        goto rule<ruleDescriptor.name>Ex;
+    }
+    cnt<decisionNumber>++;
     }
     loop<decisionNumber>: ;	/* Jump to here if this rule does not match */
     <@postloop()>
@@ -1553,10 +1556,10 @@ for (;;)
     <@postdecision()>
     switch (alt<decisionNumber>)
     {
-	<alts:{a | <altSwitchCase(i,a)>}>
-	default:
-	    goto loop<decisionNumber>;	/* break out of the loop */
-	    break;
+    <alts:{a | <altSwitchCase(i,a)>}>
+    default:
+        goto loop<decisionNumber>;	/* break out of the loop */
+        break;
     }
 }
 loop<decisionNumber>: ; /* Jump out to here if this rule does not match */
@@ -1847,7 +1850,7 @@ if ( !(<evalPredicate(...)>) )
 >>
 
 newFPE() ::= <<
-	ExceptionBaseType* ex = new ANTLR_Exception\< <name>ImplTraits, FAILED_PREDICATE_EXCEPTION, StreamType>( this->get_rec(), "<description>" );
+    ExceptionBaseType* ex = new ANTLR_Exception\< <name>ImplTraits, FAILED_PREDICATE_EXCEPTION, StreamType>( this->get_rec(), "<description>" );
     ex->set_ruleName( "<ruleName>" );
     <\n>
 >>
@@ -1912,11 +1915,11 @@ dfaLoopbackState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::
     <edges; separator="\nelse "><\n>
     <if(eotPredictsAlt)>
     <if(!edges)>
-	alt<decisionNumber>=<eotPredictsAlt>; <! if no edges, don't gen ELSE !>
-	<else>
+    alt<decisionNumber>=<eotPredictsAlt>; <! if no edges, don't gen ELSE !>
+    <else>
     else
     {
-	alt<decisionNumber>=<eotPredictsAlt>;
+    alt<decisionNumber>=<eotPredictsAlt>;
     }<\n>
     <endif>
     <endif>
@@ -1979,10 +1982,17 @@ default:
 
 dfaEdgeSwitch(labels, targetState) ::= <<
 <labels:{it |case <it>:}; separator="\n">
-	{
-		<targetState>
-	}
+    {
+        <targetState>
+    }
     break;
+>>
+
+cyclicDFA_sst(dfa) ::= <<
+<if(dfa.specialStateSTs)>
+    friend class <name>CyclicDFA<dfa.decisionNumber>;
+    ANTLR_INT32 dfa<dfa.decisionNumber>_sst(ANTLR_INT32 s);
+<endif> 
 >>
 
 // C y c l i c  D F A
@@ -2008,27 +2018,27 @@ cyclicDFA(dfa) ::= <<
  */
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_eot[<dfa.numberOfStates>] =
     {
-	<dfa.eot; wrap="\n", separator=", ", null="-1">
+    <dfa.eot; wrap="\n", separator=", ", null="-1">
     };
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_eof[<dfa.numberOfStates>] =
     {
-	<dfa.eof; wrap="\n", separator=", ", null="-1">
+    <dfa.eof; wrap="\n", separator=", ", null="-1">
     };
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_min[<dfa.numberOfStates>] =
     {
-	<dfa.min; wrap="\n", separator=", ", null="-1">
+    <dfa.min; wrap="\n", separator=", ", null="-1">
     };
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_max[<dfa.numberOfStates>] =
     {
-	<dfa.max; wrap="\n", separator=", ", null="-1">
+    <dfa.max; wrap="\n", separator=", ", null="-1">
     };
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_accept[<dfa.numberOfStates>] =
     {
-	<dfa.accept; wrap="\n", separator=", ", null="-1">
+    <dfa.accept; wrap="\n", separator=", ", null="-1">
     };
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_special[<dfa.numberOfStates>] =
     {
-	<dfa.special; wrap="\n", separator=", ", null="-1">
+    <dfa.special; wrap="\n", separator=", ", null="-1">
     };
 
 /** Used when there is no transition table entry for a particular state */
@@ -2037,7 +2047,7 @@ static const ANTLR_INT32* dfa<dfa.decisionNumber>_T_empty	 =   NULL;
 <dfa.edgeTransitionClassMap.keys:{ table |
 static const ANTLR_INT32 dfa<dfa.decisionNumber>_T<i0>[] =
     {
-	<table; separator=", ", wrap="\n", null="-1">
+    <table; separator=", ", wrap="\n", null="-1">
     \};<\n>}; null = "">
 
 /* Transition tables are a table of sub tables, with some tables
@@ -2055,94 +2065,72 @@ static const ANTLR_INT32 * const dfa<dfa.decisionNumber>_transitions[] =
 class <name>CyclicDFA<dfa.decisionNumber> : public CyclicDFA\< <name>ImplTraits, <name> >, public <name>Tokens
 {
 public:
-	typedef CyclicDFA\< <name>ImplTraits, <name> >  BaseType;
-	typedef BaseType::ContextType CtxType;
-	
-private:
+    typedef CyclicDFA\< <name>ImplTraits, <name> >  BaseType;
+    typedef BaseType::ContextType CtxType;
+
+    <name>CyclicDFA<dfa.decisionNumber>( ANTLR_INT32	decisionNumber
+                    , const ANTLR_UCHAR*	description
+                    , const ANTLR_INT32* const	eot
+                    , const ANTLR_INT32* const	eof
+                    , const ANTLR_INT32* const	min
+                    , const ANTLR_INT32* const	max
+                    , const ANTLR_INT32* const	accept
+                    , const ANTLR_INT32* const	special
+                    , const ANTLR_INT32* const *const	transition)
+                    :BaseType( decisionNumber, description, eot, eof, min, max, accept,
+                                special, transition )
+    {
+    }
 <if(dfa.specialStateSTs)>
-	//to maintain C-Target compatibility, we need to make some of ctx functions look like member funcs
-	CtxType*	m_ctx; 
-<endif>	
-
-public:
-	<name>CyclicDFA<dfa.decisionNumber>( ANTLR_INT32	decisionNumber
-					, const ANTLR_UCHAR*	description
-					, const ANTLR_INT32* const	eot
-					, const ANTLR_INT32* const	eof
-					, const ANTLR_INT32* const	min
-					, const ANTLR_INT32* const	max
-					, const ANTLR_INT32* const	accept
-					, const ANTLR_INT32* const	special
-					, const ANTLR_INT32* const *const	transition)
-					:BaseType( decisionNumber, description, eot, eof, min, max, accept,
-								special, transition )
-	{
-	<if(dfa.specialStateSTs)>
-		m_ctx = NULL;
-	<endif>		
-	}
-
-        <if(dfa.specialStateSTs)>
-        ANTLR_UINT32 LA(ANTLR_INT32 i)
-        {
-        	return m_ctx->LA(i);
-        }
-        
-        template\<typename PredType>
-        bool msynpred( PredType pred )
-        {
-        	return m_ctx->msynpred(pred);
-        }
-        
-        <if(PARSER)>
-	const CtxType::CommonTokenType*  LT(ANTLR_INT32 k)
-	{
-		return m_ctx->LT(k);
-	}
-	<endif>
-        
-	ANTLR_INT32  specialStateTransition(CtxType * ctx, RecognizerType* recognizer, IntStreamType* is, ANTLR_INT32 s)
-	{
-	    ANTLR_INT32    _s;
-		
-	    m_ctx = ctx;
-	    _s	    = s;
-	    switch  (s)
-	    {
-	    <dfa.specialStateSTs:{state |
-	    case <i0>:
-
-		<state>}; separator="\n">
-	    }
-	<if(backtracking)>
-	    if ( ctx->get_backtracking() > 0)
-	    {
-		 ctx->set_failedflag( true );
-		return	-1;
-	    }
-	<endif>
-	    ExceptionBaseType* ex = new ANTLR_Exception\< <name>ImplTraits, NO_VIABLE_ALT_EXCEPTION, StreamType>( recognizer, "<dfa.description>" );
-	    ex->set_decisionNum( <dfa.decisionNumber> );
-	    ex->set_state(_s);
-	    <@noViableAltException()>
-	    return -1;
-	}
-	<endif>
+    ANTLR_INT32 specialStateTransition(CtxType * ctx, RecognizerType* recognizer, IntStreamType* is, ANTLR_INT32 s)
+    {
+        return ctx->dfa<dfa.decisionNumber>_sst(s);
+    }
+<endif>
 };
- 
-static <name>CyclicDFA<dfa.decisionNumber>  cdfa<dfa.decisionNumber>(
-	    <dfa.decisionNumber>,		    /* Decision number of this dfa	    */
-	    /* Which decision this represents:   */
-	    (const ANTLR_UCHAR*)"<dfa.description>",
-	    dfa<dfa.decisionNumber>_eot,	    /* EOT table			    */
-	    dfa<dfa.decisionNumber>_eof,	    /* EOF table			    */
-	    dfa<dfa.decisionNumber>_min,	    /* Minimum tokens for each state    */
-	    dfa<dfa.decisionNumber>_max,	    /* Maximum tokens for each state    */
-	    dfa<dfa.decisionNumber>_accept,	/* Accept table			    */
-	    dfa<dfa.decisionNumber>_special,	/* Special transition states	    */
-	    dfa<dfa.decisionNumber>_transitions	/* Table of transition tables	    */
 
-	);
+<if(dfa.specialStateSTs)>
+ANTLR_INT32 <name>::dfa<dfa.decisionNumber>_sst(ANTLR_INT32 s)
+{
+    const ANTLR_INT32 _s = s;
+    switch(s)
+    {
+    <dfa.specialStateSTs:{state |
+    case <i0>:
+
+    <state>}; separator="\n">
+    }
+<if(backtracking)>
+    if ( get_backtracking() > 0)
+    {
+    set_failedflag( true );
+    return  -1;
+    }
+<endif>
+    ExceptionBaseType* ex = new ANTLR_Exception\< <name>ImplTraits, NO_VIABLE_ALT_EXCEPTION, StreamType>(
+        get_rec(),
+        "<dfa.description>"
+    );
+    ex->set_decisionNum( <dfa.decisionNumber> );
+    ex->set_state(_s);
+    <@noViableAltException()>
+    return -1;
+}
+<endif>
+
+static <name>CyclicDFA<dfa.decisionNumber>  cdfa<dfa.decisionNumber>(
+        <dfa.decisionNumber>,		    /* Decision number of this dfa	    */
+        /* Which decision this represents:   */
+        (const ANTLR_UCHAR*)"<dfa.description>",
+        dfa<dfa.decisionNumber>_eot,	    /* EOT table			    */
+        dfa<dfa.decisionNumber>_eof,	    /* EOF table			    */
+        dfa<dfa.decisionNumber>_min,	    /* Minimum tokens for each state    */
+        dfa<dfa.decisionNumber>_max,	    /* Maximum tokens for each state    */
+        dfa<dfa.decisionNumber>_accept,	/* Accept table			    */
+        dfa<dfa.decisionNumber>_special,	/* Special transition states	    */
+        dfa<dfa.decisionNumber>_transitions	/* Table of transition tables	    */
+
+    );
 
 
 /* End of Cyclic DFA <dfa.decisionNumber>
@@ -2158,19 +2146,19 @@ cyclicDFAState(decisionNumber,stateNumber,edges,needErrorClause,semPredState) ::
     ANTLR_UINT32 LA<decisionNumber>_<stateNumber>;<\n>
     ANTLR_MARKER index<decisionNumber>_<stateNumber>;<\n>
 
-    LA<decisionNumber>_<stateNumber> = ctx->LA(1);<\n>
+    LA<decisionNumber>_<stateNumber> = LA(1);<\n>
     <if(semPredState)> <! get next lookahead symbol to test edges, then rewind !>
-    index<decisionNumber>_<stateNumber> = ctx->index();<\n>
-    ctx->rewindLast();<\n>
+    index<decisionNumber>_<stateNumber> = index();<\n>
+    rewindLast();<\n>
     <endif>
     s = -1;
     <edges; separator="\nelse ">
-	<if(semPredState)> <! return input cursor to state before we rewound !>
-	ctx->seek(index<decisionNumber>_<stateNumber>);<\n>
-	<endif>
+    <if(semPredState)> <! return input cursor to state before we rewound !>
+    seek(index<decisionNumber>_<stateNumber>);<\n>
+    <endif>
     if ( s>=0 )
     {
-	return s;
+    return s;
     }
 }
 break;
@@ -2355,7 +2343,7 @@ returnScope(scope) ::= <<
 struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
 {
 public:
-	typedef <name>ImplTraits::RuleReturnValueType BaseType;
+    typedef <name>ImplTraits::RuleReturnValueType BaseType;
 <else>
 struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> 
 {
@@ -2386,9 +2374,9 @@ struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName(
     <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
     operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
     {
-    	BaseType::operator=( n );
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
-    	return *this;
+        BaseType::operator=( n );
+        <ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
+        return *this;
     }
 <else>
     <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
@@ -2396,18 +2384,18 @@ struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName(
     <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
     <endif>
     {
-     	start = n.start;
-     	stop  = n.stop;
+        start = n.start;
+        stop  = n.stop;
     }
     
     <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
     operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
     {
-     	start = n.start;
-     	stop  = n.stop;
+        start = n.start;
+        stop  = n.stop;
 
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
-    	return *this;
+        <ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
+        return *this;
     }
 
 <endif>

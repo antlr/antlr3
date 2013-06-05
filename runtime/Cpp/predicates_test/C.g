@@ -10,8 +10,8 @@ options {
 
 @lexer::traits 
 {
-	class CLexer;
-	class CParser;
+    class CLexer;
+    class CParser;
     typedef antlr3::Traits<CLexer, CParser> CLexerTraits;
     typedef CLexerTraits CParserTraits;
 }
@@ -37,8 +37,47 @@ static bool isValidCharAfterFloatDot(ANTLR_UCHAR c)
 #include "CLexer.hpp"
 }
 
-main : (DOT | RANGE | IMPORT | AT | PACKAGE_REVISION | BOOL | INT | FLOAT | COMMENT | NEWLINE | STRING | ID) +;
-unused : UNUSED ;
+@parser::members {
+
+
+}
+
+main : ( t=( DOT
+           | RANGE
+           | IMPORT
+           | AT
+           | PACKAGE_REVISION
+           | BOOL
+           | INT
+           | FLOAT
+           | COMMENT
+           | NEWLINE
+           | STRING
+           | ID
+           | LPAREN
+           | RPAREN
+           | LBRACK
+           | RBRACK
+           | LCURLY
+           | RCURLY
+           | ':'
+           | '=')
+        {
+          std::cout << CParserTokenNames[t->getType()];
+          switch (t->getType())
+          {
+          case PACKAGE_REVISION:
+          case BOOL:
+          case INT:
+          case FLOAT:
+          case COMMENT:
+          case STRING:
+          case ID:
+              std::cout << "=\"" << t->getText() << "\"";
+          }
+          std::cout << std::endl;
+        }
+    )+;
 
 DOT
     : '.'
@@ -49,16 +88,16 @@ RANGE
     ;
 
 IMPORT
-	: 'import' { insideImport_ = true; }
-	;
+    : 'import' { insideImport_ = true; }
+    ;
 
 AT
-	: {!insideImport_}? => '@'
-	;
+    : {!insideImport_}? => '@'
+    ;
 
 PACKAGE_REVISION
-	: {insideImport_}? => '@' HEX_DIGIT+ { insideImport_ = false; }
-	;
+    : {insideImport_}? => '@' HEX_DIGIT+ { insideImport_ = false; }
+    ;
 
 BOOL
     : 'yes'
@@ -100,6 +139,25 @@ ID
     : ID_LETTER (ID_LETTER|DIGIT)*
     ;
     
+LPAREN
+    : '('
+    ;
+RPAREN
+    : ')'
+    ;
+LBRACK
+    : '[' { insideImport_ = false; }
+    ;
+RBRACK
+    : ']'
+    ;
+LCURLY
+    : '{'
+    ;
+RCURLY
+    : '}'
+    ;
+    
 fragment
 ID_LETTER 
     : 'a'..'z'|'A'..'Z'|'_'
@@ -129,30 +187,4 @@ ESC_SEQ
 fragment
 UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT+
-    ;
-
-LPAREN
-    : '('
-    ;
-RPAREN
-    : ')'
-    ;
-LBRACK
-    : '[' { insideImport_ = false; }
-    ;
-RBRACK
-    : ']'
-    ;
-LCURLY
-    : '{'
-    ;
-RCURLY
-    : '}'
-    ;
-    
-UNUSED
-    : '`'
-    | '#'
-    | ';'
-    | '\''
     ;

@@ -1,13 +1,3 @@
-typedef int Foo;
-typedef void (*Bar)();
+import org.antlr.package@bb030c0eee92[DEBUG: yes]
 
-void f()
-{
-}
-
-int main()
-{
-    Foo foo = 0;
-    Bar bar = &f;
-    return 0;
-}
+( a = @b )
