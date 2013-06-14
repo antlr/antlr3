@@ -513,7 +513,7 @@ mainName() ::= <%
 <endif>
 %>
 
-headerReturnScope(ruleDescriptor) ::= "<returnScope(...)>"
+headerReturnScope(ruleDescriptor) ::= "<returnScope(scope=ruleDescriptor.returnScope)>"
 
 headerReturnType(ruleDescriptor) ::= <%
 <if(LEXER)>
@@ -1238,14 +1238,12 @@ ANTLR_MARKER <ruleDescriptor.name>_StartIndex;
 ruleInitializations() ::= <<
 /* Initialize rule variables
  */
+<if(ruleDescriptor.returnScope)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-<ruleDescriptor.returnScope.attributes:{ a |
-<if(a.initValue)>retval.<a.name> = <a.initValue>;<endif>
-}>
+<ruleDescriptor.returnScope.attributes:{ a | <if(a.initValue)>retval.<a.name> = <a.initValue>;<endif> }>
 <else>
-<ruleDescriptor.returnScope.attributes:{ a |
-<if(a.initValue)><a.name> = <a.initValue>;<endif>
-}>
+<ruleDescriptor.returnScope.attributes:{ a | <if(a.initValue)><a.name> = <a.initValue>;<endif> }>
+<endif>
 <endif>
 <if(memoize)>
 <ruleDescriptor.name>_StartIndex = this->index();<\n>
