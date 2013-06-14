@@ -18,3 +18,5 @@ Release/
 # Eclipse CDT files
 .cproject
 
+# tests output files
+t012.lxr.output

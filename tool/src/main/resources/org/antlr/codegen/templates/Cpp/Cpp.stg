@@ -1056,7 +1056,9 @@ void <name>::m<ruleName>_fragment( <ruleDescriptor.parameterScope:parameterScope
 <else>
     <block>
 <endif>
-<ruleCleanUp()>
+
+goto rule<ruleDescriptor.name>Ex; /* Prevent compiler warnings */
+rule<ruleDescriptor.name>Ex: ;
 }
 // $ANTLR end <ruleName>
 >>
@@ -1257,7 +1259,7 @@ ruleLabelDefs() ::= <<
     :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it |List\<Object> list_<it.label.text> = NULL;}; separator="\n"
+    :{it |ImplTraits::TokenPtrsListType list_<it.label.text>;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 >>
@@ -2328,55 +2330,62 @@ returnScope(scope) ::= <<
 struct <ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
 {
 public:
-	typedef <name>ImplTraits::RuleReturnValueType BaseType;
+    typedef <name>ImplTraits::RuleReturnValueType BaseType;
+    <ruleDescriptor:returnStructName()>()
+        : BaseType()
+        <if(scope)>, <scope.attributes:{it | <it.name>() }; separator=","><endif>
+        { init(); }
+    <ruleDescriptor:returnStructName()>( BaseParserType* parser )
+        : BaseType(parser)
+        <if(scope)>, <scope.attributes:{it | <it.name>() }; separator=","><endif>
+        { init(); }
+    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& other )
+        : BaseType(other)
+    <if(scope)>, <scope.attributes:{it | <it.name>(other.<it.name>) }; separator=", "><endif>
+    { copy(other); }
+    ~<ruleDescriptor:returnStructName()>()
+    {
+        <@ruleReturnMembersDelete()>
+    }
+
+    <ruleDescriptor:returnStructName()>&
+    operator=( const <ruleDescriptor:returnStructName()>& other )
+    {
+        BaseType::operator=( other );
+        <if(scope)><scope.attributes:{it | <it.name> = other.<it.name>; }; separator="\n"><endif>
+        copy(other);    
+    	return *this;
+    }
+    <@ruleReturnMembers()>
+    void init() { <@ruleReturnMembersInit()> }
+    void copy( const <ruleDescriptor:returnStructName()>& other) { <@ruleReturnMembersCopy()> }    
 <else>
-struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> 
+struct <ruleDescriptor:returnStructName()>
 {
+public:
     <name>ImplTraits::<recognizer.ASTLabelType>       start;
     <name>ImplTraits::<recognizer.ASTLabelType>       stop;
-<endif>
-    <@ruleReturnMembers()>
-    <ruleDescriptor.returnScope.attributes:{it |<it.type> <it.name>;}; separator="\n">
-<if(!TREE_PARSER)>    
-    <ruleDescriptor:returnStructName()>() {}
-    <ruleDescriptor:returnStructName()>( BaseParserType* parser ) : BaseType(parser) {}
-    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& n )
-    : BaseType(n)
-    <if(ruleDescriptor.returnScope.attributes)>
-    , <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
+    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& other )
+    <if(scope.attributes)>
+    <scope.attributes:{it | <it.name>(other.<it.name>) }; separator=",">
     <endif>
-    {}
+    {
+     	start = other.start;
+     	stop  = other.stop;
+    }
     
     <ruleDescriptor:returnStructName()>&
-    operator=( const <ruleDescriptor:returnStructName()>& n )
+    operator=( const <ruleDescriptor:returnStructName()>& other )
     {
-    	BaseType::operator=( n );
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
+     	start = other.start;
+     	stop  = other.stop;
+
+    	<scope.attributes:{it | <it.name> = other.<it.name>; }; separator="\n">
     	return *this;
     }
-<else>
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
-    <if(ruleDescriptor.returnScope.attributes)>
-    <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
-    <endif>
-    {
-     	start = n.start;
-     	stop  = n.stop;
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
-    operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
-    {
-     	start = n.start;
-     	stop  = n.stop;
-
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
-    	return *this;
-    }
-
 <endif>
-    
-};<\n><\n>
+    <if(scope)><scope.attributes:{it |<it.type> <it.name>;}; separator="\n"><endif>
+};
 
 <endif>
 <endif>
