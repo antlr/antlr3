@@ -1003,11 +1003,11 @@ parser(	grammar,
 		bitsets,
 		ASTLabelType,
 		superClass="Parser",
-		labelType="const CommonTokenType*",
+		labelType="ImplTraits::CommonTokenType*",
 		members={<actions.parser.members>}
 		) ::= <<
 <beginNamespace(actions)>
-<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="TOKEN", filterMode=false, ...)>
+<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="Token", filterMode=false, ...)>
 <endNamespace(actions)>
 >>
 
@@ -1030,7 +1030,7 @@ treeParser(	grammar,
 			members={<actions.treeparser.members>}
 			) ::= <<
 <beginNamespace(actions)>
-<genericParser(inputStreamType="CommonTreeNodeStream*", rewriteElementType="NODE", ...)>
+<genericParser(inputStreamType="CommonTreeNodeStream*", rewriteElementType="Node", ...)>
 <endNamespace(actions)>
 >>
 
@@ -1252,25 +1252,20 @@ ruleInitializations() ::= <<
 >>
 
 ruleLabelDefs() ::= <<
-<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels]
-    :{it |<labelType>    <it.label.text>;}; separator="\n"
+<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels,
+  ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
+    :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
-<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]
-    :{it | VectorType\<const CommonTokenType*>   list_<it.label.text>;}; separator="\n"
+<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
+    :{it |List\<Object> list_<it.label.text> = NULL;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 >>
 
 ruleLabelInitializations() ::= <<
-<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels]
-    :{it |<it.label.text>       = NULL;}; separator="\n"
->
-<[ruleDescriptor.ruleLabels,ruleDescriptor.ruleListLabels]
-    :ruleLabelInitVal(); separator="\n"
->
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!ruleDescriptor.isSynPred)>
-retval.call_start_placeholder(); <\n>
+retval.call_start_placeholder();
 <endif>
 <endif>
 >>
@@ -1279,7 +1274,7 @@ lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it |<labelType> <it.label.text>;}; separator="\n"
+    :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
 <ruleDescriptor.charLabels:{it |ANTLR_UINT32 <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
@@ -1290,11 +1285,6 @@ lexerRuleLabelDefs() ::= <<
 >>
 
 lexerRuleLabelInit() ::= <<
-<[ruleDescriptor.tokenLabels,
-  ruleDescriptor.tokenListLabels,
-  ruleDescriptor.ruleLabels]
-    :{it |<it.label.text> = NULL;}; separator="\n"
->
 <[ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleListLabels,
   ruleDescriptor.ruleListLabels]
