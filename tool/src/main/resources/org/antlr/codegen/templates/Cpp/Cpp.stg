@@ -402,6 +402,8 @@ public:
     
     void init(InputType* instream <recognizer.grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}> );
 
+    <actions.(actionScope).context>
+
 <if(LEXER)>
 <if(recognizer.filterMode)>
     void  memoize(ANTLR_MARKER  ruleIndex, ANTLR_MARKER  ruleParseStart);
@@ -427,8 +429,7 @@ public:
     const char *    getGrammarFileName();
     void            reset();
     ~<name>();
-    
-    <actions.(actionScope).context>
+
 };
 
 // Function protoypes for the constructor functions that external translation units
