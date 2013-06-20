@@ -967,8 +967,8 @@ static ANTLR_UINT8**	getTokenNames()
 <grammar.delegatedRules:{ruleDescriptor|
     <returnType()> <name>::<ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>)
     {
-        <if(ruleDescriptor.hasReturnValue)>return <endif>   m_<ruleDescriptor.grammar:delegateName()>-><ruleDescriptor.name>( <ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">);
-	\}}; separator="\n">
+        <if(ruleDescriptor.hasReturnValue)>return <endif>m_<ruleDescriptor.grammar:delegateName()>-><ruleDescriptor.name>(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", "><endif>);
+    \}}; separator="\n">
 
 <endif>
 /* End of parsing rules
