@@ -283,7 +283,7 @@ ANTLR_INLINE void	InputStream<ImplTraits>::reset()
 {
 	m_nextChar		= m_data;	/* Input at first character */
     m_line			= 1;		/* starts at line 1	    */
-    m_charPositionInLine	= -1;
+    m_charPositionInLine	= 0;
     m_currentLine		= m_data;
     m_markDepth		= 0;		/* Reset markers	    */
     
