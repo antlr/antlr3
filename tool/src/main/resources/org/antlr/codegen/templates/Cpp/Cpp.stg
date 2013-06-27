@@ -143,6 +143,9 @@ outputFile( LEXER,
  * Include the ANTLR3 generated header file.
  */
 #include    "<name>.hpp"
+<if(trace)>
+#include \<iostream>
+<endif>
 <if(recognizer.grammar.delegators)>
 // Include delegator definition header files
 //
@@ -1370,7 +1373,11 @@ void <name>::m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>)
     <ruleDeclarations()>
     <ruleDescriptor.actions.declarations>
     <lexerRuleLabelDefs()>
-    <if(trace)>System.out.println("enter <ruleName> '"+(char)this->LA(1)+"' line="+ this->getLine()+":"+  this->getCharPositionInLine()+" failed="+failed+" backtracking="+this->get_backtracking());<endif>
+    <if(trace)>
+    std::cout \<\< "enter <ruleName> '" \<\< (char)this->LA(1)
+              \<\< "' line=" \<\< this->getLine() \<\< ":" \<\< this->getCharPositionInLine()
+              \<\< " failed=" \<\< this->get_failedflag() \<\< " backtracking=" \<\< this->get_backtracking() \<\< std::endl;
+    <endif>
 
 <if(nakedBlock)>
     <ruleMemoization(rname=ruleName)>
@@ -1388,7 +1395,11 @@ void <name>::m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>)
     <block>
 	this->get_lexstate()->set_type(_type);
 <endif>
-    <if(trace)> ANTLR_FPRINTF(stderr, "exit <ruleName> '%c' line=%d:%d failed = %d, backtracking =%d\n",this->LA(1),this->getLine(),this->getCharPositionInLine(),failed,this->get_backtracking());<endif>
+    <if(trace)>
+    std::cout \<\< "exit <ruleName> '" \<\< (char)this->LA(1)
+              \<\< "' line=" \<\< this->getLine() \<\< ":" \<\< this->getCharPositionInLine()
+              \<\< " failed=" \<\< this->get_failedflag() \<\< " backtracking=" \<\< this->get_backtracking() \<\< std::endl;
+    <endif>
     <ruleCleanUp()>
     <lexerRuleLabelFree()>
     <(ruleDescriptor.actions.after):execAfter()>
