@@ -38,6 +38,10 @@ import java.util.List;
 import java.util.Map;
 
 public class CppTarget extends Target {
+    @Override
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return false;
+    }
 
     ArrayList<String> strings = new ArrayList<String>();
 
