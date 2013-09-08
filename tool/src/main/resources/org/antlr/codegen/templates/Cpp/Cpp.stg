@@ -185,17 +185,17 @@ outputFile( LEXER,
 >>
 headerFileExtension() ::= ".hpp"
 
-beginNamespace(actions) ::= <<
+beginNamespace(actions) ::= <%
 	<if(actions.(actionScope).namespace)>
 	namespace <actions.(actionScope).namespace> {
 	<endif>
->>
+%>
 
-endNamespace(actions) ::= <<
+endNamespace(actions) ::= <%
 	<if(actions.(actionScope).namespace)>
 	}
 	<endif>
->>
+%>
 
 
 headerFile( LEXER,
@@ -224,21 +224,20 @@ headerFile( LEXER,
             generatedTimestamp,
             trace,
             scopes,
-	    superClass,
+            superClass,
             literals
         ) ::=
 <<
 <leadIn("C++ header")>
 <if(PARSER)>
- * The parser <mainName()>
+ * The parser <mainName()> has the callable functions (rules) shown below,
 <endif>
 <if(LEXER)>
- * The lexer <mainName()>
+ * The lexer <mainName()> has the callable functions (rules) shown below,
 <endif>
 <if(TREE_PARSER)>
- * The tree parser <mainName()>
+ * The tree parser <mainName()> has the callable functions (rules) shown below,
 <endif>
-has the callable functions (rules) shown below,
  * which will invoke the code for the associated rule in the source grammar
  * assuming that the input stream is pointing to a token/text stream that could begin
  * this rule.
@@ -282,7 +281,7 @@ has the callable functions (rules) shown below,
 /* =============================================================================
  * Standard antlr3 C++ runtime definitions
  */
-#include    \<antlr3.hpp>
+#include \<antlr3.hpp>
 
 /* End of standard antlr 3 runtime definitions
  * =============================================================================
@@ -340,13 +339,11 @@ has the callable functions (rules) shown below,
 typedef <name>Traits <name>ImplTraits;
 
 <rules:{r | <if(r.ruleDescriptor.isSynPred)> struct <r.ruleDescriptor.name> {\}; <endif>}; separator="\n">
-<rules:{r |<headerReturnScope(ruleDescriptor=r.ruleDescriptor,...)>}>
 
 class <name>Tokens
 {
 public:
 	/** Symbolic definitions of all the tokens that the <grammarType()> will work with.
-	 * \{
 	 *
 	 * Antlr will define EOF, but we can't use that as it it is too common in
 	 * in C header files and that would be confusing. There is no way to filter this out at the moment
@@ -379,7 +376,7 @@ public:
 <endif>
 	
 	<scopes:{it | <if(it.isDynamicGlobalScope)><globalAttributeScopeDecl(it)><endif>}>
-	<rules:{r |<ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)>}>
+	<rules:{r | <if(r.ruleDescriptor.ruleScope)><ruleAttributeScopeDecl(scope=r.ruleDescriptor.ruleScope)><endif>}>
 	
 private:	
 <if(recognizer.grammar.delegates)>
@@ -405,16 +402,20 @@ public:
     
     void init(InputType* instream <recognizer.grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}> );
 
+    <actions.(actionScope).context>
+
 <if(LEXER)>
 <if(recognizer.filterMode)>
     void  memoize(ANTLR_MARKER  ruleIndex, ANTLR_MARKER  ruleParseStart);
     bool  alreadyParsedRule(ANTLR_MARKER	ruleIndex);
+    <filteringNextToken()>
 <endif>    
     <rules:{r | <if(!r.ruleDescriptor.isSynPred)><headerReturnType(ruleDescriptor=r.ruleDescriptor)>  m<r.ruleDescriptor.name>( <r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
     <rules:{r | <if(r.ruleDescriptor.isSynPred)>  <headerReturnType(ruleDescriptor=r.ruleDescriptor)> msynpred( antlr3::ClassForwarder\< <r.ruleDescriptor.name> > <r.ruleDescriptor.parameterScope:parameterScope()>);
     void m<r.ruleDescriptor.name>_fragment (<r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
 <endif>
 <if(!LEXER)>
+    <rules:{r | <headerReturnScope(ruleDescriptor=r.ruleDescriptor)>}>
     <rules:{r | <if(!r.ruleDescriptor.isSynPred)> <headerReturnType(ruleDescriptor=r.ruleDescriptor)> <r.ruleDescriptor.name> (<r.ruleDescriptor.parameterScope:parameterScope()>); <endif>}; separator="\n">
     <rules:{r | <if(r.ruleDescriptor.isSynPred)>  <headerReturnType(ruleDescriptor=r.ruleDescriptor)> msynpred( antlr3::ClassForwarder\< <r.ruleDescriptor.name> > <r.ruleDescriptor.parameterScope:parameterScope()>);
     void m<r.ruleDescriptor.name>_fragment (<r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
@@ -428,8 +429,7 @@ public:
     const char *    getGrammarFileName();
     void            reset();
     ~<name>();
-    
-    <actions.(actionScope).context>
+
 };
 
 // Function protoypes for the constructor functions that external translation units
@@ -443,7 +443,6 @@ extern ANTLR_UINT8*   <recognizer.grammar.composite.rootGrammar.recognizerName>T
 /* End of token definitions for <name>
  * =============================================================================
  */
-/** \} */
 
 <endNamespace(actions)>
 
@@ -453,7 +452,7 @@ extern ANTLR_UINT8*   <recognizer.grammar.composite.rootGrammar.recognizerName>T
 
 >>
 
-grammarType() ::= <<
+grammarType() ::= <%
 <if(PARSER)>
 parser
 <endif>
@@ -463,7 +462,7 @@ lexer
 <if(TREE_PARSER)>
 tree parser
 <endif>
->>
+%>
 
 componentType() ::= <<
 <if(PARSER)>
@@ -477,7 +476,7 @@ componentType() ::= <<
 <endif>
 >>
 
-componentBaseType() ::= <<
+componentBaseType() ::= <%
 <if(PARSER)>
 <name>ImplTraits::BaseParserType
 <endif>
@@ -487,7 +486,7 @@ componentBaseType() ::= <<
 <if(TREE_PARSER)>
 <name>ImplTraits::BaseTreeParserType
 <endif>
->>
+%>
 
 streamType() ::= <<
 <if(PARSER)>
@@ -502,7 +501,7 @@ streamType() ::= <<
 >>
 
 
-mainName() ::= <<
+mainName() ::= <%
 <if(PARSER)>
 <name>
 <endif>
@@ -512,11 +511,11 @@ mainName() ::= <<
 <if(TREE_PARSER)>
 <name>
 <endif>
->>
+%>
 
-headerReturnScope(ruleDescriptor) ::= "<returnScope(...)>"
+headerReturnScope(ruleDescriptor) ::= "<returnScope(scope=ruleDescriptor.returnScope)>"
 
-headerReturnType(ruleDescriptor) ::= <<
+headerReturnType(ruleDescriptor) ::= <%
 <if(LEXER)>
 <if(!ruleDescriptor.isSynPred)>
  void
@@ -526,7 +525,7 @@ headerReturnType(ruleDescriptor) ::= <<
 <else>
  <returnType()>
 <endif>
->>
+%>
 
 // Produce the lexer output
 //
@@ -803,28 +802,17 @@ actionGate() ::= "this->get_backtracking()==0"
 filteringActionGate() ::= "this->get_backtracking()==1"
 
 /** How to generate a parser */
-genericParser(  grammar,
-		name,
-                scopes,
-                tokens,
-                tokenNames,
-                rules,
-                numRules,
-                bitsets,
-                inputStreamType,
-                superClass,
-                labelType,
-		members,
-		rewriteElementType, filterMode,
-                ASTLabelType="ImplTraits::TreeType*"
-              ) ::= <<
+genericParser(  grammar, name, scopes, tokens, tokenNames, rules, numRules,
+                bitsets, inputStreamType, superClass,
+                labelType, members,	rewriteElementType,
+                filterMode, ASTLabelType="ImplTraits::TreeType*") ::= <<
 
 using namespace antlr3;
 <if(grammar.grammarIsRoot)>
 /** \brief Table of all token names in symbolic order, mainly used for
  *         error reporting.
  */
-ANTLR_UINT8*   <name>TokenNames[<length(tokenNames)>+4]
+ANTLR_UINT8* <name>TokenNames[<length(tokenNames)>+4]
      = {
         (ANTLR_UINT8*) "\<invalid>",       /* String to print to indicate an invalid token */
         (ANTLR_UINT8*) "\<EOR>",
@@ -877,7 +865,6 @@ const char* <name>::getGrammarFileName()
 void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>)
 {
     <actions.parser.apifuncs>
-    <actions.treeparser.apifuncs>
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
     /* Create a LIST for recording rule memos.
@@ -1017,11 +1004,11 @@ parser(	grammar,
 		bitsets,
 		ASTLabelType,
 		superClass="Parser",
-		labelType="const CommonTokenType*",
+		labelType="ImplTraits::CommonTokenType*",
 		members={<actions.parser.members>}
 		) ::= <<
 <beginNamespace(actions)>
-<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="TOKEN", ...)>
+<genericParser(inputStreamType="CommonTokenStreamType*", rewriteElementType="Token", filterMode=false, ...)>
 <endNamespace(actions)>
 >>
 
@@ -1039,12 +1026,12 @@ treeParser(	grammar,
 			bitsets,
 			filterMode,
 			labelType={<ASTLabelType>},
-			ASTLabelType="TreeType*",
+			ASTLabelType="ImplTraits::TreeType*",
 			superClass="TreeParser",
 			members={<actions.treeparser.members>}
 			) ::= <<
 <beginNamespace(actions)>
-<genericParser(inputStreamType="CommonTreeNodeStream*", rewriteElementType="NODE", ...)>
+<genericParser(inputStreamType="CommonTreeNodeStream*", rewriteElementType="Node", ...)>
 <endNamespace(actions)>
 >>
 
@@ -1070,7 +1057,9 @@ void <name>::m<ruleName>_fragment( <ruleDescriptor.parameterScope:parameterScope
 <else>
     <block>
 <endif>
-<ruleCleanUp()>
+
+goto rule<ruleDescriptor.name>Ex; /* Prevent compiler warnings */
+rule<ruleDescriptor.name>Ex: ;
 }
 // $ANTLR end <ruleName>
 >>
@@ -1237,9 +1226,11 @@ ruleDeclarations() ::= <<
 <if(PARSER)>
     <name>ImplTraits::RuleReturnValueType _antlr_rule_exit(this);
 <endif>  
+<if(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.type> <a.name>;
 }>
+<endif>
 <endif>
 <if(memoize)>
 ANTLR_MARKER <ruleDescriptor.name>_StartIndex;
@@ -1249,14 +1240,12 @@ ANTLR_MARKER <ruleDescriptor.name>_StartIndex;
 ruleInitializations() ::= <<
 /* Initialize rule variables
  */
+<if(ruleDescriptor.returnScope)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-<ruleDescriptor.returnScope.attributes:{ a |
-<if(a.initValue)>retval.<a.name> = <a.initValue>;<endif>
-}>
+<ruleDescriptor.returnScope.attributes:{ a | <if(a.initValue)>retval.<a.name> = <a.initValue>;<endif> }>
 <else>
-<ruleDescriptor.returnScope.attributes:{ a |
-<if(a.initValue)><a.name> = <a.initValue>;<endif>
-}>
+<ruleDescriptor.returnScope.attributes:{ a | <if(a.initValue)><a.name> = <a.initValue>;<endif> }>
+<endif>
 <endif>
 <if(memoize)>
 <ruleDescriptor.name>_StartIndex = this->index();<\n>
@@ -1266,27 +1255,20 @@ ruleInitializations() ::= <<
 >>
 
 ruleLabelDefs() ::= <<
-<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels]
-    :{it |<labelType>    <it.label.text>;}; separator="\n"
+<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels,
+  ruleDescriptor.wildcardTreeLabels,ruleDescriptor.wildcardTreeListLabels]
+    :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
-<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels]
-    :{it | VectorType\<const CommonTokenType*>   list_<it.label.text>;}; separator="\n"
+<[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
+    :{it |ImplTraits::TokenPtrsListType list_<it.label.text>;}; separator="\n"
 >
-<[ruleDescriptor.ruleLabels,ruleDescriptor.ruleListLabels]
-    :ruleLabelDef(); separator="\n"
->
+<ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 >>
 
 ruleLabelInitializations() ::= <<
-<[ruleDescriptor.tokenLabels,ruleDescriptor.tokenListLabels]
-    :{it |<it.label.text>       = NULL;}; separator="\n"
->
-<[ruleDescriptor.ruleLabels,ruleDescriptor.ruleListLabels]
-    :ruleLabelInitVal(); separator="\n"
->
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!ruleDescriptor.isSynPred)>
-retval.call_start_placeholder(); <\n>
+retval.call_start_placeholder();
 <endif>
 <endif>
 >>
@@ -1295,7 +1277,7 @@ lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it |<labelType> <it.label.text>;}; separator="\n"
+    :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
 <ruleDescriptor.charLabels:{it |ANTLR_UINT32 <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
@@ -1306,11 +1288,6 @@ lexerRuleLabelDefs() ::= <<
 >>
 
 lexerRuleLabelInit() ::= <<
-<[ruleDescriptor.tokenLabels,
-  ruleDescriptor.tokenListLabels,
-  ruleDescriptor.ruleLabels]
-    :{it |<it.label.text> = NULL;}; separator="\n"
->
 <[ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleListLabels,
   ruleDescriptor.ruleListLabels]
@@ -1696,8 +1673,8 @@ matchSetAndListLabel(s,label,elementIndex,postmatchCode) ::= <<
 /** Match a string literal */
 lexerStringRef(string,label,elementIndex) ::= <<
 <if(label)>
-<label>Start = this->getCharIndex();
-MATCHS(<string>);
+ANTLR_MARKER <label>Start = this->getCharIndex();
+this->matchs(<string>);
 <checkRuleBacktrackFailure()>
 <label> = new CommonTokenType;
 <label>->set_type( CommonTokenType::TOKEN_INVALID );
@@ -2082,24 +2059,25 @@ public:
 	<endif>		
 	}
 
-        <if(dfa.specialStateSTs)>
-        ANTLR_UINT32 LA(ANTLR_INT32 i)
-        {
-        	return m_ctx->LA(i);
-        }
-        
-        template\<typename PredType>
-        bool msynpred( PredType pred )
-        {
-        	return m_ctx->msynpred(pred);
-        }
-        
-        <if(PARSER)>
-	const CtxType::CommonTokenType*  LT(ANTLR_INT32 k)
-	{
-		return m_ctx->LT(k);
-	}
-	<endif>
+    <if(dfa.specialStateSTs)>
+    ANTLR_UINT32 LA(ANTLR_INT32 i)
+    {
+        return m_ctx->LA(i);
+    }
+
+    <if(PARSER)>
+    const CtxType::CommonTokenType*  LT(ANTLR_INT32 k)
+    {
+        return m_ctx->LT(k);
+    }
+    <endif>
+    <if(synpreds)>
+    template\<typename PredType>
+    bool msynpred( PredType pred )
+    {
+        return m_ctx->msynpred(pred);
+    }
+    <endif>
         
 	ANTLR_INT32  specialStateTransition(CtxType * ctx, RecognizerType* recognizer, IntStreamType* is, ANTLR_INT32 s)
 	{
@@ -2293,7 +2271,7 @@ returnStructName(r) ::= "<r.name>_return"
 returnType() ::= <%
 <if(!ruleDescriptor.isSynPred)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-<ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>
+<ruleDescriptor.grammar.recognizerName>::<ruleDescriptor:returnStructName()>
 <else>
 <if(ruleDescriptor.hasSingleReturnValue)>
 <ruleDescriptor.singleValueReturnType>
@@ -2311,7 +2289,7 @@ bool
  */
 ruleLabelType(referencedRule) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-<referencedRule.grammar.recognizerName>_<referencedRule.name>_return
+<referencedRule.name>_return
 <else>
 <if(referencedRule.hasSingleReturnValue)>
 <referencedRule.singleValueReturnType>
@@ -2335,13 +2313,12 @@ initValue(typeName) ::= <<
 /** Define a rule label  */
 ruleLabelDef(label) ::= <<
 <ruleLabelType(referencedRule=label.referencedRule)> <label.label.text>;
-typedef	<ruleLabelType(referencedRule=label.referencedRule)> RETURN_TYPE_<label.label.text>;<\n>
 >>
 /**  Rule label default value */
 ruleLabelInitVal(label) ::= <<
 >>
 
-ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>TreeType*<endif>"
+ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>ImplTraits::TreeType*<endif>"
 
 /** Define a return struct for a rule if the code needs to access its
  *  start/stop tokens, tree stuff, attributes, ...  Leave a hole for
@@ -2350,69 +2327,66 @@ ASTLabelType() ::= "<if(recognizer.ASTLabelType)><recognizer.ASTLabelType><else>
 returnScope(scope) ::= <<
 <if(!ruleDescriptor.isSynPred)>
 <if(ruleDescriptor.hasMultipleReturnValues)>
-
 <if(!TREE_PARSER)>
-struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
+struct <ruleDescriptor:returnStructName()> : public <name>ImplTraits::RuleReturnValueType
 {
 public:
-	typedef <name>ImplTraits::RuleReturnValueType BaseType;
+    typedef <name>ImplTraits::RuleReturnValueType BaseType;
+    <ruleDescriptor:returnStructName()>()
+        : BaseType()
+        <if(scope)>, <scope.attributes:{it | <it.name>() }; separator=","><endif>
+        { init(); }
+    <ruleDescriptor:returnStructName()>( BaseParserType* parser )
+        : BaseType(parser)
+        <if(scope)>, <scope.attributes:{it | <it.name>() }; separator=","><endif>
+        { init(); }
+    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& other )
+        : BaseType(other)
+    <if(scope)>, <scope.attributes:{it | <it.name>(other.<it.name>) }; separator=", "><endif>
+    { copy(other); }
+    ~<ruleDescriptor:returnStructName()>()
+    {
+        <@ruleReturnMembersDelete()>
+    }
+
+    <ruleDescriptor:returnStructName()>&
+    operator=( const <ruleDescriptor:returnStructName()>& other )
+    {
+        BaseType::operator=( other );
+        <if(scope)><scope.attributes:{it | <it.name> = other.<it.name>; }; separator="\n"><endif>
+        copy(other);    
+    	return *this;
+    }
+    <@ruleReturnMembers()>
+    void init() { <@ruleReturnMembersInit()> }
+    void copy( const <ruleDescriptor:returnStructName()>& other) { <@ruleReturnMembersCopy()> }    
 <else>
-struct <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()> 
+struct <ruleDescriptor:returnStructName()>
 {
+public:
     <name>ImplTraits::<recognizer.ASTLabelType>       start;
     <name>ImplTraits::<recognizer.ASTLabelType>       stop;
-<endif>
-    <@ruleReturnMembers()>
-    <ruleDescriptor.returnScope.attributes:{it |<it.type> <it.name>;}; separator="\n">
-    
-<if(!TREE_PARSER)>    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>()
-    {
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( BaseParserType* parser )
-        : BaseType(parser)
-    {
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
-    : BaseType(n)
-    <if(ruleDescriptor.returnScope.attributes)>
-    , <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
+    <ruleDescriptor:returnStructName()>( const <ruleDescriptor:returnStructName()>& other )
+    <if(scope.attributes)>
+    <scope.attributes:{it | <it.name>(other.<it.name>) }; separator=",">
     <endif>
     {
+     	start = other.start;
+     	stop  = other.stop;
     }
     
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
-    operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
+    <ruleDescriptor:returnStructName()>&
+    operator=( const <ruleDescriptor:returnStructName()>& other )
     {
-    	BaseType::operator=( n );
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
+     	start = other.start;
+     	stop  = other.stop;
+
+    	<scope.attributes:{it | <it.name> = other.<it.name>; }; separator="\n">
     	return *this;
     }
-<else>
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
-    <if(ruleDescriptor.returnScope.attributes)>
-    <ruleDescriptor.returnScope.attributes:{it | <it.name>(n.<it.name>) }; separator=",">
-    <endif>
-    {
-     	start = n.start;
-     	stop  = n.stop;
-    }
-    
-    <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>&
-    operator=( const <ruleDescriptor.grammar.recognizerName>_<ruleDescriptor:returnStructName()>& n )
-    {
-     	start = n.start;
-     	stop  = n.stop;
-
-    	<ruleDescriptor.returnScope.attributes:{it | <it.name> = n.<it.name>; }; separator="\n">
-    	return *this;
-    }
-
 <endif>
-    
-};<\n><\n>
+    <if(scope)><scope.attributes:{it |<it.type> <it.name>;}; separator="\n"><endif>
+};
 
 <endif>
 <endif>
