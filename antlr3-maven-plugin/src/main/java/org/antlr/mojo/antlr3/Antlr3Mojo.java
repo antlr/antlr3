@@ -34,8 +34,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.antlr.mojo.antlr3;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -411,7 +409,7 @@ public class Antlr3Mojo
      * @throws InclusionScanException
      */
     private void processGrammarFiles(File sourceDirectory, File outputDirectory)
-            throws TokenStreamException, RecognitionException, IOException, InclusionScanException {
+            throws IOException, InclusionScanException {
         // Which files under the source set should we be looking for as grammar files
         //
         SourceMapping mapping = new SuffixMapping("g", Collections.<String>emptySet());
