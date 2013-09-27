@@ -11,7 +11,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
     <packaging>pom</packaging>
-    <version>3.5.1-SNAPSHOT</version>
+    <version>3.5.1</version>
     <name>ANTLR 3 Master build control POM</name>
     <description>Master build POM for ANTLR 3</description>
     <url>http://antlr.org</url>
@@ -84,7 +84,8 @@
         <url>https://github.com/antlr/antlr3/tree/master</url>
         <connection>scm:git:git://github.com/antlr/antlr3.git</connection>
         <developerConnection>scm:git:git@github.com:antlr/antlr3.git</developerConnection>
-    </scm>
+      <tag>3.5.1</tag>
+  </scm>
   <!--
 
     Tell Maven which other artifacts we need in order to
