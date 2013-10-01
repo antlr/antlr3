@@ -2181,7 +2181,7 @@ break;
  *  state to jump to next if successful.
  */
 cyclicDFAEdge(labelExpr, targetStateNumber, edgeNumber, predicates) ::= <<
-if ( <if(predicates)>(<predicates>) && <endif>(<labelExpr>) )
+if ( (<labelExpr>) <if(predicates)>&& (<predicates>)<endif> )
 {
     s = <targetStateNumber>;
 }<\n>
