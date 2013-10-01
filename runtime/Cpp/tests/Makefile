@@ -64,6 +64,8 @@ t011:	t011.cpp t011lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_H
 t012:	t012.cpp t012lexerXMLLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
 
+t051:	t051.cpp t051lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
 
 # AST commented out
 # t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
