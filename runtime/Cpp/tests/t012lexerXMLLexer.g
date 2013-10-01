@@ -11,10 +11,6 @@ options {
 @lexer::namespace
 { Antlr3Test }
 
-@lexer::init {
-self.outbuf = StringIO()
-}
-
 @lexer::context {
 ImplTraits::StringStreamType outbuf;
 

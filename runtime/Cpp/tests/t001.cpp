@@ -67,7 +67,8 @@ int testIteratorInterface(string const& data)
 
 	std::cout << token0->getText() << std::endl;
 	std::cout << token1->getText() << std::endl;
-	
+
+	delete tstream;
 	delete lxr; lxr = NULL;
 	delete input;
 	return 0;
