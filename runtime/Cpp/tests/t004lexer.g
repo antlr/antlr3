@@ -10,4 +10,7 @@ options {
 @lexer::namespace
 { Antlr3Test }
 
-FOO: 'f' 'o'*;
+FOO: 'f' f=OO;
+
+fragment
+OO: 'o'*;
