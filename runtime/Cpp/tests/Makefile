@@ -8,7 +8,7 @@ POBJS = $(PSOURCES:.cpp=.o)
 TOKENS = $(ANTLRGRAMMARS:.g=.tokens)
 
 GRAMMAROPTIONS= #-report -Xconversiontimeout 1500000 -Xmultithreaded -Xwatchconversion
-ANTLR = ../../../antlr-complete/target/antlr-complete-3.5.1-SNAPSHOT.jar
+ANTLR = ../../../antlr-complete/target/antlr-complete-3.5.2-SNAPSHOT.jar
 STGS  = $(wildcard ../../../tool/src/main/resources/org/antlr/codegen/templates/Cpp/*.stg)
 
 .SUFFIXES:
