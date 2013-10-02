@@ -16,7 +16,7 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.5.1-SNAPSHOT</version>
+        <version>3.5.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -37,6 +37,13 @@
             <groupId>org.antlr</groupId>
             <artifactId>ST4</artifactId>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>stringtemplate</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>
