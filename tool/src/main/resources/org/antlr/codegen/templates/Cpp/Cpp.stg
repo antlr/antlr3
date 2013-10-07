@@ -161,6 +161,25 @@ outputFile( LEXER,
 <if(literals)>
 
 <beginNamespace(actions)>
+<if(LEXER)>
+const ANTLR_UINT8* <name>Tokens::getTokenName(ANTLR_UINT32 index)
+{
+       if( EOF_TOKEN == index)
+               return (ANTLR_UINT8*) "\<EOF>";
+       return TokenNames[index];
+}
+
+/** \brief Table of all token names in symbolic order, mainly used for debugging.
+ */
+ANTLR_UINT8* <name>Tokens::TokenNames[<length(tokens)>+4]
+       = {
+       (ANTLR_UINT8*) "\<invalid>",       /* String to print to indicate an invalid token */
+       (ANTLR_UINT8*) "\<EOR>",
+       (ANTLR_UINT8*) "\<DOWN>",
+       (ANTLR_UINT8*) "\<UP>",
+       <rest(tokens):{it |(ANTLR_UINT8*) "<it.name>",//<it.type>}; separator="\n">
+       };
+<endif>
 
 /** String literals used by <name> that we must do things like MATCHS() with.
  *  C will normally just lay down 8 bit characters, and you can use L"xxx" to
@@ -359,7 +378,12 @@ public:
 		EOF_TOKEN = <name>ImplTraits::CommonTokenType::TOKEN_EOF
 		<tokens:{it | , <it.name> = <it.type> }; separator="\n">
 	};
+<if(LEXER)>
+       static const ANTLR_UINT8* getTokenName(ANTLR_UINT32 index);
 
+protected:
+       static ANTLR_UINT8* TokenNames[];
+<endif>
 };
 
 /** Context tracking structure for <mainName()>
@@ -405,6 +429,7 @@ public:
     <name>(InputType* instream, RecognizerSharedStateType* state<recognizer.grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}>);
     
     void init(InputType* instream <recognizer.grammar.delegators:{g|, <g.recognizerName>* <g:delegateName()>}> );
+    static ANTLR_UINT8** getTokenNames();
 
     <actions.(actionScope).context>
 
@@ -936,7 +961,7 @@ void
  *
  * \return Pointer to first char * in the table.
  */
-static ANTLR_UINT8**	getTokenNames()
+ANTLR_UINT8**	<name>::getTokenNames()
 {
         return <grammar.composite.rootGrammar.recognizerName>TokenNames;
 }
