@@ -48,11 +48,12 @@ the end of the following contributors list.
 CONTRIBUTORS:
 
 YYYY/MM/DD, github id, Full name, email
+2013/04/17, ibre5041, Ivan Brezina, ibre5041@ibrezina.net
+2013/02/19, murrayju, Justin Murray, murrayju@addpcs.com
 2012/07/12, parrt, Terence Parr, parrt@antlr.org
 2012/08/08, Zannick, Benjamin S Wolf, jokeserver@gmail.com
 2012/09/15, martint, Martin Traverso, mtraverso@gmail.com
 2012/09/16, qmx, Douglas Campos, qmx@qmx.me
 2012/09/17, ksgokul, Gokulakannan Somasundaram, gokul007@gmail.com
 2012/11/22, sharwell, Sam Harwell, sam@tunnelvisionlabs.com
-2013/02/19, murrayju, Justin Murray, murrayju@addpcs.com
-2013/04/17, ibre5041, Ivan Brezina, ibre5041@ibrezina.net
+2012/09/24, mike-lischke, Mike Lischke, mike@lischke-online.de

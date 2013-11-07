@@ -132,7 +132,7 @@ antlr3HashTableNew(ANTLR3_UINT32 sizeHint)
 
 	ANTLR3_UINT32	bucket;	// Used to traverse the buckets
 
-	table   = ANTLR3_MALLOC(sizeof(ANTLR3_HASH_TABLE));
+	table   = (pANTLR3_HASH_TABLE)ANTLR3_MALLOC(sizeof(ANTLR3_HASH_TABLE));
 
 	// Error out if no memory left
 	if	(table	== NULL)
@@ -653,7 +653,7 @@ antlr3HashPut(pANTLR3_HASH_TABLE table, void * key, void * element, void (ANTLR3
     }
     else
     {
-        entry->keybase.key.sKey	= key;                  /* Record the key value								*/
+        entry->keybase.key.sKey	= (pANTLR3_UINT8)key;                  /* Record the key value								*/
     }
 	entry->nextEntry		= NULL;					/* Ensure that the forward pointer ends the chain   */
 
@@ -2378,7 +2378,7 @@ addEdge          (pANTLR3_TOPO topo, ANTLR3_UINT32 edge, ANTLR3_UINT32 dependenc
     {
         // We don't have any edges yet, so create an array to hold them
         //
-        topo->edges = ANTLR3_CALLOC(sizeof(pANTLR3_BITSET) * (maxEdge + 1), 1);
+        topo->edges = (pANTLR3_BITSET*)ANTLR3_CALLOC(sizeof(pANTLR3_BITSET) * (maxEdge + 1), 1);
         if (topo->edges == NULL)
         {
             return;
@@ -2392,7 +2392,7 @@ addEdge          (pANTLR3_TOPO topo, ANTLR3_UINT32 edge, ANTLR3_UINT32 dependenc
     {
         // WE have some edges but not enough
         //
-        topo->edges = ANTLR3_REALLOC(topo->edges, sizeof(pANTLR3_BITSET) * (maxEdge + 1));
+        topo->edges = (pANTLR3_BITSET*)ANTLR3_REALLOC(topo->edges, sizeof(pANTLR3_BITSET) * (maxEdge + 1));
         if (topo->edges == NULL)
         {
             return;
@@ -2576,6 +2576,7 @@ sortToArray      (pANTLR3_TOPO topo)
     // entries to accomodate the sorted list and another to accomodate
     // the maximum cycle we could detect which is all nodes such as 0->1->2->3->0
     //
+<<<<<<< HEAD
     topo->sorted    = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (topo->sorted == NULL)
 	{
@@ -2586,6 +2587,10 @@ sortToArray      (pANTLR3_TOPO topo)
 	{
 		return NULL;
 	}
+=======
+    topo->sorted    = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    topo->cycle     = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+>>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
     // Next we need an empty bitset to show whether we have visited a node
     // or not. This is the bit that gives us linear time of course as we are essentially
@@ -2688,12 +2693,16 @@ sortVector       (pANTLR3_TOPO topo, pANTLR3_VECTOR v)
     // according to where we moved it last. Then we can just swap vector entries until
     // we are done :-)
     //
+<<<<<<< HEAD
     vIndex = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (vIndex == NULL)
 	{
 		// malloc failed
 		return;
 	}
+=======
+    vIndex = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+>>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
     // Start index, each vector entry is located where you think it is
     //
