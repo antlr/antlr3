@@ -458,7 +458,6 @@ antlr38BitMark	(pANTLR3_INT_STREAM is)
      */
     if	(input->markDepth > input->markers->count)
     {	
-<<<<<<< HEAD
 		state = (pANTLR3_LEX_STATE)ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
 		if (state == NULL)
 		{
@@ -466,9 +465,6 @@ antlr38BitMark	(pANTLR3_INT_STREAM is)
 			--input->markDepth;
 			return 0;
 		}
-=======
-	state	= (pANTLR3_LEX_STATE)ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
->>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
 		/* Add it to the table
 		 */

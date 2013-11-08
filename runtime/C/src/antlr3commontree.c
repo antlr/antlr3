@@ -356,11 +356,7 @@ ANTLR3_API pANTLR3_COMMON_TREE
 antlr3CommonTreeNew()
 {
 	pANTLR3_COMMON_TREE	tree;
-<<<<<<< HEAD
 	tree = (pANTLR3_COMMON_TREE)ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
-=======
-	tree    = (pANTLR3_COMMON_TREE)ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
->>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
 	if	(tree == NULL)
 	{
