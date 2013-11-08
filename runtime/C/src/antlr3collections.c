@@ -1893,7 +1893,6 @@ intTrieDel	(pANTLR3_INT_TRIE trie, ANTLR3_INTKEY key)
     pANTLR3_INT_TRIE_NODE   p;
 
     p=trie->root;
-    key = key;
 
     return ANTLR3_FALSE;
 }

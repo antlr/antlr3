@@ -263,7 +263,7 @@ antlr3InputReset(pANTLR3_INPUT_STREAM input)
 
     input->nextChar		= input->data;	/* Input at first character */
     input->line			= 1;		/* starts at line 1	    */
-    input->charPositionInLine	= -1;
+    input->charPositionInLine	= 0;
     input->currentLine		= input->data;
     input->markDepth		= 0;		/* Reset markers	    */
     
