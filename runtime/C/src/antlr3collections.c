@@ -1934,7 +1934,6 @@ intTrieDel	(pANTLR3_INT_TRIE trie, ANTLR3_INTKEY key)
     pANTLR3_INT_TRIE_NODE   p;
 
     p=trie->root;
-    key = key;
 
     return ANTLR3_FALSE;
 }
@@ -2573,24 +2572,19 @@ sortToArray      (pANTLR3_TOPO topo)
         return NULL;
     }
     // First we need a vector to populate with enough
-    // entries to accomodate the sorted list and another to accomodate
+    // entries to accommodate the sorted list and another to accommodate
     // the maximum cycle we could detect which is all nodes such as 0->1->2->3->0
     //
-<<<<<<< HEAD
-    topo->sorted    = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    topo->sorted    = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (topo->sorted == NULL)
 	{
 		return NULL;
 	}
-    topo->cycle     = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    topo->cycle     = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (topo->cycle == NULL)
 	{
 		return NULL;
 	}
-=======
-    topo->sorted    = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
-    topo->cycle     = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
->>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
     // Next we need an empty bitset to show whether we have visited a node
     // or not. This is the bit that gives us linear time of course as we are essentially
@@ -2693,16 +2687,12 @@ sortVector       (pANTLR3_TOPO topo, pANTLR3_VECTOR v)
     // according to where we moved it last. Then we can just swap vector entries until
     // we are done :-)
     //
-<<<<<<< HEAD
-    vIndex = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    vIndex = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (vIndex == NULL)
 	{
 		// malloc failed
 		return;
 	}
-=======
-    vIndex = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
->>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
     // Start index, each vector entry is located where you think it is
     //

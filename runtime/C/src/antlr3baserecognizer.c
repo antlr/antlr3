@@ -2142,6 +2142,13 @@ reset(pANTLR3_BASE_RECOGNIZER recognizer)
 		}
 	}
 	
+  // ml: 2013-11-05, added reset of old exceptions.
+  pANTLR3_EXCEPTION thisE = recognizer->state->exception;
+  if	(thisE != NULL)
+  {
+    thisE->freeEx(thisE);
+    recognizer->state->exception = NULL;
+  }
 
     // Install a new following set
     //
