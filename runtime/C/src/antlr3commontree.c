@@ -356,7 +356,11 @@ ANTLR3_API pANTLR3_COMMON_TREE
 antlr3CommonTreeNew()
 {
 	pANTLR3_COMMON_TREE	tree;
+<<<<<<< HEAD
 	tree = (pANTLR3_COMMON_TREE)ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
+=======
+	tree    = (pANTLR3_COMMON_TREE)ANTLR3_CALLOC(1, sizeof(ANTLR3_COMMON_TREE));
+>>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
 	if	(tree == NULL)
 	{
@@ -522,13 +526,15 @@ static pANTLR3_STRING	    toString			(pANTLR3_BASE_TREE tree)
 static pANTLR3_BASE_TREE	
 getParent				(pANTLR3_BASE_TREE tree)
 {
+	if (((pANTLR3_COMMON_TREE)(tree->super))->parent == NULL)
+		return NULL;
 	return & (((pANTLR3_COMMON_TREE)(tree->super))->parent->baseTree);
 }
 
 static void					
 setParent				(pANTLR3_BASE_TREE tree, pANTLR3_BASE_TREE parent)
 {
-	((pANTLR3_COMMON_TREE)(tree->super))->parent = parent == NULL ? NULL : ((pANTLR3_COMMON_TREE)(parent->super))->parent;
+	((pANTLR3_COMMON_TREE)(tree->super))->parent = parent == NULL ? NULL : ((pANTLR3_COMMON_TREE)(parent->super));
 }
 
 static void    				

@@ -176,7 +176,7 @@ reset	(pANTLR3_BASE_RECOGNIZER rec)
 {
     pANTLR3_LEXER   lexer;
 
-    lexer   = rec->super;
+    lexer   = (pANTLR3_LEXER)rec->super;
 
     lexer->rec->state->token			    = NULL;
     lexer->rec->state->type			    = ANTLR3_TOKEN_INVALID;

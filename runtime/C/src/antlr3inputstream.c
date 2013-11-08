@@ -458,6 +458,7 @@ antlr38BitMark	(pANTLR3_INT_STREAM is)
      */
     if	(input->markDepth > input->markers->count)
     {	
+<<<<<<< HEAD
 		state = (pANTLR3_LEX_STATE)ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
 		if (state == NULL)
 		{
@@ -465,6 +466,9 @@ antlr38BitMark	(pANTLR3_INT_STREAM is)
 			--input->markDepth;
 			return 0;
 		}
+=======
+	state	= (pANTLR3_LEX_STATE)ANTLR3_MALLOC(sizeof(ANTLR3_LEX_STATE));
+>>>>>>> 351212d685a44bfc782a2685fff96d20b3025cdc
 
 		/* Add it to the table
 		 */
@@ -579,7 +583,7 @@ antlr38BitSeek	(pANTLR3_INT_STREAM is, ANTLR3_MARKER seekPoint)
 	ANTLR3_INT32   count;
 	pANTLR3_INPUT_STREAM input;
 
-	input   = ANTLR3_FUNC_PTR(((pANTLR3_INPUT_STREAM) is->super));
+	input   = (pANTLR3_INPUT_STREAM)ANTLR3_FUNC_PTR(((pANTLR3_INPUT_STREAM) is->super));
 
 	/* If the requested seek point is less than the current
 	* input point, then we assume that we are resetting from a mark
@@ -872,7 +876,7 @@ antlr3UTF16LA(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = input->nextChar;
+        nextChar    = (UTF16*)input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
@@ -1152,7 +1156,7 @@ antlr3UTF16LALE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = input->nextChar;
+        nextChar    = (pANTLR3_UCHAR)input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
@@ -1373,7 +1377,7 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = input->nextChar;
+        nextChar    = (pANTLR3_UCHAR)input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
@@ -1817,7 +1821,7 @@ antlr3UTF8Consume(pANTLR3_INT_STREAM is)
 
     input   = ((pANTLR3_INPUT_STREAM) (is->super));
 
-    nextChar = input->nextChar;
+    nextChar = (pANTLR3_UINT8)input->nextChar;
 
     if	(nextChar < (((pANTLR3_UINT8)input->data) + input->sizeBuf))
     {	
@@ -1883,7 +1887,7 @@ antlr3UTF8LA(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 
     input   = ((pANTLR3_INPUT_STREAM) (is->super));
 
-    nextChar = input->nextChar;
+    nextChar = (pANTLR3_UINT8)input->nextChar;
 
     // Do we need to traverse forwards or backwards?
     // - LA(0) is treated as LA(1) and we assume that the nextChar is
