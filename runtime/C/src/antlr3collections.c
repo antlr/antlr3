@@ -2572,15 +2572,15 @@ sortToArray      (pANTLR3_TOPO topo)
         return NULL;
     }
     // First we need a vector to populate with enough
-    // entries to accomodate the sorted list and another to accomodate
+    // entries to accommodate the sorted list and another to accommodate
     // the maximum cycle we could detect which is all nodes such as 0->1->2->3->0
     //
-    topo->sorted    = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    topo->sorted    = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (topo->sorted == NULL)
 	{
 		return NULL;
 	}
-    topo->cycle     = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    topo->cycle     = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (topo->cycle == NULL)
 	{
 		return NULL;
@@ -2687,7 +2687,7 @@ sortVector       (pANTLR3_TOPO topo, pANTLR3_VECTOR v)
     // according to where we moved it last. Then we can just swap vector entries until
     // we are done :-)
     //
-    vIndex = ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
+    vIndex = (pANTLR3_UINT32)ANTLR3_MALLOC(topo->limit * sizeof(ANTLR3_UINT32));
 	if (vIndex == NULL)
 	{
 		// malloc failed
