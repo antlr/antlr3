@@ -71,9 +71,10 @@ public class FastQueue<T> {
 
     public T head() { return elementAt(0); }
 
-    /** Return element i elements ahead of current element.  i==0 gets
-     *  current element.  This is not an absolute index into the data list
-     *  since p defines the start of the real list.
+    /**
+     * Return element {@code i} elements ahead of current element. {@code i==0}
+     * gets current element. This is not an absolute index into {@link #data}
+     * since {@code p} defines the start of the real list.
      */
     public T elementAt(int i) {
 		int absIndex = p + i;

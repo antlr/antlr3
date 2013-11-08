@@ -124,7 +124,6 @@ public class GrammarAST extends CommonTree {
 
     /**
      *
-     * @return
      */
     public Map<String, Object> getBlockOptions() {
         return blockOptions;
@@ -342,9 +341,13 @@ public class GrammarAST extends CommonTree {
         return (GrammarAST)parent.getChild(parent.getChildCount() - 1);
     }
 
-
     public GrammarAST[] getChildrenAsArray() {
-        return (GrammarAST[])(getChildren().toArray(new GrammarAST[getChildCount()]));
+		List<? extends Object> children = getChildren();
+		if (children == null) {
+			return new GrammarAST[0];
+		}
+
+        return children.toArray(new GrammarAST[children.size()]);
     }
 
     private static final GrammarAST DescendantDownNode = new GrammarAST(Token.DOWN, "DOWN");
@@ -534,8 +537,13 @@ public class GrammarAST extends CommonTree {
 		}
 	}
 
-	String toStringList() {
-		return "";
+	public String toStringList() {
+		String result = toStringTree();
+		if (this.getNextSibling() != null) {
+			result += ' ' + getNextSibling().toStringList();
+		}
+
+		return result;
 	}
 
 	/** Track start/stop token for subtree root created for a rule.

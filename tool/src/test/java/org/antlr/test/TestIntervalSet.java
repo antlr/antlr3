@@ -31,6 +31,8 @@ import org.antlr.analysis.Label;
 import org.antlr.misc.IntervalSet;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestIntervalSet extends BaseTest {
 
     /** Public default constructor used by TestRig */
@@ -339,6 +341,23 @@ public class TestIntervalSet extends BaseTest {
         String result = s.toString();
         assertEquals(result, expecting);
     }
+
+	/**
+	 * This case is responsible for antlr/antlr4#153.
+	 * https://github.com/antlr/antlr4/issues/153
+	 * <p/>
+	 * Resolution back-ported from V4.
+	 */
+	@Test public void testMergeWhereAdditionMergesThreeExistingIntervals() throws Exception {
+		IntervalSet s = new IntervalSet();
+		s.add(0);
+		s.add(3);
+		s.add(5);
+		s.add(0, 7);
+		String expecting = "0..7";
+		String result = s.toString();
+		assertEquals(expecting, result);
+	}
 
 	@Test public void testMergeWithDoubleOverlap() throws Exception {
 		IntervalSet s = IntervalSet.of(1,10);

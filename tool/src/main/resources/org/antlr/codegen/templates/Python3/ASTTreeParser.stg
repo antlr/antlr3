@@ -114,13 +114,13 @@ _last = _save_last_<treeLevel>
 /** ID! and output=AST (same as plain tokenRef) 'cept add
  *  setting of _last
  */
-tokenRefBang(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefBang(token,label,elementIndex,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.tokenRef(...)>
 >>
 
 /** ID auto construct */
-tokenRef(token,label,elementIndex,terminalOptions) ::= <<
+tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.tokenRef(...)>
 <if(!rewriteMode)>
@@ -141,13 +141,13 @@ if _first_<treeLevel> is None:
 >>
 
 /** label+=TOKEN auto construct */
-tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRef(...)>
 <listLabel(elem=label,...)>
 >>
 
 /** ^(ID ...) auto construct */
-tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefRuleRoot(token,label,elementIndex,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.tokenRef(...)>
 <if(!rewriteMode)>
@@ -163,13 +163,13 @@ root_<treeLevel> = self._adaptor.becomeRoot(<label>_tree, root_<treeLevel>)
 >>
 
 /** Match ^(label+=TOKEN ...) auto construct */
-tokenRefRuleRootAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefRuleRootAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefRuleRoot(...)>
 <listLabel(elem=label,...)>
 >>
 
 /** Match . wildcard and auto dup the node/subtree */
-wildcard(token,label,elementIndex,terminalOptions) ::= <<
+wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.wildcard(...)>
 <if(!rewriteMode)>
@@ -186,7 +186,7 @@ if _first_<treeLevel> is None:
 >>
 
 // SET AST
-matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
+matchSet(s,label,elementIndex,postmatchCode,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.matchSet(postmatchCode={
 <if(!rewriteMode)>
@@ -202,17 +202,17 @@ self._adaptor.addChild(root_<treeLevel>, <label>_tree)
 }, ...)>
 >>
 
-matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
+matchRuleBlockSet(s,label,elementIndex,postmatchCode,treeLevel="0",terminalOptions={}) ::= <<
 <matchSet(...)>
 <noRewrite(...)> <! set return tree !>
 >>
 
-matchSetBang(s,label,terminalOptions,elementIndex,postmatchCode) ::= <<
+matchSetBang(s,label,elementIndex,postmatchCode,terminalOptions={}) ::= <<
 _last = self.input.LT(1)
 <super.matchSet(...)>
 >>
 
-matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
+matchSetRuleRoot(s,label,elementIndex,debug,terminalOptions={}) ::= <<
 <super.matchSet(postmatchCode={
 <if(!rewriteMode)>
 <finishedBacktracking({
@@ -293,7 +293,7 @@ _last = self.input.LT(1)
 /** Streams for token refs are tree nodes now; override to
  *  change nextToken to nextNode.
  */
-createRewriteNodeFromElement(token,terminalOptions,scope) ::= <<
+createRewriteNodeFromElement(token,scope,terminalOptions={}) ::= <<
 <if(terminalOptions.node)>
 <terminalOptions.node>(stream_<token>.nextNode())
 <else>

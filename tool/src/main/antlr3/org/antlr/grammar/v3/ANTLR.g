@@ -135,6 +135,24 @@ public String getFileName() {
 public void setFileName(String value) {
     fileName = value;
 }
+
+@Override
+public Token nextToken() {
+	Token token = super.nextToken();
+	while (token.getType() == STRAY_BRACKET) {
+		ErrorManager.syntaxError(
+			ErrorManager.MSG_SYNTAX_ERROR,
+			null,
+			token,
+			"antlr: dangling ']'? make sure to escape with \\]",
+			null);
+
+		// skip this token
+		token = super.nextToken();
+	}
+
+	return token;
+}
 }
 
 @parser::members {
@@ -176,18 +194,15 @@ private static class GrammarASTErrorNode extends GrammarAST {
     public boolean isNil() { return false; }
 
     @Override
-    public String getText()
-    {
+    public String getText() {
         String badText = null;
-        if (start instanceof Token) {
-            int i = ((Token)start).getTokenIndex();
-            int j = ((Token)stop).getTokenIndex();
-            if (((Token)stop).getType() == Token.EOF) {
-                j = ((TokenStream)input).size();
+        if (start != null) {
+            int i = start.getTokenIndex();
+            int j = stop.getTokenIndex();
+            if (stop.getType() == Token.EOF) {
+                j = input.size();
             }
             badText = ((TokenStream)input).toString(i, j);
-        } else if (start instanceof Tree) {
-            badText = ((TreeNodeStream)input).toString(start, stop);
         } else {
             // people should subclass if they alter the tree type so this
             // next one is for sure correct.
@@ -720,10 +735,10 @@ elementNoOptionSpec
 {
 	IntSet elements=null;
 }
-	:	(	(	id (ASSIGN^|PLUS_ASSIGN^) (atom|block)
+	:	(	id (ASSIGN^|PLUS_ASSIGN^)
+			(	atom (sub=ebnfSuffix[root_0,false]! {root_0 = $sub.tree;})?
+			|	ebnf
 			)
-			(	sub=ebnfSuffix[root_0,false]! {root_0 = $sub.tree;}
-			)?
 		|	a=atom
 			(	sub2=ebnfSuffix[$a.tree,false]! {root_0=$sub2.tree;}
 			)?
@@ -800,9 +815,20 @@ ebnf
 		)
 	;
 
-range
-	:	c1=CHAR_LITERAL RANGE c2=CHAR_LITERAL
+range!
+	:	{Rule.getRuleType(currentRuleName) == Grammar.LEXER}? =>
+	 	c1=CHAR_LITERAL RANGE c2=CHAR_LITERAL
 		-> ^(CHAR_RANGE[$c1,".."] $c1 $c2)
+	|	// range elsewhere is an error
+		(	t=TOKEN_REF r=RANGE TOKEN_REF
+		|	t=STRING_LITERAL r=RANGE STRING_LITERAL
+		|	t=CHAR_LITERAL r=RANGE CHAR_LITERAL
+		)
+		{
+		ErrorManager.syntaxError(
+			ErrorManager.MSG_RANGE_OP_ILLEGAL,grammar,$r,null,null);
+		}
+		-> $t // have to generate something for surrounding code, just return first token
 	;
 
 terminal
@@ -1140,14 +1166,6 @@ DOLLAR : '$' ;
 
 STRAY_BRACKET
 	:	']'
-		{
-			ErrorManager.syntaxError(
-				ErrorManager.MSG_SYNTAX_ERROR,
-				null,
-				state.token,
-				"antlr: dangling ']'? make sure to escape with \\]",
-				null);
-		}
 	;
 
 CHAR_LITERAL

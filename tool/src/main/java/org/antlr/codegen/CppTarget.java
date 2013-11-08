@@ -34,12 +34,16 @@ import org.stringtemplate.v4.misc.Aggregate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class CppTarget extends Target {
+    @Override
+    public boolean useBaseTemplatesForSynPredFragments() {
+        return false;
+    }
 
-    ArrayList strings = new ArrayList();
+    ArrayList<String> strings = new ArrayList<String>();
 
     @Override
     protected void genRecognizerFile(Tool tool,
@@ -66,7 +70,7 @@ public class CppTarget extends Target {
 
 		//Its better we remove the EOF Token, as it would have been defined everywhere in C.
 		//we define it later as "EOF_TOKEN" instead of "EOF"
-        ST.AttributeList tokens = (ST.AttributeList) headerFileST.getAttribute("tokens");
+		List<?> tokens = (List<?>)headerFileST.getAttribute("tokens");
 		for( int i = 0; i < tokens.size(); ++i )
 		{
 			boolean can_break = false;
@@ -74,16 +78,14 @@ public class CppTarget extends Target {
 			if( tok instanceof Aggregate )
 			{
 				Aggregate atok = (Aggregate) tok;
-				Iterator it = atok.properties.entrySet().iterator();
-				while (it.hasNext()) {
-					Map.Entry pairs = (Map.Entry)it.next();
+				for (Map.Entry<String, Object> pairs : atok.properties.entrySet()) {
 					if( pairs.getValue().equals("EOF") )
 					{
 						tokens.remove(i);
 						can_break = true;
 						break;
 					}
-    			}
+				}
 			}
 
 			if( can_break )
@@ -339,7 +341,7 @@ public class CppTarget extends Target {
         // the default size. If it is then whack it all the way up to the maximum that
         // we can sensibly get away with.
         //
-        if (CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE == CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE ) {
+        if (CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE == CodeGenerator.MADSI_DEFAULT ) {
 
             CodeGenerator.MAX_ACYCLIC_DFA_STATES_INLINE = 65535;
         }

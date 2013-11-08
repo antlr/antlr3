@@ -41,7 +41,14 @@ import org.stringtemplate.v4.STGroupFile;
 import org.stringtemplate.v4.misc.STMessage;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /** Defines all the errors ANTLR can generator for both the tool and for
  *  issues with a grammar.
@@ -111,6 +118,7 @@ public class ErrorManager {
 	public static final int MSG_CODE_GEN_TEMPLATES_INCOMPLETE = 22;
 	public static final int MSG_CANNOT_CREATE_TARGET_GENERATOR = 23;
 	//public static final int MSG_CANNOT_COMPUTE_SAMPLE_INPUT_SEQ = 24;
+	public static final int MSG_STRING_TEMPLATE_ERROR = 24;
 
 	// GRAMMAR ERRORS
 	public static final int MSG_SYNTAX_ERROR = 100;
@@ -181,6 +189,7 @@ public class ErrorManager {
     public static final int MSG_CONFLICTING_OPTION_IN_TREE_FILTER = 167;
 	public static final int MSG_ILLEGAL_OPTION_VALUE = 168;
 	public static final int MSG_ALL_OPS_NEED_SAME_ASSOC = 169;
+	public static final int MSG_RANGE_OP_ILLEGAL = 170;
 
 	// GRAMMAR WARNINGS
 	public static final int MSG_GRAMMAR_NONDETERMINISM = 200; // A predicts alts 1,2
@@ -251,7 +260,7 @@ public class ErrorManager {
 	/** Each thread might need it's own error listener; e.g., a GUI with
 	 *  multiple window frames holding multiple grammars.
 	 */
-	private static Map<Thread, ANTLRErrorListener> threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
+	private static final Map<Thread, ANTLRErrorListener> threadToListenerMap = new WeakHashMap<Thread, ANTLRErrorListener>();
 
 	public static class ErrorState {
 		public int errors;
@@ -269,13 +278,13 @@ public class ErrorManager {
 	/** Track the number of errors regardless of the listener but track
 	 *  per thread.
 	 */
-	private static Map<Thread, ErrorState> threadToErrorStateMap = new HashMap<Thread, ErrorState>();
+	private static final Map<Thread, ErrorState> threadToErrorStateMap = new WeakHashMap<Thread, ErrorState>();
 
 	/** Each thread has its own ptr to a Tool object, which knows how
 	 *  to panic, for example.  In a GUI, the thread might just throw an Error
 	 *  to exit rather than the suicide System.exit.
 	 */
-	private static Map<Thread, Tool> threadToToolMap = new HashMap<Thread, Tool>();
+	private static final Map<Thread, Tool> threadToToolMap = new WeakHashMap<Thread, Tool>();
 
 	/** The group of templates that represent all possible ANTLR errors. */
 	private static STGroup messages;
@@ -285,7 +294,7 @@ public class ErrorManager {
 	/** From a msgID how can I get the name of the template that describes
 	 *  the error or warning?
 	 */
-	private static String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
+	private static final String[] idToMessageTemplateName = new String[MAX_MESSAGE_NUMBER+1];
 
 	static ANTLRErrorListener theDefaultErrorListener = new ANTLRErrorListener() {
 		@Override
@@ -369,22 +378,32 @@ public class ErrorManager {
 		new STErrorListener() {
 			@Override
 			public void compileTimeError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 
 			@Override
 			public void runTimeError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				switch (msg.error) {
+				case NO_SUCH_ATTRIBUTE:
+				case NO_SUCH_ATTRIBUTE_PASS_THROUGH:
+				case NO_SUCH_PROPERTY:
+					ErrorManager.warning(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString());
+					return;
+
+				default:
+					ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
+					return;
+				}
 			}
 
 			@Override
 			public void IOError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 
 			@Override
 			public void internalError(STMessage msg) {
-				ErrorManager.error(ErrorManager.MSG_INTERNAL_ERROR, msg.toString(), msg.cause);
+				ErrorManager.error(ErrorManager.MSG_STRING_TEMPLATE_ERROR, msg.toString(), msg.cause);
 			}
 		};
 
@@ -574,7 +593,7 @@ public class ErrorManager {
 	}
 
 	public static void resetErrorState() {
-        threadToListenerMap = new HashMap<Thread, ANTLRErrorListener>();
+        threadToListenerMap.clear();
         ErrorState ec = new ErrorState();
 		threadToErrorStateMap.put(Thread.currentThread(), ec);
 	}

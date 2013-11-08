@@ -98,7 +98,7 @@ public class RubyTarget extends Target
 			
             String idString = o.toString();
 
-            if ( idString.isEmpty() ) return idString;
+            if ( idString.length() == 0 ) return idString;
 
             if ( formatName.equals( "snakecase" ) ) {
                 return snakecase( idString );
@@ -149,7 +149,7 @@ public class RubyTarget extends Target
             char next;
             char peek;
 
-            if ( value.isEmpty() ) return value;
+            if ( value.length() == 0 ) return value;
             if ( l == 1 ) return value.toLowerCase();
 
             for ( int i = 0; i < cliff; i++ ) {
@@ -246,7 +246,7 @@ public class RubyTarget extends Target
             char next;
             boolean at_edge = true;
 
-            if ( value.isEmpty() ) return value;
+            if ( value.length() == 0 ) return value;
             if ( cliff == 1 ) return value.toUpperCase();
 
             for ( int i = 0; i < cliff; i++ ) {
@@ -293,7 +293,7 @@ public class RubyTarget extends Target
 
         private String subcamelcase( String value ) {
             value = camelcase( value );
-            if ( value.isEmpty() )
+            if ( value.length() == 0 )
                 return value;
             Character head = Character.toLowerCase( value.charAt( 0 ) );
             String tail = value.substring( 1 );

@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestTreeParsing extends BaseTest {
 	@Test public void testFlatList() throws Exception {
 		String grammar =

@@ -33,6 +33,8 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.tool.Grammar;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestDFAMatching extends BaseTest {
 
     /** Public default constructor used by TestRig */

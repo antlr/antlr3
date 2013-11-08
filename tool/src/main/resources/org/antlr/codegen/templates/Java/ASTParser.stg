@@ -46,7 +46,7 @@ retval.tree = (<ASTLabelType>)adaptor.errorNode(input, retval.start, input.LT(-1
 // TOKEN AST STUFF
 
 /** ID and output=AST */
-tokenRef(token,label,elementIndex,terminalOptions) ::= <<
+tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
 <super.tokenRef(...)>
 <if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
@@ -57,10 +57,10 @@ adaptor.addChild(root_0, <label>_tree);
 >>
 
 /** ID! and output=AST (same as plain tokenRef) */
-tokenRefBang(token,label,elementIndex,terminalOptions) ::= "<super.tokenRef(...)>"
+tokenRefBang(token,label,elementIndex,terminalOptions={}) ::= "<super.tokenRef(...)>"
 
 /** ID^ and output=AST */
-tokenRefRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefRuleRoot(token,label,elementIndex,terminalOptions={}) ::= <<
 <super.tokenRef(...)>
 <if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
@@ -71,19 +71,19 @@ root_0 = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_0);
 >>
 
 /** ids+=ID! and output=AST */
-tokenRefBangAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefBangAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefBang(...)>
 <listLabel(elem=label, ...)>
 >>
 
 /** label+=TOKEN when output=AST but not rewrite alt */
-tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRef(...)>
 <listLabel(elem=label, ...)>
 >>
 
 /** Match label+=TOKEN^ when output=AST but not rewrite alt */
-tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
+tokenRefRuleRootAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRefRuleRoot(...)>
 <listLabel(elem=label, ...)>
 >>
@@ -101,22 +101,22 @@ tokenRefRuleRootAndListLabel(token,label,terminalOptions,elementIndex) ::= <<
 // rather than just added on code.  Investigate that refactoring when
 // I have more time.
 
-matchSet(s,label,terminalOptions,elementIndex,postmatchCode) ::= <%
+matchSet(s,label,elementIndex,postmatchCode,terminalOptions={}) ::= <%
 <super.matchSet(postmatchCode={<if(!ruleDescriptor.isSynPred)><if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>adaptor.addChild(root_0, <createNodeFromToken(...)>);<endif>}, ...)>
 %>
 
-matchRuleBlockSet(s,label,terminalOptions,elementIndex,postmatchCode,treeLevel="0") ::= <<
+matchRuleBlockSet(s,label,elementIndex,postmatchCode,treeLevel="0",terminalOptions={}) ::= <<
 <matchSet(...)>
 >>
 
-matchSetBang(s,label,elementIndex,terminalOptions,postmatchCode) ::= "<super.matchSet(...)>"
+matchSetBang(s,label,elementIndex,postmatchCode,terminalOptions={}) ::= "<super.matchSet(...)>"
 
 // note there is no matchSetTrack because -> rewrites force sets to be
 // plain old blocks of alts: (A|B|...|C)
 
-matchSetRuleRoot(s,label,terminalOptions,elementIndex,debug) ::= <<
+matchSetRuleRoot(s,label,elementIndex,debug,terminalOptions={}) ::= <<
 <if(label)>
-<label>=(<labelType>)input.LT(1);
+<label>=<castToLabelType("input.LT(1)")>;
 <endif>
 <super.matchSet(postmatchCode={<if(!ruleDescriptor.isSynPred)><if(backtracking)>if ( <actions.(actionScope).synpredgate> ) <endif>root_0 = (<ASTLabelType>)adaptor.becomeRoot(<createNodeFromToken(...)>, root_0);<endif>},...)>
 >>
@@ -160,7 +160,7 @@ ruleRefRuleRootAndListLabel(rule,label,elementIndex,args,scope) ::= <<
 
 // WILDCARD AST
 
-wildcard(token,label,elementIndex,terminalOptions) ::= <<
+wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <super.wildcard(...)>
 <if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
@@ -170,9 +170,9 @@ adaptor.addChild(root_0, <label>_tree);
 <endif>
 >>
 
-wildcardBang(label,elementIndex) ::= "<super.wildcard(...)>"
+wildcardBang(label,elementIndex) ::= "<super.wildcard(token=[],...)>"
 
-wildcardRuleRoot(token,label,elementIndex,terminalOptions) ::= <<
+wildcardRuleRoot(token,label,elementIndex,terminalOptions={}) ::= <<
 <super.wildcard(...)>
 <if(!ruleDescriptor.isSynPred)>
 <if(backtracking)>if ( <actions.(actionScope).synpredgate> ) {<endif>
@@ -182,13 +182,13 @@ root_0 = (<ASTLabelType>)adaptor.becomeRoot(<label>_tree, root_0);
 <endif>
 >>
 
-createNodeFromToken(label,terminalOptions) ::= <<
+createNodeFromToken(label,terminalOptions={}) ::= <%
 <if(terminalOptions.node)>
 new <terminalOptions.node>(<label>) <! new MethodNode(IDLabel) !>
 <else>
 (<ASTLabelType>)adaptor.create(<label>)
 <endif>
->>
+%>
 
 ruleCleanUp() ::= <<
 <super.ruleCleanUp()>

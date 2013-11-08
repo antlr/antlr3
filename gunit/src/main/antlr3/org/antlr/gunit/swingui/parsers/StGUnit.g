@@ -76,17 +76,17 @@ test
 	;
 	
 expect returns [ITestCaseOutput out]
-	:	OK			{$out = adapter.createBoolOutput(true);}
-	|	FAIL		{$out = adapter.createBoolOutput(false);}
-	|	'returns' RETVAL {$out = adapter.createReturnOutput($RETVAL.text);}
-	|	'->' output {$out = adapter.createStdOutput($output.text);}
-	|	'->' AST	{$out = adapter.createAstOutput($AST.text);}
+	:	OK			{$out = TestSuiteAdapter.createBoolOutput(true);}
+	|	FAIL		{$out = TestSuiteAdapter.createBoolOutput(false);}
+	|	'returns' RETVAL {$out = TestSuiteAdapter.createReturnOutput($RETVAL.text);}
+	|	'->' output {$out = TestSuiteAdapter.createStdOutput($output.text);}
+	|	'->' AST	{$out = TestSuiteAdapter.createAstOutput($AST.text);}
 	;
 
 input returns [ITestCaseInput in]
-	:	STRING 		{$in = adapter.createStringInput($STRING.text);}
-	|	ML_STRING	{$in = adapter.createMultiInput($ML_STRING.text);}
-	|	fileInput	{$in = adapter.createFileInput($fileInput.path);}
+	:	STRING 		{$in = TestSuiteAdapter.createStringInput($STRING.text);}
+	|	ML_STRING	{$in = TestSuiteAdapter.createMultiInput($ML_STRING.text);}
+	|	fileInput	{$in = TestSuiteAdapter.createFileInput($fileInput.path);}
 	;
 
 output

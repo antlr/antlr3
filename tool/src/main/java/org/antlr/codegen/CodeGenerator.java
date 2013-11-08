@@ -183,35 +183,29 @@ public class CodeGenerator {
 	/** load the main language.stg template group file */
 	public void loadTemplates(String language) {
 		String langDir = classpathTemplateRootDirectoryName+"/"+language;
-		STGroup coreTemplates = new STGroupFile(langDir+"/"+language+".stg");
-
+		STGroup coreTemplates = new ToolSTGroupFile(langDir+"/"+language+".stg");
 		baseTemplates = coreTemplates;
-		if ( coreTemplates ==null ) {
-			ErrorManager.error(ErrorManager.MSG_MISSING_CODE_GEN_TEMPLATES,
-							   language);
-			return;
-		}
 
 		// dynamically add subgroups that act like filters to apply to
 		// their supergroup.  E.g., Java:Dbg:AST:ASTParser::ASTDbg.
 		String outputOption = (String)grammar.getOption("output");
 		if ( outputOption!=null && outputOption.equals("AST") ) {
 			if ( debug && grammar.type!=Grammar.LEXER ) {
-				STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+				STGroup dbgTemplates = new ToolSTGroupFile(langDir+"/Dbg.stg");
 				dbgTemplates.importTemplates(coreTemplates);
 				baseTemplates = dbgTemplates;
-				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
+				STGroup astTemplates = new ToolSTGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(dbgTemplates);
 				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
-					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
+					astParserTemplates = new ToolSTGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
 				}
 				else {
-					astParserTemplates = new STGroupFile(langDir+"/ASTParser.stg");
+					astParserTemplates = new ToolSTGroupFile(langDir+"/ASTParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
 				}
-				STGroup astDbgTemplates = new STGroupFile(langDir+"/ASTDbg.stg");
+				STGroup astDbgTemplates = new ToolSTGroupFile(langDir+"/ASTDbg.stg");
 				astDbgTemplates.importTemplates(astParserTemplates);
 				templates = astDbgTemplates;
 				dbgTemplates.iterateAcrossValues = true; // ST v3 compatibility with Maps
@@ -219,15 +213,15 @@ public class CodeGenerator {
 				astParserTemplates.iterateAcrossValues = true;
 			}
 			else {
-				STGroup astTemplates = new STGroupFile(langDir+"/AST.stg");
+				STGroup astTemplates = new ToolSTGroupFile(langDir+"/AST.stg");
 				astTemplates.importTemplates(coreTemplates);
 				STGroup astParserTemplates;
 				if ( grammar.type==Grammar.TREE_PARSER ) {
-					astParserTemplates = new STGroupFile(langDir+"/ASTTreeParser.stg");
+					astParserTemplates = new ToolSTGroupFile(langDir+"/ASTTreeParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
 				}
 				else {
-					astParserTemplates = new STGroupFile(langDir+"/ASTParser.stg");
+					astParserTemplates = new ToolSTGroupFile(langDir+"/ASTParser.stg");
 					astParserTemplates.importTemplates(astTemplates);
 				}
 				templates = astParserTemplates;
@@ -237,23 +231,23 @@ public class CodeGenerator {
 		}
 		else if ( outputOption!=null && outputOption.equals("template") ) {
 			if ( debug && grammar.type!=Grammar.LEXER ) {
-				STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+				STGroup dbgTemplates = new ToolSTGroupFile(langDir+"/Dbg.stg");
 				dbgTemplates.importTemplates(coreTemplates);
 				baseTemplates = dbgTemplates;
-				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
+				STGroup stTemplates = new ToolSTGroupFile(langDir+"/ST.stg");
 				stTemplates.importTemplates(dbgTemplates);
 				templates = stTemplates;
 				dbgTemplates.iterateAcrossValues = true;
 			}
 			else {
-				STGroup stTemplates = new STGroupFile(langDir+"/ST.stg");
+				STGroup stTemplates = new ToolSTGroupFile(langDir+"/ST.stg");
 				stTemplates.importTemplates(coreTemplates);
 				templates = stTemplates;
 			}
 			templates.iterateAcrossValues = true; // ST v3 compatibility with Maps
 		}
 		else if ( debug && grammar.type!=Grammar.LEXER ) {
-			STGroup dbgTemplates = new STGroupFile(langDir+"/Dbg.stg");
+			STGroup dbgTemplates = new ToolSTGroupFile(langDir+"/Dbg.stg");
 			dbgTemplates.importTemplates(coreTemplates);
 			templates = dbgTemplates;
 			baseTemplates = templates;
@@ -449,6 +443,11 @@ public class CodeGenerator {
 
 		// all recognizers can see Grammar object
 		recognizerST.add("grammar", grammar);
+
+		// do not render templates to disk if errors occurred
+		if ( ErrorManager.getErrorState().errors > 0 ) {
+			return null;
+		}
 
 		if (LAUNCH_ST_INSPECTOR) {
 			outputFileST.inspect();
@@ -1088,7 +1087,7 @@ public class CodeGenerator {
 		catch (Exception tse) {
 			ErrorManager.internalError("can't parse template action",tse);
 		}
-		GrammarAST rewriteTree = (GrammarAST)parseResult.getTree();
+		GrammarAST rewriteTree = parseResult.getTree();
 
 		// then translate via codegen.g
 		CodeGenTreeWalker gen = new CodeGenTreeWalker(new CommonTreeNodeStream(rewriteTree));

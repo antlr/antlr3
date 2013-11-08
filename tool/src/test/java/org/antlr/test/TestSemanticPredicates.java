@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
 public class TestSemanticPredicates extends BaseTest {
 
 	/** Public default constructor used by TestRig */
@@ -531,7 +533,7 @@ public class TestSemanticPredicates extends BaseTest {
 			"  ;\n");
 		String expecting =
 			".s0-B->.s1\n" +
-			".s0-C&&{(q&&r)}?->:s3=>2\n" +
+			".s0-C&&{(r&&q)}?->:s3=>2\n" +
 			".s1-{p}?->:s2=>1\n" +
 			".s1-{q}?->:s3=>2\n";
 		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
@@ -548,7 +550,7 @@ public class TestSemanticPredicates extends BaseTest {
 			"  ;\n");
 		String expecting =
 			".s0-B->.s1\n" +
-			".s0-C&&{(q&&r)}?->:s3=>2\n" +
+			".s0-C&&{(r&&q)}?->:s3=>2\n" +
 			".s1-{(s&&q)}?->:s3=>2\n" +
 			".s1-{p}?->:s2=>1\n";
 		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);

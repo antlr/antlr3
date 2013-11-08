@@ -28,21 +28,64 @@
 package org.antlr.tool;
 
 import org.antlr.Tool;
-import org.antlr.analysis.*;
 import org.antlr.analysis.DFA;
+import org.antlr.analysis.DFAState;
+import org.antlr.analysis.LL1Analyzer;
+import org.antlr.analysis.LL1DFA;
+import org.antlr.analysis.Label;
+import org.antlr.analysis.LookaheadSet;
+import org.antlr.analysis.NFA;
+import org.antlr.analysis.NFAConversionThread;
+import org.antlr.analysis.NFAState;
+import org.antlr.analysis.NFAToDFAConverter;
+import org.antlr.analysis.SemanticContext;
+import org.antlr.analysis.Transition;
 import org.antlr.codegen.CodeGenerator;
-import org.antlr.codegen.*;
-import org.antlr.grammar.v3.*;
-import org.antlr.misc.*;
+import org.antlr.codegen.Target;
+import org.antlr.grammar.v3.ANTLRLexer;
+import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.grammar.v3.ANTLRTreePrinter;
+import org.antlr.grammar.v3.ActionAnalysis;
+import org.antlr.grammar.v3.DefineGrammarItemsWalker;
+import org.antlr.grammar.v3.TreeToNFAConverter;
+import org.antlr.misc.Barrier;
+import org.antlr.misc.IntSet;
+import org.antlr.misc.IntervalSet;
+import org.antlr.misc.MultiMap;
+import org.antlr.misc.OrderedHashSet;
 import org.antlr.misc.Utils;
-import org.antlr.runtime.*;
+import org.antlr.runtime.ANTLRReaderStream;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupString;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 /** Represents a grammar in memory. */
 public class Grammar {
@@ -663,16 +706,15 @@ public class Grammar {
 			}
 		}
 
-		setGrammarTree((GrammarAST)result.getTree());
+		setGrammarTree(result.getTree());
 
 		//if ( grammarTree!=null ) System.out.println("grammar tree: "+grammarTree.toStringTree());
 
 		grammarTree.setUnknownTokenBoundaries();
 
 		setFileName(lexer.getFileName()); // the lexer #src might change name
-		if ( grammarTree==null || grammarTree.findFirstType(ANTLRParser.RULE)==null ) {
+		if ( grammarTree.findFirstType(ANTLRParser.RULE)==null ) {
 			ErrorManager.error(ErrorManager.MSG_NO_RULES, getFileName());
-			return;
 		}
 	}
 
@@ -885,7 +927,7 @@ public class Grammar {
 		parser.setGrammarType(this.type);
 		try {
 			ANTLRParser.rule_return result = parser.rule();
-			return (GrammarAST)result.getTree();
+			return result.getTree();
 		}
 		catch (Exception e) {
 			ErrorManager.error(ErrorManager.MSG_ERROR_CREATING_ARTIFICIAL_RULE,
@@ -2040,25 +2082,32 @@ outer:
 	 *  any else.
 	 */
 	public boolean isEmptyRule(GrammarAST block) {
-		GrammarAST aTokenRefNode =
-			block.findFirstType(ANTLRParser.TOKEN_REF);
-		GrammarAST aStringLiteralRefNode =
-			block.findFirstType(ANTLRParser.STRING_LITERAL);
-		GrammarAST aCharLiteralRefNode =
-			block.findFirstType(ANTLRParser.CHAR_LITERAL);
-		GrammarAST aWildcardRefNode =
-			block.findFirstType(ANTLRParser.WILDCARD);
-		GrammarAST aRuleRefNode =
-			block.findFirstType(ANTLRParser.RULE_REF);
-		if ( aTokenRefNode==null&&
-			 aStringLiteralRefNode==null&&
-			 aCharLiteralRefNode==null&&
-			 aWildcardRefNode==null&&
-			 aRuleRefNode==null )
-		{
-			return true;
+		BitSet nonEmptyTerminals = new BitSet();
+		nonEmptyTerminals.set(ANTLRParser.TOKEN_REF);
+		nonEmptyTerminals.set(ANTLRParser.STRING_LITERAL);
+		nonEmptyTerminals.set(ANTLRParser.CHAR_LITERAL);
+		nonEmptyTerminals.set(ANTLRParser.WILDCARD);
+		nonEmptyTerminals.set(ANTLRParser.RULE_REF);
+		return findFirstTypeOutsideRewrite(block, nonEmptyTerminals) == null;
+	}
+
+	protected GrammarAST findFirstTypeOutsideRewrite(GrammarAST block, BitSet types) {
+		ArrayList<GrammarAST> worklist = new ArrayList<GrammarAST>();
+		worklist.add(block);
+		while (!worklist.isEmpty()) {
+			GrammarAST current = worklist.remove(worklist.size() - 1);
+			if (current.getType() == ANTLRParser.REWRITE) {
+				continue;
+			}
+
+			if (current.getType() >= 0 && types.get(current.getType())) {
+				return current;
+			}
+
+			worklist.addAll(Arrays.asList(current.getChildrenAsArray()));
 		}
-		return false;
+
+		return null;
 	}
 
 	public boolean isAtomTokenType(int ttype) {

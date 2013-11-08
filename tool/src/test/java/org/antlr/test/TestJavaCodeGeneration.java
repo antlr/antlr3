@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** General code generation testing; compilation and/or execution.
  *  These tests are more about avoiding duplicate var definitions
  *  etc... than testing a particular ANTLR feature.
@@ -136,5 +138,24 @@ public class TestJavaCodeGeneration extends BaseTest {
 				"T.g", grammar, "TParser", "TLexer", false);
 		boolean expecting = true; // should be ok
 		assertEquals(expecting, found);
+	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#20: StackOverflow error when
+	 * compiling grammar with backtracking.
+	 * https://github.com/antlr/antlr3/issues/20
+	 */
+	@Test
+	public void testSemanticPredicateAnalysisStackOverflow() throws Exception {
+		String grammar =
+			"grammar T;\n"
+			+ "\n"
+			+ "options {\n"
+			+ "  backtrack=true;\n"
+			+ "}\n"
+			+ "\n"
+			+ "main : ('x'*)*;\n";
+		boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+		assertTrue(success);
 	}
 }

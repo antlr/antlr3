@@ -35,6 +35,8 @@ import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarSyntaxMessage;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** Tree rewrites in tree parsers are basically identical to rewrites
  *  in a normal grammar except that the atomic element is a node not
  *  a Token.  Tests here ensure duplication of nodes occurs properly

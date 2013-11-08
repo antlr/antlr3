@@ -3,6 +3,8 @@ package org.antlr.test;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /** */
 @Ignore
 public class TestLeftRecursion extends BaseTest {

@@ -35,6 +35,8 @@ import org.antlr.tool.GrammarSemanticsMessage;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestRewriteAST extends BaseTest {
 	protected boolean debug = false;
 
@@ -1018,10 +1020,7 @@ public class TestRewriteAST extends BaseTest {
 		assertEquals("2\n", found);
 	}
 
-	@Ignore 
-    // TODO: FAILS. The should probably generate a warning from antlr
-    // See http://www.antlr.org:8888/browse/ANTLR-162
-    //
+	@Test
     public void testSetWithLabel() throws Exception {
 		
 		String grammar =
@@ -1454,6 +1453,20 @@ public class TestRewriteAST extends BaseTest {
 		// ref to rule b (start of c). It then matches 34 in c.
 		assertEquals("line 1:0 no viable alternative at input '*'\n", this.stderrDuringParse);
 		assertEquals("<unexpected: [@0,0:0='*',<6>,1:0], resync=*>\n", found);
+	}
+
+	@Test public void testRewriteEmptyRule() throws Exception {
+		String grammar =
+			"grammar T;\n" +
+			"options {output=AST;}\n" +
+			"tokens {IMAGINARY;}\n" +
+			"a : empty EOF! ;\n" +
+			"empty : -> IMAGINARY;\n" +
+			"WS : ' ';\n";
+		String result = execParser("T.g", grammar, "TParser", "TLexer",
+				   "a", "", debug);
+		assertEquals("IMAGINARY\n", result);
+		assertNull(stderrDuringParse);
 	}
 
 }

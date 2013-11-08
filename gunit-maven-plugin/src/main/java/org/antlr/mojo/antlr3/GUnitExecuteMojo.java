@@ -85,14 +85,14 @@ public class GUnitExecuteMojo extends AbstractMojo {
      *
      * @parameter
      */
-    private Set includes;
+    private Set<String> includes;
 
     /**
      * A set of exclude patterns.
      *
      * @parameter
      */
-    private Set excludes;
+    private Set<String> excludes;
 
 	/**
      * Specifies directory to which gUnit reports should get written.
@@ -111,15 +111,15 @@ public class GUnitExecuteMojo extends AbstractMojo {
 	 */
 	private boolean skip;
 
-	public Set getIncludePatterns() {
+	public Set<String> getIncludePatterns() {
 		return includes == null || includes.isEmpty()
 				? Collections.singleton( "**/*.testsuite" )
 				: includes;
 	}
 
-	public Set getExcludePatterns() {
+	public Set<String> getExcludePatterns() {
 		return excludes == null
-				? Collections.emptySet()
+				? Collections.<String>emptySet()
 				: excludes;
 	}
 
@@ -346,24 +346,11 @@ public class GUnitExecuteMojo extends AbstractMojo {
 	}
 
 	private Set<File> collectIncludedSourceGrammars() throws MojoExecutionException {
-		SourceMapping mapping = new SuffixMapping( "g", Collections.EMPTY_SET );
+		SourceMapping mapping = new SuffixMapping( "g", Collections.<String>emptySet() );
         SourceInclusionScanner scan = new SimpleSourceInclusionScanner( getIncludePatterns(), getExcludePatterns() );
         scan.addSourceMapping( mapping );
 		try {
-			Set scanResults = scan.getIncludedSources( sourceDirectory, null );
-			Set<File> results = new HashSet<File>();
-			for ( Object result : scanResults ) {
-				if ( result instanceof File ) {
-					results.add( ( File ) result );
-				}
-				else if ( result instanceof String ) {
-					results.add( new File( ( String ) result ) );
-				}
-				else {
-					throw new MojoExecutionException( "Unexpected result type from scanning [" + result.getClass().getName() + "]" );
-				}
-			}
-			return results;
+			return scan.getIncludedSources( sourceDirectory, null );
 		}
 		catch ( InclusionScanException e ) {
 			throw new MojoExecutionException( "Error determining gUnit sources", e );

@@ -41,6 +41,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /** Check the $x, $x.y attributes.  For checking the actual
  *  translation, assume the Java target.  This is still a great test
  *  for the semantics of the $x.y stuff regardless of the target.
@@ -633,9 +635,9 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleLabels() throws Exception {
 		String action = "$r.x; $r.start;\n $r.stop;\n $r.tree; $a.x; $a.stop;";
-		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null);" + newline +
-			"\t\t\t (r!=null?((Token)r.stop):null);" + newline +
-			"\t\t\t (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.stop):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?(r.start):null);" + newline +
+			"\t\t\t (r!=null?(r.stop):null);" + newline +
+			"\t\t\t (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?(r.stop):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -705,7 +707,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testForwardRefRuleLabels() throws Exception {
 		String action = "$r.x; $r.start; $r.stop; $r.tree; $a.x; $a.tree;";
-		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?((Token)r.start):null); (r!=null?((Token)r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Object)r.getTree()):null);";
+		String expecting = "(r!=null?((t.a_return)r).x:0); (r!=null?(r.start):null); (r!=null?(r.stop):null); (r!=null?((Object)r.getTree()):null); (r!=null?((t.a_return)r).x:0); (r!=null?((Object)r.getTree()):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -921,7 +923,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testBasicGlobalScope() throws Exception {
 		String action = "$Symbols::names.add($id.text);";
-		String expecting = "((Symbols_scope)Symbols_stack.peek()).names.add((id!=null?id.getText():null));";
+		String expecting = "Symbols_stack.peek().names.add((id!=null?id.getText():null));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -975,7 +977,7 @@ public class TestAttributes extends BaseTest {
 	@Test public void testIndexedGlobalScope() throws Exception {
 		String action = "$Symbols[-1]::names.add($id.text);";
 		String expecting =
-			"((Symbols_scope)Symbols_stack.elementAt(Symbols_stack.size()-1-1)).names.add((id!=null?id.getText():null));";
+			"Symbols_stack.elementAt(Symbols_stack.size()-1-1).names.add((id!=null?id.getText():null));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1003,7 +1005,7 @@ public class TestAttributes extends BaseTest {
 	@Test public void test0IndexedGlobalScope() throws Exception {
 		String action = "$Symbols[0]::names.add($id.text);";
 		String expecting =
-			"((Symbols_scope)Symbols_stack.elementAt(0)).names.add((id!=null?id.getText():null));";
+			"Symbols_stack.elementAt(0).names.add((id!=null?id.getText():null));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1031,7 +1033,7 @@ public class TestAttributes extends BaseTest {
 	@Test public void testAbsoluteIndexedGlobalScope() throws Exception {
 		String action = "$Symbols[3]::names.add($id.text);";
 		String expecting =
-			"((Symbols_scope)Symbols_stack.elementAt(3)).names.add((id!=null?id.getText():null));";
+			"Symbols_stack.elementAt(3).names.add((id!=null?id.getText():null));";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1058,7 +1060,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testScopeAndAttributeWithUnderscore() throws Exception {
 		String action = "$foo_bar::a_b;";
-		String expecting = "((foo_bar_scope)foo_bar_stack.peek()).a_b;";
+		String expecting = "foo_bar_stack.peek().a_b;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1084,7 +1086,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testSharedGlobalScope() throws Exception {
 		String action = "$Symbols::x;";
-		String expecting = "((Symbols_scope)Symbols_stack.peek()).x;";
+		String expecting = "Symbols_stack.peek().x;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1114,7 +1116,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testGlobalScopeOutsideRule() throws Exception {
 		String action = "public void foo() {$Symbols::names.add('foo');}";
-		String expecting = "public void foo() {((Symbols_scope)Symbols_stack.peek()).names.add('foo');}";
+		String expecting = "public void foo() {Symbols_stack.peek().names.add('foo');}";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1141,7 +1143,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleScopeOutsideRule() throws Exception {
 		String action = "public void foo() {$a::name;}";
-		String expecting = "public void foo() {((a_scope)a_stack.peek()).name;}";
+		String expecting = "public void foo() {a_stack.peek().name;}";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1166,7 +1168,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testBasicRuleScope() throws Exception {
 		String action = "$a::n;";
-		String expecting = "((a_scope)a_stack.peek()).n;";
+		String expecting = "a_stack.peek().n;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1244,7 +1246,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testDynamicRuleScopeRefInSubrule() throws Exception {
 		String action = "$a::n;";
-		String expecting = "((a_scope)a_stack.peek()).n;";
+		String expecting = "a_stack.peek().n;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1300,7 +1302,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleScopeFromAnotherRule() throws Exception {
 		String action = "$a::n;"; // must be qualified
-		String expecting = "((a_scope)a_stack.peek()).n;";
+		String expecting = "a_stack.peek().n;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1510,7 +1512,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleRefWhenRuleHasScope() throws Exception {
 		String action = "$b.start;";
-		String expecting = "(b1!=null?((Token)b1.start):null);";
+		String expecting = "(b1!=null?(b1.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1537,7 +1539,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testDynamicScopeRefOkEvenThoughRuleRefExists() throws Exception {
 		String action = "$b::n;";
-		String expecting = "((b_scope)b_stack.peek()).n;";
+		String expecting = "b_stack.peek().n;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1607,7 +1609,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRefToStartAttributeForCurrentRule() throws Exception {
 		String action = "$start;";
-		String expecting = "((Token)retval.start);";
+		String expecting = "(retval.start);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1973,7 +1975,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(r1!=null?((Token)r1.start):null);";
+		String expecting = "(r1!=null?(r1.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -1997,7 +1999,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testReuseExistingLabelWithImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(x!=null?((Token)x.start):null);";
+		String expecting = "(x!=null?(x.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2021,7 +2023,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testReuseExistingListLabelWithImplicitRuleLabel() throws Exception {
 		String action = "$r.start;";
-		String expecting = "(x!=null?((Token)x.start):null);";
+		String expecting = "(x!=null?(x.start):null);";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2684,7 +2686,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testRuleRefWithDynamicScope() throws Exception {
 		String action = "$field::x = $field.st;";
-		String expecting = "((field_scope)field_stack.peek()).x = retval.st;";
+		String expecting = "field_stack.peek().x = retval.st;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
@@ -2881,7 +2883,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testAssignToTreeNodeAttribute() throws Exception {
 		String action = "$tree.scope = localScope;";
-		String expecting = "((Object)retval.tree).scope = localScope;";
+		String expecting = "retval.tree.scope = localScope;";
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
 		Grammar g = new Grammar(
@@ -2934,7 +2936,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testDoNotTranslateScopeAttributeCompare() throws Exception {
 		String action = "if ($rule::foo == \"foo\" || 1) { System.out.println(\"ouch\"); }";
-		String expecting = "if (((rule_scope)rule_stack.peek()).foo == \"foo\" || 1) { System.out.println(\"ouch\"); }";
+		String expecting = "if (rule_stack.peek().foo == \"foo\" || 1) { System.out.println(\"ouch\"); }";
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);
 		Grammar g = new Grammar(
@@ -3041,7 +3043,7 @@ public class TestAttributes extends BaseTest {
 
 	@Test public void testTypeOfGuardedAttributeRefIsCorrect() throws Exception {
 		String action = "int x = $b::n;";
-		String expecting = "int x = ((b_scope)b_stack.peek()).n;";
+		String expecting = "int x = b_stack.peek().n;";
 
 		ErrorQueue equeue = new ErrorQueue();
 		ErrorManager.setErrorListener(equeue);

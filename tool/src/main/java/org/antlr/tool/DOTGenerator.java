@@ -33,7 +33,7 @@ import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupDir;
+import org.stringtemplate.v4.STGroupFile;
 
 import java.util.*;
 
@@ -44,8 +44,8 @@ public class DOTGenerator {
 	protected String arrowhead="normal";
 	protected String rankdir="LR";
 
-	/** Library of output templates; use <attrname> format */
-    public static STGroup stlib = new STGroupDir("org/antlr/tool/templates/dot/dfa");
+	/** Library of output templates; use {@code <attrname>} format */
+    public static STGroup stlib = new STGroupFile("org/antlr/tool/templates/dot/dot.stg");
 
     /** To prevent infinite recursion when walking state machines, record
      *  which states we've visited.  Make a new set every time you start
@@ -86,7 +86,7 @@ public class DOTGenerator {
 			walkRuleNFACreatingDOT(dot, startState);
         }
 		dot.add("rankdir", rankdir);
-        return dot.toString();
+        return dot.render();
     }
 
     /** Return a String containing a DOT description that, when displayed,
@@ -299,7 +299,7 @@ public class DOTGenerator {
 				String predsStr;
 				predsStr = "&&{"+
 					preds.genExpr(grammar.generator,
-								  grammar.generator.getTemplates(), null).toString()
+								  grammar.generator.getTemplates(), null).render()
 					+"}?";
 				label += predsStr;
 			}

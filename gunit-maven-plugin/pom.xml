@@ -31,8 +31,7 @@
 
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -43,99 +42,26 @@
     <groupId>org.antlr</groupId>
     <artifactId>maven-gunit-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>3.4.1-SNAPSHOT</version>
 
-    <name>Maven plugin for gUnit ANTLR V3 </name>
+    <name>ANTLR 3 gUnit Maven plugin</name>
 	<description>A Maven plugin for incorporating gUnit testing of grammars</description>
     <url>http://antlr.org</url>
+
+    <!--
+
+    Inherit from the ANTLR master pom, which tells us what
+    version we are and allows us to inherit dependencies
+    and so on.
+    -->
+    <parent>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr-master</artifactId>
+        <version>3.5.2-SNAPSHOT</version>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <!-- Where do we track bugs for this project?
-      -->
-    <issueManagement>
-        <system>JIRA</system>
-        <url>http://antlr.org/jira/browse/ANTLR</url>
-    </issueManagement>
-
-    <!-- Location of the license description for this project
-      -->
-    <licenses>
-        <license>
-            <distribution>repo</distribution>
-            <name>The BSD License</name>
-            <url>http://www.antlr.org/LICENSE.txt </url>
-        </license>
-    </licenses>
-
-    <distributionManagement>
-    	<!-- The main release repo for Antlr artifacts -->
-        <repository>
-            <id>antlr-repo</id>
-            <name>ANTLR Testing repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-repo</url>
-        </repository>
-		<!-- The snapshot repo for Antlr artifacts -->
-        <snapshotRepository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-snapshot</url>
-        </snapshotRepository>
-		<!-- The place where site deployment should go -->
-        <site>
-            <id>antlr-repo</id>
-            <name>ANTLR gUnit Maven Plugin Web Site</name>
-            <url>scpexe://antlr.org/home/mavensync/antlr-maven-webs/maven-gunit-plugin</url>
-        </site>
-    </distributionManagement>
-
-    <!--
-
-    Inform Maven of the ANTLR snapshot repository, which it will
-    need to consult to get the latest snapshot build of the runtime and tool
-    if it was not built and installed locally.
-    -->
-    <repositories>
-
-      <!--
-        This is the ANTLR repository.
-        -->
-        <repository>
-            <id>antlr-snapshot</id>
-            <name>ANTLR Testing Snapshot Repository</name>
-            <url>http://antlr.org/antlr-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-
-    </repositories>
-    
-    <!-- Ancilliary information for completeness
-      -->
-    <inceptionYear>2009</inceptionYear>
-
-    <mailingLists>
-        <mailingList>
-            <archive>http://antlr.markmail.org/</archive>
-            <otherArchives>
-                <otherArchive>http://www.antlr.org/pipermail/antlr-interest/</otherArchive>
-            </otherArchives>
-            <name>ANTLR Users</name>
-            <subscribe>http://www.antlr.org/mailman/listinfo/antlr-interest/</subscribe>
-            <unsubscribe>http://www.antlr.org/mailman/options/antlr-interest/</unsubscribe>
-            <post>antlr-interest@antlr.org</post>
-        </mailingList>
-    </mailingLists>
-
-    <organization>
-        <name>ANTLR.org</name>
-        <url>http://www.antlr.org</url>
-    </organization>
-    <!-- ============================================================================= -->
 
     <!--
 
@@ -165,7 +91,7 @@
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-compiler-api</artifactId>
-            <version>1.5.3</version>
+            <version>2.0</version>
         </dependency>
 
         <!--
@@ -176,34 +102,22 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
-            <version>3.3</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!--
          Dependency on the gUnit artifact.
         -->
         <dependency>
-            <groupId>${groupId}</groupId>
+            <groupId>org.antlr</groupId>
             <artifactId>gunit</artifactId>
-            <version>3.3</version>
-        </dependency>
-
-        <!--
-          Testing requirements...
-          -->
-        <dependency>
-
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.5</version>
-            <scope>test</scope>
-
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>test</scope>
         </dependency>
         
@@ -211,44 +125,15 @@
     
     <build>
 
-        <defaultGoal>install</defaultGoal>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.6</version>
                 <configuration>
                     <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                 </configuration>
-            </plugin>
-
-            <plugin>  
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>

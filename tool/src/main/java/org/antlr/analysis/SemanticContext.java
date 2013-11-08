@@ -455,8 +455,10 @@ public abstract class SemanticContext {
 		{
 			ST result = null;
 			for (SemanticContext operand : operands) {
-				if (result == null)
+				if (result == null) {
 					result = operand.genExpr(generator, templates, dfa);
+					continue;
+				}
 
 				ST eST;
 				if ( templates!=null ) {
@@ -513,7 +515,7 @@ public abstract class SemanticContext {
 				eST = templates.getInstanceOf("orPredicates");
 			}
 			else {
-				eST = new ST("(<first(operands)><rest(operands):{o | ||<o>}>)");
+				eST = new ST("(<operands; separator=\"||\">)");
 			}
 			for (SemanticContext semctx : operands) {
 				eST.add("operands", semctx.genExpr(generator,templates,dfa));
@@ -644,7 +646,12 @@ public abstract class SemanticContext {
 		//    return a;
 
 		//System.out.println("## have to AND");
-		return new AND(a,b);
+		AND result = new AND(a,b);
+		if (result.operands.size() == 1) {
+			return result.operands.iterator().next();
+		}
+
+		return result;
 	}
 
 	public static SemanticContext or(SemanticContext a, SemanticContext b) {

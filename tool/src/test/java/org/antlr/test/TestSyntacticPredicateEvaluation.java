@@ -29,6 +29,8 @@ package org.antlr.test;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TestSyntacticPredicateEvaluation extends BaseTest {
 	@Test public void testTwoPredsWithNakedAlt() throws Exception {
 		String grammar =
@@ -413,24 +415,6 @@ public class TestSyntacticPredicateEvaluation extends BaseTest {
 				"b : 'a'+ 'b' ;\n" ;
 		String found = execParser("T.g", grammar, "TParser", "TLexer",
 				    "a", "aaab", false);
-
-		assertEquals("alt1\n", found);
-	}
-
-	@Test public void testSynPredWithSemPredReferencingLabeledRule() throws Exception {
-		String grammar =
-			"grammar T;\n" +
-			"options {\n" +
-			"    backtrack = true; \n" +
-			"}\n" +
-			"// if b is rule ref, gens bad void x=null code\n" +
-			"a : x=b {Object o = $x; System.out.println(\"alt1\");}\n" +
-			"  | y=b\n" +
-			"  ;\n" +
-			"\n" +
-			"b : 'a' ;\n" ;
-		String found = execParser("T.g", grammar, "TParser", "TLexer",
-				    "a", "a", false);
 
 		assertEquals("alt1\n", found);
 	}

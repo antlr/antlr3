@@ -27,35 +27,47 @@
  */
 package org.antlr.runtime.tree;
 
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.misc.LookaheadStream;
 import org.antlr.runtime.misc.IntArray;
 
-public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream {
+public class CommonTreeNodeStream extends LookaheadStream<Object> implements TreeNodeStream, PositionTrackingStream<Object> {
 	public static final int DEFAULT_INITIAL_BUFFER_SIZE = 100;
 	public static final int INITIAL_CALL_STACK_SIZE = 10;
 
 	/** Pull nodes from which tree? */
 	protected Object root;
 
-	/** If this tree (root) was created from a token stream, track it. */
+	/** If this tree (root) was created from a {@link TokenStream}, track it. */
 	protected TokenStream tokens;
 
-	/** What tree adaptor was used to build these trees */
+	/** What {@link TreeAdaptor} was used to build these trees */
 	TreeAdaptor adaptor;
 
-    /** The tree iterator we using */
+    /** The {@link TreeIterator} we using. */
     protected TreeIterator it;
 
-    /** Stack of indexes used for push/pop calls */
+    /** Stack of indexes used for push/pop calls. */
     protected IntArray calls;
 
-    /** Tree (nil A B C) trees like flat A B C streams */
+    /** Tree {@code (nil A B C)} trees like flat {@code A B C} streams */
     protected boolean hasNilRoot = false;
 
     /** Tracks tree depth.  Level=0 means we're at root node level. */
     protected int level = 0;
+
+	/**
+	 * Tracks the last node before the start of {@link #data} which contains
+	 * position information to provide information for error reporting. This is
+	 * tracked in addition to {@link #prevElement} which may or may not contain
+	 * position information.
+	 *
+	 * @see #hasPositionInformation
+	 * @see RecognitionException#extractInformationFromTreeNodeStream
+	 */
+	protected Object previousLocationElement;
 
 	public CommonTreeNodeStream(Object tree) {
 		this(new CommonTreeAdaptor(), tree);
@@ -73,6 +85,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         it.reset();
         hasNilRoot = false;
         level = 0;
+		previousLocationElement = null;
         if ( calls != null ) calls.clear();
     }
 
@@ -96,6 +109,16 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         }
         return t;
     }
+
+	@Override
+	public Object remove() {
+		Object result = super.remove();
+		if (p == 0 && hasPositionInformation(prevElement)) {
+			previousLocationElement = prevElement;
+		}
+
+		return result;
+	}
 
 	@Override
     public boolean isEOF(Object o) { return adaptor.getType(o) == Token.EOF; }
@@ -138,7 +161,7 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         seek(index);
     }
 
-    /** Seek back to previous index saved during last push() call.
+    /** Seek back to previous index saved during last {@link #push} call.
      *  Return top of stack (return index).
      */
     public int pop() {
@@ -146,6 +169,48 @@ public class CommonTreeNodeStream extends LookaheadStream<Object> implements Tre
         seek(ret);
         return ret;
     }
+
+	/**
+	 * Returns an element containing position information. If {@code allowApproximateLocation} is {@code false}, then
+	 * this method will return the {@code LT(1)} element if it contains position information, and otherwise return {@code null}.
+	 * If {@code allowApproximateLocation} is {@code true}, then this method will return the last known element containing position information.
+	 *
+	 * @see #hasPositionInformation
+	 */
+	@Override
+	public Object getKnownPositionElement(boolean allowApproximateLocation) {
+		Object node = data.get(p);
+		if (hasPositionInformation(node)) {
+			return node;
+		}
+
+		if (!allowApproximateLocation) {
+			return null;
+		}
+
+		for (int index = p - 1; index >= 0; index--) {
+			node = data.get(index);
+			if (hasPositionInformation(node)) {
+				return node;
+			}
+		}
+
+		return previousLocationElement;
+	}
+
+	@Override
+	public boolean hasPositionInformation(Object node) {
+		Token token = adaptor.getToken(node);
+		if (token == null) {
+			return false;
+		}
+
+		if (token.getLine() <= 0) {
+			return false;
+		}
+
+		return true;
+	}
 
 	// TREE REWRITE INTERFACE
 

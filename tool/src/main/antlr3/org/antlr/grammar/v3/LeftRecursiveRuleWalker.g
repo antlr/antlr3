@@ -164,7 +164,7 @@ block
 outerAlternative returns [boolean isLeftRec]
 @init
 {
-GrammarAST rew=(GrammarAST)$start.getNextSibling();
+GrammarAST rew = $start.getNextSibling();
 if (rew.getType() != REWRITES)
 	rew = null;
 }

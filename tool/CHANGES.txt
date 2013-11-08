@@ -1,5 +1,5 @@
-ANTLR 3.4 Release
-July 18, 2011
+ANTLR 3.5 Release
+January 4, 2012
 
 Terence Parr, parrt at cs usfca edu
 ANTLR project lead and supreme dictator for life
@@ -7,7 +7,18 @@ University of San Francisco
 
 CHANGES
 
-??? 2012 -- release 3.5
+January 4 2012 -- release 3.5
+
+January 3, 2012
+
+* Improve error reporting and recovery for STRAY_BRACKET, fixes antlr/antlr3#42
+* Do not write output files if errors were reported, fixes antlr/antlr3#61
+* Fix AST operator on labeled set of terminals e.g. x=(A|B)^
+* Fix labeled set of terminals with rewrite e.g. x=(A|B) -> $x
+
+December 1, 2012
+
+* Added error msg for .. in parser
 
 September 17, 2012
 

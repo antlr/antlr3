@@ -34,8 +34,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.antlr.mojo.antlr3;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -55,13 +53,11 @@ import org.codehaus.plexus.compiler.util.scan.mapping.SourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 
 /**
- * Goal that picks up all the ANTLR grammars in a project and moves those that
- * are required for generation of the compilable sources into the location
- * that we use to compile them, such as target/generated-sources/antlr3 ...
+ * Parses ANTLR grammar files {@code *.g} and transforms them into Java source
+ * files.
  *
  * @goal antlr
- * 
- * @phase process-sources
+ * @phase generate-sources
  * @requiresDependencyResolution compile
  * @requiresProject true
  * 
@@ -75,7 +71,7 @@ public class Antlr3Mojo
     //
     /**
      * If set to true, then after the tool has processed an input grammar file
-     * it will report variaous statistics about the parser, such as information
+     * it will report various statistics about the parser, such as information
      * on cyclic DFAs, which rules may use backtracking, and so on.
      *
      * @parameter default-value="false"
@@ -83,7 +79,7 @@ public class Antlr3Mojo
     protected boolean report;
     /**
      * If set to true, then the ANTLR tool will print a version of the input
-     * grammar which is devoid of any actions that may be present in the input file.
+     * grammar(s) which are stripped of any embedded actions.
      *
      * @parameter default-value="false"
      */
@@ -97,119 +93,124 @@ public class Antlr3Mojo
      */
     protected boolean debug;
     /**
-     * If set to true, then then the generated parser will compute and report on
-     * profile information at runtime.
+     * If set to true, then the generated parser will compute and report profile
+     * information at runtime.
      *
      * @parameter default-value="false"
      */
     protected boolean profile;
     /**
-     * If set to true then the ANTLR tool will generate a description of the nfa
-     * for each rule in <a href="http://www.graphviz.org">Dot format</a>
-     * 
+     * If set to true, then the ANTLR tool will generate a description of the
+     * NFA for each rule in <a href="http://www.graphviz.org">Dot format</a>
+     *
      * @parameter default-value="false"
      */
     protected boolean nfa;
     /**
-     * If set to true then the ANTLR tool will generate a description of the DFA
-     * for each decision in the grammar in <a href="http://www.graphviz.org">Dot format</a>
-     * 
+     * If set to true, then the ANTLR tool will generate a description of the
+     * DFA for each decision in the grammar in
+     * <a href="http://www.graphviz.org">Dot format</a>.
+     *
      * @parameter default-value="false"
      */
     protected boolean dfa;
     /**
-     * If set to true, the generated parser code will log rule entry and exit points
-     * to stdout as an aid to debugging.
+     * If set to true, the generated parser code will log rule entry and exit
+     * points to stdout ({@link System#out} for the Java target) as an aid to
+     * debugging.
      *
      * @parameter default-value="false"
      */
     protected boolean trace;
     /**
-     * If this parameter is set, it indicates that any warning or error messages returned
-     * by ANLTR, shoould be formatted in the specified way. Currently, ANTLR suports the
-     * built-in formats of antlr, gnu and vs2005.
+     * If this parameter is set, it indicates that any warning or error messages
+     * returned by ANLTR, should be formatted in the specified way. Currently,
+     * ANTLR supports the built-in formats {@code antlr}, {@code gnu} and
+     * {@code vs2005}.
      *
      * @parameter default-value="antlr"
      */
     protected String messageFormat;
     /**
-     * If this parameter is set to true, then ANTLR will report all sorts of things
-     * about what it is doing such as the names of files and the version of ANTLR and so on.
+     * If set to true, then ANTLR will report verbose messages during the code
+     * generation process. This includes the names of files, the version of
+     * ANTLR, and more.
      *
      * @parameter default-value="true"
      */
     protected boolean verbose;
 
     /**
-     * The number of alts, beyond which ANTLR will not generate a switch statement
-     * for the DFA.
+     * The maximum number of alternatives allowed in an inline switch statement.
+     * Beyond this, ANTLR will not generate a switch statement for the DFA.
      *
      * @parameter default-value="300"
      */
     private int maxSwitchCaseLabels;
 
     /**
-     * The number of alts, below which ANTLR will not choose to generate a switch
-     * statement over an if statement.
+     * The minimum number of alternatives for ANTLR to generate a switch
+     * statement. For decisions with fewer alternatives, an if/else if/else
+     * statement will be used instead.
+     *
+     * @parameter default-value="3"
      */
     private int minSwitchAlts;
 
     /* --------------------------------------------------------------------
-     * The following are Maven specific parameters, rather than specificlly
+     * The following are Maven specific parameters, rather than specific
      * options that the ANTLR tool can use.
      */
+
     /**
-     * Provides an explicit list of all the grammars that should
-     * be included in the generate phase of the plugin. Note that the plugin
-     * is smart enough to realize that imported grammars should be included but
-     * not acted upon directly by the ANTLR Tool.
-     *
-     * Unless otherwise specified, the include list scans for and includes all
-     * files that end in ".g" in any directory beneath src/main/antlr3. Note that
-     * this version of the plugin looks for the directory antlr3 and not the directory
-     * antlr, so as to avoid clashes and confusion for projects that use both v2 and v3 grammars
-     * such as ANTLR itself.
+     * Provides an explicit list of all the grammars that should be included in
+     * the generate phase of the plugin. Note that the plugin is smart enough to
+     * realize that imported grammars should be included but not acted upon
+     * directly by the ANTLR Tool.
+     * <p/>
+     * A set of Ant-like inclusion patterns used to select files from the source
+     * directory for processing. By default, the pattern <code>**&#47;*.g</code>
+     * is used to select grammar files.
      *
      * @parameter
      */
-    protected Set includes = new HashSet();
+    protected Set<String> includes = new HashSet<String>();
     /**
-     * Provides an explicit list of any grammars that should be excluded from
-     * the generate phase of the plugin. Files listed here will not be sent for
-     * processing by the ANTLR tool.
+     * A set of Ant-like exclusion patterns used to prevent certain files from
+     * being processed. By default, this set is empty such that no files are
+     * excluded.
      *
-     * @parameter 
+     * @parameter
      */
-    protected Set excludes = new HashSet();
+    protected Set<String> excludes = new HashSet<String>();
     /**
+     * The current Maven project.
+     *
      * @parameter expression="${project}"
      * @required
      * @readonly
      */
     protected MavenProject project;
     /**
-     * Specifies the Antlr directory containing grammar files. For
-     * antlr version 3.x we default this to a directory in the tree
-     * called antlr3 because the antlr directory is occupied by version
-     * 2.x grammars.
+     * The directory where the ANTLR grammar files ({@code *.g}) are located.
      *
      * @parameter default-value="${basedir}/src/main/antlr3"
-     * @required
      */
     private File sourceDirectory;
     /**
-     * Location for generated Java files. For antlr version 3.x we default
-     * this to a directory in the tree called antlr3 because the antlr
-     * directory is occupied by version 2.x grammars.
+     * The directory where the parser files generated by ANTLR will be stored.
+     * The directory will be registered as a compile source root of the project
+     * such that the generated files will participate in later build phases like
+     * compiling and packaging.
      *
      * @parameter default-value="${project.build.directory}/generated-sources/antlr3"
      * @required
      */
     private File outputDirectory;
     /**
-     * Location for imported token files, e.g. <code>.tokens</code> and imported grammars.
-     * Note that ANTLR will not try to process grammars that it finds to be imported
-     * into other grammars (in the same processing session).
+     * Location for imported token files, e.g. {@code *.tokens} and imported
+     * grammars. Note that ANTLR will not try to process grammars that it finds
+     * to be imported into other grammars (in the same processing session).
      *
      * @parameter default-value="${basedir}/src/main/antlr3/imports"
      */
@@ -231,16 +232,18 @@ public class Antlr3Mojo
         project.addCompileSourceRoot(outputDir.getPath());
     }
     /**
-     * An instance of the ANTLR tool build
+     * An instance of the ANTLR tool build.
      */
     protected Tool tool;
 
     /**
      * The main entry point for this Mojo, it is responsible for converting
      * ANTLR 3.x grammars into the target language specified by the grammar.
-     * 
-     * @throws org.apache.maven.plugin.MojoExecutionException When something is disvocered such as a missing source
-     * @throws org.apache.maven.plugin.MojoFailureException When something really bad happesn such as not being able to create the ANTLR Tool
+     *
+     * @throws MojoExecutionException if a configuration or grammar error causes
+     * the code generation process to fail
+     * @throws MojoFailureException if an instance of the ANTLR 3 {@link Tool}
+     * cannot be created
      */
     public void execute()
             throws MojoExecutionException, MojoFailureException {
@@ -254,15 +257,13 @@ public class Antlr3Mojo
 
             // Excludes
             //
-            for (String e : (Set<String>) excludes) {
-
+            for (String e : excludes) {
                 log.debug("ANTLR: Exclude: " + e);
             }
 
             // Includes
             //
-            for (String e : (Set<String>) includes) {
-
+            for (String e : includes) {
                 log.debug("ANTLR: Include: " + e);
             }
 
@@ -402,20 +403,20 @@ public class Antlr3Mojo
      *
      * @param sourceDirectory
      * @param outputDirectory
-     * @throws antlr.TokenStreamException
-     * @throws antlr.RecognitionException
-     * @throws java.io.IOException
-     * @throws org.codehaus.plexus.compiler.util.scan.InclusionScanException
+     * @throws TokenStreamException
+     * @throws RecognitionException
+     * @throws IOException
+     * @throws InclusionScanException
      */
     private void processGrammarFiles(File sourceDirectory, File outputDirectory)
-            throws TokenStreamException, RecognitionException, IOException, InclusionScanException {
+            throws IOException, InclusionScanException {
         // Which files under the source set should we be looking for as grammar files
         //
-        SourceMapping mapping = new SuffixMapping("g", Collections.EMPTY_SET);
+        SourceMapping mapping = new SuffixMapping("g", Collections.<String>emptySet());
 
         // What are the sets of includes (defaulted or otherwise).
         //
-        Set includes = getIncludesPatterns();
+        Set<String> includes = getIncludesPatterns();
 
         // Now, to the excludes, we need to add the imports directory
         // as this is autoscanned for importd grammars and so is auto-excluded from the
@@ -426,7 +427,7 @@ public class Antlr3Mojo
         SourceInclusionScanner scan = new SimpleSourceInclusionScanner(includes, excludes);
 
         scan.addSourceMapping(mapping);
-        Set grammarFiles = scan.getIncludedSources(sourceDirectory, null);
+        Set<File> grammarFiles = scan.getIncludedSources(sourceDirectory, null);
 
         if (grammarFiles.isEmpty()) {
             if (getLog().isInfoEnabled()) {
@@ -441,7 +442,7 @@ public class Antlr3Mojo
             // Iterate each grammar file we were given and add it into the tool's list of
             // grammars to process.
             //
-            for (File grammar : (Set<File>) grammarFiles) {
+            for (File grammar : grammarFiles) {
 
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Grammar file '" + grammar.getPath() + "' detected.");
@@ -462,7 +463,7 @@ public class Antlr3Mojo
 
     }
 
-    public Set getIncludesPatterns() {
+    public Set<String> getIncludesPatterns() {
         if (includes == null || includes.isEmpty()) {
             return Collections.singleton("**/*.g");
         }
@@ -472,11 +473,11 @@ public class Antlr3Mojo
     /**
      * Given the source directory File object and the full PATH to a
      * grammar, produce the path to the named grammar file in relative
-     * terms to the sourceDirectory. This will then allow ANTLR to
+     * terms to the {@code sourceDirectory}. This will then allow ANTLR to
      * produce output relative to the base of the output directory and
      * reflect the input organization of the grammar files.
      *
-     * @param sourceDirectory The source directory File object
+     * @param sourceDirectory The source directory {@link File} object
      * @param grammarFileName The full path to the input grammar file
      * @return The path to the grammar file relative to the source directory
      */

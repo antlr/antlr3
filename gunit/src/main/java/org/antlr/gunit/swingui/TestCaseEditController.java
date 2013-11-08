@@ -96,9 +96,9 @@ public class TestCaseEditController implements IController {
 
     /* END OF MODEL*/
 
-    private static final HashMap<Class, String> TypeNameTable;
+    private static final HashMap<Class<?>, String> TypeNameTable;
     static {
-        TypeNameTable = new HashMap<Class, String> ();
+        TypeNameTable = new HashMap<Class<?>, String> ();
         TypeNameTable.put(TestCaseInputString.class, IN_TYPE_STRING);
         TypeNameTable.put(TestCaseInputMultiString.class, IN_TYPE_MULTI);
         TypeNameTable.put(TestCaseInputFile.class, IN_TYPE_FILE);

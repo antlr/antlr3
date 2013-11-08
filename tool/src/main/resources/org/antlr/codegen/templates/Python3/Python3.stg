@@ -304,7 +304,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
 
 delegateRule(ruleDescriptor) ::= <<
 def <ruleDescriptor.name>(self, <ruleDescriptor.parameterScope:parameterScope()>):
-<\ >   <if(ruleDescriptor.hasReturnValue)>return <endif>self.<ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">)
+<\ >   <if(ruleDescriptor.hasReturnValue)>return <endif>self.<ruleDescriptor.grammar:delegateName()>.<ruleDescriptor.name>(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", "><endif>)
 
 
 >>
@@ -487,7 +487,7 @@ ruleDeclarations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 retval = self.<ruleDescriptor.name>_return()
 retval.start = self.input.LT(1)<\n>
-<else>
+<elseif(ruleDescriptor.returnScope)>
 <ruleDescriptor.returnScope.attributes:{ a |
 <a.name> = <if(a.initValue)><a.initValue><else>None<endif>
 }>
@@ -772,12 +772,12 @@ element(e) ::= <<
 >>
 
 /** match a token optionally with a label in front */
-tokenRef(token,label,elementIndex,terminalOptions) ::= <<
+tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)><label> = <endif>self.match(self.input, <token>, self.FOLLOW_<token>_in_<ruleName><elementIndex>)
 >>
 
 /** ids+=ID */
-tokenRefAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+tokenRefAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <tokenRef(token,label,elementIndex,terminalOptions)>
 <listLabel(label, label)>
 >>
@@ -805,7 +805,7 @@ self.matchRange(<a>, <b>)
 >>
 
 /** For now, sets are interval tests and must be tested inline */
-matchSet(s,label,elementIndex,terminalOptions,postmatchCode="") ::= <<
+matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(label)>
 <label> = self.input.LT(1)<\n>
 <endif>
@@ -856,14 +856,14 @@ self.match(<string>)
 <endif>
 >>
 
-wildcard(token,label,elementIndex,terminalOptions) ::= <<
+wildcard(token,label,elementIndex,terminalOptions={}) ::= <<
 <if(label)>
 <label> = self.input.LT(1)<\n>
 <endif>
 self.matchAny()
 >>
 
-wildcardAndListLabel(token,label,elementIndex,terminalOptions) ::= <<
+wildcardAndListLabel(token,label,elementIndex,terminalOptions={}) ::= <<
 <wildcard(...)>
 <listLabel(label,label)>
 >>
@@ -1254,32 +1254,40 @@ setTest(ranges) ::= "<ranges; separator=\" or \">"
 // A T T R I B U T E S
 
 globalAttributeScopeClass(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 class <scope.name>_scope(object):
     def __init__(self):
         <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
 
+<endif>
 <endif>
 >>
 
 globalAttributeScopeStack(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 self.<scope.name>_stack = []<\n>
+<endif>
 <endif>
 >>
 
 ruleAttributeScopeClass(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 class <scope.name>_scope(object):
     def __init__(self):
         <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
 
 <endif>
+<endif>
 >>
 
 ruleAttributeScopeStack(scope) ::= <<
+<if(scope)>
 <if(scope.attributes)>
 self.<scope.name>_stack = []<\n>
+<endif>
 <endif>
 >>
 
@@ -1304,7 +1312,7 @@ class <ruleDescriptor:returnStructName()>(<if(TREE_PARSER)>Tree<else>Parser<endi
     def __init__(self):
         super().__init__()
 
-        <scope.attributes:{it | self.<it.decl> = None}; separator="\n">
+        <if(scope)><scope.attributes:{it | self.<it.decl> = None}; separator="\n"><endif>
         <@ruleReturnInit()>
 
 
@@ -1314,7 +1322,7 @@ class <ruleDescriptor:returnStructName()>(<if(TREE_PARSER)>Tree<else>Parser<endi
 >>
 
 parameterScope(scope) ::= <<
-<scope.attributes:{it | <it.decl>}; separator=", ">
+<if(scope)><scope.attributes:{it | <it.decl>}; separator=", "><endif>
 >>
 
 parameterAttributeRef(attr) ::= "<attr.name>"

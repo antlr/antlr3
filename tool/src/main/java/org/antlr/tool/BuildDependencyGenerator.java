@@ -32,7 +32,6 @@ import org.antlr.codegen.CodeGenerator;
 import org.antlr.misc.Utils;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class BuildDependencyGenerator {
         List<File> files = new ArrayList<File>();
         File outputDir = tool.getOutputDirectory(grammarFileName);
         if (outputDir.getName().equals(".")) {
-            outputDir = null;
+            outputDir = outputDir.getParentFile();
         } else if (outputDir.getName().indexOf(' ') >= 0) { // has spaces?
             String escSpaces = Utils.replace(outputDir.toString(),
                     " ",
@@ -211,7 +210,7 @@ public class BuildDependencyGenerator {
     public void loadDependencyTemplates() {
         if (templates != null) return;
         String fileName = "org/antlr/tool/templates/depend.stg";
-        templates = new STGroupFile(fileName);
+        templates = new ToolSTGroupFile(fileName);
     }
 
     public String getTokenVocab() {
