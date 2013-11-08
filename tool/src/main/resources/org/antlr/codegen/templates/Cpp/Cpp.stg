@@ -143,6 +143,9 @@ outputFile( LEXER,
  * Include the ANTLR3 generated header file.
  */
 #include    "<name>.hpp"
+<if(trace)>
+#include \<iostream>
+<endif>
 <if(recognizer.grammar.delegators)>
 // Include delegator definition header files
 //
@@ -967,8 +970,8 @@ static ANTLR_UINT8**	getTokenNames()
 <grammar.delegatedRules:{ruleDescriptor|
     <returnType()> <name>::<ruleDescriptor.name>(<ruleDescriptor.parameterScope:parameterScope()>)
     {
-        <if(ruleDescriptor.hasReturnValue)>return <endif>   m_<ruleDescriptor.grammar:delegateName()>-><ruleDescriptor.name>( <ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", ">);
-	\}}; separator="\n">
+        <if(ruleDescriptor.hasReturnValue)>return <endif>m_<ruleDescriptor.grammar:delegateName()>-><ruleDescriptor.name>(<if(ruleDescriptor.parameterScope)><ruleDescriptor.parameterScope.attributes:{a|<a.name>}; separator=", "><endif>);
+    \}}; separator="\n">
 
 <endif>
 /* End of parsing rules
@@ -1370,7 +1373,11 @@ void <name>::m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>)
     <ruleDeclarations()>
     <ruleDescriptor.actions.declarations>
     <lexerRuleLabelDefs()>
-    <if(trace)>System.out.println("enter <ruleName> '"+(char)this->LA(1)+"' line="+ this->getLine()+":"+  this->getCharPositionInLine()+" failed="+failed+" backtracking="+this->get_backtracking());<endif>
+    <if(trace)>
+    std::cout \<\< "enter <ruleName> '" \<\< (char)this->LA(1)
+              \<\< "' line=" \<\< this->getLine() \<\< ":" \<\< this->getCharPositionInLine()
+              \<\< " failed=" \<\< this->get_failedflag() \<\< " backtracking=" \<\< this->get_backtracking() \<\< std::endl;
+    <endif>
 
 <if(nakedBlock)>
     <ruleMemoization(rname=ruleName)>
@@ -1388,7 +1395,11 @@ void <name>::m<ruleName>(<ruleDescriptor.parameterScope:parameterScope()>)
     <block>
 	this->get_lexstate()->set_type(_type);
 <endif>
-    <if(trace)> ANTLR_FPRINTF(stderr, "exit <ruleName> '%c' line=%d:%d failed = %d, backtracking =%d\n",this->LA(1),this->getLine(),this->getCharPositionInLine(),failed,this->get_backtracking());<endif>
+    <if(trace)>
+    std::cout \<\< "exit <ruleName> '" \<\< (char)this->LA(1)
+              \<\< "' line=" \<\< this->getLine() \<\< ":" \<\< this->getCharPositionInLine()
+              \<\< " failed=" \<\< this->get_failedflag() \<\< " backtracking=" \<\< this->get_backtracking() \<\< std::endl;
+    <endif>
     <ruleCleanUp()>
     <lexerRuleLabelFree()>
     <(ruleDescriptor.actions.after):execAfter()>
@@ -1674,6 +1685,8 @@ matchSetAndListLabel(s,label,elementIndex,postmatchCode) ::= <<
 lexerStringRef(string,label,elementIndex) ::= <<
 <if(label)>
 ANTLR_MARKER <label>Start = this->getCharIndex();
+ANTLR_UINT32 <label>StartLine<elementIndex> = this->getLine();
+ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
 this->matchs(<string>);
 <checkRuleBacktrackFailure()>
 <label> = new CommonTokenType;
@@ -1681,6 +1694,8 @@ this->matchs(<string>);
 <label>->set_startIndex( <label>Start);
 <label>->set_stopIndex( this->getCharIndex()-1);
 <label>->set_input( this->get_input() );
+<label>->set_line( <label>StartLine<elementIndex> );
+<label>->set_charPositionInLine( <label>StartCharPos<elementIndex> );
 <else>
 this->matchs(<string>);
 <checkRuleBacktrackFailure()><\n>
@@ -1743,13 +1758,17 @@ lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
 <if(label)>
 {
     ANTLR_MARKER <label>Start<elementIndex> = this->getCharIndex();
+    ANTLR_UINT32 <label>StartLine<elementIndex> = this->getLine();
+    ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
     <if(scope)>m_<scope:delegateName()>-><endif>m<rule.name>(<if(scope)>m_<scope:delegateName()><endif> <if(args)>, <endif><args; separator=", ">);
     <checkRuleBacktrackFailure()>
     <label> = new CommonTokenType();
     <label>->set_type( CommonTokenType::TOKEN_INVALID);
     <label>->set_startIndex( <label>Start<elementIndex> );
-    <label>->set_stopIndex( this->getCharIndex()-1);
+    <label>->set_stopIndex( this->getCharIndex()-1 );
     <label>->set_input( this->get_input() );
+    <label>->set_line( <label>StartLine<elementIndex> );
+    <label>->set_charPositionInLine( <label>StartCharPos<elementIndex> );
 }
 <else>
 <if(scope)>m_<scope:delegateName()>-><endif>m<rule.name>(<args; separator=", ">);
@@ -1768,6 +1787,8 @@ lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 {
     ANTLR_UINT32 <label>Start<elementIndex>;
+    ANTLR_UINT32 <label>StartLine<elementIndex> = this->getLine();
+    ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
     <labelType> <label>;
     <label>Start<elementIndex> = this->getCharIndex();
     this->matchc(ANTLR_CHARSTREAM_EOF);
@@ -1777,6 +1798,8 @@ lexerMatchEOF(label,elementIndex) ::= <<
     <label>->set_startIndex(<label>Start<elementIndex>);
     <label>->set_stopIndex(this->getCharIndex()-1);
     <label>->set_input( this->get_input() );
+    <label>->set_line( <label>StartLine<elementIndex> );
+    <label>->set_charPositionInLine( <label>StartCharPos<elementIndex> );
 }
 <else>
     this->matchc(ANTLR_CHARSTREAM_EOF);
@@ -1908,7 +1931,7 @@ dfaAcceptState(alt) ::= "alt<decisionNumber>=<alt>;"
  *  have to evaluate some predicates for this edge.
  */
 dfaEdge(labelExpr, targetState, predicates) ::= <<
-if ( <if(predicates)>(<predicates>) && <endif>(<labelExpr>))
+if ( (<labelExpr>)<if(predicates)> && (<predicates>)<endif>)
 {
     <targetState>
 }
@@ -2158,7 +2181,7 @@ break;
  *  state to jump to next if successful.
  */
 cyclicDFAEdge(labelExpr, targetStateNumber, edgeNumber, predicates) ::= <<
-if ( <if(predicates)>(<predicates>) && <endif>(<labelExpr>) )
+if ( (<labelExpr>) <if(predicates)>&& (<predicates>)<endif> )
 {
     s = <targetStateNumber>;
 }<\n>

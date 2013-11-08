@@ -110,29 +110,29 @@ public:
 	{
 	};
 
-	static void* operator new (std::size_t bytes) 
+	ANTLR_INLINE static void* operator new (std::size_t bytes)
 	{ 
 		void* p = alloc(bytes);
 		return p;
 	}
-	static void* operator new (std::size_t , void* p) { return p; }
-	static void* operator new[]( std::size_t bytes)
+	ANTLR_INLINE static void* operator new (std::size_t , void* p) { return p; }
+	ANTLR_INLINE static void* operator new[]( std::size_t bytes)
 	{
 		void* p = alloc(bytes); 
 		return p;
 	}
-	static void operator delete(void* p)
+	ANTLR_INLINE static void operator delete(void* p)
 	{
 		DefaultAllocPolicy::free(p);
 	}
-	static void operator delete(void* , void* ) {} //placement delete
+	ANTLR_INLINE static void operator delete(void* , void* ) {} //placement delete
 
-	static void operator delete[](void* p)
+	ANTLR_INLINE static void operator delete[](void* p)
 	{
 		DefaultAllocPolicy::free(p);
 	}
 
-	static void* alloc( std::size_t bytes )
+	ANTLR_INLINE static void* alloc( std::size_t bytes )
 	{
 		void* p = malloc(bytes); 
 		if( p== NULL )
@@ -140,19 +140,20 @@ public:
 		return p;
 	}
 
-	static void* alloc0( std::size_t bytes )
+	ANTLR_INLINE static void* alloc0( std::size_t bytes )
 	{
-		void* p = DefaultAllocPolicy::alloc(bytes); 
-		memset(p, 0, bytes );
+		void* p = calloc(1, bytes);
+		if( p== NULL )
+			throw std::bad_alloc();
 		return p;
 	}
 
-	static void  free( void* p )
+	ANTLR_INLINE static void  free( void* p )
 	{
 		return ::free(p);
 	}
 	
-	static void* realloc(void *ptr, size_t size)
+	ANTLR_INLINE static void* realloc(void *ptr, size_t size)
 	{
 		return ::realloc( ptr, size );
 	}

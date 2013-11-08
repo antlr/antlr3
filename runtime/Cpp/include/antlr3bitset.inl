@@ -105,9 +105,8 @@ Bitset<ImplTraits>::Bitset( ANTLR_UINT32 numBits )
 	//
 	ANTLR_UINT32 numelements	= ((numBits -1) >> ANTLR_BITSET_LOG_BITS) + 1;
 
-	m_blist.set_bits( (ANTLR_BITWORD*) AllocPolicyType::alloc(numelements * sizeof(ANTLR_BITWORD)));
+	m_blist.set_bits( (ANTLR_BITWORD*) AllocPolicyType::alloc0(numelements * sizeof(ANTLR_BITWORD)));
 
-	memset( m_blist.get_bits(), 0, (numelements * sizeof(ANTLR_BITWORD)));
 	m_blist.set_length( numelements );
 }
 

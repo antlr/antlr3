@@ -24,6 +24,7 @@ namespace Antlr3Test {
 	class t010lexer;
 	class t011lexer;
 	class t012lexerXMLLexer;
+	class t051lexer;
 
 	class t039labelsLexer;
 	class t039labelsParser;
@@ -58,6 +59,7 @@ namespace Antlr3Test {
 	typedef antlr3::Traits<t010lexer, NoParser, UserTraits> t010lexerTraits;
 	typedef antlr3::Traits<t011lexer, NoParser, UserTraits> t011lexerTraits;
 	typedef antlr3::Traits<t012lexerXMLLexer, NoParser, UserTraits> t012lexerXMLLexerTraits;
+	typedef antlr3::Traits<t051lexer, NoParser, UserTraits> t051lexerTraits;
 
 	typedef antlr3::Traits<t039labelsLexer, t039labelsParser, UserTraits> t039labelsLexerTraits;
 	typedef t039labelsLexerTraits t039labelsParserTraits;
