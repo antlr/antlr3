@@ -1365,15 +1365,15 @@ static ANTLR3_UCHAR
 antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 {
 	pANTLR3_INPUT_STREAM input;
-        UTF32           ch;
-        UTF32           ch2;
-        pANTLR3_UCHAR   nextChar;
+        ANTLR3_UCHAR   ch;
+        ANTLR3_UCHAR   ch2;
+        UTF16          *nextChar;
 
         // Find the input interface and where we are currently pointing to
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = (pANTLR3_UCHAR)input->nextChar;
+        nextChar    = input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
@@ -1385,8 +1385,8 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
                 //
                 // Next char in Big Endian byte order
                 //
-                ch  = ((*nextChar) << 8) + *(nextChar+1);
-                nextChar += 2;
+                ch  = ((*(pANTLR3_UINT8)nextChar) << 8) + *((pANTLR3_UINT8)nextChar+1);
+                nextChar++;
 
                 // If we have a surrogate pair then we need to consume
                 // a following valid LO surrogate.
@@ -1399,7 +1399,7 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
                     {
                         // Next character is in big endian byte order
                         //
-                        ch2 = ((*nextChar) << 8) + *(nextChar+1);
+                        ch2 = ((*(pANTLR3_UINT8)nextChar) << 8) + *((pANTLR3_UINT8)nextChar+1);
 
                         // If it's a valid low surrogate, consume it
                         //
@@ -1407,7 +1407,7 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
                         {
                             // We consumed one 16 bit character
                             //
-		            nextChar += 2;
+                	    nextChar ++;
                         }
                         // Note that we ignore a valid hi surrogate that has no lo surrogate to go with
                         // it.
@@ -1431,20 +1431,20 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
             {
                 // Get the previous 16 bit character
                 //
-                ch = ((*nextChar - 2) << 8) + (*nextChar -1);
-                nextChar -= 2;
+                ch = ((*((pANTLR3_UINT8)nextChar - 2)) << 8) + (*((pANTLR3_UINT8)nextChar -1));
+                nextChar --;
 
                 // If we found a low surrogate then go back one more character if
                 // the hi surrogate is there
                 //
                 if (ch >= UNI_SUR_LOW_START && ch <= UNI_SUR_LOW_END) 
                 {
-                    ch2 = ((*nextChar - 2) << 8) + (*nextChar -1);
+                    ch2 = ((*((pANTLR3_UINT8)nextChar - 2)) << 8) + (*((pANTLR3_UINT8)nextChar -1));
                     if (ch2 >= UNI_SUR_HIGH_START && ch2 <= UNI_SUR_HIGH_END) 
                     {
                         // Yes, there is a high surrogate to match it so decrement one more and point to that
                         //
-                        nextChar -=2;
+                        nextChar --;
                     }
                 }
             }
@@ -1454,16 +1454,16 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
         //
         // Input buffer size is always in bytes
         //
-	if	( (pANTLR3_UINT8)nextChar >= (((pANTLR3_UINT8)input->data) + input->sizeBuf))
+	if ( (pANTLR3_UINT8)nextChar >= (((pANTLR3_UINT8)input->data) + input->sizeBuf))
 	{
-		return	ANTLR3_CHARSTREAM_EOF;
+	    return ANTLR3_CHARSTREAM_EOF;
 	}
 	else
 	{
             // Pick up the next 16 character (big endian byte order)
             //
-            ch = ((*nextChar) << 8) + *(nextChar+1);
-            nextChar += 2;
+            ch = ((*(pANTLR3_UINT8)nextChar) << 8) + *((pANTLR3_UINT8)nextChar+1);
+            nextChar ++;
 
             // If we have a surrogate pair then we need to consume
             // a following valid LO surrogate.
@@ -1472,11 +1472,11 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
             {
                 // If the 16 bits following the high surrogate are in the source buffer...
                 //
-                if	((pANTLR3_UINT8)(nextChar) < (((pANTLR3_UINT8)input->data) + input->sizeBuf))
+                if ((pANTLR3_UINT8)(nextChar) < (((pANTLR3_UINT8)input->data) + input->sizeBuf))
                 {
                     // Next character is in big endian byte order
                     //
-                    ch2 = ((*nextChar) << 8) + *(nextChar+1);
+                    ch2 = ((*(pANTLR3_UINT8)nextChar) << 8) + *((pANTLR3_UINT8)nextChar+1);
 
                     // If it's a valid low surrogate, consume it
                     //
