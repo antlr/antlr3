@@ -213,7 +213,7 @@ public class CTarget extends Target {
                     case 'u':
                     case 'U':
                         buf.append(literal.substring(i + 1, i + 5));  // Already a hex string
-                        i = i + 4;                                // Move to next string/char/escape
+                        i = i + 5;                                // Move to next string/char/escape
                         break;
 
                     case 'n':
