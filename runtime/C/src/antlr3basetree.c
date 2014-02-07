@@ -214,9 +214,11 @@ addChild (pANTLR3_BASE_TREE tree, pANTLR3_BASE_TREE child)
 			tree->createChildrenList(tree);
 		}
 
-		ANTLR3_UINT32 count = tree->children->add(tree->children, child, (void (ANTLR3_CDECL *)(void *))child->free);
-		child->setChildIndex(child, count - 1);
-		child->setParent(child, tree);
+		{
+			ANTLR3_UINT32 count = tree->children->add(tree->children, child, (void (ANTLR3_CDECL *)(void *))child->free);
+			child->setChildIndex(child, count - 1);
+			child->setParent(child, tree);
+		}
 	}
 }
 
