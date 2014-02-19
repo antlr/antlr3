@@ -34,7 +34,14 @@ import org.antlr.misc.Utils;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 /** A tree of component (delegate) grammars.
  *
@@ -223,7 +230,9 @@ public class CompositeGrammar {
 	public List<Grammar> getIndirectDelegates(Grammar g) {
 		List<Grammar> direct = getDirectDelegates(g);
 		List<Grammar> delegates = getDelegates(g);
-		delegates.removeAll(direct);
+		if ( direct!=null ) {
+			delegates.removeAll(direct);
+		}
 		return delegates;
 	}
 
