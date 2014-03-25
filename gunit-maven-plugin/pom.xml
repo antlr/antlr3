@@ -56,7 +56,7 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.5.2-SNAPSHOT</version>
+        <version>3.5.3-SNAPSHOT</version>
     </parent>
 
     <properties>
