@@ -42,7 +42,7 @@ import java.util.*;
  *  input a1a2..an, the DFA is in a state that represents the
  *  subset T of the states of the NFA that are reachable from the
  *  NFA's start state along some path labeled a1a2..an."
- *  In conventional NFA->DFA conversion, therefore, the subset T
+ *  In conventional NFA&rarr;DFA conversion, therefore, the subset T
  *  would be a bitset representing the set of states the
  *  NFA could be in.  We need to track the alt predicted by each
  *  state as well, however.  More importantly, we need to maintain
@@ -84,7 +84,7 @@ public class DFAState extends State {
 	 */
     protected int k;
 
-    /** The NFA->DFA algorithm may terminate leaving some states
+    /** The NFA&rarr;DFA algorithm may terminate leaving some states
      *  without a path to an accept state, implying that upon certain
      *  input, the decision is not deterministic--no decision about
      *  predicting a unique alternative can be made.  Recall that an
@@ -205,7 +205,7 @@ public class DFAState extends State {
 	}
 
     /** Add an NFA configuration to this DFA node.  Add uniquely
-     *  an NFA state/alt/syntactic&semantic context (chain of invoking state(s)
+     *  an NFA state/alt/syntactic&amp;semantic context (chain of invoking state(s)
      *  and semantic predicate contexts).
      *
      *  I don't see how there could be two configurations with same
@@ -294,7 +294,7 @@ public class DFAState extends State {
      *
      *  The idea for adding a new set, t, is to look for overlap with the
      *  elements of existing list s.  Upon overlap, replace
-     *  existing set s[i] with two new disjoint sets, s[i]-t and s[i]&t.
+     *  existing set s[i] with two new disjoint sets, s[i]-t and s[i]&amp;t.
      *  (if s[i]-t is nil, don't add).  The remainder is t-s[i], which is
      *  what you want to add to the set minus what was already there.  The
      *  remainder must then be compared against the i+1..n elements in s
@@ -691,7 +691,7 @@ public class DFAState extends State {
 	 *  predicate implies we should evaluate the predicate to true. This
 	 *  means the whole edge has to be ungated. Consider:
 	 *
-	 *	 X : ('a' | {p}?=> 'a')
+	 *	 X : ('a' | {p}?=&gt; 'a')
 	 *	   | 'a' 'b'
 	 *	   ;
 	 *
@@ -701,7 +701,7 @@ public class DFAState extends State {
 	 *  can't test p.  You can get to the same place with and w/o the context.
 	 *  Therefore, it is never ok to test p in this situation. 
 	 *
-	 *  TODO: cache this as it's called a lot; or at least set bit if >1 present in state
+	 *  TODO: cache this as it's called a lot; or at least set bit if &gt;1 present in state
 	 */
 	public SemanticContext getGatedPredicatesInNFAConfigurations() {
 		SemanticContext unionOfPredicatesFromAllAlts = null;

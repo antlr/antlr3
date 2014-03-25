@@ -108,7 +108,7 @@ public class LeftRecursiveRuleAnalyzer extends LeftRecursiveRuleWalker {
 		//System.out.println("binaryAlt " + alt + ": " + altText + ", rewrite=" + rewriteText);
 	}
 
-	/** Convert e ? e : e  ->  ? e : e_[nextPrec] */
+	/** Convert e ? e : e  &rarr;  ? e : e_[nextPrec] */
 	@Override
 	public void ternaryAlt(GrammarAST altTree, GrammarAST rewriteTree, int alt) {
 		altTree = GrammarAST.dupTree(altTree);

@@ -62,7 +62,7 @@ public class NFAContext {
 	 *  you could chase your tail forever if somebody said "s : e '.' | e ';' ;"
 	 *  This constant prevents new states from being created after a stack gets
 	 *  "too big".  Actually (12/14/2007) I realize that this example is
-	 *  trapped by the non-LL(*) detector for recursion in > 1 alt.  Here is
+	 *  trapped by the non-LL(*) detector for recursion in &gt; 1 alt.  Here is
 	 *  an example that trips stack overflow:
 	 *
 	 *	  s : a Y | A A A A A X ; // force recursion past m=4
@@ -168,7 +168,7 @@ public class NFAContext {
 	 *  This is used in relation to checking conflicts associated with a
 	 *  single NFA state's configurations within a single DFA state.
 	 *  If there are configurations s and t within a DFA state such that
-	 *  s.state=t.state && s.alt != t.alt && s.ctx conflicts t.ctx then
+	 *  s.state=t.state &amp;&amp; s.alt != t.alt &amp;&amp; s.ctx conflicts t.ctx then
 	 *  the DFA state predicts more than a single alt--it's nondeterministic.
 	 *  Two contexts conflict if they are the same or if one is a suffix
 	 *  of the other.

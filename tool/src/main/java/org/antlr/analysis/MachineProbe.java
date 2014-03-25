@@ -94,7 +94,7 @@ public class MachineProbe {
 	}
 
 	/**
-	 * Given List<IntSet>, return a String with a useful representation of the
+	 * Given List&lt;IntSet&gt;, return a String with a useful representation of the
 	 * associated input string. One could show something different for lexers
 	 * and parsers, for example.
 	 */

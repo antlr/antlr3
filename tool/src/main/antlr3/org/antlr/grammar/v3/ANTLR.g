@@ -339,7 +339,7 @@ protected GrammarAST createBlockFromDupAlt(GrammarAST alt) {
 }
 
 /** Rewrite alt to have a synpred as first element;
- *  (xxx)=>xxx
+ *  (xxx)=&gt;xxx
  *  but only if they didn't specify one manually.
  */
 protected void prefixWithSynPred( GrammarAST alt ) {

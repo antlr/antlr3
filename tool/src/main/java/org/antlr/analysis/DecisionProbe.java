@@ -40,7 +40,7 @@ import java.util.*;
 /** Collection of information about what is wrong with a decision as
  *  discovered while building the DFA predictor.
  *
- *  The information is collected during NFA->DFA conversion and, while
+ *  The information is collected during NFA&rarr;DFA conversion and, while
  *  some of this is available elsewhere, it is nice to have it all tracked
  *  in one spot so a great error message can be easily had.  I also like
  *  the fact that this object tracks it all for later perusing to make an
@@ -118,7 +118,7 @@ public class DecisionProbe {
 	 */
 	protected Set<Integer> altsWithProblem = new HashSet<Integer>();
 
-	/** If decision with > 1 alt has recursion in > 1 alt, it's (likely) nonregular
+	/** If decision with &gt; 1 alt has recursion in &gt; 1 alt, it's (likely) nonregular
 	 *  lookahead.  The decision cannot be made with a DFA.
 	 *  the alts are stored in altsWithProblem.
 	 */
@@ -156,7 +156,7 @@ public class DecisionProbe {
 	 *  an input sequence.  Tracks the input position
 	 *  we were at the last time at this node.  If same input position, then
 	 *  we'd have reached same state without consuming input...probably an
-	 *  infinite loop.  Stop.  Set<String>.  The strings look like
+	 *  infinite loop.  Stop.  Set&lt;String&gt;.  The strings look like
 	 *  stateNumber_labelIndex.
 	 */
 	protected Set<String> statesVisitedAtInputDepth;
@@ -219,7 +219,7 @@ public class DecisionProbe {
 		return stateToRecursionOverflowConfigurationsMap.size()>0;
 	}
 
-	/** Found recursion in > 1 alt */
+	/** Found recursion in &gt; 1 alt */
 	public boolean isNonLLStarDecision() {
 		return nonLLStarDecision;
 	}
@@ -291,7 +291,7 @@ public class DecisionProbe {
 		stateToRecursionOverflowConfigurationsMap.remove(stateI);
 	}
 
-	/** Return a List<Label> indicating an input sequence that can be matched
+	/** Return a List&lt;Label&gt; indicating an input sequence that can be matched
 	 *  from the start state of the DFA to the targetState (which is known
 	 *  to have a problem).
 	 */
@@ -309,7 +309,7 @@ public class DecisionProbe {
 		return labels;
 	}
 
-	/** Given List<Label>, return a String with a useful representation
+	/** Given List&lt;Label&gt;, return a String with a useful representation
 	 *  of the associated input string.  One could show something different
 	 *  for lexers and parsers, for example.
 	 */
@@ -334,13 +334,13 @@ public class DecisionProbe {
 	 *  The first NFA state for all NFA paths will be the same: the starting
 	 *  NFA state of the first nondeterministic alt.  Imagine (A|B|A|A):
 	 *
-	 * 	5->9-A->o
+	 * 	5-&gt;9-A-&gt;o
 	 *  |
-	 *  6->10-B->o
+	 *  6-&gt;10-B-&gt;o
 	 *  |
-	 *  7->11-A->o
+	 *  7-&gt;11-A-&gt;o
 	 *  |
-	 *  8->12-A->o
+	 *  8-&gt;12-A-&gt;o
 	 *
 	 *  There are 3 nondeterministic alts.  The paths should be:
 	 *  5 9 ...
@@ -757,7 +757,7 @@ public class DecisionProbe {
 	/** Given a start state and a final state, find a list of edge labels
 	 *  between the two ignoring epsilon.  Limit your scan to a set of states
 	 *  passed in.  This is used to show a sample input sequence that is
-	 *  nondeterministic with respect to this decision.  Return List<Label> as
+	 *  nondeterministic with respect to this decision.  Return List&lt;Label&gt; as
 	 *  a parameter.  The incoming states set must be all states that lead
 	 *  from startState to targetState and no others so this algorithm doesn't
 	 *  take a path that eventually leads to a state other than targetState.

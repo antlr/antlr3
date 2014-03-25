@@ -46,10 +46,10 @@ public interface TreeNodeStream extends IntStream {
 	 * provide results for {@code k < -1}. {@code LT(0)} is undefined. For
 	 * {@code k<=n}, return {@code null}. Return {@code null} for {@code LT(0)}
 	 * and any index that results in an absolute address that is negative.
-	 * <p/>
+	 * <p>
 	 * This is analogous to {@link TokenStream#LT}, but this returns a tree node
 	 * instead of a {@link Token}. Makes code generation identical for both
-	 * parser and tree grammars.
+	 * parser and tree grammars.</p>
 	 */
 	public Object LT(int k);
 
@@ -104,10 +104,10 @@ public interface TreeNodeStream extends IntStream {
 	 * it is walking the tree and might need to know you are monkeying with the
 	 * underlying tree. Also, it might be able to modify the node stream to
 	 * avoid restreaming for future phases.
-	 * <p/>
+	 * <p>
 	 * If {@code parent} is {@code null}, don't do anything; must be at root of
 	 * overall tree. Can't replace whatever points to the parent externally. Do
-	 * nothing.
+	 * nothing.</p>
 	 */
 	public void replaceChildren(Object parent, int startChildIndex, int stopChildIndex, Object t);
 }

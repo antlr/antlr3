@@ -143,7 +143,7 @@ public class CommonTree extends BaseTree {
 
     /** For every node in this subtree, make sure it's start/stop token's
      *  are set.  Walk depth first, visit bottom up.  Only updates nodes
-     *  with at least one token index < 0.
+     *  with at least one token index &lt; 0.
      */
     public void setUnknownTokenBoundaries() {
         if ( children==null ) {

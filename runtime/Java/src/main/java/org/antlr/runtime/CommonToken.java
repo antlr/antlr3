@@ -42,7 +42,7 @@ public class CommonToken implements Token, Serializable {
 	  */
 	protected String text;
 
-	/** What token number is this from 0..n-1 tokens; < 0 implies invalid index */
+	/** What token number is this from 0..n-1 tokens; &lt; 0 implies invalid index */
 	protected int index = -1;
 
 	/** The char position into the input buffer where this token starts */

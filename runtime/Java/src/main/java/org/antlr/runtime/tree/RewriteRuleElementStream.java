@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** A generic list of elements tracked in an alternative to be used in
- *  a -> rewrite rule.  We need to subclass to fill in the next() method,
+ *  a -&gt; rewrite rule.  We need to subclass to fill in the next() method,
  *  which returns either an AST node wrapped around a token payload or
  *  an existing subtree.
  *
@@ -148,8 +148,8 @@ public abstract class RewriteRuleElementStream {
 
 	/** do the work of getting the next element, making sure that it's
 	 *  a tree node or subtree.  Deal with the optimization of single-
-	 *  element list versus list of size > 1.  Throw an exception
-	 *  if the stream is empty or we're out of elements and size>1.
+	 *  element list versus list of size &gt; 1.  Throw an exception
+	 *  if the stream is empty or we're out of elements and size&gt;1.
 	 *  protected so you can override in a subclass if necessary.
 	 */
 	protected Object _next() {

@@ -134,11 +134,11 @@ public class RubyTarget extends Target
          *
          * example -- aGUIWhatNot
          *   c   c+1 c+2  action
-         *   a   G        << 'a' << '_'  // a lower-upper word edge
-         *   G   U   I    << 'g'
-         *   U   I   W    << 'w'
-         *   I   W   h    << 'i' << '_'  // the last character in an acronym run of uppers
-         *   W   h        << 'w'
+         *   a   G        &lt;&lt; 'a' &lt;&lt; '_'  // a lower-upper word edge
+         *   G   U   I    &lt;&lt; 'g'
+         *   U   I   W    &lt;&lt; 'w'
+         *   I   W   h    &lt;&lt; 'i' &lt;&lt; '_'  // the last character in an acronym run of uppers
+         *   W   h        &lt;&lt; 'w'
          *   ... and so on
          */
         private String snakecase( String value ) {

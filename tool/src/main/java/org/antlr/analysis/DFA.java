@@ -78,7 +78,7 @@ public class DFA {
 
 	/** A set of all uniquely-numbered DFA states.  Maps hash of DFAState
      *  to the actual DFAState object.  We use this to detect
-     *  existing DFA states.  Map<DFAState,DFAState>.  Use Map so
+     *  existing DFA states.  Map&lt;DFAState,DFAState&gt;.  Use Map so
 	 *  we can get old state back (Set only allows you to see if it's there).
 	 *  Not used during fixed k lookahead as it's a waste to fill it with
 	 *  a dup of states array.
@@ -88,7 +88,7 @@ public class DFA {
 	/** Maps the state number to the actual DFAState.  Use a Vector as it
 	 *  grows automatically when I set the ith element.  This contains all
 	 *  states, but the states are not unique.  s3 might be same as s1 so
-	 *  s3 -> s1 in this table.  This is how cycles occur.  If fixed k,
+	 *  s3 &rarr; s1 in this table.  This is how cycles occur.  If fixed k,
 	 *  then these states will all be unique as states[i] always points
 	 *  at state i when no cycles exist.
 	 *
@@ -146,7 +146,7 @@ public class DFA {
 	protected DFAState[] altToAcceptState;
 
 	/** Track whether an alt discovers recursion for each alt during
-	 *  NFA to DFA conversion; >1 alt with recursion implies nonregular.
+	 *  NFA to DFA conversion; &gt;1 alt with recursion implies nonregular.
 	 */
 	public IntSet recursiveAltSet = new IntervalSet();
 
@@ -212,7 +212,7 @@ public class DFA {
 	public Vector<Integer> max;
 	public Vector<Integer> special;
 	public Vector<Vector<Integer>> transition;
-	/** just the Vector<Integer> indicating which unique edge table is at
+	/** just the Vector&lt;Integer&gt; indicating which unique edge table is at
 	 *  position i.
 	 */
 	public Vector<Integer> transitionEdgeTables; // not used by java yet
@@ -345,7 +345,7 @@ public class DFA {
 	 *  that GIF files use.  Transition tables are heavily compressed by
 	 *  this technique.  I got the idea from JFlex http://jflex.de/
 	 *
-	 *  Return List<String> where each string is either \xyz for 8bit char
+	 *  Return List&lt;String&gt; where each string is either \xyz for 8bit char
 	 *  and \uFFFF for 16bit.  Hideous and specific to Java, but it is the
 	 *  only target bad enough to need it.
 	 */
@@ -802,16 +802,16 @@ public class DFA {
 	/** Count all disambiguating syn preds (ignore synpred tests
 	 *  for gated edges, which occur for nonambig input sequences).
 	 *  E.g.,
-	 *  x  : (X)=> (X|Y)\n" +
+	 *  x  : (X)=&gt; (X|Y)\n" +
 	 *     | X\n" +
 	 *     ;
 	 *
 	 *  gives
 	 * 
-	 * .s0-X->.s1
-	 * .s0-Y&&{synpred1_t}?->:s2=>1
-	 * .s1-{synpred1_t}?->:s2=>1
-	 * .s1-{true}?->:s3=>2
+	 * .s0-X-&gt;.s1
+	 * .s0-Y&amp;&amp;{synpred1_t}?-&gt;:s2=&gt;1
+	 * .s1-{synpred1_t}?-&gt;:s2=&gt;1
+	 * .s1-{true}?-&gt;:s3=&gt;2
 	 */
 	public boolean hasSynPred() {
 		boolean has = _hasSynPred(startState, new HashSet<DFAState>());

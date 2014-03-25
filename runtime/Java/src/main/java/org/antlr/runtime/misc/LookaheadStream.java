@@ -100,7 +100,7 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
 
     /** Make sure we have 'need' elements from current position p. Last valid
      *  p index is data.size()-1.  p+need-1 is the data index 'need' elements
-     *  ahead.  If we need 1 element, (p+1-1)==p must be < data.size().
+     *  ahead.  If we need 1 element, (p+1-1)==p must be &lt; data.size().
      */
     protected void syncAhead(int need) {
         int n = (p+need-1) - data.size() + 1; // how many more elements we need?
@@ -160,11 +160,11 @@ public abstract class LookaheadStream<T> extends FastQueue<T> {
 	/**
 	 * Seek to a 0-indexed absolute token index. Normally used to seek backwards
 	 * in the buffer. Does not force loading of nodes.
-	 * <p/>
+	 * <p>
 	 * To preserve backward compatibility, this method allows seeking past the
 	 * end of the currently buffered data. In this case, the input pointer will
 	 * be moved but the data will only actually be loaded upon the next call to
-	 * {@link #consume} or {@link #LT} for {@code k>0}.
+	 * {@link #consume} or {@link #LT} for {@code k>0}.</p>
 	 *
 	 * @throws IllegalArgumentException if {@code index} is less than 0
 	 * @throws UnsupportedOperationException if {@code index} lies before the

@@ -108,10 +108,10 @@ public class DOTTreeGenerator {
 	 *   node [shape=plaintext, fixedsize=true, fontsize=11, fontname="Courier",
 	 *         width=.4, height=.2];
 	 *   edge [arrowsize=.7]
-	 *   "+"->3
-	 *   "+"->"*"
-	 *   "*"->4
-	 *   "*"->5
+	 *   "+"-&gt;3
+	 *   "+"-&gt;"*"
+	 *   "*"-&gt;4
+	 *   "*"-&gt;5
 	 * }
 	 *
 	 * Return the ST not a string in case people want to alter.

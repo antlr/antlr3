@@ -56,7 +56,7 @@ public class Antlr3ErrorLog implements ANTLRErrorListener {
 
     /**
      * Sends an informational message to the Maven log sink.
-     * @param s The message to send to Maven
+     * @param message The message to send to Maven
      */
     public void info(String message) {
         log.info(message);

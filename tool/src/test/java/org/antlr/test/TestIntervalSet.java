@@ -345,8 +345,8 @@ public class TestIntervalSet extends BaseTest {
 	/**
 	 * This case is responsible for antlr/antlr4#153.
 	 * https://github.com/antlr/antlr4/issues/153
-	 * <p/>
-	 * Resolution back-ported from V4.
+	 * <p>
+	 * Resolution back-ported from V4.</p>
 	 */
 	@Test public void testMergeWhereAdditionMergesThreeExistingIntervals() throws Exception {
 		IntervalSet s = new IntervalSet();
@@ -387,7 +387,7 @@ public class TestIntervalSet extends BaseTest {
 	}
 
 	/** The following was broken:
-	    {'\u0000'..'s', 'u'..'\uFFFE'} & {'\u0000'..'q', 's'..'\uFFFE'}=
+	    {'\u0000'..'s', 'u'..'\uFFFE'} &amp; {'\u0000'..'q', 's'..'\uFFFE'}=
 	    {'\u0000'..'q', 's'}!!!! broken...
 	 	'q' is 113 ascii
 	 	'u' is 117

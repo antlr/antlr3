@@ -187,7 +187,7 @@ public class GrammarSpelunker {
             return null;
         }
 
-        /** NAME : LETTER+ ; // NAME is sequence of >=1 letter */
+        /** NAME : LETTER+ ; // NAME is sequence of &gt;=1 letter */
         String ID() throws IOException {
             StringBuilder buf = new StringBuilder();
             while ( c!=EOF && isID_LETTER() ) { buf.append((char)c); consume(); }

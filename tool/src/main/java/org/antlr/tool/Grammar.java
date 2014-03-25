@@ -306,7 +306,7 @@ public class Grammar {
 
 	// Token options are here to avoid contaminating Token object in runtime
 
-	/** Legal options for terminal refs like ID<node=MyVarNode> */
+	/** Legal options for terminal refs like ID&lt;node=MyVarNode&gt; */
 	public static final Set<String> legalTokenOptions =
 		new HashSet<String>() {
 			{
@@ -326,7 +326,7 @@ public class Grammar {
 	protected int global_k = -1;
 
 	/** Map a scope to a map of name:action pairs.
-	 *  Map<String, Map<String,GrammarAST>>
+	 *  Map&lt;String, Map&lt;String,GrammarAST&gt;&gt;
 	 *  The code generator will use this to fill holes in the output files.
 	 *  I track the AST node for the action in case I need the line number
 	 *  for errors.
@@ -452,7 +452,7 @@ public class Grammar {
 
 	/** An AST that records entire input grammar with all rules.  A simple
 	 *  grammar with one rule, "grammar t; a : A | B ;", looks like:
-	 * ( grammar t ( rule a ( BLOCK ( ALT A ) ( ALT B ) ) <end-of-rule> ) )
+	 * ( grammar t ( rule a ( BLOCK ( ALT A ) ( ALT B ) ) &lt;end-of-rule&gt; ) )
 	 */
 	protected GrammarAST grammarTree = null;
 
@@ -504,7 +504,7 @@ public class Grammar {
 	/** How long in ms did it take to build DFAs for this grammar?
 	 *  If this grammar is a combined grammar, it only records time for
 	 *  the parser grammar component.  This only records the time to
-	 *  do the LL(*) work; NFA->DFA conversion.
+	 *  do the LL(*) work; NFA&rarr;DFA conversion.
 	 */
 	public long DFACreationWallClockTimeInMS;
 
@@ -1880,7 +1880,7 @@ outer:
 		}
 	}
 
-	/** Given a set of all rewrite elements on right of ->, filter for
+	/** Given a set of all rewrite elements on right of -&gt;, filter for
 	 *  label types such as Grammar.TOKEN_LABEL, Grammar.TOKEN_LIST_LABEL, ...
 	 *  Return a displayable token type name computed from the GrammarAST.
 	 */
@@ -2352,7 +2352,7 @@ outer:
 		delegateGrammar.composite = this.composite;
 	}
 
-	/** Load a vocab file <vocabName>.tokens and return max token type found. */
+	/** Load a vocab file &lt;vocabName&gt;.tokens and return max token type found. */
 	public int importTokenVocabulary(GrammarAST tokenVocabOptionAST,
 									 String vocabName)
 	{
@@ -2851,7 +2851,7 @@ outer:
 	 *  ANTLRWorks has to give the *exact* location which
 	 *  is not easy from the user point of view).
 	 *
-	 *  This is not particularly fast as it walks entire line:col->DFA map
+	 *  This is not particularly fast as it walks entire line:col&rarr;DFA map
 	 *  looking for a prefix of "line:".
 	 */
 	public List<Integer> getLookaheadDFAColumnsForLineInFile(int line) {
@@ -3095,9 +3095,9 @@ outer:
 	 *  an invalid alt is requested.  I must count in to find the right
 	 *  alternative number.  For (A|B), you get NFA structure (roughly):
 	 *
-	 *  o->o-A->o
+	 *  o-&gt;o-A-&gt;o
 	 *  |
-	 *  o->o-B->o
+	 *  o-&gt;o-B-&gt;o
 	 *
 	 *  This routine returns the leftmost state for each alt.  So alt=1, returns
 	 *  the upperleft most state in this structure.
@@ -3171,7 +3171,7 @@ outer:
 	}
 
 	/** given a token type and the text of the literal, come up with a
-	 *  decent token type label.  For now it's just T<type>.  Actually,
+	 *  decent token type label.  For now it's just T&lt;type&gt;.  Actually,
 	 *  if there is an aliased name from tokens like PLUS='+', use it.
 	 */
 	public String computeTokenNameFromLiteral(int tokenType, String literal) {

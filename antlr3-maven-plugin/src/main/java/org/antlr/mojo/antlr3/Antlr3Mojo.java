@@ -167,10 +167,10 @@ public class Antlr3Mojo
      * the generate phase of the plugin. Note that the plugin is smart enough to
      * realize that imported grammars should be included but not acted upon
      * directly by the ANTLR Tool.
-     * <p/>
+     * <p>
      * A set of Ant-like inclusion patterns used to select files from the source
      * directory for processing. By default, the pattern <code>**&#47;*.g</code>
-     * is used to select grammar files.
+     * is used to select grammar files.</p>
      *
      * @parameter
      */
@@ -403,8 +403,6 @@ public class Antlr3Mojo
      *
      * @param sourceDirectory
      * @param outputDirectory
-     * @throws TokenStreamException
-     * @throws RecognitionException
      * @throws IOException
      * @throws InclusionScanException
      */

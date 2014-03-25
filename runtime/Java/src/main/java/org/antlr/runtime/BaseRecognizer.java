@@ -476,7 +476,7 @@ public abstract class BaseRecognizer {
 	 *  given the current call chain.  Contrast this with the
 	 *  definition of plain FOLLOW for rule r:
 	 *
-	 *   FOLLOW(r)={x | S=>*alpha r beta in G and x in FIRST(beta)}
+	 *   FOLLOW(r)={x | S=&gt;*alpha r beta in G and x in FIRST(beta)}
 	 *
 	 *  where x in T* and alpha, beta in V*; T is set of terminals and
 	 *  V is the set of terminals and nonterminals.  In other words,
@@ -500,16 +500,16 @@ public abstract class BaseRecognizer {
 	 *  FOLLOW sets are precisely what could follow a rule reference.
 	 *  For input input "i=(3);", here is the derivation:
 	 *
-	 *  stat => ID '=' expr ';'
-	 *       => ID '=' atom ('+' atom)* ';'
-	 *       => ID '=' '(' expr ')' ('+' atom)* ';'
-	 *       => ID '=' '(' atom ')' ('+' atom)* ';'
-	 *       => ID '=' '(' INT ')' ('+' atom)* ';'
-	 *       => ID '=' '(' INT ')' ';'
+	 *  stat =&gt; ID '=' expr ';'
+	 *       =&gt; ID '=' atom ('+' atom)* ';'
+	 *       =&gt; ID '=' '(' expr ')' ('+' atom)* ';'
+	 *       =&gt; ID '=' '(' atom ')' ('+' atom)* ';'
+	 *       =&gt; ID '=' '(' INT ')' ('+' atom)* ';'
+	 *       =&gt; ID '=' '(' INT ')' ';'
 	 *
 	 *  At the "3" token, you'd have a call chain of
 	 *
-	 *    stat -> expr -> atom -> expr -> atom
+	 *    stat &rarr; expr &rarr; atom &rarr; expr &rarr; atom
 	 *
 	 *  What can follow that specific nested ref to atom?  Exactly ')'
 	 *  as you can see by looking at the derivation of this specific
@@ -573,12 +573,12 @@ public abstract class BaseRecognizer {
 	 *  ')'.  When the parser returns from the nested call to expr, it
 	 *  will have call chain:
 	 *
-	 *    stat -> expr -> atom
+	 *    stat &rarr; expr &rarr; atom
 	 *
 	 *  and it will be trying to match the ')' at this point in the
 	 *  derivation:
 	 *
-	 *       => ID '=' '(' INT ')' ('+' atom)* ';'
+	 *       =&gt; ID '=' '(' INT ')' ('+' atom)* ';'
 	 *                          ^
 	 *  match() will see that ';' doesn't match ')' and report a
 	 *  mismatched token error.  To recover, it sees that LA(1)==';'
@@ -702,7 +702,7 @@ public abstract class BaseRecognizer {
 		state.following[++state._fsp] = fset;
 	}
 
-	/** Return List<String> of the rules in your parser instance
+	/** Return List&lt;String&gt; of the rules in your parser instance
 	 *  leading up to a call to this method.  You could override if
 	 *  you want more details such as the file/line info of where
 	 *  in the parser java code a rule is invoked.
@@ -769,7 +769,7 @@ public abstract class BaseRecognizer {
 	public abstract String getSourceName();
 
 	/** A convenience method for use most often with template rewrites.
-	 *  Convert a List<Token> to List<String>
+	 *  Convert a List&lt;Token&gt; to List&lt;String&gt;
 	 */
 	public List<String> toStrings(List<? extends Token> tokens) {
 		if ( tokens==null ) return null;
