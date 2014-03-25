@@ -157,7 +157,7 @@ public class GrammarSanity {
 	/** enclosingRuleName calls targetRuleName, find the cycle containing
 	 *  the target and add the caller.  Find the cycle containing the caller
 	 *  and add the target.  If no cycles contain either, then create a new
-	 *  cycle.  listOfRecursiveCycles is List<Set<String>> that holds a list
+	 *  cycle.  listOfRecursiveCycles is List&lt;Set&lt;String&gt;&gt; that holds a list
 	 *  of cycles (sets of rule names).
 	 */
 	protected void addRulesToCycle(Rule targetRule,
@@ -252,12 +252,12 @@ public class GrammarSanity {
 		}
 	}
 
-	/** Rules in tree grammar that use -> rewrites and are spitting out
+	/** Rules in tree grammar that use -&gt; rewrites and are spitting out
 	 *  templates via output=template and then use rewrite=true must only
-	 *  use -> on alts that are simple nodes or trees or single rule refs
+	 *  use -&gt; on alts that are simple nodes or trees or single rule refs
 	 *  that match either nodes or trees.  The altAST is the ALT node
 	 *  for an ALT.  Verify that its first child is simple.  Must be either
-	 *  ( ALT ^( A B ) <end-of-alt> ) or ( ALT A <end-of-alt> ) or
+	 *  ( ALT ^( A B ) &lt;end-of-alt&gt; ) or ( ALT A &lt;end-of-alt&gt; ) or
 	 *  other element.
 	 *
 	 *  Ignore predicates in front and labels.

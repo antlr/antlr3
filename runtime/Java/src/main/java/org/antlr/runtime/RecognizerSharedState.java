@@ -67,11 +67,11 @@ public class RecognizerSharedState {
 	public int syntaxErrors = 0;
 
 	/** If 0, no backtracking is going on.  Safe to exec actions etc...
-	 *  If >0 then it's the level of backtracking.
+	 *  If &gt;0 then it's the level of backtracking.
 	 */
 	public int backtracking = 0;
 
-	/** An array[size num rules] of Map<Integer,Integer> that tracks
+	/** An array[size num rules] of Map&lt;Integer,Integer&gt; that tracks
 	 *  the stop token index for each rule.  ruleMemo[ruleIndex] is
 	 *  the memoization table for ruleIndex.  For key ruleStartIndex, you
 	 *  get back the stop token for associated rule or MEMO_RULE_FAILED.

@@ -88,7 +88,7 @@ public class Tool {
     /**
      * A list of dependency generators that are accumulated aaaas (and if) the
      * tool is required to sort the provided grammars into build dependency order.
-    protected Map<String, BuildDependencyGenerator> buildDependencyGenerators;
+    protected Map&lt;String, BuildDependencyGenerator&gt; buildDependencyGenerators;
      */
 
     public static void main(String[] args) {

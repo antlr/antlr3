@@ -35,7 +35,7 @@ import org.antlr.tool.Grammar;
  *  label such as a token or character.  A label can be a set of char or
  *  tokens.  It can be an epsilon transition.  It can be a semantic predicate
  *  (which assumes an epsilon transition) or a tree of predicates (in a DFA).
- *  Special label types have to be < 0 to avoid conflict with char.
+ *  Special label types have to be &lt; 0 to avoid conflict with char.
  */
 public class Label implements Comparable<Label>, Cloneable {
     public static final int INVALID = -7;
@@ -60,9 +60,9 @@ public class Label implements Comparable<Label>, Cloneable {
      *
      *  yields a DFA predictor:
      *
-     *  o-a->o-b->1   predict alt 1
+     *  o-a-&gt;o-b-&gt;1   predict alt 1
      *       |
-     *       |-EOT->o predict alt 2
+     *       |-EOT-&gt;o predict alt 2
      *
      *  To generate code for EOT, treat it as the "default" path, which
      *  implies there is no way to mismatch a char for the state from

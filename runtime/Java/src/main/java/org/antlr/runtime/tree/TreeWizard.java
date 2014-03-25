@@ -41,7 +41,7 @@ import java.util.Map;
  *
  *  In order to create nodes and navigate, this class needs a TreeAdaptor.
  *
- *  This class can build a token type -> node index for repeated use or for
+ *  This class can build a token type &rarr; node index for repeated use or for
  *  iterating over the various nodes with a particular type.
  *
  *  This class works in conjunction with the TreeAdaptor rather than moving
@@ -140,7 +140,7 @@ public class TreeWizard {
 		this(new CommonTreeAdaptor(), tokenNames);
 	}
 
-	/** Compute a Map<String, Integer> that is an inverted index of
+	/** Compute a Map&lt;String, Integer&gt; that is an inverted index of
 	 *  tokenNames (which maps int token types to names).
 	 */
 	public Map<String, Integer> computeTokenTypes(String[] tokenNames) {
@@ -169,7 +169,7 @@ public class TreeWizard {
 
 	/** Walk the entire tree and make a node name to nodes mapping.
 	 *  For now, use recursion but later nonrecursive version may be
-	 *  more efficient.  Returns Map<Integer, List> where the List is
+	 *  more efficient.  Returns Map&lt;Integer, List&gt; where the List is
 	 *  of your AST node type.  The Integer is the token type of the node.
 	 *
 	 *  TODO: save this index so that find and visit are faster

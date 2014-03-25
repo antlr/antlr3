@@ -636,7 +636,7 @@ public class TestSemanticPredicates extends BaseTest {
 	 *  "pinching" together into a single NFA state.
 	 *
 	 *  This test also demonstrates that just because B D could predict
-	 *  alt 1 in rule 'a', it is unnecessary to continue NFA->DFA
+	 *  alt 1 in rule 'a', it is unnecessary to continue NFA&rarr;DFA
 	 *  conversion to include an edge for D.  Alt 1 is the only possible
 	 *  prediction because we resolve the ambiguity by choosing alt 1.
 	 */

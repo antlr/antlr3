@@ -104,8 +104,8 @@ public class GUnitExecuteMojo extends AbstractMojo {
 
 	/**
 	 * Should gUnit functionality be completely by-passed?
-	 * <p/>
-	 * By default we skip gUnit tests if the user requested that all testing be skipped using 'maven.test.skip'
+	 * <p>
+	 * By default we skip gUnit tests if the user requested that all testing be skipped using 'maven.test.skip'</p>
 	 *
 	 * @parameter expression="${maven.test.skip}"
 	 */

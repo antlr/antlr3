@@ -130,7 +130,7 @@ public class Rule {
 
 	public int numberOfAlts;
 
-	/** Each alt has a Map<tokenRefName,List<tokenRefAST>>; range 1..numberOfAlts.
+	/** Each alt has a Map&lt;tokenRefName,List&lt;tokenRefAST&gt;&gt;; range 1..numberOfAlts.
 	 *  So, if there are 3 ID refs in a rule's alt number 2, you'll have
 	 *  altToTokenRef[2].get("ID").size()==3.  This is used to see if $ID is ok.
 	 *  There must be only one ID reference in the alt for $ID to be ok in
@@ -143,7 +143,7 @@ public class Rule {
 	 */
 	protected Map<String, List<GrammarAST>>[] altToTokenRefMap;
 
-	/** Each alt has a Map<ruleRefName,List<ruleRefAST>>; range 1..numberOfAlts
+	/** Each alt has a Map&lt;ruleRefName,List&lt;ruleRefAST&gt;&gt;; range 1..numberOfAlts
 	 *  So, if there are 3 expr refs in a rule's alt number 2, you'll have
 	 *  altToRuleRef[2].get("expr").size()==3.  This is used to see if $expr is ok.
 	 *  There must be only one expr reference in the alt for $expr to be ok in

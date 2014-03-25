@@ -289,7 +289,7 @@ public abstract class BaseTreeAdaptor implements TreeAdaptor {
 	 *  an actual real input token.  Typically this is for converting '{'
 	 *  tokens to BLOCK etc...  You'll see
 	 *
-	 *    r : lc='{' ID+ '}' -> ^(BLOCK[$lc] ID+) ;
+	 *    r : lc='{' ID+ '}' -&gt; ^(BLOCK[$lc] ID+) ;
 	 *
 	 *  If you care what the token payload objects' type is, you should
 	 *  override this method and any other createToken variant.

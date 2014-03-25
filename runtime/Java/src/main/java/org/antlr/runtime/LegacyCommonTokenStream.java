@@ -44,10 +44,10 @@ public class LegacyCommonTokenStream implements TokenStream {
 	 */
 	protected List<Token> tokens;
 
-	/** Map<tokentype, channel> to override some Tokens' channel numbers */
+	/** Map&lt;tokentype, channel&gt; to override some Tokens' channel numbers */
 	protected Map<Integer, Integer> channelOverrideMap;
 
-	/** Set<tokentype>; discard any tokens with this type */
+	/** Set&lt;tokentype&gt;; discard any tokens with this type */
 	protected Set<Integer> discardSet;
 
 	/** Skip tokens on any channel but this one; this is how we skip whitespace... */

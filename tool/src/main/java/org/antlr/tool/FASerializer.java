@@ -50,7 +50,7 @@ public class FASerializer {
 
     /** Rather than add a new instance variable to NFA and DFA just for
      *  serializing machines, map old state numbers to new state numbers
-     *  by a State object -> Integer new state number HashMap.
+     *  by a State object &rarr; Integer new state number HashMap.
      */
     protected Map<State, Integer> stateNumberTranslator;
 

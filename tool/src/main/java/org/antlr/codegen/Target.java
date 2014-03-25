@@ -199,7 +199,7 @@ public class Target {
 
 	/** Convert from an ANTLR string literal found in a grammar file to
 	 *  an equivalent string literal in the target language.  For Java, this
-	 *  is the translation 'a\n"' -> "a\n\"".  Expect single quotes
+	 *  is the translation 'a\n"' &rarr; "a\n\"".  Expect single quotes
 	 *  around the incoming literal.  Just flip the quotes and replace
 	 *  double quotes with \"
      * 

@@ -744,7 +744,7 @@ public class CodeGenerator {
 	}
 
 	/** For intervals such as [3..3, 30..35], generate an expression that
-	 *  tests the lookahead similar to LA(1)==3 || (LA(1)>=30&&LA(1)<=35)
+	 *  tests the lookahead similar to LA(1)==3 || (LA(1)&gt;=30&amp;&amp;LA(1)&lt;=35)
 	 */
 	public ST genSetExpr(STGroup templates,
 									 IntSet set,
@@ -931,7 +931,7 @@ public class CodeGenerator {
 
 	/** Translate an action like [3,"foo",a[3]] and return a List of the
 	 *  translated actions.  Because actions are themselves translated to a list
-	 *  of chunks, must cat together into a ST>.  Don't translate
+	 *  of chunks, must cat together into a ST&gt;.  Don't translate
 	 *  to strings early as we need to eval templates in context.
 	 */
 	public List<ST> translateArgAction(String ruleName,
@@ -1340,7 +1340,7 @@ public class CodeGenerator {
 	/** Create a label to track a token / rule reference's result.
 	 *  Technically, this is a place where I break model-view separation
 	 *  as I am creating a variable name that could be invalid in a
-	 *  target language, however, label ::= <ID><INT> is probably ok in
+	 *  target language, however, label ::= &lt;ID&gt;&lt;INT&gt; is probably ok in
 	 *  all languages we care about.
 	 */
 	public String createUniqueLabel(String name) {

@@ -281,7 +281,7 @@ public class Profiler extends BlankDebugEventListener {
 						   d.decision.ruleName+"-"+d.decision.decision+" start index "+d.startIndex);		
 	}
 
-	/** The parser is in a decision if the decision depth > 0.  This
+	/** The parser is in a decision if the decision depth &gt; 0.  This
 	 *  works for backtracking also, which can have nested decisions.
 	 */
 	public boolean inDecision() {

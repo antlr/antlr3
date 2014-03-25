@@ -193,7 +193,7 @@ public class NFAToDFAConverter {
 		return startState;
 	}
 
-	/** From this node, add a d--a-->t transition for all
+	/** From this node, add a d--a--&gt;t transition for all
 	 *  labels 'a' where t is a DFA node created
 	 *  from the set of NFA states reachable from any NFA
 	 *  state in DFA state d.
@@ -356,14 +356,14 @@ public class NFAToDFAConverter {
 	 *
 	 *  The normal decision to predict alts 1, 2, 3 is:
 	 *
-	 *  if ( (input.LA(1)>='1' && input.LA(1)&lt;='9') ) {
+	 *  if ( (input.LA(1)&gt;='1' &amp;&amp; input.LA(1)&lt;='9') ) {
      *       alt7=1;
      *  }
      *  else if ( input.LA(1)=='0' ) {
      *      if ( input.LA(2)=='X'||input.LA(2)=='x' ) {
      *          alt7=2;
      *      }
-     *      else if ( (input.LA(2)>='0' && input.LA(2)&lt;='7') ) {
+     *      else if ( (input.LA(2)&gt;='0' &amp;&amp; input.LA(2)&lt;='7') ) {
      *           alt7=3;
      *      }
      *      else if ( input.LA(2)=='L'||input.LA(2)=='l' ) {
@@ -381,7 +381,7 @@ public class NFAToDFAConverter {
 	 *
 	 *  A better decision is as follows:
      *
-	 *  if ( (input.LA(1)>='1' && input.LA(1)&lt;='9') ) {
+	 *  if ( (input.LA(1)&gt;='1' &amp;&amp; input.LA(1)&lt;='9') ) {
 	 *      alt7=1;
 	 *  }
 	 *  else if ( input.LA(1)=='0' ) {
@@ -514,7 +514,7 @@ public class NFAToDFAConverter {
 	 *
 	 *   3. Like case 2, we reach an NFA state associated with the end of a
 	 *      rule, r, in the grammar from which NFA was built.  In this case,
-	 *      however, we realize that during this NFA->DFA conversion, no state
+	 *      however, we realize that during this NFA&rarr;DFA conversion, no state
 	 *      invoked the current rule's NFA.  There is no choice but to add
 	 *      all NFA states that follow references to r's start state.  This is
 	 *      analogous to computing the FOLLOW(r) in the LL(k) world.  By
@@ -581,7 +581,7 @@ public class NFAToDFAConverter {
 	 *        ;
 	 *
 	 *      Input L ID R is ambiguous but to figure this out, ANTLR
-	 *      needs to go a->b->a->b to find the L ID sequence.
+	 *      needs to go a-&gt;b-&gt;a-&gt;b to find the L ID sequence.
 	 *
 	 *      Do not allow closure to add a configuration that would
 	 *      allow too much recursion.
@@ -910,7 +910,7 @@ public class NFAToDFAConverter {
 	 *  That would mean that two NFA configurations could reach the
 	 *  end of the token with possibly different predicted alts.
 	 *  Seems like that would be rare or impossible.  Perhaps convert
-	 *  this routine to find all such configs and give error if >1.
+	 *  this routine to find all such configs and give error if &gt;1.
 	 */
 	protected void convertToEOTAcceptState(DFAState d) {
 		Label eot = new Label(Label.EOT);
@@ -938,7 +938,7 @@ public class NFAToDFAConverter {
 	/** Add a new DFA state to the DFA if not already present.
      *  If the DFA state uniquely predicts a single alternative, it
      *  becomes a stop state; don't add to work list.  Further, if
-     *  there exists an NFA state predicted by > 1 different alternatives
+     *  there exists an NFA state predicted by &gt; 1 different alternatives
      *  and with the same syn and sem context, the DFA is nondeterministic for
      *  at least one input sequence reaching that NFA state.
      */
@@ -1024,7 +1024,7 @@ public class NFAToDFAConverter {
 		return d;
 	}
 
-	/** If > 1 NFA configurations within this DFA state have identical
+	/** If &gt; 1 NFA configurations within this DFA state have identical
 	 *  NFA state and context, but differ in their predicted
 	 *  TODO update for new context suffix stuff 3-9-2005
 	 *  alternative then a single input sequence predicts multiple alts.
@@ -1079,13 +1079,13 @@ public class NFAToDFAConverter {
 	 *
 	 *  Here is a (slightly reduced) NFA of this grammar:
 	 *
-	 *  (1)-A->(2)-B->(end)-EOF->(8)
+	 *  (1)-A-&gt;(2)-B-&gt;(end)-EOF-&gt;(8)
 	 *   |              ^
-	 *  (2)-A->(3)-C----|
+	 *  (2)-A-&gt;(3)-C----|
 	 *   |              ^
-	 *  (4)-A->(5)------|
+	 *  (4)-A-&gt;(5)------|
 	 *   |              ^
-	 *  (6)-A->(7)------|
+	 *  (6)-A-&gt;(7)------|
 	 *
 	 *  where (n) is NFA state n.  To begin DFA conversion, the start
 	 *  state is created:
@@ -1114,9 +1114,9 @@ public class NFAToDFAConverter {
 	 *  {(1|1),(2|2),(4|3),(6|4)}
 	 *              |
 	 *              v
-	 *  {(2|1),(3|2),(5|3),(7|4),(end|3),(end|4)} -B-> (end|1)
+	 *  {(2|1),(3|2),(5|3),(7|4),(end|3),(end|4)} -B-&gt; (end|1)
 	 *              |                        |
-	 *              C                        ----EOF-> (8,3)
+	 *              C                        ----EOF-&gt; (8,3)
 	 *              |
 	 *              v
 	 *           (end|2)
@@ -1160,7 +1160,7 @@ public class NFAToDFAConverter {
 	 *  it uniquely predicts one alt. :)  Problem
 	 *  states will look like this during conversion:
 	 *
-	 *  DFA 1:{9|1, 19|2, 14|3, 20|2, 23|2, 24|2, ...}-<EOT>->5:{41|3, 42|2}
+	 *  DFA 1:{9|1, 19|2, 14|3, 20|2, 23|2, 24|2, ...}-&lt;EOT&gt;-&gt;5:{41|3, 42|2}
 	 *
 	 *  Worse, when you have two identical literal rules, you will see 3 alts
 	 *  in the EOT state (one for ID and one each for the identical rules).

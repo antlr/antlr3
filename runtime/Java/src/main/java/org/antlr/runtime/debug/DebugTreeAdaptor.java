@@ -38,10 +38,10 @@ import org.antlr.runtime.tree.TreeAdaptor;
  *  in generated rules.  Debugging events are triggered *after* invoking
  *  tree adaptor routines.
  *
- *  Trees created with actions in rewrite actions like "-> ^(ADD {foo} {bar})"
+ *  Trees created with actions in rewrite actions like "-&gt; ^(ADD {foo} {bar})"
  *  cannot be tracked as they might not use the adaptor to create foo, bar.
  *  The debug listener has to deal with tree node IDs for which it did
- *  not see a createNode event.  A single <unknown> node is sufficient even
+ *  not see a createNode event.  A single &lt;unknown&gt; node is sufficient even
  *  if it represents a whole tree.
  */
 public class DebugTreeAdaptor implements TreeAdaptor {

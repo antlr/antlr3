@@ -41,7 +41,7 @@ import java.util.Set;
  *  loop exit branches are unreachable if you prune exit branches
  *  during DFA construction and before determinism checks.
  *
- *  In general, ANTLR's NFA->DFA->codegen pipeline seems very robust
+ *  In general, ANTLR's NFA&rarr;DFA&rarr;codegen pipeline seems very robust
  *  to me which I attribute to a uniform and consistent set of data
  *  structures.  Regardless of what I want to "say"/implement, I do so
  *  within the confines of, for example, a DFA.  The code generator
@@ -99,7 +99,7 @@ import java.util.Set;
  *  state.  This is a waste and messes up my code generation. ;)  If
  *  Tokens rule DFA goes
  *
- * 		s0 -'='-> s3 -EOT-> s5 (accept)
+ * 		s0 -'='-&gt; s3 -EOT-&gt; s5 (accept)
  *
  *  then s5 should be pruned and s3 should be made an accept.  Do NOT do this
  *  for keyword versus ID as the state with EOT edge emanating from it will

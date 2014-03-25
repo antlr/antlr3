@@ -41,7 +41,7 @@ import java.util.List;
  *
  *  TODO: add an optimization that reduces number of states and transitions
  *  will help with speed of conversion and make it easier to view NFA.  For
- *  example, o-A->o-->o-B->o should be o-A->o-B->o
+ *  example, o-A-&gt;o--&gt;o-B-&gt;o should be o-A-&gt;o-B-&gt;o
  */
 public class NFAFactory {
 	/** This factory is attached to a specifc NFA that it is building.
@@ -114,7 +114,7 @@ public class NFAFactory {
 		}
 	}
 
-	/** From label A build Graph o-A->o */
+	/** From label A build Graph o-A-&gt;o */
 	public StateCluster build_Atom(int label, GrammarAST associatedAST) {
 		NFAState left = newState();
 		NFAState right = newState();
@@ -130,7 +130,7 @@ public class NFAFactory {
 		return build_Atom(tokenType, atomAST);
 	}
 
-	/** From set build single edge graph o->o-set->o.  To conform to
+	/** From set build single edge graph o-&gt;o-set-&gt;o.  To conform to
      *  what an alt block looks like, must have extra state on left.
      */
 	public StateCluster build_Set(IntSet set, GrammarAST associatedAST) {
@@ -170,14 +170,14 @@ public class NFAFactory {
         return g;
     }
 
-	/** From char 'c' build StateCluster o-intValue(c)->o
+	/** From char 'c' build StateCluster o-intValue(c)-&gt;o
 	 */
 	public StateCluster build_CharLiteralAtom(GrammarAST charLiteralAST) {
         int c = Grammar.getCharValueFromGrammarCharLiteral(charLiteralAST.getText());
 		return build_Atom(c, charLiteralAST);
 	}
 
-	/** From char 'c' build StateCluster o-intValue(c)->o
+	/** From char 'c' build StateCluster o-intValue(c)-&gt;o
 	 *  can include unicode spec likes '\u0024' later.  Accepts
 	 *  actual unicode 16-bit now, of course, by default.
      *  TODO not supplemental char clean!
@@ -191,7 +191,7 @@ public class NFAFactory {
     /** For a non-lexer, just build a simple token reference atom.
      *  For a lexer, a string is a sequence of char to match.  That is,
      *  "fog" is treated as 'f' 'o' 'g' not as a single transition in
-     *  the DFA.  Machine== o-'f'->o-'o'->o-'g'->o and has n+1 states
+     *  the DFA.  Machine== o-'f'-&gt;o-'o'-&gt;o-'g'-&gt;o and has n+1 states
      *  for n characters.
      */
     public StateCluster build_StringLiteralAtom(GrammarAST stringLiteralAST) {
@@ -217,16 +217,16 @@ public class NFAFactory {
 
     /** For reference to rule r, build
      *
-     *  o-e->(r)  o
+     *  o-e-&gt;(r)  o
      *
      *  where (r) is the start of rule r and the trailing o is not linked
      *  to from rule ref state directly (it's done thru the transition(0)
      *  RuleClosureTransition.
      *
      *  If the rule r is just a list of tokens, it's block will be just
-     *  a set on an edge o->o->o-set->o->o->o, could inline it rather than doing
+     *  a set on an edge o-&gt;o-&gt;o-set-&gt;o-&gt;o-&gt;o, could inline it rather than doing
      *  the rule reference, but i'm not doing this yet as I'm not sure
-     *  it would help much in the NFA->DFA construction.
+     *  it would help much in the NFA&rarr;DFA construction.
      *
      *  TODO add to codegen: collapse alt blks that are sets into single matchSet
      */
@@ -242,7 +242,7 @@ public class NFAFactory {
         return g;
     }
 
-    /** From an empty alternative build StateCluster o-e->o */
+    /** From an empty alternative build StateCluster o-e-&gt;o */
     public StateCluster build_Epsilon() {
         NFAState left = newState();
         NFAState right = newState();
@@ -327,7 +327,7 @@ public class NFAFactory {
 		endNFAState.addTransition(toEnd);
 	}
 
-    /** From A B build A-e->B (that is, build an epsilon arc from right
+    /** From A B build A-e-&gt;B (that is, build an epsilon arc from right
      *  of A to left of B).
      *
      *  As a convenience, return B if A is null or return A if B is null.
@@ -346,7 +346,7 @@ public class NFAFactory {
 
 	/** From a set ('a'|'b') build
      *
-     *  o->o-'a'..'b'->o->o (last NFAState is blockEndNFAState pointed to by all alts)
+     *  o-&gt;o-'a'..'b'-&gt;o-&gt;o (last NFAState is blockEndNFAState pointed to by all alts)
 	 */
 	public StateCluster build_AlternativeBlockFromSet(StateCluster set) {
 		if ( set==null ) {
@@ -362,13 +362,13 @@ public class NFAFactory {
 
 	/** From A|B|..|Z alternative block build
      *
-     *  o->o-A->o->o (last NFAState is blockEndNFAState pointed to by all alts)
+     *  o-&gt;o-A-&gt;o-&gt;o (last NFAState is blockEndNFAState pointed to by all alts)
      *  |          ^
-     *  o->o-B->o--|
+     *  o-&gt;o-B-&gt;o--|
      *  |          |
      *  ...        |
      *  |          |
-     *  o->o-Z->o--|
+     *  o-&gt;o-Z-&gt;o--|
      *
      *  So every alternative gets begin NFAState connected by epsilon
      *  and every alt right side points at a block end NFAState.  There is a
@@ -379,7 +379,7 @@ public class NFAFactory {
      *  begin/end.
      *
      *  Special case: if just a list of tokens/chars/sets, then collapse
-     *  to a single edge'd o-set->o graph.
+     *  to a single edge'd o-set-&gt;o graph.
      *
      *  Set alt number (1..n) in the left-Transition NFAState.
      */
@@ -442,9 +442,9 @@ public class NFAFactory {
 
     /** From (A)? build either:
      *
-	 *  o--A->o
+	 *  o--A-&gt;o
 	 *  |     ^
-	 *  o---->|
+	 *  o----&gt;|
      *
      *  or, if A is a block, just add an empty alt to the end of the block
      */
@@ -496,7 +496,7 @@ public class NFAFactory {
 	 *
      *     |---|    (Transition 2 from A.right points at alt 1)
 	 *     v   |    (follow of loop is Transition 1)
-     *  o->o-A-o->o
+     *  o-&gt;o-A-o-&gt;o
      *
      *  Meaning that the last NFAState in A points back to A's left Transition NFAState
      *  and we add a new begin/end NFAState.  A can be single alternative or
@@ -538,7 +538,7 @@ public class NFAFactory {
      *
 	 *     |---|
 	 *     v   |
-	 *  o->o-A-o--o (Transition 2 from block end points at alt 1; follow is Transition 1)
+	 *  o-&gt;o-A-o--o (Transition 2 from block end points at alt 1; follow is Transition 1)
      *  |         ^
      *  o---------| (optional branch is 2nd alt of optional block containing A+)
      *

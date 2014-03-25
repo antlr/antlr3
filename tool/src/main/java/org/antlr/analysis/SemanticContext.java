@@ -38,10 +38,10 @@ import java.util.*;
 
 /** A binary tree structure used to record the semantic context in which
  *  an NFA configuration is valid.  It's either a single predicate or
- *  a tree representing an operation tree such as: p1&&p2 or p1||p2.
+ *  a tree representing an operation tree such as: p1&amp;&amp;p2 or p1||p2.
  *
- *  For NFA o-p1->o-p2->o, create tree AND(p1,p2).
- *  For NFA (1)-p1->(2)
+ *  For NFA o-p1-&gt;o-p2-&gt;o, create tree AND(p1,p2).
+ *  For NFA (1)-p1-&gt;(2)
  *           |       ^
  *           |       |
  *          (3)-p2----
@@ -65,8 +65,8 @@ public abstract class SemanticContext {
 	public static final SemanticContext EMPTY_SEMANTIC_CONTEXT = new Predicate(Predicate.INVALID_PRED_VALUE);
 
 	/** Given a semantic context expression tree, return a tree with all
-	 *  nongated predicates set to true and then reduced.  So p&&(q||r) would
-	 *  return p&&r if q is nongated but p and r are gated.
+	 *  nongated predicates set to true and then reduced.  So p&amp;&amp;(q||r) would
+	 *  return p&amp;&amp;r if q is nongated but p and r are gated.
 	 */
 	public abstract SemanticContext getGatedPredicateContext();
 
@@ -88,7 +88,7 @@ public abstract class SemanticContext {
 		/** The AST node in tree created from the grammar holding the predicate */
 		public GrammarAST predicateAST;
 
-		/** Is this a {...}?=> gating predicate or a normal disambiguating {..}?
+		/** Is this a {...}?=&gt; gating predicate or a normal disambiguating {..}?
 		 *  If any predicate in expression is gated, then expression is considered
 		 *  gated.
 		 *

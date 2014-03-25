@@ -36,8 +36,8 @@ import java.util.NoSuchElementException;
  *  lexer. Useful when the parser or lexer has to set context/mode info before
  *  proper lexing of future tokens. The ST template parser needs this,
  *  for example, because it has to constantly flip back and forth between
- *  inside/output templates. E.g., <names:{hi, <it>}> has to parse names
- *  as part of an expression but "hi, <it>" as a nested template.
+ *  inside/output templates. E.g., {@code <names:{hi, <it>}>} has to parse names
+ *  as part of an expression but {@code "hi, <it>"} as a nested template.
  *
  *  You can't use this stream if you pass whitespace or other off-channel
  *  tokens to the parser. The stream can't ignore off-channel tokens.

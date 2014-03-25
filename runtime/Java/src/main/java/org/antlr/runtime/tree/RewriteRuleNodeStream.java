@@ -29,7 +29,7 @@ package org.antlr.runtime.tree;
 
 import java.util.List;
 
-/** Queues up nodes matched on left side of -> in a tree parser. This is
+/** Queues up nodes matched on left side of -&gt; in a tree parser. This is
  *  the analog of RewriteRuleTokenStream for normal parsers. 
  */
 public class RewriteRuleNodeStream extends RewriteRuleElementStream {

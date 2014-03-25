@@ -43,9 +43,9 @@ public class LL1DFA extends DFA {
 	/** From list of lookahead sets (one per alt in decision), create
 	 *  an LL(1) DFA.  One edge per set.
 	 *
-	 *  s0-{alt1}->:o=>1
+	 *  s0-{alt1}-&gt;:o=&gt;1
 	 *  | \
-	 *  |  -{alt2}->:o=>2
+	 *  |  -{alt2}-&gt;:o=&gt;2
 	 *  |
 	 *  ...
 	 */
@@ -70,8 +70,8 @@ public class LL1DFA extends DFA {
 		}
 	}
 
-	/** From a set of edgeset->list-of-alts mappings, create a DFA
-	 *  that uses syn preds for all |list-of-alts|>1.
+	/** From a set of edgeset&rarr;list-of-alts mappings, create a DFA
+	 *  that uses syn preds for all |list-of-alts|&gt;1.
 	 */
 	@SuppressWarnings("OverridableMethodCallInConstructor")
 	public LL1DFA(int decisionNumber,
