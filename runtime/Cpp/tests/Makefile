@@ -15,7 +15,7 @@ STGS  = $(wildcard ../../../tool/src/main/resources/org/antlr/codegen/templates/
 
 INCLUDES= -I. -I../include/
 
-CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable
+CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable -std=c++0x
 #CFLAGS=-ggdb3 -O3
 
 TOBJS= utils.o

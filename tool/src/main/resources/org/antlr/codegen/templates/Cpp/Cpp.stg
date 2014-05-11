@@ -142,7 +142,7 @@ outputFile( LEXER,
 /* -----------------------------------------
  * Include the ANTLR3 generated header file.
  */
-#include    "<name>.hpp"
+#include "<name>.hpp"
 <if(trace)>
 #include \<iostream>
 <endif>
@@ -151,6 +151,7 @@ outputFile( LEXER,
 //
 <recognizer.grammar.delegators: {g|#include "<g.recognizerName>.hpp" }; separator="\n">
 <endif>
+#include \<memory>
 
 <actions.(actionScope).postinclude>
 /* ----------------------------------------- */
@@ -540,7 +541,7 @@ lexer(  grammar,
         numRules,
         filterMode,
         superClass,
-        labelType="ImplTraits::CommonTokenType*") ::= <<
+        labelType="ImplTraits::CommonTokenType") ::= <<
 
 using namespace antlr3;
 
@@ -1280,7 +1281,7 @@ lexerRuleLabelDefs() ::= <<
 <[ruleDescriptor.tokenLabels,
   ruleDescriptor.tokenListLabels,
   ruleDescriptor.ruleLabels]
-    :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
+    :{it |std::unique_ptr\<<labelType>\> <it.label.text> = NULL;}; separator="\n"
 >
 <ruleDescriptor.charLabels:{it |ANTLR_UINT32 <it.label.text>;}; separator="\n">
 <[ruleDescriptor.tokenListLabels,
@@ -1689,7 +1690,7 @@ ANTLR_UINT32 <label>StartLine<elementIndex> = this->getLine();
 ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
 this->matchs(<string>);
 <checkRuleBacktrackFailure()>
-<label> = new CommonTokenType;
+<label>.reset( new CommonTokenType );
 <label>->set_type( CommonTokenType::TOKEN_INVALID );
 <label>->set_startIndex( <label>Start);
 <label>->set_stopIndex( this->getCharIndex()-1);
@@ -1762,7 +1763,7 @@ lexerRuleRef(rule,label,args,elementIndex,scope) ::= <<
     ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
     <if(scope)>m_<scope:delegateName()>-><endif>m<rule.name>(<if(scope)>m_<scope:delegateName()><endif> <if(args)>, <endif><args; separator=", ">);
     <checkRuleBacktrackFailure()>
-    <label> = new CommonTokenType();
+    <label>.reset( new CommonTokenType() );
     <label>->set_type( CommonTokenType::TOKEN_INVALID);
     <label>->set_startIndex( <label>Start<elementIndex> );
     <label>->set_stopIndex( this->getCharIndex()-1 );
@@ -1793,7 +1794,7 @@ lexerMatchEOF(label,elementIndex) ::= <<
     <label>Start<elementIndex> = this->getCharIndex();
     this->matchc(ANTLR_CHARSTREAM_EOF);
     <checkRuleBacktrackFailure()>
-    <label> = new CommonTokenType();
+    <label>.reset( new CommonTokenType() );
     <label>->set_type( CommonTokenType::TOKEN_EOF );
     <label>->set_startIndex(<label>Start<elementIndex>);
     <label>->set_stopIndex(this->getCharIndex()-1);
