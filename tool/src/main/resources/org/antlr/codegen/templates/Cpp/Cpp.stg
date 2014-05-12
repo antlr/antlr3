@@ -1632,7 +1632,7 @@ this->matchRange(<a>, <b>);
 >>
 
 /** For now, sets are interval tests and must be tested inline */
-matchSet(s,label,elementIndex,terminalOptions,postmatchCode="") ::= <<
+matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(label)>
 <if(LEXER)>
 <label>= this->LA(1);<\n>
@@ -1787,11 +1787,9 @@ lexerRuleRefAndListLabel(rule,label,args,elementIndex,scope) ::= <<
 lexerMatchEOF(label,elementIndex) ::= <<
 <if(label)>
 {
-    ANTLR_UINT32 <label>Start<elementIndex>;
+    ANTLR_UINT32 <label>Start<elementIndex> = this->getCharIndex();
     ANTLR_UINT32 <label>StartLine<elementIndex> = this->getLine();
     ANTLR_UINT32 <label>StartCharPos<elementIndex> = this->getCharPositionInLine();
-    <labelType> <label>;
-    <label>Start<elementIndex> = this->getCharIndex();
     this->matchc(ANTLR_CHARSTREAM_EOF);
     <checkRuleBacktrackFailure()>
     <label>.reset( new CommonTokenType() );
