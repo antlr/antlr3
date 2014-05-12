@@ -78,7 +78,7 @@ int testValid(string const& data)
 	
 	for(unsigned i = 0; i < r.tokens.size() ; i++)
 	{
-		t039labelsLexerTraits::CommonTokenType *token = r.tokens.at(i);
+		const t039labelsLexerTraits::CommonTokenType *token = r.tokens.at(i);
 
 		size_t startIndex = ((const char*)token->get_startIndex()) - data.c_str();
 		size_t stopIndex = ((const char*)token->get_stopIndex()) - data.c_str();
@@ -88,6 +88,8 @@ int testValid(string const& data)
 			  << std::endl;
 		
 	}
+	delete psr;
+	delete tstream;
 	delete lxr; lxr = NULL;
 	delete input; 
 	return 0;
