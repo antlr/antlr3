@@ -18,7 +18,7 @@ version of ANTLR for 9 years.
 
 You should use v3 in conjunction with ANTLRWorks:
 
-    http://www.antlr.org/works/index.html
+    http://www.antlr3.org/works/
 
 and gUnit (grammar unit testing tool included in distribution):
 
@@ -98,7 +98,7 @@ How is ANTLR v3 different than ANTLR v2?
 
 See "What is the difference between ANTLR v2 and v3?"
 
-    http://www.antlr.org/wiki/pages/viewpage.action?pageId=719
+    http://www.antlr.org/wiki/pages/viewpage.action?pageId=2687279
 
 See migration guide:
 
@@ -110,8 +110,8 @@ How do I install this damn thing?
 
 You will have grabbed either of these:
 
-	http://antlr.org/download/antlr-3.5-complete-no-st3.jar
-	http://antlr.org/download/antlr-3.5-complete.jar
+    http://www.antlr3.org/download/antlr-3.5.2-complete-no-st3.jar
+	http://www.antlr3.org/download/antlr-3.5.2-complete.jar
 
 It has all of the jars you need combined into one. Then you need to
 add antlr-3.5-complete.jar to your CLASSPATH or add to arg list; e.g., on unix:
@@ -139,4 +139,4 @@ Please see the FAQ
 
 How can I contribute to ANTLR v3?
 
-http://www.antlr.org/wiki/pages/viewpage.action?pageId=33947666
+http://www.antlr.org/wiki/pages/viewpage.action?pageId=2687297

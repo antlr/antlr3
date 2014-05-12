@@ -48,6 +48,7 @@ the end of the following contributors list.
 CONTRIBUTORS:
 
 YYYY/MM/DD, github id, Full name, email
+2014/05/15, robstoll, Robert Stoll, rstoll@tutteli.ch
 2013/04/17, ibre5041, Ivan Brezina, ibre5041@ibrezina.net
 2013/02/19, murrayju, Justin Murray, murrayju@addpcs.com
 2012/07/12, parrt, Terence Parr, parrt@antlr.org
