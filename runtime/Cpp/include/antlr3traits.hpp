@@ -189,6 +189,9 @@ public:
 
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::CommonTokenType, 
 									 CommonToken<TraitsType> >::selected CommonTokenType;
+
+	typedef typename BaseTraitsType::AllocPolicyType::template ListType<const CommonTokenType*> TokenListType;
+
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TokenIntStreamType, 
 		                             TokenIntStream<TraitsType> >::selected TokenIntStreamType;
 	

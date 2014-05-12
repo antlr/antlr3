@@ -1264,7 +1264,7 @@ ruleLabelDefs() ::= <<
     :{it |<labelType> <it.label.text> = NULL;}; separator="\n"
 >
 <[ruleDescriptor.tokenListLabels,ruleDescriptor.ruleListLabels,ruleDescriptor.wildcardTreeListLabels]
-    :{it |ImplTraits::TokenPtrsListType list_<it.label.text>;}; separator="\n"
+    :{it |ImplTraits::TokenListType list_<it.label.text>;}; separator="\n"
 >
 <ruleDescriptor.ruleLabels:ruleLabelDef(); separator="\n">
 >>
