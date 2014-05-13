@@ -20,7 +20,7 @@ CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable -std=c++0x
 
 TOBJS= utils.o
 
-all: $(ANTLR) $(TOKENS) t001 t002 t003 t004 t005 t006 t006 t007 t008 t009 t010 t011 t012 t039
+all: $(ANTLR) $(TOKENS) t001 t002 t003 t004 t005 t006 t006 t007 t008 t009 t010 t011 t012 t020 t039
 
 # For devel only. This will replace .stg files in the tool in a fast way
 #
@@ -62,6 +62,9 @@ t011:	t011.cpp t011lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_H
 	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
 
 t012:	t012.cpp t012lexerXMLLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+
+t020:	t020.cpp t020fuzzyLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
 
 t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)

@@ -7,6 +7,10 @@
 // to locate the antlr3 runtime files and -I. to find this file
 #include <antlr3.hpp>
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 // Forward declaration for Lexer&Parser class(es)
 namespace Antlr3Test {
 	class S1Lexer;
@@ -25,6 +29,8 @@ namespace Antlr3Test {
 	class t011lexer;
 	class t012lexerXMLLexer;
 	class t051lexer;
+
+	class t020fuzzyLexer;
 
 	class t039labelsLexer;
 	class t039labelsParser;
@@ -61,8 +67,21 @@ namespace Antlr3Test {
 	typedef antlr3::Traits<t012lexerXMLLexer, NoParser, UserTraits> t012lexerXMLLexerTraits;
 	typedef antlr3::Traits<t051lexer, NoParser, UserTraits> t051lexerTraits;
 
+	typedef antlr3::Traits<t020fuzzyLexer, NoParser, UserTraits> t020fuzzyLexerTraits;
+
 	typedef antlr3::Traits<t039labelsLexer, t039labelsParser, UserTraits> t039labelsLexerTraits;
 	typedef t039labelsLexerTraits t039labelsParserTraits;
+
+	inline std::string slurp(std::string const& fileName)
+	{
+		std::ifstream ifs(fileName.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
+		//std::ifstream::pos_type fileSize = ifs.tellg();
+		ifs.seekg(0, std::ios::beg);
+		std::stringstream sstr;
+		sstr << ifs.rdbuf();
+		return sstr.str();
+	}
+
 };
 
 #endif

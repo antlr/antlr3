@@ -437,7 +437,6 @@ public:
 <if(recognizer.filterMode)>
     void  memoize(ANTLR_MARKER  ruleIndex, ANTLR_MARKER  ruleParseStart);
     bool  alreadyParsedRule(ANTLR_MARKER	ruleIndex);
-    <filteringNextToken()>
 <endif>    
     <rules:{r | <if(!r.ruleDescriptor.isSynPred)><headerReturnType(ruleDescriptor=r.ruleDescriptor)>  m<r.ruleDescriptor.name>( <r.ruleDescriptor.parameterScope:parameterScope()>);<endif>}; separator="\n">
     <rules:{r | <if(r.ruleDescriptor.isSynPred)>  <headerReturnType(ruleDescriptor=r.ruleDescriptor)> msynpred( antlr3::ClassForwarder\< <r.ruleDescriptor.name> > <r.ruleDescriptor.parameterScope:parameterScope()>);
@@ -749,81 +748,6 @@ void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName
  
 <endNamespace(actions)>
 
->>
-
-
-filteringNextToken() ::= <<
-<name>ImplTraits::CommonTokenType*
-<name>ImplTraits::TokenSourceType::nextToken()
-{
-    LexerType*   lexer;
-    typename LexerType::RecognizerSharedStateType* state;
-
-    lexer   = this->get_super();
-    state	= lexer->get_lexstate();
-
-    /* Get rid of any previous token (token factory takes care of
-     * any deallocation when this token is finally used up.
-     */
-    state->set_token_present( false );
-    state->set_error( false );	    /* Start out without an exception	*/
-    state->set_failedflag(false);
-
-    /* Record the start of the token in our input stream.
-     */
-    state->set_tokenStartCharIndex( lexer->index();
-    state->set_tokenStartCharPositionInLine( lexer->getCharPositionInLine() );
-    state->set_tokenStartLine( lexer->getLine() );
-    state->set_text("");
-
-    /* Now call the matching rules and see if we can generate a new token
-     */
-    for	(;;)
-    {
-		if (lexer->LA(1) == ANTLR_CHARSTREAM_EOF)
-		{
-			/* Reached the end of the stream, nothing more to do.
-			 */
-			CommonTokenType&    teof = m_eofToken;
-
-			teof.set_startIndex(lexer->getCharIndex());
-			teof.set_stopIndex(lexer->getCharIndex());
-			teof.setLine(lexer->getLine());
-			return  &teof;
-		}
-
-		state->set_token_present(false);
-		state->set_error(false);	    /* Start out without an exception	*/
-
-		{
-			ANTLR_MARKER   m;
-
-			m	= this->get_istream()->mark();
-			state->set_backtracking(1);				/* No exceptions */
-			state->set_failedflag(false);
-
-			/* Call the generated lexer, see if it can get a new token together.
-			 */
-			lexer->mTokens();
-    			state->set_backtracking(0);
-
-    		<! mTokens backtracks with synpred at BACKTRACKING==2
-				and we set the synpredgate to allow actions at level 1. !>
-
-			if(state->get_failed())
-			{
-				lexer->rewind(m);
-				lexer->consume(); <! advance one char and try again !>
-			}
-			else
-			{
-				lexer->emit();					/* Assemble the token and emit it to the stream */
-				TokenType& tok = state->get_token();
-				return &tok;
-			}
-		}
-    }
-}
 >>
 
 actionGate() ::= "this->get_backtracking()==0"
