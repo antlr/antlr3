@@ -443,6 +443,29 @@ public class TestCompositeGrammars extends BaseTest {
 
 		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
 	}
+	
+	@Test public void testTokenVocabNoWarningsLikeNoLexerRuleCorrespondingToToken() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "TokenFromTokenVocab=4\n'token'=4\n");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+
 
 	@Test public void testSyntaxErrorsInImportsNotThrownOut() throws Exception {
 		ErrorQueue equeue = new ErrorQueue();
