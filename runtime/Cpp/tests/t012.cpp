@@ -14,7 +14,6 @@ int testValid(string const& in, string const& out);
 int testMalformedInput1(string const& data);
 int testMalformedInput2(string const& data);
 int testMalformedInput3(string const& data);
-string slurp(string const& fileName);
 
 static t012lexerXMLLexer *lxr;
 
@@ -173,15 +172,4 @@ int testMalformedInput3(string const& data)
 	delete lxr; lxr = NULL;
 	delete input; 
 	return 0;
-}
- 
-string slurp(string const& fileName)
-{
-	ifstream ifs(fileName.c_str(), ios::in | ios::binary | ios::ate);
-	ifstream::pos_type fileSize = ifs.tellg();
-	ifs.seekg(0, ios::beg);
-
-	stringstream sstr;
-	sstr << ifs.rdbuf();
-	return sstr.str();
 }
