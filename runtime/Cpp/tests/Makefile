@@ -1,6 +1,6 @@
 .PRECIOUS=.o
 
-ANTLRGRAMMARS ?= $(wildcard t0[01]*.g)
+ANTLRGRAMMARS ?= $(wildcard [st]*.g)
 HEADERS = $(wildcard *.hpp) $(wildcard *.inl)
 RUNTIME_HEADERS = $(wildcard ../include/*.hpp) $(wildcard ../include/*.inl)
 SOURCES = $(wildcard *.cpp)
@@ -29,53 +29,53 @@ $(ANTLR): $(STGS)
 	org/antlr/codegen/templates/Cpp/Cpp.stg
 
 t001:	t001.cpp t001lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL -DD $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t002:	t002.cpp t002lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t003:	t003.cpp t003lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t004:	t004.cpp t004lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t005:	t005.cpp t005lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t006:	t006.cpp t006lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t007:	t007.cpp t007lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t008:	t008.cpp t008lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t009:	t009.cpp t009lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t010:	t010.cpp t010lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t011:	t011.cpp t011lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t012:	t012.cpp t012lexerXMLLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t020:	t020.cpp t020fuzzyLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t051:	t051.cpp t051lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 # AST commented out
 # t042:	t042.cpp t005lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-# 	g++ $(CFLAGS) -DUSESTL $(INCLUDES) $< $@?*.cpp -o $@
+# 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 clean:
 	rm -f *.o t0[0-9][0-9]??*.[ch]pp *.tokens t[0-9][0-9][0-9] t0[0-9][0-9].exe
@@ -97,4 +97,4 @@ endif
 endif
 
 %.o: %.cpp $(HEADERS) utils.hpp
-	g++ $(CFLAGS) -DUSESTL $(INCLUDES) -c $< -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) -c $< -o $@
