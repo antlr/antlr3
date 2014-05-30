@@ -1382,7 +1382,7 @@ block(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,maxK,max
 
 // <fileName>:<description>
 {
-    int alt<decisionNumber>=<maxAlt>;
+    ANTLR_UINT32 alt<decisionNumber>=<maxAlt>;
     <decls>
     <@predecision()>
     <decision>
@@ -1443,7 +1443,7 @@ positiveClosureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decision
 
     for (;;)
     {
-        int alt<decisionNumber>=<maxAlt>;
+        ANTLR_UINT32 alt<decisionNumber>=<maxAlt>;
 	<@predecision()>
 	<decision>
 	<@postdecision()>
@@ -1485,7 +1485,7 @@ closureBlock(alts,decls,decision,enclosingBlockLevel,blockLevel,decisionNumber,m
 <@preloop()>
 for (;;)
 {
-    int alt<decisionNumber>=<maxAlt>;
+    ANTLR_UINT32 alt<decisionNumber>=<maxAlt>;
     <@predecision()>
     <decision>
     <@postdecision()>
@@ -1805,7 +1805,7 @@ newFPE() ::= <<
 dfaState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 
 {
-    int LA<decisionNumber>_<stateNumber> = this->LA(<k>);
+    ANTLR_UINT32 LA<decisionNumber>_<stateNumber> = this->LA(<k>);
     <edges; separator="\nelse ">
     else
     {
@@ -1837,7 +1837,7 @@ ex->set_state( <stateNumber> );
  */
 dfaOptionalBlockState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 {
-    int LA<decisionNumber>_<stateNumber> = this->LA(<k>);
+    ANTLR_UINT32 LA<decisionNumber>_<stateNumber> = this->LA(<k>);
     <edges; separator="\nelse ">
 }
 >>
@@ -1850,13 +1850,13 @@ dfaOptionalBlockState(k,edges,eotPredictsAlt,description,stateNumber,semPredStat
  */
 
 dfaLoopbackStateDecls()::= <<
-ANTLR_UINT32   LA<decisionNumber>_<stateNumber>;
+ANTLR_UINT32 LA<decisionNumber>_<stateNumber>;
 >>
 dfaLoopbackState(k,edges,eotPredictsAlt,description,stateNumber,semPredState) ::= <<
 {
    /* dfaLoopbackState(k,edges,eotPredictsAlt,description,stateNumber,semPredState)
     */
-    int LA<decisionNumber>_<stateNumber> = this->LA(<k>);
+    ANTLR_UINT32 LA<decisionNumber>_<stateNumber> = this->LA(<k>);
     <edges; separator="\nelse "><\n>
     <if(eotPredictsAlt)>
     <if(!edges)>

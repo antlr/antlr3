@@ -40,7 +40,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include    <stdlib.h>
-
+#include    <limits>
 #include    "antlr3defs.hpp"
 
 ANTLR_BEGIN_NAMESPACE()
@@ -78,7 +78,7 @@ public:
 
 		/** End of file token
 		 */
-		, TOKEN_EOF =	(ANTLR_CHARSTREAM_EOF & 0xFFFFFFFF)
+		, TOKEN_EOF = std::numeric_limits<ANTLR_UINT32>::max()
 	};
 
 	typedef typename ImplTraits::TokenIntStreamType TokenIntStreamType;

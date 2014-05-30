@@ -110,6 +110,18 @@ public class CppTarget extends Target {
         return recognizerST;
     }
 
+	/** Override the labels used for token types */
+    @Override
+	public String getTokenTypeAsTargetLabel(CodeGenerator generator, int ttype) {
+		String name = super.getTokenTypeAsTargetLabel(generator, ttype);
+		// If name is a EOF return EOF_TOKEN (EOF is #define macro setting EOF -1 (signed)
+		// while LA and the rest of the runtime uses unsigned integers 
+		if ( name.equals("EOF") ) {
+			return new String("EOF_TOKEN");
+		}
+		return name;
+	}
+
     /** Is scope in @scope::name {action} valid for this kind of grammar?
      *  Targets like C++ may want to allow new scopes like headerfile or
      *  some such.  The action names themselves are not policed at the
