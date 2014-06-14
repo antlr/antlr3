@@ -78,7 +78,11 @@ public:
 
 		/** End of file token
 		 */
+#ifndef  _MSC_VER
 		, TOKEN_EOF = std::numeric_limits<ANTLR_UINT32>::max()
+#else
+		, TOKEN_EOF = 0xFFFFFFFF
+#endif
 	};
 
 	typedef typename ImplTraits::TokenIntStreamType TokenIntStreamType;
