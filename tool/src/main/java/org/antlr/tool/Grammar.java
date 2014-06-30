@@ -2392,8 +2392,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
-					token = tokenizer.nextToken();
+					token = recoverToNextLine(tokenizer);
 					continue;
 				}
 				token = tokenizer.nextToken();
@@ -2401,8 +2400,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
-					token = tokenizer.nextToken();
+					token = recoverToNextLine(tokenizer);
 					continue;
 				}
 				token = tokenizer.nextToken(); // skip '='
@@ -2410,8 +2408,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
-					token = tokenizer.nextToken();
+					token = recoverToNextLine(tokenizer);
 					continue;
 				}
 				int tokenType = (int)tokenizer.nval;
@@ -2424,8 +2421,7 @@ outer:
 					ErrorManager.error(ErrorManager.MSG_TOKENS_FILE_SYNTAX_ERROR,
 									   vocabName+CodeGenerator.VOCAB_FILE_EXTENSION,
 									   Utils.integer(lineNum));
-					while ( tokenizer.nextToken() != StreamTokenizer.TT_EOL ) {}
-					token = tokenizer.nextToken();
+					token = recoverToNextLine(tokenizer);
 					continue;
 				}
 				token = tokenizer.nextToken(); // skip newline
@@ -2447,6 +2443,15 @@ outer:
 							   e);
 		}
 		return composite.maxTokenType;
+	}
+
+	private int recoverToNextLine(StreamTokenizer tokenizer) throws IOException {
+		int token = tokenizer.nextToken();
+		while (token  != StreamTokenizer.TT_EOL && token != StreamTokenizer.TT_EOF) {
+			token = tokenizer.nextToken();
+		}
+		token = tokenizer.nextToken();
+		return token;
 	}
 
 	/** Given a token type, get a meaningful name for it such as the ID
