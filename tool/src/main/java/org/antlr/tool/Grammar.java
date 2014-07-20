@@ -2425,6 +2425,9 @@ outer:
 					continue;
 				}
 				token = tokenizer.nextToken(); // skip newline
+				while(token == StreamTokenizer.TT_EOL ){
+					token = tokenizer.nextToken(); 
+				}
 			}
 			br.close();
 		}
