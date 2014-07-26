@@ -161,7 +161,7 @@ outputFile( LEXER,
 <if(literals)>
 
 <beginNamespace(actions)>
-<if(LEXER)>
+<if(LEXER)><if(!PARSER)>
 const ANTLR_UINT8* <name>Tokens::getTokenName(ANTLR_UINT32 index)
 {
        if( EOF_TOKEN == index)
@@ -179,7 +179,7 @@ ANTLR_UINT8* <name>Tokens::TokenNames[<length(tokens)>+4]
        (ANTLR_UINT8*) "\<UP>",
        <rest(tokens):{it |(ANTLR_UINT8*) "<it.name>",//<it.type>}; separator="\n">
        };
-<endif>
+<endif><endif>
 
 /** String literals used by <name> that we must do things like MATCHS() with.
  *  C will normally just lay down 8 bit characters, and you can use L"xxx" to
@@ -206,6 +206,7 @@ ANTLR_UINT8* <name>Tokens::TokenNames[<length(tokens)>+4]
  */
 
 >>
+
 headerFileExtension() ::= ".hpp"
 
 beginNamespace(actions) ::= <%
@@ -382,13 +383,18 @@ public:
        static const ANTLR_UINT8* getTokenName(ANTLR_UINT32 index);
 
 protected:
-       static ANTLR_UINT8* TokenNames[];
+	static ANTLR_UINT8* TokenNames[];
+
 <endif>
 };
 
 /** Context tracking structure for <mainName()>
  */
-class <name> : public <componentBaseType()>, public <name>Tokens
+class <name> : public <componentBaseType()>
+    , public <name>Tokens
+<if(PARSER)>
+    , <name>ImplTraits::TreeAdaptorType
+<endif>
 {
 public:
 	typedef <name>ImplTraits ImplTraits;
@@ -397,6 +403,11 @@ public:
 	typedef <componentBaseType()> BaseType;
 	typedef ImplTraits::RecognizerSharedStateType\<StreamType> RecognizerSharedStateType;
 	typedef StreamType InputType;
+<if(PARSER)>
+	typedef <name>ImplTraits::CommonTokenType CommonTokenType;
+	typedef <name>ImplTraits::TreeAdaptorType TreeAdaptorType;
+<endif>
+
 <if(recognizer.filterMode)>
 	static const bool IsFiltered = true;
 <else>
@@ -558,7 +569,7 @@ headerReturnType(ruleDescriptor) ::= <%
 // Produce the lexer output
 //
 lexer(  grammar,
-	name,
+        name,
         tokens,
         scopes,
         rules,
@@ -997,7 +1008,7 @@ treeParser(	grammar,
  */
 synpredRule(ruleName, ruleDescriptor, block, description, nakedBlock) ::=
 <<
-// $ANTLR start <ruleName>
+// $ANTLR start synpredRule <ruleName>
 void <name>::m<ruleName>_fragment( <ruleDescriptor.parameterScope:parameterScope()> )
 {
 	<ruleLabelDefs()>
@@ -2260,7 +2271,7 @@ bool
  */
 ruleLabelType(referencedRule) ::= <%
 <if(referencedRule.hasMultipleReturnValues)>
-<referencedRule.name>_return
+<referencedRule.grammar.recognizerName>::<referencedRule.name>_return
 <else>
 <if(referencedRule.hasSingleReturnValue)>
 <referencedRule.singleValueReturnType>

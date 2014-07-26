@@ -59,7 +59,7 @@ public:
     void	setParent( TreeType* child, TreeType* parent);
     TreeType*		getParent( TreeType* child);
 
-	TreeType*		errorNode( CommonTokenType* tnstream, CommonTokenType* startToken, CommonTokenType* stopToken);
+	TreeType*		errorNode( CommonTokenType* tnstream, const CommonTokenType* startToken, const CommonTokenType* stopToken);
 	bool	isNilNode( TreeType* t);
 
     TreeType*	    becomeRoot( TreeType* newRoot, TreeType* oldRoot);
@@ -67,10 +67,13 @@ public:
 
     TreeType*	becomeRootToken(CommonTokenType* newRoot, TreeType* oldRoot);
 
-    TreeType*	 	create( CommonTokenType* payload);
-    TreeType* 		createTypeToken( ANTLR_UINT32 tokenType, CommonTokenType* fromToken);
-    TreeType*	   	createTypeTokenText	( ANTLR_UINT32 tokenType, CommonTokenType* fromToken, const ANTLR_UINT8* text);
-    TreeType*	    createTypeText		( ANTLR_UINT32 tokenType, const ANTLR_UINT8* text);
+    TreeType* create( CommonTokenType const* payload);
+    TreeType* create( ANTLR_UINT32 tokenType, const CommonTokenType* fromToken);
+    TreeType* create( ANTLR_UINT32 tokenType, const CommonTokenType* fromToken, const char* text);
+    TreeType* create( ANTLR_UINT32 tokenType, const char* text);
+
+    CommonTokenType* createToken( ANTLR_UINT32 tokenType, const char* text);
+    CommonTokenType* createToken( const CommonTokenType* fromToken);
 
     TreeType*	    dupNode( TreeType* treeNode);
     ANTLR_UINT32			getType( TreeType* t);
@@ -85,11 +88,9 @@ public:
     ANTLR_UINT32	getChildCount( TreeType*);
 	ANTLR_UINT64	getUniqueID( TreeType*);
 
-    CommonTokenType*    createToken( ANTLR_UINT32 tokenType, const ANTLR_UINT8* text);
-    CommonTokenType*    createTokenFromToken( CommonTokenType* fromToken);
     CommonTokenType*    getToken( TreeType* t);
 
-    void setTokenBoundaries( TreeType* t, CommonTokenType* startToken, CommonTokenType* stopToken);
+    void setTokenBoundaries( TreeType* t, const CommonTokenType* startToken, const CommonTokenType* stopToken);
     ANTLR_MARKER	getTokenStartIndex( TreeType* t);
     ANTLR_MARKER	getTokenStopIndex( TreeType* t);
 

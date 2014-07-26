@@ -5,8 +5,12 @@
 
 
 ANTLR_BEGIN_NAMESPACE()
-	
-//Users implementing overrides should inherit from this
+
+/**
+ * Users implementing overrides should inherit from this
+ *
+ * All classes typenames reffer to Empty class
+ */
 template<class ImplTraits>
 class CustomTraitsBase
 {
@@ -33,9 +37,11 @@ public:
 	typedef Empty LexStateType;
 
 	typedef Empty CommonTokenType;
-	typedef Empty TokenIntStreamType;
 
+	typedef Empty TokenIntStreamType;
 	typedef Empty TokenStreamType;
+
+	typedef Empty TreeNodeIntStreamType;
 	typedef Empty TreeNodeStreamType;
 
 
@@ -71,7 +77,7 @@ public:
 	typedef Empty BaseParserType;//this should be overridden with generated lexer
 	typedef Empty BaseTreeParserType;
 	
-	template<class StreamType>
+	template<class ElementType>
 	class RewriteStreamType : public Empty
 	{
 	public:
@@ -87,6 +93,9 @@ public:
 	static void displayRecognitionError( const std::string& str ) {  printf("%s", str.c_str() ); }
 };
 
+/**
+ * Traits manipulation classes
+ */
 template<class A, class B>
 class TraitsSelector
 {
@@ -129,103 +138,129 @@ public:
 	typedef B selected;
 };
 
+/**
+ * Base traits template
+ *
+ * This class contains default typenames for every trait
+ */
 template< template<class ImplTraits> class UserTraits >
 class TraitsBase
 {
 public:
 	typedef TraitsBase  TraitsType;
 	
-	typedef typename TraitsSelector< typename UserTraits<TraitsType>::AllocPolicyType, DefaultAllocPolicy >::selected  AllocPolicyType;
+	typedef typename TraitsSelector< typename UserTraits<TraitsType>::AllocPolicyType,
+					 DefaultAllocPolicy
+					 >::selected  AllocPolicyType;
 
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::StringType, 
-									std::string >::selected StringType;
+					 std::string
+					 >::selected StringType;
 	
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::StringStreamType, 
-		                             std::stringstream >::selected StringStreamType;
+					 std::stringstream
+					 >::selected StringStreamType;
 
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::StreamDataType, 
-		                             ANTLR_UINT8 >::selected StreamDataType;
+					 ANTLR_UINT8
+					 >::selected StreamDataType;
 	
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::Endianness, 
-									 RESOLVE_ENDIAN_AT_RUNTIME >::selected Endianness;
+					 RESOLVE_ENDIAN_AT_RUNTIME
+					 >::selected Endianness;
 
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::BitsetType, 
-		                             Bitset<TraitsType> >::selected BitsetType;
+					 Bitset<TraitsType>
+					 >::selected BitsetType;
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::BitsetListType, 
-		                             BitsetList<TraitsType> >::selected BitsetListType;
+					 BitsetList<TraitsType>
+					 >::selected BitsetListType;
 
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::InputStreamType, 
-		                              InputStream<TraitsType> >::selected InputStreamType;
+					 InputStream<TraitsType>
+					 >::selected InputStreamType;
 
 	template<class SuperType>
-	class IntStreamType 
-		: public TraitsOneArgSelector< 
-					typename UserTraits<TraitsType>::template IntStreamType<SuperType>, 
-		            IntStream<TraitsType, SuperType>,
-					typename UserTraits<TraitsType>::template IntStreamType<SuperType>::BaseType
-								>::selected  
+	class IntStreamType : public TraitsOneArgSelector< typename UserTraits<TraitsType>::template IntStreamType<SuperType>, 
+							   IntStream<TraitsType, SuperType>,
+							   typename UserTraits<TraitsType>::template IntStreamType<SuperType>::BaseType
+							   >::selected  
 	{ };
 	
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::LexStateType, 
-		                             LexState<TraitsType> >::selected LexStateType;
+					 LexState<TraitsType>
+					 >::selected LexStateType;
 
 	static const bool TOKENS_ACCESSED_FROM_OWNING_RULE = UserTraits<TraitsType>::TOKENS_ACCESSED_FROM_OWNING_RULE;
 	static const int  TOKEN_FILL_BUFFER_INCREMENT = UserTraits<TraitsType>::TOKEN_FILL_BUFFER_INCREMENT; //used only if the above val is true
 
-	static void displayRecognitionError( const StringType& str ) { UserTraits<TraitsType>::displayRecognitionError(str);  }
+	static void displayRecognitionError( const StringType& str ) { UserTraits<TraitsType>::displayRecognitionError(str); }
 };
 
-template<
-	     class LxrType, 
-         class PsrType, 
-		 template<class ImplTraits> class UserTraits = CustomTraitsBase, 
-		 class TreePsrType = antlr3::Empty
-         >
-class Traits  : public TraitsBase<UserTraits>
+/**
+ * Final traits
+ *
+ * They combine Traits and user provided traits(UserTraits)
+ */
+template< class LxrType, 
+	  class PsrType, 
+	  template<class ImplTraits> class UserTraits = CustomTraitsBase
+	  //,
+	  //class TreePsrType = antlr3::Empty
+	  //template<class ImplTraits> class TreePsrType = TreeParser
+	  >
+class Traits : public TraitsBase<UserTraits>
 {
 public:
 	typedef Traits TraitsType;
 	typedef TraitsBase<UserTraits> BaseTraitsType;	
 
+	// CommonTokenType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::CommonTokenType, 
-									 CommonToken<TraitsType> >::selected CommonTokenType;
+					 CommonToken<TraitsType> >::selected CommonTokenType;
 
+	// TokenListType
 	typedef typename BaseTraitsType::AllocPolicyType::template ListType<const CommonTokenType*> TokenListType;
 
+	// TokenIntStreamType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TokenIntStreamType, 
-		                             TokenIntStream<TraitsType> >::selected TokenIntStreamType;
-	
-	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TokenStreamType, 
-									CommonTokenStream<TraitsType> >::selected TokenStreamType;
+					 TokenIntStream<TraitsType> >::selected TokenIntStreamType;
+	// TokenStreamType
+	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TokenStreamType,
+					 CommonTokenStream<TraitsType> >::selected TokenStreamType;
+
+	// TreeNodeIntStreamType
+	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeNodeIntStreamType,
+					  TreeNodeIntStream<TraitsType> >::selected TreeNodeIntStreamType;
+
+	// TreeNodeStreamType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeNodeStreamType, 
-		                            CommonTreeNodeStream<TraitsType> >::selected TreeNodeStreamType;
-	
+					 CommonTreeNodeStream<TraitsType> >::selected TreeNodeStreamType;
+
+	// DebugEventListenerType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::DebugEventListenerType, 
-		                            DebugEventListener<TraitsType> >::selected DebugEventListenerType;
-		
+					 DebugEventListener<TraitsType> >::selected DebugEventListenerType;
+
+	// RecognizerSharedStateType
 	template<class StreamType>
-	class  RecognizerSharedStateType 
-		          : public TraitsOneArgSelector< 
-							typename UserTraits<TraitsType>::template RecognizerSharedStateType<StreamType>, 
-							RecognizerSharedState<TraitsType, StreamType>,
-							typename UserTraits<TraitsType>::template RecognizerSharedStateType<StreamType>::BaseType
-										>::selected 
+	class  RecognizerSharedStateType : public TraitsOneArgSelector< typename UserTraits<TraitsType>::template RecognizerSharedStateType<StreamType>, 
+									RecognizerSharedState<TraitsType, StreamType>,
+									typename UserTraits<TraitsType>::template RecognizerSharedStateType<StreamType>::BaseType
+									>::selected 
 	{};
 
+	// RecognizerType
 	template<class StreamType>
-	class  RecognizerType 
-				   : public TraitsOneArgSelector< 
-				             typename UserTraits<TraitsType>::template RecognizerType<StreamType>, 
-							 BaseRecognizer<TraitsType, StreamType>,
-							 typename UserTraits<TraitsType>::template RecognizerType<StreamType>::BaseType
-									>::selected 
+	class  RecognizerType : public TraitsOneArgSelector< typename UserTraits<TraitsType>::template RecognizerType<StreamType>, 
+							     BaseRecognizer<TraitsType, StreamType>,
+							     typename UserTraits<TraitsType>::template RecognizerType<StreamType>::BaseType
+							     >::selected 
 	{
 	public:
-		typedef typename TraitsOneArgSelector< 
-							typename UserTraits<TraitsType>::template RecognizerType<StreamType>, 
-							BaseRecognizer<TraitsType, StreamType>,
-							typename UserTraits<TraitsType>::template RecognizerType<StreamType>::BaseType
-										>::selected  BaseType;
+		typedef typename TraitsOneArgSelector< typename UserTraits<TraitsType>::template RecognizerType<StreamType>, 
+						       BaseRecognizer<TraitsType, StreamType>,
+						       typename UserTraits<TraitsType>::template RecognizerType<StreamType>::BaseType
+						       >::selected  BaseType;
 		typedef typename BaseType::RecognizerSharedStateType RecognizerSharedStateType;
 
 	public:
@@ -235,24 +270,25 @@ public:
 		}
 	};
 
+	// TreeType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeType, 
-										CommonTree<TraitsType> >::selected TreeType;
+					 CommonTree<TraitsType> >::selected TreeType;
+	// TreeAdaptorType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeAdaptorType, 
-										CommonTreeAdaptor<TraitsType> >::selected TreeAdaptorType;
-		
+					 CommonTreeAdaptor<TraitsType> >::selected TreeAdaptorType;
+
+	// ExceptionBaseType
 	template<class StreamType>
-	class ExceptionBaseType : public TraitsOneArgSelector< 
-								typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>, 
-								ANTLR_ExceptionBase<TraitsType, StreamType>, 
-								typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>::BaseType
-													>::selected 
+	class ExceptionBaseType : public TraitsOneArgSelector< typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>, 
+							       ANTLR_ExceptionBase<TraitsType, StreamType>, 
+							       typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>::BaseType
+							       >::selected 
 	{
 	public:
-		typedef typename TraitsOneArgSelector< 
-			                    typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>, 
-								ANTLR_ExceptionBase<TraitsType, StreamType>,
-								typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>::BaseType
-							>::selected BaseType;
+		typedef typename TraitsOneArgSelector< typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>, 
+						       ANTLR_ExceptionBase<TraitsType, StreamType>,
+						       typename UserTraits<TraitsType>::template ExceptionBaseType<StreamType>::BaseType
+						       >::selected BaseType;
 	
 	protected:
 		ExceptionBaseType( const typename BaseTraitsType::StringType& message )
@@ -261,62 +297,70 @@ public:
 		}
 	};
 
-	//this should be overridden with generated lexer
+	// this should be overridden with generated lexer
+	// BaseLexerType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::BaseLexerType, 
-											Lexer<TraitsType> >::selected BaseLexerType;
+					 Lexer<TraitsType> >::selected BaseLexerType;
 	typedef LxrType LexerType;
 
+	// TokenSourceType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TokenSourceType, 
-											TokenSource<TraitsType> >::selected TokenSourceType;
+					 TokenSource<TraitsType> >::selected TokenSourceType;
+
+	// this should be overridden with generated parser
+	// BaseParserType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::BaseParserType, 
-											Parser<TraitsType> >::selected BaseParserType;
-	
+					 Parser<TraitsType> >::selected BaseParserType;	
 	typedef PsrType ParserType;
 
+	// this should be overridden with generated treeparser (not implemented yet)
+	// BaseTreeParserType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::BaseTreeParserType, 
-											 TreeParser<TraitsType> >::selected BaseTreeParserType;
-	typedef TreePsrType TreeParserType;
+					 TreeParser<TraitsType> >::selected BaseTreeParserType;
+	//typedef TreePsrType<Traits> TreeParserType;
+	typedef BaseTreeParserType TreeParserType;
 
-	template<class SuperType>
-	class RewriteStreamType : public TraitsOneArgSelector< 
-								typename UserTraits<TraitsType>::template RewriteStreamType<SuperType>, 
-								RewriteRuleElementStream<TraitsType, SuperType>,
-								typename UserTraits<TraitsType>::template RewriteStreamType<SuperType>::BaseType
-													>::selected 
+	// RewriteStreamType
+	template<class ElementType>
+	class RewriteStreamType : public TraitsOneArgSelector< typename UserTraits<TraitsType>::template RewriteStreamType<ElementType>,
+							       RewriteRuleElementStream<TraitsType, ElementType>,
+							       typename UserTraits<TraitsType>::template RewriteStreamType<ElementType>::BaseType
+							       >::selected 
 	{
 	public:
-		typedef typename TraitsOneArgSelector< 
-				typename UserTraits<TraitsType>::template RewriteStreamType<SuperType>, 
-				RewriteRuleElementStream<TraitsType, SuperType>, 
-				typename UserTraits<TraitsType>::template RewriteStreamType<SuperType>::BaseType
-						>::selected BaseType;
+		typedef typename TraitsOneArgSelector< typename UserTraits<TraitsType>::template RewriteStreamType<ElementType>,
+						       RewriteRuleElementStream<TraitsType, ElementType>,
+						       typename UserTraits<TraitsType>::template RewriteStreamType<ElementType>::BaseType
+						       >::selected BaseType;
 
-		typedef typename SuperType::StreamType StreamType;
-		typedef typename BaseType::RecognizerType Recognizer_Type;
-		typedef typename BaseType::TokenType TokenType;
-		typedef typename BaseType::ElementsType ElementsType;			
+		//typedef typename SuperType::StreamType StreamType;
+		//typedef typename BaseType::RecognizerType Recognizer_Type;
+		//typedef typename BaseType::ElementType ElementType;
+		typedef typename BaseType::ElementsType ElementsType;
 
 	public:
-		RewriteStreamType(TreeAdaptorType* adaptor = NULL, Recognizer_Type* rec=NULL, ANTLR_UINT8* description = NULL)
-			:BaseType(adaptor, rec, description)
+		RewriteStreamType(TreeAdaptorType* adaptor = NULL, const char* description = NULL)
+			:BaseType(adaptor, description)
 		{
 		}
-		RewriteStreamType(TreeAdaptorType* adaptor, Recognizer_Type* rec, ANTLR_UINT8* description, TokenType* oneElement)
-			:BaseType(adaptor, rec, description, oneElement)
+		RewriteStreamType(TreeAdaptorType* adaptor, const char* description, ElementType* oneElement)
+			:BaseType(adaptor, description, oneElement)
 		{
 		}
-		RewriteStreamType(TreeAdaptorType* adaptor, Recognizer_Type* rec, ANTLR_UINT8* description, const ElementsType& elements)
-			:BaseType(adaptor, rec, description, elements)
+		RewriteStreamType(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements)
+			:BaseType(adaptor, description, elements)
 		{
 		}
 	};
 
+	// RuleReturnValueType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::RuleReturnValueType, 
-										typename BoolSelector< TraitsType::TOKENS_ACCESSED_FROM_OWNING_RULE, 
-														RuleReturnValue_1<TraitsType>, RuleReturnValue<TraitsType> >::selected
-								   >::selected RuleReturnValueType;
+					 typename BoolSelector< TraitsType::TOKENS_ACCESSED_FROM_OWNING_RULE, 
+								RuleReturnValue_1<TraitsType>,
+								RuleReturnValue<TraitsType>
+								>::selected
+					 >::selected RuleReturnValueType;
 };
-
 
 ANTLR_END_NAMESPACE()
 
