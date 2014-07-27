@@ -828,7 +828,7 @@ void <name>::init(StreamType* instream<grammar.delegators:{g|, <g.recognizerName
 {
 	/* Allocate TreeAdaptorType 
 	 */
-	<if(buildAST)>this->get_psrstate()->set_treeAdaptor( new TreeAdaptorType() );<endif>
+	<if(grammar.grammarIsRoot)><if(buildAST)>this->get_psrstate()->set_treeAdaptor( new TreeAdaptorType() );<endif><endif>
     <actions.parser.apifuncs>
 <if(memoize)>
 <if(grammar.grammarIsRoot)>
