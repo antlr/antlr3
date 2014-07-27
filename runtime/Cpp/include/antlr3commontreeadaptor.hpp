@@ -62,7 +62,7 @@ private:
 };
 
 template <class ImplTraits>
-class CommonTreeStore : public ImplTraits::AllocPolicyType
+class CommonTreeStore
 {
 public:
 	typedef typename ImplTraits::TreeType TreeType;
