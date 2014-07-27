@@ -13,8 +13,9 @@
 
 // Forward declaration for Lexer&Parser class(es)
 namespace Antlr3Test {
-	class S1Lexer;
-	class S1Parser;
+	class s001Lexer;	class s001Parser;
+	class s002Lexer;	class s002Parser;
+	class s003Lexer;	class s003Parser;
 
 	class t001lexer;
 	class t002lexer;
@@ -50,9 +51,13 @@ namespace Antlr3Test {
 	};
 		
 	// Instantiate the Traits class(will be used for Lexer/Parser template instantiations)
-	typedef antlr3::Traits<S1Lexer, S1Parser, UserTraits> S1LexerTraits;
-	typedef antlr3::Traits<S1Lexer, S1Parser, UserTraits> S1ParserTraits;
-
+	typedef antlr3::Traits<s001Lexer, s001Parser, UserTraits> s001LexerTraits;
+	typedef s001LexerTraits s001ParserTraits;
+  	typedef antlr3::Traits<s002Lexer, s002Parser, UserTraits> s002LexerTraits;
+	typedef s002LexerTraits s002ParserTraits;
+  	typedef antlr3::Traits<s003Lexer, s003Parser, UserTraits> s003LexerTraits;
+	typedef s003LexerTraits s003ParserTraits;
+  
 	typedef antlr3::Traits<t001lexer, NoParser, UserTraits> t001lexerTraits;
 	typedef antlr3::Traits<t002lexer, NoParser, UserTraits> t002lexerTraits;
 	typedef antlr3::Traits<t003lexer, NoParser, UserTraits> t003lexerTraits;

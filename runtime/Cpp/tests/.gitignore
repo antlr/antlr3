@@ -1,13 +1,13 @@
 # Windows test files
-[st][0-9][0-9][0-9].exe
+[ast][0-9][0-9][0-9].exe
 
 # Unix test files
-[st[0-9][0-9][0-9]
+[st][0-9][0-9][0-9]
 
 # ANTLR generated files
-[st][0-9][0-9][0-9]?*.cpp
-[st][0-9][0-9][0-9]?*.hpp
-[st][0-9][0-9][0-9]*.tokens
+[ast][0-9][0-9][0-9]?*.cpp
+[ast][0-9][0-9][0-9]?*.hpp
+[ast][0-9][0-9][0-9]*.tokens
 
 # MSVC files
 *.vcxproj

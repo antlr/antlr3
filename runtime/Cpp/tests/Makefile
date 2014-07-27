@@ -1,6 +1,6 @@
 .PRECIOUS=.o
 
-ANTLRGRAMMARS ?= $(wildcard [st]*.g)
+ANTLRGRAMMARS ?= $(wildcard [ast]*.g)
 HEADERS = $(wildcard *.hpp) $(wildcard *.inl)
 RUNTIME_HEADERS = $(wildcard ../include/*.hpp) $(wildcard ../include/*.inl)
 SOURCES = $(wildcard *.cpp)
@@ -13,20 +13,48 @@ STGS  = $(wildcard ../../../tool/src/main/resources/org/antlr/codegen/templates/
 
 .SUFFIXES:
 
-INCLUDES= -I. -I../include/
+INCLUDES= -I. -I../include/ -I../../../../boost_1_46_1/ -I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/ -I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/i686-pc-cygwin/
 
-CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable -std=c++0x
-#CFLAGS=-ggdb3 -O3
+CXX=clang++
+CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable -Wno-unused-local-typedefs -Wno-parentheses-equality -Wno-tautological-compare -std=c++0x
+#CFLAGS=-ggdb3 -O3 -std=c++0x
 
 TOBJS= utils.o
 
-all: $(ANTLR) $(TOKENS) t001 t002 t003 t004 t005 t006 t006 t007 t008 t009 t010 t011 t012 t020 t039
+all: $(ANTLR) $(TOKENS) t001 t002 t003 t004 t005 t006 t006 t007 t008 t009 t010 t011 t012 t020 t039 \
+	s001 s002 s003 s004 a001 a002 a003 a004 a005
 
 # For devel only. This will replace .stg files in the tool in a fast way
 #
 $(ANTLR): $(STGS)
-	jar uvf $(ANTLR) -C ../../../tool/src/main/resources \
-	org/antlr/codegen/templates/Cpp/Cpp.stg
+	jar uvf $(ANTLR) \
+	-C ../../../tool/src/main/resources org/antlr/codegen/templates/Cpp/Cpp.stg \
+	-C ../../../tool/src/main/resources org/antlr/codegen/templates/Cpp/AST.stg \
+	-C ../../../tool/src/main/resources org/antlr/codegen/templates/Cpp/ASTParser.stg
+
+a001:	a001.cpp a001.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+a002:	a002.cpp a002.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+a003:	a003.cpp a003.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+a004:	a004.cpp a004.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+a005:	a005.cpp a005.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+s001:	s001.cpp s001.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
+
+s002:	s002.cpp s002.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
+
+s003:	s003.cpp s003.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
 
 t001:	t001.cpp t001lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) -DUSESTL -DD $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
@@ -73,12 +101,23 @@ t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_
 t051:	t051.cpp t051lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
+s004:   s004.cpp PLSQLLexer.tokens PLSQLParser.tokens PTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL -Wno-unused-but-set-variable $(INCLUDES) $< PLSQLLexer*.cpp PLSQLParser*.cpp utils.cpp -o $@
+
+s005:   s005.cpp SQLMini.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL -Wno-parentheses-equality -Wno-unused-but-set-variable $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+
+s006:   s006.cpp SQLMini2.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL -Wno-parentheses-equality -Wno-unused-but-set-variable $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+
 # AST commented out
+#
 # t042:	t042.cpp t005lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 # 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 clean:
-	rm -f *.o t0[0-9][0-9]??*.[ch]pp *.tokens t[0-9][0-9][0-9] t0[0-9][0-9].exe
+	rm -f *.o [ast]0[0-9][0-9]??*.[ch]pp *.tokens [ast][0-9][0-9][0-9] [ast]0[0-9][0-9].exe
+	rm -f PLSQLLexer.[ch]pp PLSQLParser*.[ch]pp
 
 # %.u: %.g
 # 	@echo "Bulding dependencies for "$<
@@ -87,8 +126,8 @@ clean:
 # 	@cat $@.tmp >> $@
 # 	$(RM) $@.tmp
 
-%.tokens %.cpp %Lexer.c %Parser.c %Lexer.h %Parser.h %.hpp: %.g $(ANTLR)
-	java -jar $(ANTLR) $(GRAMMAROPTIONS) $<
+%.tokens %Lexer.cpp %Parser.cpp %Lexer.hpp %Parser.hpp: %.g $(ANTLR)
+	java -Xmx512m -jar $(ANTLR) $(GRAMMAROPTIONS) $<
 
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(ANTLRGRAMMARS)),)
