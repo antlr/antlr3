@@ -551,6 +551,7 @@ void CommonTreeAdaptor<ImplTraits>::replaceChildren( TreeTypePtr parent, ANTLR_I
 template<class ImplTraits>
 CommonTreeAdaptor<ImplTraits>::~CommonTreeAdaptor()
 {
+#ifdef ANTLR3_DEBUG
 	std::cout << "SZ" << TreeStoreType::size() << std::endl;
 	std::cout << "RZ" << TreeStoreType::m_recycleBin.size() << std::endl;
 
@@ -571,6 +572,7 @@ CommonTreeAdaptor<ImplTraits>::~CommonTreeAdaptor()
 			<< (*i)->toStringTree() << '\t'
 			<< std::endl;
 	}
+#endif
 }
 
 template<class ImplTraits>
