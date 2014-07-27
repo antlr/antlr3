@@ -58,6 +58,7 @@ template<class ImplTraits, class ElementType>
 class RewriteRuleElementStream : public ImplTraits::AllocPolicyType
 {
 public:
+	//typedef typename ElementTypePtr::element_type ElementType; unique_ptr
 	//typedef typename ImplTraits::TreeType TreeType;
 	typedef typename ImplTraits::AllocPolicyType AllocPolicyType;
 	typedef typename ImplTraits::TreeAdaptorType TreeAdaptorType;
@@ -67,10 +68,6 @@ public:
 	typedef typename AllocPolicyType::template VectorType< ElementType* > ElementsType;
 
 protected:
-	/// Track single elements w/o creating a list.  Upon 2nd add, alloc list
-    ///
-    ElementType*		m_singleElement;
-
     /// The list of tokens or subtrees we are tracking
     ///
     ElementsType		m_elements;
@@ -83,7 +80,7 @@ protected:
 
 private:
 	ElementType* dupImpl(typename ImplTraits::CommonTokenType* el);
-	ElementType* dupImpl(typename ImplTraits::TreeType* el);
+	ElementType* dupImpl(typename ImplTraits::TreeTypePtr el);
 
 
 	/// Pointer to the tree adaptor in use for this stream
@@ -104,7 +101,7 @@ private:
 
 public:
 	RewriteRuleElementStream(TreeAdaptorType* adaptor, const char* description);
-	RewriteRuleElementStream(TreeAdaptorType* adaptor, const char* description, ElementType* oneElement);
+	RewriteRuleElementStream(TreeAdaptorType* adaptor, const char* description, const ElementType* oneElement);
 	RewriteRuleElementStream(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements);
 
 	~RewriteRuleElementStream();
@@ -123,7 +120,7 @@ public:
     /// an exception unless size()==1.  If size is 1, then return elements[0].
     ///
 	//TokenType* next();
-    ElementType* nextTree();
+    ElementType nextTree();
     //TokenType* nextToken();
     ElementType* _next();
 
@@ -151,7 +148,7 @@ public:
     /// Referencing to a rule result twice is ok; dup entire tree as
     /// we can't be adding trees; e.g., expr expr. 
     ///
-    //TreeType* nextNode();
+    //TreeTypePtr nextNode();
 
     /// Number of elements available in the stream
     ///
@@ -170,7 +167,8 @@ protected:
 ///
 template<class ImplTraits>
 //class RewriteRuleTokenStream : public ImplTraits::template RewriteRuleElementStreamType< typename ImplTraits::ParserType>
-class RewriteRuleTokenStream : public ImplTraits::template RewriteStreamType< const typename ImplTraits::CommonTokenType >
+class RewriteRuleTokenStream
+		//: public ImplTraits::template RewriteStreamType< const typename ImplTraits::CommonTokenType >
 {
 public:
 	typedef typename ImplTraits::AllocPolicyType AllocPolicyType;
@@ -179,20 +177,31 @@ public:
 	typedef typename ComponentType::StreamType StreamType;
 	typedef typename ImplTraits::CommonTokenType TokenType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef typename AllocPolicyType::template VectorType< TokenType* > ElementsType;
 	typedef typename ImplTraits::template RecognizerType< StreamType > RecognizerType;
 	typedef typename ImplTraits::template RewriteStreamType< const typename ImplTraits::CommonTokenType > BaseType;
 
 public:
 	RewriteRuleTokenStream(TreeAdaptorType* adaptor, const char* description);
-	RewriteRuleTokenStream(TreeAdaptorType* adaptor, const char* description, TokenType* oneElement);
+	RewriteRuleTokenStream(TreeAdaptorType* adaptor, const char* description, const TokenType* oneElement);
 	RewriteRuleTokenStream(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements);
 
-	TreeType*	nextNode();
+	TreeTypePtr	nextNode();
 	TokenType*  nextToken();
 
+	/// TODO copied from RewriteRuleElementStreamType
+    /// Add a new pANTLR3_BASE_TREE to this stream
+    ///
+	typedef typename ImplTraits::CommonTokenType ElementType;
+    void	add(const ElementType* el);
+	/// Pointer to the tree adaptor in use for this stream
+	///
+    TreeAdaptorType*	m_adaptor;
+    ElementType* _next();
+
 private:
-	//TreeType*	nextNodeToken();
+	//TreeTypePtr	nextNodeToken();
 };
 
 /// This is an implementation of a subtree stream which is a set of trees
@@ -200,7 +209,8 @@ private:
 ///
 template<class ImplTraits>
 //class RewriteRuleSubtreeStream : public ImplTraits::template RewriteStreamType< typename ImplTraits::TreeParserType>
-class RewriteRuleSubtreeStream : public ImplTraits::template RewriteStreamType< typename ImplTraits::TreeType >
+class RewriteRuleSubtreeStream
+		//: public ImplTraits::template RewriteStreamType< typename ImplTraits::TreeType >
 {
 public:
 	typedef typename ImplTraits::AllocPolicyType AllocPolicyType;
@@ -208,22 +218,31 @@ public:
 	typedef typename ImplTraits::TreeParserType ComponentType;
 	typedef typename ComponentType::StreamType StreamType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef TreeType TokenType;
 	typedef typename ImplTraits::template RecognizerType< StreamType > RecognizerType;
 	typedef typename AllocPolicyType::template VectorType< TokenType* > ElementsType;
 	typedef typename ImplTraits::template RewriteStreamType< typename ImplTraits::TreeType >  BaseType;
 
 	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description);
-	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, TokenType* oneElement);
+	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, TreeTypePtr& oneElement);
 	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements);
 
-	TreeType* nextNode(TreeType*);
+	TreeTypePtr nextNode(TreeTypePtr);
+
+	/// TODO copied from RewriteRuleElementStreamType
+    /// Add a new pANTLR3_BASE_TREE to this stream
+    ///
+    void	add(TreeTypePtr& el);
+    bool	hasNext();
+    TreeTypePtr& nextTree();
+    void	reset();
 
 protected:
-	TreeType* dup( TreeType* el );
+	TreeTypePtr dup( TreeTypePtr el );
 
 private:
-	TreeType* dupTree( TreeType* el );
+	TreeTypePtr dupTree( TreeTypePtr el );
 };
 
 /* TODO This class is probably used in TreeParser only
@@ -269,10 +288,10 @@ public:
 	RewriteRuleNodeStream(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements);
 
 protected:
-	TreeType*	toTree(TreeType* element);
+	TreeTypePtr	toTree(TreeTypePtr element);
 
 private:
-	TreeType*	toTreeNode(TreeType* element);
+	TreeTypePtr	toTreeNode(TreeTypePtr element);
 };
 */
 ANTLR_END_NAMESPACE()

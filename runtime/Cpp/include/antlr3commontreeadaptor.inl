@@ -1,28 +1,103 @@
 ANTLR_BEGIN_NAMESPACE()
 
-template<class ImplTraits>
-ANTLR_INLINE CommonTreeAdaptor<ImplTraits>::CommonTreeAdaptor(DebuggerType*)
+template <typename ImplTraits>
+CommonResourcePoolManager<ImplTraits>::CommonResourcePoolManager(CommonTreeStore<ImplTraits> * pool)
+	: m_pool(pool)
+{}
+
+template <typename ImplTraits>
+CommonResourcePoolManager<ImplTraits>::CommonResourcePoolManager()
+	: m_pool(NULL)
+{}
+
+template <typename ImplTraits>
+CommonResourcePoolManager<ImplTraits>::~CommonResourcePoolManager()
+{};
+
+template <typename ImplTraits>
+void
+CommonResourcePoolManager<ImplTraits>::operator()(TreeType* releasedResource) const
 {
+	if (releasedResource && m_pool)
+		m_pool->reuse(releasedResource);
+}
+
+template <class ImplTraits>
+CommonTreeStore<ImplTraits>::CommonTreeStore()
+	: m_manager(this)
+{}
+
+template <class ImplTraits>
+typename CommonTreeStore<ImplTraits>::TreeTypePtr
+CommonTreeStore<ImplTraits>::create()
+{
+	if (m_recycleBin.empty())
+	{
+		TreeTypePtr retval = TreeTypePtr(new TreeType, m_manager);
+		m_treeStore.push_back(std::unique_ptr<TreeType>(retval.get()));
+		return retval;
+	} else {
+		TreeType* resource = m_recycleBin.back();
+		m_recycleBin.pop_back();
+		return TreeTypePtr(resource, m_manager);
+	}
+}
+
+template <class ImplTraits>
+typename CommonTreeStore<ImplTraits>::CommonTokenType*
+CommonTreeStore<ImplTraits>::createToken()
+{
+	CommonTokenType* retval = new CommonTokenType;
+	m_tokenStore.push_back(std::unique_ptr<CommonTokenType>(retval));
+	return retval;
+}
+
+template <class ImplTraits>
+typename CommonTreeStore<ImplTraits>::CommonTokenType*
+CommonTreeStore<ImplTraits>::createToken( const CommonTokenType* fromToken)
+{
+	CommonTokenType* retval = new CommonTokenType(*fromToken);
+	m_tokenStore.push_back(std::unique_ptr<CommonTokenType>(retval));
+	return retval;
+}
+
+template <class ImplTraits>
+void
+CommonTreeStore<ImplTraits>::reuse(TreeType* releasedResource)
+{
+	if (contains(m_recycleBin, releasedResource))
+	{
+		throw std::string("Grrr double reuse");
+	}
+	releasedResource->reuse();
+	m_recycleBin.push_back(releasedResource);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*	  CommonTreeAdaptor<ImplTraits>::nilNode()
+CommonTreeAdaptor<ImplTraits>::CommonTreeAdaptor(DebuggerType*)
+{}
+
+template<class ImplTraits>
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::nilNode()
 {
 	return this->create(NULL);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*	  CommonTreeAdaptor<ImplTraits>::dupTree( TreeType* tree)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::dupTree( TreeTypePtr& tree)
 {
 	return this->dupTreeTT(tree, NULL);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*	  CommonTreeAdaptor<ImplTraits>::dupTreeTT( TreeType* t, TreeType* parent)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::dupTreeTT( TreeTypePtr t, TreeTypePtr parent)
 {
-	TreeType*	newTree;
-	TreeType*	child;
-	TreeType*	newSubTree;
+	TreeTypePtr	newTree;
+	TreeTypePtr	child;
+	TreeTypePtr	newSubTree;
 	ANTLR_UINT32		n;
 	ANTLR_UINT32		i;
 
@@ -47,7 +122,7 @@ typename CommonTreeAdaptor<ImplTraits>::TreeType*	  CommonTreeAdaptor<ImplTraits
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::addChild( TreeType* t, TreeType* child)
+void	CommonTreeAdaptor<ImplTraits>::addChild( TreeTypePtr& t, TreeTypePtr& child)
 {
 	if	(t != NULL && child != NULL)
 	{
@@ -56,7 +131,16 @@ void	CommonTreeAdaptor<ImplTraits>::addChild( TreeType* t, TreeType* child)
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::addChildToken( TreeType* t, CommonTokenType* child)
+void	CommonTreeAdaptor<ImplTraits>::addChild( TreeTypePtr& t, TreeTypePtr&& child)
+{
+	if	(t != NULL && child != NULL)
+	{
+		t->addChild(child);
+	}
+}
+
+template<class ImplTraits>
+void	CommonTreeAdaptor<ImplTraits>::addChildToken( TreeTypePtr& t, CommonTokenType* child)
 {
 	if	(t != NULL && child != NULL)
 	{
@@ -65,14 +149,14 @@ void	CommonTreeAdaptor<ImplTraits>::addChildToken( TreeType* t, CommonTokenType*
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::setParent( TreeType* child, TreeType* parent)
+void	CommonTreeAdaptor<ImplTraits>::setParent( TreeTypePtr& child, TreeType* parent)
 {
 	child->set_parent(parent);
 }
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::TreeType*
-CommonTreeAdaptor<ImplTraits>::getParent( TreeType* child)
+CommonTreeAdaptor<ImplTraits>::getParent( TreeTypePtr& child)
 {
 	if ( child==NULL )
 		return NULL;
@@ -80,7 +164,7 @@ CommonTreeAdaptor<ImplTraits>::getParent( TreeType* child)
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
 CommonTreeAdaptor<ImplTraits>::errorNode( CommonTokenType* tnstream,
 											const CommonTokenType* startToken,
 											const CommonTokenType* stopToken)
@@ -95,24 +179,22 @@ CommonTreeAdaptor<ImplTraits>::errorNode( CommonTokenType* tnstream,
 }
 
 template<class ImplTraits>
-bool	CommonTreeAdaptor<ImplTraits>::isNilNode( TreeType* t)
+bool	CommonTreeAdaptor<ImplTraits>::isNilNode( TreeTypePtr& t)
 {
 	return t->isNilNode();
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
-CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeType* newRootTree, TreeType* oldRootTree)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeTypePtr& newRootTree, TreeTypePtr& oldRootTree)
 {
-	TreeType* saveRoot;
-
 	/* Protect against tree rewrites if we are in some sort of error
 	 * state, but have tried to recover. In C we can end up with a null pointer
 	 * for a tree that was not produced.
 	 */
 	if	(newRootTree == NULL)
 	{
-		return	oldRootTree;
+		return	std::move(oldRootTree);
 	}
 
 	/* root is just the new tree as is if there is no
@@ -120,7 +202,7 @@ CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeType* newRootTree, TreeType* oldR
 	 */
 	if	(oldRootTree == NULL)
 	{
-		return	newRootTree;
+		return	std::move(newRootTree);
 	}
 
 	/* Produce ^(nil real-node)
@@ -132,17 +214,16 @@ CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeType* newRootTree, TreeType* oldR
 			/* TODO: Handle tree exceptions 
 			 */
 			fprintf(stderr, "More than one node as root! TODO: Create tree exception handling\n");
-			return newRootTree;
+			return std::move(newRootTree);
 		}
 
 		/* The new root is the first child, keep track of the original newRoot
-         * because if it was a Nil Node, then we can reuse it now.
+		 * because if it was a Nil Node, then we can reuse it now.
 		 */
-        saveRoot    = newRootTree;
-		newRootTree = newRootTree->getChild(0);
+		TreeTypePtr saveRoot = std::move(newRootTree);
+		newRootTree = std::move(saveRoot->getChild(0));
 
-        // Reclaim the old nilNode()
-        delete saveRoot;
+		// Will Reclaim the old nilNode() saveRoot here
 	}
 
 	/* Add old root into new root. addChild takes care of the case where oldRoot
@@ -151,46 +232,86 @@ CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeType* newRootTree, TreeType* oldR
 	 */
 	newRootTree->addChild(oldRootTree);
 
-    // If the oldroot tree was a nil node, then we know at this point
-    // it has become orphaned by the rewrite logic, so we tell it to do
-    // whatever it needs to do to be reused.
-    //
-    if  (oldRootTree->isNilNode())
-    {
-        // We have taken an old Root Tree and appended all its children to the new
-        // root. In addition though it was a nil node, which means the generated code
-        // will not reuse it again, so we will reclaim it here. First we want to zero out
-        // any pointers it was carrying around. We are just the baseTree handler so we
-        // don't know necessarilly know how to do this for the real node, we just ask the tree itself
-        // to do it.
-        //
-		delete oldRootTree;
-    }
 	/* Always returns new root structure
 	 */
-	return	newRootTree;
+	return	std::move(newRootTree);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
-CommonTreeAdaptor<ImplTraits>::becomeRootToken( CommonTokenType* newRoot, TreeType* oldRoot)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::becomeRoot( TreeTypePtr&& newRootTree, TreeTypePtr& oldRootTree)
+{
+	/* Protect against tree rewrites if we are in some sort of error
+	 * state, but have tried to recover. In C we can end up with a null pointer
+	 * for a tree that was not produced.
+	 */
+	if	(newRootTree == NULL)
+	{
+		return	std::move(oldRootTree);
+	}
+
+	/* root is just the new tree as is if there is no
+	 * current root tree.
+	 */
+	if	(oldRootTree == NULL)
+	{
+		return	std::move(newRootTree);
+	}
+
+	/* Produce ^(nil real-node)
+	 */
+	if	(newRootTree->isNilNode())
+	{
+		if	(newRootTree->getChildCount() > 1)
+		{
+			/* TODO: Handle tree exceptions
+			 */
+			fprintf(stderr, "More than one node as root! TODO: Create tree exception handling\n");
+			return std::move(newRootTree);
+		}
+
+		/* The new root is the first child, keep track of the original newRoot
+		 * because if it was a Nil Node, then we can reuse it now.
+		 */
+		TreeTypePtr saveRoot = std::move(newRootTree);
+		newRootTree = std::move(saveRoot->getChild(0));
+
+		// will Reclaim the old nilNode() here saveRoot.
+	}
+
+	/* Add old root into new root. addChild takes care of the case where oldRoot
+	 * is a flat list (nill rooted tree). All children of oldroot are added to
+	 * new root.
+	 */
+	newRootTree->addChild(oldRootTree);
+
+	/* Always returns new root structure
+	 */
+	return	std::move(newRootTree);
+}
+
+template<class ImplTraits>
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::becomeRootToken( CommonTokenType* newRoot, TreeTypePtr& oldRoot)
 {
 	return	this->becomeRoot(this->create(newRoot), oldRoot);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
 CommonTreeAdaptor<ImplTraits>::create( CommonTokenType const* payload)
 {
-	return new TreeType(payload);
+	TreeTypePtr retval = TreeStoreType::create();
+	retval->set_token(payload);
+	return retval;
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
 CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const CommonTokenType* fromToken)
 {
 	/* Create the new token */
-	CommonTokenType* newToken = this->createToken(fromToken);
+	auto newToken = this->createToken(fromToken);
 	/* Set the type of the new token to that supplied */
 	newToken->set_type(tokenType);
 	/* Return a new node based upon this token */
@@ -198,7 +319,7 @@ CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const CommonToken
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
 CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const CommonTokenType* fromToken, const char* text)
 {
 	if (fromToken == NULL)
@@ -214,21 +335,26 @@ CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const CommonToken
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
 CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const char* text)
 {
-	CommonTokenType* fromToken = this->createToken(tokenType, text);
+	auto fromToken = this->createToken(tokenType, text);
 	return	this->create(fromToken);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType* CommonTreeAdaptor<ImplTraits>::dupNode( TreeType* treeNode)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::dupNode(const TreeTypePtr& treeNode)
 {
-	return  (treeNode == NULL) ? NULL : treeNode->dupNode();
+	if (treeNode == NULL)
+		return TreeStoreType::null();
+	TreeTypePtr retval(TreeStoreType::create());
+	treeNode->dupNode(retval.get());
+	return retval;
 }
 
 template<class ImplTraits>
-ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getType( TreeType* t)
+ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getType( TreeTypePtr& t)
 {
 	if ( t==NULL)
 		return CommonTokenType::TOKEN_INVALID;
@@ -236,13 +362,13 @@ ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getType( TreeType* t)
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::StringType	CommonTreeAdaptor<ImplTraits>::getText( TreeType* t)
+typename CommonTreeAdaptor<ImplTraits>::StringType	CommonTreeAdaptor<ImplTraits>::getText( TreeTypePtr& t)
 {
 	return t->getText();
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType*	    CommonTreeAdaptor<ImplTraits>::getChild( TreeType* t, ANTLR_UINT32 i)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr&	    CommonTreeAdaptor<ImplTraits>::getChild( TreeTypePtr& t, ANTLR_UINT32 i)
 {
 	if ( t==NULL )
 		return NULL;
@@ -250,26 +376,26 @@ typename CommonTreeAdaptor<ImplTraits>::TreeType*	    CommonTreeAdaptor<ImplTrai
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::setChild( TreeType* t, ANTLR_UINT32 i, TreeType* child)
+void	CommonTreeAdaptor<ImplTraits>::setChild( TreeTypePtr& t, ANTLR_UINT32 i, TreeTypePtr& child)
 {
 	t->setChild(i, child);
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::deleteChild( TreeType* t, ANTLR_UINT32 i)
+void	CommonTreeAdaptor<ImplTraits>::deleteChild( TreeTypePtr& t, ANTLR_UINT32 i)
 {
 	t->deleteChild(i);
 }
 
 template<class ImplTraits>
-void	CommonTreeAdaptor<ImplTraits>::setChildIndex( TreeType* t, ANTLR_INT32 i)
+void	CommonTreeAdaptor<ImplTraits>::setChildIndex( TreeTypePtr& t, ANTLR_INT32 i)
 {
 	if( t!= NULL)
 		t->set_childIndex(i);
 }
 
 template<class ImplTraits>
-ANTLR_INT32	CommonTreeAdaptor<ImplTraits>::getChildIndex( TreeType * t)
+ANTLR_INT32	CommonTreeAdaptor<ImplTraits>::getChildIndex( TreeTypePtr& t)
 {
 	if ( t==NULL )
 		return 0;
@@ -277,7 +403,7 @@ ANTLR_INT32	CommonTreeAdaptor<ImplTraits>::getChildIndex( TreeType * t)
 }
 
 template<class ImplTraits>
-ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getChildCount( TreeType* t)
+ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getChildCount( TreeTypePtr& t)
 {
 	if ( t==NULL )
 		return 0;
@@ -285,42 +411,38 @@ ANTLR_UINT32	CommonTreeAdaptor<ImplTraits>::getChildCount( TreeType* t)
 }
 
 template<class ImplTraits>
-ANTLR_UINT64	CommonTreeAdaptor<ImplTraits>::getUniqueID( TreeType* node )
+ANTLR_UINT64	CommonTreeAdaptor<ImplTraits>::getUniqueID( TreeTypePtr& node )
 {
 	return	reinterpret_cast<ANTLR_UINT64>(node);
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::CommonTokenType*    
-	CommonTreeAdaptor<ImplTraits>::createToken( ANTLR_UINT32 tokenType, const char* text)
+typename CommonTreeAdaptor<ImplTraits>::CommonTokenType*
+CommonTreeAdaptor<ImplTraits>::createToken( ANTLR_UINT32 tokenType, const char* text)
 {
-	CommonTokenType*    newToken = new CommonTokenType;
-
-    if	(newToken != NULL)
-    {	
-		newToken->set_tokText( text );
-		newToken->set_type(tokenType);
-    }
-    return  newToken;
-
+	CommonTokenType* newToken = TreeStoreType::createToken();
+	newToken->set_tokText( text );
+	newToken->set_type(tokenType);
+	return newToken;
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::CommonTokenType*    
-	CommonTreeAdaptor<ImplTraits>::createToken( const CommonTokenType* fromToken)
+typename CommonTreeAdaptor<ImplTraits>::CommonTokenType*
+CommonTreeAdaptor<ImplTraits>::createToken( const CommonTokenType* fromToken)
 {
-    return new CommonTokenType(*fromToken);
+	CommonTokenType* newToken = TreeStoreType::createToken(fromToken);
+	return newToken;
 }
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::CommonTokenType*  
-		 CommonTreeAdaptor<ImplTraits>::getToken( TreeType* t)
+CommonTreeAdaptor<ImplTraits>::getToken( TreeTypePtr& t)
 {
 	return t->getToken();
 }
 
 template<class ImplTraits>
-void CommonTreeAdaptor<ImplTraits>::setTokenBoundaries( TreeType* t, const CommonTokenType* startToken, const CommonTokenType* stopToken)
+void CommonTreeAdaptor<ImplTraits>::setTokenBoundaries( TreeTypePtr& t, const CommonTokenType* startToken, const CommonTokenType* stopToken)
 {
 	ANTLR_MARKER   start = 0;
 	ANTLR_MARKER   stop = 0;
@@ -339,7 +461,7 @@ void CommonTreeAdaptor<ImplTraits>::setTokenBoundaries( TreeType* t, const Commo
 }
 
 template<class ImplTraits>
-ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStartIndex( TreeType* t)
+ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStartIndex( TreeTypePtr& t)
 {
 	if ( t==NULL )
 		return -1;
@@ -347,7 +469,7 @@ ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStartIndex( TreeType* t)
 }
 
 template<class ImplTraits>
-ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStopIndex( TreeType* t)
+ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStopIndex( TreeTypePtr& t)
 {
 	if ( t==NULL )
 		return -1;
@@ -355,7 +477,7 @@ ANTLR_MARKER	CommonTreeAdaptor<ImplTraits>::getTokenStopIndex( TreeType* t)
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::StringType	 CommonTreeAdaptor<ImplTraits>::makeDot( TreeType* theTree)
+typename CommonTreeAdaptor<ImplTraits>::StringType	 CommonTreeAdaptor<ImplTraits>::makeDot( TreeTypePtr& theTree)
 {
 	// The string we are building up
 	//
@@ -420,7 +542,7 @@ typename CommonTreeAdaptor<ImplTraits>::StringType	 CommonTreeAdaptor<ImplTraits
 }
 
 template<class ImplTraits>
-void CommonTreeAdaptor<ImplTraits>::replaceChildren( TreeType* parent, ANTLR_INT32 startChildIndex, ANTLR_INT32 stopChildIndex, TreeType* t)
+void CommonTreeAdaptor<ImplTraits>::replaceChildren( TreeTypePtr parent, ANTLR_INT32 startChildIndex, ANTLR_INT32 stopChildIndex, TreeTypePtr t)
 {
 	if	(parent != NULL)
 		parent->replaceChildren(startChildIndex, stopChildIndex, t);
@@ -429,19 +551,39 @@ void CommonTreeAdaptor<ImplTraits>::replaceChildren( TreeType* parent, ANTLR_INT
 template<class ImplTraits>
 CommonTreeAdaptor<ImplTraits>::~CommonTreeAdaptor()
 {
+	std::cout << "SZ" << TreeStoreType::size() << std::endl;
+	std::cout << "RZ" << TreeStoreType::m_recycleBin.size() << std::endl;
+
+	auto i = TreeStoreType::m_treeStore.begin();
+
+	std::cout
+		<< ' '
+		<< "Node    " << '\t' << "Parent  " << '\t' << "Type" << '\t' << "toStringTree" << std::endl;
+
+	for(; i != TreeStoreType::m_treeStore.end(); ++i)
+	{
+		std::cout
+			<< (TreeStoreType::contains(TreeStoreType::m_recycleBin, i->get()) ? '*' : ' ')
+			<< i->get() << '\t'
+			<< (const void *) (*i)->get_parent() << '\t'
+			<< (*i)->getType() << '\t'
+			<< (*i)->getChildCount() << '\t'
+			<< (*i)->toStringTree() << '\t'
+			<< std::endl;
+	}
 }
 
 template<class ImplTraits>
-void CommonTreeAdaptor<ImplTraits>::defineDotNodes(TreeType* t, const StringType& dotSpec)
+void CommonTreeAdaptor<ImplTraits>::defineDotNodes(TreeTypePtr t, const StringType& dotSpec)
 {
 	// How many nodes are we talking about?
 	//
 	int	nCount;
 	int i;
-    TreeType* child;
+	TreeTypePtr child;
 	char	buff[64];
 	StringType	text;
-	int		j;
+	int	j;
 
 	// Count the nodes
 	//
@@ -504,7 +646,7 @@ void CommonTreeAdaptor<ImplTraits>::defineDotNodes(TreeType* t, const StringType
 }
 
 template<class ImplTraits>
-void CommonTreeAdaptor<ImplTraits>::defineDotEdges(TreeType* t, const StringType& dotSpec)
+void CommonTreeAdaptor<ImplTraits>::defineDotEdges(TreeTypePtr t, const StringType& dotSpec)
 {
 	// How many nodes are we talking about?
 	//
@@ -533,7 +675,7 @@ void CommonTreeAdaptor<ImplTraits>::defineDotEdges(TreeType* t, const StringType
 	//
 	for	(int i=0; i<nCount; i++)
 	{
-		TreeType* child;
+		TreeTypePtr child;
 		char	buff[128];
         StringType text;
 
@@ -609,30 +751,30 @@ void CommonTreeAdaptor<ImplTraits>::defineDotEdges(TreeType* t, const StringType
 }
 
 template<class ImplTraits>
-typename CommonTreeAdaptor<ImplTraits>::TreeType* CommonTreeAdaptor<ImplTraits>::rulePostProcessing( TreeType* root)
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr CommonTreeAdaptor<ImplTraits>::rulePostProcessing( TreeTypePtr& root)
 {
-	TreeType* saveRoot = root;
+	TreeTypePtr saveRoot = std::move(root);
 
-	if (root != NULL && root->isNilNode())
+	if (saveRoot != NULL && saveRoot->isNilNode())
 	{
-		if	(root->getChildCount() == 0)
+		if (saveRoot->getChildCount() == 0)
 		{
-			root = NULL;
+			return TreeTypePtr(NULL, root.get_deleter());
 		}
-		else if	(root->getChildCount() == 1)
+		else if (saveRoot->getChildCount() == 1)
 		{
-			root = root->getChild(0);
-			root->set_parent(NULL);
-			root->set_childIndex(-1);
-
-            // The root we were given was a nil node, wiht one child, which means it has
-            // been abandoned and would be lost in the node factory. However
-            // nodes can be flagged as resuable to prevent this terrible waste
-            //
-			delete saveRoot;
+			TreeTypePtr newRoot = std::move(saveRoot->getChild(0));
+			newRoot->set_parent(NULL);
+			newRoot->set_childIndex(-1);
+			
+			// The root we were given was a nil node, with one child, which means it has
+			// been abandoned and would be lost in the node factory.
+			// saveRoot will be releases and put back into factory
+			//
+			return newRoot;
 		}
 	}
-	return root;
+	return saveRoot;
 }
 
 template<class ImplTraits>
@@ -648,15 +790,15 @@ void DebugTreeAdaptor<ImplTraits>::setDebugEventListener( DebuggerType* debugger
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType*	  DebugTreeAdaptor<ImplTraits>::nilNode()
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr	  DebugTreeAdaptor<ImplTraits>::nilNode()
 {
-	TreeType*	t = this->create(NULL);
+	TreeTypePtr	t = this->create(NULL);
 	m_debugger->createNode(t);
 	return	t;
 }
 
 template<class ImplTraits>
-void	DebugTreeAdaptor<ImplTraits>::addChild(TreeType* t, TreeType* child)
+void	DebugTreeAdaptor<ImplTraits>::addChild(TreeTypePtr& t, TreeTypePtr& child)
 {
 	if	(t != NULL && child != NULL)
 	{
@@ -666,9 +808,9 @@ void	DebugTreeAdaptor<ImplTraits>::addChild(TreeType* t, TreeType* child)
 }
 
 template<class ImplTraits>
-void	DebugTreeAdaptor<ImplTraits>::addChildToken(TreeType* t, CommonTokenType* child)
+void	DebugTreeAdaptor<ImplTraits>::addChildToken(TreeTypePtr& t, CommonTokenType* child)
 {
-	TreeType*	tc;
+	TreeTypePtr	tc;
 	if	(t != NULL && child != NULL)
 	{
 		tc = this->create(child);
@@ -678,54 +820,52 @@ void	DebugTreeAdaptor<ImplTraits>::addChildToken(TreeType* t, CommonTokenType* c
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::becomeRoot( TreeType* newRootTree, TreeType* oldRootTree )
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::becomeRoot( TreeTypePtr& newRootTree, TreeTypePtr& oldRootTree )
 {
-	TreeType* t;
-	t = this->becomeRoot(newRootTree, oldRootTree);
+	TreeTypePtr t = super::becomeRoot(newRootTree, oldRootTree);
 	m_debugger->becomeRoot(newRootTree, oldRootTree);
 	return t;
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::becomeRootToken(TreeType* newRoot, TreeType* oldRoot)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::becomeRootToken(CommonTokenType* newRoot, TreeTypePtr& oldRoot)
 {
-	TreeType*	t;
-	t =	this->becomeRoot(this->create(newRoot), oldRoot);
+	TreeTypePtr	t =	super::becomeRoot(this->create(newRoot), oldRoot);
 	m_debugger->becomeRoot(t, oldRoot);
 	return t;
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::createTypeToken(ANTLR_UINT32 tokenType, CommonTokenType* fromToken)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::createTypeToken(ANTLR_UINT32 tokenType, CommonTokenType* fromToken)
 {
-	TreeType* t;
+	TreeTypePtr t;
 	t = this->createTypeToken(tokenType, fromToken);
 	m_debugger->createNode(t);
 	return t;
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::createTypeTokenText(ANTLR_UINT32 tokenType, CommonTokenType* fromToken, ANTLR_UINT8* text)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::createTypeTokenText(ANTLR_UINT32 tokenType, CommonTokenType* fromToken, ANTLR_UINT8* text)
 {
-	TreeType* t;
+	TreeTypePtr t;
 	t = this->createTypeTokenText(tokenType, fromToken, text);
 	m_debugger->createNode(t);
 	return t;
 }
 	
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::createTypeText( ANTLR_UINT32 tokenType, ANTLR_UINT8* text)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::createTypeText( ANTLR_UINT32 tokenType, ANTLR_UINT8* text)
 {
-	TreeType* t;
+	TreeTypePtr t;
 	t = this->createTypeText(tokenType, text);
 	m_debugger->createNode(t);
 	return t;
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::dupTree( TreeType* tree)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::dupTree( TreeTypePtr& tree)
 {
-	TreeType* t;
+	TreeTypePtr t;
 
 	// Call the normal dup tree mechanism first
 	//
@@ -742,11 +882,11 @@ typename DebugTreeAdaptor<ImplTraits>::TreeType* DebugTreeAdaptor<ImplTraits>::d
 }
 
 template<class ImplTraits>
-void DebugTreeAdaptor<ImplTraits>::simulateTreeConstruction(TreeType* tree)
+void DebugTreeAdaptor<ImplTraits>::simulateTreeConstruction(TreeTypePtr& tree)
 {
 	ANTLR_UINT32		n;
 	ANTLR_UINT32		i;
-	TreeType*	child;
+	TreeTypePtr	child;
 
 	// Send the create node event
 	//
@@ -760,6 +900,5 @@ void DebugTreeAdaptor<ImplTraits>::simulateTreeConstruction(TreeType* tree)
 		m_debugger->addChild(tree, child);
 	}
 }
-
 
 ANTLR_END_NAMESPACE()

@@ -138,6 +138,8 @@ public:
 	CommonToken(TOKEN_TYPE type);
 	CommonToken( const CommonToken& ctoken );
 
+	~CommonToken() {}
+
 	CommonToken& operator=( const CommonToken& ctoken );
 	bool operator==( const CommonToken& ctoken ) const;
 	bool operator<( const CommonToken& ctoken ) const;

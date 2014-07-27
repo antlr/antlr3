@@ -1589,7 +1589,7 @@ ANTLR_UINT32		TreeNodeIntStream<ImplTraits>::_LA(ANTLR_INT32 i)
 
 	// Ask LT for the 'token' at that position
 	//
-	TreeType* t = tns->_LT(i);
+	TreeTypePtr t = tns->_LT(i);
 
 	if	(t == NULL)
 	{

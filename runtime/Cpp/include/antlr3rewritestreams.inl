@@ -10,7 +10,7 @@ RewriteRuleElementStream<ImplTraits, ElementType>::RewriteRuleElementStream(Tree
 template<class ImplTraits, class ElementType>
 RewriteRuleElementStream<ImplTraits, ElementType>::RewriteRuleElementStream(TreeAdaptorType* adaptor,
 	const char* description,
-	ElementType* oneElement)
+	const ElementType* oneElement)
 {
 	this->init(adaptor, description);
 	if( oneElement != NULL )
@@ -33,21 +33,20 @@ void RewriteRuleElementStream<ImplTraits, ElementType>::init(TreeAdaptorType* ad
 	m_adaptor = adaptor;
 	m_cursor  = 0;
 	m_dirty	  = false;
-	m_singleElement = NULL;
 }
 
 template<class ImplTraits>
 RewriteRuleTokenStream<ImplTraits>::RewriteRuleTokenStream(TreeAdaptorType* adaptor,
 	const char* description)
-	: BaseType(adaptor, description)
+	//: BaseType(adaptor, description)
 {
 }
 
 template<class ImplTraits>
 RewriteRuleTokenStream<ImplTraits>::RewriteRuleTokenStream(TreeAdaptorType* adaptor,
 	const char* description,
-	TokenType* oneElement)
-	: BaseType(adaptor, description, oneElement)
+	const TokenType* oneElement)
+	//: BaseType(adaptor, description, oneElement)
 {
 }
 
@@ -55,22 +54,22 @@ template<class ImplTraits>
 RewriteRuleTokenStream<ImplTraits>::RewriteRuleTokenStream(TreeAdaptorType* adaptor,
 	const char* description,
 	const ElementsType& elements)
-	: BaseType(adaptor, description, elements)
+	//: BaseType(adaptor, description, elements)
 {
 }
 
 template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor,
 	const char* description)
-	: BaseType(adaptor, description)
+	//: BaseType(adaptor, description)
 {
 }
 
 template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor,
 	const char* description,
-	TokenType* oneElement)
-	: BaseType(adaptor, description, oneElement)
+	TreeTypePtr& oneElement)
+	//: BaseType(adaptor, description, oneElement)
 {
 }
 
@@ -78,7 +77,7 @@ template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor,
 	const char* description,
 	const ElementsType& elements)
-	: BaseType(adaptor, description, elements)
+	//: BaseType(adaptor, description, elements)
 {
 }
 
@@ -120,23 +119,6 @@ void RewriteRuleElementStream<ImplTraits, ElementType>::add(ElementType* el)
 	if ( el== NULL )
 		return;
 
-	if ( !m_elements.empty() )
-	{
-		// if in list, just add
-		m_elements.push_back(el);
-		return;
-	}
-
-	if ( m_singleElement == NULL )
-	{
-		// no elements yet, track w/o list
-		m_singleElement = el;
-		return;
-	}
-
-	// adding 2nd element, move to list
-	m_elements.push_back(m_singleElement);
-	m_singleElement = NULL;
 	m_elements.push_back(el);
 }
 
@@ -157,7 +139,8 @@ ElementType* RewriteRuleElementStream<ImplTraits, ElementType>::_next()
 		if (n == 1)
 		{
 			// Special case when size is single element, it will just dup a lot
-			return this->toTree(m_singleElement);
+			//return this->toTree(m_singleElement);
+			return this->toTree(m_elements.at(0));
 		}
 
 		// Out of elements and the size is not 1, so we cannot assume
@@ -165,13 +148,6 @@ ElementType* RewriteRuleElementStream<ImplTraits, ElementType>::_next()
 		// This means we ran out of elements earlier than was expected.
 		//
 		return NULL;	// Caller must cope with this (TODO throw RewriteEmptyStreamException)
-	}
-
-	// Elements available either for duping or just available
-	if ( m_singleElement != NULL)
-	{
-		m_cursor++;   // Cursor advances even for single element as this tells us to dup()
-		return this->toTree(m_singleElement);
 	}
 
 	// More than just a single element so we extract it from the
@@ -182,7 +158,7 @@ ElementType* RewriteRuleElementStream<ImplTraits, ElementType>::_next()
 }
 
 template<class ImplTraits, class ElementType>
-ElementType*
+ElementType
 RewriteRuleElementStream<ImplTraits, ElementType>::nextTree()
 {
 	ANTLR_UINT32 n = this->size();
@@ -214,7 +190,7 @@ RewriteRuleElementStream<ImplTraits, SuperType>::next()
 	s = this->size();
 	if ( (m_cursor >= s) && (s == 1) )
 	{
-		TreeType* el;
+		TreeTypePtr el;
 		el = this->_next();
 		return	this->dup(el);
 	}
@@ -239,21 +215,21 @@ RewriteRuleElementStream<ImplTraits, ElementType>::dupImpl( typename ImplTraits:
 
 template<class ImplTraits, class ElementType>
 ElementType*
-RewriteRuleElementStream<ImplTraits, ElementType>::dupImpl( typename ImplTraits::TreeType* element)
+RewriteRuleElementStream<ImplTraits, ElementType>::dupImpl( typename ImplTraits::TreeTypePtr element)
 {
 	return m_adaptor->dupTree(element);
 }
 
 template<class ImplTraits>
-typename RewriteRuleSubtreeStream<ImplTraits>::TreeType*	
-RewriteRuleSubtreeStream<ImplTraits>::dup(TreeType* element)
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr	
+RewriteRuleSubtreeStream<ImplTraits>::dup(TreeTypePtr element)
 {
 	return this->dupTree(element);
 }
 
 template<class ImplTraits>
-typename RewriteRuleSubtreeStream<ImplTraits>::TreeType*
-RewriteRuleSubtreeStream<ImplTraits>::dupTree(TreeType* element)
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
+RewriteRuleSubtreeStream<ImplTraits>::dupTree(TreeTypePtr element)
 {
 	return BaseType::m_adaptor->dupNode(element);
 }
@@ -267,15 +243,15 @@ RewriteRuleElementStream<ImplTraits, ElementType>::toTree( ElementType* element)
 
 /*
 template<class ImplTraits>
-typename RewriteRuleNodeStream<ImplTraits>::TreeType*
-RewriteRuleNodeStream<ImplTraits>::toTree(TreeType* element)
+typename RewriteRuleNodeStream<ImplTraits>::TreeTypePtr
+RewriteRuleNodeStream<ImplTraits>::toTree(TreeTypePtr element)
 {
 	return this->toTreeNode(element);
 }
 
 template<class ImplTraits>
-typename RewriteRuleNodeStream<ImplTraits>::TreeType*
-RewriteRuleNodeStream<ImplTraits>::toTreeNode(TreeType* element)
+typename RewriteRuleNodeStream<ImplTraits>::TreeTypePtr
+RewriteRuleNodeStream<ImplTraits>::toTreeNode(TreeTypePtr element)
 {
 	return BaseType::m_adaptor->dupNode(element);
 }
@@ -284,8 +260,7 @@ RewriteRuleNodeStream<ImplTraits>::toTreeNode(TreeType* element)
 template<class ImplTraits, class ElementType>
 bool RewriteRuleElementStream<ImplTraits, ElementType>::hasNext()
 {
-	if (	((m_singleElement != NULL) && (m_cursor < 1))
-		||	 ( !m_elements.empty() && m_cursor < m_elements.size()))
+	if ( !m_elements.empty() && m_cursor < m_elements.size())
 	{
 		return true;
 	}
@@ -296,16 +271,17 @@ bool RewriteRuleElementStream<ImplTraits, ElementType>::hasNext()
 }
 
 template<class ImplTraits >
-typename RewriteRuleTokenStream<ImplTraits>::TreeType*
+typename RewriteRuleTokenStream<ImplTraits>::TreeTypePtr
 RewriteRuleTokenStream<ImplTraits>::nextNode()
 {
 	TokenType *Token = this->nextToken();
-	return BaseType::m_adaptor->create(Token);
+	//return BaseType::m_adaptor->create(Token);
+	return m_adaptor->create(Token);
 }
 
 /*
 template<class ImplTraits>
-typename RewriteRuleTokenStream<ImplTraits>::TreeType*
+typename RewriteRuleTokenStream<ImplTraits>::TreeTypePtr
 RewriteRuleTokenStream<ImplTraits>::nextNodeToken()
 {
 	return BaseType::m_adaptor->create(this->_next());
@@ -317,22 +293,7 @@ RewriteRuleTokenStream<ImplTraits>::nextNodeToken()
 template<class ImplTraits, class ElementType>
 ANTLR_UINT32 RewriteRuleElementStream<ImplTraits, ElementType>::size()
 {
-	ANTLR_UINT32 n = 0;
-
-	/// Should be a count of one if singleElement is set. I copied this
-	/// logic from the java implementation, which I suspect is just guarding
-	/// against someone setting singleElement and forgetting to NULL it out
-	///
-	if ( m_singleElement != NULL)
-	{
-		n = 1;
-	}
-	if ( !m_elements.empty() )
-	{
-		return (ANTLR_UINT32)(m_elements.size());
-	}
-	return n;
-
+	return (ANTLR_UINT32)(m_elements.size());
 }
 
 template<class ImplTraits, class ElementType>
@@ -352,41 +313,23 @@ RewriteRuleElementStream<ImplTraits, ElementType>::~RewriteRuleElementStream()
     // Before placing the stream back in the pool, we
 	// need to clear any vector it has. This is so any
 	// free pointers that are associated with the
-	// entires are called. However, if this particular function is called
-    // then we know that the entries in the stream are definately
+	// entries are called. However, if this particular function is called
+    // then we know that the entries in the stream are definitely
     // tree nodes. Hence we check to see if any of them were nilNodes as
     // if they were, we can reuse them.
 	//
-	if	( !m_elements.empty() )
+	// We have some elements to traverse
+	//
+	for (ANTLR_UINT32 i = 0; i < m_elements.size(); i++)
 	{
-	 // We have some elements to traverse
-	 //
-	 ANTLR_UINT32 i;
-
-	 for (i = 1; i<= m_elements.size(); i++)
-	 {
-	     ElementType *tree = m_elements.at(i-1);
-	     //if  ( (tree != NULL) && tree->isNilNode() )
-	     {
-		 // Had to remove this for now, check is not comprehensive enough
-		 // tree->reuse(tree);
-	     }
-	 }
-		m_elements.clear();
+		ElementType *tree = m_elements.at(i);
+		//if  ( (tree != NULL) && tree->isNilNode() )
+		{
+			// Had to remove this for now, check is not comprehensive enough
+			// tree->reuse(tree);
+		}
 	}
-	else
-	{
-	 if  (m_singleElement != NULL)
-	 {
-	     ElementType *tree = m_singleElement;
-	     //if  (tree->isNilNode())
-	     {
-		 // Had to remove this for now, check is not comprehensive enough
-		 //   tree->reuse(tree);
-	     }
-	 }
-	 m_singleElement = NULL;
-	}
+	m_elements.clear();
 }
 
 template<class ImplTraits>
@@ -397,15 +340,15 @@ RewriteRuleTokenStream<ImplTraits>::nextToken()
 }
 
 template<class ImplTraits>
-typename RewriteRuleSubtreeStream<ImplTraits>::TreeType*
-RewriteRuleSubtreeStream<ImplTraits>::nextNode(TreeType* element)
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
+RewriteRuleSubtreeStream<ImplTraits>::nextNode(TreeTypePtr element)
 {
 	//System.out.println("nextNode: elements="+elements+", singleElement="+((Tree)singleElement).toStringTree());
 	ANTLR_UINT32 n = this->size();
 	if ( BaseType::m_dirty || (BaseType::m_cursor>=n && n==1) ) {
 		// if out of elements and size is 1, dup (at most a single node
 		// since this is for making root nodes).
-		TreeType* el = this->_next();
+		TreeTypePtr el = this->_next();
 		return BaseType::m_adaptor->dupNode(el);
 	}
 	// test size above then fetch

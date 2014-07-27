@@ -46,6 +46,7 @@ public:
 	typedef TreeNodeStreamType StreamType;
 	typedef typename TreeNodeStreamType::IntStreamType IntStreamType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef TreeType TokenType;
 	typedef typename ImplTraits::template ExceptionBaseType<TreeNodeStreamType> ExceptionBaseType;
 	typedef typename ImplTraits::template RecognizerType< typename ImplTraits::TreeNodeStreamType > RecognizerType;

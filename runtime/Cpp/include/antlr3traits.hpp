@@ -62,6 +62,8 @@ public:
 	
 	typedef Empty TreeType;
 	typedef Empty TreeAdaptorType;
+	typedef Empty TreeStoreType;
+  
 	
 	template<class StreamType>
 	class ExceptionBaseType : public Empty
@@ -88,7 +90,7 @@ public:
 	
 	//If we want to change the way tokens are stored
 	static const bool TOKENS_ACCESSED_FROM_OWNING_RULE = false;
-	static const int  TOKEN_FILL_BUFFER_INCREMENT = 100; //used only if the above val is true
+	static const unsigned TOKEN_FILL_BUFFER_INCREMENT = 100; //used only if the above val is true
 
 	static void displayRecognitionError( const std::string& str ) {  printf("%s", str.c_str() ); }
 };
@@ -192,7 +194,7 @@ public:
 					 >::selected LexStateType;
 
 	static const bool TOKENS_ACCESSED_FROM_OWNING_RULE = UserTraits<TraitsType>::TOKENS_ACCESSED_FROM_OWNING_RULE;
-	static const int  TOKEN_FILL_BUFFER_INCREMENT = UserTraits<TraitsType>::TOKEN_FILL_BUFFER_INCREMENT; //used only if the above val is true
+	static const unsigned TOKEN_FILL_BUFFER_INCREMENT = UserTraits<TraitsType>::TOKEN_FILL_BUFFER_INCREMENT; //used only if the above val is true
 
 	static void displayRecognitionError( const StringType& str ) { UserTraits<TraitsType>::displayRecognitionError(str); }
 };
@@ -273,9 +275,14 @@ public:
 	// TreeType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeType, 
 					 CommonTree<TraitsType> >::selected TreeType;
+
 	// TreeAdaptorType
 	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeAdaptorType, 
 					 CommonTreeAdaptor<TraitsType> >::selected TreeAdaptorType;
+	typedef typename TraitsSelector< typename UserTraits<TraitsType>::TreeStoreType,
+					 CommonTreeStore<TraitsType> >::selected TreeStoreType;
+	typedef typename TreeStoreType::TreeTypePtr TreeTypePtr;
+	//typedef std::unique_ptr<TreeType, ResourcePoolManager<ImplTraits>> TreeTypePtr;
 
 	// ExceptionBaseType
 	template<class StreamType>

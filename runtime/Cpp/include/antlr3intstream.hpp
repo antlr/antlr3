@@ -382,6 +382,7 @@ public:
 	typedef typename ImplTraits::TreeNodeStreamType TreeNodeStreamType;
 	typedef IntStream<ImplTraits, TreeNodeStreamType > BaseType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
 
 public:
