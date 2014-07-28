@@ -174,46 +174,40 @@ template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::~RewriteRuleSubtreeStream()
 {
     // Before placing the stream back in the pool, we
-	// need to clear any vector it has. This is so any
-	// free pointers that are associated with the
-	// entries are called. However, if this particular function is called
-    // then we know that the entries in the stream are definitely
-    // tree nodes. Hence we check to see if any of them were nilNodes as
-    // if they were, we can reuse them.
-	//
-	// We have some elements to traverse
-	//
-	for (ANTLR_UINT32 i = 0; i < m_elements.size(); i++)
-	{
-		TreeTypePtr tree(std::move(m_elements.at(i)));
-		//if  ( (tree != NULL) && tree->isNilNode() )
-		{
-			// Had to remove this for now, check is not comprehensive enough
-			// tree->reuse(tree);
-		}
-	}
+	// need to clear any vector it has.
 	m_elements.clear();
 }
 
 template<class ImplTraits>
 typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
-RewriteRuleSubtreeStream<ImplTraits>::nextNode(TreeTypePtr element)
+RewriteRuleSubtreeStream<ImplTraits>::nextNode()
 {
 	//System.out.println("nextNode: elements="+elements+", singleElement="+((Tree)singleElement).toStringTree());
 	ANTLR_UINT32 n = this->size();
-	if ( m_dirty || (m_cursor>=n && n==1) ) {
+	if (m_dirty || (m_cursor == m_elements.end() && m_elements.size() == 1)) {
 		// if out of elements and size is 1, dup (at most a single node
 		// since this is for making root nodes).
-		TreeTypePtr el = this->_next();
-		return m_adaptor->dupNode(el);
+		typename ElementsType::iterator el = this->_next();
+		return m_adaptor->dupNode(*el);
 	}
-	// test size above then fetch
-	TreeType *tree = this->_next();
-	while (m_adaptor->isNil(tree) && m_adaptor->getChildCount(tree) == 1)
-		tree = m_adaptor->getChild(tree, 0);
+
+	typename ElementsType::iterator el = this->_next();
+	//while (m_adaptor->isNilNode(el) && m_adaptor->getChildCount(el) == 1)
+	//	tree = m_adaptor->getChild(tree, 0);
+	TreeTypePtr& node = leftestNode(*el);
 	//System.out.println("_next="+((Tree)tree).toStringTree());
-	TreeType *el = m_adaptor->dupNode(tree); // dup just the root (want node here)
-	return el;
+	return m_adaptor->dupNode(node); // dup just the root (want node here)
+}
+
+template<class ImplTraits>
+ANTLR_INLINE
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr&
+RewriteRuleSubtreeStream<ImplTraits>::leftestNode(TreeTypePtr& node) const
+{
+	if(m_adaptor->isNilNode(node) && m_adaptor->getChildCount(node) == 1)
+		return leftestNode(node->getChild(0));
+	else
+		return node;
 }
 
 ANTLR_END_NAMESPACE()

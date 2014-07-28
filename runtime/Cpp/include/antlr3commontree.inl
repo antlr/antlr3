@@ -244,10 +244,10 @@ CommonTree<ImplTraits>*	CommonTree<ImplTraits>::dupNode(void *p) const
 template<class ImplTraits>
 ANTLR_UINT32	CommonTree<ImplTraits>::getCharPositionInLine()
 {
-	if(m_token == NULL || (m_token->get_charPositionInLine() == -1) )
+	if(m_token == NULL || (m_token->get_charPositionInLine() == 0) )
 	{
-		if(this->getChildCount() > 0)
-			return this->getChild(0)->get_charPositionInLine();
+		if(!m_children.empty() && m_children.front())
+			return m_children.front()->get_charPositionInLine();
 		return 0;
 	}
 	return m_token->get_charPositionInLine();

@@ -62,7 +62,7 @@ public:
     ///
     void	reset();
 
-	TreeTypePtr nextNode(TreeTypePtr);
+	TreeTypePtr nextNode();
 
 	/// TODO copied from RewriteRuleElementStreamType
     /// Add a new pANTLR3_BASE_TREE to this stream
@@ -84,6 +84,7 @@ public:
 protected:
 	TreeTypePtr dup(const TreeTypePtr& el );
 
+	TreeTypePtr& leftestNode(TreeTypePtr& node) const;
 private:
 	/// Pointer to the tree adaptor in use for this stream
 	///

@@ -155,14 +155,7 @@ template<class ImplTraits>
 bool
 RewriteRuleTokenStream<ImplTraits>::hasNext()
 {
-	if ( !m_elements.empty() && m_cursor < m_elements.size())
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return m_cursor != m_elements.end();
 }
 
 template<class ImplTraits >
