@@ -57,11 +57,10 @@ RewriteRuleTokenStream<ImplTraits>::_next()
 	{
 		// This means that the stream is empty
 		// Caller must cope with this (TODO throw RewriteEmptyStreamException)
-		m_dirty = true;
 		return m_elements.end();
 	}
 
-	if (m_dirty && m_cursor == m_elements.end())
+	if (m_dirty || m_cursor == m_elements.end())
 	{
 		if( m_elements.size() == 1)
 		{
@@ -79,7 +78,6 @@ RewriteRuleTokenStream<ImplTraits>::_next()
 
 	// More than just a single element so we extract it from the
 	// vector.
-	m_dirty = true;
 	return m_cursor++;
 }
 
