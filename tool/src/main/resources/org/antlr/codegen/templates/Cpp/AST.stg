@@ -285,7 +285,8 @@ rewritePositiveClosureBlock(
 	description) ::=
 <<
 if ( !(<referencedElements:{el | stream_<el>.hasNext()}; separator="||">) ) {
-	throw new RewriteEarlyExitException();
+	ExceptionBaseType* ex = new ANTLR_Exception\< <name>ImplTraits, REWRITE_EARLY_EXCEPTION, StreamType>( this->get_rec(), "<referencedElements> empty" );
+	goto rule<ruleDescriptor.name>Ex;
 }
 while ( <referencedElements:{el | stream_<el>.hasNext()}; separator="||"> ) {
 	<alt>
