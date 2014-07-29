@@ -14,6 +14,8 @@ void test1(const char* input);
 void test2(const char* input);
 void test3(const char* input);
 void test4(const char* input);
+void test5(const char* input);
+void test6(const char* input);
 
 int 
 main	(int argc, char *argv[])
@@ -21,7 +23,11 @@ main	(int argc, char *argv[])
 	test1("ABC");
 	test2("AABBCC");
 	test3("AABBCC");
-	test4("ABC"); // NOTE: this one leaks memory
+	test4("ABC");
+	test5("ABDE");
+	test5("ACDE");
+	test6("ABDE");
+	test6("ACDE");
 
 	printf("finished parsing OK\n");	// Finnish parking is pretty good - I think it is all the snow
 
