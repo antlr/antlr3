@@ -86,38 +86,40 @@ CommonTreeAdaptor<ImplTraits>::nilNode()
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
-CommonTreeAdaptor<ImplTraits>::dupTree( TreeTypePtr& tree)
+CommonTreeAdaptor<ImplTraits>::dupTree( const TreeType* tree)
 {
-	return this->dupTreeTT(tree, NULL);
+	if (tree == NULL)
+		return NULL;
+	return std::move(this->dupTreeImpl(tree, NULL));
 }
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
-CommonTreeAdaptor<ImplTraits>::dupTreeTT( TreeTypePtr t, TreeTypePtr parent)
+CommonTreeAdaptor<ImplTraits>::dupTree( const TreeTypePtr& tree)
 {
-	TreeTypePtr	newTree;
-	TreeTypePtr	child;
-	TreeTypePtr	newSubTree;
-	ANTLR_UINT32		n;
-	ANTLR_UINT32		i;
-
-	if	(t == NULL)
+	if (tree == NULL)
 		return NULL;
+	return std::move(this->dupTreeImpl(tree, NULL));
+}
 
-	newTree = t->dupNode();
+template<class ImplTraits>
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::dupTreeImpl( const TreeTypePtr& root, TreeType* parent)
+{
+	TreeTypePtr newTree(this->dupNode(root));
 
 	// Ensure new subtree root has parent/child index set
 	//
-	this->setChildIndex( newTree, t->get_childIndex() );
+	this->setChildIndex( newTree, root->get_childIndex() );
 	this->setParent(newTree, parent);
-	n = this->getChildCount(t);
 
-	for	(i=0; i < n; i++)
+	ChildrenType& r_children = root->get_children();
+	for (auto i = r_children.begin(); i != r_children.end(); ++i)
 	{
-		child = this->getChild(t, i);
-		newSubTree = this->dupTreeTT(child, t);
-		this->addChild(newTree, newSubTree);
+		// add child's clone
+		this->addChild(newTree, this->dupTreeImpl(*i, newTree.get()));
 	}
+
 	return	newTree;
 }
 
@@ -340,6 +342,17 @@ CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const char* text)
 {
 	auto fromToken = this->createToken(tokenType, text);
 	return	this->create(fromToken);
+}
+
+template<class ImplTraits>
+typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
+CommonTreeAdaptor<ImplTraits>::dupNode(const TreeType* treeNode)
+{
+	if (treeNode == NULL)
+		return TreeStoreType::null();
+	TreeTypePtr retval(TreeStoreType::create());
+	treeNode->dupNode(retval.get());
+	return retval;
 }
 
 template<class ImplTraits>
@@ -865,13 +878,32 @@ typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>:
 }
 
 template<class ImplTraits>
-typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::dupTree( TreeTypePtr& tree)
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::dupTree( const TreeTypePtr& tree)
 {
 	TreeTypePtr t;
 
 	// Call the normal dup tree mechanism first
 	//
-	t = this->dupTreeTT(tree, NULL);
+	t = this->dupTreeImpl(tree, NULL);
+
+	// In order to tell the debugger what we have just done, we now
+	// simulate the tree building mechanism. THis will fire
+	// lots of debugging events to the client and look like we
+	// duped the tree..
+	//
+	this->simulateTreeConstruction( t);
+
+	return t;
+}
+
+template<class ImplTraits>
+typename DebugTreeAdaptor<ImplTraits>::TreeTypePtr DebugTreeAdaptor<ImplTraits>::dupTree( const TreeType* tree)
+{
+	TreeTypePtr t;
+
+	// Call the normal dup tree mechanism first
+	//
+	t = this->dupTreeImpl(tree, NULL);
 
 	// In order to tell the debugger what we have just done, we now
 	// simulate the tree building mechanism. THis will fire

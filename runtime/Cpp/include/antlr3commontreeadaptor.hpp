@@ -116,6 +116,7 @@ public:
 	typedef typename ImplTraits::StringType StringType;
 	typedef typename ImplTraits::TreeType TreeType;
 	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
+	typedef typename TreeType::ChildrenType ChildrenType;
 
 	typedef	TreeType TokenType;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
@@ -126,9 +127,13 @@ public:
 public:
 	//The parameter is there only to provide uniform constructor interface
 	CommonTreeAdaptor(DebuggerType* dbg = nullptr);
+
 	TreeTypePtr	nilNode();
-	TreeTypePtr	dupTree( TreeTypePtr& tree);
-	TreeTypePtr	dupTreeTT( TreeTypePtr t, TreeTypePtr tree);
+	TreeTypePtr	dupTree( const TreeTypePtr& tree);
+	TreeTypePtr	dupTree( const TreeType* tree);
+
+	TreeTypePtr	dupNode(const TreeTypePtr& treeNode);
+	TreeTypePtr	dupNode(const TreeType* treeNode);
 
 	void	addChild( TreeTypePtr& t, TreeTypePtr& child);
 	void	addChild( TreeTypePtr& t, TreeTypePtr&& child);
@@ -152,7 +157,6 @@ public:
 	CommonTokenType* createToken( ANTLR_UINT32 tokenType, const char* text);
 	CommonTokenType* createToken( const CommonTokenType* fromToken);
 
-	TreeTypePtr	dupNode(const TreeTypePtr& treeNode);
 	ANTLR_UINT32	getType( TreeTypePtr& t);
 	StringType	getText( TreeTypePtr& t);
         
@@ -188,6 +192,8 @@ public:
 	~CommonTreeAdaptor();
 
 protected:
+	TreeTypePtr	dupTreeImpl( const TreeTypePtr& root, TreeType* parent);
+
 	void defineDotNodes(TreeTypePtr t, const StringType& dotSpec);
 	void defineDotEdges(TreeTypePtr t, const StringType& dotSpec);
 };
@@ -229,7 +235,8 @@ public:
 	TreeTypePtr createTypeTokenText(ANTLR_UINT32 tokenType, CommonTokenType* fromToken, ANTLR_UINT8* text);
 	TreeTypePtr createTypeText( ANTLR_UINT32 tokenType, ANTLR_UINT8* text);
 
-	TreeTypePtr dupTree( TreeTypePtr& tree);
+	TreeTypePtr dupTree( const TreeTypePtr& tree);
+	TreeTypePtr dupTree( const TreeType* tree);
 
 	/// Sends the required debugging events for duplicating a tree
 	/// to the debugger.

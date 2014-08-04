@@ -53,6 +53,7 @@ public:
 	typedef typename ImplTraits::TreeType ElementType;
 
 	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description);
+	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, TreeType* oneElement);
 	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, TreeTypePtr& oneElement);
 	RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description, const ElementsType& elements);
 	~RewriteRuleSubtreeStream();
@@ -83,6 +84,7 @@ public:
 
 protected:
 	TreeTypePtr dup(const TreeTypePtr& el );
+	TreeTypePtr dup(const TreeType* el );
 
 	TreeTypePtr& leftestNode(TreeTypePtr& node) const;
 private:
@@ -106,6 +108,7 @@ private:
     ElementsType		m_elements;
 
 	TreeTypePtr dupTree(const TreeTypePtr& el );
+	TreeTypePtr dupTree(const TreeType* el );
 
 	/// Once a node / subtree has been used in a stream, it must be dup'ed
 	/// from then on.  Streams are reset after sub rules so that the streams

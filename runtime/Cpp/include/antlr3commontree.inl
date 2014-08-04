@@ -34,8 +34,8 @@ CommonTree<ImplTraits>::CommonTree( const CommonTokenType* token )
 template<class ImplTraits>
 CommonTree<ImplTraits>::CommonTree( const CommonTree* tree )
 {
-	m_startIndex = -1;
-	m_stopIndex  = -1;
+	m_startIndex = tree->get_startIndex();
+	m_stopIndex  = tree->get_stopIndex();
 	m_childIndex = -1;
 	m_token		 = tree->get_token();
 	m_parent     = NULL;
@@ -228,16 +228,12 @@ void	CommonTree<ImplTraits>::replaceChildren(ANTLR_INT32 startChildIndex, ANTLR_
 template<class ImplTraits>
 CommonTree<ImplTraits>*	CommonTree<ImplTraits>::dupNode() const
 {
-	// The node we are duplicating is in fact the common tree (that's why we are here)
-	// so we use the super pointer to duplicate.
 	return new CommonTree<ImplTraits>(this);
 }
 
 template<class ImplTraits>
 CommonTree<ImplTraits>*	CommonTree<ImplTraits>::dupNode(void *p) const
 {
-	// The node we are duplicating is in fact the common tree (that's why we are here)
-	// so we use the super pointer to duplicate.
 	return new (p) CommonTree<ImplTraits>(this);
 }
 

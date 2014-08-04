@@ -116,7 +116,9 @@ public:
 	///
 	void	replaceChildren(ANTLR_INT32 startChildIndex, ANTLR_INT32 stopChildIndex, TreeTypePtr t);
 
+	// clone itself
 	CommonTree*	dupNode() const;
+	// clone itself in pre-allocated storage
 	CommonTree*	dupNode(void *) const;
 
 

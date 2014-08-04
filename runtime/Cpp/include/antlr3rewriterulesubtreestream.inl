@@ -11,6 +11,22 @@ RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* 
 
 template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description,
+	TreeType* oneElement
+	)
+	: m_adaptor(adaptor)
+	, m_elementDescription(description)
+	, m_dirty(false)
+{
+	if( oneElement != NULL )
+	{
+		auto tree_clone = this->dup(oneElement);
+		this->add( tree_clone );
+	}
+	m_cursor = m_elements.begin();
+}
+
+template<class ImplTraits>
+RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description,
 	TreeTypePtr& oneElement
 	)
 	: m_adaptor(adaptor)
@@ -48,6 +64,7 @@ RewriteRuleSubtreeStream<ImplTraits>::add(TreeTypePtr& el)
 {
 	if ( el == NULL )
 		return;
+
 	m_elements.push_back(std::move(el));
 	m_cursor = m_elements.begin();
 }
@@ -125,8 +142,15 @@ RewriteRuleSubtreeStream<ImplTraits, SuperType>::next()
 */
 
 template<class ImplTraits>
-typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr	
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
 RewriteRuleSubtreeStream<ImplTraits>::dup(const TreeTypePtr& element)
+{
+	return this->dupTree(element);
+}
+
+template<class ImplTraits>
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
+RewriteRuleSubtreeStream<ImplTraits>::dup(const TreeType* element)
 {
 	return std::move(this->dupTree(element));
 }
@@ -134,6 +158,13 @@ RewriteRuleSubtreeStream<ImplTraits>::dup(const TreeTypePtr& element)
 template<class ImplTraits>
 typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
 RewriteRuleSubtreeStream<ImplTraits>::dupTree(const TreeTypePtr& element)
+{
+	return std::move(m_adaptor->dupNode(element));
+}
+
+template<class ImplTraits>
+typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
+RewriteRuleSubtreeStream<ImplTraits>::dupTree(const TreeType* element)
 {
 	return std::move(m_adaptor->dupNode(element));
 }
