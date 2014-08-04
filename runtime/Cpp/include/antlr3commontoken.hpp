@@ -156,7 +156,7 @@ public:
     /** Function that returns the text pointer of a token, use
      *  toString() if you want a pANTLR3_STRING version of the token.
      */
-    StringType  getText() const;
+    StringType const & getText() const;
 	
     /** Pointer to a function that 'might' be able to set the text associated
      *  with a token. Imaginary tokens such as an ANTLR3_CLASSIC_TOKEN may actually
