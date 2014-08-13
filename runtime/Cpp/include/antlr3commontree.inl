@@ -495,7 +495,9 @@ void	CommonTree<ImplTraits>::reuse()
 	m_childIndex = -1;
 	m_token		 = NULL;
 	m_parent     = NULL;
-	m_children.clear();
+
+	ChildrenType empty;
+	m_children.swap(empty);
 }
 
 template<class ImplTraits>
