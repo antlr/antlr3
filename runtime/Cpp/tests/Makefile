@@ -15,6 +15,8 @@ STGS  = $(wildcard ../../../tool/src/main/resources/org/antlr/codegen/templates/
 
 INCLUDES= -I. -I../include/
 
+#-I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/ -I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/x86_64-pc-cygwin
+
 #CXX=/usr/bin/clang++
 CFLAGS=-ggdb3 -O0 -fno-inline -Wall -std=c++0x
 #CFLAGS=-ggdb3 -O3 -std=c++0x
@@ -46,6 +48,9 @@ a004:	a004.cpp a004.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 
 a005:	a005.cpp a005.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
+a006:	a006.cpp a006.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 s001:	s001.cpp s001.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@

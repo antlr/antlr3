@@ -23,6 +23,7 @@ namespace Antlr3Test {
 	class a003Lexer;	class a003Parser;
 	class a004Lexer;	class a004Parser;
 	class a005Lexer;	class a005Parser;
+  	class a006Lexer;	class a006Parser;
 
 	// Instantiate the Traits class(will be used for Lexer/Parser template instantiations)
 	typedef antlr3::Traits<a001Lexer, a001Parser, UserTraits> a001LexerTraits;	typedef a001LexerTraits a001ParserTraits;
@@ -30,6 +31,7 @@ namespace Antlr3Test {
 	typedef antlr3::Traits<a003Lexer, a003Parser, UserTraits> a003LexerTraits;	typedef a003LexerTraits a003ParserTraits;
 	typedef antlr3::Traits<a004Lexer, a004Parser, UserTraits> a004LexerTraits;	typedef a004LexerTraits a004ParserTraits;
 	typedef antlr3::Traits<a005Lexer, a005Parser, UserTraits> a005LexerTraits;	typedef a005LexerTraits a005ParserTraits;
+  	typedef antlr3::Traits<a006Lexer, a006Parser, UserTraits> a006LexerTraits;	typedef a006LexerTraits a006ParserTraits;
 };
 
 #endif
