@@ -36,7 +36,7 @@
  *  if necessary, and contains function can be supported If the hash key
  *  could be unique I would have invented the perfect compression algorithm ;-)
  */
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 class  TreeParser : public ImplTraits::template RecognizerType< typename ImplTraits::TreeNodeStreamType >
@@ -95,7 +95,7 @@ public:
 	void mismatch(ANTLR_UINT32 ttype, BitsetListType* follow);
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3treeparser.inl"
 

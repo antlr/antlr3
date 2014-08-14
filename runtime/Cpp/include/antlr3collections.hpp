@@ -31,7 +31,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /* -------------- TRIE Interfaces ---------------- */
 
@@ -276,7 +276,7 @@ public:
 	~Topo();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3collections.inl"
     

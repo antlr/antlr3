@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 RewriteRuleSubtreeStream<ImplTraits>::RewriteRuleSubtreeStream(TreeAdaptorType* adaptor, const char* description)
@@ -241,4 +241,4 @@ RewriteRuleSubtreeStream<ImplTraits>::leftestNode(TreeTypePtr& node) const
 		return node;
 }
 
-ANTLR_END_NAMESPACE()
+}

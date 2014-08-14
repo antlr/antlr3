@@ -39,7 +39,7 @@
 #include <iostream>
 #include <algorithm>
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template <typename ImplTraits> class CommonTreeStore;
 
@@ -244,7 +244,7 @@ public:
 	void simulateTreeConstruction(TreeTypePtr& tree);
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3commontreeadaptor.inl"
 

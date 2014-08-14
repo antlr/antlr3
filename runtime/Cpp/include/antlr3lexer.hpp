@@ -62,7 +62,7 @@
  */
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 static const ANTLR_UINT32	ANTLR_STRING_TERMINATOR	= 0xFFFFFFFF;
 
@@ -241,7 +241,7 @@ public:
 	~Lexer();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3lexer.inl"
 

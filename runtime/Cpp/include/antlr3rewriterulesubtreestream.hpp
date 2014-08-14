@@ -31,7 +31,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /// This is an implementation of a subtree stream which is a set of trees
 ///  modeled as an element stream.
@@ -118,7 +118,7 @@ private:
 	bool m_dirty;
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3rewriterulesubtreestream.inl"
 

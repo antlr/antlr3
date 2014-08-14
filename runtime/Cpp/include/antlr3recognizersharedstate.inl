@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class StreamType>
 RecognizerSharedState<ImplTraits, StreamType>::RecognizerSharedState()
@@ -276,4 +276,4 @@ ANTLR_INLINE void RecognizerSharedState<ImplTraits, StreamType>::dec_backtrackin
 	--m_backtracking;
 }
 
-ANTLR_END_NAMESPACE()
+}

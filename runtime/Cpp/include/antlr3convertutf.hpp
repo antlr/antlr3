@@ -101,7 +101,7 @@
 #ifndef	_ANTLR3_CONVERTUTF_H
 #define	_ANTLR3_CONVERTUTF_H
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 typedef ANTLR_UINT32	UTF32;	/* at least 32 bits */
 typedef ANTLR_UINT16	UTF16;	/* at least 16 bits */
@@ -136,7 +136,7 @@ enum ConversionFlags {
 
 
 
-ANTLR_END_NAMESPACE()
+}
 
 #endif
 

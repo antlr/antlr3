@@ -43,7 +43,7 @@
  *  multiple interfaces without defining them in the interface structure
  *  or casting (void *), which is too convoluted.
  */
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 //We are not making it subclass AllocPolicy, as this will always be a base class
 template<class ImplTraits>
@@ -401,7 +401,7 @@ class TokenAccessException : public std::exception
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3tokenstream.inl"
 

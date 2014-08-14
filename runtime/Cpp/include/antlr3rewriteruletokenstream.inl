@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 RewriteRuleTokenStream<ImplTraits>::RewriteRuleTokenStream(TreeAdaptorType* adaptor, const char* description)
@@ -221,4 +221,4 @@ RewriteRuleTokenStream<ImplTraits>::nextToken()
 		return *retval;
 }
 
-ANTLR_END_NAMESPACE()
+}

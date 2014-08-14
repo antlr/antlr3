@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class StreamType>
 ANTLR_ExceptionBase<ImplTraits, StreamType>::ANTLR_ExceptionBase(const StringType& message)
@@ -381,4 +381,4 @@ ANTLR_ExceptionBase<ImplTraits,StreamType>::~ANTLR_ExceptionBase()
 		delete m_token;
 }
 
-ANTLR_END_NAMESPACE()
+}

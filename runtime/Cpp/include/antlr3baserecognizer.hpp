@@ -38,7 +38,7 @@
 #include    "antlr3defs.hpp"
 #include    "antlr3collections.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** \brief Base tracking context structure for all types of
  * recognizers.
@@ -501,7 +501,7 @@ public:
 
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3baserecognizer.inl"
 

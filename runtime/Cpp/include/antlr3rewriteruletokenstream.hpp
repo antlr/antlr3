@@ -31,7 +31,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /// This is an implementation of a token stream, which is basically an element
 ///  stream that deals with tokens only.
@@ -126,7 +126,7 @@ private:
 	bool m_dirty;
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3rewriteruletokenstream.inl"
 

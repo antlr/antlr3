@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class ElementType>
 RewriteRuleElementStream<ImplTraits, ElementType>::RewriteRuleElementStream(TreeAdaptorType* adaptor,
@@ -360,4 +360,4 @@ RewriteRuleSubtreeStream<ImplTraits>::nextNode(TreeTypePtr element)
 	return el;
 }
 
-ANTLR_END_NAMESPACE()
+}

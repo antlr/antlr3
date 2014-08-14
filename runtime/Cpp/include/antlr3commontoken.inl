@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 CommonToken<ImplTraits>::CommonToken()
@@ -323,4 +323,4 @@ typename CommonToken<ImplTraits>::StringType  CommonToken<ImplTraits>::toString(
     return  outtext.str();
 }
 
-ANTLR_END_NAMESPACE()
+}

@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template <class ImplTraits>
 ANTLR_INLINE BitsetList<ImplTraits>::BitsetList()
@@ -489,4 +489,4 @@ Bitset<ImplTraits>* Bitset<ImplTraits>::BitsetFromList(const IntListType& list)
 	return bitset;
 }
 
-ANTLR_END_NAMESPACE()
+}

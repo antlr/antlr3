@@ -43,7 +43,7 @@
 #include    <limits>
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** The definition of an ANTLR3 common token structure, which all implementations
  * of a token stream should provide, installing any further structures in the
@@ -249,7 +249,7 @@ public:
 
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3commontoken.inl"
 

@@ -4,7 +4,7 @@
 #include	"antlr3defs.hpp"
 
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /**
  * Users implementing overrides should inherit from this
@@ -369,6 +369,6 @@ public:
 					 >::selected RuleReturnValueType;
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #endif //_ANTLR3_TRAITS_HPP

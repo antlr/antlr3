@@ -34,7 +34,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 class FileUtils
@@ -68,7 +68,7 @@ class ParseFileAbsentException : public std::exception
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3filestream.inl"
 

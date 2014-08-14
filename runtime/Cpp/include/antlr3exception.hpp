@@ -45,7 +45,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** Base structure for an ANTLR3 exception tracker
  */
@@ -202,7 +202,7 @@ public:
 	virtual void displayRecognitionError( ANTLR_UINT8** tokenNames, StringStreamType& str_stream) const;
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3exception.inl"
 

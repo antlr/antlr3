@@ -38,7 +38,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** How many bits in the elements
  */
@@ -216,7 +216,7 @@ private:
 	
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3bitset.inl"
 

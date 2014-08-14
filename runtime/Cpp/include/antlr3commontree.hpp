@@ -35,7 +35,7 @@
 
 #include    "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 class CommonTree : public ImplTraits::AllocPolicyType				   
@@ -142,7 +142,7 @@ public:
 	void	reuse();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3commontree.inl"
 

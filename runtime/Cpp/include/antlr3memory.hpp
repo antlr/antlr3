@@ -40,7 +40,7 @@
 
 #include   "antlr3defs.hpp"
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 class DefaultAllocPolicy
 {
@@ -180,6 +180,6 @@ public:
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #endif	/* _ANTLR3MEMORY_H */

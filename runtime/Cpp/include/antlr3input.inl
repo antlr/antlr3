@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 InputStream<ImplTraits>::InputStream(const ANTLR_UINT8* fileName, ANTLR_UINT32 encoding)
@@ -616,4 +616,4 @@ void InputStream<ImplTraits>::setupInputStream()
     }    
 }
 
-ANTLR_END_NAMESPACE()
+}

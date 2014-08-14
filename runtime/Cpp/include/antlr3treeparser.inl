@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template< class ImplTraits >
 TreeParser<ImplTraits>::TreeParser( ANTLR_UINT32 sizeHint, TreeNodeStreamType* ctnstream,
@@ -195,4 +195,4 @@ TreeParser<ImplTraits>::getMissingSymbol( IntStreamType* istream, ExceptionBaseT
 }
 
 
-ANTLR_END_NAMESPACE()
+}

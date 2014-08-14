@@ -43,7 +43,7 @@
 #pragma warning (disable : 4610)
 #endif
 
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class CtxType>
 class CyclicDFA : public ImplTraits::AllocPolicyType
@@ -97,7 +97,7 @@ private:
 	void noViableAlt(RecognizerType* rec, ANTLR_UINT32	s);
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #ifdef ANTLR3_WINDOWS
 #pragma warning	(pop)

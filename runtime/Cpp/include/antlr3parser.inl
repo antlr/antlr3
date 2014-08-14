@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template< class ImplTraits >
 Parser<ImplTraits>::Parser( ANTLR_UINT32 sizeHint, RecognizerSharedStateType* state )
@@ -576,4 +576,4 @@ RuleReturnValue_1<ImplTraits>::~RuleReturnValue_1()
 	}
 }
 
-ANTLR_END_NAMESPACE()
+}

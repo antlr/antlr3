@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 CommonTree<ImplTraits>::CommonTree()
@@ -505,4 +505,4 @@ CommonTree<ImplTraits>::~CommonTree()
 {
 }
 
-ANTLR_END_NAMESPACE()
+}

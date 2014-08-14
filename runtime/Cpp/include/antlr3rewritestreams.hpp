@@ -51,7 +51,7 @@
 ///
 /// TODO: add mechanism to detect/puke on modification after reading from stream
 ///
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class ElementType>
 //template<class ImplTraits>
@@ -294,7 +294,7 @@ private:
 	TreeTypePtr	toTreeNode(TreeTypePtr element);
 };
 */
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3rewritestreams.inl"
 

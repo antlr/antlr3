@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template <typename ImplTraits>
 CommonResourcePoolManager<ImplTraits>::CommonResourcePoolManager(CommonTreeStore<ImplTraits> * pool)
@@ -935,4 +935,4 @@ void DebugTreeAdaptor<ImplTraits>::simulateTreeConstruction(TreeTypePtr& tree)
 	}
 }
 
-ANTLR_END_NAMESPACE()
+}

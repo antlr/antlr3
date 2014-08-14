@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class SuperType>
 ANTLR_INLINE IntStream<ImplTraits, SuperType>::IntStream()
@@ -1658,4 +1658,4 @@ ANTLR_UINT32	TreeNodeIntStream<ImplTraits>::size()
 }
 
 
-ANTLR_END_NAMESPACE()
+}

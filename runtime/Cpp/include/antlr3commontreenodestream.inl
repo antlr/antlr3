@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 CommonTreeNodeStream<ImplTraits>::CommonTreeNodeStream(ANTLR_UINT32 hint)
@@ -418,5 +418,5 @@ void CommonTreeNodeStream<ImplTraits>::fillBuffer(TreeTypePtr t)
 
 
 
-ANTLR_END_NAMESPACE()
+}
 
