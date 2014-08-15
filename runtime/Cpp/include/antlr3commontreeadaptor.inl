@@ -167,9 +167,9 @@ CommonTreeAdaptor<ImplTraits>::getParent( TreeTypePtr& child)
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
-CommonTreeAdaptor<ImplTraits>::errorNode( CommonTokenType* tnstream,
-											const CommonTokenType* startToken,
-											const CommonTokenType* stopToken)
+CommonTreeAdaptor<ImplTraits>::errorNode( CommonTokenType*,
+											const CommonTokenType*,
+											const CommonTokenType*)
 {
 	// Use the supplied common tree node stream to get another tree from the factory
 	// TODO: Look at creating the erronode as in Java, but this is complicated by the

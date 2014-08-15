@@ -34,8 +34,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 /** Definition of a token source, which has a pointer to a function that
  *  returns the next token (using a token factory if it is going to be
  *  efficient) and a pointer to an ANTLR3_INPUT_STREAM. This is slightly

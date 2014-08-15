@@ -29,8 +29,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 /** Internal structure representing an element in a hash bucket.
  *  Stores the original key so that duplicate keys can be rejected
  *  if necessary, and contains function can be supported If the hash key

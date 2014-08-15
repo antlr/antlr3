@@ -60,7 +60,6 @@
 
 /* Definitions
  */
-#include    "antlr3defs.hpp"
 
 namespace antlr3 {
 

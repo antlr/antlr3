@@ -28,35 +28,61 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <string>
+#include <cassert>
+#include <cstdint> // uint32_t, ...
+#include <cstdio>  // stderr (TODO remove fprintf(stderr)
+#include <cstdlib> // malloc, calloc
+#include <cstring>
+
+#include <algorithm>
+#include <deque>
+#include <exception>
+#include <iostream>
+#include <limits>
+#include <map>
+#include <memory>
+#include <new>
+#include <set>
 #include <sstream>
+#include <string>
+#include <vector>
 
-#include    "antlr3defs.hpp"
+#include "antlr3defs.hpp"
 
-#include    "antlr3errors.hpp"
-#include    "antlr3memory.hpp"
+/* Pre declare the typedefs for all the interfaces, then
+ * they can be inter-dependant and we will let the linker
+ * sort it out for us.
+ */
+#include "antlr3interfaces.hpp"
 
-#include	"antlr3recognizersharedstate.hpp"
-#include    "antlr3baserecognizer.hpp"
-#include    "antlr3bitset.hpp"
-#include    "antlr3collections.hpp"
-#include    "antlr3commontoken.hpp"
-#include	"antlr3commontree.hpp"
-#include    "antlr3commontreeadaptor.hpp"
-#include    "antlr3cyclicdfa.hpp"
-#include	"antlr3debugeventlistener.hpp"
-#include    "antlr3exception.hpp"
-#include    "antlr3filestream.hpp"
-#include    "antlr3intstream.hpp"
-#include    "antlr3input.hpp"
-#include    "antlr3tokenstream.hpp"
-#include	"antlr3commontreenodestream.hpp"
-#include    "antlr3lexer.hpp"
-#include    "antlr3parser.hpp"
-//#include    "antlr3rewritestreams.hpp"
-#include    "antlr3rewriteruletokenstream.hpp"
-#include    "antlr3rewriterulesubtreestream.hpp"
-#include	"antlr3traits.hpp"
-#include    "antlr3treeparser.hpp"
+// Include the unicode.org conversion library header.
+//
+#include "antlr3convertutf.hpp"
+
+#include "antlr3errors.hpp"
+#include "antlr3memory.hpp"
+
+#include "antlr3collections.hpp"
+#include "antlr3recognizersharedstate.hpp"
+#include "antlr3baserecognizer.hpp"
+#include "antlr3bitset.hpp"
+#include "antlr3commontoken.hpp"
+#include "antlr3commontree.hpp"
+#include "antlr3commontreeadaptor.hpp"
+#include "antlr3cyclicdfa.hpp"
+#include "antlr3debugeventlistener.hpp"
+#include "antlr3exception.hpp"
+#include "antlr3filestream.hpp"
+#include "antlr3intstream.hpp"
+#include "antlr3input.hpp"
+#include "antlr3tokenstream.hpp"
+#include "antlr3commontreenodestream.hpp"
+#include "antlr3lexer.hpp"
+#include "antlr3parser.hpp"
+//#include "antlr3rewritestreams.hpp"
+#include "antlr3rewriteruletokenstream.hpp"
+#include "antlr3rewriterulesubtreestream.hpp"
+#include "antlr3traits.hpp"
+#include "antlr3treeparser.hpp"
 
 #endif

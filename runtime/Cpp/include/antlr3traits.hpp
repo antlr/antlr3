@@ -1,9 +1,6 @@
 #ifndef _ANTLR3_TRAITS_HPP
 #define _ANTLR3_TRAITS_HPP
 
-#include	"antlr3defs.hpp"
-
-
 namespace antlr3 {
 
 /**

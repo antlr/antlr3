@@ -36,35 +36,25 @@
 
 namespace antlr3 {
 
-template<class ImplTraits, class SuperType>
-class IntStream;
+// Definitions that indicate the encoding scheme character streams and strings etc
+enum Encoding
+{
+	ENC_8BIT      = 4               /// General latin-1 or other 8 bit encoding scheme such as straight ASCII
+	, ENC_UTF8    = 8               /// UTF-8 encoding scheme
+	, ENC_UTF16   = 16              /// UTF-16 encoding scheme (which also covers UCS2 as that does not have surrogates)
+	, ENC_UTF16BE
+	, ENC_UTF16LE
+	, ENC_UTF32   = 32              /// UTF-32 encoding scheme (basically straight 32 bit)
+	, ENC_UTF32BE
+	, ENC_UTF32LE
+	, ENC_EBCDIC  = 64              /// Input is 8 bit EBCDIC (which we convert to 8 bit ASCII on the fly
+};
 
-/// Pointer to an instantiation of 'class' #ANTLR3_RECOGNIZER_SHARED_STATE
-/// \ingroup ANTLR3_RECOGNIZER_SHARED_STATE
-///
-template<class ImplTraits, class SuperType>
-class RecognizerSharedState;
-
-/// Pointer to an instantiation of 'class' #ANTLR3_BITSET_LIST
-/// \ingroup ANTLR3_BITSET_LIST
-///
-template<class AllocatorType>
-class BitsetList;
-
-/// Pointer to an instantiation of 'class' #ANTLR3_BITSET
-/// \ingroup ANTLR3_BITSET
-///
-template<class AllocatorType>
-class Bitset;
-
-/// Pointer to an instantiation of 'class' #ANTLR3_COMMON_TOKEN
-/// \ingroup ANTLR3_COMMON_TOKEN
-///
-template<class ImplTraits>
-class CommonToken;
-
-template<class ImplTraits>
-class CommonTokenFunctions;
+enum ChannelType
+{
+	TOKEN_DEFAULT_CHANNEL = 0           /// Default channel for a token
+	, HIDDEN	= 99                    /// Reserved channel number for a HIDDEN token - a token that is hidden from the parser
+};
 
 /// Pointer to an instantiation of 'class' #ANTLR3_EXCEPTION
 /// \ingroup ANTLR3_EXCEPTION
@@ -104,6 +94,33 @@ enum ExceptionType
 	, MISSING_TOKEN_EXCEPTION
 };
 
+template<class ImplTraits, class SuperType>
+class IntStream;
+
+/// Pointer to an instantiation of 'class' #ANTLR3_RECOGNIZER_SHARED_STATE
+/// \ingroup ANTLR3_RECOGNIZER_SHARED_STATE
+///
+template<class ImplTraits, class SuperType>
+class RecognizerSharedState;
+
+/// Pointer to an instantiation of 'class' #ANTLR3_BITSET_LIST
+/// \ingroup ANTLR3_BITSET_LIST
+///
+template<class AllocatorType>
+class BitsetList;
+
+/// Pointer to an instantiation of 'class' #ANTLR3_BITSET
+/// \ingroup ANTLR3_BITSET
+///
+template<class AllocatorType>
+class Bitset;
+
+/// Pointer to an instantiation of 'class' #ANTLR3_COMMON_TOKEN
+/// \ingroup ANTLR3_COMMON_TOKEN
+///
+template<class ImplTraits>
+class CommonToken;
+
 template<class ImplTraits, ExceptionType Ex, class StreamType>
 class ANTLR_Exception;
 
@@ -130,25 +147,18 @@ class LexState;
 ///
 template<class ImplTraits>
 class TokenSource;
-template<class ImplTraits, class SuperType>
-class TokenSourceFunctions;
 
 /// Pointer to an instantiation of 'class' #ANTLR3_TOKEN_STREAM
 /// \ingroup ANTLR3_TOKEN_STREAM
 ///
 template<class ImplTraits>
 class TokenStream;
-template<class ImplTraits>
-class TokenStreamFunctions;
 
 /// Pointer to an instantiation of 'class' #ANTLR3_COMMON_TOKEN_STREAM
 /// \ingroup ANTLR3_COMMON_TOKEN_STREAM
 ///
 template<class ImplTraits>
 class CommonTokenStream;
-template<class ImplTraits>
-class CommonTokenStreamFunctions;
-
 
 /// Pointer to an instantiation of 'class' #ANTLR3_CYCLIC_DFA
 /// \ingroup ANTLR3_CYCLIC_DFA
@@ -173,17 +183,12 @@ class Parser;
 ///
 template<class ImplTraits>
 class BaseTree;
-template<class ImplTraits>
-class BaseTreeFunctions;
-
 
 /// Pointer to an instantiation of 'class' #ANTLR3_COMMON_TREE
 /// \ingroup ANTLR3_COMMON_TREE
 ///
 template<class ImplTraits>
 class CommonTree;
-template<class ImplTraits>
-class CommonTreeFunctions;
 
 /// Pointer to an instantiation of 'class' #ANTLR3_PARSE_TREE
 /// \ingroup ANTLR3_PARSE_TREE
@@ -209,23 +214,11 @@ class CommonTreeNodeStream;
 template<class ImplTraits>
 class TreeWalkState;
 
-/// Pointer to an instantiation of 'class' #ANTLR3_BASE_TREE_ADAPTOR
-/// \ingroup ANTLR3_BASE_TREE_ADAPTOR
-///
-template<class ImplTraits>
-class BaseTreeAdaptor;
-template<class ImplTraits>
-class BaseTreeAdaptorFunctions;
-
-
 /// Pointer to an instantiation of 'class' #ANTLR3_COMMON_TREE_ADAPTOR
 /// \ingroup ANTLR3_COMMON_TREE_ADAPTOR
 ///
 template<class ImplTraits>
 class CommonTreeAdaptor;
-template<class ImplTraits>
-class CommonTreeAdaptorFunctions;
-
 
 /// Pointer to an instantiation of 'class' #ANTLR3_TREE_PARSER
 /// \ingroup ANTLR3_TREE_PARSER

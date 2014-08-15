@@ -29,8 +29,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 namespace antlr3 {
 
 /// This is an implementation of a subtree stream which is a set of trees

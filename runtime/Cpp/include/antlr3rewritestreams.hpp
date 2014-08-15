@@ -29,8 +29,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 /// A generic list of elements tracked in an alternative to be used in
 /// a -> rewrite rule.  
 ///

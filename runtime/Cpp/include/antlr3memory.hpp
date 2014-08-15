@@ -29,17 +29,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <string.h>
-
-#include <deque>
-#include <map>
-#include <new>
-#include <set>
-#include <vector>
-#include <memory>
-
-#include   "antlr3defs.hpp"
-
 namespace antlr3 {
 
 class DefaultAllocPolicy
@@ -62,8 +51,8 @@ public:
 		};
 
 		AllocatorType() throw() {}
-		AllocatorType( const AllocatorType& alloc ) throw() {}
-		template<typename U> AllocatorType(const AllocatorType<U>& alloc) throw(){}
+		AllocatorType( const AllocatorType& ) throw() {}
+		template<typename U> AllocatorType(const AllocatorType<U>& ) throw(){}
 	};
 
 	template<class TYPE>
