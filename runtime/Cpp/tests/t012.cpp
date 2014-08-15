@@ -31,7 +31,7 @@ int testValid(string const& inFilename, string const& outFilename)
 {
 	string data = slurp(inFilename);
 	t012lexerXMLLexerTraits::InputStreamType* input	= new t012lexerXMLLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 											   (ANTLR_UINT8*)inFilename.c_str());
 	if (lxr == NULL)
@@ -63,7 +63,7 @@ int testValid(string const& inFilename, string const& outFilename)
 int testMalformedInput1(string const& data)
 {
 	t012lexerXMLLexerTraits::InputStreamType* input	= new t012lexerXMLLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t012");
 	if (lxr == NULL)
@@ -101,7 +101,7 @@ int testMalformedInput1(string const& data)
 int testMalformedInput2(string const& data)
 {
 	t012lexerXMLLexerTraits::InputStreamType* input	= new t012lexerXMLLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t012");
 	if (lxr == NULL)
@@ -139,7 +139,7 @@ int testMalformedInput2(string const& data)
 int testMalformedInput3(string const& data)
 {
 	t012lexerXMLLexerTraits::InputStreamType* input	= new t012lexerXMLLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t012");
 	if (lxr == NULL)

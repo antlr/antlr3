@@ -403,7 +403,7 @@ alter_type
     :    alter_key type_key type_name
     (    compile_type_clause
     |    replace_type_clause
-    |    {equalsIgnoreCase(LT(2)->getText(), "ATTRIBUTE")}? alter_attribute_definition
+    |    { LT(2)->getText() == "ATTRIBUTE" }? alter_attribute_definition
     |    alter_method_spec
     |    alter_collection_clauses
     |    modifier_clause

@@ -6,18 +6,86 @@
 // The compiler must use -I (or set the project settings in VS2005)
 // to locate the antlr3 runtime files and -I. to find this file
 #include <antlr3.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cctype>
+#include <locale>
+#include <cwchar>
 
 // Forward declaration for Lexer&Parser class(es)
 namespace Antlr3Test {
 	class PLSQLLexer;
 	class PLSQLParser;
 
-	typedef antlr3::Traits<PLSQLLexer, PLSQLParser> PLSQLTraits;
+	template<class ImplTraits>
+	class UserTraits : public antlr3::CustomTraitsBase<ImplTraits>
+	{
+	public:
+		struct ci_char_traits : public std::char_traits<char>
+		// just inherit all the other functions
+		//  that we don't need to override
+		{			
+			static bool eq( char c1, char c2 )
+			{ return toupper(c1) == std::toupper(c2); }
+			
+			static bool ne( char c1, char c2 )
+			{ return toupper(c1) != std::toupper(c2); }
+
+			static bool lt( char c1, char c2 )
+			{ return toupper(c1) <  std::toupper(c2); }
+
+			static int compare( const char* s1, const char* s2, size_t n )
+			{
+				for (std::size_t i=0; i<n; ++i)
+				{
+					if (!eq(s1[i],s2[i]))
+					{
+						return lt(s1[i],s2[i])?-1:1;
+					}
+				}
+				return 0;
+			}
+
+			static const char* find( const char* s, int n, char a )
+			{
+				a = toupper(a);				
+				while( n-- > 0 && toupper(*s) != a )
+				{
+					++s;
+				}
+				return s;
+			}
+
+		private:
+			static inline int toupper(int C)
+			{
+				//static const std::ctype<typename StringType::value_type>& f = std::use_facet<std::ctype<typename StringType::value_type>>(std::locale(std::locale::classic(), new codecvt_byname(".C")))
+				//static std::locale loc(std::locale::classic(), new std::codecvt_byname<char, char, std::mbstate_t>(".C"));
+				static std::locale loc(std::locale::classic());
+				static const std::ctype<typename ImplTraits::StringType::value_type>& f = std::use_facet<std::ctype<typename ImplTraits::StringType::value_type>>(loc);
+				int i = f.toupper((char)C);
+				return i;
+			}
+		};
+
+		typedef std::basic_string<char,ci_char_traits> StringType;
+		typedef std:: basic_stringstream<char, ci_char_traits> StringStreamType;
+
+		static void displayRecognitionError(const StringType& str)
+		{
+			printf("%s", str.c_str());
+		}
+		//static void displayRecognitionError(const std::string& str)
+		//{
+		//printf("%s", str.c_str());
+		//}		
+		//static const bool TOKENS_ACCESSED_FROM_OWNING_RULE = true;
+		//static const int  TOKEN_FILL_BUFFER_INCREMENT = 2;
+	};
+
+	typedef antlr3::Traits<PLSQLLexer, PLSQLParser, UserTraits> PLSQLTraits;
 	typedef PLSQLTraits PLSQLLexerTraits;
 	typedef PLSQLTraits PLSQLParserTraits;
 	typedef PLSQLTraits PLSQLParser_PLSQLKeysTraits;
@@ -26,47 +94,44 @@ namespace Antlr3Test {
 	typedef PLSQLTraits PLSQLParser_SQLPLUSParserTraits;
 	typedef PLSQLTraits PLSQLParser_PLSQL_DMLParser_PLSQLKeysTraits;
 	typedef PLSQLTraits PLSQLParser_PLSQL_DMLParser_PLSQLCommonsTraits;
-
-	//template<class StringType>
-	inline bool equalsIgnoreCase(PLSQLTraits::StringType const& s1, const char* s2)
+	
+	/* define an output operator
+	 * because the traits type is different than that for std::ostream
+	 */
+	inline
+	std::ostream& operator << (std::ostream& strm, const PLSQLTraits::StringType& s)
 	{
-		// return !strcasecmp(s1.c_str(), s2);
-		// StringType s1U(s1);
-		// std::transform(s1U.begin(), s1U.end(), s1U.begin(), ::toupper);
-		// return s1U == s2;
-		PLSQLTraits::StringType ST2(s2);
-		return boost::iequals(s1, ST2);
+		// simply convert the icstring into a normal string
+		return strm << std::string(s.data(),s.length());
 	}
 
   	template<class CommonTokenType>
 	inline bool isTableAlias(CommonTokenType *LT1, CommonTokenType *LT2) {
-		static const std::string wPARTITION("PARTITION");
-		static const std::string wBY("BY");
-		static const std::string wCROSS("CROSS");
-		static const std::string wNATURAL("NATURAL");
-		static const std::string wINNER("INNER");
-		static const std::string wJOIN("JOIN");
-		static const std::string wFULL("FULL");
-		static const std::string wLEFT("LEFT");
-		static const std::string wRIGHT("RIGHT");
-		static const std::string wOUTER("OUTER");
+		static const char* wPARTITION("PARTITION");
+		static const char* wBY("BY");
+		static const char* wCROSS("CROSS");
+		static const char* wNATURAL("NATURAL");
+		static const char* wINNER("INNER");
+		static const char* wJOIN("JOIN");
+		static const char* wFULL("FULL");
+		static const char* wLEFT("LEFT");
+		static const char* wRIGHT("RIGHT");
+		static const char* wOUTER("OUTER");
 
-		PLSQLTraits::StringType lt1 = LT1->getText();
-		PLSQLTraits::StringType lt2 = "";
-		//std::transform(lt1.begin(), lt1.end(), lt1.begin(), ::toupper);
-        
-		if ( LT2 && LT2->getText() != ""){
-			lt2 = LT2->getText();
-			std::transform(lt2.begin(), lt2.end(), lt2.begin(), ::toupper); 
-		}
+		PLSQLTraits::StringType const& lt1 = LT1->getText();
+		PLSQLTraits::StringType lt2;
 		
-		if ( (boost::iequals(lt1, wPARTITION) && boost::iequals(lt2, wBY))
-		     || boost::iequals(lt1, wCROSS)
-		     || boost::iequals(lt1, wNATURAL)
-		     || boost::iequals(lt1, wINNER)
-		     || boost::iequals(lt1, wJOIN)
-		     || ( ( boost::iequals(lt1, wFULL) || boost::iequals(lt1, wLEFT) || boost::iequals(lt1, wRIGHT) ) && ( boost::iequals(lt2, wOUTER) || boost::iequals(lt2, wJOIN) ) )
-		     )
+		if ( LT2 )
+			lt2 = LT2->getText();
+
+		
+		if ( ( lt1 == wPARTITION && lt2 == wBY)
+		     || lt1 == wCROSS
+		     || lt1 == wNATURAL
+		     || lt1 == wINNER
+		     || lt1 == wJOIN
+		     || ( ( lt1 == wFULL || lt1 == wLEFT || lt1 == wRIGHT ) && ( lt2 == wOUTER || lt2 == wJOIN ))
+			)
 		{
 			return false;
 		}
@@ -75,21 +140,21 @@ namespace Antlr3Test {
 
   	template<class StringType>
 	inline bool isStandardPredictionFunction(StringType const& originalFunctionName) {
-		static const std::string wPREDICTION("PREDICTION");
-		static const std::string wPREDICTION_BOUNDS("PREDICTION_BOUNDS");
-		static const std::string wPREDICTION_COST("PREDICTION_COST");
-		static const std::string wPREDICTION_DETAILS("PREDICTION_DETAILS");
-		static const std::string wPREDICTION_PROBABILITY("PREDICTION_PROBABILITY");
-		static const std::string wPREDICTION_SET("PREDICTION_SET");		
+		static const char* wPREDICTION("PREDICTION");
+		static const char* wPREDICTION_BOUNDS("PREDICTION_BOUNDS");
+		static const char* wPREDICTION_COST("PREDICTION_COST");
+		static const char* wPREDICTION_DETAILS("PREDICTION_DETAILS");
+		static const char* wPREDICTION_PROBABILITY("PREDICTION_PROBABILITY");
+		static const char* wPREDICTION_SET("PREDICTION_SET");		
 		// StringType  functionName = originalFunctionName;
 		// std::transform(functionName.begin(), functionName.end(), functionName.begin(), ::toupper);
 		
-		if ( boost::iequals(originalFunctionName, wPREDICTION)
-		     || boost::iequals(originalFunctionName, wPREDICTION_BOUNDS)
-		     || boost::iequals(originalFunctionName, wPREDICTION_COST)
-		     || boost::iequals(originalFunctionName, wPREDICTION_DETAILS)
-		     || boost::iequals(originalFunctionName, wPREDICTION_PROBABILITY)
-		     || boost::iequals(originalFunctionName, wPREDICTION_SET)
+		if ( (originalFunctionName == wPREDICTION)
+		     || (originalFunctionName == wPREDICTION_BOUNDS)
+		     || (originalFunctionName == wPREDICTION_COST)
+		     || (originalFunctionName == wPREDICTION_DETAILS)
+		     || (originalFunctionName == wPREDICTION_PROBABILITY)
+		     || (originalFunctionName == wPREDICTION_SET)
 			)
 		{
 			return true;
@@ -97,42 +162,44 @@ namespace Antlr3Test {
 		return false;
 	}
 
+	inline bool starts_with(PLSQLTraits::StringType const& A, const char*B)
+	{
+		return A.length() >= strlen(B) && A.compare(0, strlen(B), B) == 0;
+	}
+		
 	template<class StringType>     
 	inline bool enablesWithinOrOverClause(StringType const& originalFunctionName) {
-		static const std::string wCUME_DIST("CUME_DIST");
-		static const std::string wDENSE_RANK("DENSE_RANK");
-		static const std::string wLISTAGG("LISTAGG");
-		static const std::string wPERCENT_RANK("PERCENT_RANK");
-		static const std::string wPERCENTILE_CONT("PERCENTILE_CONT");
-		static const std::string wPERCENTILE_DISC("PERCENTILE_DISC");
-		static const std::string wRANK("RANK");		
+		static const char* wCUME_DIST("CUME_DIST");
+		static const char* wDENSE_RANK("DENSE_RANK");
+		static const char* wLISTAGG("LISTAGG");
+		static const char* wPERCENT_RANK("PERCENT_RANK");
+		static const char* wPERCENTILE_CONT("PERCENTILE_CONT");
+		static const char* wPERCENTILE_DISC("PERCENTILE_DISC");
+		static const char* wRANK("RANK");		
 		// StringType functionName = originalFunctionName;
 		// std::transform(functionName.begin(), functionName.end(), functionName.begin(), ::toupper);
 		
-		if ( boost::iequals(originalFunctionName, wCUME_DIST)
-		     || boost::iequals(originalFunctionName, wDENSE_RANK)
-		     || boost::iequals(originalFunctionName, wLISTAGG)
-		     || boost::iequals(originalFunctionName, wPERCENT_RANK)
-		     || boost::iequals(originalFunctionName, wPERCENTILE_CONT)
-		     || boost::iequals(originalFunctionName, wPERCENTILE_DISC)
-		     || boost::iequals(originalFunctionName, wRANK)
+		if ( (originalFunctionName == wCUME_DIST)
+		     || (originalFunctionName == wDENSE_RANK)
+		     || (originalFunctionName == wLISTAGG)
+		     || (originalFunctionName == wPERCENT_RANK)
+		     || (originalFunctionName == wPERCENTILE_CONT)
+		     || (originalFunctionName == wPERCENTILE_DISC)
+		     || (originalFunctionName == wRANK)
 			)
 		{
 			return true;
 		}
 		return false;
 	}
+
 
 	template<class StringType>          
 	inline bool enablesUsingClause(StringType const& originalFunctionName) {
-		static const std::string wCLUSTER("CLUSTER_");
-		static const std::string wFEATURE("FEATURE_");		
-		// StringType functionName = originalFunctionName;
-		// std::transform(functionName.begin(), functionName.end(), functionName.begin(), ::toupper);
-		
-		if ( boost::algorithm::istarts_with(originalFunctionName, wCLUSTER)
-		     || boost::algorithm::istarts_with(originalFunctionName, wFEATURE)
-			)
+		static const char *wCLUSTER("CLUSTER_");
+		static const char *wFEATURE("FEATURE_");
+	
+		if ( starts_with(originalFunctionName, wCLUSTER) || starts_with(originalFunctionName, wFEATURE) )
 		{
 			return true;
 		}
@@ -141,41 +208,41 @@ namespace Antlr3Test {
 
 	//template<class StringType>     
 	inline bool enablesOverClause(PLSQLTraits::StringType const& originalFunctionName) {
-		static const std::string wREGR("REGR_");
-		static const std::string wSTDDEV("STDDEV");
-		static const std::string wVAR("VAR_");
-		static const std::string wCOVAR("COVAR_");		
-		static const std::string wAVG("AVG");
-		static const std::string wCORR("CORR");
-		static const std::string wLAG("LAG");
-		static const std::string wLEAD("LEAD");
-		static const std::string wMAX ("MAX");
-		static const std::string wMEDIAN("MEDIAN");
-		static const std::string wMIN("MIN");
-		static const std::string wNTILE("NTILE");
-		static const std::string wRATIO_TO_REPORT("RATIO_TO_REPORT");
-		static const std::string wROW_NUMBER("ROW_NUMBER");
-		static const std::string wSUM("SUM");
-		static const std::string wVARIANCE("VARIANCE");       
+		static const char* wREGR("REGR_");
+		static const char* wSTDDEV("STDDEV");
+		static const char* wVAR("VAR_");
+		static const char* wCOVAR("COVAR_");		
+		static const char* wAVG("AVG");
+		static const char* wCORR("CORR");
+		static const char* wLAG("LAG");
+		static const char* wLEAD("LEAD");
+		static const char* wMAX ("MAX");
+		static const char* wMEDIAN("MEDIAN");
+		static const char* wMIN("MIN");
+		static const char* wNTILE("NTILE");
+		static const char* wRATIO_TO_REPORT("RATIO_TO_REPORT");
+		static const char* wROW_NUMBER("ROW_NUMBER");
+		static const char* wSUM("SUM");
+		static const char* wVARIANCE("VARIANCE");       
 		// StringType functionName = originalFunctionName;
 		// std::transform(functionName.begin(), functionName.end(), functionName.begin(), ::toupper);		
 		
-		if ( boost::iequals(originalFunctionName, wAVG)
-		     || boost::iequals(originalFunctionName, wCORR)
-		     || boost::iequals(originalFunctionName, wLAG)
-		     || boost::iequals(originalFunctionName, wLEAD)
-		     || boost::iequals(originalFunctionName, wMAX)
-		     || boost::iequals(originalFunctionName, wMEDIAN)
-		     || boost::iequals(originalFunctionName, wMIN)
-		     || boost::iequals(originalFunctionName, wNTILE)
-		     || boost::iequals(originalFunctionName, wRATIO_TO_REPORT)
-		     || boost::iequals(originalFunctionName, wROW_NUMBER)
-		     || boost::iequals(originalFunctionName, wSUM)
-		     || boost::iequals(originalFunctionName, wVARIANCE)
-		     || boost::algorithm::istarts_with(originalFunctionName, wREGR)
-		     || boost::algorithm::istarts_with(originalFunctionName, wSTDDEV)
-		     || boost::algorithm::istarts_with(originalFunctionName, wVAR)
-		     || boost::algorithm::istarts_with(originalFunctionName, wCOVAR)
+		if ( (originalFunctionName == wAVG)
+		     || (originalFunctionName == wCORR)
+		     || (originalFunctionName == wLAG)
+		     || (originalFunctionName == wLEAD)
+		     || (originalFunctionName == wMAX)
+		     || (originalFunctionName == wMEDIAN)
+		     || (originalFunctionName == wMIN)
+		     || (originalFunctionName == wNTILE)
+		     || (originalFunctionName == wRATIO_TO_REPORT)
+		     || (originalFunctionName == wROW_NUMBER)
+		     || (originalFunctionName == wSUM)
+		     || (originalFunctionName == wVARIANCE)
+		     || starts_with(originalFunctionName, wREGR)
+		     || starts_with(originalFunctionName, wSTDDEV)
+		     || starts_with(originalFunctionName, wVAR)
+		     || starts_with(originalFunctionName, wCOVAR)
 			)
 		{
 			return true;
@@ -193,5 +260,5 @@ namespace Antlr3Test {
 		return sstr.str();
 	}
 };
-
+ 
 #endif

@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
 int testValid(string const& data)
 {
 	t039labelsLexerTraits::InputStreamType* input	= new t039labelsLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t039");
 	if (lxr == NULL)

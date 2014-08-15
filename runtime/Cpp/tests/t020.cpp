@@ -24,7 +24,7 @@ int testValid(string const& inFilename, string const& outFilename)
 {
 	string data = slurp(inFilename);
 	t020fuzzyLexerTraits::InputStreamType* input	= new t020fuzzyLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-												    ANTLR_ENC_8BIT,
+												    antlr3::ENC_8BIT,
 												    data.length(), //strlen(data.c_str()),
 												    (ANTLR_UINT8*)inFilename.c_str());
 	if (lxr == NULL)

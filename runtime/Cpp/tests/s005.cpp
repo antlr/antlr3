@@ -127,14 +127,14 @@ void parseFile(const char* fName, int fd)
 	// Create the input stream using the supplied file name
 	// (Use antlr3AsciiFileStreamNew for UCS2/16bit input).
 	//
-	///byIvan input	= new PLSQLTraits::InputStreamType(fName, ANTLR_ENC_8BIT);
+	///byIvan input	= new PLSQLTraits::InputStreamType(fName, antlr3::ENC_8BIT);
 #if defined __linux
 	string data = Utils::slurp(fd);
 #else
 	string data = Utils::slurp(fName);
 #endif
 	input	= new SQLMiniLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-						   ANTLR_ENC_8BIT,
+						   antlr3::ENC_8BIT,
 						   data.length(), //strlen(data.c_str()),
 						   (ANTLR_UINT8*)fName);
 

@@ -33,7 +33,7 @@ main	(int argc, char *argv[])
 void test1(const char* input)
 {
 	a002LexerTraits::InputStreamType* istream = new a002LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
-											 , ANTLR_ENC_8BIT
+											 , antlr3::ENC_8BIT
 											 , strlen(input)
 											 , (ANTLR_UINT8*)"test1");
 	istream->setUcaseLA(true);
@@ -55,7 +55,7 @@ void test1(const char* input)
 void test2(const char* input)
 {
 	auto istream = new a002LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
-							    , ANTLR_ENC_8BIT
+							    , antlr3::ENC_8BIT
 							    , strlen(input)
 							    , (ANTLR_UINT8*)"test2");
 	istream->setUcaseLA(true);
@@ -77,7 +77,7 @@ void test2(const char* input)
 void test3(const char* input)
 {
 	auto istream = new a002LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
-							    , ANTLR_ENC_8BIT
+							    , antlr3::ENC_8BIT
 							    , strlen(input)
 							    , (ANTLR_UINT8*)"test2");
 	istream->setUcaseLA(true);
@@ -99,7 +99,7 @@ void test3(const char* input)
 void test4(const char* input)
 {
 	auto istream = new a002LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
-							    , ANTLR_ENC_8BIT
+							    , antlr3::ENC_8BIT
 							    , strlen(input)
 							    , (ANTLR_UINT8*)"test2");
 	istream->setUcaseLA(true);
@@ -121,7 +121,7 @@ void test4(const char* input)
 void test5(const char* input)
 {
 	auto istream = new a002LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
-							    , ANTLR_ENC_8BIT
+							    , antlr3::ENC_8BIT
 							    , strlen(input)
 							    , (ANTLR_UINT8*)"test2");
 	istream->setUcaseLA(true);

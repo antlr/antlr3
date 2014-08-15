@@ -8,15 +8,15 @@ POBJS = $(PSOURCES:.cpp=.o)
 TOKENS = $(ANTLRGRAMMARS:.g=.tokens)
 
 GRAMMAROPTIONS= #-report -Xconversiontimeout 1500000 -Xmultithreaded -Xwatchconversion
-ANTLR = ../../../antlr-complete/target/antlr-complete-3.5.2-SNAPSHOT.jar
+ANTLR = ../../../antlr-complete/target/antlr-complete-3.5.3-SNAPSHOT.jar
 STGS  = $(wildcard ../../../tool/src/main/resources/org/antlr/codegen/templates/Cpp/*.stg)
 
 .SUFFIXES:
 
-INCLUDES= -I. -I../include/ -I../../../../boost_1_46_1/ -I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/ -I/usr/lib/gcc/x86_64-pc-cygwin/4.8.3/include/c++/i686-pc-cygwin/
+INCLUDES= -I. -I../include/
 
-CXX=clang++
-CFLAGS=-ggdb3 -O0 -fno-inline -Wall -Wno-unused-variable -Wno-unused-local-typedefs -Wno-parentheses-equality -Wno-tautological-compare -std=c++0x
+#CXX=/usr/bin/clang++
+CFLAGS=-ggdb3 -O0 -fno-inline -Wall -std=c++0x
 #CFLAGS=-ggdb3 -O3 -std=c++0x
 
 TOBJS= utils.o
@@ -101,14 +101,14 @@ t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_
 t051:	t051.cpp t051lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
-s004:   s004.cpp PLSQLLexer.tokens PLSQLParser.tokens PTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL -Wno-unused-but-set-variable $(INCLUDES) $< PLSQLLexer*.cpp PLSQLParser*.cpp utils.cpp -o $@
+s004:   s004.cpp PLSQLLexer.tokens PLSQLParser.tokens PLSQL_DMLParser.g PTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< PLSQLLexer*.cpp PLSQLParser*.cpp utils.cpp -o $@
 
 s005:   s005.cpp SQLMini.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL -Wno-parentheses-equality -Wno-unused-but-set-variable $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
 
 s006:   s006.cpp SQLMini2.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL -Wno-parentheses-equality -Wno-unused-but-set-variable $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
 
 # AST commented out
 #

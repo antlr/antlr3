@@ -44,7 +44,7 @@ void parseFile(const char* fName, int fd)
 	string data = Utils::slurp(fName);
 #endif
 	input	= new s002LexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str()
-						       , ANTLR_ENC_8BIT
+						       , antlr3::ENC_8BIT
 						       , data.length()
 						       , (ANTLR_UINT8*)fName);
 

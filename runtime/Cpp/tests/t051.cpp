@@ -42,7 +42,7 @@ void parseFile(const char* fName)
 	string data = slurp(fName);
 
 	input	= new t051lexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-						       ANTLR_ENC_8BIT,
+						       antlr3::ENC_8BIT,
 						       data.length(), //strlen(data.c_str()),
 						       (ANTLR_UINT8*)fName);
 
