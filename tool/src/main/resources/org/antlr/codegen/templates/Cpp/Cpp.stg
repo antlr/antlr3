@@ -142,7 +142,9 @@ outputFile( LEXER,
 /* -----------------------------------------
  * Include the ANTLR3 generated header file.
  */
+#include "antlr3compilerwarning.hpp"
 #include "<name>.hpp"
+
 <if(trace)>
 #include \<iostream>
 <endif>
@@ -324,26 +326,6 @@ headerFile( LEXER,
 
 <actions.(actionScope).header>
 
-#ifdef	WIN32
-// Disable: Unreferenced parameter,							- Rules with parameters that are not used
-//          constant conditional,							- ANTLR realizes that a prediction is always true (synpred usually)
-//          initialized but unused variable					- tree rewrite variables declared but not needed
-//          Unreferenced local variable						- lexer rule declares but does not always use _type
-//          potentially unitialized variable used			- retval always returned from a rule
-//			unreferenced local function has been removed	- susually getTokenNames or freeScope, they can go without warnigns
-//
-// These are only really displayed at warning level /W4 but that is the code ideal I am aiming at
-// and the codegen must generate some of these warnings by necessity, apart from 4100, which is
-// usually generated when a parser rule is given a parameter that it does not use. Mostly though
-// this is a matter of orthogonality hence I disable that one.
-//
-#pragma warning( disable : 4100 )
-#pragma warning( disable : 4101 )
-#pragma warning( disable : 4127 )
-#pragma warning( disable : 4189 )
-#pragma warning( disable : 4505 )
-#pragma warning( disable : 4701 )
-#endif
 <if(backtracking)>
 
 /* ========================
