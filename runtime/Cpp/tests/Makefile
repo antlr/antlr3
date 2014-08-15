@@ -33,87 +33,87 @@ $(ANTLR): $(STGS)
 	-C ../../../tool/src/main/resources org/antlr/codegen/templates/Cpp/ASTParser.stg
 
 a001:	a001.cpp a001.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 a002:	a002.cpp a002.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 a003:	a003.cpp a003.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 a004:	a004.cpp a004.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 a005:	a005.cpp a005.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 s001:	s001.cpp s001.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
 
 s002:	s002.cpp s002.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
 
 s003:	s003.cpp s003.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
 
 t001:	t001.cpp t001lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL -DD $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t002:	t002.cpp t002lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t003:	t003.cpp t003lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t004:	t004.cpp t004lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t005:	t005.cpp t005lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t006:	t006.cpp t006lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t007:	t007.cpp t007lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t008:	t008.cpp t008lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t009:	t009.cpp t009lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t010:	t010.cpp t010lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t011:	t011.cpp t011lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t012:	t012.cpp t012lexerXMLLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t020:	t020.cpp t020fuzzyLexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t039:	t039.cpp t039labels.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 t051:	t051.cpp t051lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 s004:   s004.cpp PLSQLLexer.tokens PLSQLParser.tokens PLSQL_DMLParser.g PTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< PLSQLLexer*.cpp PLSQLParser*.cpp utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< PLSQLLexer*.cpp PLSQLParser*.cpp utils.cpp -o $@
 
 s005:   s005.cpp SQLMini.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
 
 s006:   s006.cpp SQLMini2.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) $< SQLMiniLexer.cpp SQLMiniParser.cpp utils.cpp -o $@
 
 # AST commented out
 #
 # t042:	t042.cpp t005lexer.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
-# 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+# 	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
 clean:
 	rm -f *.o [ast]0[0-9][0-9]??*.[ch]pp *.tokens [ast][0-9][0-9][0-9] [ast]0[0-9][0-9].exe
@@ -136,4 +136,4 @@ endif
 endif
 
 %.o: %.cpp $(HEADERS) utils.hpp
-	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) -c $< -o $@
+	$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@

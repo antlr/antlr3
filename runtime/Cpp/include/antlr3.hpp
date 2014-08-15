@@ -29,6 +29,7 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <cassert>
+#include <cstddef> // ptrdiff_t
 #include <cstdint> // uint32_t, ...
 #include <cstdio>  // stderr (TODO remove fprintf(stderr)
 #include <cstdlib> // malloc, calloc

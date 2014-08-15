@@ -48,7 +48,9 @@
 #if defined(__GNUC__) && !defined(__clang__)
 //#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#if __GNUC_MINOR__ >= 8
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
