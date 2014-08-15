@@ -327,13 +327,13 @@ CommonTreeAdaptor<ImplTraits>::create( ANTLR_UINT32 tokenType, const CommonToken
 	if (fromToken == NULL)
 		return create(tokenType, text);
 	/* Create the new token */
-	fromToken = this->createToken(fromToken);
+	auto newToken = this->createToken(fromToken);
 	/* Set the type of the new token to that supplied */
-	fromToken->set_type(tokenType);
+	newToken->set_type(tokenType);
 	/* Set the text of the token accordingly */
-	fromToken->set_text(text);
+	newToken->setText(text);
 	/* Return a new node based upon this token */
-	return	this->create(fromToken);
+	return	this->create(newToken);
 }
 
 template<class ImplTraits>
