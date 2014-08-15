@@ -357,7 +357,7 @@ public:
 	 * so we just undef it here for now. That isn't the value we get back from C recognizers
 	 * anyway. We are looking for ANTLR_TOKEN_EOF.
 	 */
-	enum Tokens 
+	enum Tokens : ANTLR_UINT32
 	{
 		EOF_TOKEN = <name>ImplTraits::CommonTokenType::TOKEN_EOF
 		<tokens:{it | , <it.name> = <it.type> }; separator="\n">

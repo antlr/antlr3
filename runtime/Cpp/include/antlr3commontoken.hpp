@@ -56,7 +56,7 @@ class CommonToken : public ImplTraits::AllocPolicyType
 public:
 	/* Base token types, which all lexer/parser tokens come after in sequence.
 	*/
-	enum TOKEN_TYPE
+	enum TOKEN_TYPE : ANTLR_UINT32
 	{
 		/** Indicator of an invalid token
 		 */
