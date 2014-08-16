@@ -120,13 +120,14 @@ public:
 	CommonTree*	dupNode(void *) const;
 
 
-	ANTLR_UINT32	getCharPositionInLine();
+	ANTLR_UINT32	get_charPositionInLine() const;
+	ANTLR_UINT32	get_line() const;
+
 	TreeTypePtr&	getChild(ANTLR_UINT32 i);
-	
 	ANTLR_UINT32	getChildCount() const;
 	ANTLR_UINT32	getType();
 	TreeTypePtr&	getFirstChildWithType(ANTLR_UINT32 type);
-	ANTLR_UINT32	getLine();
+
 	StringType	getText();
 	bool	isNilNode();
 	void	setChild(ANTLR_UINT32 i, TreeTypePtr child);

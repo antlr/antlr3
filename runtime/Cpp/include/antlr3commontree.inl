@@ -238,11 +238,13 @@ CommonTree<ImplTraits>*	CommonTree<ImplTraits>::dupNode(void *p) const
 }
 
 template<class ImplTraits>
-ANTLR_UINT32	CommonTree<ImplTraits>::getCharPositionInLine()
+ANTLR_UINT32	CommonTree<ImplTraits>::get_charPositionInLine() const
 {
 	if(m_token == NULL || (m_token->get_charPositionInLine() == 0) )
 	{
-		if(!m_children.empty() && m_children.front())
+		if(m_children.empty())
+			return 0;
+		if(m_children.front())
 			return m_children.front()->get_charPositionInLine();
 		return 0;
 	}
@@ -351,15 +353,17 @@ typename CommonTree<ImplTraits>::TreeTypePtr& CommonTree<ImplTraits>::getFirstCh
 }
 
 template<class ImplTraits>
-ANTLR_UINT32	CommonTree<ImplTraits>::getLine()
+ANTLR_UINT32	CommonTree<ImplTraits>::get_line() const
 {
 	if(m_token == NULL || m_token->get_line() == 0)
 	{
-		if  ( this->getChildCount() > 0)
-			return this->getChild(0)->get_line();
+		if ( m_children.empty())
+			return 0;
+		if ( m_children.front())
+			return m_children.front()->get_line();
 		return 0;
 	}
-	return  m_token->get_line();
+	return m_token->get_line();
 }
 
 template<class ImplTraits>
