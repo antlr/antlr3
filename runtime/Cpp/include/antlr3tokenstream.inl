@@ -82,7 +82,7 @@ typename TokenSource<ImplTraits>::TokenType*	TokenSource<ImplTraits>::nextTokenS
             state->set_tokenStartLine( input->get_line() );
             state->set_text("");
 
-            if  (istream->_LA(1) == ANTLR_CHARSTREAM_EOF)
+            if  (istream->LA(1) == ANTLR_CHARSTREAM_EOF)
             {
                 // Reached the end of the current stream, nothing more to do if this is
                 // the last in the stack.

@@ -121,7 +121,7 @@ ANTLR_INT32	CyclicDFA<ImplTraits, CtxType>::predict(CtxType * ctx,
 
 		/* Look for a normal transition state based upon the input token element
 		 */
-		c = is->_LA(1);
+		c = is->LA(1);
 
 		/* Check against min and max for this state
 		 */

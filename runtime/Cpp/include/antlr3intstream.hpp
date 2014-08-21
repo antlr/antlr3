@@ -141,7 +141,7 @@ public:
 
     /** Get ANTLR3_UINT32 at current input pointer + i ahead where i=1 is next ANTLR3_UINT32 
      */
-    ANTLR_UINT32	_LA( ANTLR_INT32 i);
+    ANTLR_UINT32	LA( ANTLR_INT32 i);
 
     /** Tell the stream to start buffering if it hasn't already.  Return
      *  current input position, index(), or some other marker so that
@@ -215,7 +215,7 @@ protected:
 	void findout_endian_spec(bool machineBigEndian, bool inputBigEndian);
 
 	//If the user chooses this option, then we will be resolving stuffs at run-time
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
 
 	//resolve into one of the three categories below at runtime
 	void	consume( ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
@@ -225,7 +225,7 @@ template<class ImplTraits, class SuperType>
 class EBCDIC_IntStream : public IntStream<ImplTraits, SuperType>
 {
 public:
-	ANTLR_UINT32	_LA( ANTLR_INT32 i);
+	ANTLR_UINT32	LA( ANTLR_INT32 i);
 
 protected:
 	void setupIntStream();
@@ -235,7 +235,7 @@ template<class ImplTraits, class SuperType>
 class UTF8_IntStream : public IntStream<ImplTraits, SuperType>
 {
 public:
-	ANTLR_UINT32	_LA( ANTLR_INT32 i);
+	ANTLR_UINT32	LA( ANTLR_INT32 i);
 	void consume();
 
 protected:
@@ -250,7 +250,7 @@ template<class ImplTraits, class SuperType>
 class UTF16_IntStream : public IntStream<ImplTraits, SuperType>
 {
 public:
-	ANTLR_UINT32	_LA( ANTLR_INT32 i);
+	ANTLR_UINT32	LA( ANTLR_INT32 i);
 	void		    consume();
 	ANTLR_MARKER	index();
 	void seek(ANTLR_MARKER seekPoint);
@@ -265,7 +265,7 @@ protected:
 	///
 	/// \return Next input character in internal ANTLR3 encoding (UTF32)
 	///
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<BYTE_AGNOSTIC> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<BYTE_AGNOSTIC> );
 
 	/// \brief Return the input element assuming a UTF16 input when the input is Little Endian and the machine is not
 	///
@@ -274,7 +274,7 @@ protected:
 	///
 	/// \return Next input character in internal ANTLR3 encoding (UTF32)
 	///
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<ANTLR_LITTLE_ENDIAN> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<ANTLR_LITTLE_ENDIAN> );
 	
 	/// \brief Return the input element assuming a UTF16 input when the input is Little Endian and the machine is not
 	///
@@ -283,7 +283,7 @@ protected:
 	///
 	/// \return Next input character in internal ANTLR3 encoding (UTF32)
 	///
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<ANTLR_BIG_ENDIAN> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<ANTLR_BIG_ENDIAN> );
 
 	/// \brief Consume the next character in a UTF16 input stream
 	///
@@ -314,7 +314,7 @@ template<class ImplTraits, class SuperType>
 class UTF32_IntStream : public IntStream<ImplTraits, SuperType>
 {
 public:
-	ANTLR_UINT32	_LA( ANTLR_INT32 i);
+	ANTLR_UINT32	LA( ANTLR_INT32 i);
 	void		    consume();
 	
 	/// \brief Calculate the current index in the output stream.
@@ -325,10 +325,10 @@ public:
 
 protected:
 	void setupIntStream(bool machineBigEndian, bool inputBigEndian);
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<BYTE_AGNOSTIC> );
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<ANTLR_LITTLE_ENDIAN> );
-	ANTLR_UINT32	_LA( ANTLR_INT32 i, ClassForwarder<ANTLR_BIG_ENDIAN> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<BYTE_AGNOSTIC> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<ANTLR_LITTLE_ENDIAN> );
+	ANTLR_UINT32	LA( ANTLR_INT32 i, ClassForwarder<ANTLR_BIG_ENDIAN> );
 
 	void	consume( ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> );
 	void	consume( ClassForwarder<BYTE_AGNOSTIC> );
@@ -359,7 +359,7 @@ public:
 
 	void consume();
 	void  consumeInitialHiddenTokens();
-	ANTLR_UINT32  _LA( ANTLR_INT32 i );
+	ANTLR_UINT32  LA( ANTLR_INT32 i );
 	ANTLR_MARKER  mark();
 	ANTLR_UINT32  size();
 	void release();

@@ -362,7 +362,7 @@ ANTLR_INLINE void Parser<ImplTraits>::preporterror()
 template< class ImplTraits>
 ANTLR_INLINE ANTLR_UINT32 Parser<ImplTraits>::LA(ANTLR_INT32 i)
 {
-	return this->get_istream()->_LA(i);
+	return this->get_istream()->LA(i);
 }
 
 template< class ImplTraits>

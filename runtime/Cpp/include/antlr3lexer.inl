@@ -109,7 +109,7 @@ void Lexer<ImplTraits>::displayRecognitionError( ANTLR_UINT8** , ExceptionBaseTy
 template<class ImplTraits>
 void Lexer<ImplTraits>::fillExceptionData( ExceptionBaseType* ex )
 {
-	ex->set_c( m_input->_LA(1) );					/* Current input character			*/
+	ex->set_c( m_input->LA(1) );					/* Current input character			*/
 	ex->set_line( m_input->get_line() );						/* Line number comes from stream		*/
 	ex->set_charPositionInLine( m_input->get_charPositionInLine() );	    /* Line offset also comes from the stream   */
 	ex->set_index( m_input->index() );
@@ -235,7 +235,7 @@ bool	Lexer<ImplTraits>::matchs(ANTLR_UCHAR* str )
 	RecognizerSharedStateType* state = this->get_rec()->get_state();
 	while   (*str != ANTLR_STRING_TERMINATOR)
 	{
-		if  ( this->get_istream()->_LA(1) != (*str))
+		if  ( this->get_istream()->LA(1) != (*str))
 		{
 			if	( state->get_backtracking() > 0)
 			{
@@ -267,7 +267,7 @@ bool	Lexer<ImplTraits>::matchs(ANTLR_UCHAR* str )
 template<class ImplTraits>
 bool	Lexer<ImplTraits>::matchc(ANTLR_UCHAR c)
 {
-	if	(this->get_istream()->_LA(1) == c)
+	if	(this->get_istream()->LA(1) == c)
 	{
 		/* Matched correctly, do consume it
 		 */
@@ -304,7 +304,7 @@ bool	Lexer<ImplTraits>::matchRange(ANTLR_UCHAR low, ANTLR_UCHAR high)
 
     /* What is in the stream at the moment?
      */
-    c	= this->get_istream()->_LA(1);
+    c	= this->get_istream()->LA(1);
     if	( c >= low && c <= high)
     {
 		/* Matched correctly, consume it
@@ -579,7 +579,7 @@ ANTLR_INLINE typename Lexer<ImplTraits>::DebuggerType* Lexer<ImplTraits>::get_de
 template< class ImplTraits>
 ANTLR_INLINE ANTLR_UINT32 Lexer<ImplTraits>::LA(ANTLR_INT32 i)
 {
-	return this->get_istream()->_LA(i);
+	return this->get_istream()->LA(i);
 }
 
 template< class ImplTraits>
