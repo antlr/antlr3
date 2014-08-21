@@ -74,7 +74,7 @@ void	IntStream<ImplTraits, SuperType>::consume()
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la )
+ANTLR_UINT32	IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la )
 {
 	SuperType* input = this->get_super();
 	const ANTLR_UINT8* nextChar = input->get_nextChar();
@@ -230,7 +230,7 @@ IntStream<ImplTraits, SuperType>::~IntStream()
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	EBCDIC_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la)
+ANTLR_UINT32	EBCDIC_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la)
 {
 	// EBCDIC to ASCII conversion table
 	//
@@ -295,9 +295,9 @@ void EBCDIC_IntStream<ImplTraits, SuperType>::setupIntStream()
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 i)
+ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 i)
 {
-	return this->_LA(i, ClassForwarder< typename ImplTraits::Endianness >() );
+	return this->LA(i, ClassForwarder< typename ImplTraits::Endianness >() );
 }
 
 template<class ImplTraits, class SuperType>
@@ -331,7 +331,7 @@ void UTF16_IntStream<ImplTraits, SuperType>::seek(ANTLR_MARKER seekPoint)
 	{
         // Call consume until we reach the asked for seek point or EOF
         //
-        while( (this->_LA(1) != ANTLR_CHARSTREAM_EOF) && (seekPoint < (ANTLR_MARKER)input->get_nextChar() ) )
+        while( (this->LA(1) != ANTLR_CHARSTREAM_EOF) && (seekPoint < (ANTLR_MARKER)input->get_nextChar() ) )
 	    {
 			this->consume();
 	    }
@@ -396,19 +396,19 @@ void UTF16_IntStream<ImplTraits, SuperType>::setupIntStream(bool machineBigEndia
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32 IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> )
+ANTLR_UINT32 IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 i, ClassForwarder<RESOLVE_ENDIAN_AT_RUNTIME> )
 {
 	assert( (m_endian_spec >= 1) && (m_endian_spec <= 3));
 	switch(m_endian_spec)
 	{
 	case 1:
-		return this->_LA(i, ClassForwarder<BYTE_AGNOSTIC>() );
+		return this->LA(i, ClassForwarder<BYTE_AGNOSTIC>() );
 		break;
 	case 2:
-		return this->_LA(i, ClassForwarder<ANTLR_LITTLE_ENDIAN>() );
+		return this->LA(i, ClassForwarder<ANTLR_LITTLE_ENDIAN>() );
 		break;
 	case 3:
-		return this->_LA(i, ClassForwarder<ANTLR_BIG_ENDIAN>() );
+		return this->LA(i, ClassForwarder<ANTLR_BIG_ENDIAN>() );
 		break;
 	default:
 		break;
@@ -437,7 +437,7 @@ void	IntStream<ImplTraits, SuperType>::consume( ClassForwarder<RESOLVE_ENDIAN_AT
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<BYTE_AGNOSTIC> )
+ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<BYTE_AGNOSTIC> )
 {
 	SuperType* input;
     UTF32   ch;
@@ -572,7 +572,7 @@ ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassF
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<ANTLR_LITTLE_ENDIAN> )
+ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<ANTLR_LITTLE_ENDIAN> )
 {
 	SuperType* input;
     UTF32           ch;
@@ -710,7 +710,7 @@ ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassF
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<ANTLR_BIG_ENDIAN> )
+ANTLR_UINT32	UTF16_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<ANTLR_BIG_ENDIAN> )
 {
 	SuperType* input;
     UTF32           ch;
@@ -1063,9 +1063,9 @@ void	UTF16_IntStream<ImplTraits, SuperType>::consume( ClassForwarder<ANTLR_BIG_E
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 i)
+ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 i)
 {
-	return this->_LA( i, ClassForwarder<typename ImplTraits::Endianness>() );
+	return this->LA( i, ClassForwarder<typename ImplTraits::Endianness>() );
 }
 
 template<class ImplTraits, class SuperType>
@@ -1095,7 +1095,7 @@ void UTF32_IntStream<ImplTraits, SuperType>::seek(ANTLR_MARKER seekPoint)
 	{
         // Call consume until we reach the asked for seek point or EOF
         //
-        while( (this->_LA(1) != ANTLR_CHARSTREAM_EOF) && (seekPoint < (ANTLR_MARKER)input->get_nextChar()) )
+        while( (this->LA(1) != ANTLR_CHARSTREAM_EOF) && (seekPoint < (ANTLR_MARKER)input->get_nextChar()) )
 	    {
 			this->consume();
 	    }
@@ -1113,7 +1113,7 @@ void UTF32_IntStream<ImplTraits, SuperType>::setupIntStream(bool machineBigEndia
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<BYTE_AGNOSTIC> )
+ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<BYTE_AGNOSTIC> )
 {
     SuperType* input = this->get_super();
 
@@ -1128,7 +1128,7 @@ ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassF
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<ANTLR_LITTLE_ENDIAN> )
+ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<ANTLR_LITTLE_ENDIAN> )
 {
 	SuperType* input = this->get_super();
 
@@ -1149,7 +1149,7 @@ ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassF
 }
 
 template<class ImplTraits, class SuperType>
-ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::_LA( ANTLR_INT32 la, ClassForwarder<ANTLR_BIG_ENDIAN> )
+ANTLR_UINT32	UTF32_IntStream<ImplTraits, SuperType>::LA( ANTLR_INT32 la, ClassForwarder<ANTLR_BIG_ENDIAN> )
 {
 	SuperType* input = this->get_super();
 
@@ -1323,7 +1323,7 @@ void UTF8_IntStream<ImplTraits, SuperType>::consume()
  * \return Next input character in internal ANTLR3 encoding (UTF32)
  */
 template<class ImplTraits, class SuperType>
-ANTLR_UCHAR UTF8_IntStream<ImplTraits, SuperType>::_LA(ANTLR_INT32 la)
+ANTLR_UCHAR UTF8_IntStream<ImplTraits, SuperType>::LA(ANTLR_INT32 la)
 {
     SuperType* input = this->get_super();
 	const ANTLR_UINT32* trailingBytesForUTF8 = UTF8_IntStream::TrailingBytesForUTF8();
@@ -1477,12 +1477,12 @@ void  TokenIntStream<ImplTraits>::consumeInitialHiddenTokens()
 
 
 template<class ImplTraits>
-ANTLR_UINT32	TokenIntStream<ImplTraits>::_LA( ANTLR_INT32 i )
+ANTLR_UINT32	TokenIntStream<ImplTraits>::LA( ANTLR_INT32 i )
 {
 	const CommonTokenType*    tok;
 	TokenStreamType*    ts	    = static_cast<TokenStreamType*>(this);
 
-	tok	    =  ts->_LT(i);
+	tok	    =  ts->LT(i);
 
 	if	(tok != NULL)
 	{
@@ -1583,13 +1583,13 @@ ANTLR_MARKER		TreeNodeIntStream<ImplTraits>::tindex()
 }
 
 template<class ImplTraits>
-ANTLR_UINT32		TreeNodeIntStream<ImplTraits>::_LA(ANTLR_INT32 i)
+ANTLR_UINT32 TreeNodeIntStream<ImplTraits>::LA(ANTLR_INT32 i)
 {
 	TreeNodeStreamType* tns	    = this->get_super();
 
 	// Ask LT for the 'token' at that position
 	//
-	TreeTypePtr t = tns->_LT(i);
+	TreeTypePtr t = tns->LT(i);
 
 	if	(t == NULL)
 	{

@@ -82,7 +82,7 @@ typename TokenSource<ImplTraits>::TokenType*	TokenSource<ImplTraits>::nextTokenS
             state->set_tokenStartLine( input->get_line() );
             state->set_text("");
 
-            if  (istream->_LA(1) == ANTLR_CHARSTREAM_EOF)
+            if  (istream->LA(1) == ANTLR_CHARSTREAM_EOF)
             {
                 // Reached the end of the current stream, nothing more to do if this is
                 // the last in the stack.
@@ -387,7 +387,7 @@ void	TokenStream<ImplTraits>::setDebugListener(DebugEventListenerType* debugger)
 }
 
 template<class ImplTraits>
-const typename TokenStream<ImplTraits>::TokenType*  TokenStream<ImplTraits>::_LT(ANTLR_INT32 k)
+const typename TokenStream<ImplTraits>::TokenType*  TokenStream<ImplTraits>::LT(ANTLR_INT32 k)
 {
 	ANTLR_INT32    i;
 	ANTLR_INT32    n;

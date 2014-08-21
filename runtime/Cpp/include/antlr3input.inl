@@ -317,9 +317,9 @@ void    InputStream<ImplTraits>::reuse(ANTLR_UINT8* inString, ANTLR_UINT32 size,
 
 /*
 template<class ImplTraits>
-typename InputStream<ImplTraits>::DataType*	InputStream<ImplTraits>::_LT(ANTLR_INT32 lt)
+typename InputStream<ImplTraits>::DataType*	InputStream<ImplTraits>::LT(ANTLR_INT32 lt)
 {
-	return this->_LA(lt);
+	return this->LA(lt);
 }
 */
 

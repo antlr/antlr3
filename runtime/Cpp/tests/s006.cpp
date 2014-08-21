@@ -183,20 +183,20 @@ void parseFile(const char* fName, int fd)
 		ANTLR_INT32 T = 0;
 		while	(T != SQLMiniLexer::EOF_TOKEN)
 		{
-			T = tstream->_LA(1);
-			SQLMiniLexerTraits::CommonTokenType const* token = tstream->_LT(1);
+			T = tstream->LA(1);
+			SQLMiniLexerTraits::CommonTokenType const* token = tstream->LT(1);
 			ANTLR_UINT8 const *name = lxr->getTokenName(T);
 			  
 			printf("%d %s\t\"%s\"\n",
 			       T,
 			       name,
-			       tstream->_LT(1)->getText().c_str()
+			       tstream->LT(1)->getText().c_str()
 			       );
 			tstream->consume();
 		}
 	}
 
-	tstream->_LT(1);	// Don't do this mormally, just causes lexer to run for timings here
+	tstream->LT(1);	// Don't do this mormally, just causes lexer to run for timings here
 
 	delete tstream; 
 	delete lxr; lxr = NULL;

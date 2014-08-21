@@ -172,7 +172,7 @@ public:
      *  Return null for LT(0) and any index that results in an absolute address
      *  that is negative.
      */
-    const TokenType*  _LT(ANTLR_INT32 k);
+    const TokenType*  LT(ANTLR_INT32 k);
 
     /** Where is this stream pulling tokens from?  This is not the name, but
      *  a pointer into an interface that contains a ANTLR3_TOKEN_SOURCE interface.

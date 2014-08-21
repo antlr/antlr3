@@ -115,3 +115,47 @@ void test4(const char* input)
 	delete lxr;
 	delete istream;
 }
+
+void test5(const char* input)
+{
+	a005LexerTraits::InputStreamType* istream = new a005LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
+											 , antlr3::ENC_8BIT
+											 , strlen(input)
+											 , (ANTLR_UINT8*)"test5");
+	istream->setUcaseLA(true);
+	
+	a005Lexer* lxr = new a005Lexer(istream);
+	a005LexerTraits::TokenStreamType* tstream = new a005LexerTraits::TokenStreamType(ANTLR_SIZE_HINT, lxr->get_tokSource());
+	a005Parser* psr = new a005Parser(tstream);	
+	{
+		auto r1 = psr->test5();
+		std::cout << r1.tree->toStringTree() << std::endl;
+	}
+	
+	delete psr;
+	delete tstream; 
+	delete lxr;
+	delete istream;
+}
+
+void test6(const char* input)
+{
+	a005LexerTraits::InputStreamType* istream = new a005LexerTraits::InputStreamType((const ANTLR_UINT8 *)input
+											 , antlr3::ENC_8BIT
+											 , strlen(input)
+											 , (ANTLR_UINT8*)"test6");
+	istream->setUcaseLA(true);
+	
+	a005Lexer* lxr = new a005Lexer(istream);
+	a005LexerTraits::TokenStreamType* tstream = new a005LexerTraits::TokenStreamType(ANTLR_SIZE_HINT, lxr->get_tokSource());
+	a005Parser* psr = new a005Parser(tstream);	
+	{
+		auto r1 = psr->test6();
+		std::cout << r1.tree->toStringTree() << std::endl;
+	}
+	
+	delete psr;
+	delete tstream; 
+	delete lxr;
+	delete istream;
+}

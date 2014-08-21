@@ -39,7 +39,7 @@
 namespace antlr3 {
 
 /// Master context structure for an ANTLR3 C runtime based input stream.
-/// \ingroup apistructures. Calling _LT on this doesn't seem right. You would
+/// \ingroup apistructures. Calling LT on this doesn't seem right. You would
 /// call it only with parser / TreeParser, and their respective input streams 
 /// has that function. calling it from lexer will throw a compile time error
 ///

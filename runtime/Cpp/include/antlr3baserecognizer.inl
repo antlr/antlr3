@@ -62,7 +62,7 @@ BaseRecognizer<ImplTraits, StreamType>::match(ANTLR_UINT32 ttype, BitsetListType
 	//
 	const UnitType* matchedSymbol = this->getCurrentInputSymbol(is);
 
-	//if (is->_LA(1) == ttype)
+	//if (is->LA(1) == ttype)
 	if (matchedSymbol->get_type() == ttype)
 	{
 		// The token was the one we were told to expect
@@ -108,7 +108,7 @@ void BaseRecognizer<ImplTraits, StreamType>::matchAny()
 template< class ImplTraits, class StreamType >
 bool BaseRecognizer<ImplTraits, StreamType>::mismatchIsUnwantedToken(IntStreamType* is, ANTLR_UINT32 ttype)
 {
-	ANTLR_UINT32 nextt = is->_LA(2);
+	ANTLR_UINT32 nextt = is->LA(2);
 
 	if	(nextt == ttype)
 	{
@@ -173,7 +173,7 @@ bool BaseRecognizer<ImplTraits, StreamType>::mismatchIsMissingToken(IntStreamTyp
 	/// in follow set to indicate that the fall of the start symbol is
 	/// in the set (EOF can follow).
 	///
-	if	(		followClone->isMember(is->_LA(1))
+	if	(		followClone->isMember(is->LA(1))
 			||	followClone->isMember(ImplTraits::CommonTokenType::EOR_TOKEN_TYPE)
 		)
 	{
@@ -580,7 +580,7 @@ bool  BaseRecognizer<ImplTraits, StreamType>::recoverFromMismatchedElement(Bitse
      * is consistent, then we can "insert" that token by not throwing
      * an exception and assuming that we saw it.
      */
-    if	( follow->isMember(is->_LA(1)) == true)
+    if	( follow->isMember(is->LA(1)) == true)
     {
 		/* report the error, but don't cause any rules to abort and stuff
 		 */
@@ -613,14 +613,14 @@ void	BaseRecognizer<ImplTraits, StreamType>::consumeUntil(ANTLR_UINT32   tokenTy
 
 	// What do have at the moment?
     //
-    ANTLR_UINT32 ttype	= is->_LA(1);
+    ANTLR_UINT32 ttype	= is->LA(1);
 
     // Start eating tokens until we get to the one we want.
     //
     while   (ttype != ImplTraits::CommonTokenType::TOKEN_EOF && ttype != tokenType)
     {
 		is->consume();
-		ttype	= is->_LA(1);
+		ttype	= is->LA(1);
     }
 }
 
@@ -633,14 +633,14 @@ void	BaseRecognizer<ImplTraits, StreamType>::consumeUntilSet(BitsetType*	set)
 
     // What do have at the moment?
     //
-    ttype	= is->_LA(1);
+    ttype	= is->LA(1);
 
     // Start eating tokens until we get to one we want.
     //
     while   (ttype != ImplTraits::CommonTokenType::TOKEN_EOF && set->isMember(ttype) == false)
     {
 		is->consume();
-		ttype	= is->_LA(1);
+		ttype	= is->LA(1);
     }
 
 }
@@ -774,7 +774,7 @@ BaseRecognizer<ImplTraits, StreamType>::getCurrentInputSymbol(IntStreamType* ist
 {
 	typedef typename ImplTraits::TokenStreamType TokenStreamType;
 	TokenStreamType* token_stream = static_cast<TokenStreamType*>(istream);
-	return token_stream->_LT(1);
+	return token_stream->LT(1);
 }
 
 template< class ImplTraits, class StreamType >
@@ -783,7 +783,7 @@ BaseRecognizer<ImplTraits, StreamType>::getCurrentInputSymbol(IntStreamType* ist
 {
 	typedef typename ImplTraits::TreeNodeStreamType TreeNodeStreamType;
 	TreeNodeStreamType*	ctns = static_cast<TreeNodeStreamType*>(istream);
-	return ctns->_LT(1);
+	return ctns->LT(1);
 }
 
 

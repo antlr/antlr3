@@ -52,7 +52,7 @@ ANTLR_INLINE typename Parser<ImplTraits>::TokenStreamType* Parser<ImplTraits>::g
 template< class ImplTraits >
 void Parser<ImplTraits>::fillExceptionData( ExceptionBaseType* ex )
 {
-	ex->set_token( new CommonTokenType(*(m_tstream->_LT(1))) ); /* Current input token (clonned) - held by the exception */
+	ex->set_token( new CommonTokenType(*(m_tstream->LT(1))) ); /* Current input token (clonned) - held by the exception */
 	ex->set_line( ex->get_token()->get_line() );
 	ex->set_charPositionInLine( ex->get_token()->get_charPositionInLine() );
 	ex->set_index( this->get_istream()->index() );
@@ -200,10 +200,10 @@ typename Parser<ImplTraits>::TokenType*	Parser<ImplTraits>::getMissingSymbol( In
 	// Work out what to use as the current symbol to make a line and offset etc
 	// If we are at EOF, we use the token before EOF
 	//
-	const CommonTokenType* current = cts->_LT(1);
+	const CommonTokenType* current = cts->LT(1);
 	if	(current->get_type() == CommonTokenType::TOKEN_EOF)
 	{
-		current = cts->_LT(-1);
+		current = cts->LT(-1);
 	}
 
 	CommonTokenType* token = new CommonTokenType;
@@ -362,13 +362,13 @@ ANTLR_INLINE void Parser<ImplTraits>::preporterror()
 template< class ImplTraits>
 ANTLR_INLINE ANTLR_UINT32 Parser<ImplTraits>::LA(ANTLR_INT32 i)
 {
-	return this->get_istream()->_LA(i);
+	return this->get_istream()->LA(i);
 }
 
 template< class ImplTraits>
 ANTLR_INLINE const typename Parser<ImplTraits>::CommonTokenType*  Parser<ImplTraits>::LT(ANTLR_INT32 k)
 {
-	return this->get_input()->_LT(k);
+	return this->get_input()->LT(k);
 }
 
 template< class ImplTraits>
