@@ -387,7 +387,7 @@ void	TokenStream<ImplTraits>::setDebugListener(DebugEventListenerType* debugger)
 }
 
 template<class ImplTraits>
-const typename TokenStream<ImplTraits>::TokenType*  TokenStream<ImplTraits>::_LT(ANTLR_INT32 k)
+const typename TokenStream<ImplTraits>::TokenType*  TokenStream<ImplTraits>::LT(ANTLR_INT32 k)
 {
 	ANTLR_INT32    i;
 	ANTLR_INT32    n;

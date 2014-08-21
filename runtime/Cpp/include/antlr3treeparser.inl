@@ -44,9 +44,10 @@ typename TreeParser<ImplTraits>::RecognizerType* TreeParser<ImplTraits>::get_rec
 template< class ImplTraits >
 void TreeParser<ImplTraits>::fillExceptionData( ExceptionBaseType* ex )
 {
-	ex->set_token( m_ctnstream->_LT(1) );	    /* Current input tree node */
-	ex->set_line( ex->get_token()->getLine() );
-	ex->set_charPositionInLine( ex->get_token()->getCharPositionInLine() );
+	auto xxx = m_ctnstream->LT(1);
+	//ex->set_token( m_ctnstream->LT(1) );	    /* Current input tree node */
+	ex->set_line( ex->get_token()->get_line() );
+	ex->set_charPositionInLine( ex->get_token()->get_charPositionInLine() );
 	ex->set_index( m_ctnstream->index() );
 
 	// Are you ready for this? Deep breath now...
@@ -168,12 +169,12 @@ TreeParser<ImplTraits>::getMissingSymbol( IntStreamType* istream, ExceptionBaseT
 
 	// Create a new empty node, by stealing the current one, or the previous one if the current one is EOF
 	//
-	current	= tns->_LT(1);
+	current	= tns->LT(1);
     i       = -1;
 
 	if	(current == tns->get_EOF_NODE_p())
 	{
-		current = tns->_LT(-1);
+		current = tns->LT(-1);
         i--;
 	}
 	node	= current->dupNode();

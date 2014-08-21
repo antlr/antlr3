@@ -1482,7 +1482,7 @@ ANTLR_UINT32	TokenIntStream<ImplTraits>::LA( ANTLR_INT32 i )
 	const CommonTokenType*    tok;
 	TokenStreamType*    ts	    = static_cast<TokenStreamType*>(this);
 
-	tok	    =  ts->_LT(i);
+	tok	    =  ts->LT(i);
 
 	if	(tok != NULL)
 	{
@@ -1589,7 +1589,7 @@ ANTLR_UINT32 TreeNodeIntStream<ImplTraits>::LA(ANTLR_INT32 i)
 
 	// Ask LT for the 'token' at that position
 	//
-	TreeTypePtr t = tns->_LT(i);
+	TreeTypePtr t = tns->LT(i);
 
 	if	(t == NULL)
 	{

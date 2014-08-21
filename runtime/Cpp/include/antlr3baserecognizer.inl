@@ -774,7 +774,7 @@ BaseRecognizer<ImplTraits, StreamType>::getCurrentInputSymbol(IntStreamType* ist
 {
 	typedef typename ImplTraits::TokenStreamType TokenStreamType;
 	TokenStreamType* token_stream = static_cast<TokenStreamType*>(istream);
-	return token_stream->_LT(1);
+	return token_stream->LT(1);
 }
 
 template< class ImplTraits, class StreamType >
@@ -783,7 +783,7 @@ BaseRecognizer<ImplTraits, StreamType>::getCurrentInputSymbol(IntStreamType* ist
 {
 	typedef typename ImplTraits::TreeNodeStreamType TreeNodeStreamType;
 	TreeNodeStreamType*	ctns = static_cast<TreeNodeStreamType*>(istream);
-	return ctns->_LT(1);
+	return ctns->LT(1);
 }
 
 
