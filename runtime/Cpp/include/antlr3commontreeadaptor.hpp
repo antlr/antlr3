@@ -187,7 +187,7 @@ public:
 	~CommonTreeAdaptor();
 
 protected:
-	TreeTypePtr	dupTreeImpl( const TreeTypePtr& root, TreeType* parent);
+	TreeTypePtr	dupTreeImpl( const TreeType* root, TreeType* parent);
 
 	void defineDotNodes(TreeTypePtr t, const StringType& dotSpec);
 	void defineDotEdges(TreeTypePtr t, const StringType& dotSpec);
