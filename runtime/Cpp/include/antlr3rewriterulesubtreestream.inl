@@ -159,14 +159,14 @@ template<class ImplTraits>
 typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
 RewriteRuleSubtreeStream<ImplTraits>::dupTree(const TreeTypePtr& element)
 {
-	return std::move(m_adaptor->dupNode(element));
+	return std::move(m_adaptor->dupTree(element));
 }
 
 template<class ImplTraits>
 typename RewriteRuleSubtreeStream<ImplTraits>::TreeTypePtr
 RewriteRuleSubtreeStream<ImplTraits>::dupTree(const TreeType* element)
 {
-	return std::move(m_adaptor->dupNode(element));
+	return std::move(m_adaptor->dupTree(element));
 }
 
 template<class ImplTraits>

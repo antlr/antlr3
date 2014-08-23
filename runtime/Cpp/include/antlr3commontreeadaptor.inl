@@ -99,25 +99,25 @@ CommonTreeAdaptor<ImplTraits>::dupTree( const TreeTypePtr& tree)
 {
 	if (tree == NULL)
 		return NULL;
-	return std::move(this->dupTreeImpl(tree, NULL));
+	return std::move(dupTreeImpl(tree.get(), NULL));
 }
 
 template<class ImplTraits>
 typename CommonTreeAdaptor<ImplTraits>::TreeTypePtr
-CommonTreeAdaptor<ImplTraits>::dupTreeImpl( const TreeTypePtr& root, TreeType* parent)
+CommonTreeAdaptor<ImplTraits>::dupTreeImpl( const TreeType *root, TreeType* parent)
 {
-	TreeTypePtr newTree(this->dupNode(root));
+	TreeTypePtr newTree(dupNode(root));
 
 	// Ensure new subtree root has parent/child index set
 	//
 	this->setChildIndex( newTree, root->get_childIndex() );
 	this->setParent(newTree, parent);
 
-	ChildrenType& r_children = root->get_children();
+	ChildrenType const& r_children = root->get_children();
 	for (auto i = r_children.begin(); i != r_children.end(); ++i)
 	{
 		// add child's clone
-		this->addChild(newTree, this->dupTreeImpl(*i, newTree.get()));
+		this->addChild(newTree, dupTreeImpl(i->get(), newTree.get()));
 	}
 
 	return	newTree;
