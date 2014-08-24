@@ -65,6 +65,11 @@ public class ANTLRReaderStream extends ANTLRStringStream {
 		if ( readChunkSize<=0 ) {
 			readChunkSize = READ_BUFFER_SIZE;
 		}
+
+        if(size < readChunkSize){
+            size = readChunkSize;
+        }
+
 		// System.out.println("load "+size+" in chunks of "+readChunkSize);
 		try {
 			// alloc initial buffer size.
