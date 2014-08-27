@@ -493,8 +493,7 @@ ANTLR_INLINE typename Parser<ImplTraits>::TokenStreamType* Parser<ImplTraits>::g
 
 template< class ImplTraits>
 ANTLR_INLINE RuleReturnValue<ImplTraits>::RuleReturnValue(BaseParserType* psr) 
-{ 
-	parser = psr; 
+{
 	start = NULL;
 	stop = NULL;
 }
@@ -502,7 +501,6 @@ ANTLR_INLINE RuleReturnValue<ImplTraits>::RuleReturnValue(BaseParserType* psr)
 template< class ImplTraits>
 ANTLR_INLINE RuleReturnValue<ImplTraits>::RuleReturnValue( const RuleReturnValue& val )
 {
-	parser	= val.parser; 
 	start	= val.start;
 	stop	= val.stop;
 }
@@ -510,7 +508,6 @@ ANTLR_INLINE RuleReturnValue<ImplTraits>::RuleReturnValue( const RuleReturnValue
 template< class ImplTraits>
 ANTLR_INLINE RuleReturnValue<ImplTraits>& RuleReturnValue<ImplTraits>::operator=( const RuleReturnValue& val )
 {
-	parser	= val.parser; 
 	start	= val.start;
 	stop	= val.stop;
 	return *this;
@@ -522,26 +519,28 @@ ANTLR_INLINE RuleReturnValue<ImplTraits>::~RuleReturnValue()
 }
 
 template< class ImplTraits>
-ANTLR_INLINE void RuleReturnValue<ImplTraits>::call_start_placeholder()
+ANTLR_INLINE void RuleReturnValue<ImplTraits>::call_start_placeholder(BaseParserType *parser)
 {
 	start = parser->LT(1); 
 	stop = start;
 }
 
 template< class ImplTraits>
-ANTLR_INLINE void RuleReturnValue<ImplTraits>::call_stop_placeholder()
+ANTLR_INLINE void RuleReturnValue<ImplTraits>::call_stop_placeholder(BaseParserType *parser)
 {
 	stop = parser->LT(-1);
 }
 
 template< class ImplTraits>
 ANTLR_INLINE RuleReturnValue_1<ImplTraits>::RuleReturnValue_1()
+	: parser()
 {
 }
 
 template< class ImplTraits>
 RuleReturnValue_1<ImplTraits>::RuleReturnValue_1( BaseParserType* psr )
-	:RuleReturnValue_1<ImplTraits>::BaseType(psr)
+	: RuleReturnValue_1<ImplTraits>::BaseType(psr)
+	, parser(psr)
 {
 	BaseType::start = psr->LT(1);
 	BaseType::stop = BaseType::start;
@@ -549,19 +548,20 @@ RuleReturnValue_1<ImplTraits>::RuleReturnValue_1( BaseParserType* psr )
 
 template< class ImplTraits>
 RuleReturnValue_1<ImplTraits>::RuleReturnValue_1( const RuleReturnValue_1& val )
-	:BaseType(val)
+	: RuleReturnValue_1<ImplTraits>::BaseType(val)
+	, parser(val.parser)
 {
 }
 
 template< class ImplTraits>
-void RuleReturnValue_1<ImplTraits>::call_start_placeholder()
+void RuleReturnValue_1<ImplTraits>::call_start_placeholder(BaseParserType*)
 {
 }
 
 template< class ImplTraits>
 RuleReturnValue_1<ImplTraits>::~RuleReturnValue_1()
 {
-	if( BaseType::parser && ( BaseType::parser->get_backtracking() == 0 ) )
+	if( parser && parser->get_backtracking() == 0 )
 	{
 		if( BaseType::stop == NULL )
 			BaseType::stop = BaseType::parser->LT(-1);
@@ -571,7 +571,7 @@ RuleReturnValue_1<ImplTraits>::~RuleReturnValue_1()
 			ANTLR_MARKER stop_token_idx		= BaseType::stop->get_index() - 1;
 			if( start_token_idx > stop_token_idx )
 				return;
-			BaseType::parser->getTokenStream()->discardTokens( start_token_idx, stop_token_idx); 
+			parser->getTokenStream()->discardTokens( start_token_idx, stop_token_idx);
 		}
 	}
 }
