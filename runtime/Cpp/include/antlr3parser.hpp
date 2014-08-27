@@ -159,17 +159,15 @@ class RuleReturnValue
 public:
 	typedef typename ImplTraits::BaseParserType BaseParserType;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
-	
-public:
+
 	const CommonTokenType*		start;
 	const CommonTokenType*		stop;
-	BaseParserType*			parser;
 
 	RuleReturnValue(BaseParserType* psr = NULL );
 	RuleReturnValue( const RuleReturnValue& val );
 	RuleReturnValue& operator=( const RuleReturnValue& val );
-	void call_start_placeholder(); 
-	void call_stop_placeholder(); 
+	void call_start_placeholder(BaseParserType*);
+	void call_stop_placeholder(BaseParserType*);
 	RuleReturnValue& get_struct();
 	~RuleReturnValue();
 };
@@ -183,11 +181,12 @@ public:
 	typedef RuleReturnValue<ImplTraits> BaseType;
 	typedef typename BaseType::BaseParserType BaseParserType;
 
-public:
+	BaseParserType* parser;
+
 	RuleReturnValue_1();
 	RuleReturnValue_1( BaseParserType* psr);
 	RuleReturnValue_1( const RuleReturnValue_1& val );
-	void call_start_placeholder();  //its dummy here
+	void call_start_placeholder(BaseParserType*);  //its dummy here
 	~RuleReturnValue_1();
 };
 

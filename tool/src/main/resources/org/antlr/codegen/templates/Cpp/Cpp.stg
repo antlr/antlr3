@@ -1219,7 +1219,7 @@ ruleLabelDefs() ::= <<
 ruleLabelInitializations() ::= <<
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!ruleDescriptor.isSynPred)>
-retval.call_start_placeholder();
+retval.call_start_placeholder(this);
 <endif>
 <endif>
 >>
@@ -1288,7 +1288,7 @@ rule<ruleDescriptor.name>Ex: ;
 <if(ruleDescriptor.hasMultipleReturnValues)>
 <if(!TREE_PARSER)>
 <if(!ruleDescriptor.isSynPred)>
-retval.call_stop_placeholder();<\n>
+retval.call_stop_placeholder(this);<\n>
 <endif>
 <endif>
 <endif>
@@ -2353,6 +2353,9 @@ public:
     	<scope.attributes:{it | <it.name> = other.<it.name>; }; separator="\n">
     	return *this;
     }
+    
+	void call_start_placeholder(<componentBaseType()>* parser) { start = stop= static_cast\< <name>* >(parser)->get_istream()->LT(1); };
+	void call_stop_placeholder(<componentBaseType()>* parser) { stop = static_cast\< <name>* >(parser)->get_istream()->LT(-1); };
 <endif>
     <if(scope)><scope.attributes:{it |<it.type> <it.name>;}; separator="\n"><endif>
 };
