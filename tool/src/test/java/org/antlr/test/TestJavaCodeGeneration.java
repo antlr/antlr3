@@ -29,7 +29,6 @@ package org.antlr.test;
 
 import org.junit.Test;
 
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
 
 /** General code generation testing; compilation and/or execution.
