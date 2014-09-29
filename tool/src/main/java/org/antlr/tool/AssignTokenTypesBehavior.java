@@ -271,9 +271,14 @@ protected void defineStringLiteralsFromDelegates() {
 			String tokenID = entry.getKey();
 			String literal = entry.getValue();
 			if ( literal.charAt(0)=='\'' && stringLiterals.get(literal)!=null ) {
-				stringLiterals.put(literal, tokens.get(tokenID));
-				// an alias still means you need a lexer rule for it
 				Integer typeI = tokens.get(tokenID);
+				if (typeI == null) {
+					// must have been imported from a tokenVocab
+					typeI = grammar.composite.tokenIDToTypeMap.get(tokenID);
+				}
+
+				stringLiterals.put(literal, typeI);
+				// an alias still means you need a lexer rule for it
 				if ( !tokenRuleDefs.contains(tokenID) ) {
 					root.defineLexerRuleForAliasedStringLiteral(tokenID, literal, typeI);
 				}
