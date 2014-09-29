@@ -217,7 +217,7 @@ org.antlr.lang.augmentObject(<grammar.recognizerName>.prototype, {
 // public class variables
 org.antlr.lang.augmentObject(<grammar.recognizerName>, {
 <if(grammar.grammarIsRoot)>
-    tokenNames: ["\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">],<\n>
+    tokenNames: ["\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", null="\"<invalid>\"">],<\n>
 <endif>
     <bitsets:bitset(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>},
                     words64=it.bits); separator=",\n">

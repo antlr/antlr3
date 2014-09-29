@@ -712,7 +712,7 @@ genericParser(  grammar,
 {
     #pragma mark Bitsets
     <bitsets:{it | <bitsetInit(name={FOLLOW_<it.name>_in_<it.inName><it.tokenIndex>}, words64=it.bits)>}>
-    [BaseRecognizer setTokenNames:[[AMutableArray arrayWithObjects:@"\<invalid>", @"\<EOR>", @"\<DOWN>", @"\<UP>", <tokenNames:{it | @<it>}; separator=", ", wrap="\n ">, nil] retain]];
+    [BaseRecognizer setTokenNames:[[AMutableArray arrayWithObjects:@"\<invalid>", @"\<EOR>", @"\<DOWN>", @"\<UP>", <tokenNames:{it | @<it>}; separator=", ", null="@\"<invalid>\"", wrap="\n ">, nil] retain]];
     [BaseRecognizer setGrammarFileName:@"<fileName>"];
     <synpreds:{pred | <synpred(pred)>}>
 }

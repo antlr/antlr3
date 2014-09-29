@@ -321,7 +321,7 @@ type
         '\<EOR>',
         '\<DOWN>',
         '\<UP>',
-        <tokenNames; separator=",\n">);<\n>
+        <tokenNames; separator=",\n", null="'<invalid>'">);<\n>
 <endif>
   public
     const
