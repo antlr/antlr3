@@ -34,7 +34,9 @@ namespace Antlr.Runtime.Tree
 {
     using IList = System.Collections.IList;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RewriteRuleSubtreeStream : RewriteRuleElementStream
     {
         public RewriteRuleSubtreeStream( ITreeAdaptor adaptor, string elementDescription )

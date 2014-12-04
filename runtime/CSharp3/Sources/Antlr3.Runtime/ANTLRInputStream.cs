@@ -41,7 +41,9 @@ namespace Antlr.Runtime
      *  Useful for reading from stdin and specifying file encodings etc...
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class ANTLRInputStream : ANTLRReaderStream
     {
         public ANTLRInputStream( Stream input )

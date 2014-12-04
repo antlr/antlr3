@@ -45,7 +45,9 @@ namespace Antlr.Runtime.Tree
      *  non-null node is called "nil".
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     [System.Diagnostics.DebuggerTypeProxy(typeof(AntlrRuntime_BaseTreeDebugView))]
     public abstract class BaseTree : ITree
     {

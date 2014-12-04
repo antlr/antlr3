@@ -43,7 +43,9 @@ namespace Antlr.Runtime
      *  strings aren't very good so I'm avoiding.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class ANTLRStringStream : ICharStream
     {
         /** <summary>The data being scanned</summary> */

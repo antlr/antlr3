@@ -40,7 +40,9 @@ namespace Antlr.Runtime.Tree
      *  the analog of RewriteRuleTokenStream for normal parsers.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RewriteRuleNodeStream : RewriteRuleElementStream
     {
 

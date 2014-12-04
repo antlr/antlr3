@@ -35,7 +35,6 @@ namespace Antlr.Runtime
     using System.Collections.Generic;
 
     using ArgumentException = System.ArgumentException;
-    using Console = System.Console;
     using Math = System.Math;
     using DebuggerDisplay = System.Diagnostics.DebuggerDisplayAttribute;
     using Exception = System.Exception;
@@ -93,8 +92,10 @@ namespace Antlr.Runtime
      *  If you don't use named rewrite streams, a "default" stream is used as
      *  the first example shows.
      */
+#if !PORTABLE
     [System.Serializable]
-    [DebuggerDisplay( "TODO: TokenRewriteStream debugger display" )]
+#endif
+    [DebuggerDisplay("TODO: TokenRewriteStream debugger display")]
     public class TokenRewriteStream : CommonTokenStream
     {
         public const string DEFAULT_PROGRAM_NAME = "default";
@@ -617,7 +618,7 @@ namespace Antlr.Runtime
                         rewrites[prevRop.instructionIndex] = null; // kill first delete
                         rop.index = Math.Min(prevRop.index, rop.index);
                         rop.lastIndex = Math.Max(prevRop.lastIndex, rop.lastIndex);
-                        Console.WriteLine("new rop " + rop);
+                        System.Diagnostics.Debug.WriteLine("new rop " + rop);
                     }
                     else if ( !disjoint && !same )
                     {

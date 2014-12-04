@@ -34,11 +34,12 @@ namespace Antlr.Runtime
 {
     using System.Collections.Generic;
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>An extra token while parsing a TokenStream</summary> */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class UnwantedTokenException : MismatchedTokenException
     {
         public UnwantedTokenException()
@@ -75,10 +76,12 @@ namespace Antlr.Runtime
         {
         }
 
-        protected UnwantedTokenException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected UnwantedTokenException(System.Runtime.Serialization.SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
 
         public virtual IToken UnexpectedToken
         {

@@ -46,10 +46,14 @@ namespace Antlr.Runtime
      *
      *  <remarks>TODO: how to access the full token stream?  How to track all tokens matched per rule?</remarks>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class LegacyCommonTokenStream : ITokenStream
     {
+#if !PORTABLE
         [System.NonSerialized]
+#endif
         ITokenSource _tokenSource;
 
         /** <summary>

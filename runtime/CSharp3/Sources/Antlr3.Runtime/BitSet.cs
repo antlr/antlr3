@@ -36,7 +36,9 @@ namespace Antlr.Runtime
 
     using Array = System.Array;
     using CLSCompliant = System.CLSCompliantAttribute;
+#if !PORTABLE
     using ICloneable = System.ICloneable;
+#endif
     using Math = System.Math;
     using StringBuilder = System.Text.StringBuilder;
 
@@ -46,8 +48,13 @@ namespace Antlr.Runtime
      *  for automatic error recovery.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
-    public sealed class BitSet : ICloneable
+#endif
+    public sealed class BitSet
+#if !PORTABLE
+        : ICloneable
+#endif
     {
         private const int BITS = 64;    // number of bits / long
         private const int LOG_BITS = 6; // 2^6 == 64

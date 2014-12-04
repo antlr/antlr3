@@ -32,18 +32,20 @@
 
 namespace Antlr.Runtime
 {
-    using NonSerialized = System.NonSerializedAttribute;
     using Regex = System.Text.RegularExpressions.Regex;
-    using Serializable = System.SerializableAttribute;
 
-    [Serializable]
+#if !PORTABLE
+    [System.Serializable]
+#endif
     public class CommonToken : IToken
     {
         int type;
         int line;
         int charPositionInLine = -1; // set to invalid position
         int channel = TokenChannels.Default;
-        [NonSerialized]
+#if !PORTABLE
+        [System.NonSerialized]
+#endif
         ICharStream input;
 
         /** <summary>

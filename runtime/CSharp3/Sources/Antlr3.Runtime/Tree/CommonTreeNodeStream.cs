@@ -37,7 +37,9 @@ namespace Antlr.Runtime.Tree
 
     using StringBuilder = System.Text.StringBuilder;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class CommonTreeNodeStream : LookaheadStream<object>, ITreeNodeStream, IPositionTrackingStream
     {
         public const int DEFAULT_INITIAL_BUFFER_SIZE = 100;
@@ -50,7 +52,9 @@ namespace Antlr.Runtime.Tree
         protected ITokenStream tokens;
 
         /** <summary>What tree adaptor was used to build these trees</summary> */
+#if !PORTABLE
         [System.NonSerialized]
+#endif
         private ITreeAdaptor _adaptor;
 
         /** The tree iterator we are using */

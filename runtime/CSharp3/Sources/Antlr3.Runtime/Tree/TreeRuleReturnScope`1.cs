@@ -38,7 +38,9 @@ namespace Antlr.Runtime.Tree
      *  when you are parsing trees.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class TreeRuleReturnScope<TTree> : IRuleReturnScope<TTree>
     {
         private TTree _start;

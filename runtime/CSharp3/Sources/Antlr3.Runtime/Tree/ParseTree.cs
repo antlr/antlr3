@@ -43,7 +43,9 @@ namespace Antlr.Runtime.Tree
      *  that is more meaningful (specific) and holds a String to display for a node.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class ParseTree : BaseTree
     {
         public object payload;

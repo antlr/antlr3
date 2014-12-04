@@ -42,7 +42,9 @@ namespace Antlr.Runtime.Tree
      *  fields, it's easy to cut them out in your own BaseTree subclass.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class CommonTree : BaseTree
     {
         /** <summary>A single token is the payload</summary> */
