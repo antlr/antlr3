@@ -37,7 +37,6 @@ namespace Antlr.Runtime
     using ArgumentNullException = System.ArgumentNullException;
     using Exception = System.Exception;
     using NotSupportedException = System.NotSupportedException;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>The root of the ANTLR exception hierarchy.</summary>
@@ -72,7 +71,9 @@ namespace Antlr.Runtime
      *  figure out a fancy report.
      *  </remarks>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RecognitionException : Exception
     {
         /** <summary>What input stream did the error occur in?</summary> */
@@ -215,7 +216,8 @@ namespace Antlr.Runtime
             }
         }
 
-        protected RecognitionException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected RecognitionException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
@@ -227,6 +229,7 @@ namespace Antlr.Runtime
             _charPositionInLine = info.GetInt32("CharPositionInLine");
             _approximateLineInfo = info.GetBoolean("ApproximateLineInfo");
         }
+#endif
 
         /** <summary>Return the token type or char of the unexpected input element</summary> */
         public virtual int UnexpectedType
@@ -353,7 +356,8 @@ namespace Antlr.Runtime
             }
         }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -365,6 +369,7 @@ namespace Antlr.Runtime
             info.AddValue("CharPositionInLine", _charPositionInLine);
             info.AddValue("ApproximateLineInfo", _approximateLineInfo);
         }
+#endif
 
         protected virtual void ExtractInformationFromTreeNodeStream(ITreeNodeStream input)
         {

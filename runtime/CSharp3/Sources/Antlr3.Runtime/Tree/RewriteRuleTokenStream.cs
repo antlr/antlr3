@@ -35,7 +35,9 @@ namespace Antlr.Runtime.Tree
     using IList = System.Collections.IList;
     using NotSupportedException = System.NotSupportedException;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RewriteRuleTokenStream : RewriteRuleElementStream
     {
 

@@ -34,10 +34,14 @@ namespace Antlr.Runtime
 {
     using ArgumentNullException = System.ArgumentNullException;
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#if !PORTABLE
+    using System.Runtime.Serialization.SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#endif
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class MismatchedRangeException : RecognitionException
     {
         private readonly int _a;
@@ -78,7 +82,8 @@ namespace Antlr.Runtime
             this._b = b;
         }
 
-        protected MismatchedRangeException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected MismatchedRangeException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
@@ -87,6 +92,7 @@ namespace Antlr.Runtime
             this._a = info.GetInt32("A");
             this._b = info.GetInt32("B");
         }
+#endif
 
         public int A
         {
@@ -104,7 +110,8 @@ namespace Antlr.Runtime
             }
         }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -113,6 +120,7 @@ namespace Antlr.Runtime
             info.AddValue("A", _a);
             info.AddValue("B", _b);
         }
+#endif
 
         public override string ToString()
         {

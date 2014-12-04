@@ -34,7 +34,6 @@ namespace Antlr.Runtime.Tree
 {
     using ArgumentNullException = System.ArgumentNullException;
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>
@@ -43,7 +42,9 @@ namespace Antlr.Runtime.Tree
      *  in a subrule are different: (ID INT)+ where |ID|!=|INT|
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RewriteCardinalityException : Exception
     {
         private readonly string _elementDescription;
@@ -75,7 +76,8 @@ namespace Antlr.Runtime.Tree
             _elementDescription = elementDescription;
         }
 
-        protected RewriteCardinalityException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected RewriteCardinalityException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
@@ -84,7 +86,7 @@ namespace Antlr.Runtime.Tree
             _elementDescription = info.GetString("ElementDescription");
         }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -92,5 +94,6 @@ namespace Antlr.Runtime.Tree
             base.GetObjectData(info, context);
             info.AddValue("ElementDescription", _elementDescription);
         }
+#endif
     }
 }

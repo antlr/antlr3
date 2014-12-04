@@ -34,7 +34,9 @@ namespace Antlr.Runtime.Tree
 {
 
     /** <summary>A node representing erroneous token range in token stream</summary> */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class CommonErrorNode : CommonTree
     {
         public IIntStream input;

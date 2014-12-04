@@ -34,7 +34,6 @@ namespace Antlr.Runtime
 {
     using System.Collections.Generic;
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>
@@ -42,7 +41,9 @@ namespace Antlr.Runtime
      *  is actually what we wanted next.  Used for tree node errors too.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class MissingTokenException : MismatchedTokenException
     {
         private readonly object _inserted;
@@ -84,10 +85,12 @@ namespace Antlr.Runtime
             this._inserted = inserted;
         }
 
-        protected MissingTokenException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected MissingTokenException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
 
         public virtual int MissingType
         {

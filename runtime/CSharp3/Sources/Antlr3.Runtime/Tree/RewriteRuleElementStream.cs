@@ -52,7 +52,9 @@ namespace Antlr.Runtime.Tree
      *  <see cref="RewriteRuleSubtreeStream"/>
      *  <see cref="RewriteRuleTokenStream"/>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public abstract class RewriteRuleElementStream
     {
         /** <summary>

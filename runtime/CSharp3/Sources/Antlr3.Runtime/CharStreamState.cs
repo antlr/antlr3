@@ -41,7 +41,9 @@ namespace Antlr.Runtime
      *
      *  <remarks>This is the complete state of a stream.</remarks>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class CharStreamState
     {
         /** <summary>Index into the char stream of next lookahead char</summary> */

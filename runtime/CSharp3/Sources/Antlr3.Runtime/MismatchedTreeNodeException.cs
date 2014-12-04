@@ -35,10 +35,11 @@ namespace Antlr.Runtime
     using ArgumentNullException = System.ArgumentNullException;
     using Exception = System.Exception;
     using ITreeNodeStream = Antlr.Runtime.Tree.ITreeNodeStream;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class MismatchedTreeNodeException : RecognitionException
     {
         private readonly int _expecting;
@@ -75,7 +76,8 @@ namespace Antlr.Runtime
             this._expecting = expecting;
         }
 
-        protected MismatchedTreeNodeException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected MismatchedTreeNodeException(System.Runtime.Serialization.SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
@@ -83,6 +85,7 @@ namespace Antlr.Runtime
 
             this._expecting = info.GetInt32("Expecting");
         }
+#endif
 
         public int Expecting
         {
@@ -92,7 +95,8 @@ namespace Antlr.Runtime
             }
         }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -100,6 +104,7 @@ namespace Antlr.Runtime
             base.GetObjectData(info, context);
             info.AddValue("Expecting", _expecting);
         }
+#endif
 
         public override string ToString()
         {

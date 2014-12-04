@@ -43,7 +43,9 @@ namespace Antlr.Runtime
      *  If you need encoding, use ANTLRInputStream.
      *  </remarks>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class ANTLRReaderStream : ANTLRStringStream
     {
         public const int ReadBufferSize = 1024;
@@ -86,7 +88,7 @@ namespace Antlr.Runtime
             }
             finally
             {
-                r.Close();
+                r.Dispose();
             }
         }
     }

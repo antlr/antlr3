@@ -51,7 +51,9 @@ namespace Antlr.Runtime
      *  This is not a subclass of UnbufferedTokenStream because I don't want
      *  to confuse small moving window of tokens it uses for the full buffer.
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class BufferedTokenStream : ITokenStream, ITokenStreamInformation
     {
         private ITokenSource _tokenSource;

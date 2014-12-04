@@ -41,7 +41,9 @@ namespace Antlr.Runtime
      *  new strings.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class ClassicToken : IToken
     {
         string text;

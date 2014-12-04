@@ -33,10 +33,14 @@
 namespace Antlr.Runtime
 {
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#if !PORTABLE
+    using System.Runtime.Serialization.SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#endif
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class MismatchedNotSetException : MismatchedSetException
     {
         public MismatchedNotSetException()
@@ -68,10 +72,12 @@ namespace Antlr.Runtime
         {
         }
 
-        protected MismatchedNotSetException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected MismatchedNotSetException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
 
         public override string ToString()
         {

@@ -33,11 +33,12 @@
 namespace Antlr.Runtime.Tree
 {
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>No elements within a (...)+ in a rewrite rule</summary> */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class RewriteEarlyExitException : RewriteCardinalityException
     {
         public RewriteEarlyExitException()
@@ -64,9 +65,11 @@ namespace Antlr.Runtime.Tree
         {
         }
 
-        protected RewriteEarlyExitException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected RewriteEarlyExitException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
     }
 }

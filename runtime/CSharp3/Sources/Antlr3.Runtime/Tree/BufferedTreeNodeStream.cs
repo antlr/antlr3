@@ -34,7 +34,7 @@ namespace Antlr.Runtime.Tree
 {
     using System.Collections.Generic;
 
-    using Console = System.Console;
+    using Debug = System.Diagnostics.Debug;
     using IList = System.Collections.IList;
     using InvalidOperationException = System.InvalidOperationException;
     using StringBuilder = System.Text.StringBuilder;
@@ -590,7 +590,7 @@ namespace Antlr.Runtime.Tree
 
         public virtual string ToString( object start, object stop )
         {
-            Console.Out.WriteLine( "toString" );
+            Debug.WriteLine( "toString" );
             if ( start == null || stop == null )
             {
                 return null;
@@ -601,13 +601,13 @@ namespace Antlr.Runtime.Tree
             }
             //Console.Out.WriteLine( "stop: " + stop );
             if ( start is CommonTree )
-                Console.Out.Write( "toString: " + ( (CommonTree)start ).Token + ", " );
+                Debug.WriteLine( "toString: " + ( (CommonTree)start ).Token + ", " );
             else
-                Console.Out.WriteLine( start );
+                Debug.WriteLine( start );
             if ( stop is CommonTree )
-                Console.Out.WriteLine( ( (CommonTree)stop ).Token );
+                Debug.WriteLine( ( (CommonTree)stop ).Token );
             else
-                Console.Out.WriteLine( stop );
+                Debug.WriteLine( stop );
             // if we have the token stream, use that to dump text in order
             if ( tokens != null )
             {

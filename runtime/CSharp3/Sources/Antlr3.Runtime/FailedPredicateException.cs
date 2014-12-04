@@ -34,7 +34,9 @@ namespace Antlr.Runtime
 {
     using ArgumentNullException = System.ArgumentNullException;
     using Exception = System.Exception;
-    using SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#if !PORTABLE
+    using System.Runtime.Serialization.SerializationInfo = System.Runtime.Serialization.SerializationInfo;
+#endif
     using StreamingContext = System.Runtime.Serialization.StreamingContext;
 
     /** <summary>
@@ -44,7 +46,9 @@ namespace Antlr.Runtime
      *  a prediction decision.
      *  </summary>
      */
+#if !PORTABLE
     [System.Serializable]
+#endif
     public class FailedPredicateException : RecognitionException
     {
         private readonly string _ruleName;
@@ -85,7 +89,8 @@ namespace Antlr.Runtime
             this._predicateText = predicateText;
         }
 
-        protected FailedPredicateException(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        protected FailedPredicateException(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
             : base(info, context)
         {
             if (info == null)
@@ -94,6 +99,7 @@ namespace Antlr.Runtime
             this._ruleName = info.GetString("RuleName");
             this._predicateText = info.GetString("PredicateText");
         }
+#endif
 
         public string RuleName
         {
@@ -111,7 +117,8 @@ namespace Antlr.Runtime
             }
         }
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+#if !PORTABLE
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo  info, StreamingContext context)
         {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -120,6 +127,7 @@ namespace Antlr.Runtime
             info.AddValue("RuleName", _ruleName);
             info.AddValue("PredicateText", _predicateText);
         }
+#endif
 
         public override string ToString()
         {
