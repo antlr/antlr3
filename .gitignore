@@ -18,13 +18,3 @@ nb-configuration.xml
 
 # Python runtime files
 *.py[co]
-
-# ANTLR C# target build folders
-/runtime/CSharp3/Sources/Antlr3.Runtime/bin/
-/runtime/CSharp3/Sources/Antlr3.Runtime/obj/
-/runtime/CSharp3/Sources/Antlr3.Runtime.Debug/bin/
-/runtime/CSharp3/Sources/Antlr3.Runtime.Debug/obj/
-/runtime/CSharp3/Sources/Antlr3.Runtime.JavaExtensions/bin/
-/runtime/CSharp3/Sources/Antlr3.Runtime.JavaExtensions/obj/
-/runtime/CSharp3/Sources/Antlr3.Runtime.Test/bin/
-/runtime/CSharp3/Sources/Antlr3.Runtime.Test/obj/
