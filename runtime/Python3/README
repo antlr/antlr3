@@ -40,6 +40,11 @@ $ python3 setup.py install
 
 See <http://docs.python.org/inst/> for more information.
 
+If this fails due to an obscure setuptools error, you may need a newer bootstrap
+script (ez_setup.py): see <https://pypi.python.org/pypi/setuptools/> for full
+setuptools installation instructions, or simply download the given ez_setup.py
+script, place it in this folder, and run the above setup.py command.
+
 
 5) DOCUMENTATION
 ================
