@@ -59,11 +59,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include  <cassert>
-
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 enum STREAM_TYPE
 {
@@ -376,12 +372,13 @@ public:
 };
 
 template<class ImplTraits>
-class TreeNodeIntStream : public IntStream<ImplTraits, typename ImplTraits::CommonTreeNodeStreamType>
+class TreeNodeIntStream : public IntStream<ImplTraits, typename ImplTraits::TreeNodeStreamType>
 {
 public:
-	typedef typename ImplTraits::CommonTreeNodeStreamType CommonTreeNodeStreamType;
-	typedef IntStream<ImplTraits, CommonTreeNodeStreamType > BaseType;
+	typedef typename ImplTraits::TreeNodeStreamType TreeNodeStreamType;
+	typedef IntStream<ImplTraits, TreeNodeStreamType > BaseType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
 
 public:
@@ -396,7 +393,7 @@ public:
 	ANTLR_UINT32		size();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3intstream.inl"
 

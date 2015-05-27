@@ -1,8 +1,8 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template< class ImplTraits >
 Parser<ImplTraits>::Parser( ANTLR_UINT32 sizeHint, RecognizerSharedStateType* state )
-	:RecognizerType( sizeHint, state )
+	: RecognizerType( sizeHint, state )
 {
 	m_tstream = NULL;
 }
@@ -10,7 +10,7 @@ Parser<ImplTraits>::Parser( ANTLR_UINT32 sizeHint, RecognizerSharedStateType* st
 template< class ImplTraits >
 Parser<ImplTraits>::Parser( ANTLR_UINT32 sizeHint, TokenStreamType* tstream,
 												RecognizerSharedStateType* state )
-												:RecognizerType( sizeHint, state )
+	: RecognizerType( sizeHint, state )
 {
 	this->setTokenStream( tstream );
 }
@@ -19,7 +19,7 @@ template< class ImplTraits >
 Parser<ImplTraits>::Parser( ANTLR_UINT32 sizeHint, TokenStreamType* tstream,
 											DebugEventListenerType* dbg,
 											RecognizerSharedStateType* state )
-											:RecognizerType( sizeHint, state )
+	: RecognizerType( sizeHint, state )
 {
 	this->setTokenStream( tstream );
 	this->setDebugListener( dbg );
@@ -52,7 +52,7 @@ ANTLR_INLINE typename Parser<ImplTraits>::TokenStreamType* Parser<ImplTraits>::g
 template< class ImplTraits >
 void Parser<ImplTraits>::fillExceptionData( ExceptionBaseType* ex )
 {
-	ex->set_token( m_tstream->_LT(1) );	    /* Current input token			    */
+	ex->set_token( new CommonTokenType(*(m_tstream->_LT(1))) ); /* Current input token (clonned) - held by the exception */
 	ex->set_line( ex->get_token()->get_line() );
 	ex->set_charPositionInLine( ex->get_token()->get_charPositionInLine() );
 	ex->set_index( this->get_istream()->index() );
@@ -99,7 +99,7 @@ void Parser<ImplTraits>::displayRecognitionError( ANTLR_UINT8** tokenNames, Exce
 	// Prepare the knowledge we know we have
 	//
 	const CommonTokenType* theToken   = this->get_rec()->get_state()->get_exception()->get_token();
-	StringType ttext			= theToken->toString();
+	StringType ttext = theToken->toString();
 
 	errtext << ", at offset , "
 			<< this->get_rec()->get_state()->get_exception()->get_charPositionInLine();
@@ -193,25 +193,20 @@ typename Parser<ImplTraits>::TokenType*	Parser<ImplTraits>::getMissingSymbol( In
 										  ANTLR_UINT32			expectedTokenType,
 										  BitsetListType*	)
 {
-	TokenStreamType*		cts;
-	CommonTokenType*		token;
-	const CommonTokenType*		current;
-	StringType				text;
-
 	// Dereference the standard pointers
 	//
-	cts		= static_cast<TokenStreamType*>(istream);
+	TokenStreamType *cts = static_cast<TokenStreamType*>(istream);
 
 	// Work out what to use as the current symbol to make a line and offset etc
 	// If we are at EOF, we use the token before EOF
 	//
-	current	= cts->_LT(1);
+	const CommonTokenType* current = cts->_LT(1);
 	if	(current->get_type() == CommonTokenType::TOKEN_EOF)
 	{
 		current = cts->_LT(-1);
 	}
 
-	token	= new CommonTokenType;
+	CommonTokenType* token = new CommonTokenType;
 
 	// Set some of the token properties based on the current token
 	//
@@ -219,19 +214,18 @@ typename Parser<ImplTraits>::TokenType*	Parser<ImplTraits>::getMissingSymbol( In
 	token->set_charPositionInLine( current->get_charPositionInLine());
 	token->set_channel( TOKEN_DEFAULT_CHANNEL );
 	token->set_type(expectedTokenType);
-    token->set_lineStart( current->get_lineStart() );
-
+	token->set_lineStart( current->get_lineStart() );
+	
 	// Create the token text that shows it has been inserted
 	//
-	token->setText("<missing ");
-	text = token->getText();
-
-	if	(!text.empty())
+	if ( expectedTokenType == CommonTokenType::TOKEN_EOF )
 	{
-		text.append((const char *) this->get_rec()->get_state()->get_tokenName(expectedTokenType) );
-		text.append(">");
+		token->setText( "<missing EOF>" );
+	} else {
+		typename ImplTraits::StringStreamType text;
+		text << "<missing " << this->get_rec()->get_state()->get_tokenName(expectedTokenType) << ">";
+		token->setText( text.str().c_str() );
 	}
-
 	// Finally return the pointer to our new token
 	//
 	return	token;
@@ -582,4 +576,4 @@ RuleReturnValue_1<ImplTraits>::~RuleReturnValue_1()
 	}
 }
 
-ANTLR_END_NAMESPACE()
+}

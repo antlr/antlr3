@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class StreamType>
 ANTLR_ExceptionBase<ImplTraits, StreamType>::ANTLR_ExceptionBase(const StringType& message)
@@ -111,6 +111,8 @@ ANTLR_INLINE void ANTLR_ExceptionBase<ImplTraits, StreamType>::set_index( ANTLR_
 template<class ImplTraits, class StreamType>
 ANTLR_INLINE void ANTLR_ExceptionBase<ImplTraits, StreamType>::set_token( const TokenType* token )
 {
+	if (m_token)
+		delete m_token;
 	m_token = token;
 }
 template<class ImplTraits, class StreamType>
@@ -341,6 +343,7 @@ void ANTLR_Exception<ImplTraits, Ex, StreamType>::displayRecognitionError( ANTLR
 				str_stream << "Actually dude, we didn't seem to be expecting anything here, or at least\n";
 				str_stream << "I could not work out what I was expecting, like so many of us these days!\n";
 			}
+			delete errBits;
 		}
 		break;
 	case EARLY_EXIT_EXCEPTION:
@@ -358,10 +361,10 @@ ANTLR_ExceptionBase<ImplTraits,StreamType>::~ANTLR_ExceptionBase()
 	ANTLR_ExceptionBase<ImplTraits,StreamType>* next;
 	ANTLR_ExceptionBase<ImplTraits,StreamType>* ex = m_nextException;
 
-    /* Ensure valid pointer
-     */
-    while   (ex != NULL)
-    {
+	/* Ensure valid pointer
+	 */
+	while   (ex != NULL)
+	{
 		/* Pick up anythign following now, before we free the
 		 * current memory block.
 		 */
@@ -373,7 +376,9 @@ ANTLR_ExceptionBase<ImplTraits,StreamType>::~ANTLR_ExceptionBase()
 		delete ex;
 
 		ex = next;
-    }
+	}
+	if ( m_token)
+		delete m_token;
 }
 
-ANTLR_END_NAMESPACE()
+}

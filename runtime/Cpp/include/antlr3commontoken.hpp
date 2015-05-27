@@ -39,11 +39,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    <stdlib.h>
-
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** The definition of an ANTLR3 common token structure, which all implementations
  * of a token stream should provide, installing any further structures in the
@@ -60,7 +56,7 @@ class CommonToken : public ImplTraits::AllocPolicyType
 public:
 	/* Base token types, which all lexer/parser tokens come after in sequence.
 	*/
-	enum TOKEN_TYPE
+	enum TOKEN_TYPE : ANTLR_UINT32
 	{
 		/** Indicator of an invalid token
 		 */
@@ -78,7 +74,11 @@ public:
 
 		/** End of file token
 		 */
-		, TOKEN_EOF =	(ANTLR_CHARSTREAM_EOF & 0xFFFFFFFF)
+#ifndef  _MSC_VER
+		, TOKEN_EOF = std::numeric_limits<ANTLR_UINT32>::max()
+#else
+		, TOKEN_EOF = 0xFFFFFFFF
+#endif
 	};
 
 	typedef typename ImplTraits::TokenIntStreamType TokenIntStreamType;
@@ -134,6 +134,8 @@ public:
 	CommonToken(TOKEN_TYPE type);
 	CommonToken( const CommonToken& ctoken );
 
+	~CommonToken() {}
+
 	CommonToken& operator=( const CommonToken& ctoken );
 	bool operator==( const CommonToken& ctoken ) const;
 	bool operator<( const CommonToken& ctoken ) const;
@@ -150,7 +152,7 @@ public:
     /** Function that returns the text pointer of a token, use
      *  toString() if you want a pANTLR3_STRING version of the token.
      */
-    StringType  getText() const;
+    StringType const & getText() const;
 	
     /** Pointer to a function that 'might' be able to set the text associated
      *  with a token. Imaginary tokens such as an ANTLR3_CLASSIC_TOKEN may actually
@@ -243,7 +245,7 @@ public:
 
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3commontoken.inl"
 

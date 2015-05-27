@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
 int testValid(string const& data)
 {
 	t009lexerTraits::InputStreamType* input	= new t009lexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t009");
 	if (lxr == NULL)
@@ -82,7 +82,7 @@ int testValid(string const& data)
 int testMalformedInput(string const& data)
 {
 	t009lexerTraits::InputStreamType* input	= new t009lexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t009");
 	if (lxr == NULL)

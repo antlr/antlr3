@@ -34,9 +34,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** This is the main interface for an ANTLR3 parser.
  */
@@ -193,7 +191,7 @@ public:
 	~RuleReturnValue_1();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3parser.inl"
 

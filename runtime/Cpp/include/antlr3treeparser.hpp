@@ -29,26 +29,25 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 /** Internal structure representing an element in a hash bucket.
  *  Stores the original key so that duplicate keys can be rejected
  *  if necessary, and contains function can be supported If the hash key
  *  could be unique I would have invented the perfect compression algorithm ;-)
  */
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
-class	TreeParser : public ImplTraits::template RecognizerType< TreeParser<ImplTraits> >
+class  TreeParser : public ImplTraits::template RecognizerType< typename ImplTraits::TreeNodeStreamType >
 {
 public:
 	typedef typename ImplTraits::TreeNodeStreamType TreeNodeStreamType;
 	typedef TreeNodeStreamType StreamType;
 	typedef typename TreeNodeStreamType::IntStreamType IntStreamType;
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef TreeType TokenType;
-	typedef typename ImplTraits::template ExceptionBase<TreeNodeStreamType> ExceptionBaseType;
-	typedef typename ImplTraits::template RecognizerType< TreeParser<ImplTraits> > RecognizerType;
+	typedef typename ImplTraits::template ExceptionBaseType<TreeNodeStreamType> ExceptionBaseType;
+	typedef typename ImplTraits::template RecognizerType< typename ImplTraits::TreeNodeStreamType > RecognizerType;
 	typedef typename RecognizerType::RecognizerSharedStateType RecognizerSharedStateType;
 	typedef Empty TokenSourceType;
 	typedef typename ImplTraits::BitsetListType BitsetListType;
@@ -94,7 +93,7 @@ public:
 	void mismatch(ANTLR_UINT32 ttype, BitsetListType* follow);
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3treeparser.inl"
 

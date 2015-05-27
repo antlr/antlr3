@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template< class ImplTraits, class DataType >
 ANTLR_INLINE TrieEntry<ImplTraits, DataType>::TrieEntry(const DataType& data, TrieEntry* next)
@@ -992,4 +992,4 @@ Topo<ImplTraits>::~Topo()
 }
 
 
-ANTLR_END_NAMESPACE()
+}

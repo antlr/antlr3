@@ -35,10 +35,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-#include    "antlr3collections.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /** \brief Base tracking context structure for all types of
  * recognizers.
@@ -501,7 +498,7 @@ public:
 
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3baserecognizer.inl"
 

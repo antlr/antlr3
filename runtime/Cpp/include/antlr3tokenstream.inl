@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 TokenSource<ImplTraits>::TokenSource()
@@ -934,4 +934,4 @@ CommonTokenStream<ImplTraits>::~CommonTokenStream()
 	m_tokens.clear();
 }
 
-ANTLR_END_NAMESPACE()
+}

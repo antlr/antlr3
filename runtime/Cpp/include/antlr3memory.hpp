@@ -29,17 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <string.h>
-
-#include <deque>
-#include <map>
-#include <new>
-#include <set>
-#include <vector>
-
-#include   "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 class DefaultAllocPolicy
 {
@@ -61,8 +51,8 @@ public:
 		};
 
 		AllocatorType() throw() {}
-		AllocatorType( const AllocatorType& alloc ) throw() {}
-		template<typename U> AllocatorType(const AllocatorType<U>& alloc) throw(){}
+		AllocatorType( const AllocatorType& ) throw() {}
+		template<typename U> AllocatorType(const AllocatorType<U>& ) throw(){}
 	};
 
 	template<class TYPE>
@@ -108,6 +98,26 @@ public:
 	class OrderedMapType : public std::map< KeyType, ValueType, std::less<KeyType>, 
 										AllocatorType<std::pair<KeyType, ValueType> > >
 	{
+	};
+
+	template<class TYPE>
+	class SmartPtrType : public std::unique_ptr<TYPE, std::default_delete<TYPE> >
+	{
+		typedef typename std::unique_ptr<TYPE, std::default_delete<TYPE> > BaseType;
+	public:
+		SmartPtrType() {};
+		SmartPtrType( SmartPtrType&& other )
+            : BaseType()
+		{};
+		SmartPtrType & operator=(SmartPtrType&& other) //= default;
+		{
+			BaseType::swap(other);
+			//return std::move((BaseType&)other);
+			return *this;
+		}
+	private:
+		SmartPtrType & operator=(const SmartPtrType&) /*= delete*/;
+		SmartPtrType(const SmartPtrType&) /*= delete*/;
 	};
 
 	ANTLR_INLINE static void* operator new (std::size_t bytes)
@@ -159,6 +169,6 @@ public:
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #endif	/* _ANTLR3MEMORY_H */

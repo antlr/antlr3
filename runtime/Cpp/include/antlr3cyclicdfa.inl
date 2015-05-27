@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class CtxType>
 CyclicDFA<ImplTraits, CtxType>::CyclicDFA( ANTLR_INT32	decisionNumber
@@ -201,4 +201,4 @@ void CyclicDFA<ImplTraits, CtxType>::noViableAlt(RecognizerType* rec, ANTLR_UINT
 	}
 }
 
-ANTLR_END_NAMESPACE()
+}

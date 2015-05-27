@@ -34,16 +34,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include   "antlr3defs.hpp"
-
-#ifdef ANTLR3_WINDOWS
-#pragma warning	(push)
-#pragma warning (disable : 4510)
-#pragma warning (disable : 4512)
-#pragma warning (disable : 4610)
-#endif
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits, class CtxType>
 class CyclicDFA : public ImplTraits::AllocPolicyType
@@ -97,11 +88,7 @@ private:
 	void noViableAlt(RecognizerType* rec, ANTLR_UINT32	s);
 };
 
-ANTLR_END_NAMESPACE()
-
-#ifdef ANTLR3_WINDOWS
-#pragma warning	(pop)
-#endif
+}
 
 #include "antlr3cyclicdfa.inl"
 

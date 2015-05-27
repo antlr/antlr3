@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
 int testValid(string const& data)
 {
 	t039labelsLexerTraits::InputStreamType* input	= new t039labelsLexerTraits::InputStreamType((const ANTLR_UINT8 *)data.c_str(),
-										       ANTLR_ENC_8BIT,
+										       antlr3::ENC_8BIT,
 										       data.length(), //strlen(data.c_str()),
 										       (ANTLR_UINT8*)"t039");
 	if (lxr == NULL)
@@ -78,7 +78,7 @@ int testValid(string const& data)
 	
 	for(unsigned i = 0; i < r.tokens.size() ; i++)
 	{
-		t039labelsLexerTraits::CommonTokenType *token = r.tokens.at(i);
+		const t039labelsLexerTraits::CommonTokenType *token = r.tokens.at(i);
 
 		size_t startIndex = ((const char*)token->get_startIndex()) - data.c_str();
 		size_t stopIndex = ((const char*)token->get_stopIndex()) - data.c_str();
@@ -88,6 +88,8 @@ int testValid(string const& data)
 			  << std::endl;
 		
 	}
+	delete psr;
+	delete tstream;
 	delete lxr; lxr = NULL;
 	delete input; 
 	return 0;

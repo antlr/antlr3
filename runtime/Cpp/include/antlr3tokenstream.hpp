@@ -34,8 +34,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
 /** Definition of a token source, which has a pointer to a function that
  *  returns the next token (using a token factory if it is going to be
  *  efficient) and a pointer to an ANTLR3_INPUT_STREAM. This is slightly
@@ -43,7 +41,7 @@
  *  multiple interfaces without defining them in the interface structure
  *  or casting (void *), which is too convoluted.
  */
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 //We are not making it subclass AllocPolicy, as this will always be a base class
 template<class ImplTraits>
@@ -333,14 +331,14 @@ public:
 	void insertToken( const TokenType& tok, BoolForwarder<false>  tokens_accessed_from_owning_rule  );
 
 	/** Get a token at an absolute index i; 0..n-1.  This is really only
-     *  needed for profiling and debugging and token stream rewriting.
-     *  If you don't want to buffer up tokens, then this method makes no
-     *  sense for you.  Naturally you can't use the rewrite stream feature.
-     *  I believe DebugTokenStream can easily be altered to not use
-     *  this method, removing the dependency.
-     */
-    const TokenType*   get(ANTLR_MARKER i);
-	const TokenType*   getToken(ANTLR_MARKER i);
+	 *  needed for profiling and debugging and token stream rewriting.
+	 *  If you don't want to buffer up tokens, then this method makes no
+	 *  sense for you.  Naturally you can't use the rewrite stream feature.
+	 *  I believe DebugTokenStream can easily be altered to not use
+	 *  this method, removing the dependency.
+	 */
+	const TokenType* get(ANTLR_MARKER i);
+	const TokenType* getToken(ANTLR_MARKER i);
 	const TokenType* getToken( ANTLR_MARKER tok_idx, BoolForwarder<true>  tokens_accessed_from_owning_rule );
 	const TokenType* getToken( ANTLR_MARKER tok_idx, BoolForwarder<false>  tokens_accessed_from_owning_rule  );
 
@@ -401,7 +399,7 @@ class TokenAccessException : public std::exception
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3tokenstream.inl"
 

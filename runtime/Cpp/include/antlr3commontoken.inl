@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 CommonToken<ImplTraits>::CommonToken()
@@ -119,8 +119,12 @@ void CommonToken<ImplTraits>::set_input( InputStreamType* input )
 }
 
 template<class ImplTraits>
-typename CommonToken<ImplTraits>::StringType  CommonToken<ImplTraits>::getText() const
+typename CommonToken<ImplTraits>::StringType const &
+CommonToken<ImplTraits>::getText() const
 {
+	static const StringType EOF_STRING("<EOF>");
+	static const StringType EMPTY_STRING("");
+
 	if ( !m_tokText.empty() )
 		return m_tokText;
 
@@ -128,19 +132,19 @@ typename CommonToken<ImplTraits>::StringType  CommonToken<ImplTraits>::getText()
 	//
 	if ( m_type == TOKEN_EOF)
 	{
-		m_tokText	= "<EOF>";
-		return m_tokText;
+		return EOF_STRING;
 	}
 
 	// We had nothing installed in the token, create a new string
 	// from the input stream
 	//
-	if	(m_input != NULL)
-		return	m_input->substr(	this->get_startIndex(), this->get_stopIndex() );
-
+	if ( m_input != NULL)
+	{
+		return m_tokText = m_input->substr( this->get_startIndex(), this->get_stopIndex() );
+	}
 	// Nothing to return, there is no input stream
 	//
-	return "";
+	return EMPTY_STRING;
 }
 
 template<class ImplTraits>
@@ -164,7 +168,7 @@ ANTLR_INLINE void	CommonToken<ImplTraits>::setText(const char* text)
 	if( text == NULL )
 		m_tokText.clear();
 	else
-		m_tokText = (const char*) text;
+		m_tokText = text;
 }
 
 template<class ImplTraits>
@@ -319,4 +323,4 @@ typename CommonToken<ImplTraits>::StringType  CommonToken<ImplTraits>::toString(
     return  outtext.str();
 }
 
-ANTLR_END_NAMESPACE()
+}

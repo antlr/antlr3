@@ -33,9 +33,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 class CommonTreeNodeStream : public ImplTraits::TreeNodeIntStreamType
@@ -50,13 +48,14 @@ public:
 	};
 
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef TreeType UnitType;
 	typedef typename ImplTraits::StringType StringType;
 	typedef typename ImplTraits::StringStreamType StringStreamType;
 	typedef typename ImplTraits::TreeAdaptorType TreeAdaptorType;
 	typedef typename ImplTraits::TreeNodeIntStreamType IntStreamType;
 	typedef typename ImplTraits::AllocPolicyType AllocPolicyType;
-	typedef typename AllocPolicyType::template VectorType<TreeType*>	NodesType;
+	typedef typename AllocPolicyType::template VectorType<TreeTypePtr>	NodesType;
 	typedef typename AllocPolicyType::template VectorType< TreeWalkState<ImplTraits> > MarkersType;
 	typedef typename AllocPolicyType::template StackType< ANTLR_INT32 > NodeStackType;
 	typedef typename ImplTraits::TreeParserType ComponentType;
@@ -100,7 +99,7 @@ public:
 
 	/// Which tree are we navigating ?
     ///
-    TreeType*				m_root;
+    TreeTypePtr				m_root;
 
     /// Pointer to tree adaptor interface that manipulates/builds
     /// the tree.
@@ -121,11 +120,11 @@ public:
 
     /// Which node are we currently visiting?
     ///
-    TreeType*		m_currentNode;
+    TreeTypePtr		m_currentNode;
 
     /// Which node did we last visit? Used for LT(-1)
     ///
-    TreeType*		m_previousNode;
+    TreeTypePtr		m_previousNode;
 
     /// Which child are we currently visiting?  If -1 we have not visited
     /// this node yet; next consume() request will set currentIndex to 0.
@@ -141,7 +140,7 @@ public:
     /// to fit new lookahead depths, but consume() wraps like a circular
     /// buffer.
     ///
-    TreeType**		m_lookAhead;
+    TreeTypePtr*		m_lookAhead;
 
     /// Number of elements available in the lookahead buffer at any point in
     ///  time. This is the current size of the array.
@@ -181,7 +180,7 @@ public:
 	//
 	CommonTreeNodeStream( ANTLR_UINT32 hint );
 	CommonTreeNodeStream( const CommonTreeNodeStream& ctn );
-	CommonTreeNodeStream( TreeType* tree, ANTLR_UINT32 hint );
+	CommonTreeNodeStream( TreeTypePtr tree, ANTLR_UINT32 hint );
 
 	void init( ANTLR_UINT32 hint );
 	~CommonTreeNodeStream();
@@ -197,12 +196,12 @@ public:
 	/// returns a tree node instead of a token.  Makes code gen identical
 	/// for both parser and tree grammars. :)
 	///
-    TreeType*	_LT(ANTLR_INT32 k);
+    TreeTypePtr	_LT(ANTLR_INT32 k);
 
 	/// Where is this stream pulling nodes from?  This is not the name, but
 	/// the object that provides node objects.
 	///
-    TreeType*	getTreeSource();
+    TreeTypePtr	getTreeSource();
 
 	/// What adaptor can tell me how to interpret/navigate nodes and
 	/// trees.  E.g., get text of a node.
@@ -225,7 +224,7 @@ public:
 	/// null or "" too, but users should not access $ruleLabel.text in
 	/// an action of course in that case.
 	///
-    StringType	toStringSS(TreeType* start, TreeType* stop);
+    StringType	toStringSS(TreeTypePtr start, TreeTypePtr stop);
 
 	/// Return the text of all nodes from start to stop, inclusive, into the
 	/// supplied buffer.
@@ -234,13 +233,13 @@ public:
 	/// null or "" too, but users should not access $ruleLabel.text in
 	/// an action of course in that case.
 	///
-    void toStringWork(TreeType* start, TreeType* stop, StringType& buf);
+    void toStringWork(TreeTypePtr start, TreeTypePtr stop, StringType& buf);
 
 	/// Get a tree node at an absolute index i; 0..n-1.
 	/// If you don't want to buffer up nodes, then this method makes no
 	/// sense for you.
 	///
-	TreeType*	get(ANTLR_INT32 i);
+	TreeTypePtr	get(ANTLR_INT32 i);
 
 	// REWRITING TREES (used by tree parser)
 
@@ -254,10 +253,10 @@ public:
 	/// If parent is null, don't do anything; must be at root of overall tree.
 	/// Can't replace whatever points to the parent externally.  Do nothing.
 	///
-	void replaceChildren(TreeType* parent, ANTLR_INT32 startChildIndex, 
-										ANTLR_INT32 stopChildIndex, TreeType* t);
+	void replaceChildren(TreeTypePtr parent, ANTLR_INT32 startChildIndex, 
+										ANTLR_INT32 stopChildIndex, TreeTypePtr t);
 
-	TreeType* LB(ANTLR_INT32 k);
+	TreeTypePtr LB(ANTLR_INT32 k);
 
 	/// As we flatten the tree, we use UP, DOWN nodes to represent
 	/// the tree structure.  When debugging we need unique nodes
@@ -265,9 +264,9 @@ public:
 	///
     void	addNavigationNode(ANTLR_UINT32 ttype);
 
-    TreeType*	newDownNode();
+    TreeTypePtr	newDownNode();
 
-	TreeType*	newUpNode();
+	TreeTypePtr	newUpNode();
 
     bool	hasUniqueNavigationNodes() const;
 
@@ -280,7 +279,7 @@ public:
     void	reset();
 
 	void fillBufferRoot();
-	void fillBuffer(TreeType* t);
+	void fillBuffer(TreeTypePtr t);
 	
 };
 
@@ -295,14 +294,15 @@ class TreeWalkState : public ImplTraits::AllocPolicyType
 {
 public:
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 
 private:
     ANTLR_UINT32		m_currentChildIndex;
     ANTLR_MARKER		m_absoluteNodeIndex;
-    TreeType*		m_currentNode;
-    TreeType*		m_previousNode;
+    TreeTypePtr		m_currentNode;
+    TreeTypePtr		m_previousNode;
     ANTLR_UINT32		m_nodeStackSize;
-    TreeType*		m_lookAhead;
+    TreeTypePtr		m_lookAhead;
     ANTLR_UINT32		m_lookAheadLength;
     ANTLR_UINT32		m_tail;
     ANTLR_UINT32		m_head;
@@ -310,7 +310,7 @@ private:
 
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3commontreenodestream.inl"
 

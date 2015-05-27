@@ -11,12 +11,8 @@ options {
 @lexer::namespace
 { Antlr3Test }
 
-@header {
-from io import StringIO
-}
-
-@init {
-self.output = StringIO()
+@lexer::context {
+	ImplTraits::StringStreamType outbuf;
 }
 
 IMPORT
@@ -31,35 +27,35 @@ RETURN
 CLASS
 	:	'class' WS name=ID WS? ('extends' WS QID WS?)?
 		('implements' WS QID WS? (',' WS? QID WS?)*)? '{'
-        {self.output.write("found class "+$name.text+"\n")}
+        { outbuf << "found class " << $name->getText() << "\n"; }
 	;
 	
 METHOD
     :   TYPE WS name=ID WS? '(' ( ARG WS? (',' WS? ARG WS?)* )? ')' WS? 
        ('throws' WS QID WS? (',' WS? QID WS?)*)? '{'
-        {self.output.write("found method "+$name.text+"\n");}
+        { outbuf << "found method " << $name->getText() << "\n"; } 
     ;
 
 FIELD
     :   TYPE WS name=ID '[]'? WS? (';'|'=')
-        {self.output.write("found var "+$name.text+"\n");}
+        { outbuf << "found var " << $name->getText() << "\n"; }                
     ;
 
 STAT:	('if'|'while'|'switch'|'for') WS? '(' ;
 	
 CALL
     :   name=QID WS? '('
-        {self.output.write("found call "+$name.text+"\n");}
+        { outbuf << "found call " << $name->getText() << "\n"; }                
     ;
 
 COMMENT
     :   '/*' (options {greedy=false;} : . )* '*/'
-        {self.output.write("found comment "+self.getText()+"\n");}
+        { outbuf << "found comment " << getText() << "\n"; } 
     ;
 
 SL_COMMENT
     :   '//' (options {greedy=false;} : . )* '\n'
-        {self.output.write("found // comment "+self.getText()+"\n");}
+        { outbuf << "found // comment " << getText() << "\n"; } 
     ;
 	
 STRING

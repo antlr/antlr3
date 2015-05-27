@@ -36,9 +36,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /// Master context structure for an ANTLR3 C runtime based input stream.
 /// \ingroup apistructures. Calling _LT on this doesn't seem right. You would
@@ -320,7 +318,7 @@ class ParseNullStringException : public std::exception
 	}
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #include "antlr3input.inl"
 

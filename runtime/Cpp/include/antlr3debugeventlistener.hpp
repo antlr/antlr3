@@ -43,9 +43,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include    "antlr3defs.hpp"
-
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 /// Default debugging port
 ///
@@ -60,6 +58,7 @@ class DebugEventListener  : public ImplTraits::AllocPolicyType
 {
 public:
 	typedef typename ImplTraits::TreeType TreeType;
+	typedef typename ImplTraits::TreeTypePtr TreeTypePtr;
 	typedef typename ImplTraits::StringType StringType;
 	typedef typename ImplTraits::CommonTokenType CommonTokenType;
 	typedef typename ImplTraits::TreeAdaptorType TreeAdaptorType;
@@ -311,13 +310,13 @@ public:
 	 *  know what the interface is in full, just those bits that are the base.
 	 * @param t
 	 */
-	virtual void	consumeNode( TreeType* t);
+	virtual void	consumeNode( TreeTypePtr t);
 
 	/** The tree parser looked ahead.  If the type is UP or DOWN,
 	 *  then the ID is not really meaningful as it's fixed--there is
 	 *  just one UP node and one DOWN navigation node.
 	 */
-	virtual void	LTT( int i, TreeType* t);
+	virtual void	LTT( int i, TreeTypePtr t);
 
 
 	// A S T  E v e n t s
@@ -331,13 +330,13 @@ public:
  	 *  If you are receiving this event over a socket via
 	 *  RemoteDebugEventSocketListener then only t.ID is set.
 	 */
-	virtual void	nilNode( TreeType* t);
+	virtual void	nilNode( TreeTypePtr t);
 
 	/** If a syntax error occurs, recognizers bracket the error
 	 *  with an error node if they are building ASTs. This event
 	 *  notifies the listener that this is the case
 	 */
-	virtual void	errorNode( TreeType* t);
+	virtual void	errorNode( TreeTypePtr t);
 
 	/** Announce a new node built from token elements such as type etc...
 	 *
@@ -345,7 +344,7 @@ public:
 	 *  RemoteDebugEventSocketListener then only t.ID, type, text are
 	 *  set.
 	 */
-	virtual void	createNode( TreeType* t);
+	virtual void	createNode( TreeTypePtr t);
 
 	/** Announce a new node built from an existing token.
 	 *
@@ -353,7 +352,7 @@ public:
 	 *  RemoteDebugEventSocketListener then only node.ID and token.tokenIndex
 	 *  are set.
 	 */
-	virtual void	createNodeTok( TreeType* node, CommonTokenType* token);
+	virtual void	createNodeTok( TreeTypePtr node, CommonTokenType* token);
 
 	/** Make a node the new root of an existing root.  See
 	 *
@@ -371,7 +370,7 @@ public:
 	 *
 	 *  @see org.antlr.runtime.tree.TreeAdaptor.becomeRoot()
 	 */
-	virtual void	becomeRoot( TreeType* newRoot, TreeType* oldRoot);
+	virtual void	becomeRoot( TreeTypePtr newRoot, TreeTypePtr oldRoot);
 
 	/** Make childID a child of rootID.
 	 *
@@ -380,21 +379,21 @@ public:
 	 *
 	 *  @see org.antlr.runtime.tree.TreeAdaptor.addChild()
 	 */
-	virtual void	addChild( TreeType* root, TreeType* child);
+	virtual void	addChild( TreeTypePtr root, TreeTypePtr child);
 
 	/** Set the token start/stop token index for a subtree root or node.
 	 *
 	 *  If you are receiving this event over a socket via
 	 *  RemoteDebugEventSocketListener then only t.ID is set.
 	 */
-	virtual void	setTokenBoundaries( TreeType* t, ANTLR_MARKER tokenStartIndex, ANTLR_MARKER tokenStopIndex);
+	virtual void	setTokenBoundaries( TreeTypePtr t, ANTLR_MARKER tokenStartIndex, ANTLR_MARKER tokenStopIndex);
 
 	/// Free up the resources allocated to this structure
 	///
 	virtual ~DebugEventListener();
 };
 
-ANTLR_END_NAMESPACE()
+}
 
 #endif
 

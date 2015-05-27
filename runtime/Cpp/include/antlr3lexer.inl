@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 Lexer<ImplTraits>::Lexer(ANTLR_UINT32 sizeHint, RecognizerSharedStateType* state)
@@ -588,5 +588,5 @@ ANTLR_INLINE void Lexer<ImplTraits>::consume()
 	return this->get_istream()->consume();
 }
 
-ANTLR_END_NAMESPACE()
+}
 

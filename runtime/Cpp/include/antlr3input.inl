@@ -1,4 +1,4 @@
-ANTLR_BEGIN_NAMESPACE()
+namespace antlr3 {
 
 template<class ImplTraits>
 InputStream<ImplTraits>::InputStream(const ANTLR_UINT8* fileName, ANTLR_UINT32 encoding)
@@ -465,7 +465,7 @@ void InputStream<ImplTraits>::setupInputStream()
     //
     switch  (m_encoding)
     {
-        case    ANTLR_ENC_UTF8:
+        case    ENC_UTF8:
 
             // See if there is a BOM at the start of this UTF-8 sequence
             // and just eat it if there is. Windows .TXT files have this for instance
@@ -488,7 +488,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(0);
             break;
 
-        case    ANTLR_ENC_UTF16:
+        case    ENC_UTF16:
 
             // See if there is a BOM at the start of the input. If not then
             // we assume that the byte order is the natural order of this
@@ -524,7 +524,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(2);
             break;
 
-        case    ANTLR_ENC_UTF32:
+        case    ENC_UTF32:
 
             // See if there is a BOM at the start of the input. If not then
             // we assume that the byte order is the natural order of this
@@ -564,7 +564,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(4);
             break;
 
-        case    ANTLR_ENC_UTF16BE:
+        case    ENC_UTF16BE:
 
             // Encoding is definately Big Endian with no BOM
             //
@@ -572,7 +572,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(2);
             break;
 
-        case    ANTLR_ENC_UTF16LE:
+        case    ENC_UTF16LE:
 
             // Encoding is definately Little Endian with no BOM
             //
@@ -580,7 +580,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(2);
             break;
 
-        case    ANTLR_ENC_UTF32BE:
+        case    ENC_UTF32BE:
 
             // Encoding is definately Big Endian with no BOM
             //
@@ -588,7 +588,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(4);
             break;
 
-        case    ANTLR_ENC_UTF32LE:
+        case    ENC_UTF32LE:
 
             // Encoding is definately Little Endian with no BOM
             //
@@ -596,7 +596,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(4);
             break;
 
-        case    ANTLR_ENC_EBCDIC:
+        case    ENC_EBCDIC:
 
             // EBCDIC is basically the same as ASCII but with an on the
             // fly translation to ASCII
@@ -605,7 +605,7 @@ void InputStream<ImplTraits>::setupInputStream()
 			this->set_charByteSize(1);
             break;
 
-        case    ANTLR_ENC_8BIT:
+        case    ENC_8BIT:
         default:
 
             // Standard 8bit/ASCII
@@ -616,4 +616,4 @@ void InputStream<ImplTraits>::setupInputStream()
     }    
 }
 
-ANTLR_END_NAMESPACE()
+}
