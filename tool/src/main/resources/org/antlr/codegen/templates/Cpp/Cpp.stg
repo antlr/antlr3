@@ -1007,7 +1007,7 @@ parser(	grammar,
 		bitsets,
 		ASTLabelType,
 		superClass="Parser",
-		labelType="ImplTraits::CommonTokenType*",
+		labelType="const ImplTraits::CommonTokenType*",
 		members={<actions.parser.members>}
 		) ::= <<
 <beginNamespace(actions)>
