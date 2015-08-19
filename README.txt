@@ -1,7 +1,9 @@
 ANTLR v3.5
 January 4, 2013
 
-Terence Parr, parrt at cs usfca edu
+Given day-job constraints, my time working on this project is limited so I'll have to focus first on fixing bugs rather than changing/improving the feature set. Likely I'll do it in bursts every few months. Please do not be offended if your bug or pull request does not yield a response! --parrt
+
+Terence Parr
 ANTLR project lead and supreme dictator for life
 University of San Francisco
 
