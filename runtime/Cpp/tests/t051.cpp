@@ -68,7 +68,7 @@ void parseFile(const char* fName)
 		ANTLR_INT32 T = 0;
 		while	(T != t051lexer::EOF_TOKEN)
 		{
-			T = tstream->_LA(1);
+			T = tstream->LA(1);
 			t051lexerTraits::CommonTokenType const* token = tstream->_LT(1);
 			  
 			printf("%d\t\"%s\"\n",

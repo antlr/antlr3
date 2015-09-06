@@ -81,10 +81,10 @@ int testIteratorInterface(string const& data)
 	std::cout << "testIteratorInterface: \"" << data << '"' <<std::endl;
 		
 	t003lexerTraits::TokenStreamType *tstream = new t003lexerTraits::TokenStreamType(ANTLR_SIZE_HINT, lxr->get_tokSource());
-	t003lexerTraits::CommonTokenType const *token0 = tstream->_LT(1);
-	t003lexerTraits::CommonTokenType const *token1 = tstream->_LT(2);
-	t003lexerTraits::CommonTokenType const *token2 = tstream->_LT(3);
-	t003lexerTraits::CommonTokenType const *token3 = tstream->_LT(4);
+	t003lexerTraits::CommonTokenType const *token0 = tstream->LT(1);
+	t003lexerTraits::CommonTokenType const *token1 = tstream->LT(2);
+	t003lexerTraits::CommonTokenType const *token2 = tstream->LT(3);
+	t003lexerTraits::CommonTokenType const *token3 = tstream->LT(4);
 
 	std::cout << token0->getText() << std::endl;
 	std::cout << token1->getText() << std::endl;

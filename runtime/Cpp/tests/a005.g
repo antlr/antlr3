@@ -39,6 +39,25 @@ test4
     :	a1=A b1=B c1=C -> ^(T_A[$a1] $a1 $b1 $c1)
 	;
 
+test5
+@init	{    int mode = 0;    }
+	:	aa (bb {mode = 1;} | cc) dd ee
+        -> {mode == 1}? ^( aa bb? cc? dd ee)
+        -> ^( aa bb? cc? dd ee)
+    ;
+aa: A;
+bb: B;
+cc: C;
+dd: D;
+ee: E;
+
+test6
+@init	{    int mode = 0;    }
+	:	A (B {mode = 1;} | C) D E
+        -> {mode == 1}? ^( A B? C? D E)
+        -> ^( A B? C? D E)
+    ;
+
 A: 'A';
 B: 'B';
 C: 'C';

@@ -24,7 +24,7 @@ tokens
 
 @lexer::namespace{ Antlr3Mini }
 
-@lexer::members {
+@lexer::context {
 
   void advanceInput()
   {

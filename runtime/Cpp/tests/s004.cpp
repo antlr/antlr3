@@ -88,13 +88,13 @@ void parseFile(const char* fName, int fd)
 	//	T = 0;
 	//	while	(T != ANTLR3_TOKEN_EOF)
 	//	{
-	//		T = tstream->tstream->istream->_LA(tstream->tstream->istream, 1);
+	//		T = tstream->tstream->istream->LA(tstream->tstream->istream, 1);
 	//		tstream->tstream->istream->consume(tstream->tstream->istream);
 	//		printf("%d %s\n", T,  (psr->pParser->rec->state->tokenNames)[T]);
 	//	}
 	//}
 	{
-		//tstream->_LT(1);	// Don't do this mormally, just causes lexer to run for timings here
+		//tstream->LT(1);	// Don't do this mormally, just causes lexer to run for timings here
 		//putc('P', stdout); fflush(stdout);
 		auto ast = psr->seq_of_statements();
 		std::cout << ast.tree->toStringTree() << std::endl;
