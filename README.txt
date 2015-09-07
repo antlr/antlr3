@@ -146,3 +146,5 @@ Please see the FAQ
 How can I contribute to ANTLR v3?
 
 http://www.antlr.org/wiki/pages/viewpage.action?pageId=2687297
+
+Join the chat at https://gitter.im/antlr/antlr3
