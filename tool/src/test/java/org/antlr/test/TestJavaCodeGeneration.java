@@ -158,4 +158,136 @@ public class TestJavaCodeGeneration extends BaseTest {
 		boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
 		assertTrue(success);
 	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#157 "missing lexer rules if
+	 * tokenVocab defined"
+	 * https://github.com/antlr/antlr3/pull/157
+	 */
+	@Test public void testImportedTokensInCombinedGrammar() {
+		String tokensFile =
+			"TypeArray=394\n" +
+			"Null=395\n";
+		System.out.println("dir " + tmpdir);
+		mkdir(tmpdir);
+		writeFile(tmpdir, "CustomVocab.tokens", tokensFile);
+
+		String grammar =
+			"grammar T;\n" +
+			"options { output = AST; tokenVocab = CustomVocab; }\n" +
+			"tokens { TypeArray = 'array'; }\n" +
+			"a : ('array' TypeArray 'null' Null ID)* EOF\n" +
+			"    {System.out.println(tokenNames[TypeArray] + \"=\" + TypeArray);\n" +
+			"     System.out.println(tokenNames[Null] + \"=\" + Null);};\n" +
+			"Null : 'null';\n" +
+			"ID : 'a'..'z'+;\n" +
+			"WS : ' '+ {skip();};\n";
+		String input = "array array null null foo";
+		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", input, false);
+		String expected =
+			"TypeArray=394\n" +
+			"Null=395\n" +
+			"array array null null foo <EOF>\n";
+		assertEquals(expected, found);
+		assertNull(stderrDuringParse);
+	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#157 "missing lexer rules if
+	 * tokenVocab defined"
+	 * https://github.com/antlr/antlr3/pull/157
+	 */
+	@Test public void testImportedTokensInCombinedGrammarNoReferences() {
+		String tokensFile =
+			"TypeArray=394\n" +
+			"Null=395\n";
+		System.out.println("dir " + tmpdir);
+		mkdir(tmpdir);
+		writeFile(tmpdir, "CustomVocab.tokens", tokensFile);
+
+		String grammar =
+			"grammar T;\n" +
+			"options { output = AST; tokenVocab = CustomVocab; }\n" +
+			"tokens { TypeArray = 'array'; }\n" +
+			"a : (ID)* EOF\n" +
+			"    {System.out.println(tokenNames[TypeArray] + \"=\" + TypeArray);\n" +
+			"     System.out.println(tokenNames[Null] + \"=\" + Null);};\n" +
+			"Null : 'null';\n" +
+			"ID : 'a'..'z'+;\n" +
+			"WS : ' '+ {skip();};\n";
+		String input = "foo";
+		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", input, false);
+		String expected =
+			"TypeArray=394\n" +
+			"Null=395\n" +
+			"foo <EOF>\n";
+		assertEquals(expected, found);
+		assertNull(stderrDuringParse);
+	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#157 "missing lexer rules if
+	 * tokenVocab defined"
+	 * https://github.com/antlr/antlr3/pull/157
+	 */
+	@Test public void testImportedTokensInCombinedGrammarLiteralReferencesOnly() {
+		String tokensFile =
+			"TypeArray=394\n" +
+			"Null=395\n";
+		System.out.println("dir " + tmpdir);
+		mkdir(tmpdir);
+		writeFile(tmpdir, "CustomVocab.tokens", tokensFile);
+
+		String grammar =
+			"grammar T;\n" +
+			"options { output = AST; tokenVocab = CustomVocab; }\n" +
+			"tokens { TypeArray = 'array'; }\n" +
+			"a : ('array' 'null' ID)* EOF\n" +
+			"    {System.out.println(tokenNames[TypeArray] + \"=\" + TypeArray);\n" +
+			"     System.out.println(tokenNames[Null] + \"=\" + Null);};\n" +
+			"Null : 'null';\n" +
+			"ID : 'a'..'z'+;\n" +
+			"WS : ' '+ {skip();};\n";
+		String input = "array null foo";
+		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", input, false);
+		String expected =
+			"TypeArray=394\n" +
+			"Null=395\n" +
+			"array null foo <EOF>\n";
+		assertEquals(expected, found);
+		assertNull(stderrDuringParse);
+	}
+
+	/**
+	 * This is a regression test for antlr/antlr3#157 "missing lexer rules if
+	 * tokenVocab defined"
+	 * https://github.com/antlr/antlr3/pull/157
+	 */
+	@Test public void testImportedTokensInCombinedGrammarSymbolicReferencesOnly() {
+		String tokensFile =
+			"TypeArray=394\n" +
+			"Null=395\n";
+		System.out.println("dir " + tmpdir);
+		mkdir(tmpdir);
+		writeFile(tmpdir, "CustomVocab.tokens", tokensFile);
+
+		String grammar =
+			"grammar T;\n" +
+			"options { output = AST; tokenVocab = CustomVocab; }\n" +
+			"tokens { TypeArray = 'array'; }\n" +
+			"a : (TypeArray Null ID)* EOF\n" +
+			"    {System.out.println(tokenNames[TypeArray] + \"=\" + TypeArray);\n" +
+			"     System.out.println(tokenNames[Null] + \"=\" + Null);};\n" +
+			"Null : 'null';\n" +
+			"ID : 'a'..'z'+;\n" +
+			"WS : ' '+ {skip();};\n";
+		String input = "array null foo";
+		String found = execParser("T.g", grammar, "TParser", "TLexer", "a", input, false);
+		String expected =
+			"TypeArray=394\n" +
+			"Null=395\n" +
+			"array null foo <EOF>\n";
+		assertEquals(expected, found);
+		assertNull(stderrDuringParse);
+	}
 }

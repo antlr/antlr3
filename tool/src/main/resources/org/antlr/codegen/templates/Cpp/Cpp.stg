@@ -821,7 +821,7 @@ ANTLR_UINT8* <name>TokenNames[<length(tokenNames)>+4]
         (ANTLR_UINT8*) "\<EOR>",
         (ANTLR_UINT8*) "\<DOWN>",
         (ANTLR_UINT8*) "\<UP>",
-        <tokenNames:{it |(ANTLR_UINT8*) <it>}; separator=",\n">
+        <tokenNames:{it |(ANTLR_UINT8*) <it>}; separator=",\n", null="(ANTLR_UINT8*) \"<invalid>\"">
        };
 <endif>
 

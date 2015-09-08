@@ -201,7 +201,7 @@ use Moose;
 extends '<@superClassName><superClass><@end>';
 
 Readonly my $token_names => [
-    "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
+    "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", null="\"<invalid>\"">
 ];
 
 use constant {

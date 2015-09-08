@@ -227,7 +227,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 # token names
 tokenNames = [
     "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>",
-    <tokenNames; wrap, separator=", ">
+    <tokenNames; wrap, separator=", ", null="\"<invalid>\"">
 ]<\n>
 <else>
 from <grammar.composite.rootGrammar.recognizerName> import tokenNames<\n>
