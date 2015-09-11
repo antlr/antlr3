@@ -171,6 +171,18 @@ public class TestSemanticPredicates extends BaseTest {
 		checkDecision(g, 1, expecting, null,
 					  null, null, null, null, 0, true);
 	}
+	
+	@Test public void testForceHoistingOverActions() throws Exception {
+		Grammar g = new Grammar(
+			"parser grammar P;\n"+
+		    "options {forceHoisting=true;}\n"+
+			"a : {a1} {p1}? A | {a2} {p2}? A ;");
+		String expecting =
+			".s0-A->.s1\n" +
+			".s1-{p1}?->:s2=>1\n" +
+			".s1-{p2}?->:s3=>2\n";
+		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
+	}
 
 	/*
 	@Test public void testIncompleteSemanticHoistedContextk2() throws Exception {
