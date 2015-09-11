@@ -183,6 +183,39 @@ public class TestSemanticPredicates extends BaseTest {
 			".s1-{p2}?->:s3=>2\n";
 		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
 	}
+	
+	
+	@Test public void testForceHoistingOverActions2() throws Exception {
+		Grammar g = new Grammar(
+			"parser grammar P;\n"+
+		    "options {forceHoisting=true;}\n"+
+		    "foobar: (foo | bar)+\n;"+
+			"foo: {/*do nothing*/} {p1}? MY;\n"+
+			"bar: MY;\n");
+
+		String expecting =
+			".s0-EOF->:s1=>3\n"+
+			".s0-MY->.s2\n"+
+			".s2-{p1}?->:s3=>1\n"+
+			".s2-{true}?->:s4=>2\n";
+		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
+	}
+	
+	@Test public void testForceHoistingOverActions3() throws Exception {
+		Grammar g = new Grammar(
+			"parser grammar P;\n"+
+		    "options {forceHoisting=true;}\n"+
+		    "foobar: {/*do nothing*/}(foo | bar)+\n;"+
+			"foo: {/*do nothing*/} {p1}? MY;\n"+
+			"bar: MY;\n");
+
+		String expecting =
+			".s0-EOF->:s1=>3\n"+
+			".s0-MY->.s2\n"+
+			".s2-{p1}?->:s3=>1\n"+
+			".s2-{true}?->:s4=>2\n";
+		checkDecision(g, 1, expecting, null, null, null, null, null, 0, false);
+	}
 
 	/*
 	@Test public void testIncompleteSemanticHoistedContextk2() throws Exception {
