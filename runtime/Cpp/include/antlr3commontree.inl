@@ -441,7 +441,7 @@ typename CommonTree<ImplTraits>::StringType	CommonTree<ImplTraits>::toString()
 {
 	if( this->isNilNode())
 		return StringType("nil");
-	return	m_token->getText();
+	return	m_token->toString();
 }
 
 template<class ImplTraits>

@@ -52,6 +52,9 @@ a005:	a005.cpp a005.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 a006:	a006.cpp a006.tokens ATestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
 
+a007:	a007.cpp a007.tokens A007TestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
+	$(CXX) $(CFLAGS) -DUSESTL $(INCLUDES) $< $(wildcard $@?*.cpp) -o $@
+
 s001:	s001.cpp s001.tokens UserTestTraits.hpp Makefile $(ANTLR) $(RUNTIME_HEADERS)
 	$(CXX) $(CFLAGS) $(INCLUDES) $< $(wildcard $@?*.cpp) utils.cpp -o $@
 
