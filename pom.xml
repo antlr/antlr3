@@ -44,6 +44,9 @@
         <module>gunit-maven-plugin</module>
         <module>antlr3-maven-archetype</module>
         <module>antlr-complete</module>
+        <module>org.antlr.runtime</module>
+        <module>org.antlr.feature</module>
+        <module>org.antlr.updatesite</module>
     </modules>
 
   <!--
@@ -59,6 +62,9 @@
         <bootclasspath.compile>${bootclasspath.java5}</bootclasspath.compile>
         <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
 			<github.global.server>github</github.global.server>
+			<tycho.version>0.24.0</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<eclipse.name>luna</eclipse.name>
     </properties>
 
     <licenses>
@@ -130,6 +136,23 @@
         </dependencies>
 
     </dependencyManagement>
+	 
+	 <repositories>
+		<repository>
+			<id>Eclipse</id>
+			<name>Eclipse Repository</name>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/${eclipse.name}</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</releases>
+		</repository>
+	</repositories>
 
     <profiles>
         <profile>
@@ -317,7 +340,7 @@
 					<artifactId>site-maven-plugin</artifactId>
 					<version>0.12</version>
 					<configuration>
-						<branch>refs/heads/gh-pages</branch>
+						<branch>refs/heads/mvn-repo</branch>
 						<includes>
 							<include>**/*</include>
 						</includes>
@@ -338,10 +361,55 @@
 						</execution>
 					</executions>
 				</plugin>
-			
-        </plugins>
-
-    </build>
+			</plugins>
+			<pluginManagement>
+				<plugins>
+				<!-- We build this project using Tycho: -->
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-maven-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<extensions>true</extensions>
+					</plugin>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>target-platform-configuration</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<environments>
+								<environment>
+									<os>linux</os>
+									<ws>gtk</ws>
+									<arch>x86</arch>
+								</environment>
+								<environment>
+									<os>linux</os>
+									<ws>gtk</ws>
+									<arch>x86_64</arch>
+								</environment>
+								<environment>
+									<os>win32</os>
+									<ws>win32</ws>
+									<arch>x86</arch>
+								</environment>
+								<environment>
+									<os>win32</os>
+									<ws>win32</ws>
+									<arch>x86_64</arch>
+								</environment>
+								<environment>
+									<os>macosx</os>
+									<ws>cocoa</ws>
+									<arch>x86_64</arch>
+								</environment>
+							</environments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</pluginManagement>
+		</build>
+	 
+	 
 	 
 	 <distributionManagement>
 		<repository>

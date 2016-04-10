@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.antlr.runtime
+Bundle-SymbolicName: org.antlr.runtime
+Bundle-Version: 3.5.3.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
