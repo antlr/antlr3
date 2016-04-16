@@ -595,6 +595,9 @@ public class NFAToDFAConverter {
 						DFAState d,
 						boolean collectPredicates)
 	{
+		boolean forceHoisting = Boolean.parseBoolean((String)dfa.nfa.grammar.getOption("forceHoisting"));
+		collectPredicates = collectPredicates || forceHoisting;
+		
 		if ( debug ){
 			System.out.println("closure at "+p.enclosingRule.name+" state "+p.stateNumber+"|"+
 							   alt+" filling DFA state "+d.stateNumber+" with context "+context

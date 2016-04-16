@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<feature url="features/org.antlr.feature_0.0.0.jar" id="org.antlr.feature" version="0.0.0">
+		<category name="org.antlr"/>
+	</feature>
+	<category-def name="org.antlr" label="org.antlr"/>
+</site>

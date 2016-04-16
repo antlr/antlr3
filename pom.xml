@@ -44,6 +44,9 @@
         <module>gunit-maven-plugin</module>
         <module>antlr3-maven-archetype</module>
         <module>antlr-complete</module>
+        <module>org.antlr.runtime</module>
+        <module>org.antlr.feature</module>
+        <module>org.antlr.updatesite</module>
     </modules>
 
   <!--
@@ -58,6 +61,10 @@
         <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
         <bootclasspath.compile>${bootclasspath.java5}</bootclasspath.compile>
         <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
+			<github.global.server>github</github.global.server>
+			<tycho.version>0.24.0</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<eclipse.name>luna</eclipse.name>
     </properties>
 
     <licenses>
@@ -129,6 +136,23 @@
         </dependencies>
 
     </dependencyManagement>
+	 
+	 <repositories>
+		<repository>
+			<id>Eclipse</id>
+			<name>Eclipse Repository</name>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/${eclipse.name}</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</releases>
+		</repository>
+	</repositories>
 
     <profiles>
         <profile>
@@ -300,10 +324,100 @@
                 <!-- override the version inherited from the parent -->
                 <version>1.5</version>
             </plugin>
+				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.1</version>
+					<configuration>
+						<deployAtEnd>false</deployAtEnd>
+						<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+					</configuration>
+				</plugin>
 
-        </plugins>
-
-    </build>
+				<plugin>
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.12</version>
+					<configuration>
+						<branch>refs/heads/mvn-repo</branch>
+						<includes>
+							<include>**/*</include>
+						</includes>
+						<merge>true</merge>
+						<message>Creating site for ${project.version}</message>
+						<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+						<!--<path>${updates}/${output-dir}/</path>-->
+						<repositoryName>antlr3</repositoryName>
+						<repositoryOwner>timeraider4u</repositoryOwner>
+						<noJekyll>true</noJekyll>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<phase>deploy</phase>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+			<pluginManagement>
+				<plugins>
+				<!-- We build this project using Tycho: -->
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-maven-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<extensions>true</extensions>
+					</plugin>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>target-platform-configuration</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<environments>
+								<environment>
+									<os>linux</os>
+									<ws>gtk</ws>
+									<arch>x86</arch>
+								</environment>
+								<environment>
+									<os>linux</os>
+									<ws>gtk</ws>
+									<arch>x86_64</arch>
+								</environment>
+								<environment>
+									<os>win32</os>
+									<ws>win32</ws>
+									<arch>x86</arch>
+								</environment>
+								<environment>
+									<os>win32</os>
+									<ws>win32</ws>
+									<arch>x86_64</arch>
+								</environment>
+								<environment>
+									<os>macosx</os>
+									<ws>cocoa</ws>
+									<arch>x86_64</arch>
+								</environment>
+							</environments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</pluginManagement>
+		</build>
+	 
+	 
+	 
+	 <distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-repo</url>
+		</repository>
+	</distributionManagement>
 
     <reporting>
         <plugins>

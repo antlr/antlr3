@@ -249,6 +249,7 @@ public class Grammar {
 				add("k");
 				add("backtrack");
 				add("memoize");
+				add("forceHoisting");
 				}
 			};
 
@@ -262,6 +263,7 @@ public class Grammar {
 				add("k");
 				add("backtrack");
 				add("memoize");
+				add("forceHoisting");
 				}
 			};
 
