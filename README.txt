@@ -28,7 +28,7 @@ You should use v3 in conjunction with ANTLRWorks:
 
 and gUnit (grammar unit testing tool included in distribution):
 
-    http://www.antlr.org/wiki/display/ANTLR3/gUnit+-+Grammar+Unit+Testing
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/gUnit+-+Grammar+Unit+Testing
 
 The book will also help you a great deal (printed May 15, 2007); you
 can also buy the PDF:
@@ -41,17 +41,17 @@ can also buy the PDF:
 
 See the getting started document:
 
-    http://www.antlr.org/wiki/display/ANTLR3/FAQ+-+Getting+Started
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/FAQ+-+Getting+Started
 
 You also have the examples plus the source to guide you.
 
 See the wiki FAQ:
 
-    http://www.antlr.org/wiki/display/ANTLR3/ANTLR+v3+FAQ
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/ANTLR+v3+FAQ
 
 and general doc root:
 
-    http://www.antlr.org/wiki/display/ANTLR3/ANTLR+3+Wiki+Home
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/ANTLR+3+Wiki+Home
 
 Please help add/update FAQ entries.
 
@@ -96,7 +96,7 @@ that provides a framework for constructing recognizers, compilers, and
 translators from grammatical descriptions containing actions.
 Target language list:
 
-http://www.antlr.org/wiki/display/ANTLR3/Code+Generation+Targets
+http://theantlrguy.atlassian.net/wiki/display/ANTLR3/Code+Generation+Targets
 
 ----------------------------------------------------------------------
 
@@ -104,11 +104,11 @@ How is ANTLR v3 different than ANTLR v2?
 
 See "What is the difference between ANTLR v2 and v3?"
 
-    http://www.antlr.org/wiki/pages/viewpage.action?pageId=2687279
+    http://theantlrguy.atlassian.net/wiki/pages/viewpage.action?pageId=2687279
 
 See migration guide:
 
-    http://www.antlr.org/wiki/display/ANTLR3/Migrating+from+ANTLR+2+to+ANTLR+3
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/Migrating+from+ANTLR+2+to+ANTLR+3
 
 ----------------------------------------------------------------------
 
@@ -139,10 +139,10 @@ antlr-3.5/lib
 
 Please see the FAQ
 
-    http://www.antlr.org/wiki/display/ANTLR3/ANTLR+v3+FAQ
+    http://theantlrguy.atlassian.net/wiki/display/ANTLR3/ANTLR+v3+FAQ
 
 -------------------------
 
 How can I contribute to ANTLR v3?
 
-http://www.antlr.org/wiki/pages/viewpage.action?pageId=2687297
+http://theantlrguy.atlassian.net/wiki/pages/viewpage.action?pageId=2687297
