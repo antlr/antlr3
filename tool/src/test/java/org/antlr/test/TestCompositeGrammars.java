@@ -443,6 +443,164 @@ public class TestCompositeGrammars extends BaseTest {
 
 		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
 	}
+	
+	@Test public void testTokenVocabEmptyNoWarningsLikeNoLexerRuleCorrespondingToToken() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabWrongIdentifierAtEndOfFileRecoversCorrectly() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "#");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		//twice an error, once in parser composite and once in lexer composite
+		assertEquals("unexpected errors: "+equeue, 2, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabMissingEqualAtEndOfFileRecoversCorrectly() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "tokenFromTokenVocab");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		//twice an error, once in parser composite and once in lexer composite
+		assertEquals("unexpected errors: "+equeue, 2, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabMissingNumberAtEndOfFileRecoversCorrectly() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "tokenFromTokenVocab=");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		//twice an error, once in parser composite and once in lexer composite
+		assertEquals("unexpected errors: "+equeue, 2, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabCommentsOnOwnLineNoErrorNoWarnings() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "TokenFromTokenVocab=4\n"
+				  + "//some comments on a new line\n'token'=4\n");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabWithEmptyLineNoErrorNoWarnings() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "TokenFromTokenVocab=4\n\n'token'=4\n");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
+	
+	@Test public void testTokenVocabNonReferencedTokensNoWarningsLikeNoLexerRuleCorrespondingToToken() 
+			throws Exception {
+		ErrorQueue equeue = new ErrorQueue();
+		ErrorManager.setErrorListener(equeue);		
+		
+		mkdir(tmpdir);
+		writeFile(tmpdir, "Foo.tokens", "ReservedTokenNotYetUsedInParserRule=4\n'reserved'=4\n");
+
+		String grammar = "grammar Foo;\n" 
+				+ "options {tokenVocab=Foo;}\n"
+				+ "tokens{TokenFromTokenVocab='token';}\n" 
+				+ "a : TokenFromTokenVocab;\n"
+				+ "WS : (' '|'\\n') {$channel=HIDDEN;} ;\n";
+		
+		writeFile(tmpdir, "Foo.g", grammar);
+		Tool antlr = newTool(new String[] {"-lib", tmpdir, tmpdir + "/Foo.g"});
+		antlr.process();
+		
+		assertEquals("unexpected errors: "+equeue, 0, equeue.errors.size());
+		assertEquals("unexpected warnings: "+equeue, 0, equeue.warnings.size());
+	}
 
 	@Test public void testSyntaxErrorsInImportsNotThrownOut() throws Exception {
 		ErrorQueue equeue = new ErrorQueue();

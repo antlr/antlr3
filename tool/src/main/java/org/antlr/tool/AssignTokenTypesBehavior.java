@@ -90,10 +90,20 @@ public class AssignTokenTypesBehavior extends AssignTokenTypesWalker {
 			return;
 		}
 		// otherwise add literal to token types if referenced from parser rule
-		// or in the tokens{} section
+		// or in the tokens{} section - since a parser can contain a tokenVocab as well  
+		// (in order to predefine the order of the tokens - can reduce branching) 
+		// and it looks like those tokens are not in the tokens section 
+		// (because grammar.getTokenType(t.getText()) will not be Label.INVALID) 
+		// we ensure that literals are still recorded for combined parsers which
+		// have defined a tokenVocab
+		String tokenVocab = (String) grammar.getOption("tokenVocab");
+		boolean hasTokenVocabAndIsCombinedParser = tokenVocab != null && 
+				grammar.type == Grammar.COMBINED;
+		
 		if ( (currentRuleName==null ||
-			  Character.isLowerCase(currentRuleName.charAt(0))) &&
-																grammar.getTokenType(t.getText())==Label.INVALID )
+			  Character.isLowerCase(currentRuleName.charAt(0))) && 
+			  (hasTokenVocabAndIsCombinedParser ||
+			  grammar.getTokenType(t.getText())==Label.INVALID ))
 		{
 			stringLiterals.put(t.getText(), UNASSIGNED_IN_PARSER_RULE);
 		}
