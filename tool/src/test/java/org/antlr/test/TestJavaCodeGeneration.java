@@ -158,4 +158,87 @@ public class TestJavaCodeGeneration extends BaseTest {
 		boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
 		assertTrue(success);
 	}
+
+    /**
+     * Regression test for antlr/antlr3#163 - NullPointerException when literal
+     * of a token is not escaped
+     */
+    @Test
+    public void testTokenVocabWithUnescapedBackslashThrowsNullPointerException(){
+        mkdir(tmpdir);
+        writeFile(tmpdir, "T2.tokens", "Backslash=4\n'\\\\'=4\n");
+        String grammar =
+            "grammar T;\n"
+            + "\n"
+            + "options{\n"
+            + "  tokenVocab=T2;\n"
+            + "}\n"
+            + "tokens{\n"
+            + "  Backslash = '\\\\';\n"
+            + "}\n"
+            + "main : '\\\\' EOF;";
+        boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+        assertFalse(success);
+    }
+
+    /**
+     * Regression test for antlr/antlr3#163 - NullPointerException when literal
+     * of a token is not escaped
+     */
+    @Test
+    public void testTokenVocabWithEscapedBackslash(){
+        mkdir(tmpdir);
+        writeFile(tmpdir, "T2.tokens", "Backslash=4\n'\\\\\\\\'=4\n");
+        String grammar =
+            "grammar T;\n"
+            + "\n"
+            + "options{\n"
+            + "  tokenVocab=T2;\n"
+            + "}\n"
+            + "tokens{\n"
+            + "  Backslash = '\\\\';\n"
+            + "}\n"
+            + "main : '\\\\' 'another token, reason see below' EOF;";
+            /* needed to insert another token since pull request #157 is not yet merged
+             * No lexer would be generated without the additional token since a tokenVocab
+             * was defined which covers all tokens used in the grammar
+             * See https://github.com/antlr/antlr3/pull/157 for more information
+             */
+        boolean success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+        assertTrue(success);
+    }
+
+    /**
+     * Regression test for antlr/antlr3#163 - NullPointerException when literal
+     * of a token is not escaped
+     */
+    @Test
+    public void testTokenVocabWithBackslashReusedInOtherGrammar(){
+        String grammar =
+                "grammar T2;\n"
+                        + "tokens{\n"
+                        + "  Backslash = '\\\\';\n"
+                        + "}\n"
+                        + "main : '\\\\' EOF;";
+
+        boolean success = rawGenerateAndBuildRecognizer("T2.g", grammar, "T2Parser", "T2Lexer", false);
+        assertTrue(success);
+        grammar =
+                "grammar T;\n"
+                        + "\n"
+                        + "options{\n"
+                        + "  tokenVocab=T2;\n"
+                        + "}\n"
+                        + "tokens{\n"
+                        + "  Backslash = '\\\\';\n"
+                        + "}\n"
+                        + "main : '\\\\' 'another token, reason see below' EOF;";
+            /* needed to insert another token since pull request #157 is not yet merged
+             * No lexer would be generated without the additional token since a tokenVocab
+             * was defined which covers all tokens used in the grammar
+             * See https://github.com/antlr/antlr3/pull/157 for more information
+             */
+        success = rawGenerateAndBuildRecognizer("T.g", grammar, "TParser", "TLexer", false);
+        assertTrue(success);
+    }
 }

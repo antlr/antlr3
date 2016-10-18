@@ -909,6 +909,7 @@ public class CodeGenerator {
 		// now dump the strings
 		for (String literal : grammar.getStringLiterals()) {
 			int tokenType = grammar.getTokenType(literal);
+            literal = literal.replace("\\", "\\\\");
 			if ( tokenType>=Label.MIN_TOKEN_TYPE ) {
 				vocabFileST.addAggr("tokens.{name,type}", literal, Utils.integer(tokenType));
 			}
