@@ -491,8 +491,6 @@ class TestAutoAST(testbase.ANTLRTest):
         self.assertEquals("(+ abc)", found)
 
 
-    @testbase.broken(
-        "FAILS until antlr.g rebuilt in v3", testbase.GrammarCompileError)
     def testSetRootWithLabel(self):
         grammar = textwrap.dedent(
             r'''
@@ -846,7 +844,7 @@ class TestAutoAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "int 34 x=1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 extraneous input u'34' expecting ID"],
+        self.assertListEqual(["line 1:4 extraneous input u'34' expecting ID"],
                           errors)
         self.assertEquals("(int x 1)", found) # tree gets correct x and 1 tokens
 
@@ -866,7 +864,7 @@ class TestAutoAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "int =1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 missing ID at u'='"], errors)
+        self.assertListEqual(["line 1:4 missing ID at u'='"], errors)
         self.assertEquals("(int <missing ID> 1)", found) # tree gets invented ID token
 
 
@@ -885,7 +883,7 @@ class TestAutoAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "x=1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:0 mismatched input u'x' expecting set None"], errors)
+        self.assertListEqual(["line 1:0 mismatched input u'x' expecting set None"], errors)
         self.assertEquals("(<error: x> x 1)", found) # tree gets invented ID token
 
 
@@ -901,7 +899,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
-        self.assertEquals(["line 1:3 missing INT at '<EOF>'"], errors)
+        self.assertListEqual(["line 1:3 missing INT at '<EOF>'"], errors)
         self.assertEquals("abc <missing INT>", found)
 
 
@@ -918,7 +916,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "abc", expectErrors=True)
-        self.assertEquals(["line 1:3 mismatched input '<EOF>' expecting INT"], errors)
+        self.assertListEqual(["line 1:3 mismatched input '<EOF>' expecting INT"], errors)
         self.assertEquals("<mismatched token: <EOF>, resync=abc>", found)
 
 
@@ -937,7 +935,7 @@ class TestAutoAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "a", "abc ick 34",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 extraneous input u'ick' expecting INT"],
+        self.assertListEqual(["line 1:4 extraneous input u'ick' expecting INT"],
                           errors)
         self.assertEquals("abc 34", found)
 
@@ -954,7 +952,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "34", expectErrors=True)
-        self.assertEquals(["line 1:0 missing ID at u'34'"], errors)
+        self.assertListEqual(["line 1:0 missing ID at u'34'"], errors)
         self.assertEquals("<missing ID> 34", found)
 
 
@@ -976,7 +974,7 @@ class TestAutoAST(testbase.ANTLRTest):
         # finds an error at the first token, 34, and re-syncs.
         # re-synchronizing does not consume a token because 34 follows
         # ref to rule b (start of c). It then matches 34 in c.
-        self.assertEquals(["line 1:0 missing ID at u'34'"], errors)
+        self.assertListEqual(["line 1:0 missing ID at u'34'"], errors)
         self.assertEquals("<missing ID> 34", found)
 
 
@@ -995,7 +993,7 @@ class TestAutoAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "*", expectErrors=True)
-        self.assertEquals(["line 1:0 no viable alternative at input u'*'"],
+        self.assertListEqual(["line 1:0 no viable alternative at input u'*'"],
                           errors)
         self.assertEquals("<unexpected: [@0,0:0=u'*',<6>,1:0], resync=*>",
                           found)

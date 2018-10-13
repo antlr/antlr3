@@ -70,7 +70,7 @@ class T(testbase.ANTLRTest):
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testLexerFromStdIO(self):
@@ -96,7 +96,7 @@ class T(testbase.ANTLRTest):
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testLexerEncoding(self):
@@ -122,7 +122,7 @@ class T(testbase.ANTLRTest):
             stdout=stdout
             )
 
-        self.failUnlessEqual(len(stdout.getvalue().splitlines()), 3)
+        self.assertEqual(len(stdout.getvalue().splitlines()), 3)
 
 
     def testCombined(self):
@@ -151,7 +151,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue()
-        self.failUnlessEqual(len(stdout.splitlines()), 1, stdout)
+        self.assertEqual(len(stdout.splitlines()), 1, stdout)
 
 
     def testCombinedOutputAST(self):
@@ -182,7 +182,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "(+ foo bar)")
+        self.assertEqual(stdout, "(+ foo bar)")
 
 
     def testTreeParser(self):
@@ -223,7 +223,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "u'a + b'")
+        self.assertEqual(stdout, "u'a + b'")
 
 
     def testTreeParserRewrite(self):
@@ -266,7 +266,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "(+ (ARG a) (ARG b))")
+        self.assertEqual(stdout, "(+ (ARG a) (ARG b))")
 
 
 
@@ -311,7 +311,7 @@ class T(testbase.ANTLRTest):
             )
 
         stdout = stdout.getvalue().strip()
-        self.failUnlessEqual(stdout, "u'b'")
+        self.assertEqual(stdout, "u'b'")
 
 
 if __name__ == '__main__':

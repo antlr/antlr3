@@ -160,7 +160,7 @@ class T(testbase.ANTLRTest):
             input="b"
             )
 
-        self.failUnlessEqual("S.a", found)
+        self.assertEqual("S.a", found)
 
 
         # @Test public void testDelegatorInvokesDelegateRuleWithReturnStruct() throws Exception {
@@ -216,7 +216,7 @@ class T(testbase.ANTLRTest):
             input="b"
             )
 
-        self.failUnlessEqual("S.a1000", found)
+        self.assertEqual("S.a1000", found)
 
 
     def testDelegatorAccessesDelegateMembers(self):
@@ -253,7 +253,7 @@ class T(testbase.ANTLRTest):
             input="b"
             )
 
-        self.failUnlessEqual("foo", found)
+        self.assertEqual("foo", found)
 
 
     def testDelegatorInvokesFirstVersionOfDelegateRule(self):
@@ -302,7 +302,7 @@ class T(testbase.ANTLRTest):
             input="b"
             )
 
-        self.failUnlessEqual("S.a", found)
+        self.assertEqual("S.a", found)
 
 
     def testDelegatesSeeSameTokenType(self):
@@ -354,7 +354,7 @@ class T(testbase.ANTLRTest):
             input="aa"
             )
 
-        self.failUnlessEqual("S.x T.y", found)
+        self.assertEqual("S.x T.y", found)
 
 
         # @Test public void testDelegatesSeeSameTokenType2() throws Exception {
@@ -702,7 +702,7 @@ class T(testbase.ANTLRTest):
             input="c"
             )
 
-        self.failUnlessEqual("S.a", found)
+        self.assertEqual("S.a", found)
 
 
     #     @Test public void testDelegatorRuleOverridesLookaheadInDelegate() throws Exception {
@@ -789,7 +789,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("S.A abc", found)
+        self.assertEqual("S.A abc", found)
 
 
     def testLexerDelegatorRuleOverridesDelegate(self):
@@ -823,7 +823,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("M.A a", found)
+        self.assertEqual("M.A a", found)
 
         # @Test public void testLexerDelegatorRuleOverridesDelegateLeavingNoRules() throws Exception {
         #         // M.Tokens has nothing to predict tokens from S.  Should

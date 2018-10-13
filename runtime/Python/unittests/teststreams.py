@@ -14,7 +14,7 @@ class TestStringStream(unittest.TestCase):
 
         stream = antlr3.StringStream('foo')
 
-        self.failUnlessEqual(stream.size(), 3)
+        self.assertEqual(stream.size(), 3)
 
 
     def testIndex(self):
@@ -22,7 +22,7 @@ class TestStringStream(unittest.TestCase):
 
         stream = antlr3.StringStream('foo')
 
-        self.failUnlessEqual(stream.index(), 0)
+        self.assertEqual(stream.index(), 0)
 
 
     def testConsume(self):
@@ -31,49 +31,49 @@ class TestStringStream(unittest.TestCase):
         stream = antlr3.StringStream('foo\nbar')
 
         stream.consume() # f
-        self.failUnlessEqual(stream.index(), 1)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.line, 1)
+        self.assertEqual(stream.index(), 1)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.line, 1)
 
         stream.consume() # o
-        self.failUnlessEqual(stream.index(), 2)
-        self.failUnlessEqual(stream.charPositionInLine, 2)
-        self.failUnlessEqual(stream.line, 1)
+        self.assertEqual(stream.index(), 2)
+        self.assertEqual(stream.charPositionInLine, 2)
+        self.assertEqual(stream.line, 1)
 
         stream.consume() # o
-        self.failUnlessEqual(stream.index(), 3)
-        self.failUnlessEqual(stream.charPositionInLine, 3)
-        self.failUnlessEqual(stream.line, 1)
+        self.assertEqual(stream.index(), 3)
+        self.assertEqual(stream.charPositionInLine, 3)
+        self.assertEqual(stream.line, 1)
 
         stream.consume() # \n
-        self.failUnlessEqual(stream.index(), 4)
-        self.failUnlessEqual(stream.charPositionInLine, 0)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 4)
+        self.assertEqual(stream.charPositionInLine, 0)
+        self.assertEqual(stream.line, 2)
 
         stream.consume() # b
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.line, 2)
 
         stream.consume() # a
-        self.failUnlessEqual(stream.index(), 6)
-        self.failUnlessEqual(stream.charPositionInLine, 2)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 6)
+        self.assertEqual(stream.charPositionInLine, 2)
+        self.assertEqual(stream.line, 2)
 
         stream.consume() # r
-        self.failUnlessEqual(stream.index(), 7)
-        self.failUnlessEqual(stream.charPositionInLine, 3)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 7)
+        self.assertEqual(stream.charPositionInLine, 3)
+        self.assertEqual(stream.line, 2)
 
         stream.consume() # EOF
-        self.failUnlessEqual(stream.index(), 7)
-        self.failUnlessEqual(stream.charPositionInLine, 3)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 7)
+        self.assertEqual(stream.charPositionInLine, 3)
+        self.assertEqual(stream.line, 2)
 
         stream.consume() # EOF
-        self.failUnlessEqual(stream.index(), 7)
-        self.failUnlessEqual(stream.charPositionInLine, 3)
-        self.failUnlessEqual(stream.line, 2)
+        self.assertEqual(stream.index(), 7)
+        self.assertEqual(stream.charPositionInLine, 3)
+        self.assertEqual(stream.line, 2)
 
 
     def testReset(self):
@@ -85,10 +85,10 @@ class TestStringStream(unittest.TestCase):
         stream.consume()
 
         stream.reset()
-        self.failUnlessEqual(stream.index(), 0)
-        self.failUnlessEqual(stream.line, 1)
-        self.failUnlessEqual(stream.charPositionInLine, 0)
-        self.failUnlessEqual(stream.LT(1), 'f')
+        self.assertEqual(stream.index(), 0)
+        self.assertEqual(stream.line, 1)
+        self.assertEqual(stream.charPositionInLine, 0)
+        self.assertEqual(stream.LT(1), 'f')
 
 
     def testLA(self):
@@ -96,16 +96,16 @@ class TestStringStream(unittest.TestCase):
 
         stream = antlr3.StringStream('foo')
 
-        self.failUnlessEqual(stream.LT(1), 'f')
-        self.failUnlessEqual(stream.LT(2), 'o')
-        self.failUnlessEqual(stream.LT(3), 'o')
+        self.assertEqual(stream.LT(1), 'f')
+        self.assertEqual(stream.LT(2), 'o')
+        self.assertEqual(stream.LT(3), 'o')
 
         stream.consume()
         stream.consume()
 
-        self.failUnlessEqual(stream.LT(1), 'o')
-        self.failUnlessEqual(stream.LT(2), antlr3.EOF)
-        self.failUnlessEqual(stream.LT(3), antlr3.EOF)
+        self.assertEqual(stream.LT(1), 'o')
+        self.assertEqual(stream.LT(2), antlr3.EOF)
+        self.assertEqual(stream.LT(3), antlr3.EOF)
 
 
     def testSubstring(self):
@@ -113,10 +113,10 @@ class TestStringStream(unittest.TestCase):
 
         stream = antlr3.StringStream('foobar')
 
-        self.failUnlessEqual(stream.substring(0, 0), 'f')
-        self.failUnlessEqual(stream.substring(0, 1), 'fo')
-        self.failUnlessEqual(stream.substring(0, 5), 'foobar')
-        self.failUnlessEqual(stream.substring(3, 5), 'bar')
+        self.assertEqual(stream.substring(0, 0), 'f')
+        self.assertEqual(stream.substring(0, 1), 'fo')
+        self.assertEqual(stream.substring(0, 5), 'foobar')
+        self.assertEqual(stream.substring(3, 5), 'bar')
 
 
     def testSeekForward(self):
@@ -126,10 +126,10 @@ class TestStringStream(unittest.TestCase):
 
         stream.seek(4)
 
-        self.failUnlessEqual(stream.index(), 4)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 0)
-        self.failUnlessEqual(stream.LT(1), 'b')
+        self.assertEqual(stream.index(), 4)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 0)
+        self.assertEqual(stream.LT(1), 'b')
 
 
 ##     # not yet implemented
@@ -141,10 +141,10 @@ class TestStringStream(unittest.TestCase):
 ##         stream.seek(4)
 ##         stream.seek(1)
 
-##         self.failUnlessEqual(stream.index(), 1)
-##         self.failUnlessEqual(stream.line, 1)
-##         self.failUnlessEqual(stream.charPositionInLine, 1)
-##         self.failUnlessEqual(stream.LA(1), 'o')
+##         self.assertEqual(stream.index(), 1)
+##         self.assertEqual(stream.line, 1)
+##         self.assertEqual(stream.charPositionInLine, 1)
+##         self.assertEqual(stream.LA(1), 'o')
 
 
     def testMark(self):
@@ -155,13 +155,13 @@ class TestStringStream(unittest.TestCase):
         stream.seek(4)
 
         marker = stream.mark()
-        self.failUnlessEqual(marker, 1)
-        self.failUnlessEqual(stream.markDepth, 1)
+        self.assertEqual(marker, 1)
+        self.assertEqual(stream.markDepth, 1)
 
         stream.consume()
         marker = stream.mark()
-        self.failUnlessEqual(marker, 2)
-        self.failUnlessEqual(stream.markDepth, 2)
+        self.assertEqual(marker, 2)
+        self.assertEqual(stream.markDepth, 2)
 
 
     def testReleaseLast(self):
@@ -176,11 +176,11 @@ class TestStringStream(unittest.TestCase):
         marker2 = stream.mark()
 
         stream.release()
-        self.failUnlessEqual(stream.markDepth, 1)
+        self.assertEqual(stream.markDepth, 1)
 
         # release same marker again, nothing has changed
         stream.release()
-        self.failUnlessEqual(stream.markDepth, 1)
+        self.assertEqual(stream.markDepth, 1)
 
 
     def testReleaseNested(self):
@@ -198,7 +198,7 @@ class TestStringStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.release(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
+        self.assertEqual(stream.markDepth, 1)
 
 
     def testRewindLast(self):
@@ -213,11 +213,11 @@ class TestStringStream(unittest.TestCase):
         stream.consume()
 
         stream.rewind()
-        self.failUnlessEqual(stream.markDepth, 0)
-        self.failUnlessEqual(stream.index(), 4)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 0)
-        self.failUnlessEqual(stream.LT(1), 'b')
+        self.assertEqual(stream.markDepth, 0)
+        self.assertEqual(stream.index(), 4)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 0)
+        self.assertEqual(stream.LT(1), 'b')
 
 
     def testRewindNested(self):
@@ -235,11 +235,11 @@ class TestStringStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.rewind(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.LT(1), 'a')
+        self.assertEqual(stream.markDepth, 1)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.LT(1), 'a')
 
 
 class TestFileStream(unittest.TestCase):
@@ -261,12 +261,12 @@ class TestFileStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.rewind(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.LT(1), 'a')
-        self.failUnlessEqual(stream.LA(1), ord('a'))
+        self.assertEqual(stream.markDepth, 1)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.LT(1), 'a')
+        self.assertEqual(stream.LA(1), ord('a'))
 
 
     def testEncoded(self):
@@ -284,12 +284,12 @@ class TestFileStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.rewind(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.LT(1), u'ä')
-        self.failUnlessEqual(stream.LA(1), ord(u'ä'))
+        self.assertEqual(stream.markDepth, 1)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.LT(1), u'ä')
+        self.assertEqual(stream.LA(1), ord(u'ä'))
 
 
 
@@ -311,12 +311,12 @@ class TestInputStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.rewind(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.LT(1), 'a')
-        self.failUnlessEqual(stream.LA(1), ord('a'))
+        self.assertEqual(stream.markDepth, 1)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.LT(1), 'a')
+        self.assertEqual(stream.LA(1), ord('a'))
 
 
     def testEncoded(self):
@@ -334,12 +334,12 @@ class TestInputStream(unittest.TestCase):
         marker3 = stream.mark()
 
         stream.rewind(marker2)
-        self.failUnlessEqual(stream.markDepth, 1)
-        self.failUnlessEqual(stream.index(), 5)
-        self.failUnlessEqual(stream.line, 2)
-        self.failUnlessEqual(stream.charPositionInLine, 1)
-        self.failUnlessEqual(stream.LT(1), u'ä')
-        self.failUnlessEqual(stream.LA(1), ord(u'ä'))
+        self.assertEqual(stream.markDepth, 1)
+        self.assertEqual(stream.index(), 5)
+        self.assertEqual(stream.line, 2)
+        self.assertEqual(stream.charPositionInLine, 1)
+        self.assertEqual(stream.LT(1), u'ä')
+        self.assertEqual(stream.LA(1), ord(u'ä'))
 
 
 class TestCommonTokenStream(unittest.TestCase):
@@ -373,7 +373,7 @@ class TestCommonTokenStream(unittest.TestCase):
         """CommonTokenStream.__init__()"""
 
         stream = antlr3.CommonTokenStream(self.source)
-        self.failUnlessEqual(stream.index(), -1)
+        self.assertEqual(stream.index(), -1)
 
 
     def testSetTokenSource(self):
@@ -381,8 +381,8 @@ class TestCommonTokenStream(unittest.TestCase):
 
         stream = antlr3.CommonTokenStream(None)
         stream.setTokenSource(self.source)
-        self.failUnlessEqual(stream.index(), -1)
-        self.failUnlessEqual(stream.channel, antlr3.DEFAULT_CHANNEL)
+        self.assertEqual(stream.index(), -1)
+        self.assertEqual(stream.channel, antlr3.DEFAULT_CHANNEL)
 
 
     def testLTEmptySource(self):
@@ -391,7 +391,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
 
         lt1 = stream.LT(1)
-        self.failUnlessEqual(lt1.type, antlr3.EOF)
+        self.assertEqual(lt1.type, antlr3.EOF)
 
 
     def testLT1(self):
@@ -404,7 +404,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
 
         lt1 = stream.LT(1)
-        self.failUnlessEqual(lt1.type, 12)
+        self.assertEqual(lt1.type, 12)
 
 
     def testLT1WithHidden(self):
@@ -421,7 +421,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
 
         lt1 = stream.LT(1)
-        self.failUnlessEqual(lt1.type, 13)
+        self.assertEqual(lt1.type, 13)
 
 
     def testLT2BeyondEnd(self):
@@ -438,7 +438,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
 
         lt1 = stream.LT(2)
-        self.failUnlessEqual(lt1.type, antlr3.EOF)
+        self.assertEqual(lt1.type, antlr3.EOF)
 
 
     # not yet implemented
@@ -458,7 +458,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream.consume()
 
         lt1 = stream.LT(-1)
-        self.failUnlessEqual(lt1.type, 12)
+        self.assertEqual(lt1.type, 12)
 
 
     def testLB1(self):
@@ -476,7 +476,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream.fillBuffer()
         stream.consume()
 
-        self.failUnlessEqual(stream.LB(1).type, 12)
+        self.assertEqual(stream.LB(1).type, 12)
 
 
     def testLTZero(self):
@@ -493,7 +493,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
 
         lt1 = stream.LT(0)
-        self.failUnless(lt1 is None)
+        self.assertTrue(lt1 is None)
 
 
     def testLBBeyondBegin(self):
@@ -516,11 +516,11 @@ class TestCommonTokenStream(unittest.TestCase):
             )
 
         stream = antlr3.CommonTokenStream(self.source)
-        self.failUnless(stream.LB(1) is None)
+        self.assertTrue(stream.LB(1) is None)
 
         stream.consume()
         stream.consume()
-        self.failUnless(stream.LB(3) is None)
+        self.assertTrue(stream.LB(3) is None)
 
 
     def testFillBuffer(self):
@@ -545,10 +545,10 @@ class TestCommonTokenStream(unittest.TestCase):
         stream = antlr3.CommonTokenStream(self.source)
         stream.fillBuffer()
 
-        self.failUnlessEqual(len(stream.tokens), 3)
-        self.failUnlessEqual(stream.tokens[0].type, 12)
-        self.failUnlessEqual(stream.tokens[1].type, 13)
-        self.failUnlessEqual(stream.tokens[2].type, 14)
+        self.assertEqual(len(stream.tokens), 3)
+        self.assertEqual(stream.tokens[0].type, 12)
+        self.assertEqual(stream.tokens[1].type, 13)
+        self.assertEqual(stream.tokens[2].type, 14)
 
 
     def testConsume(self):
@@ -567,16 +567,16 @@ class TestCommonTokenStream(unittest.TestCase):
             )
 
         stream = antlr3.CommonTokenStream(self.source)
-        self.failUnlessEqual(stream.LA(1), 12)
+        self.assertEqual(stream.LA(1), 12)
 
         stream.consume()
-        self.failUnlessEqual(stream.LA(1), 13)
+        self.assertEqual(stream.LA(1), 13)
 
         stream.consume()
-        self.failUnlessEqual(stream.LA(1), antlr3.EOF)
+        self.assertEqual(stream.LA(1), antlr3.EOF)
 
         stream.consume()
-        self.failUnlessEqual(stream.LA(1), antlr3.EOF)
+        self.assertEqual(stream.LA(1), antlr3.EOF)
 
 
     def testSeek(self):
@@ -595,13 +595,13 @@ class TestCommonTokenStream(unittest.TestCase):
             )
 
         stream = antlr3.CommonTokenStream(self.source)
-        self.failUnlessEqual(stream.LA(1), 12)
+        self.assertEqual(stream.LA(1), 12)
 
         stream.seek(2)
-        self.failUnlessEqual(stream.LA(1), antlr3.EOF)
+        self.assertEqual(stream.LA(1), antlr3.EOF)
 
         stream.seek(0)
-        self.failUnlessEqual(stream.LA(1), 12)
+        self.assertEqual(stream.LA(1), 12)
 
 
     def testMarkRewind(self):
@@ -628,7 +628,7 @@ class TestCommonTokenStream(unittest.TestCase):
         stream.consume()
         stream.rewind(marker)
 
-        self.failUnlessEqual(stream.LA(1), 13)
+        self.assertEqual(stream.LA(1), 13)
 
 
     def testToString(self):

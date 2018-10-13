@@ -64,7 +64,7 @@ class T(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.a()
 
-        self.failUnlessEqual(
+        self.assertListEqual(
             lexer.traces,
             [ '>T__7', '<T__7', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
               '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
@@ -72,7 +72,7 @@ class T(testbase.ANTLRTest):
               '>T__8', '<T__8']
             )
 
-        self.failUnlessEqual(
+        self.assertListEqual(
             parser.traces,
             [ '>a', '>synpred1_t044trace_fragment', '<synpred1_t044trace_fragment', '>b', '>c',
               '<c', '>c', '<c', '>c', '<c', '<b', '<a' ]
@@ -86,7 +86,7 @@ class T(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         parser.a()
 
-        self.failUnlessEqual(
+        self.assertListEqual(
             parser._stack,
             ['a', 'b', 'c']
             )
