@@ -19,9 +19,8 @@ party open source libraries:
   * Unzip the downloaded file.
   * Move the unzipped folder to runtime/JavaScript/third/jsdoc-toolkit
 
-  * jsunit: Download here: https://sourceforge.net/project/showfiles.php?group_id=28041&package_id=19823&release_id=404277 
-  * Unzip the downloaded file.
-  * Move the unzipped folder to runtime/JavaScript/tests/jsunit
+  * jsunit:
+  * cd runtime/JavaScript/tests && git clone https://github.com/pivotal-legacy/jsunit.git
 
 ### BUILD ###
 1) In a shell cd to runtime/JavaScript/build.
@@ -32,7 +31,7 @@ party open source libraries:
 Compile Tests:
 1) Build the Antlr tool itself (see main Antlr documentation for details).
    This is most easily done by cd'ing to the root of the antlr code and running
-   'mvn -Dmaven.test.skip=true package assembly:assembly'.  If using a
+   'mvn -Dmaven.test.skip=true package'.  If using a
    different build method, update runtime/JavaScript/build/antlr3.properties to
    point to the alternative jar.
 2) In a shell cd to runtime/JavaScript/build.
