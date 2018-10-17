@@ -84,6 +84,11 @@ public abstract class SemanticContext {
 	public void trackUseOfSyntacticPredicates(Grammar g) {
 	}
 
+	@Override
+	public abstract int hashCode();
+	@Override
+	public abstract String toString();
+
 	public static class Predicate extends SemanticContext {
 		/** The AST node in tree created from the grammar holding the predicate */
 		public GrammarAST predicateAST;
@@ -304,7 +309,7 @@ public abstract class SemanticContext {
 	}
 
 	public static abstract class CommutativePredicate extends SemanticContext {
-		protected final Set<SemanticContext> operands = new HashSet<SemanticContext>();
+		protected final Set<SemanticContext> operands = new LinkedHashSet<SemanticContext>();
 		protected int hashcode;
 
 		public CommutativePredicate(SemanticContext a, SemanticContext b) {
@@ -733,10 +738,10 @@ public abstract class SemanticContext {
 			return new SemanticContext[] { new TruePredicate(), EMPTY_SEMANTIC_CONTEXT, EMPTY_SEMANTIC_CONTEXT };
 		}
 
-		HashSet<SemanticContext> opsA = new HashSet<SemanticContext>(getAndOperands(a));
-		HashSet<SemanticContext> opsB = new HashSet<SemanticContext>(getAndOperands(b));
+		HashSet<SemanticContext> opsA = new LinkedHashSet<SemanticContext>(getAndOperands(a));
+		HashSet<SemanticContext> opsB = new LinkedHashSet<SemanticContext>(getAndOperands(b));
 
-		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
+		HashSet<SemanticContext> result = new LinkedHashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
 		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
@@ -766,10 +771,10 @@ public abstract class SemanticContext {
 	// Factor so (a || b) == (result || a || b)
 	public static SemanticContext[] factorOr(SemanticContext a, SemanticContext b)
 	{
-		HashSet<SemanticContext> opsA = new HashSet<SemanticContext>(getOrOperands(a));
-		HashSet<SemanticContext> opsB = new HashSet<SemanticContext>(getOrOperands(b));
+		HashSet<SemanticContext> opsA = new LinkedHashSet<SemanticContext>(getOrOperands(a));
+		HashSet<SemanticContext> opsB = new LinkedHashSet<SemanticContext>(getOrOperands(b));
 
-		HashSet<SemanticContext> result = new HashSet<SemanticContext>(opsA);
+		HashSet<SemanticContext> result = new LinkedHashSet<SemanticContext>(opsA);
 		result.retainAll(opsB);
 		if (result.isEmpty())
 			return new SemanticContext[] { EMPTY_SEMANTIC_CONTEXT, a, b };
