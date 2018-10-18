@@ -60,8 +60,8 @@
             token = lexer.nextToken();
             fail("nextToken should have thrown error on invalid input");
         } catch (e) {
-            assertEquals(e.a, '0');
-            assertEquals(e.b, '9');
+            /* TODO: This shoud provide more useful information */
+            assertEquals(e.expecting, null);
             assertEquals(e.getUnexpectedType(), 'a');
             assertEquals(e.charPositionInLine, 1);
             assertEquals(e.line, 1);
