@@ -211,6 +211,15 @@ public class BitSet implements IntSet, Cloneable {
     }
 
 	@Override
+	public int hashCode() {
+		int hashCode = 0;
+		for (int i=0; i < this.bits.length; i++) {
+			hashCode ^= this.bits[i];
+		}
+		return hashCode;
+	}
+
+	@Override
     public boolean equals(Object other) {
         if ( other == null || !(other instanceof BitSet) ) {
             return false;

@@ -264,7 +264,7 @@ public class NFAToDFAConverter {
 		*/
 
 		int numberOfEdgesEmanating = 0;
-		Map<Integer, Transition> targetToLabelMap = new HashMap<Integer, Transition>();
+		Map<Integer, Transition> targetToLabelMap = new LinkedHashMap<Integer, Transition>();
 		// for each label that could possibly emanate from NFAStates of d
 		int numLabels = 0;
 		if ( labels!=null ) {
@@ -1487,10 +1487,10 @@ public class NFAToDFAConverter {
 	{
 		// map alt to combined SemanticContext
 		Map<Integer, SemanticContext> altToPredicateContextMap =
-			new HashMap<Integer, SemanticContext>();
+			new LinkedHashMap<Integer, SemanticContext>();
 		// init the alt to predicate set map
 		Map<Integer, OrderedHashSet<SemanticContext>> altToSetOfContextsMap =
-			new HashMap<Integer, OrderedHashSet<SemanticContext>>();
+			new LinkedHashMap<Integer, OrderedHashSet<SemanticContext>>();
 		for (Integer altI : nondeterministicAlts) {
 			altToSetOfContextsMap.put(altI, new OrderedHashSet<SemanticContext>());
 		}
@@ -1504,7 +1504,7 @@ public class NFAToDFAConverter {
 		// for each configuration, create a unique set of predicates
 		// Also, track the alts with at least one uncovered configuration
 		// (one w/o a predicate); tracks tautologies like p1||true
-		Map<Integer, Set<Token>> altToLocationsReachableWithoutPredicate = new HashMap<Integer, Set<Token>>();
+		Map<Integer, Set<Token>> altToLocationsReachableWithoutPredicate = new LinkedHashMap<Integer, Set<Token>>();
 		Set<Integer> nondetAltsWithUncoveredConfiguration = new HashSet<Integer>();
 		//System.out.println("configs="+d.nfaConfigurations);
 		//System.out.println("configs with preds?"+d.atLeastOneConfigurationHasAPredicate);

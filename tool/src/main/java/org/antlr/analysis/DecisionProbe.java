@@ -79,7 +79,7 @@ public class DecisionProbe {
 	 *  Note that from the DFA state, you can ask for
 	 *  which alts are nondeterministic.
 	 */
-	protected Set<DFAState> statesWithSyntacticallyAmbiguousAltsSet = new HashSet<DFAState>();
+	protected Set<DFAState> statesWithSyntacticallyAmbiguousAltsSet = new LinkedHashSet<DFAState>();
 
 	/** Track just like stateToSyntacticallyAmbiguousAltsMap, but only
 	 *  for nondeterminisms that arise in the Tokens rule such as keyword vs
@@ -87,13 +87,13 @@ public class DecisionProbe {
 	 *  in conflict.
 	 */
 	protected Map<DFAState, Set<Integer>> stateToSyntacticallyAmbiguousTokensRuleAltsMap =
-		new HashMap<DFAState, Set<Integer>>();
+		new LinkedHashMap<DFAState, Set<Integer>>();
 
 	/** Was a syntactic ambiguity resolved with predicates?  Any DFA
 	 *  state that predicts more than one alternative, must be resolved
 	 *  with predicates or it should be reported to the user.
 	 */
-	protected Set<DFAState> statesResolvedWithSemanticPredicatesSet = new HashSet<DFAState>();
+	protected Set<DFAState> statesResolvedWithSemanticPredicatesSet = new LinkedHashSet<DFAState>();
 
 	/** Track the predicates for each alt per DFA state;
 	 *  more than one DFA state might have syntactically ambig alt prediction.
@@ -101,22 +101,22 @@ public class DecisionProbe {
 	 *  SemanticContext (pred(s) to execute to resolve syntactic ambiguity).
 	 */
 	protected Map<DFAState, Map<Integer,SemanticContext>> stateToAltSetWithSemanticPredicatesMap =
-		new HashMap<DFAState, Map<Integer,SemanticContext>>();
+		new LinkedHashMap<DFAState, Map<Integer,SemanticContext>>();
 
 	/** Tracks alts insufficiently covered.
 	 *  For example, p1||true gets reduced to true and so leaves
 	 *  whole alt uncovered.  This maps DFA state to the set of alts
 	 */
 	protected Map<DFAState,Map<Integer, Set<Token>>> stateToIncompletelyCoveredAltsMap =
-		new HashMap<DFAState,Map<Integer, Set<Token>>>();
+		new LinkedHashMap<DFAState,Map<Integer, Set<Token>>>();
 
 	/** The set of states w/o emanating edges and w/o resolving sem preds. */
-	protected Set<DFAState> danglingStates = new HashSet<DFAState>();
+	protected Set<DFAState> danglingStates = new LinkedHashSet<DFAState>();
 
 	/** The overall list of alts within the decision that have at least one
 	 *  conflicting input sequence.
 	 */
-	protected Set<Integer> altsWithProblem = new HashSet<Integer>();
+	protected Set<Integer> altsWithProblem = new LinkedHashSet<Integer>();
 
 	/** If decision with &gt; 1 alt has recursion in &gt; 1 alt, it's (likely) nonregular
 	 *  lookahead.  The decision cannot be made with a DFA.
@@ -137,7 +137,7 @@ public class DecisionProbe {
 	/** Left recursion discovered.  The proposed new NFAConfiguration
 	 *  is recorded for the associated DFA state.
 	protected Map<Integer,List<NFAConfiguration>> stateToLeftRecursiveConfigurationsMap =
-		new HashMap<Integer,List<NFAConfiguration>>();
+		new LinkedHashMap<Integer,List<NFAConfiguration>>();
 	 */
 
 	/** Did ANTLR have to terminate early on the analysis of this decision? */
@@ -297,7 +297,7 @@ public class DecisionProbe {
 	 */
 	public List<Label> getSampleNonDeterministicInputSequence(DFAState targetState) {
 		Set<DFAState> dfaStates = getDFAPathStatesToTarget(targetState);
-		statesVisitedDuringSampleSequence = new HashSet<Integer>();
+		statesVisitedDuringSampleSequence = new LinkedHashSet<Integer>();
 		List<Label> labels = new ArrayList<Label>(); // may access ith element; use array
 		if ( dfa==null || dfa.startState==null ) {
 			return labels;
@@ -372,7 +372,7 @@ public class DecisionProbe {
 		path.add(isolatedAltStart);
 
 		// add the actual path now
-		statesVisitedAtInputDepth = new HashSet<String>();
+		statesVisitedAtInputDepth = new LinkedHashSet<String>();
 		getNFAPath(isolatedAltStart,
 				   0,
 				   labels,
@@ -532,9 +532,9 @@ public class DecisionProbe {
 		// Goal: create a map from alt to map<target,List<callsites>>
 		// Map<Map<String target, List<NFAState call sites>>
 		Map<Integer, Map<String, Set<NFAState>>> altToTargetToCallSitesMap =
-			new HashMap<Integer, Map<String, Set<NFAState>>>();
+			new LinkedHashMap<Integer, Map<String, Set<NFAState>>>();
 		// track a single problem DFA state for each alt
-		Map<Integer, DFAState> altToDFAState = new HashMap<Integer, DFAState>();
+		Map<Integer, DFAState> altToDFAState = new LinkedHashMap<Integer, DFAState>();
 		computeAltToProblemMaps(dfaStatesWithRecursionProblems,
 								stateToRecursionOverflowConfigurationsMap,
 								altToTargetToCallSitesMap, // output param
@@ -576,13 +576,13 @@ public class DecisionProbe {
 				Map<String, Set<NFAState>> targetToCallSiteMap =
 					altToTargetToCallSitesMap.get(altI);
 				if ( targetToCallSiteMap==null ) {
-					targetToCallSiteMap = new HashMap<String, Set<NFAState>>();
+					targetToCallSiteMap = new LinkedHashMap<String, Set<NFAState>>();
 					altToTargetToCallSitesMap.put(altI, targetToCallSiteMap);
 				}
 				Set<NFAState> callSites =
 					targetToCallSiteMap.get(targetRule);
 				if ( callSites==null ) {
-					callSites = new HashSet<NFAState>();
+					callSites = new LinkedHashSet<NFAState>();
 					targetToCallSiteMap.put(targetRule, callSites);
 				}
 				callSites.add(ruleInvocationState);
@@ -596,7 +596,7 @@ public class DecisionProbe {
 	}
 
 	private Set<Integer> getUnaliasedDFAStateSet(Set<Integer> dfaStatesWithRecursionProblems) {
-		Set<Integer> dfaStatesUnaliased = new HashSet<Integer>();
+		Set<Integer> dfaStatesUnaliased = new LinkedHashSet<Integer>();
 		for (Integer stateI : dfaStatesWithRecursionProblems) {
 			DFAState d = dfa.getState(stateI);
 			dfaStatesUnaliased.add(Utils.integer(d.stateNumber));
@@ -684,7 +684,7 @@ public class DecisionProbe {
 	 *  in d as resolved.
 	 */
 	public void reportAltPredicateContext(DFAState d, Map<Integer, ? extends SemanticContext> altPredicateContext) {
-		Map<Integer, SemanticContext> copy = new HashMap<Integer, SemanticContext>();
+		Map<Integer, SemanticContext> copy = new LinkedHashMap<Integer, SemanticContext>();
 		copy.putAll(altPredicateContext);
 		stateToAltSetWithSemanticPredicatesMap.put(d,copy);
 	}
@@ -745,8 +745,8 @@ public class DecisionProbe {
 	}
 
 	protected Set<DFAState> getDFAPathStatesToTarget(DFAState targetState) {
-		Set<DFAState> dfaStates = new HashSet<DFAState>();
-		stateReachable = new HashMap<Integer, Integer>();
+		Set<DFAState> dfaStates = new LinkedHashSet<DFAState>();
+		stateReachable = new LinkedHashMap<Integer, Integer>();
 		if ( dfa==null || dfa.startState==null ) {
 			return dfaStates;
 		}

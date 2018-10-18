@@ -570,6 +570,13 @@ public class IntervalSet implements IntSet {
     }
 
 	@Override
+	public int hashCode() {
+		// Since the intervals are sorted and disjoint, we can use the
+		// hashcode of the list as the hashcode of the set.
+		return this.intervals.hashCode();
+	}
+
+	@Override
     public String toString() {
         return toString(null);
     }

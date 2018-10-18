@@ -62,6 +62,11 @@ public class Interval {
 	}
 
 	@Override
+	public int hashCode() {
+		return this.a + 7*this.b;
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if ( o==null ) {
 			return false;
