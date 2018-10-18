@@ -291,7 +291,7 @@ class <grammar.recognizerName>(<@superClassName><superClass><@end>):
 
     <cyclicDFAs:cyclicDFA()> <! dump tables for all DFA !>
 
-    <bitsets:{it | FOLLOW_<it.name>_in_<it.inName><it.tokenIndex> = frozenset([<it.tokenTypes:{it | <it>};separator=", ">])<\n>}>
+    <bitsets:{it | FOLLOW_<tokenWorkaround(it.name)>_in_<it.inName><it.tokenIndex> = frozenset([<it.tokenTypes:{it | <it>};separator=", ">])<\n>}>
 
 >>
 
@@ -766,7 +766,7 @@ element(e) ::= <<
 
 /** match a token optionally with a label in front */
 tokenRef(token,label,elementIndex,terminalOptions={}) ::= <<
-<if(label)><label> = <endif>self.match(self.input, <token>, self.FOLLOW_<token>_in_<ruleName><elementIndex>)
+<if(label)><label> = <endif>self.match(self.input, <tokenWorkaround(token)>, self.FOLLOW_<tokenWorkaround(token)>_in_<ruleName><elementIndex>)
 >>
 
 /** ids+=ID */
@@ -800,7 +800,11 @@ self.matchRange(<a>, <b>)
 /** For now, sets are interval tests and must be tested inline */
 matchSet(s,label,elementIndex,postmatchCode="",terminalOptions={}) ::= <<
 <if(label)>
+<if(LEXER)>
+<label> = self.input.LA(1);<\n>
+<else>
 <label> = self.input.LT(1)<\n>
+<endif>
 <endif>
 if <s>:
     self.input.consume()
@@ -818,7 +822,7 @@ else:
     raise mse
 <else>
     raise mse
-    <! use following code to make it recover inline; remove throw mse;
+    <! use following code to make it recover inline; remove `raise mse`;
     self.recoverFromMismatchedSet(
         self.input, mse, self.FOLLOW_set_in_<ruleName><elementIndex>
         )
@@ -1071,7 +1075,7 @@ else:
 >>
 
 dfaEdgeSwitch(labels, targetState) ::= <<
-if <labels:{it | LA<decisionNumber> == <it>}; separator=" or ">:
+if <labels:{it | LA<decisionNumber> == <tokenWorkaround(it)>}; separator=" or ">:
     <targetState>
 >>
 
@@ -1476,6 +1480,15 @@ execForcedAction(action) ::= "<action>"
 // M I S C (properties, etc...)
 
 codeFileExtension() ::= ".py"
+
+tokenWorkaround(token) ::= <%
+<if(isInvalid.(token))>0<else><token><endif>
+%>
+
+isInvalid ::= [
+    "<INVALID>": true,
+    default: false
+]
 
 true_value() ::= "True"
 false_value() ::= "False"

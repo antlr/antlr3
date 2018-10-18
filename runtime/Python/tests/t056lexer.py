@@ -42,7 +42,7 @@ class T(testbase.ANTLRTest):
             "- 34"
             )
 
-        self.failUnlessEqual("- 34, channel=0", found)
+        self.assertEqual("- 34, channel=0", found)
 
         
 if __name__ == '__main__':

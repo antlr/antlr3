@@ -25,13 +25,13 @@ class t002lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        self.failUnlessEqual(token.type, self.lexerModule.ZERO)
+        self.assertEqual(token.type, self.lexerModule.ZERO)
 
         token = lexer.nextToken()
-        self.failUnlessEqual(token.type, self.lexerModule.ONE)
+        self.assertEqual(token.type, self.lexerModule.ONE)
 
         token = lexer.nextToken()
-        self.failUnlessEqual(token.type, self.lexerModule.EOF)
+        self.assertEqual(token.type, self.lexerModule.EOF)
         
 
     def testMalformedInput(self):
@@ -43,7 +43,7 @@ class t002lexer(testbase.ANTLRTest):
             self.fail()
 
         except antlr3.NoViableAltException, exc:
-            self.failUnlessEqual(exc.unexpectedType, '2')
+            self.assertEqual(exc.unexpectedType, '2')
             
 
 if __name__ == '__main__':

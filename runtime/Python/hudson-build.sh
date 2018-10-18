@@ -24,7 +24,7 @@ cd $WORKSPACE
 
 # stringtemplate3
 if [ ! -f stringtemplate3-$ST_VERSION.tar.gz ]; then
-    wget http://pypi.python.org/packages/source/s/stringtemplate3/stringtemplate3-$ST_VERSION.tar.gz
+    wget https://pypi.python.org/packages/source/s/stringtemplate3/stringtemplate3-$ST_VERSION.tar.gz
 fi
 (cd tmp; tar xzf ../stringtemplate3-$ST_VERSION.tar.gz)
 (cd tmp/stringtemplate3-$ST_VERSION; python setup.py install --install-lib=$WORKSPACE)

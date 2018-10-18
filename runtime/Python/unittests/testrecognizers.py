@@ -11,7 +11,7 @@ class TestBaseRecognizer(unittest.TestCase):
         """BaseRecognizer._getRuleInvocationStack()"""
 
         rules = antlr3.BaseRecognizer._getRuleInvocationStack(__name__)
-        self.failUnlessEqual(
+        self.assertListEqual(
             rules,
             ['testGetRuleInvocationStack']
             )
@@ -47,7 +47,7 @@ class TestTokenSource(unittest.TestCase):
         for token in src:
             tokens.append(token.type)
 
-        self.failUnlessEqual(tokens, [1, 2, 3, 4])
+        self.assertListEqual(tokens, [1, 2, 3, 4])
 
 
 

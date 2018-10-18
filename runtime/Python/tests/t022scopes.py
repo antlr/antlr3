@@ -66,7 +66,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         symbols = parser.c()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             symbols,
             set(['i', 'j'])
             )
@@ -91,7 +91,7 @@ class t022scopes(testbase.ANTLRTest):
             parser.c()
             self.fail()
         except RuntimeError, exc:
-            self.failUnlessEqual(exc.args[0], 'x')
+            self.assertEqual(exc.args[0], 'x')
 
 
     def testd1(self):
@@ -114,7 +114,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         symbols = parser.d()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             symbols,
             set(['i', 'j'])
             )
@@ -131,7 +131,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.e()
 
-        self.failUnlessEqual(res, 12)
+        self.assertEqual(res, 12)
 
 
     def testf1(self):
@@ -145,7 +145,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.f()
 
-        self.failUnlessEqual(res, None)
+        self.assertEqual(res, None)
 
 
     def testf2(self):
@@ -159,7 +159,7 @@ class t022scopes(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         res = parser.f()
 
-        self.failUnlessEqual(res, None)
+        self.assertEqual(res, None)
 
 
 

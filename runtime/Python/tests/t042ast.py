@@ -38,7 +38,7 @@ class t042ast(testbase.ANTLRTest):
     
     def testR1(self):
         r = self.parse("1 + 2", 'r1')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(+ 1 2)'
             )
@@ -46,7 +46,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR2a(self):
         r = self.parse("assert 2+3;", 'r2')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(assert (+ 2 3))'
             )
@@ -54,7 +54,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR2b(self):
         r = self.parse("assert 2+3 : 5;", 'r2')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(assert (+ 2 3) 5)'
             )
@@ -62,7 +62,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR3a(self):
         r = self.parse("if 1 fooze", 'r3')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(if 1 fooze)'
             )
@@ -70,7 +70,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR3b(self):
         r = self.parse("if 1 fooze else fooze", 'r3')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(if 1 fooze fooze)'
             )
@@ -78,7 +78,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR4a(self):
         r = self.parse("while 2 fooze", 'r4')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(while 2 fooze)'
             )
@@ -86,7 +86,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR5a(self):
         r = self.parse("return;", 'r5')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'return'
             )
@@ -94,7 +94,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR5b(self):
         r = self.parse("return 2+3;", 'r5')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(return (+ 2 3))'
             )
@@ -102,7 +102,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR6a(self):
         r = self.parse("3", 'r6')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '3'
             )
@@ -110,7 +110,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR6b(self):
         r = self.parse("3 a", 'r6')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '3 a'
             )
@@ -118,14 +118,14 @@ class t042ast(testbase.ANTLRTest):
 
     def testR7(self):
         r = self.parse("3", 'r7')
-        self.failUnless(
+        self.assertTrue(
             r.tree is None
             )
 
 
     def testR8(self):
         r = self.parse("var foo:bool", 'r8')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(var bool foo)'
             )
@@ -133,7 +133,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR9(self):
         r = self.parse("int foo;", 'r9')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(VARDEF int foo)'
             )
@@ -141,7 +141,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR10(self):
         r = self.parse("10", 'r10')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '10.0'
             )
@@ -149,7 +149,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR11a(self):
         r = self.parse("1+2", 'r11')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR (+ 1 2))'
             )
@@ -157,7 +157,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR11b(self):
         r = self.parse("", 'r11')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'EXPR'
             )
@@ -165,7 +165,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR12a(self):
         r = self.parse("foo", 'r12')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'foo'
             )
@@ -173,7 +173,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR12b(self):
         r = self.parse("foo, bar, gnurz", 'r12')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'foo bar gnurz'
             )
@@ -181,7 +181,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR13a(self):
         r = self.parse("int foo;", 'r13')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(int foo)'
             )
@@ -189,7 +189,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR13b(self):
         r = self.parse("bool foo, bar, gnurz;", 'r13')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(bool foo bar gnurz)'
             )
@@ -197,7 +197,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR14a(self):
         r = self.parse("1+2 int", 'r14')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR (+ 1 2) int)'
             )
@@ -205,7 +205,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR14b(self):
         r = self.parse("1+2 int bool", 'r14')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR (+ 1 2) int bool)'
             )
@@ -213,7 +213,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR14c(self):
         r = self.parse("int bool", 'r14')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR int bool)'
             )
@@ -221,7 +221,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR14d(self):
         r = self.parse("fooze fooze int bool", 'r14')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR fooze fooze int bool)'
             )
@@ -229,7 +229,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR14e(self):
         r = self.parse("7+9 fooze fooze int bool", 'r14')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(EXPR (+ 7 9) fooze fooze int bool)'
             )
@@ -237,7 +237,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR15(self):
         r = self.parse("7", 'r15')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '7 7'
             )
@@ -245,7 +245,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR16a(self):
         r = self.parse("int foo", 'r16')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(int foo)'
             )
@@ -254,7 +254,7 @@ class t042ast(testbase.ANTLRTest):
     def testR16b(self):
         r = self.parse("int foo, bar, gnurz", 'r16')
             
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(int foo) (int bar) (int gnurz)'
             )
@@ -262,7 +262,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR17a(self):
         r = self.parse("for ( fooze ; 1 + 2 ; fooze ) fooze", 'r17')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(for fooze (+ 1 2) fooze fooze)'
             )
@@ -270,7 +270,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR18a(self):
         r = self.parse("for", 'r18')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'BLOCK'
             )
@@ -278,7 +278,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR19a(self):
         r = self.parse("for", 'r19')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'for'
             )
@@ -286,7 +286,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR20a(self):
         r = self.parse("for", 'r20')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'FOR'
             )
@@ -294,7 +294,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR21a(self):
         r = self.parse("for", 'r21')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'BLOCK'
             )
@@ -302,7 +302,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR22a(self):
         r = self.parse("for", 'r22')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'for'
             )
@@ -310,7 +310,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR23a(self):
         r = self.parse("for", 'r23')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'FOR'
             )
@@ -318,7 +318,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR24a(self):
         r = self.parse("fooze 1 + 2", 'r24')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(fooze (+ 1 2))'
             )
@@ -326,7 +326,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR25a(self):
         r = self.parse("fooze, fooze2 1 + 2", 'r25')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(fooze (+ 1 2))'
             )
@@ -334,7 +334,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR26a(self):
         r = self.parse("fooze, fooze2", 'r26')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(BLOCK fooze fooze2)'
             )
@@ -342,7 +342,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR27a(self):
         r = self.parse("fooze 1 + 2", 'r27')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(fooze (fooze (+ 1 2)))'
             )
@@ -350,7 +350,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR28(self):
         r = self.parse("foo28a", 'r28')
-        self.failUnless(
+        self.assertTrue(
             r.tree is None
             )
 
@@ -374,7 +374,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR31a(self):
         r = self.parse("public int gnurz = 1 + 2;", 'r31', flag=0)
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(VARDEF gnurz public int (+ 1 2))'
             )
@@ -382,7 +382,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR31b(self):
         r = self.parse("public int gnurz = 1 + 2;", 'r31', flag=1)
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(VARIABLE gnurz public int (+ 1 2))'
             )
@@ -390,7 +390,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR31c(self):
         r = self.parse("public int gnurz = 1 + 2;", 'r31', flag=2)
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(FIELD gnurz public int (+ 1 2))'
             )
@@ -398,7 +398,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR32a(self):
         r = self.parse("gnurz 32", 'r32', [1], flag=2)
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'gnurz'
             )
@@ -406,7 +406,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR32b(self):
         r = self.parse("gnurz 32", 'r32', [2], flag=2)
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '32'
             )
@@ -414,14 +414,14 @@ class t042ast(testbase.ANTLRTest):
 
     def testR32c(self):
         r = self.parse("gnurz 32", 'r32', [3], flag=2)
-        self.failUnless(
+        self.assertTrue(
             r.tree is None
             )
 
 
     def testR33a(self):
         r = self.parse("public private fooze", 'r33')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'fooze'
             )
@@ -429,7 +429,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR34a(self):
         r = self.parse("public class gnurz { fooze fooze2 }", 'r34')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(class gnurz public fooze fooze2)'
             )
@@ -437,7 +437,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR34b(self):
         r = self.parse("public class gnurz extends bool implements int, bool { fooze fooze2 }", 'r34')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(class gnurz public (extends bool) (implements int bool) fooze fooze2)'
             )
@@ -454,7 +454,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR36a(self):
         r = self.parse("if ( 1 + 2 ) fooze", 'r36')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(if (EXPR (+ 1 2)) fooze)'
             )
@@ -462,7 +462,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR36b(self):
         r = self.parse("if ( 1 + 2 ) fooze else fooze2", 'r36')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(if (EXPR (+ 1 2)) fooze fooze2)'
             )
@@ -470,7 +470,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR37(self):
         r = self.parse("1 + 2 + 3", 'r37')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(+ (+ 1 2) 3)'
             )
@@ -478,7 +478,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR38(self):
         r = self.parse("1 + 2 + 3", 'r38')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(+ (+ 1 2) 3)'
             )
@@ -486,7 +486,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR39a(self):
         r = self.parse("gnurz[1]", 'r39')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(INDEX gnurz 1)'
             )
@@ -494,7 +494,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR39b(self):
         r = self.parse("gnurz(2)", 'r39')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(CALL gnurz 2)'
             )
@@ -502,7 +502,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR39c(self):
         r = self.parse("gnurz.gnarz", 'r39')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(FIELDACCESS gnurz gnarz)'
             )
@@ -510,7 +510,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR39d(self):
         r = self.parse("gnurz.gnarz.gnorz", 'r39')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(FIELDACCESS (FIELDACCESS gnurz gnarz) gnorz)'
             )
@@ -518,7 +518,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR40(self):
         r = self.parse("1 + 2 + 3;", 'r40')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(+ 1 2 3)'
             )
@@ -526,7 +526,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR41(self):
         r = self.parse("1 + 2 + 3;", 'r41')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(3 (2 1))'
             )
@@ -534,7 +534,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR42(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r42')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'gnurz gnarz gnorz'
             )
@@ -542,10 +542,10 @@ class t042ast(testbase.ANTLRTest):
 
     def testR43(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r43')
-        self.failUnless(
+        self.assertTrue(
             r.tree is None
             )
-        self.failUnlessEqual(
+        self.assertListEqual(
             r.res,
             ['gnurz', 'gnarz', 'gnorz']
             )
@@ -553,7 +553,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR44(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r44')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(gnorz (gnarz gnurz))'
             )
@@ -561,7 +561,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR45(self):
         r = self.parse("gnurz", 'r45')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'gnurz'
             )
@@ -569,10 +569,10 @@ class t042ast(testbase.ANTLRTest):
 
     def testR46(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r46')
-        self.failUnless(
+        self.assertTrue(
             r.tree is None
             )
-        self.failUnlessEqual(
+        self.assertListEqual(
             r.res,
             ['gnurz', 'gnarz', 'gnorz']
             )
@@ -580,7 +580,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR47(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r47')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'gnurz gnarz gnorz'
             )
@@ -588,7 +588,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR48(self):
         r = self.parse("gnurz, gnarz, gnorz", 'r48')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'gnurz gnarz gnorz'
             )
@@ -596,7 +596,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR49(self):
         r = self.parse("gnurz gnorz", 'r49')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(gnurz gnorz)'
             )
@@ -604,7 +604,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR50(self):
         r = self.parse("gnurz", 'r50')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(1.0 gnurz)'
             )
@@ -612,7 +612,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR51(self):
         r = self.parse("gnurza gnurzb gnurzc", 'r51')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.res.toStringTree(),
             'gnurzb'
             )
@@ -620,7 +620,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR52(self):
         r = self.parse("gnurz", 'r52')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.res.toStringTree(),
             'gnurz'
             )
@@ -628,7 +628,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR53(self):
         r = self.parse("gnurz", 'r53')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.res.toStringTree(),
             'gnurz'
             )
@@ -636,7 +636,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR54(self):
         r = self.parse("gnurza 1 + 2 gnurzb", 'r54')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(+ 1 2)'
             )
@@ -644,7 +644,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR55a(self):
         r = self.parse("public private 1 + 2", 'r55')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'public private (+ 1 2)'
             )
@@ -652,7 +652,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR55b(self):
         r = self.parse("public fooze", 'r55')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'public fooze'
             )
@@ -660,7 +660,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR56(self):
         r = self.parse("a b c d", 'r56')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'foo'
             )
@@ -668,7 +668,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR57(self):
         r = self.parse("a b c d", 'r57')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             'foo'
             )
@@ -676,7 +676,7 @@ class t042ast(testbase.ANTLRTest):
 
     def testR59(self):
         r = self.parse("a b c fooze", 'r59')
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             '(a fooze) (b fooze) (c fooze)'
             )

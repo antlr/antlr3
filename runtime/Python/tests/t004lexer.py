@@ -61,8 +61,8 @@ class t004lexer(testbase.ANTLRTest):
             self.fail()
 
         except antlr3.MismatchedTokenException, exc:
-            self.failUnlessEqual(exc.expecting, 'f')
-            self.failUnlessEqual(exc.unexpectedType, '2')
+            self.assertEqual(exc.expecting, 'f')
+            self.assertEqual(exc.unexpectedType, '2')
             
 
 if __name__ == '__main__':

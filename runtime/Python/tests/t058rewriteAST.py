@@ -1202,8 +1202,6 @@ class TestRewriteAST(testbase.ANTLRTest):
         self.assertEquals("2", found)
 
 
-    @testbase.broken("http://www.antlr.org:8888/browse/ANTLR-162",
-                     antlr3.tree.RewriteEmptyStreamException)
     def testSetWithLabel(self):
         grammar = textwrap.dedent(
             r'''
@@ -1367,7 +1365,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "int 34 x=1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 extraneous input u'34' expecting ID"],
+        self.assertListEqual(["line 1:4 extraneous input u'34' expecting ID"],
                           errors)
         self.assertEquals("(EXPR int x 1)", found) # tree gets correct x and 1 tokens
 
@@ -1388,7 +1386,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "int =1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 missing ID at u'='"], errors)
+        self.assertListEqual(["line 1:4 missing ID at u'='"], errors)
         self.assertEquals("(EXPR int <missing ID> 1)", found) # tree gets invented ID token
 
 
@@ -1407,7 +1405,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "decl", "x=1;",
                                         expectErrors=True)
-        self.assertEquals(["line 1:0 mismatched input u'x' expecting set None"],
+        self.assertListEqual(["line 1:0 mismatched input u'x' expecting set None"],
                           errors);
         self.assertEquals("(EXPR <error: x> x 1)", found) # tree gets invented ID token
 
@@ -1425,7 +1423,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "a", "abc",
                                         expectErrors=True)
-        self.assertEquals(["line 1:3 missing INT at '<EOF>'"], errors)
+        self.assertListEqual(["line 1:3 missing INT at '<EOF>'"], errors)
         # doesn't do in-line recovery for sets (yet?)
         self.assertEquals("abc <missing INT>", found)
 
@@ -1445,7 +1443,7 @@ class TestRewriteAST(testbase.ANTLRTest):
 
         found, errors = self.execParser(grammar, "a", "abc ick 34",
                                         expectErrors=True)
-        self.assertEquals(["line 1:4 extraneous input u'ick' expecting INT"],
+        self.assertListEqual(["line 1:4 extraneous input u'ick' expecting INT"],
                           errors)
         self.assertEquals("abc 34", found)
 
@@ -1463,7 +1461,7 @@ class TestRewriteAST(testbase.ANTLRTest):
             ''')
 
         found, errors = self.execParser(grammar, "a", "34", expectErrors=True)
-        self.assertEquals(["line 1:0 missing ID at u'34'"], errors)
+        self.assertListEqual(["line 1:0 missing ID at u'34'"], errors)
         self.assertEquals("<missing ID> 34", found)
 
 
@@ -1485,7 +1483,7 @@ class TestRewriteAST(testbase.ANTLRTest):
         # finds an error at the first token, 34, and re-syncs.
         # re-synchronizing does not consume a token because 34 follows
         # ref to rule b (start of c). It then matches 34 in c.
-        self.assertEquals(["line 1:0 missing ID at u'34'"], errors)
+        self.assertListEqual(["line 1:0 missing ID at u'34'"], errors)
         self.assertEquals("<missing ID> 34", found)
 
 
@@ -1507,7 +1505,7 @@ class TestRewriteAST(testbase.ANTLRTest):
         # finds an error at the first token, 34, and re-syncs.
         # re-synchronizing does not consume a token because 34 follows
         # ref to rule b (start of c). It then matches 34 in c.
-        self.assertEquals(["line 1:0 no viable alternative at input u'*'"],
+        self.assertListEqual(["line 1:0 no viable alternative at input u'*'"],
                           errors);
         self.assertEquals("<unexpected: [@0,0:0=u'*',<6>,1:0], resync=*>",
                           found)

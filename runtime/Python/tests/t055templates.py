@@ -47,7 +47,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("id=abc, int=34", found)
+        self.assertEqual("id=abc, int=34", found)
 
 
     def testExternalTemplate(self):
@@ -88,7 +88,7 @@ class T(testbase.ANTLRTest):
             group
             )
 
-        self.failUnlessEqual("[a+b]", found)
+        self.assertEqual("[a+b]", found)
 
 
     def testEmptyTemplate(self):
@@ -113,7 +113,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnless(found is None)
+        self.assertTrue(found is None)
 
 
     def testList(self):
@@ -142,7 +142,7 @@ class T(testbase.ANTLRTest):
             "abc def ghi"
             )
 
-        self.failUnlessEqual("abc,def,ghi", found)
+        self.assertEqual("abc,def,ghi", found)
 
 
     def testAction(self):
@@ -166,7 +166,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("hello", found)
+        self.assertEqual("hello", found)
 
 
     def testTemplateExpressionInAction(self):
@@ -190,7 +190,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("hello", found)
+        self.assertEqual("hello", found)
 
 
     def testTemplateExpressionInAction2(self):
@@ -218,7 +218,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("hello world", found)
+        self.assertEqual("hello world", found)
 
 
     def testIndirectTemplateConstructor(self):
@@ -259,7 +259,7 @@ class T(testbase.ANTLRTest):
             group
             )
 
-        self.failUnlessEqual("[1+2+3]", found)
+        self.assertEqual("[1+2+3]", found)
 
 
     def testPredicates(self):
@@ -289,7 +289,7 @@ class T(testbase.ANTLRTest):
             "b 34"
             )
 
-        self.failUnlessEqual("B: 34", found)
+        self.assertEqual("B: 34", found)
 
 
     def testBacktrackingMode(self):
@@ -316,7 +316,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("id=abc, int=34", found)
+        self.assertEqual("id=abc, int=34", found)
 
 
     def testRewrite(self):
@@ -388,7 +388,7 @@ class T(testbase.ANTLRTest):
             '''
             )
 
-        self.failUnlessEqual(expected, found)
+        self.assertEqual(expected, found)
 
 
     def testTreeRewrite(self):
@@ -501,7 +501,7 @@ class T(testbase.ANTLRTest):
             '''
             )
 
-        self.failUnlessEqual(expected, found)
+        self.assertEqual(expected, found)
 
 
 if __name__ == '__main__':

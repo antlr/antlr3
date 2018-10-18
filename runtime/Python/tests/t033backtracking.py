@@ -17,7 +17,6 @@ class t033backtracking(testbase.ANTLRTest):
         return TParser
 
 
-    @testbase.broken("Some bug in the tool", SyntaxError)
     def testValid1(self):
         cStream = antlr3.StringStream('int a;')
 

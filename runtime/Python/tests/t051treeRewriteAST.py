@@ -79,7 +79,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("34 abc", found)
+        self.assertEqual("34 abc", found)
 
 
     def testSimpleTree(self):
@@ -114,7 +114,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(34 abc)", found)
+        self.assertEqual("(34 abc)", found)
 
 
     def testCombinedRewriteAndAuto(self):
@@ -149,7 +149,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(34 abc)", found)
+        self.assertEqual("(34 abc)", found)
 
 
         found = self.execTreeParser(
@@ -158,7 +158,7 @@ class T(testbase.ANTLRTest):
             "34"
             )
 
-        self.failUnlessEqual("34", found)
+        self.assertEqual("34", found)
 
 
     def testAvoidDup(self):
@@ -193,7 +193,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("(abc abc)", found)
+        self.assertEqual("(abc abc)", found)
 
 
     def testLoop(self):
@@ -228,7 +228,7 @@ class T(testbase.ANTLRTest):
             "a b c 3 4 5"
             )
 
-        self.failUnlessEqual("3 4 5 a b c", found)
+        self.assertEqual("3 4 5 a b c", found)
 
 
     def testAutoDup(self):
@@ -263,7 +263,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("abc", found)
+        self.assertEqual("abc", found)
 
 
     def testAutoDupRule(self):
@@ -300,7 +300,7 @@ class T(testbase.ANTLRTest):
             "a 1"
             )
 
-        self.failUnlessEqual("a 1", found)
+        self.assertEqual("a 1", found)
 
 
     def testAutoWildcard(self):
@@ -468,7 +468,7 @@ class T(testbase.ANTLRTest):
             "a b 3"
             )
 
-        self.failUnlessEqual("a b 3", found)
+        self.assertEqual("a b 3", found)
 
 
     def testAutoDupTree(self):
@@ -504,7 +504,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupTreeWithLabels(self):
@@ -540,7 +540,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupTreeWithListLabels(self):
@@ -576,7 +576,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupTreeWithRuleRoot(self):
@@ -612,7 +612,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupTreeWithRuleRootAndLabels(self):
@@ -648,7 +648,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupTreeWithRuleRootAndListLabels(self):
@@ -685,7 +685,7 @@ class T(testbase.ANTLRTest):
             "a 3"
             )
 
-        self.failUnlessEqual("(a 3)", found)
+        self.assertEqual("(a 3)", found)
 
 
     def testAutoDupNestedTree(self):
@@ -721,7 +721,7 @@ class T(testbase.ANTLRTest):
             "a b 3"
             )
 
-        self.failUnlessEqual("(a (b 3))", found)
+        self.assertEqual("(a (b 3))", found)
 
 
     def testDelete(self):
@@ -757,7 +757,7 @@ class T(testbase.ANTLRTest):
             "abc"
             )
 
-        self.failUnlessEqual("", found)
+        self.assertEqual("", found)
 
     def testSetMatchNoRewrite(self):
         grammar = textwrap.dedent(
@@ -792,7 +792,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("abc 34", found)
+        self.assertEqual("abc 34", found)
 
 
     def testSetOptionalMatchNoRewrite(self):
@@ -826,7 +826,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc 34")
 
-        self.failUnlessEqual("abc 34", found)
+        self.assertEqual("abc 34", found)
 
 
     def testSetMatchNoRewriteLevel2(self):
@@ -861,7 +861,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(abc 34)", found)
+        self.assertEqual("(abc 34)", found)
 
 
     def testSetMatchNoRewriteLevel2Root(self):
@@ -896,7 +896,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(abc 34)", found)
+        self.assertEqual("(abc 34)", found)
 
 
     ## REWRITE MODE
@@ -936,7 +936,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(ick 34)", found)
+        self.assertEqual("(ick 34)", found)
 
 
         found = self.execTreeParser(
@@ -945,7 +945,7 @@ class T(testbase.ANTLRTest):
             "34"
             )
 
-        self.failUnlessEqual("34", found)
+        self.assertEqual("34", found)
 
 
     def testRewriteModeFlatTree(self):
@@ -1180,7 +1180,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 's',
             "abc 34")
-        self.failUnlessEqual("abc 34", found)
+        self.assertEqual("abc 34", found)
 
 
     def testRewriteOfRuleRefRoot(self):
@@ -1209,7 +1209,7 @@ class T(testbase.ANTLRTest):
         # emits whole tree when you ref the root since I can't know whether
         # you want the children or not.  You might be returning a whole new
         # tree.  Hmm...still seems weird.  oh well.
-        self.failUnlessEqual("(12 (abc 34))", found)
+        self.assertEqual("(12 (abc 34))", found)
 
 
     def testRewriteOfRuleRefRootLabeled(self):
@@ -1238,7 +1238,7 @@ class T(testbase.ANTLRTest):
         # emits whole tree when you ref the root since I can't know whether
         # you want the children or not.  You might be returning a whole new
         # tree.  Hmm...still seems weird.  oh well.
-        self.failUnlessEqual("(12 (abc 34))", found)
+        self.assertEqual("(12 (abc 34))", found)
 
 
     def testRewriteOfRuleRefRootListLabeled(self):
@@ -1267,7 +1267,7 @@ class T(testbase.ANTLRTest):
         # emits whole tree when you ref the root since I can't know whether
         # you want the children or not.  You might be returning a whole new
         # tree.  Hmm...still seems weird.  oh well.
-        self.failUnlessEqual("(12 (abc 34))", found)
+        self.assertEqual("(12 (abc 34))", found)
 
 
     def testRewriteOfRuleRefChild(self):
@@ -1293,7 +1293,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 's',
             "abc 34")
-        self.failUnlessEqual("(34 34)", found)
+        self.assertEqual("(34 34)", found)
 
 
     def testRewriteOfRuleRefLabel(self):
@@ -1319,7 +1319,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 's',
             "abc 34")
-        self.failUnlessEqual("(34 34)", found)
+        self.assertEqual("(34 34)", found)
 
 
     def testRewriteOfRuleRefListLabel(self):
@@ -1345,7 +1345,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             treeGrammar, 's',
             "abc 34")
-        self.failUnlessEqual("(34 34)", found)
+        self.assertEqual("(34 34)", found)
 
 
 
@@ -1385,7 +1385,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("(root (ick 34))", found)
+        self.assertEqual("(root (ick 34))", found)
 
 
     def testWildcardSingleNode(self):
@@ -1421,7 +1421,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("34", found)
+        self.assertEqual("34", found)
 
     def testWildcardUnlabeledSingleNode(self):
         grammar = textwrap.dedent(

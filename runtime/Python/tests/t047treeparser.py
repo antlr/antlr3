@@ -56,7 +56,7 @@ class T(testbase.ANTLRTest):
         parser = self.getParser(tStream)
         r = parser.program()
 
-        self.failUnlessEqual(
+        self.assertEqual(
             r.tree.toStringTree(),
             "(VAR_DEF char c) (VAR_DEF int x) (FUNC_DECL (FUNC_HDR void bar (ARG_DEF int x))) (FUNC_DEF (FUNC_HDR int foo (ARG_DEF int y) (ARG_DEF char d)) (BLOCK (VAR_DEF int i) (for (= i 0) (< i 3) (= i (+ i 1)) (BLOCK (= x 3) (= y 5)))))"
             )
@@ -69,7 +69,7 @@ class T(testbase.ANTLRTest):
         # FIXME: need to crosscheck with Java target (compile walker with
         # -trace option), if this is the real list. For now I'm happy that
         # it does not crash ;)
-        self.failUnlessEqual(
+        self.assertListEqual(
             walker.traces,
             [ '>program', '>declaration', '>variable', '>type', '<type',
               '>declarator', '<declarator', '<variable', '<declaration',
@@ -115,7 +115,7 @@ class T(testbase.ANTLRTest):
         walker = self.getWalker(nodes)
         r = walker.variable()
 
-        self.failUnlessEqual(r, 'c')
+        self.assertEqual(r, 'c')
         
 
 if __name__ == '__main__':

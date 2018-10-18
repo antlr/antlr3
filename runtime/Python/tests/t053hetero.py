@@ -122,7 +122,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenCommonTree(self):
@@ -142,7 +142,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             input="a")
 
-        self.failUnlessEqual("a", found)
+        self.assertEqual("a", found)
 
 
     def testTokenWithQualifiedType(self):
@@ -169,7 +169,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testNamedType(self):
@@ -220,7 +220,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenWithListLabel(self):
@@ -248,7 +248,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenRoot(self):
@@ -276,7 +276,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testTokenRootWithListLabel(self):
@@ -304,7 +304,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testString(self):
@@ -332,7 +332,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     def testStringRoot(self):
@@ -360,7 +360,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     # PARSERS -- REWRITE AST
@@ -390,7 +390,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("a<V>", found)
+        self.assertEqual("a<V>", found)
 
 
     def testRewriteTokenWithArgs(self):
@@ -444,7 +444,7 @@ class T(testbase.ANTLRTest):
             input="a"
             )
 
-        self.failUnlessEqual("<V>;421930 a<V>;9900", found)
+        self.assertEqual("<V>;421930 a<V>;9900", found)
 
 
     def testRewriteTokenRoot(self):
@@ -473,7 +473,7 @@ class T(testbase.ANTLRTest):
             input="a 2"
             )
 
-        self.failUnlessEqual("(a<V> 2)", found)
+        self.assertEqual("(a<V> 2)", found)
 
 
     def testRewriteString(self):
@@ -501,7 +501,7 @@ class T(testbase.ANTLRTest):
             input="begin"
             )
 
-        self.failUnlessEqual("begin<V>", found)
+        self.assertEqual("begin<V>", found)
 
 
     def testRewriteStringRoot(self):
@@ -530,7 +530,7 @@ class T(testbase.ANTLRTest):
             input="begin 2"
             )
 
-        self.failUnlessEqual("(begin<V> 2)", found)
+        self.assertEqual("(begin<V> 2)", found)
 
     def testRewriteRuleResults(self):
         grammar = textwrap.dedent(
@@ -567,7 +567,7 @@ class T(testbase.ANTLRTest):
             grammar, 'a',
             input="a,b,c")
 
-        self.failUnlessEqual("(LIST<W> a<V> b<V> c<V>)", found)
+        self.assertEqual("(LIST<W> a<V> b<V> c<V>)", found)
 
     def testCopySemanticsWithHetero(self):
         grammar = textwrap.dedent(
@@ -597,7 +597,7 @@ class T(testbase.ANTLRTest):
         found = self.execParser(
             grammar, 'a',
             input="int a, b, c;")
-        self.failUnlessEqual("(int<V> a) (int<V> b) (int<V> c)", found)
+        self.assertEqual("(int<V> a) (int<V> b) (int<V> c)", found)
 
     # TREE PARSERS -- REWRITE AST
 
@@ -646,7 +646,7 @@ class T(testbase.ANTLRTest):
             input="abc 34"
             )
 
-        self.failUnlessEqual("34<V> abc<W>", found)
+        self.assertEqual("34<V> abc<W>", found)
 
 
     def testTreeParserRewriteTree(self):
@@ -694,7 +694,7 @@ class T(testbase.ANTLRTest):
             input="abc 34"
             )
 
-        self.failUnlessEqual("(34<V> abc<W>)", found)
+        self.assertEqual("(34<V> abc<W>)", found)
 
 
     def testTreeParserRewriteImaginary(self):
@@ -742,7 +742,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V> abc", found)
+        self.assertEqual("ROOT<V> abc", found)
 
 
     def testTreeParserRewriteImaginaryWithArgs(self):
@@ -790,7 +790,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V>;42 abc", found)
+        self.assertEqual("ROOT<V>;42 abc", found)
 
 
     def testTreeParserRewriteImaginaryRoot(self):
@@ -837,7 +837,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("(ROOT<V> abc)", found)
+        self.assertEqual("(ROOT<V> abc)", found)
 
 
     def testTreeParserRewriteImaginaryFromReal(self):
@@ -888,7 +888,7 @@ class T(testbase.ANTLRTest):
             input="abc"
             )
 
-        self.failUnlessEqual("ROOT<V>@1", found)
+        self.assertEqual("ROOT<V>@1", found)
 
 
     def testTreeParserAutoHeteroAST(self):
@@ -932,7 +932,7 @@ class T(testbase.ANTLRTest):
             input="abc;"
             )
 
-        self.failUnlessEqual("abc<V> ;<V>", found)
+        self.assertEqual("abc<V> ;<V>", found)
 
 
 if __name__ == '__main__':

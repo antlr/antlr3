@@ -79,7 +79,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
 
-        self.failUnlessEqual("abc, 34", found)
+        self.assertEqual("abc, 34", found)
         
 
 
@@ -113,7 +113,7 @@ class T(testbase.ANTLRTest):
             "abc 34"
             )
             
-        self.failUnlessEqual("abc, 34", found)
+        self.assertEqual("abc, 34", found)
 
 
     def testFlatVsTreeDecision(self):
@@ -148,7 +148,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 b 2"
             )
-        self.failUnlessEqual("^(a 1)b 2\n", found)
+        self.assertEqual("^(a 1)b 2\n", found)
 
 
     def testFlatVsTreeDecision2(self):
@@ -183,7 +183,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 2 3 b 4 5"
             )
-        self.failUnlessEqual("^(a 3)b 5\n", found)
+        self.assertEqual("^(a 3)b 5\n", found)
 
 
     def testCyclicDFALookahead(self):
@@ -217,7 +217,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "a 1 2 3."
             )
-        self.failUnlessEqual("alt 1", found)
+        self.assertEqual("alt 1", found)
 
 
 ##     def testTemplateOutput(self):
@@ -271,7 +271,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc"
             )
-        self.failUnlessEqual("abc", found)
+        self.assertEqual("abc", found)
 
 
     def testNullableChildList2(self):
@@ -304,7 +304,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc;"
             )
-        self.failUnlessEqual("abc", found)
+        self.assertEqual("abc", found)
 
 
     def testNullableChildList3(self):
@@ -338,7 +338,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc def;"
             )
-        self.failUnlessEqual("abc, def", found)
+        self.assertEqual("abc, def", found)
 
 
     def testActionsAfterRoot(self):
@@ -371,7 +371,7 @@ class T(testbase.ANTLRTest):
             treeGrammar, 'a',
             "abc;"
             )
-        self.failUnless("abc, 2\n", found)
+        self.assertTrue("abc, 2\n", found)
 
 
     def testWildcardLookahead(self):
