@@ -58,6 +58,7 @@
         <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
         <bootclasspath.compile>${bootclasspath.java5}</bootclasspath.compile>
         <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
+        <jdk>1.8</jdk>
     </properties>
 
     <licenses>
@@ -145,8 +146,8 @@
                             <execution>
                                 <id>default-compile</id>
                                 <configuration>
-                                    <source>1.5</source>
-                                    <target>1.5</target>
+                                    <source>${jdk}</source>
+                                    <target>${jdk}</target>
                                     <compilerArgs>
                                         <arg>-Xlint</arg>
                                         <arg>-Xlint:-serial</arg>
@@ -158,8 +159,8 @@
                             <execution>
                                 <id>default-testCompile</id>
                                 <configuration>
-                                    <source>1.6</source>
-                                    <target>1.6</target>
+                                    <source>${jdk}</source>
+                                    <target>${jdk}</target>
                                     <compilerArgs>
                                         <arg>-Xlint</arg>
                                         <arg>-Xlint:-serial</arg>
@@ -235,15 +236,15 @@
                     <execution>
                         <id>default-compile</id>
                         <configuration>
-                            <source>1.5</source>
-                            <target>1.5</target>
+                            <source>${jdk}</source>
+                            <target>${jdk}</target>
                         </configuration>
                     </execution>
                     <execution>
                         <id>default-testCompile</id>
                         <configuration>
-                            <source>1.6</source>
-                            <target>1.6</target>
+                            <source>${jdk}</source>
+                            <target>${jdk}</target>
                         </configuration>
                     </execution>
                 </executions>
