@@ -59,6 +59,11 @@
         <bootclasspath.compile>${bootclasspath.java5}</bootclasspath.compile>
         <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
         <jdk>1.8</jdk>
+        <junit.version>4.13</junit.version>
+        <st4.version>4.3</st4.version>
+        <antlr.version>2.7.7</antlr.version>
+        <stringtemplate.version>3.2.1</stringtemplate.version>
+        <required-maven-version>3.3.1</required-maven-version>
     </properties>
 
     <licenses>
@@ -102,28 +107,28 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.10</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>antlr</groupId>
                 <artifactId>antlr</artifactId>
-                <version>2.7.7</version>
+                <version>${antlr.version}</version>
                 <scope>compile</scope>
             </dependency>
 
             <dependency>
               <groupId>org.antlr</groupId>
               <artifactId>stringtemplate</artifactId>
-              <version>3.2.1</version>
+              <version>${stringtemplate.version}</version>
               <scope>compile</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.antlr</groupId>
                 <artifactId>ST4</artifactId>
-                <version>4.0.8</version>
+                <version>${st4.version}</version>
                 <scope>compile</scope>
             </dependency>
 
@@ -302,6 +307,26 @@
                 <version>1.5</version>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required-maven-version}</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
     </build>
