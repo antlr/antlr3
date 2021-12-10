@@ -369,7 +369,7 @@ public class TestAutoAST extends BaseTest {
 
 	@Test
     public void testSetRootWithLabel() throws Exception {
-		
+
 		String grammar =
 			"grammar T;\n" +
 			"options {output=AST;}\n" +
@@ -807,7 +807,7 @@ public class TestAutoAST extends BaseTest {
 
 	// S U P P O R T
 
-	public void _test() throws Exception {
+	private void _test() throws Exception {
 		String grammar =
 			"grammar T;\n" +
 			"options {output=AST;}\n" +

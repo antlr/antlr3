@@ -499,7 +499,7 @@ public class TestCharDFAConversion extends BaseTest {
 
 	// S U P P O R T
 
-	public void _template() throws Exception {
+	private void _template() throws Exception {
 		Grammar g = new Grammar(
 			"grammar T;\n"+
 			"a : A | B;");

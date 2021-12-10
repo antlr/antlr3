@@ -1,0 +1,29 @@
+"""BUILD.bazel file for ANTLR 3."""
+
+load("@rules_java//java:defs.bzl", "java_library")
+
+package(default_visibility = ["//visibility:private"])
+
+java_library(
+    name = "java_runtime",
+    srcs = glob(
+        ["runtime/Java/src/main/java/**/*.java"],
+        # Avoid pulling in org.antlr.stringtemplate.
+        exclude = ["runtime/Java/src/main/java/org/antlr/runtime/tree/DOTTreeGenerator.java"],
+    ),
+    javacopts = [
+        "-Xep:EqualsHashCode:OFF",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "tool",
+    actual = "//tool/src:tool",
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "tests",
+    tests = ["//tool/src:tests"],
+)
