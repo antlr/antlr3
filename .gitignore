@@ -18,3 +18,9 @@ nb-configuration.xml
 
 # Python runtime files
 *.py[co]
+
+# Bazel
+bazel-bin
+bazel-out
+bazel-antlr3
+bazel-testlogs

@@ -1,0 +1,145 @@
+"""BUILD.bazel file for ANTLR 3."""
+
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
+
+package(default_visibility = ["//visibility:private"])
+
+java_binary(
+    name = "tool",
+    main_class = "org.antlr.Tool",
+    visibility = ["//:__pkg__"],
+    runtime_deps = [":tool_lib"],
+)
+
+java_library(
+    name = "tool_lib",
+    srcs = glob(["main/java/**/*.java"]) + [
+        "main/java/org/antlr/grammar/v3/ANTLRLexer.java",
+        "main/java/org/antlr/grammar/v3/ANTLRParser.java",
+        "main/java/org/antlr/grammar/v3/ANTLRTreePrinter.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Lexer.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Parser.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Tree.java",
+        "main/java/org/antlr/grammar/v3/ActionAnalysis.java",
+        "main/java/org/antlr/grammar/v3/ActionTranslator.java",
+        "main/java/org/antlr/grammar/v3/AssignTokenTypesWalker.java",
+        "main/java/org/antlr/grammar/v3/CodeGenTreeWalker.java",
+        "main/java/org/antlr/grammar/v3/DefineGrammarItemsWalker.java",
+        "main/java/org/antlr/grammar/v3/LeftRecursiveRuleWalker.java",
+        "main/java/org/antlr/grammar/v3/TreeToNFAConverter.java",
+    ],
+    javacopts = [
+        "-Xep:EqualsHashCode:OFF",
+    ],
+    resource_strip_prefix = "tool/src/main/resources",
+    resources = glob(["main/resources/**/*.stg"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":tool_bootstrap",
+        "//:java_runtime",
+        "@stringtemplate4",
+    ],
+)
+
+genrule(
+    name = "tool_bootstrap",
+    srcs = [
+        "main/antlr3/org/antlr/grammar/v3/ANTLR.g",
+        "main/antlr3/org/antlr/grammar/v3/ANTLRTreePrinter.g",
+        "main/antlr3/org/antlr/grammar/v3/ANTLRv3.g",
+        "main/antlr3/org/antlr/grammar/v3/ANTLRv3Tree.g",
+        "main/antlr3/org/antlr/grammar/v3/ActionAnalysis.g",
+        "main/antlr3/org/antlr/grammar/v3/ActionTranslator.g",
+        "main/antlr3/org/antlr/grammar/v3/AssignTokenTypesWalker.g",
+        "main/antlr3/org/antlr/grammar/v3/CodeGenTreeWalker.g",
+        "main/antlr3/org/antlr/grammar/v3/DefineGrammarItemsWalker.g",
+        "main/antlr3/org/antlr/grammar/v3/LeftRecursiveRuleWalker.g",
+        "main/antlr3/org/antlr/grammar/v3/TreeToNFAConverter.g",
+    ],
+    outs = [
+        "main/java/org/antlr/grammar/v3/ANTLRLexer.java",
+        "main/java/org/antlr/grammar/v3/ANTLRParser.java",
+        "main/java/org/antlr/grammar/v3/ANTLRTreePrinter.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Lexer.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Parser.java",
+        "main/java/org/antlr/grammar/v3/ANTLRv3Tree.java",
+        "main/java/org/antlr/grammar/v3/ActionAnalysis.java",
+        "main/java/org/antlr/grammar/v3/ActionTranslator.java",
+        "main/java/org/antlr/grammar/v3/AssignTokenTypesWalker.java",
+        "main/java/org/antlr/grammar/v3/CodeGenTreeWalker.java",
+        "main/java/org/antlr/grammar/v3/DefineGrammarItemsWalker.java",
+        "main/java/org/antlr/grammar/v3/LeftRecursiveRuleWalker.java",
+        "main/java/org/antlr/grammar/v3/TreeToNFAConverter.java",
+    ],
+    cmd = """
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ANTLR.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ANTLRTreePrinter.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ANTLRv3.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ANTLRv3Tree.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ActionAnalysis.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/ActionTranslator.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/AssignTokenTypesWalker.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/CodeGenTreeWalker.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/DefineGrammarItemsWalker.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/LeftRecursiveRuleWalker.g)
+      $(JAVA) -cp $(location @antlr3_bootstrap//jar) org.antlr.Tool -fo $(RULEDIR)/main/java/org/antlr/grammar/v3 $(location :main/antlr3/org/antlr/grammar/v3/TreeToNFAConverter.g)
+    """,
+    toolchains = ["@bazel_tools//tools/jdk:current_host_java_runtime"],
+    tools = ["@antlr3_bootstrap//jar"],
+)
+
+java_test(
+    name = "tests",
+    srcs = glob(["test/java/**/*.java"]),
+    args = [
+        "org.antlr.test.TestASTConstruction",
+        "org.antlr.test.TestAttributes",
+        "org.antlr.test.TestAutoAST",
+        "org.antlr.test.TestBufferedTreeNodeStream",
+        "org.antlr.test.TestCharDFAConversion",
+        "org.antlr.test.TestCommonTokenStream",
+        "org.antlr.test.TestCompositeGrammars",
+        "org.antlr.test.TestDFAConversion",
+        "org.antlr.test.TestDFAMatching",
+        "org.antlr.test.TestFastQueue",
+        "org.antlr.test.TestHeteroAST",
+        "org.antlr.test.TestInterpretedLexing",
+        "org.antlr.test.TestInterpretedParsing",
+        "org.antlr.test.TestIntervalSet",
+        "org.antlr.test.TestJavaCodeGeneration",
+        "org.antlr.test.TestLeftRecursion",
+        "org.antlr.test.TestLexer",
+        "org.antlr.test.TestMessages",
+        "org.antlr.test.TestNFAConstruction",
+        "org.antlr.test.TestRewriteAST",
+        "org.antlr.test.TestRewriteTemplates",
+        "org.antlr.test.TestSemanticPredicateEvaluation",
+        "org.antlr.test.TestSemanticPredicates",
+        "org.antlr.test.TestSets",
+        "org.antlr.test.TestSymbolDefinitions",
+        "org.antlr.test.TestSyntacticPredicateEvaluation",
+        "org.antlr.test.TestSyntaxErrors",
+        "org.antlr.test.TestTemplates",
+        "org.antlr.test.TestTokenRewriteStream",
+        "org.antlr.test.TestTopologicalSort",
+        "org.antlr.test.TestTreeGrammarRewriteAST",
+        "org.antlr.test.TestTreeIterator",
+        "org.antlr.test.TestTreeNodeStream",
+        "org.antlr.test.TestTreeParsing",
+        "org.antlr.test.TestTrees",
+        "org.antlr.test.TestTreeWizard",
+    ],
+    javacopts = [
+        "-Xep:JUnit4RunWithMissing:OFF",
+    ],
+    main_class = "org.junit.runner.JUnitCore",
+    use_testrunner = False,
+    visibility = ["//:__pkg__"],
+    deps = [
+        ":tool_lib",
+        "//:java_runtime",
+        "@hamcrest_core//jar",
+        "@junit//jar",
+        "@stringtemplate4",
+    ],
+)

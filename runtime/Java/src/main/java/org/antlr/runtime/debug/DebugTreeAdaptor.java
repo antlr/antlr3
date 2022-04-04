@@ -227,7 +227,7 @@ public class DebugTreeAdaptor implements TreeAdaptor {
 
 	@Override
 	public Object deleteChild(Object t, int i) {
-		return deleteChild(t, i);
+		return adaptor.deleteChild(t, i);
 	}
 
 	@Override

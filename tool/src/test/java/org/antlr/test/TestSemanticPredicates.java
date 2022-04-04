@@ -185,7 +185,7 @@ public class TestSemanticPredicates extends BaseTest {
 			".s1-B->:s2=>1\n";
 		checkDecision(g, 1, expecting, new int[] {2},
 					  new int[] {1,2}, "A B", new int[] {1}, null, 3);
-	}	
+	}
 	 */
 
 	@Test public void testHoist2() throws Exception {
@@ -768,7 +768,7 @@ public class TestSemanticPredicates extends BaseTest {
 
 	// S U P P O R T
 
-	public void _template() throws Exception {
+	private void _template() throws Exception {
 		Grammar g = new Grammar(
 			"parser grammar t;\n"+
 			"a : A | B;");

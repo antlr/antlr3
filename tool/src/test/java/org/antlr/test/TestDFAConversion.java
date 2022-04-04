@@ -1524,7 +1524,7 @@ As a result, alternative(s) 2 were disabled for that input
 
 	// S U P P O R T
 
-	public void _template() throws Exception {
+	private void _template() throws Exception {
 		Grammar g = new Grammar(
 			"parser grammar t;\n"+
 			"a : A | B;");

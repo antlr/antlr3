@@ -225,7 +225,7 @@ public class TestSemanticPredicateEvaluation extends BaseTest {
 
 	// S U P P O R T
 
-	public void _test() throws Exception {
+	private void _test() throws Exception {
 		String grammar =
 			"grammar T;\n" +
 			"options {output=AST;}\n" +
