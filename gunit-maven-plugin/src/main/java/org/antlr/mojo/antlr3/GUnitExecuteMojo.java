@@ -36,18 +36,22 @@ import org.antlr.gunit.GrammarInfo;
 import org.antlr.gunit.gUnitExecutor;
 import org.antlr.gunit.AbstractTest;
 import org.antlr.gunit.Interp;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * Takes gUnit scripts and directly performs testing.
- *
- * @goal gunit
- *
- * @phase test
- * @requiresDependencyResolution test
- * @requiresProject true
- *
  * @author Steve Ebersole
  */
+@Mojo(
+		name = "gunit",
+		defaultPhase = LifecyclePhase.TEST,
+		requiresDependencyResolution = ResolutionScope.TEST,
+		requiresProject = true)
 public class GUnitExecuteMojo extends AbstractMojo {
 	public static final String ANTLR_GROUP_ID = "org.antlr";
 	public static final String ANTLR_ARTIFACT_NAME = "antlr";
@@ -55,60 +59,48 @@ public class GUnitExecuteMojo extends AbstractMojo {
 
 	/**
      * INTERNAL : The Maven Project to which we are attached
-     *
-     * @parameter expression="${project}"
-     * @required
      */
+	@Parameter(defaultValue = "${project}", required = true)
     private MavenProject project;
 
 	/**
 	 * INTERNAL : The artifacts associated to the dependencies defined as part
 	 * of our configuration within the project to which we are being attached.
-	 *
-	 * @parameter expression="${plugin.artifacts}"
-     * @required
-     * @readonly
 	 */
+	@Parameter(defaultValue = "${plugin.artifacts}", required = true, readonly = true)
 	private List<Artifact> pluginArtifacts;
 
 	/**
      * Specifies the directory containing the gUnit testing files.
-     *
-     * @parameter expression="${basedir}/src/test/gunit"
-     * @required
      */
+	@Parameter(defaultValue = "${basedir}/src/test/gunit", required = true)
     private File sourceDirectory;
 
     /**
      * A set of patterns for matching files from the sourceDirectory that
      * should be included as gUnit source files.
-     *
-     * @parameter
      */
+	@Parameter
     private Set<String> includes;
 
     /**
      * A set of exclude patterns.
-     *
-     * @parameter
      */
+	@Parameter
     private Set<String> excludes;
 
 	/**
      * Specifies directory to which gUnit reports should get written.
-     *
-     * @parameter expression="${basedir}/target/gunit-report"
-     * @required
      */
-    private File reportDirectory;
+	@Parameter(defaultValue = "${basedir}/target/gunit-report", required = true)
+	private File reportDirectory;
 
 	/**
 	 * Should gUnit functionality be completely by-passed?
 	 * <p>
 	 * By default we skip gUnit tests if the user requested that all testing be skipped using 'maven.test.skip'</p>
-	 *
-	 * @parameter expression="${maven.test.skip}"
 	 */
+	@Parameter(defaultValue = "${maven.test.skip}")
 	private boolean skip;
 
 	public Set<String> getIncludePatterns() {

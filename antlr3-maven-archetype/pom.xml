@@ -35,14 +35,11 @@
     </extensions>
 
         <plugins>
-<!--
             <plugin>
                 <artifactId>maven-archetype-plugin</artifactId>
                 <version>2.2</version>
                 <extensions>true</extensions>
             </plugin>
-            -->
-
         </plugins>
 
   </build>

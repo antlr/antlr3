@@ -7,6 +7,10 @@
         <version>9</version>
     </parent>
 
+    <prerequisites>
+        <maven>3.8</maven>
+    </prerequisites>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
@@ -52,8 +56,6 @@
     -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bootclasspath.java5>${java5.home}/lib/rt.jar</bootclasspath.java5>
-        <bootclasspath.java6>${java6.home}/lib/rt.jar</bootclasspath.java6>
         <bootclasspath.compile>${bootclasspath.java5}</bootclasspath.compile>
         <bootclasspath.testCompile>${bootclasspath.java6}</bootclasspath.testCompile>
         <jdk>1.8</jdk>
@@ -62,6 +64,7 @@
         <antlr.version>2.7.7</antlr.version>
         <stringtemplate.version>3.2.1</stringtemplate.version>
         <required-maven-version>3.3.1</required-maven-version>
+        <mavenVersion>3.8.4</mavenVersion>
     </properties>
 
     <licenses>
