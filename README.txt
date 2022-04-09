@@ -110,11 +110,11 @@ How do I install this damn thing?
 
 You will have grabbed either of these:
 
-    http://www.antlr3.org/download/antlr-3.5.2-complete-no-st3.jar
-	http://www.antlr3.org/download/antlr-3.5.2-complete.jar
+    http://www.antlr3.org/download/antlr-3.5.3-complete-no-st3.jar
+    http://www.antlr3.org/download/antlr-3.5.3-complete.jar
 
 It has all of the jars you need combined into one. Then you need to
-add antlr-3.5-complete.jar to your CLASSPATH or add to arg list; e.g., on unix:
+add antlr-3.5.3-complete.jar to your CLASSPATH or add to arg list; e.g., on unix:
 
 $ java -cp "/usr/local/lib/antlr-3.5.3-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
 
