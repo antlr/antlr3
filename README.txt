@@ -1,11 +1,5 @@
-ANTLR v3.5
-January 4, 2013
-
-Given day-job constraints, my time working on this project is limited
-so I'll have to focus first on fixing bugs rather than changing/improving
-the feature set. Likely I'll do it in bursts every few months. Please do
-not be offended if your bug or pull request does not yield a response!
---parrt
+ANTLR v3.5.3
+April 9, 2022
 
 Terence Parr
 ANTLR project lead and supreme dictator for life
@@ -122,20 +116,20 @@ You will have grabbed either of these:
 It has all of the jars you need combined into one. Then you need to
 add antlr-3.5-complete.jar to your CLASSPATH or add to arg list; e.g., on unix:
 
-$ java -cp "/usr/local/lib/antlr-3.5-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
+$ java -cp "/usr/local/lib/antlr-3.5.3-complete.jar:$CLASSPATH" org.antlr.Tool Test.g
 
-Source + java binaries: Just untar antlr-3.5.tar.gz and you'll get:
+Source + java binaries: Just untar antlr-3.5.3.tar.gz and you'll get:
 
-antlr-3.5/BUILD.txt
-antlr-3.5/antlr3-maven-plugin
-antlr-3.5/antlrjar.xml
-antlr-3.5/antlrsources.xml
-antlr-3.5/gunit
-antlr-3.5/gunit-maven-plugin
-antlr-3.5/pom.xml
+antlr-3.5.3/BUILD.txt
+antlr-3.5.3/antlr3-maven-plugin
+antlr-3.5.3/antlrjar.xml
+antlr-3.5.3/antlrsources.xml
+antlr-3.5.3/gunit
+antlr-3.5.3/gunit-maven-plugin
+antlr-3.5.3/pom.xml
 antlr-3.5/runtime
-antlr-3.5/tool
-antlr-3.5/lib
+antlr-3.5.3/tool
+antlr-3.5.3/lib
 
 Please see the FAQ
 
