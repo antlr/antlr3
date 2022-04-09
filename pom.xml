@@ -145,16 +145,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
-                        <configuration>
-                            <source>${jdk}</source>
-                            <target>${jdk}</target>
-                        </configuration>
-                    </plugin>
-                    <!--
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>default-compile</id>
@@ -184,7 +174,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    -->
                 </plugins>
             </build>
         </profile>
@@ -267,21 +256,14 @@
                 <version>2.2.1</version>
             </plugin>
 
-            <plugin> <!-- create javadoc jar -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
+                <!-- override the version inherited from the parent -->
+                <version>2.9.1</version>
                 <configuration>
-                    <javadocVersion>1.8</javadocVersion>
-                    <failOnError>false</failOnError>
+                    <quiet>true</quiet>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -320,11 +302,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <javadocVersion>1.8</javadocVersion>
-                    <failOnError>false</failOnError>
-                </configuration>
+                <version>2.9.1</version>
             </plugin>
         </plugins>
     </reporting>

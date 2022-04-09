@@ -123,21 +123,12 @@
                 </executions>
             </plugin>
 
-            <plugin> <!-- create javadoc jar -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
                 <configuration>
-                    <javadocVersion>1.8</javadocVersion>
-                    <failOnError>false</failOnError>
+                    <includeDependencySources>true</includeDependencySources>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 
