@@ -145,6 +145,16 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <source>${jdk}</source>
+                            <target>${jdk}</target>
+                        </configuration>
+                    </plugin>
+                    <!--
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>default-compile</id>
@@ -174,6 +184,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>
