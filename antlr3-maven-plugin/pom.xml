@@ -38,7 +38,7 @@
     <parent>
         <groupId>org.antlr</groupId>
         <artifactId>antlr-master</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4-SNAPSHOT</version>
     </parent>
     <artifactId>antlr3-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
@@ -154,7 +154,7 @@ Jim Idle - March 2009
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4-SNAPSHOT</version>
         </dependency>
         <!-- Testing requirements... -->
         <dependency>

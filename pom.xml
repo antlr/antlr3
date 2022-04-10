@@ -15,7 +15,7 @@
     <groupId>org.antlr</groupId>
     <artifactId>antlr-master</artifactId>
     <packaging>pom</packaging>
-    <version>3.5.3</version>
+    <version>3.5.4-SNAPSHOT</version>
     <name>ANTLR 3 Master build control POM</name>
     <description>Master build POM for ANTLR 3</description>
     <url>http://antlr.org</url>
