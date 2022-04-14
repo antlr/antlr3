@@ -16,6 +16,9 @@ target/
 nbactions.xml
 nb-configuration.xml
 
+# MonoDevelop user configuration
+*.userprefs
+
 # Python runtime files
 *.py[co]
 
