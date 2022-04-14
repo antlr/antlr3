@@ -118,7 +118,7 @@ module TokenData
   # this is necessary because anonymous tokens, which are
   # created from literal values in the grammar, do not
   # have descriptive names
-  register_names( <tokenNames:{it | <it>}; separator=", ", anchor, wrap="\n"> )
+  register_names( <tokenNames:{it | <it>}; separator=", ", null="\"<invalid>\"", anchor, wrap="\n"> )
 
 <endif>
 

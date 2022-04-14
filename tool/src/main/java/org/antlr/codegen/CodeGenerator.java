@@ -861,10 +861,11 @@ public class CodeGenerator {
 	protected void genTokenTypeNames(ST code) {
 		for (int t=Label.MIN_TOKEN_TYPE; t<=grammar.getMaxTokenType(); t++) {
 			String tokenName = grammar.getTokenDisplayName(t);
-			if ( tokenName!=null ) {
+			if (tokenName != null) {
 				tokenName=target.getTargetStringLiteralFromString(tokenName, true);
-				code.add("tokenNames", tokenName);
 			}
+
+			code.add("tokenNames", tokenName);
 		}
 	}
 

@@ -1195,7 +1195,7 @@ pANTLR3_UINT8   <name>TokenNames[<length(tokenNames)>+4]
         (pANTLR3_UINT8) "\<EOR>",
         (pANTLR3_UINT8) "\<DOWN>",
         (pANTLR3_UINT8) "\<UP>",
-        <tokenNames:{it |(pANTLR3_UINT8) <it>}; separator=",\n">
+        <tokenNames:{it |(pANTLR3_UINT8) <it>}; separator=",\n", null="(pANTLR3_UINT8) \"<invalid>\"">
        };
 <endif>
 

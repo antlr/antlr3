@@ -173,7 +173,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 public class <grammar.recognizerName> extends <if(actions.(actionScope).superClass)><actions.(actionScope).superClass><else><@superClassName><superClass><@end><endif> {
 <if(grammar.grammarIsRoot)>
     public static const tokenNames:Array = [
-        "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
+        "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", null="\"<invalid>\"">
     ];<\n>
 <endif>
     <tokens:{it |public static const <it.name>:int=<it.type>;}; separator="\n">

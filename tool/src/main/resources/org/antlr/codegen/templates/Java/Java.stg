@@ -208,7 +208,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 public class <grammar.recognizerName> extends <@superClassName><superClass><@end> {
 <if(grammar.grammarIsRoot)>
 	public static final String[] tokenNames = new String[] {
-		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", wrap="\n\t\t">
+		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; null="\"<invalid>\"", separator=", ", wrap="\n\t\t">
 	};
 <endif>
 	<tokens:{it |public static final int <it.name>=<it.type>;}; separator="\n">

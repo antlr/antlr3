@@ -287,7 +287,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 {
 <if(grammar.grammarIsRoot)>
 	internal static readonly string[] tokenNames = new string[] {
-		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
+		"\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", null="\"<invalid>\"">
 	};
 <endif>
 	<tokens:{it|public const int <it.name; format="id">=<it.type>;}; separator="\n">

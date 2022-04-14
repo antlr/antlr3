@@ -185,7 +185,7 @@ genericParser(grammar, name, scopes, tokens, tokenNames, rules, numRules,
 object <grammar.recognizerName> {
 <if(grammar.grammarIsRoot)>
     val tokenNames = Array(
-        "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ">
+        "\<invalid>", "\<EOR>", "\<DOWN>", "\<UP>", <tokenNames; separator=", ", null="\"<invalid>\"">
     )<\n>
 <endif>
 
