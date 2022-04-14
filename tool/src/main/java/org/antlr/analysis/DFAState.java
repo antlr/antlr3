@@ -659,7 +659,7 @@ public class DFAState extends State {
 
 	public Set<? extends SemanticContext> getGatedSyntacticPredicatesInNFAConfigurations() {
 		int numConfigs = nfaConfigurations.size();
-		Set<SemanticContext> synpreds = new HashSet<SemanticContext>();
+		Set<SemanticContext> synpreds = new LinkedHashSet<SemanticContext>();
 		for (int i = 0; i < numConfigs; i++) {
 			NFAConfiguration configuration = nfaConfigurations.get(i);
 			SemanticContext gatedPredExpr =

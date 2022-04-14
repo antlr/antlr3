@@ -48,10 +48,12 @@ public class Graph<T> {
 
 		@Override
         public String toString() { return payload.toString(); }
+        @Override
+        public int hashCode() { return payload.hashCode(); }
     }
 
     /** Map from node payload to node containing it */
-    protected Map<T,Node<T>> nodes = new HashMap<T,Node<T>>();
+    protected Map<T,Node<T>> nodes = new LinkedHashMap<T,Node<T>>();
 
     public void addEdge(T a, T b) {
         //System.out.println("add edge "+a+" to "+b);
