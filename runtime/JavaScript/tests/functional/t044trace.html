@@ -57,10 +57,10 @@
 
         parser.a();
         assertArrayEquals(lexer.traces,
-            [ '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__8', '<T__8', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__8', '<T__8', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
-              '>T__7', '<T__7']
+            [ '>T__7', '<T__7', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__6', '<T__6', '>WS', '<WS', '>INT', '<INT', '>WS', '<WS',
+              '>T__8', '<T__8']
         );
         assertArrayEquals(parser.traces,
             [ '>a', '>synpred1_t044trace_fragment', '<synpred1_t044trace_fragment', '>b', '>c',
