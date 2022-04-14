@@ -184,7 +184,7 @@ class functest(Command):
         testDir = os.path.join(os.path.dirname(__file__), 'tests')
         if not os.path.isdir(testDir):
             raise DistutilsFileError(
-                "There is not 'tests' directory. Did you fetch the "
+                "There is no 'tests' directory. Did you fetch the "
                 "development version?",
                 )
 
@@ -208,10 +208,7 @@ class functest(Command):
                 ]
 
         classpath.extend([
-            os.path.join(rootDir, 'lib', 'antlr-2.7.7.jar'),
-            os.path.join(rootDir, 'lib', 'stringtemplate-3.2.1.jar'),
-            os.path.join(rootDir, 'lib', 'ST-4.0.2.jar'),
-            os.path.join(rootDir, 'lib', 'junit-4.2.jar')
+            os.path.join(rootDir, 'antlr-complete', 'target', 'antlr-complete-3.5.3-SNAPSHOT.jar'),
             ])
         os.environ['CLASSPATH'] = ':'.join(classpath)
 

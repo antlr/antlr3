@@ -44,7 +44,7 @@ class T(testbase.ANTLRTest):
 
         ''')
 
-        self.failUnlessEqual(
+        self.assertEqual(
             str(tStream),
             expectedOutput
             )

@@ -25,10 +25,10 @@ class t001lexer(testbase.ANTLRTest):
         lexer = self.getLexer(stream)
 
         token = lexer.nextToken()
-        self.failUnlessEqual(token.type, self.lexerModule.ZERO)
+        self.assertEqual(token.type, self.lexerModule.ZERO)
 
         token = lexer.nextToken()
-        self.failUnlessEqual(token.type, self.lexerModule.EOF)
+        self.assertEqual(token.type, self.lexerModule.EOF)
         
 
     def testIteratorInterface(self):
@@ -37,7 +37,7 @@ class t001lexer(testbase.ANTLRTest):
 
         types = [token.type for token in lexer]
 
-        self.failUnlessEqual(types, [self.lexerModule.ZERO])
+        self.assertListEqual(types, [self.lexerModule.ZERO])
         
 
     def testMalformedInput(self):
@@ -49,8 +49,8 @@ class t001lexer(testbase.ANTLRTest):
             self.fail()
 
         except antlr3.MismatchedTokenException, exc:
-            self.failUnlessEqual(exc.expecting, '0')
-            self.failUnlessEqual(exc.unexpectedType, '1')
+            self.assertEqual(exc.expecting, '0')
+            self.assertEqual(exc.unexpectedType, '1')
             
 
 if __name__ == '__main__':
