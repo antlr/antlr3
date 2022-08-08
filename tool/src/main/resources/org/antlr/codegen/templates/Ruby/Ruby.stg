@@ -27,7 +27,6 @@ outputFile(LEXER, PARSER, TREE_PARSER, actionScope, actions, docComment, recogni
 # Generated using ANTLR version: <ANTLRVersion>
 # Ruby runtime library version: <runtimeLibraryVersion()>
 # Input grammar file: <fileName>
-# Generated at: <generatedTimestamp>
 #
 
 # ~~~\> start load path setup
