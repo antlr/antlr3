@@ -90,7 +90,7 @@ unit <name>;
 
 {$HINTS OFF}
 
-// $ANTLR <ANTLRVersion> <fileName> <generatedTimestamp>
+// $ANTLR <ANTLRVersion> <fileName>
 
 <actions.(actionScope).header>
 

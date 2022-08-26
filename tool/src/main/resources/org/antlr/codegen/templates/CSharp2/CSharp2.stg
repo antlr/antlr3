@@ -58,7 +58,7 @@ outputFile(	LEXER,PARSER,TREE_PARSER, actionScope, actions,
 // \</auto-generated>
 //------------------------------------------------------------------------------
 
-// $ANTLR <ANTLRVersion> <fileName> <generatedTimestamp>
+// $ANTLR <ANTLRVersion> <fileName>
 
 <if(trace)>
 #define ANTLR_TRACE

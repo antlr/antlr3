@@ -59,7 +59,7 @@ outputFile(LEXER,PARSER,TREE_PARSER, actionScope, actions,
 	   fileName, ANTLRVersion, generatedTimestamp, trace,
 	   scopes, superClass, literals) ::=
 <<
-// $ANTLR <ANTLRVersion> <fileName> <generatedTimestamp>
+// $ANTLR <ANTLRVersion> <fileName>
 <actions.(actionScope).header>
 
 <@imports>

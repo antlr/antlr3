@@ -59,7 +59,7 @@ outputFile(	LEXER,PARSER,TREE_PARSER, actionScope, actions,
 // \</auto-generated>
 //------------------------------------------------------------------------------
 
-// $ANTLR <ANTLRVersion> <fileName> <generatedTimestamp>
+// $ANTLR <ANTLRVersion> <fileName>
 
 // The variable 'variable' is assigned but its value is never used.
 #pragma warning disable 219
