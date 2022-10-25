@@ -1052,6 +1052,9 @@ public class Tool {
      */
     public static String getCurrentTimeStamp() {
         GregorianCalendar calendar = new java.util.GregorianCalendar();
+        if (System.getenv("SOURCE_DATE_EPOCH") != null) {
+            calendar.setTimeInMillis(1000 * Long.parseLong(System.getenv("SOURCE_DATE_EPOCH")));
+        }
         int y = calendar.get(Calendar.YEAR);
         int m = calendar.get(Calendar.MONTH) + 1; // zero-based for months
         int d = calendar.get(Calendar.DAY_OF_MONTH);
