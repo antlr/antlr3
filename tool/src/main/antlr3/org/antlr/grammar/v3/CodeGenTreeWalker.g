@@ -56,6 +56,7 @@ import org.antlr.codegen.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Collection;
+import java.util.Collections;
 import org.antlr.runtime.BitSet;
 import org.antlr.runtime.DFA;
 import org.stringtemplate.v4.ST;
@@ -284,6 +285,7 @@ protected final List<String> getTokenTypesAsTargetLabels(Collection<GrammarAST> 
         }
         labels.add( label );
     }
+	Collections.sort(labels); // ensure reproducible order
     return labels;
 }
 
