@@ -53,7 +53,7 @@ If all else fails, you can buy support or ask the antlr-interest list:
 
     http://www.antlr.org/support.html
 
-Per the license in LICENSE.txt, this software is not guaranteed to
+Per a license in LICENSE.txt, this software is not guaranteed to
 work and might even destroy all life on this planet:
 
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
