@@ -61,18 +61,18 @@ private:
     /// Decision number that a particular static structure
     ///  represents.
     ///
-    const ANTLR_INT32		m_decisionNumber;
+    ANTLR_INT32		m_decisionNumber;
 
     /// What this decision represents
     ///
     const ANTLR_UCHAR*			m_description;
-	const ANTLR_INT32* const	m_eot;
-    const ANTLR_INT32* const	m_eof;
-    const ANTLR_INT32* const	m_min;
-    const ANTLR_INT32* const	m_max;
-    const ANTLR_INT32* const	m_accept;
-    const ANTLR_INT32* const	m_special;
-    const ANTLR_INT32* const *const	m_transition;
+	const ANTLR_INT32*	m_eot;
+    const ANTLR_INT32*	m_eof;
+    const ANTLR_INT32*	m_min;
+    const ANTLR_INT32*	m_max;
+    const ANTLR_INT32*	m_accept;
+    const ANTLR_INT32*	m_special;
+    const ANTLR_INT32* const *	m_transition;
 
 public:
 	CyclicDFA( ANTLR_INT32	decisionNumber
