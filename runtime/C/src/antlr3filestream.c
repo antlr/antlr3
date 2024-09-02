@@ -232,8 +232,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
             }
             else if  (      (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFF
                         &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0xFE
-                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0x00
-                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0x00
+                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+2))    == 0x00
+                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+3))    == 0x00
                 )
             {
                 // BOM present, indicates Little Endian

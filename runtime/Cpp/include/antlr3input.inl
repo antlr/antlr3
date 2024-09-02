@@ -545,8 +545,8 @@ void InputStream<ImplTraits>::setupInputStream()
             }
             else if  (      (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar))      == 0xFF
                         &&  (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar+1))    == 0xFE
-                        &&  (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar+1))    == 0x00
-                        &&  (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar+1))    == 0x00
+                        &&  (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar+2))    == 0x00
+                        &&  (ANTLR_UINT8)(*((ANTLR_UINT8*)m_nextChar+3))    == 0x00
                 )
             {
                 // BOM present, indicates Little Endian
