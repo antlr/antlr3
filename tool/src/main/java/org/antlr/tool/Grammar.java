@@ -85,6 +85,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 /** Represents a grammar in memory. */
@@ -1885,7 +1886,8 @@ outer:
 	 *  Return a displayable token type name computed from the GrammarAST.
 	 */
 	public Set<String> getLabels(Set<GrammarAST> rewriteElements, int labelType) {
-		Set<String> labels = new HashSet<String>();
+		// Use a TreeSet so that parsers are generated repeatably
+		Set<String> labels = new TreeSet<>();
 		for (GrammarAST el : rewriteElements) {
 			if ( el.getType()==ANTLRParser.LABEL ) {
 				String labelName = el.getText();
