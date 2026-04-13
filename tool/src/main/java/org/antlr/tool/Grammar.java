@@ -82,6 +82,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1885,7 +1886,7 @@ outer:
 	 *  Return a displayable token type name computed from the GrammarAST.
 	 */
 	public Set<String> getLabels(Set<GrammarAST> rewriteElements, int labelType) {
-		Set<String> labels = new HashSet<String>();
+		Set<String> labels = new LinkedHashSet<String>();
 		for (GrammarAST el : rewriteElements) {
 			if ( el.getType()==ANTLRParser.LABEL ) {
 				String labelName = el.getText();
