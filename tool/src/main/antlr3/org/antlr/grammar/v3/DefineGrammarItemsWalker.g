@@ -45,6 +45,7 @@ scope AttributeScopeActions {
 package org.antlr.grammar.v3;
 import org.antlr.tool.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 }
 
@@ -556,7 +557,7 @@ rewrite
 	if ( state.backtracking == 0 )
 	{
 		if ( grammar.buildAST() )
-			currentRewriteRule.rewriteRefsDeep = new HashSet<GrammarAST>();
+			currentRewriteRule.rewriteRefsDeep = new LinkedHashSet<GrammarAST>();
 	}
 }
 	:	^(	REWRITES
@@ -582,8 +583,8 @@ rewrite_block
 	{
 		// don't do if guessing
 		currentRewriteBlock=$start; // pts to BLOCK node
-		currentRewriteBlock.rewriteRefsShallow = new HashSet<GrammarAST>();
-		currentRewriteBlock.rewriteRefsDeep = new HashSet<GrammarAST>();
+		currentRewriteBlock.rewriteRefsShallow = new LinkedHashSet<GrammarAST>();
+		currentRewriteBlock.rewriteRefsDeep = new LinkedHashSet<GrammarAST>();
 	}
 }
 	:   ^( BLOCK rewrite_alternative EOB )
