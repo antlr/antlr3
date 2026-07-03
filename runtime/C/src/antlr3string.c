@@ -404,7 +404,7 @@ toUTF8_UTF16	(pANTLR3_STRING string)
             //
             utf8String->len = ANTLR3_UINT32_CAST(((pANTLR3_UINT8)outputEnd) - utf8String->chars);
 
-            *(outputEnd+1) = '\0';		// Always null terminate
+            *outputEnd = '\0';		// Always null terminate
         }
     }
     return utf8String;
