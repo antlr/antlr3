@@ -762,7 +762,7 @@ printableUTF16(pANTLR3_STRING_FACTORY factory, pANTLR3_STRING instr)
 			*scannedText++   = 'r';
 			outLen	    += 2;
 		}
-		else if	(!isprint(*(inText +i)))
+		else if	(*(inText + i) <= 255 && !isprint(*(inText +i)))
 		{
 			*scannedText++ = '?';
 			outLen++;
@@ -1398,7 +1398,7 @@ toInt32_UTF16       (struct ANTLR3_STRING_struct * string)
 		input++;
     }
 
-    while   (*input != '\0' && isdigit(*input))
+    while   (*input != '\0' && *input <= 255 && isdigit(*input))
     {
 		value	 = value * 10;
 		value	+= ((ANTLR3_UINT32)(*input) - (ANTLR3_UINT32)'0');

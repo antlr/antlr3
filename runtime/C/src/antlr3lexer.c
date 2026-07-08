@@ -458,7 +458,7 @@ displayRecognitionError	    (pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_UINT8 *
 
 		if	(width >= 1)
 		{			
-			if	(isprint(ex->c))
+			if	(ex->c <= 255 && isprint(ex->c))
 			{
 				ANTLR3_FPRINTF(stderr, "near '%c' :\n", ex->c);
 			}
