@@ -161,7 +161,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
             // as it identifies UTF-8 even though it is of no consequence for byte order
             // as UTF-8 does not have a byte order.
             //
-            if  (       (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xEF
+            if  (       input->sizeBuf >= 3
+                    &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xEF
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0xBB
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+2))    == 0xBF
                 )
@@ -183,7 +184,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
             // machine (or it is really UCS2). If there is a BOM we determine if the encoding
             // is the same as the natural order of this machine.
             //
-            if  (       (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFE
+            if  (       input->sizeBuf >= 2
+                    &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFE
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0xFF
                 )
             {
@@ -193,7 +195,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
 
                 antlr3UTF16SetupStream(input, isBigEndian, ANTLR3_TRUE);
             }
-            else if  (      (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFF
+            else if  (      input->sizeBuf >= 2
+                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFF
                         &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0xFE
                 )
             {
@@ -218,7 +221,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
             // machine. If there is we determine if the encoding
             // is the same as the natural order of this machine.
             //
-            if  (       (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0x00
+            if  (       input->sizeBuf >= 4
+                    &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0x00
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0x00
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+2))    == 0xFE
                     &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+3))    == 0xFF
@@ -230,7 +234,8 @@ setupInputStream(pANTLR3_INPUT_STREAM input)
 
                 antlr3UTF32SetupStream(input, isBigEndian, ANTLR3_TRUE);
             }
-            else if  (      (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFF
+            else if  (      input->sizeBuf >= 4
+                        &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar))      == 0xFF
                         &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0xFE
                         &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0x00
                         &&  (ANTLR3_UINT8)(*((pANTLR3_UINT8)input->nextChar+1))    == 0x00
