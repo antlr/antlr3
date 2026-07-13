@@ -1934,7 +1934,7 @@ antlr3UTF8LA(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
             // the UTF8 is well formed and do not check boundary conditions
             //
             nextChar--;
-            while ((*nextChar & 0xC0) == 0x80)
+            while (nextChar > (pANTLR3_UINT8)input->data && (*nextChar & 0xC0) == 0x80)
             {
                 nextChar--;
             }
