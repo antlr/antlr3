@@ -1146,13 +1146,13 @@ antlr3UTF16LALE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 	pANTLR3_INPUT_STREAM input;
         UTF32           ch;
         UTF32           ch2;
-        pANTLR3_UCHAR   nextChar;
+        pANTLR3_UINT8   nextChar;
 
         // Find the input interface and where we are currently pointing to
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = (pANTLR3_UCHAR)input->nextChar;
+        nextChar    = (pANTLR3_UINT8)input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
@@ -1367,13 +1367,13 @@ antlr3UTF16LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 	pANTLR3_INPUT_STREAM input;
         UTF32           ch;
         UTF32           ch2;
-        pANTLR3_UCHAR   nextChar;
+        pANTLR3_UINT8   nextChar;
 
         // Find the input interface and where we are currently pointing to
         // in the input stream
         //
 	input       = ((pANTLR3_INPUT_STREAM) (is->super));
-        nextChar    = (pANTLR3_UCHAR)input->nextChar;
+        nextChar    = (pANTLR3_UINT8)input->nextChar;
 
         // If a positive offset then advance forward, else retreat
         //
