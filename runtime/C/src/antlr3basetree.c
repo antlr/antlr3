@@ -451,10 +451,7 @@ replaceChildren		(pANTLR3_BASE_TREE parent, ANTLR3_INT32 startChildIndex, ANTLR3
 
 	if	(freeNewChildren == ANTLR3_TRUE)
 	{
-		ANTLR3_FREE(newChildren->elements);
-		newChildren->elements = NULL;
-		newChildren->size = 0;
-		ANTLR3_FREE(newChildren);		// Will not free the nodes
+		newChildren->free(newChildren);		// Will not free the nodes
 	}
 }
 
