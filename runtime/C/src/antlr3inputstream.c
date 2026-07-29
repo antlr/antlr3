@@ -934,14 +934,20 @@ antlr3UTF16LA(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
                 // If we found a low surrogate then go back one more character if
                 // the hi surrogate is there
                 //
-                if (ch >= UNI_SUR_LOW_START && ch <= UNI_SUR_LOW_END) 
+                if (ch >= UNI_SUR_LOW_START && ch <= UNI_SUR_LOW_END)
                 {
-                    ch2 = *(nextChar-1);
-                    if (ch2 >= UNI_SUR_HIGH_START && ch2 <= UNI_SUR_HIGH_END) 
+                    // Only peek at the preceding 16 bits if they are still within
+                    // the source buffer, otherwise we would read before input->data
+                    //
+                    if	((pANTLR3_UINT8)(nextChar - 1) >= (pANTLR3_UINT8)input->data)
                     {
-                        // Yes, there is a high surrogate to match it so decrement one more and point to that
-                        //
-                        nextChar--;
+                        ch2 = *(nextChar-1);
+                        if (ch2 >= UNI_SUR_HIGH_START && ch2 <= UNI_SUR_HIGH_END)
+                        {
+                            // Yes, there is a high surrogate to match it so decrement one more and point to that
+                            //
+                            nextChar--;
+                        }
                     }
                 }
             }
