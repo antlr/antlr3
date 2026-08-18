@@ -1677,7 +1677,7 @@ antlr3UTF32LA(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 	
     input   = ((pANTLR3_INPUT_STREAM) (is->super));
 
-    if	(( ((pANTLR3_UINT8)input->nextChar) + la - 1) >= (((pANTLR3_UINT8)input->data) + input->sizeBuf))
+    if	(( (pANTLR3_UINT8)((pANTLR3_UINT32)input->nextChar + la - 1) + sizeof(ANTLR3_UINT32)) > (((pANTLR3_UINT8)input->data) + input->sizeBuf))
     {
 		return	ANTLR3_CHARSTREAM_EOF;
     }
@@ -1701,7 +1701,7 @@ antlr3UTF32LALE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 	
     input   = ((pANTLR3_INPUT_STREAM) (is->super));
 
-    if	(( ((pANTLR3_UINT8)input->nextChar) + la - 1) >= (((pANTLR3_UINT8)input->data) + input->sizeBuf))
+    if	(( (pANTLR3_UINT8)((pANTLR3_UINT32)input->nextChar + la - 1) + sizeof(ANTLR3_UINT32)) > (((pANTLR3_UINT8)input->data) + input->sizeBuf))
     {
 		return	ANTLR3_CHARSTREAM_EOF;
     }
@@ -1732,7 +1732,7 @@ antlr3UTF32LABE(pANTLR3_INT_STREAM is, ANTLR3_INT32 la)
 	
     input   = ((pANTLR3_INPUT_STREAM) (is->super));
 
-    if	(( ((pANTLR3_UINT8)input->nextChar) + la - 1) >= (((pANTLR3_UINT8)input->data) + input->sizeBuf))
+    if	(( (pANTLR3_UINT8)((pANTLR3_UINT32)input->nextChar + la - 1) + sizeof(ANTLR3_UINT32)) > (((pANTLR3_UINT8)input->data) + input->sizeBuf))
     {
 		return	ANTLR3_CHARSTREAM_EOF;
     }
