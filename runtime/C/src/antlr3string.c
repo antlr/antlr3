@@ -1345,6 +1345,10 @@ subString8   (pANTLR3_STRING string, ANTLR3_UINT32 startIndex, ANTLR3_UINT32 end
     {
 		endIndex = string->len + 1;
     }
+    if	(startIndex > endIndex)
+    {
+		startIndex = endIndex;
+    }
     newStr  = string->factory->newPtr(string->factory, string->chars + startIndex, endIndex - startIndex);
 
     return newStr;
@@ -1361,6 +1365,10 @@ subStringUTF16  (pANTLR3_STRING string, ANTLR3_UINT32 startIndex, ANTLR3_UINT32 
     if	(endIndex > string->len)
     {
 		endIndex = string->len + 1;
+    }
+    if	(startIndex > endIndex)
+    {
+		startIndex = endIndex;
     }
     newStr  = string->factory->newPtr(string->factory, (pANTLR3_UINT8)((pANTLR3_UINT16)(string->chars) + startIndex), endIndex - startIndex);
 
